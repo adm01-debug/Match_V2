@@ -194,3 +194,40 @@ export interface AgendaDia {
   candidato: string;
   local?: string;
 }
+
+// Avaliação Types
+export type TipoCompetencia = 'tecnica' | 'comportamental';
+
+export interface Competencia {
+  id: string;
+  nome: string;
+  descricao: string;
+  tipo: TipoCompetencia;
+}
+
+export interface NotaCompetencia {
+  competenciaId: string;
+  nota: 1 | 2 | 3 | 4 | 5;
+  observacao?: string;
+}
+
+export interface Avaliacao {
+  id: string;
+  processoId: string;
+  candidatoId: string;
+  candidatoNome: string;
+  vagaId: string;
+  vagaTitulo: string;
+  avaliadorId: string;
+  avaliadorNome: string;
+  etapa: EtapaProcesso;
+  dataAvaliacao: Date;
+  notasTecnicas: NotaCompetencia[];
+  notasComportamentais: NotaCompetencia[];
+  notaGeral: number;
+  pontosFortes: string;
+  pontosDesenvolvimento: string;
+  parecer: 'aprovar' | 'reprovar' | 'em_duvida';
+  observacoesGerais: string;
+  recomendacao: string;
+}

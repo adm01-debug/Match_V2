@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { PipelineColumn } from "@/components/pipeline/PipelineColumn";
 import { Button } from "@/components/ui/button";
@@ -41,6 +41,7 @@ import { Separator } from "@/components/ui/separator";
 
 export default function Pipeline() {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const vagaIdParam = searchParams.get("vaga");
   const { toast } = useToast();
 
@@ -324,7 +325,11 @@ export default function Pipeline() {
                   <Button variant="outline" className="w-full">
                     Agendar Entrevista
                   </Button>
-                  <Button variant="outline" className="w-full">
+                  <Button 
+                    variant="outline" 
+                    className="w-full"
+                    onClick={() => navigate(`/avaliacao/${selectedProcesso.id}`)}
+                  >
                     Registrar Avaliação
                   </Button>
                 </div>
