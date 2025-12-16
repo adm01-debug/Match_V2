@@ -7,6 +7,7 @@ import Dashboard from "./pages/Dashboard";
 import VagasList from "./pages/VagasList";
 import VagaForm from "./pages/VagaForm";
 import VagaDetalhes from "./pages/VagaDetalhes";
+import Pipeline from "./pages/Pipeline";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -23,6 +24,7 @@ const App = () => (
           <Route path="/vagas/nova" element={<VagaForm />} />
           <Route path="/vagas/:id" element={<VagaDetalhes />} />
           <Route path="/vagas/:id/editar" element={<VagaForm />} />
+          <Route path="/pipeline" element={<Pipeline />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
