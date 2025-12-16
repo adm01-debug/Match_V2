@@ -17,6 +17,7 @@ import {
   ChevronRight,
   LogOut,
   Bell,
+  Sparkles,
 } from "lucide-react";
 import {
   Sidebar,
@@ -43,6 +44,7 @@ const menuItems = [
       { title: "Vagas", url: "/vagas", icon: Briefcase },
       { title: "Banco de Talentos", url: "/talentos", icon: Users },
       { title: "Pipeline", url: "/pipeline", icon: Kanban },
+      { title: "Parser Currículo", url: "/parser-curriculo", icon: Sparkles },
     ],
   },
   {
