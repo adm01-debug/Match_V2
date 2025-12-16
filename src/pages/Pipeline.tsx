@@ -36,6 +36,7 @@ import { sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 import { CandidatoKanbanCard } from "@/components/pipeline/CandidatoKanbanCard";
 import { Users, Target, Clock, CheckCircle2, Settings, User, Mail, Phone, Calendar, Star } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useNotifications } from "@/contexts/NotificationContext";
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 
@@ -44,7 +45,7 @@ export default function Pipeline() {
   const navigate = useNavigate();
   const vagaIdParam = searchParams.get("vaga");
   const { toast } = useToast();
-
+  const { notifyStageChange } = useNotifications();
   const [selectedVaga, setSelectedVaga] = useState<string>(vagaIdParam || "todas");
   const [processos, setProcessos] = useState<ProcessoSeletivo[]>(pipelineData);
   const [activeId, setActiveId] = useState<string | null>(null);
@@ -104,6 +105,9 @@ export default function Pipeline() {
 
     if (!activeProcesso || activeProcesso.etapaAtual === overEtapa) return;
 
+    const fromEtapaLabel = etapasConfig.find((e) => e.id === activeProcesso.etapaAtual)?.label || '';
+    const toEtapaLabel = etapasConfig.find((e) => e.id === overEtapa)?.label || '';
+
     // Update the process stage
     setProcessos((prev) =>
       prev.map((p) =>
@@ -113,10 +117,12 @@ export default function Pipeline() {
       )
     );
 
-    const etapaLabel = etapasConfig.find((e) => e.id === overEtapa)?.label;
+    // Notify stage change via realtime notifications
+    notifyStageChange(activeProcesso.candidatoNome, fromEtapaLabel, toEtapaLabel);
+
     toast({
       title: "Candidato movido",
-      description: `${activeProcesso.candidatoNome} foi movido para ${etapaLabel}`,
+      description: `${activeProcesso.candidatoNome} foi movido para ${toEtapaLabel}`,
     });
   };
 
