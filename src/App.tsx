@@ -15,6 +15,7 @@ import ProvaAplicacao from "./pages/ProvaAplicacao";
 import ResumeParserPage from "./pages/ResumeParserPage";
 import CandidatosPage from "./pages/CandidatosPage";
 import AnalyticsPage from "./pages/AnalyticsPage";
+import ComunicacaoPage from "./pages/ComunicacaoPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -40,6 +41,7 @@ const App = () => (
           <Route path="/parser-curriculo" element={<ResumeParserPage />} />
           <Route path="/talentos" element={<CandidatosPage />} />
           <Route path="/relatorios" element={<AnalyticsPage />} />
+          <Route path="/comunicacao" element={<ComunicacaoPage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

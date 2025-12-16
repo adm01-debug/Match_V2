@@ -18,6 +18,7 @@ import {
   LogOut,
   Bell,
   Sparkles,
+  Mail,
 } from "lucide-react";
 import {
   Sidebar,
@@ -59,7 +60,7 @@ const menuItems = [
     group: "Gestão",
     items: [
       { title: "Indicações", url: "/indicacoes", icon: Gift },
-      { title: "Templates", url: "/templates", icon: FileSpreadsheet },
+      { title: "Comunicação", url: "/comunicacao", icon: Mail },
       { title: "Relatórios", url: "/relatorios", icon: BarChart3 },
     ],
   },
