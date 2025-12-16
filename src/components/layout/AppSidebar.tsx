@@ -62,6 +62,7 @@ const menuItems = [
       { title: "Indicações", url: "/indicacoes", icon: Gift },
       { title: "Comunicação", url: "/comunicacao", icon: Mail },
       { title: "Relatórios", url: "/relatorios", icon: BarChart3, roles: ['admin', 'rh'] as AppRole[] },
+      { title: "Administração", url: "/admin", icon: Shield, roles: ['admin'] as AppRole[] },
     ],
   },
   {
