@@ -14,7 +14,119 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      candidatos: {
+        Row: {
+          arquivo_curriculo: string | null
+          created_at: string | null
+          email: string
+          experiencias: Json | null
+          fonte: string | null
+          formacao: Json | null
+          habilidades: string[] | null
+          id: string
+          nome: string
+          resumo: string | null
+          status: string | null
+          telefone: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          arquivo_curriculo?: string | null
+          created_at?: string | null
+          email: string
+          experiencias?: Json | null
+          fonte?: string | null
+          formacao?: Json | null
+          habilidades?: string[] | null
+          id?: string
+          nome: string
+          resumo?: string | null
+          status?: string | null
+          telefone?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          arquivo_curriculo?: string | null
+          created_at?: string | null
+          email?: string
+          experiencias?: Json | null
+          fonte?: string | null
+          formacao?: Json | null
+          habilidades?: string[] | null
+          id?: string
+          nome?: string
+          resumo?: string | null
+          status?: string | null
+          telefone?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      match_scores: {
+        Row: {
+          analise: string | null
+          candidato_id: string
+          created_at: string | null
+          habilidades_extras: string[] | null
+          habilidades_faltantes: string[] | null
+          habilidades_match: string[] | null
+          id: string
+          pontos_atencao: string[] | null
+          pontos_fortes: string[] | null
+          recomendacao: string | null
+          score_experiencia: number | null
+          score_formacao: number | null
+          score_habilidades: number | null
+          score_total: number
+          vaga_id: string
+          vaga_titulo: string
+        }
+        Insert: {
+          analise?: string | null
+          candidato_id: string
+          created_at?: string | null
+          habilidades_extras?: string[] | null
+          habilidades_faltantes?: string[] | null
+          habilidades_match?: string[] | null
+          id?: string
+          pontos_atencao?: string[] | null
+          pontos_fortes?: string[] | null
+          recomendacao?: string | null
+          score_experiencia?: number | null
+          score_formacao?: number | null
+          score_habilidades?: number | null
+          score_total: number
+          vaga_id: string
+          vaga_titulo: string
+        }
+        Update: {
+          analise?: string | null
+          candidato_id?: string
+          created_at?: string | null
+          habilidades_extras?: string[] | null
+          habilidades_faltantes?: string[] | null
+          habilidades_match?: string[] | null
+          id?: string
+          pontos_atencao?: string[] | null
+          pontos_fortes?: string[] | null
+          recomendacao?: string | null
+          score_experiencia?: number | null
+          score_formacao?: number | null
+          score_habilidades?: number | null
+          score_total?: number
+          vaga_id?: string
+          vaga_titulo?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "match_scores_candidato_id_fkey"
+            columns: ["candidato_id"]
+            isOneToOne: false
+            referencedRelation: "candidatos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
