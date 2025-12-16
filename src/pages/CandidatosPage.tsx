@@ -11,10 +11,11 @@ import { supabase } from '@/integrations/supabase/client';
 import { 
   Users, Search, Filter, Target, Mail, Phone, Briefcase, 
   GraduationCap, Sparkles, Calendar, Loader2, UserPlus,
-  TrendingUp, ChevronRight, Trash2
+  TrendingUp, ChevronRight, Trash2, MessageSquare
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
+import { ComunicacaoHistorico } from '@/components/candidatos/ComunicacaoHistorico';
 
 interface Candidato {
   id: string;
@@ -444,6 +445,15 @@ export default function CandidatosPage() {
                           </div>
                         </div>
                       )}
+
+                      {/* Communication History */}
+                      <div>
+                        <h4 className="text-sm font-medium mb-2 flex items-center gap-2">
+                          <MessageSquare className="h-4 w-4" />
+                          Histórico de Comunicações
+                        </h4>
+                        <ComunicacaoHistorico candidatoId={candidato.id} />
+                      </div>
 
                       {/* Actions */}
                       <div className="flex gap-3 pt-4 border-t">
