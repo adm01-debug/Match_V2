@@ -1,9 +1,9 @@
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "./AppSidebar";
-import { Bell, Search } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
+import { NotificationPanel } from "@/components/notifications/NotificationPanel";
+import { useNotifications } from "@/contexts/NotificationContext";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -11,6 +11,8 @@ interface LayoutProps {
 }
 
 export function Layout({ children, title }: LayoutProps) {
+  const { notifications, unreadCount, markAsRead, markAllAsRead, clearAll } = useNotifications();
+
   return (
     <SidebarProvider defaultOpen={true}>
       <div className="min-h-screen flex w-full bg-background">
@@ -34,12 +36,13 @@ export function Layout({ children, title }: LayoutProps) {
                 />
               </div>
 
-              <Button variant="ghost" size="icon" className="relative">
-                <Bell className="h-5 w-5 text-muted-foreground" />
-                <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs bg-destructive">
-                  3
-                </Badge>
-              </Button>
+              <NotificationPanel
+                notifications={notifications}
+                unreadCount={unreadCount}
+                onMarkAsRead={markAsRead}
+                onMarkAllAsRead={markAllAsRead}
+                onClearAll={clearAll}
+              />
             </div>
           </header>
 
