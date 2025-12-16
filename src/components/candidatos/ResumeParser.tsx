@@ -3,10 +3,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
-import { Upload, FileText, Loader2, User, Mail, Phone, Briefcase, GraduationCap, Sparkles, CheckCircle2, X } from 'lucide-react';
+import { Upload, FileText, Loader2, User, Mail, Phone, Briefcase, GraduationCap, Sparkles, CheckCircle2, X, Target } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
+import { MatchScoreCalculator } from './MatchScoreCalculator';
 
-interface ParsedResume {
+export interface ParsedResume {
   nome: string;
   email: string;
   telefone: string;
@@ -35,6 +36,7 @@ export function ResumeParser({ onParsed }: ResumeParserProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [parsedData, setParsedData] = useState<ParsedResume | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
+  const [showMatchCalculator, setShowMatchCalculator] = useState(false);
 
   const extractTextFromFile = async (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
@@ -46,8 +48,6 @@ export function ResumeParser({ onParsed }: ResumeParserProps) {
       };
       
       reader.onerror = () => reject(new Error('Erro ao ler arquivo'));
-      
-      // For simplicity, read as text - in production you'd use pdf-parse or mammoth for docx
       reader.readAsText(file);
     });
   };
@@ -56,6 +56,7 @@ export function ResumeParser({ onParsed }: ResumeParserProps) {
     setIsLoading(true);
     setFileName(file.name);
     setParsedData(null);
+    setShowMatchCalculator(false);
 
     try {
       const fileContent = await extractTextFromFile(file);
@@ -132,6 +133,7 @@ export function ResumeParser({ onParsed }: ResumeParserProps) {
   const clearData = () => {
     setParsedData(null);
     setFileName(null);
+    setShowMatchCalculator(false);
   };
 
   return (
@@ -314,12 +316,22 @@ export function ResumeParser({ onParsed }: ResumeParserProps) {
               <Button className="flex-1">
                 Criar Candidato com estes dados
               </Button>
-              <Button variant="outline" onClick={clearData}>
-                Processar outro currículo
+              <Button 
+                variant="outline" 
+                onClick={() => setShowMatchCalculator(!showMatchCalculator)}
+                className="flex items-center gap-2"
+              >
+                <Target className="h-4 w-4" />
+                {showMatchCalculator ? 'Ocultar Match Score' : 'Calcular Match Score'}
               </Button>
             </div>
           </CardContent>
         </Card>
+      )}
+
+      {/* Match Score Calculator */}
+      {parsedData && showMatchCalculator && (
+        <MatchScoreCalculator candidatoData={parsedData} />
       )}
     </div>
   );
