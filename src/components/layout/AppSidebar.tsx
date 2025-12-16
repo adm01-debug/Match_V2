@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
   Briefcase,
@@ -9,16 +8,15 @@ import {
   ClipboardCheck,
   FileText,
   Gift,
-  FileSpreadsheet,
   BarChart3,
   Globe,
   Settings,
   ChevronLeft,
   ChevronRight,
   LogOut,
-  Bell,
   Sparkles,
   Mail,
+  Shield,
 } from "lucide-react";
 import {
   Sidebar,
@@ -36,6 +34,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
+import { useAuth, AppRole } from "@/contexts/AuthContext";
+import { Badge } from "@/components/ui/badge";
 
 const menuItems = [
   {
@@ -61,7 +61,7 @@ const menuItems = [
     items: [
       { title: "Indicações", url: "/indicacoes", icon: Gift },
       { title: "Comunicação", url: "/comunicacao", icon: Mail },
-      { title: "Relatórios", url: "/relatorios", icon: BarChart3 },
+      { title: "Relatórios", url: "/relatorios", icon: BarChart3, roles: ['admin', 'rh'] as AppRole[] },
     ],
   },
   {
@@ -72,14 +72,54 @@ const menuItems = [
   },
 ];
 
+const roleLabels: Record<AppRole, string> = {
+  admin: 'Admin',
+  rh: 'RH',
+  gestor: 'Gestor',
+};
+
+const roleColors: Record<AppRole, string> = {
+  admin: 'bg-destructive/20 text-destructive',
+  rh: 'bg-primary/20 text-primary',
+  gestor: 'bg-amber-500/20 text-amber-600',
+};
+
 export function AppSidebar() {
   const { state, toggleSidebar } = useSidebar();
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, roles, signOut, hasRole } = useAuth();
   const collapsed = state === "collapsed";
 
   const isActive = (path: string) => {
     if (path === "/") return location.pathname === "/";
     return location.pathname.startsWith(path);
+  };
+
+  const handleLogout = async () => {
+    await signOut();
+    navigate('/auth');
+  };
+
+  const canAccessItem = (itemRoles?: AppRole[]) => {
+    if (!itemRoles || itemRoles.length === 0) return true;
+    return itemRoles.some(role => hasRole(role));
+  };
+
+  const getUserInitials = () => {
+    if (user?.user_metadata?.nome) {
+      return user.user_metadata.nome
+        .split(' ')
+        .slice(0, 2)
+        .map((n: string) => n[0])
+        .join('')
+        .toUpperCase();
+    }
+    return user?.email?.slice(0, 2).toUpperCase() || 'U';
+  };
+
+  const getUserName = () => {
+    return user?.user_metadata?.nome || user?.email?.split('@')[0] || 'Usuário';
   };
 
   return (
@@ -117,28 +157,33 @@ export function AppSidebar() {
             )}
             <SidebarGroupContent>
               <SidebarMenu>
-                {group.items.map((item) => (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton
-                      asChild
-                      isActive={isActive(item.url)}
-                      tooltip={collapsed ? item.title : undefined}
-                    >
-                      <NavLink
-                        to={item.url}
-                        className={cn(
-                          "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all",
-                          "text-sidebar-foreground/80 hover:text-sidebar-foreground hover:bg-sidebar-accent",
-                          isActive(item.url) && "bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground",
-                          collapsed && "justify-center px-2"
-                        )}
+                {group.items.map((item) => {
+                  const itemWithRoles = item as typeof item & { roles?: AppRole[] };
+                  if (!canAccessItem(itemWithRoles.roles)) return null;
+                  
+                  return (
+                    <SidebarMenuItem key={item.title}>
+                      <SidebarMenuButton
+                        asChild
+                        isActive={isActive(item.url)}
+                        tooltip={collapsed ? item.title : undefined}
                       >
-                        <item.icon className={cn("h-5 w-5 shrink-0", collapsed && "h-5 w-5")} />
-                        {!collapsed && <span>{item.title}</span>}
-                      </NavLink>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
+                        <NavLink
+                          to={item.url}
+                          className={cn(
+                            "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all",
+                            "text-sidebar-foreground/80 hover:text-sidebar-foreground hover:bg-sidebar-accent",
+                            isActive(item.url) && "bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground",
+                            collapsed && "justify-center px-2"
+                          )}
+                        >
+                          <item.icon className={cn("h-5 w-5 shrink-0", collapsed && "h-5 w-5")} />
+                          {!collapsed && <span>{item.title}</span>}
+                        </NavLink>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  );
+                })}
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>
@@ -152,20 +197,52 @@ export function AppSidebar() {
         )}>
           <Avatar className="h-9 w-9">
             <AvatarImage src="" />
-            <AvatarFallback className="bg-primary/20 text-primary text-sm">MS</AvatarFallback>
+            <AvatarFallback className="bg-primary/20 text-primary text-sm">
+              {getUserInitials()}
+            </AvatarFallback>
           </Avatar>
           {!collapsed && (
             <div className="flex flex-col flex-1 min-w-0">
-              <span className="text-sm font-medium text-sidebar-foreground truncate">Maria Santos</span>
-              <span className="text-xs text-sidebar-muted truncate">RH - Recrutadora</span>
+              <span className="text-sm font-medium text-sidebar-foreground truncate">
+                {getUserName()}
+              </span>
+              <div className="flex gap-1 flex-wrap">
+                {roles.map((role) => (
+                  <Badge 
+                    key={role} 
+                    variant="secondary" 
+                    className={cn("text-[10px] px-1.5 py-0", roleColors[role])}
+                  >
+                    {roleLabels[role]}
+                  </Badge>
+                ))}
+              </div>
             </div>
           )}
           {!collapsed && (
-            <Button variant="ghost" size="icon" className="h-8 w-8 text-sidebar-muted hover:text-sidebar-foreground">
-              <Settings className="h-4 w-4" />
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="h-8 w-8 text-sidebar-muted hover:text-destructive"
+              onClick={handleLogout}
+              title="Sair"
+            >
+              <LogOut className="h-4 w-4" />
             </Button>
           )}
         </div>
+
+        {collapsed && (
+          <Button
+            variant="ghost"
+            size="icon"
+            className="w-full mt-2 text-sidebar-muted hover:text-destructive"
+            onClick={handleLogout}
+            title="Sair"
+          >
+            <LogOut className="h-4 w-4" />
+          </Button>
+        )}
 
         <Button
           variant="ghost"
