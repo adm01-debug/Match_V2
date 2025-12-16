@@ -10,6 +10,7 @@ import VagaDetalhes from "./pages/VagaDetalhes";
 import Pipeline from "./pages/Pipeline";
 import AvaliacaoForm from "./pages/AvaliacaoForm";
 import TestsPage from "./pages/TestsPage";
+import ProvaEditor from "./pages/ProvaEditor";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -29,6 +30,8 @@ const App = () => (
           <Route path="/pipeline" element={<Pipeline />} />
           <Route path="/avaliacao/:processoId" element={<AvaliacaoForm />} />
           <Route path="/testes" element={<TestsPage />} />
+          <Route path="/testes/nova" element={<ProvaEditor />} />
+          <Route path="/testes/:id/editar" element={<ProvaEditor />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
