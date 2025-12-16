@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Layout } from '@/components/layout/Layout';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -40,6 +41,7 @@ import {
 
 export default function TestsPage() {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('biblioteca');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategoria, setSelectedCategoria] = useState<CategoriaProva | 'todas'>('todas');
@@ -100,10 +102,7 @@ export default function TestsPage() {
   };
 
   const handleEditProva = (prova: Prova) => {
-    toast({
-      title: "Editar prova",
-      description: `Abrindo editor para: ${prova.titulo}`
-    });
+    navigate(`/testes/${prova.id}/editar`);
   };
 
   const handleDuplicateProva = (prova: Prova) => {
@@ -132,7 +131,7 @@ export default function TestsPage() {
               Biblioteca completa de avaliações para recrutamento
             </p>
           </div>
-          <Button>
+          <Button onClick={() => navigate('/testes/nova')}>
             <Plus className="h-4 w-4 mr-2" />
             Nova Prova
           </Button>
