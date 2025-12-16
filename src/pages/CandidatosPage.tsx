@@ -78,7 +78,7 @@ export default function CandidatosPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('todos');
-  const [skillFilter, setSkillFilter] = useState('');
+  const [skillFilter, setSkillFilter] = useState('todas');
   const [sortBy, setSortBy] = useState('created_at');
   const [selectedCandidato, setSelectedCandidato] = useState<Candidato | null>(null);
 
@@ -159,7 +159,7 @@ export default function CandidatosPage() {
       
       const matchesStatus = statusFilter === 'todos' || c.status === statusFilter;
       
-      const matchesSkill = !skillFilter || 
+      const matchesSkill = skillFilter === 'todas' || 
         (c.habilidades && c.habilidades.some((h: string) => 
           h.toLowerCase().includes(skillFilter.toLowerCase())
         ));
@@ -227,7 +227,7 @@ export default function CandidatosPage() {
                   <SelectValue placeholder="Filtrar por skill" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Todas as skills</SelectItem>
+                  <SelectItem value="todas">Todas as skills</SelectItem>
                   {allSkills.slice(0, 50).map(skill => (
                     <SelectItem key={skill} value={skill}>{skill}</SelectItem>
                   ))}
