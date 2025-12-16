@@ -5,12 +5,16 @@ import { VagasUrgentes } from "@/components/dashboard/VagasUrgentes";
 import { AcoesPendentes } from "@/components/dashboard/AcoesPendentes";
 import { AgendaHoje } from "@/components/dashboard/AgendaHoje";
 import { AcoesRapidas } from "@/components/dashboard/AcoesRapidas";
+import { SmartInsights } from "@/components/dashboard/SmartInsights";
+import { AlertasInteligentes } from "@/components/dashboard/AlertasInteligentes";
+import { TopCandidatos } from "@/components/dashboard/TopCandidatos";
 import {
   kpiData,
   funilData,
   vagasUrgentes,
   acoesPendentes,
   agendaDia,
+  processos,
 } from "@/data/mockData";
 import { Briefcase, Users, Target, UserCheck, Clock } from "lucide-react";
 import {
@@ -85,6 +89,12 @@ export default function Dashboard() {
           />
         </div>
 
+        {/* Insights e Alertas Inteligentes */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <SmartInsights kpiData={kpiData} funilData={funilData} />
+          <AlertasInteligentes acoesPendentes={acoesPendentes} vagasUrgentes={vagasUrgentes} />
+        </div>
+
         {/* Main Content */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Funil - Takes 2 columns */}
@@ -92,9 +102,9 @@ export default function Dashboard() {
             <FunilChart data={funilData} />
           </div>
 
-          {/* Ações Pendentes */}
+          {/* Top Candidatos */}
           <div>
-            <AcoesPendentes acoes={acoesPendentes} />
+            <TopCandidatos processos={processos} />
           </div>
         </div>
 
@@ -108,6 +118,14 @@ export default function Dashboard() {
           {/* Agenda do Dia */}
           <div>
             <AgendaHoje agenda={agendaDia} />
+          </div>
+        </div>
+
+        {/* Third Row */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Ações Pendentes */}
+          <div className="lg:col-span-2">
+            <AcoesPendentes acoes={acoesPendentes} />
           </div>
         </div>
 
