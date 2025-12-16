@@ -62,6 +62,50 @@ export type Database = {
         }
         Relationships: []
       }
+      comunicacoes: {
+        Row: {
+          assunto: string
+          candidato_id: string
+          conteudo: string
+          created_at: string
+          enviado_em: string
+          enviado_por: string | null
+          id: string
+          template_etapa: string
+          template_nome: string
+        }
+        Insert: {
+          assunto: string
+          candidato_id: string
+          conteudo: string
+          created_at?: string
+          enviado_em?: string
+          enviado_por?: string | null
+          id?: string
+          template_etapa: string
+          template_nome: string
+        }
+        Update: {
+          assunto?: string
+          candidato_id?: string
+          conteudo?: string
+          created_at?: string
+          enviado_em?: string
+          enviado_por?: string | null
+          id?: string
+          template_etapa?: string
+          template_nome?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "comunicacoes_candidato_id_fkey"
+            columns: ["candidato_id"]
+            isOneToOne: false
+            referencedRelation: "candidatos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       match_scores: {
         Row: {
           analise: string | null
