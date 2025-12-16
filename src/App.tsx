@@ -19,6 +19,7 @@ import CandidatosPage from "./pages/CandidatosPage";
 import AnalyticsPage from "./pages/AnalyticsPage";
 import ComunicacaoPage from "./pages/ComunicacaoPage";
 import AuthPage from "./pages/AuthPage";
+import AdminPage from "./pages/AdminPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -47,6 +48,7 @@ const App = () => (
             <Route path="/talentos" element={<ProtectedRoute><CandidatosPage /></ProtectedRoute>} />
             <Route path="/relatorios" element={<ProtectedRoute requiredRoles={['admin', 'rh']}><AnalyticsPage /></ProtectedRoute>} />
             <Route path="/comunicacao" element={<ProtectedRoute><ComunicacaoPage /></ProtectedRoute>} />
+            <Route path="/admin" element={<ProtectedRoute requiredRoles={['admin']}><AdminPage /></ProtectedRoute>} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
