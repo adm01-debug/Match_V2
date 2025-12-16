@@ -12,6 +12,7 @@ import AvaliacaoForm from "./pages/AvaliacaoForm";
 import TestsPage from "./pages/TestsPage";
 import ProvaEditor from "./pages/ProvaEditor";
 import ProvaAplicacao from "./pages/ProvaAplicacao";
+import ResumeParserPage from "./pages/ResumeParserPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -34,6 +35,7 @@ const App = () => (
           <Route path="/testes/nova" element={<ProvaEditor />} />
           <Route path="/testes/:id/editar" element={<ProvaEditor />} />
           <Route path="/testes/:provaId/aplicar" element={<ProvaAplicacao />} />
+          <Route path="/parser-curriculo" element={<ResumeParserPage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
