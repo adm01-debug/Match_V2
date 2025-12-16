@@ -458,6 +458,13 @@ export default function CandidatosPage() {
                       {/* Actions */}
                       <div className="flex gap-3 pt-4 border-t">
                         <Button 
+                          size="sm"
+                          onClick={() => navigate(`/candidato/${candidato.id}`)}
+                        >
+                          <Users className="h-4 w-4 mr-2" />
+                          Ver Perfil Completo
+                        </Button>
+                        <Button 
                           variant="destructive" 
                           size="sm"
                           onClick={() => deleteCandidato(candidato.id)}
