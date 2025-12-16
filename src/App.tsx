@@ -11,6 +11,7 @@ import Pipeline from "./pages/Pipeline";
 import AvaliacaoForm from "./pages/AvaliacaoForm";
 import TestsPage from "./pages/TestsPage";
 import ProvaEditor from "./pages/ProvaEditor";
+import ProvaAplicacao from "./pages/ProvaAplicacao";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,6 +33,7 @@ const App = () => (
           <Route path="/testes" element={<TestsPage />} />
           <Route path="/testes/nova" element={<ProvaEditor />} />
           <Route path="/testes/:id/editar" element={<ProvaEditor />} />
+          <Route path="/testes/:provaId/aplicar" element={<ProvaAplicacao />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

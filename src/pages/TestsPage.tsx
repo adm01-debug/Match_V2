@@ -429,7 +429,7 @@ export default function TestsPage() {
                   <Separator />
 
                   <div className="flex gap-2">
-                    <Button className="flex-1">
+                    <Button className="flex-1" onClick={() => navigate(`/testes/${selectedProva.id}/aplicar`)}>
                       Aplicar Prova
                     </Button>
                     <Button variant="outline" onClick={() => handleEditProva(selectedProva)}>
