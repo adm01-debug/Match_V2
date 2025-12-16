@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
-import { Upload, FileText, Loader2, User, Mail, Phone, Briefcase, GraduationCap, Sparkles, CheckCircle2, X, Target } from 'lucide-react';
+import { Upload, FileText, Loader2, User, Mail, Phone, Briefcase, GraduationCap, Sparkles, CheckCircle2, X, Target, Save, UserPlus } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { MatchScoreCalculator } from './MatchScoreCalculator';
 
@@ -28,25 +28,23 @@ export interface ParsedResume {
 
 interface ResumeParserProps {
   onParsed?: (data: ParsedResume) => void;
+  onCandidatoSaved?: (candidatoId: string) => void;
 }
 
-export function ResumeParser({ onParsed }: ResumeParserProps) {
+export function ResumeParser({ onParsed, onCandidatoSaved }: ResumeParserProps) {
   const { toast } = useToast();
   const [isDragging, setIsDragging] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const [parsedData, setParsedData] = useState<ParsedResume | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
   const [showMatchCalculator, setShowMatchCalculator] = useState(false);
+  const [savedCandidatoId, setSavedCandidatoId] = useState<string | null>(null);
 
   const extractTextFromFile = async (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
-      
-      reader.onload = (e) => {
-        const content = e.target?.result as string;
-        resolve(content);
-      };
-      
+      reader.onload = (e) => resolve(e.target?.result as string);
       reader.onerror = () => reject(new Error('Erro ao ler arquivo'));
       reader.readAsText(file);
     });
@@ -57,6 +55,7 @@ export function ResumeParser({ onParsed }: ResumeParserProps) {
     setFileName(file.name);
     setParsedData(null);
     setShowMatchCalculator(false);
+    setSavedCandidatoId(null);
 
     try {
       const fileContent = await extractTextFromFile(file);
@@ -64,7 +63,7 @@ export function ResumeParser({ onParsed }: ResumeParserProps) {
       if (!fileContent || fileContent.trim().length < 50) {
         toast({
           title: "Arquivo inválido",
-          description: "O arquivo parece estar vazio ou não contém texto suficiente. Para PDFs, use arquivos de texto (.txt) por enquanto.",
+          description: "O arquivo parece estar vazio ou não contém texto suficiente.",
           variant: "destructive",
         });
         setIsLoading(false);
@@ -75,13 +74,8 @@ export function ResumeParser({ onParsed }: ResumeParserProps) {
         body: { fileContent, fileName: file.name },
       });
 
-      if (error) {
-        throw new Error(error.message);
-      }
-
-      if (!data.success) {
-        throw new Error(data.error || 'Erro ao processar currículo');
-      }
+      if (error) throw new Error(error.message);
+      if (!data.success) throw new Error(data.error || 'Erro ao processar currículo');
 
       setParsedData(data.data);
       onParsed?.(data.data);
@@ -99,6 +93,46 @@ export function ResumeParser({ onParsed }: ResumeParserProps) {
       });
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const saveCandidato = async () => {
+    if (!parsedData) return;
+
+    setIsSaving(true);
+
+    try {
+      const { data, error } = await supabase.from('candidatos').insert({
+        nome: parsedData.nome,
+        email: parsedData.email,
+        telefone: parsedData.telefone,
+        resumo: parsedData.resumo,
+        habilidades: parsedData.habilidades,
+        experiencias: parsedData.experiencias,
+        formacao: parsedData.formacao,
+        arquivo_curriculo: fileName,
+        fonte: 'parser_curriculo',
+        status: 'novo',
+      }).select().single();
+
+      if (error) throw error;
+
+      setSavedCandidatoId(data.id);
+      onCandidatoSaved?.(data.id);
+
+      toast({
+        title: "Candidato salvo!",
+        description: `${parsedData.nome} foi adicionado ao banco de dados.`,
+      });
+    } catch (error) {
+      console.error('Error saving candidato:', error);
+      toast({
+        title: "Erro ao salvar",
+        description: error instanceof Error ? error.message : "Não foi possível salvar o candidato.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -134,6 +168,7 @@ export function ResumeParser({ onParsed }: ResumeParserProps) {
     setParsedData(null);
     setFileName(null);
     setShowMatchCalculator(false);
+    setSavedCandidatoId(null);
   };
 
   return (
@@ -192,12 +227,20 @@ export function ResumeParser({ onParsed }: ResumeParserProps) {
                 <FileText className="h-4 w-4 text-muted-foreground" />
                 <span className="text-sm">{fileName}</span>
               </div>
-              {parsedData && (
-                <Badge variant="default" className="bg-green-500">
-                  <CheckCircle2 className="h-3 w-3 mr-1" />
-                  Processado
-                </Badge>
-              )}
+              <div className="flex items-center gap-2">
+                {savedCandidatoId && (
+                  <Badge variant="default" className="bg-blue-500">
+                    <Save className="h-3 w-3 mr-1" />
+                    Salvo no BD
+                  </Badge>
+                )}
+                {parsedData && (
+                  <Badge variant="default" className="bg-green-500">
+                    <CheckCircle2 className="h-3 w-3 mr-1" />
+                    Processado
+                  </Badge>
+                )}
+              </div>
             </div>
           )}
         </CardContent>
@@ -312,10 +355,30 @@ export function ResumeParser({ onParsed }: ResumeParserProps) {
             )}
 
             {/* Action Buttons */}
-            <div className="flex gap-3 pt-4 border-t">
-              <Button className="flex-1">
-                Criar Candidato com estes dados
-              </Button>
+            <div className="flex flex-wrap gap-3 pt-4 border-t">
+              {!savedCandidatoId ? (
+                <Button onClick={saveCandidato} disabled={isSaving} className="flex-1">
+                  {isSaving ? (
+                    <>
+                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                      Salvando...
+                    </>
+                  ) : (
+                    <>
+                      <UserPlus className="h-4 w-4 mr-2" />
+                      Salvar Candidato no Banco
+                    </>
+                  )}
+                </Button>
+              ) : (
+                <div className="flex-1 p-3 bg-green-50 dark:bg-green-950/20 rounded-lg text-center">
+                  <p className="text-sm text-green-700 dark:text-green-400 flex items-center justify-center gap-2">
+                    <CheckCircle2 className="h-4 w-4" />
+                    Candidato salvo com sucesso!
+                  </p>
+                </div>
+              )}
+              
               <Button 
                 variant="outline" 
                 onClick={() => setShowMatchCalculator(!showMatchCalculator)}
@@ -331,7 +394,16 @@ export function ResumeParser({ onParsed }: ResumeParserProps) {
 
       {/* Match Score Calculator */}
       {parsedData && showMatchCalculator && (
-        <MatchScoreCalculator candidatoData={parsedData} />
+        <MatchScoreCalculator 
+          candidatoData={parsedData} 
+          candidatoId={savedCandidatoId || undefined}
+          onMatchSaved={() => {
+            toast({
+              title: "Match Score vinculado",
+              description: "O score foi salvo no perfil do candidato.",
+            });
+          }}
+        />
       )}
     </div>
   );

@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Target, ArrowRight } from 'lucide-react';
+import { Loader2, Target, ArrowRight, Save } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { MatchScoreCard } from './MatchScoreCard';
 import { vagas } from '@/data/mockData';
@@ -43,12 +43,15 @@ interface MatchResult {
 
 interface MatchScoreCalculatorProps {
   candidatoData: ParsedResume;
+  candidatoId?: string;
+  onMatchSaved?: () => void;
 }
 
-export function MatchScoreCalculator({ candidatoData }: MatchScoreCalculatorProps) {
+export function MatchScoreCalculator({ candidatoData, candidatoId, onMatchSaved }: MatchScoreCalculatorProps) {
   const { toast } = useToast();
   const [selectedVagaId, setSelectedVagaId] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const [matchResult, setMatchResult] = useState<MatchResult | null>(null);
 
   const vagasAbertas = vagas.filter(v => v.status === 'publicada' || v.status === 'aprovada');
@@ -68,7 +71,6 @@ export function MatchScoreCalculator({ candidatoData }: MatchScoreCalculatorProp
     setMatchResult(null);
 
     try {
-      // Parse requisitos obrigatórios e desejáveis do texto
       const parseRequisitos = (texto: string): string[] => {
         return texto
           .split(/[,;\n]/)
@@ -97,13 +99,8 @@ export function MatchScoreCalculator({ candidatoData }: MatchScoreCalculatorProp
         },
       });
 
-      if (error) {
-        throw new Error(error.message);
-      }
-
-      if (!data.success) {
-        throw new Error(data.error || 'Erro ao calcular match score');
-      }
+      if (error) throw new Error(error.message);
+      if (!data.success) throw new Error(data.error || 'Erro ao calcular match score');
 
       setMatchResult(data.data);
 
@@ -120,6 +117,56 @@ export function MatchScoreCalculator({ candidatoData }: MatchScoreCalculatorProp
       });
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const saveMatchScore = async () => {
+    if (!matchResult || !selectedVaga || !candidatoId) {
+      toast({
+        title: "Erro",
+        description: "Dados incompletos para salvar o match score.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsSaving(true);
+
+    try {
+      const { error } = await supabase.from('match_scores').insert({
+        candidato_id: candidatoId,
+        vaga_id: selectedVaga.id,
+        vaga_titulo: selectedVaga.titulo,
+        score_total: matchResult.scoreTotal,
+        score_habilidades: matchResult.scoreHabilidades,
+        score_experiencia: matchResult.scoreExperiencia,
+        score_formacao: matchResult.scoreFormacao,
+        habilidades_match: matchResult.habilidadesMatch,
+        habilidades_faltantes: matchResult.habilidadesFaltantes,
+        habilidades_extras: matchResult.habilidadesExtras,
+        analise: matchResult.analise,
+        recomendacao: matchResult.recomendacao,
+        pontos_fortes: matchResult.pontosFortes,
+        pontos_atencao: matchResult.pontosAtencao,
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Match Score salvo!",
+        description: `Score de ${matchResult.scoreTotal}% para ${selectedVaga.titulo} foi salvo.`,
+      });
+
+      onMatchSaved?.();
+    } catch (error) {
+      console.error('Error saving match score:', error);
+      toast({
+        title: "Erro ao salvar",
+        description: "Não foi possível salvar o match score.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -199,11 +246,31 @@ export function MatchScoreCalculator({ candidatoData }: MatchScoreCalculatorProp
       </Card>
 
       {matchResult && selectedVaga && (
-        <MatchScoreCard
-          matchResult={matchResult}
-          candidatoNome={candidatoData.nome}
-          vagaTitulo={selectedVaga.titulo}
-        />
+        <>
+          <MatchScoreCard
+            matchResult={matchResult}
+            candidatoNome={candidatoData.nome}
+            vagaTitulo={selectedVaga.titulo}
+          />
+          
+          {candidatoId && (
+            <div className="flex justify-end">
+              <Button onClick={saveMatchScore} disabled={isSaving}>
+                {isSaving ? (
+                  <>
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    Salvando...
+                  </>
+                ) : (
+                  <>
+                    <Save className="h-4 w-4 mr-2" />
+                    Salvar Match Score
+                  </>
+                )}
+              </Button>
+            </div>
+          )}
+        </>
       )}
     </div>
   );
