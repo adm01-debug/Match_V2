@@ -10,6 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { entrevistasMock, Entrevista } from '@/data/agendaData';
 import EntrevistaCard from '@/components/agenda/EntrevistaCard';
 import AgendarEntrevistaDialog from '@/components/agenda/AgendarEntrevistaDialog';
+import EntrevistaDetalhesDialog from '@/components/agenda/EntrevistaDetalhesDialog';
 import { cn } from '@/lib/utils';
 
 const AgendaPage = () => {
@@ -17,6 +18,8 @@ const AgendaPage = () => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [entrevistas, setEntrevistas] = useState<Entrevista[]>(entrevistasMock);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [detalhesDialogOpen, setDetalhesDialogOpen] = useState(false);
+  const [selectedEntrevista, setSelectedEntrevista] = useState<Entrevista | null>(null);
   const [viewMode, setViewMode] = useState<'calendar' | 'list'>('calendar');
 
   const monthStart = startOfMonth(currentMonth);
@@ -51,6 +54,25 @@ const AgendaPage = () => {
       id: `ent-${Date.now()}`,
     };
     setEntrevistas([...entrevistas, entrevistaComId]);
+  };
+
+  const handleOpenDetalhes = (entrevista: Entrevista) => {
+    setSelectedEntrevista(entrevista);
+    setDetalhesDialogOpen(true);
+  };
+
+  const handleUpdateEntrevista = (updated: Entrevista) => {
+    setEntrevistas(entrevistas.map((e) => e.id === updated.id ? updated : e));
+    setSelectedEntrevista(updated);
+  };
+
+  const handleCancelEntrevista = (id: string) => {
+    setEntrevistas(entrevistas.map((e) => e.id === id ? { ...e, status: 'cancelada' as const } : e));
+  };
+
+  const handleConfirmEntrevista = (id: string) => {
+    setEntrevistas(entrevistas.map((e) => e.id === id ? { ...e, status: 'confirmada' as const } : e));
+    setSelectedEntrevista(prev => prev ? { ...prev, status: 'confirmada' as const } : null);
   };
 
   const estatisticas = useMemo(() => {
@@ -239,7 +261,7 @@ const AgendaPage = () => {
                       <div className="text-sm text-muted-foreground min-w-[100px]">
                         {format(ent.data, "dd/MM/yyyy", { locale: ptBR })}
                       </div>
-                      <EntrevistaCard entrevista={ent} />
+                      <EntrevistaCard entrevista={ent} onClick={() => handleOpenDetalhes(ent)} />
                     </div>
                   ))
                 )}
@@ -276,7 +298,7 @@ const AgendaPage = () => {
                 </div>
               ) : (
                 entrevistasSelecionadas.map((ent) => (
-                  <EntrevistaCard key={ent.id} entrevista={ent} />
+                  <EntrevistaCard key={ent.id} entrevista={ent} onClick={() => handleOpenDetalhes(ent)} />
                 ))
               )}
             </CardContent>
@@ -309,12 +331,21 @@ const AgendaPage = () => {
         </div>
       </div>
 
-      {/* Dialog */}
+      {/* Dialogs */}
       <AgendarEntrevistaDialog
         open={dialogOpen}
         onOpenChange={setDialogOpen}
         onSave={handleSaveEntrevista}
         selectedDate={selectedDate}
+      />
+
+      <EntrevistaDetalhesDialog
+        entrevista={selectedEntrevista}
+        open={detalhesDialogOpen}
+        onOpenChange={setDetalhesDialogOpen}
+        onUpdate={handleUpdateEntrevista}
+        onCancel={handleCancelEntrevista}
+        onConfirm={handleConfirmEntrevista}
       />
     </div>
     </Layout>
