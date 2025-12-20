@@ -1,552 +1,351 @@
-import { useState, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Layout } from '@/components/layout/Layout';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from '@/components/ui/sheet';
-import { Separator } from '@/components/ui/separator';
-import { Progress } from '@/components/ui/progress';
-import { Skeleton } from '@/components/ui/skeleton';
-import { ProvaCard } from '@/components/tests/ProvaCard';
-import { BateriaCard } from '@/components/tests/BateriaCard';
-import { TestFilters } from '@/components/tests/TestFilters';
-import { CategoriaCard } from '@/components/tests/CategoriaCard';
-import { useProvas, useBaterias, useProvasStats, useDeleteProva, useDuplicateProva } from '@/hooks/useProvas';
-import { categoriasInfo, departamentosInfo, niveisInfo } from '@/data/testsData';
-import { Prova, BateriaProvas, CategoriaProva, Departamento, NivelCargo } from '@/types/tests';
-import { useToast } from '@/hooks/use-toast';
-import { 
-  Plus, 
-  FileText, 
-  Layers, 
-  Clock, 
-  Users, 
+import { useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
+import { Layout } from "@/components/layout/Layout";
+import { useProvas } from "@/hooks/useProvas";
+import { categoriasInfo, niveisInfo, departamentosInfo, getCategoriaById, getNivelById } from "@/config/testsConfig";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Search,
+  Plus,
+  FileText,
+  Clock,
+  Users,
+  CheckCircle2,
+  BarChart3,
+  Filter,
+  RefreshCw,
+  Edit,
+  Copy,
+  Trash2,
+  Play,
+  Brain,
+  Code,
   BookOpen,
-  CheckCircle,
-  TrendingUp,
-  AlertCircle
-} from 'lucide-react';
+  Globe,
+  Table,
+  Heart,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast";
+
+// Mapa de ícones
+const iconeMap: Record<string, any> = {
+  Brain,
+  Code,
+  BookOpen,
+  Globe,
+  Table,
+  Users,
+  Heart,
+};
 
 export default function TestsPage() {
-  const { toast } = useToast();
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState('biblioteca');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategoria, setSelectedCategoria] = useState<CategoriaProva | 'todas'>('todas');
-  const [selectedDepartamento, setSelectedDepartamento] = useState<Departamento | 'todos'>('todos');
-  const [selectedNivel, setSelectedNivel] = useState<NivelCargo | 'todos'>('todos');
-  const [selectedProva, setSelectedProva] = useState<Prova | null>(null);
-  const [selectedBateria, setSelectedBateria] = useState<BateriaProvas | null>(null);
+  const { toast } = useToast();
 
-  // Dados reais do Supabase
-  const { data: provas = [], isLoading: loadingProvas } = useProvas();
-  const { data: baterias = [], isLoading: loadingBaterias } = useBaterias();
-  const { data: stats, isLoading: loadingStats } = useProvasStats();
-  const deleteProva = useDeleteProva();
-  const duplicateProva = useDuplicateProva();
+  const { data: provas = [], isLoading, deleteProva, duplicarProva, refetch } = useProvas();
 
-  // Filter provas
-  const filteredProvas = useMemo(() => {
-    return provas.filter((prova) => {
-      const matchSearch = searchTerm === '' || 
-        prova.titulo.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        prova.descricao.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        prova.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
-      
-      const matchCategoria = selectedCategoria === 'todas' || prova.categoria === selectedCategoria;
-      
-      const matchDepartamento = selectedDepartamento === 'todos' || 
-        prova.departamentos.includes(selectedDepartamento);
-      
-      const matchNivel = selectedNivel === 'todos' || 
-        prova.niveisAplicaveis.includes(selectedNivel);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filtroCategoria, setFiltroCategoria] = useState<string>("todas");
+  const [filtroNivel, setFiltroNivel] = useState<string>("todos");
+  const [activeTab, setActiveTab] = useState("provas");
 
-      return matchSearch && matchCategoria && matchDepartamento && matchNivel;
+  // Filtrar provas
+  const provasFiltradas = useMemo(() => {
+    return provas.filter(p => {
+      if (searchQuery && !p.titulo.toLowerCase().includes(searchQuery.toLowerCase())) return false;
+      if (filtroCategoria !== "todas" && p.categoria !== filtroCategoria) return false;
+      if (filtroNivel !== "todos" && p.nivel !== filtroNivel) return false;
+      return true;
     });
-  }, [provas, searchTerm, selectedCategoria, selectedDepartamento, selectedNivel]);
+  }, [provas, searchQuery, filtroCategoria, filtroNivel]);
 
-  // Count provas by categoria
-  const provasByCategoria = useMemo(() => {
-    const counts: Record<CategoriaProva, number> = {
-      cognitivo: 0,
-      comportamental: 0,
-      tecnico: 0,
-      idiomas: 0,
-      situacional: 0,
-      competencias: 0
+  // Estatísticas
+  const stats = useMemo(() => {
+    return {
+      totalProvas: provas.length,
+      totalQuestoes: provas.reduce((acc, p) => acc + (p.total_questoes || 0), 0),
+      totalAplicacoes: provas.reduce((acc, p) => acc + (p.total_aplicacoes || 0), 0),
+      mediaAprovacao: provas.length > 0
+        ? provas.reduce((acc, p) => acc + (p.taxa_aprovacao || 0), 0) / provas.length
+        : 0,
     };
-    provas.forEach(prova => {
-      counts[prova.categoria]++;
-    });
-    return counts;
   }, [provas]);
 
-  const clearFilters = () => {
-    setSearchTerm('');
-    setSelectedCategoria('todas');
-    setSelectedDepartamento('todos');
-    setSelectedNivel('todos');
-  };
-
-  const handleEditProva = (prova: Prova) => {
-    navigate(`/testes/${prova.id}/editar`);
-  };
-
-  const handleDuplicateProva = async (prova: Prova) => {
+  // Handlers
+  const handleDuplicar = async (id: string) => {
     try {
-      await duplicateProva.mutateAsync(prova.id);
-      toast({
-        title: "Prova duplicada",
-        description: `Cópia de "${prova.titulo}" criada com sucesso!`
-      });
-    } catch (error) {
-      toast({
-        title: "Erro ao duplicar",
-        description: "Não foi possível duplicar a prova.",
-        variant: "destructive"
-      });
+      await duplicarProva(id);
+      toast({ title: "Prova duplicada com sucesso" });
+    } catch {
+      toast({ title: "Erro ao duplicar", variant: "destructive" });
     }
   };
 
-  const handleDeleteProva = async (prova: Prova) => {
+  const handleExcluir = async (id: string) => {
+    if (!confirm("Deseja excluir esta prova?")) return;
     try {
-      await deleteProva.mutateAsync(prova.id);
-      toast({
-        title: "Prova excluída",
-        description: `"${prova.titulo}" foi removida.`,
-      });
-    } catch (error) {
-      toast({
-        title: "Erro ao excluir",
-        description: "Não foi possível excluir a prova.",
-        variant: "destructive"
-      });
+      await deleteProva(id);
+      toast({ title: "Prova excluída" });
+    } catch {
+      toast({ title: "Erro ao excluir", variant: "destructive" });
     }
   };
 
-  const isLoading = loadingProvas || loadingBaterias || loadingStats;
+  // Render Card de Prova
+  const ProvaCard = ({ prova }: { prova: any }) => {
+    const categoria = getCategoriaById(prova.categoria);
+    const nivel = getNivelById(prova.nivel);
+    const IconeCategoria = categoria ? iconeMap[categoria.icone] || FileText : FileText;
+
+    return (
+      <Card className="hover:shadow-md transition-shadow">
+        <CardHeader className="pb-2">
+          <div className="flex items-start justify-between">
+            <div className={cn("p-2 rounded-lg", categoria?.cor || "bg-gray-500")}>
+              <IconeCategoria className="h-5 w-5 text-white" />
+            </div>
+            <Badge variant="outline">{nivel?.nome || prova.nivel}</Badge>
+          </div>
+          <CardTitle className="text-lg mt-2">{prova.titulo}</CardTitle>
+          <CardDescription className="line-clamp-2">{prova.descricao}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-3 gap-4 text-sm">
+            <div className="text-center">
+              <p className="text-2xl font-bold">{prova.total_questoes}</p>
+              <p className="text-xs text-muted-foreground">Questões</p>
+            </div>
+            <div className="text-center">
+              <p className="text-2xl font-bold">{prova.duracao_minutos}</p>
+              <p className="text-xs text-muted-foreground">Minutos</p>
+            </div>
+            <div className="text-center">
+              <p className="text-2xl font-bold">{prova.nota_minima}%</p>
+              <p className="text-xs text-muted-foreground">Mínimo</p>
+            </div>
+          </div>
+
+          {prova.total_aplicacoes > 0 && (
+            <div className="mt-4 p-3 bg-muted rounded-lg">
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-muted-foreground">Aplicações</span>
+                <span className="font-medium">{prova.total_aplicacoes}</span>
+              </div>
+              <div className="flex items-center justify-between text-sm mt-1">
+                <span className="text-muted-foreground">Taxa de aprovação</span>
+                <span className={cn(
+                  "font-medium",
+                  (prova.taxa_aprovacao || 0) >= 70 ? "text-green-600" : "text-amber-600"
+                )}>
+                  {prova.taxa_aprovacao?.toFixed(0) || 0}%
+                </span>
+              </div>
+            </div>
+          )}
+        </CardContent>
+        <CardFooter className="flex justify-between pt-0">
+          <div className="flex gap-1">
+            <Button size="sm" variant="ghost" onClick={() => navigate(`/provas/${prova.id}/editar`)}>
+              <Edit className="h-4 w-4" />
+            </Button>
+            <Button size="sm" variant="ghost" onClick={() => handleDuplicar(prova.id)}>
+              <Copy className="h-4 w-4" />
+            </Button>
+            <Button size="sm" variant="ghost" onClick={() => handleExcluir(prova.id)}>
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          </div>
+          <Button size="sm" onClick={() => navigate(`/provas/${prova.id}/aplicar`)}>
+            <Play className="h-4 w-4 mr-1" />
+            Aplicar
+          </Button>
+        </CardFooter>
+      </Card>
+    );
+  };
+
+  if (isLoading) {
+    return (
+      <Layout title="Provas">
+        <div className="p-6 space-y-6">
+          <Skeleton className="h-10 w-48" />
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            {[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-24" />)}
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {[1, 2, 3, 4, 5, 6].map(i => <Skeleton key={i} className="h-64" />)}
+          </div>
+        </div>
+      </Layout>
+    );
+  }
 
   return (
-    <Layout>
-      <div className="space-y-6">
+    <Layout title="Provas e Testes">
+      <div className="p-6 space-y-6 animate-fade-in">
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold">Banco de Testes e Provas</h1>
-            <p className="text-muted-foreground mt-1">
-              Biblioteca completa de avaliações para recrutamento
-            </p>
+            <h1 className="text-2xl font-bold">Provas e Testes</h1>
+            <p className="text-muted-foreground">Gerencie avaliações técnicas e comportamentais</p>
           </div>
-          <Button onClick={() => navigate('/testes/nova')}>
-            <Plus className="h-4 w-4 mr-2" />
-            Nova Prova
-          </Button>
+          <div className="flex items-center gap-3">
+            <Button variant="outline" size="icon" onClick={() => refetch()}>
+              <RefreshCw className="h-4 w-4" />
+            </Button>
+            <Button onClick={() => navigate("/provas/nova")}>
+              <Plus className="h-4 w-4 mr-2" />
+              Nova Prova
+            </Button>
+          </div>
         </div>
 
-        {/* Stats Cards */}
+        {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {isLoading ? (
-            Array.from({ length: 4 }).map((_, i) => (
-              <Skeleton key={i} className="h-20 rounded-lg" />
-            ))
-          ) : (
-            <>
-              <Card>
-                <CardContent className="p-4">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-primary/10">
-                      <FileText className="h-5 w-5 text-primary" />
-                    </div>
-                    <div>
-                      <p className="text-2xl font-bold">{stats?.totalProvas || 0}</p>
-                      <p className="text-xs text-muted-foreground">Provas Disponíveis</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent className="p-4">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-green-500/10">
-                      <Users className="h-5 w-5 text-green-500" />
-                    </div>
-                    <div>
-                      <p className="text-2xl font-bold">
-                        {stats?.totalAplicacoes ? (stats.totalAplicacoes / 1000).toFixed(1) + 'k' : '0'}
-                      </p>
-                      <p className="text-xs text-muted-foreground">Total de Aplicações</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent className="p-4">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-orange-500/10">
-                      <Clock className="h-5 w-5 text-orange-500" />
-                    </div>
-                    <div>
-                      <p className="text-2xl font-bold">{stats?.mediaDuracao || 0}min</p>
-                      <p className="text-xs text-muted-foreground">Duração Média</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent className="p-4">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-purple-500/10">
-                      <Layers className="h-5 w-5 text-purple-500" />
-                    </div>
-                    <div>
-                      <p className="text-2xl font-bold">{stats?.totalBaterias || 0}</p>
-                      <p className="text-xs text-muted-foreground">Baterias Prontas</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </>
-          )}
-        </div>
-
-        {/* Empty State */}
-        {!isLoading && provas.length === 0 && (
           <Card>
-            <CardContent className="p-12 text-center">
-              <AlertCircle className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-              <h3 className="font-medium mb-2">Nenhuma prova cadastrada</h3>
-              <p className="text-sm text-muted-foreground mb-4">
-                Comece criando sua primeira prova para avaliar candidatos
-              </p>
-              <Button onClick={() => navigate('/testes/nova')}>
-                <Plus className="h-4 w-4 mr-2" />
-                Criar Primeira Prova
-              </Button>
+            <CardContent className="pt-4">
+              <div className="flex items-center gap-2">
+                <FileText className="h-5 w-5 text-blue-500" />
+                <div>
+                  <p className="text-2xl font-bold">{stats.totalProvas}</p>
+                  <p className="text-xs text-muted-foreground">Provas</p>
+                </div>
+              </div>
             </CardContent>
           </Card>
-        )}
+          <Card>
+            <CardContent className="pt-4">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="h-5 w-5 text-green-500" />
+                <div>
+                  <p className="text-2xl font-bold">{stats.totalQuestoes}</p>
+                  <p className="text-xs text-muted-foreground">Questões</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="pt-4">
+              <div className="flex items-center gap-2">
+                <Users className="h-5 w-5 text-purple-500" />
+                <div>
+                  <p className="text-2xl font-bold">{stats.totalAplicacoes}</p>
+                  <p className="text-xs text-muted-foreground">Aplicações</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="pt-4">
+              <div className="flex items-center gap-2">
+                <BarChart3 className="h-5 w-5 text-amber-500" />
+                <div>
+                  <p className="text-2xl font-bold">{stats.mediaAprovacao.toFixed(0)}%</p>
+                  <p className="text-xs text-muted-foreground">Aprovação Média</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Filtros */}
+        <div className="flex flex-col md:flex-row gap-4">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Buscar prova..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10"
+            />
+          </div>
+          <Select value={filtroCategoria} onValueChange={setFiltroCategoria}>
+            <SelectTrigger className="w-48">
+              <Filter className="h-4 w-4 mr-2" />
+              <SelectValue placeholder="Categoria" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="todas">Todas Categorias</SelectItem>
+              {categoriasInfo.map(c => (
+                <SelectItem key={c.id} value={c.id}>{c.nome}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Select value={filtroNivel} onValueChange={setFiltroNivel}>
+            <SelectTrigger className="w-40">
+              <SelectValue placeholder="Nível" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="todos">Todos Níveis</SelectItem>
+              {niveisInfo.map(n => (
+                <SelectItem key={n.id} value={n.id}>{n.nome}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
 
         {/* Tabs */}
-        {provas.length > 0 && (
-          <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList>
-              <TabsTrigger value="biblioteca">
-                <BookOpen className="h-4 w-4 mr-2" />
-                Biblioteca de Provas
-              </TabsTrigger>
-              <TabsTrigger value="baterias">
-                <Layers className="h-4 w-4 mr-2" />
-                Baterias Pré-configuradas
-              </TabsTrigger>
-              <TabsTrigger value="categorias">
-                <FileText className="h-4 w-4 mr-2" />
-                Por Categoria
-              </TabsTrigger>
-            </TabsList>
+        <Tabs value={activeTab} onValueChange={setActiveTab}>
+          <TabsList>
+            <TabsTrigger value="provas">Provas ({provasFiltradas.length})</TabsTrigger>
+            <TabsTrigger value="categorias">Por Categoria</TabsTrigger>
+          </TabsList>
 
-            {/* Biblioteca Tab */}
-            <TabsContent value="biblioteca" className="space-y-4">
-              <TestFilters
-                searchTerm={searchTerm}
-                onSearchChange={setSearchTerm}
-                selectedCategoria={selectedCategoria}
-                onCategoriaChange={setSelectedCategoria}
-                selectedDepartamento={selectedDepartamento}
-                onDepartamentoChange={setSelectedDepartamento}
-                selectedNivel={selectedNivel}
-                onNivelChange={setSelectedNivel}
-                onClearFilters={clearFilters}
-              />
-
-              <div className="flex items-center justify-between">
-                <p className="text-sm text-muted-foreground">
-                  {filteredProvas.length} prova(s) encontrada(s)
-                </p>
-              </div>
-
+          {/* Tab Provas */}
+          <TabsContent value="provas" className="mt-4">
+            {provasFiltradas.length === 0 ? (
+              <Card>
+                <CardContent className="py-12 text-center text-muted-foreground">
+                  <FileText className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                  <p>Nenhuma prova encontrada</p>
+                  <Button onClick={() => navigate("/provas/nova")} className="mt-4">
+                    <Plus className="h-4 w-4 mr-2" />
+                    Criar Primeira Prova
+                  </Button>
+                </CardContent>
+              </Card>
+            ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {filteredProvas.map((prova) => (
-                  <ProvaCard
-                    key={prova.id}
-                    prova={prova}
-                    onSelect={setSelectedProva}
-                    onEdit={handleEditProva}
-                    onDuplicate={handleDuplicateProva}
-                    onDelete={handleDeleteProva}
-                  />
+                {provasFiltradas.map(prova => (
+                  <ProvaCard key={prova.id} prova={prova} />
                 ))}
               </div>
-
-              {filteredProvas.length === 0 && provas.length > 0 && (
-                <Card>
-                  <CardContent className="p-12 text-center">
-                    <FileText className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                    <h3 className="font-medium mb-2">Nenhuma prova encontrada</h3>
-                    <p className="text-sm text-muted-foreground">
-                      Tente ajustar os filtros ou termos de busca
-                    </p>
-                  </CardContent>
-                </Card>
-              )}
-            </TabsContent>
-
-            {/* Baterias Tab */}
-            <TabsContent value="baterias" className="space-y-4">
-              {baterias.length === 0 ? (
-                <Card>
-                  <CardContent className="p-12 text-center">
-                    <Layers className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                    <h3 className="font-medium mb-2">Nenhuma bateria configurada</h3>
-                    <p className="text-sm text-muted-foreground">
-                      Configure baterias de provas para aplicar múltiplos testes
-                    </p>
-                  </CardContent>
-                </Card>
-              ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {baterias.map((bateria) => (
-                    <BateriaCard
-                      key={bateria.id}
-                      bateria={bateria}
-                      onSelect={setSelectedBateria}
-                    />
-                  ))}
-                </div>
-              )}
-            </TabsContent>
-
-            {/* Categorias Tab */}
-            <TabsContent value="categorias" className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {(Object.keys(categoriasInfo) as CategoriaProva[]).map((categoria) => (
-                  <CategoriaCard
-                    key={categoria}
-                    categoria={categoria}
-                    count={provasByCategoria[categoria]}
-                    onClick={() => {
-                      setSelectedCategoria(categoria);
-                      setActiveTab('biblioteca');
-                    }}
-                    isSelected={selectedCategoria === categoria}
-                  />
-                ))}
-              </div>
-
-              {/* Detailed breakdown by category */}
-              <div className="space-y-6">
-                {(Object.keys(categoriasInfo) as CategoriaProva[]).map((categoria) => {
-                  const provasCategoria = provas.filter(p => p.categoria === categoria);
-                  const info = categoriasInfo[categoria];
-                  
-                  if (provasCategoria.length === 0) return null;
-                  
-                  return (
-                    <Card key={categoria}>
-                      <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                          <div className={`w-8 h-8 rounded-lg ${info.cor} flex items-center justify-center`}>
-                            <FileText className="h-4 w-4 text-white" />
-                          </div>
-                          {info.nome}
-                          <Badge variant="secondary" className="ml-auto">
-                            {provasCategoria.length} provas
-                          </Badge>
-                        </CardTitle>
-                        <CardDescription>{info.descricao}</CardDescription>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                          {provasCategoria.map((prova) => (
-                            <ProvaCard
-                              key={prova.id}
-                              prova={prova}
-                              compact
-                              onSelect={setSelectedProva}
-                            />
-                          ))}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  );
-                })}
-              </div>
-            </TabsContent>
-          </Tabs>
-        )}
-
-        {/* Prova Detail Sheet */}
-        <Sheet open={!!selectedProva} onOpenChange={() => setSelectedProva(null)}>
-          <SheetContent className="w-full sm:max-w-xl overflow-y-auto">
-            {selectedProva && (
-              <>
-                <SheetHeader>
-                  <SheetTitle>{selectedProva.titulo}</SheetTitle>
-                  <SheetDescription>{selectedProva.descricao}</SheetDescription>
-                </SheetHeader>
-                
-                <div className="space-y-6 mt-6">
-                  <div className="flex flex-wrap gap-2">
-                    <Badge className={categoriasInfo[selectedProva.categoria].cor}>
-                      {categoriasInfo[selectedProva.categoria].nome}
-                    </Badge>
-                    {selectedProva.ativo ? (
-                      <Badge variant="outline" className="text-green-600 border-green-600">
-                        <CheckCircle className="h-3 w-3 mr-1" />
-                        Ativo
-                      </Badge>
-                    ) : (
-                      <Badge variant="outline" className="text-muted-foreground">
-                        Inativo
-                      </Badge>
-                    )}
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-4">
-                    <Card>
-                      <CardContent className="p-4 text-center">
-                        <Clock className="h-5 w-5 mx-auto text-muted-foreground mb-1" />
-                        <p className="text-lg font-bold">{selectedProva.duracao} min</p>
-                        <p className="text-xs text-muted-foreground">Duração</p>
-                      </CardContent>
-                    </Card>
-                    <Card>
-                      <CardContent className="p-4 text-center">
-                        <FileText className="h-5 w-5 mx-auto text-muted-foreground mb-1" />
-                        <p className="text-lg font-bold">{selectedProva.totalQuestoes}</p>
-                        <p className="text-xs text-muted-foreground">Questões</p>
-                      </CardContent>
-                    </Card>
-                    <Card>
-                      <CardContent className="p-4 text-center">
-                        <Users className="h-5 w-5 mx-auto text-muted-foreground mb-1" />
-                        <p className="text-lg font-bold">{selectedProva.aplicacoes}</p>
-                        <p className="text-xs text-muted-foreground">Aplicações</p>
-                      </CardContent>
-                    </Card>
-                    <Card>
-                      <CardContent className="p-4 text-center">
-                        <TrendingUp className="h-5 w-5 mx-auto text-muted-foreground mb-1" />
-                        <p className="text-lg font-bold">{selectedProva.mediaNotas}%</p>
-                        <p className="text-xs text-muted-foreground">Média</p>
-                      </CardContent>
-                    </Card>
-                  </div>
-
-                  <Separator />
-
-                  <div>
-                    <h4 className="font-medium mb-2">Nota Mínima para Aprovação</h4>
-                    <div className="flex items-center gap-3">
-                      <Progress value={selectedProva.notaMinima} className="flex-1" />
-                      <span className="text-sm font-medium">{selectedProva.notaMinima}%</span>
-                    </div>
-                  </div>
-
-                  <div>
-                    <h4 className="font-medium mb-2">Departamentos</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {selectedProva.departamentos.map((dep) => (
-                        <Badge key={dep} variant="outline">
-                          {departamentosInfo[dep]?.nome || dep}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div>
-                    <h4 className="font-medium mb-2">Níveis Aplicáveis</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {selectedProva.niveisAplicaveis.map((nivel) => (
-                        <Badge key={nivel} variant="secondary">
-                          {niveisInfo[nivel]?.nome || nivel}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-
-                  {selectedProva.tags.length > 0 && (
-                    <div>
-                      <h4 className="font-medium mb-2">Tags</h4>
-                      <div className="flex flex-wrap gap-2">
-                        {selectedProva.tags.map((tag) => (
-                          <Badge key={tag} variant="outline" className="text-xs">
-                            #{tag}
-                          </Badge>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  <Separator />
-
-                  <div className="flex gap-2">
-                    <Button className="flex-1" onClick={() => navigate(`/testes/${selectedProva.id}/aplicar`)}>
-                      Aplicar Prova
-                    </Button>
-                    <Button variant="outline" onClick={() => handleEditProva(selectedProva)}>
-                      Editar
-                    </Button>
-                  </div>
-                </div>
-              </>
             )}
-          </SheetContent>
-        </Sheet>
+          </TabsContent>
 
-        {/* Bateria Detail Sheet */}
-        <Sheet open={!!selectedBateria} onOpenChange={() => setSelectedBateria(null)}>
-          <SheetContent className="w-full sm:max-w-xl overflow-y-auto">
-            {selectedBateria && (
-              <>
-                <SheetHeader>
-                  <SheetTitle>{selectedBateria.nome}</SheetTitle>
-                  <SheetDescription>{selectedBateria.descricao}</SheetDescription>
-                </SheetHeader>
-                
-                <div className="space-y-6 mt-6">
-                  <div className="flex flex-wrap gap-2">
-                    <Badge variant="outline">
-                      {departamentosInfo[selectedBateria.departamento]?.nome || selectedBateria.departamento}
-                    </Badge>
-                    <Badge variant="secondary">
-                      {niveisInfo[selectedBateria.nivel]?.nome || selectedBateria.nivel}
-                    </Badge>
+          {/* Tab Por Categoria */}
+          <TabsContent value="categorias" className="mt-4 space-y-6">
+            {categoriasInfo.map(categoria => {
+              const provasCategoria = provas.filter(p => p.categoria === categoria.id);
+              if (provasCategoria.length === 0) return null;
+              const IconeCategoria = iconeMap[categoria.icone] || FileText;
+
+              return (
+                <div key={categoria.id}>
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className={cn("p-2 rounded-lg", categoria.cor)}>
+                      <IconeCategoria className="h-5 w-5 text-white" />
+                    </div>
+                    <h2 className="text-lg font-semibold">{categoria.nome}</h2>
+                    <Badge variant="secondary">{provasCategoria.length}</Badge>
                   </div>
-
-                  <div className="grid grid-cols-2 gap-4">
-                    <Card>
-                      <CardContent className="p-4 text-center">
-                        <Clock className="h-5 w-5 mx-auto text-muted-foreground mb-1" />
-                        <p className="text-lg font-bold">{selectedBateria.duracaoTotal} min</p>
-                        <p className="text-xs text-muted-foreground">Duração Total</p>
-                      </CardContent>
-                    </Card>
-                    <Card>
-                      <CardContent className="p-4 text-center">
-                        <FileText className="h-5 w-5 mx-auto text-muted-foreground mb-1" />
-                        <p className="text-lg font-bold">{selectedBateria.provas.length}</p>
-                        <p className="text-xs text-muted-foreground">Provas</p>
-                      </CardContent>
-                    </Card>
-                  </div>
-
-                  <Separator />
-
-                  <div className="flex gap-2">
-                    <Button className="flex-1">
-                      Aplicar Bateria
-                    </Button>
-                    <Button variant="outline">
-                      Editar
-                    </Button>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {provasCategoria.map(prova => (
+                      <ProvaCard key={prova.id} prova={prova} />
+                    ))}
                   </div>
                 </div>
-              </>
-            )}
-          </SheetContent>
-        </Sheet>
+              );
+            })}
+          </TabsContent>
+        </Tabs>
       </div>
     </Layout>
   );
