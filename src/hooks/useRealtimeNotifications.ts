@@ -174,10 +174,60 @@ export function useRealtimeNotifications() {
         console.log('Entrevistas subscription status:', status);
       });
 
+    // Subscribe to processos_seletivos table for pipeline stage changes
+    const processosChannel = supabase
+      .channel('processos-notifications')
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'processos_seletivos',
+        },
+        (payload) => {
+          console.log('Pipeline update received:', payload);
+          const oldProcesso = payload.old as { etapa_atual: string };
+          const newProcesso = payload.new as {
+            candidato_nome: string;
+            etapa_atual: string;
+            vaga_titulo: string;
+          };
+
+          // Only notify if the stage actually changed
+          if (oldProcesso.etapa_atual !== newProcesso.etapa_atual) {
+            const etapaLabels: Record<string, string> = {
+              'novo': 'Novos',
+              'triagem': 'Triagem',
+              'entrevista_rh': 'Entrevista RH',
+              'entrevista_tecnica': 'Entrevista Técnica',
+              'entrevista_gestor': 'Entrevista Gestor',
+              'proposta': 'Proposta',
+              'contratado': 'Contratado',
+              'reprovado': 'Reprovado',
+            };
+
+            const fromLabel = etapaLabels[oldProcesso.etapa_atual] || oldProcesso.etapa_atual;
+            const toLabel = etapaLabels[newProcesso.etapa_atual] || newProcesso.etapa_atual;
+
+            addNotification({
+              type: 'stage_change',
+              title: '📋 Candidato Movido no Pipeline',
+              message: `${newProcesso.candidato_nome} foi movido de "${fromLabel}" para "${toLabel}" (${newProcesso.vaga_titulo})`,
+              candidatoNome: newProcesso.candidato_nome,
+              etapa: newProcesso.etapa_atual,
+            });
+          }
+        }
+      )
+      .subscribe((status) => {
+        console.log('Processos seletivos subscription status:', status);
+      });
+
     return () => {
       console.log('Cleaning up realtime subscriptions...');
       supabase.removeChannel(matchScoresChannel);
       supabase.removeChannel(entrevistasChannel);
+      supabase.removeChannel(processosChannel);
     };
   }, [addNotification]);
 
