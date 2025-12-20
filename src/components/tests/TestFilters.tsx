@@ -3,7 +3,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { categoriasInfo, departamentosInfo, niveisInfo } from '@/data/testsData';
+import { categoriasInfo, departamentosInfo, niveisInfo } from '@/config/testsConfig';
 import { CategoriaProva, Departamento, NivelCargo } from '@/types/tests';
 import { Search, X, Filter } from 'lucide-react';
 
@@ -119,3 +119,4 @@ export function TestFilters({
     </div>
   );
 }
+
