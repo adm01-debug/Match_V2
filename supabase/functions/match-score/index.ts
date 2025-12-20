@@ -1,36 +1,29 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-interface VagaRequisitos {
-  titulo: string;
-  departamento: string;
-  nivel: string;
-  habilidadesObrigatorias: string[];
-  habilidadesDesejaveis: string[];
-  experienciaMinima: number;
-  formacaoMinima: string;
-  descricao: string;
+interface Candidato {
+  id: string;
+  nome: string;
+  email: string;
+  habilidades: string[];
+  experiencia_anos: number;
+  formacao: any[];
+  cargo_atual: string | null;
 }
 
-interface CandidatoPerfil {
-  nome: string;
-  habilidades: string[];
-  experiencias: {
-    empresa: string;
-    cargo: string;
-    periodo: string;
-    descricao: string;
-  }[];
-  formacao: {
-    instituicao: string;
-    curso: string;
-    periodo: string;
-  }[];
-  resumo: string;
+interface Vaga {
+  id: string;
+  titulo: string;
+  departamento: string;
+  habilidades_obrigatorias: string[];
+  habilidades_desejaveis: string[];
+  nivel: string;
+  requisitos_obrigatorios: string;
 }
 
 interface MatchResult {
@@ -42,172 +35,204 @@ interface MatchResult {
   habilidadesFaltantes: string[];
   habilidadesExtras: string[];
   analise: string;
-  recomendacao: 'forte' | 'moderado' | 'fraco' | 'nao_recomendado';
+  recomendacao: string;
   pontosFortes: string[];
   pontosAtencao: string[];
 }
 
 serve(async (req) => {
-  if (req.method === "OPTIONS") {
+  if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const { vaga, candidato }: { vaga: VagaRequisitos; candidato: CandidatoPerfil } = await req.json();
-
-    if (!vaga || !candidato) {
-      return new Response(
-        JSON.stringify({ success: false, error: "Dados da vaga e candidato são obrigatórios" }),
-        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
-
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
+    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
+    const SUPABASE_URL = Deno.env.get('SUPABASE_URL');
+    const SUPABASE_ANON_KEY = Deno.env.get('SUPABASE_ANON_KEY');
+    
     if (!LOVABLE_API_KEY) {
-      console.error("LOVABLE_API_KEY not configured");
       return new Response(
-        JSON.stringify({ success: false, error: "API key não configurada" }),
-        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        JSON.stringify({ error: 'LOVABLE_API_KEY não configurada' }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
-    console.log(`Calculating match score for: ${candidato.nome} -> ${vaga.titulo}`);
+    const { candidatoId, vagaId } = await req.json();
 
-    const systemPrompt = `Você é um especialista em recrutamento e seleção com vasta experiência em análise de compatibilidade entre candidatos e vagas.
+    if (!candidatoId || !vagaId) {
+      return new Response(
+        JSON.stringify({ error: 'candidatoId e vagaId são obrigatórios' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
 
-Sua tarefa é analisar o perfil de um candidato comparando com os requisitos de uma vaga e gerar um Match Score de 0 a 100.
+    // Criar cliente Supabase
+    const supabase = createClient(SUPABASE_URL!, SUPABASE_ANON_KEY!);
 
-CRITÉRIOS DE AVALIAÇÃO:
-1. HABILIDADES (40% do score):
-   - Habilidades obrigatórias: cada uma presente vale pontos proporcionais
-   - Habilidades desejáveis: bônus adicional
-   - Habilidades extras relevantes: pequeno bônus
+    // Buscar candidato do banco
+    const { data: candidato, error: candidatoError } = await supabase
+      .from('candidatos')
+      .select('*')
+      .eq('id', candidatoId)
+      .single();
 
-2. EXPERIÊNCIA (35% do score):
-   - Anos de experiência vs requisito mínimo
-   - Relevância dos cargos anteriores
-   - Progressão de carreira
+    if (candidatoError || !candidato) {
+      return new Response(
+        JSON.stringify({ error: 'Candidato não encontrado', details: candidatoError?.message }),
+        { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
 
-3. FORMAÇÃO (25% do score):
-   - Compatibilidade do curso com a vaga
-   - Nível de formação vs requisito
+    // Buscar vaga do banco
+    const { data: vaga, error: vagaError } = await supabase
+      .from('vagas')
+      .select('*')
+      .eq('id', vagaId)
+      .single();
 
-CLASSIFICAÇÃO:
-- 80-100: FORTE (Altamente recomendado)
-- 60-79: MODERADO (Recomendado com ressalvas)
-- 40-59: FRACO (Considerar apenas se não houver melhores)
-- 0-39: NÃO RECOMENDADO
+    if (vagaError || !vaga) {
+      return new Response(
+        JSON.stringify({ error: 'Vaga não encontrada', details: vagaError?.message }),
+        { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
 
-Seja preciso e justo na avaliação. Retorne APENAS JSON válido.`;
+    // Construir prompt para IA
+    const prompt = `Analise a compatibilidade entre este candidato e esta vaga e retorne um JSON com a análise.
 
-    const userPrompt = `Analise a compatibilidade entre o candidato e a vaga:
+CANDIDATO:
+- Nome: ${candidato.nome}
+- Cargo Atual: ${candidato.cargo_atual || 'Não informado'}
+- Anos de Experiência: ${candidato.experiencia_anos}
+- Habilidades: ${(candidato.habilidades || []).join(', ') || 'Não informadas'}
+- Formação: ${JSON.stringify(candidato.formacao || [])}
 
 VAGA:
 - Título: ${vaga.titulo}
 - Departamento: ${vaga.departamento}
-- Nível: ${vaga.nivel}
-- Habilidades Obrigatórias: ${vaga.habilidadesObrigatorias.join(', ')}
-- Habilidades Desejáveis: ${vaga.habilidadesDesejaveis.join(', ')}
-- Experiência Mínima: ${vaga.experienciaMinima} anos
-- Formação Mínima: ${vaga.formacaoMinima}
-- Descrição: ${vaga.descricao}
+- Nível: ${vaga.nivel || 'Não especificado'}
+- Habilidades Obrigatórias: ${(vaga.habilidades_obrigatorias || []).join(', ') || 'Não especificadas'}
+- Habilidades Desejáveis: ${(vaga.habilidades_desejaveis || []).join(', ') || 'Não especificadas'}
+- Requisitos: ${vaga.requisitos_obrigatorios || 'Não especificados'}
 
-CANDIDATO:
-- Nome: ${candidato.nome}
-- Habilidades: ${candidato.habilidades.join(', ')}
-- Experiências: ${JSON.stringify(candidato.experiencias)}
-- Formação: ${JSON.stringify(candidato.formacao)}
-- Resumo: ${candidato.resumo}
-
-FORMATO DE SAÍDA (JSON):
+Retorne APENAS um JSON válido (sem markdown) com esta estrutura:
 {
-  "scoreTotal": 75,
-  "scoreHabilidades": 80,
-  "scoreExperiencia": 70,
-  "scoreFormacao": 75,
-  "habilidadesMatch": ["Habilidade1", "Habilidade2"],
-  "habilidadesFaltantes": ["HabilidadeFaltante1"],
-  "habilidadesExtras": ["HabilidadeExtra1"],
-  "analise": "Análise detalhada em 2-3 frases",
-  "recomendacao": "forte | moderado | fraco | nao_recomendado",
-  "pontosFortes": ["Ponto forte 1", "Ponto forte 2"],
-  "pontosAtencao": ["Ponto de atenção 1"]
-}
+  "scoreTotal": número de 0 a 100,
+  "scoreHabilidades": número de 0 a 100,
+  "scoreExperiencia": número de 0 a 100,
+  "scoreFormacao": número de 0 a 100,
+  "habilidadesMatch": ["habilidades que o candidato tem e a vaga exige"],
+  "habilidadesFaltantes": ["habilidades exigidas que o candidato não tem"],
+  "habilidadesExtras": ["habilidades do candidato não exigidas mas relevantes"],
+  "analise": "Análise detalhada da compatibilidade em 2-3 frases",
+  "recomendacao": "Altamente Recomendado" ou "Recomendado" ou "Considerar" ou "Não Recomendado",
+  "pontosFortes": ["até 3 pontos fortes principais"],
+  "pontosAtencao": ["até 3 pontos de atenção"]
+}`;
 
-Retorne APENAS o JSON, sem explicações.`;
-
-    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-      method: "POST",
+    const response = await fetch('https://ai-gateway.lovable.dev/v1/chat/completions', {
+      method: 'POST',
       headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${LOVABLE_API_KEY}`,
       },
       body: JSON.stringify({
-        model: "google/gemini-2.5-flash",
+        model: 'gemini-2.5-flash',
         messages: [
-          { role: "system", content: systemPrompt },
-          { role: "user", content: userPrompt },
+          {
+            role: 'system',
+            content: 'Você é um especialista em recrutamento e seleção. Analise a compatibilidade entre candidatos e vagas de forma objetiva e precisa. Sempre retorne JSON válido sem markdown.'
+          },
+          {
+            role: 'user',
+            content: prompt
+          }
         ],
+        max_tokens: 2048,
         temperature: 0.2,
       }),
     });
 
     if (!response.ok) {
-      const errorText = await response.text();
-      console.error("AI gateway error:", response.status, errorText);
-      
-      if (response.status === 429) {
-        return new Response(
-          JSON.stringify({ success: false, error: "Limite de requisições excedido." }),
-          { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
-      }
-      
       return new Response(
-        JSON.stringify({ success: false, error: "Erro ao calcular match score" }),
-        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        JSON.stringify({ error: 'Erro no serviço de IA', status: response.status }),
+        { status: 502, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
-    const data = await response.json();
-    const content = data.choices?.[0]?.message?.content;
+    const aiResponse = await response.json();
+    const content = aiResponse.choices?.[0]?.message?.content;
 
     if (!content) {
       return new Response(
-        JSON.stringify({ success: false, error: "Resposta vazia da IA" }),
-        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        JSON.stringify({ error: 'Resposta vazia da IA' }),
+        { status: 502, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
-    // Clean and parse JSON
+    // Limpar e parsear JSON
     let jsonContent = content.trim();
-    if (jsonContent.startsWith("```json")) jsonContent = jsonContent.slice(7);
-    else if (jsonContent.startsWith("```")) jsonContent = jsonContent.slice(3);
-    if (jsonContent.endsWith("```")) jsonContent = jsonContent.slice(0, -3);
+    if (jsonContent.startsWith('```json')) jsonContent = jsonContent.slice(7);
+    if (jsonContent.startsWith('```')) jsonContent = jsonContent.slice(3);
+    if (jsonContent.endsWith('```')) jsonContent = jsonContent.slice(0, -3);
     jsonContent = jsonContent.trim();
 
     let matchResult: MatchResult;
+    
     try {
       matchResult = JSON.parse(jsonContent);
-    } catch (parseError) {
-      console.error("JSON parse error:", parseError);
-      return new Response(
-        JSON.stringify({ success: false, error: "Erro ao processar resultado" }),
-        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    } catch {
+      // Fallback: calcular score básico
+      const habilidadesCandidato = (candidato.habilidades || []).map((h: string) => h.toLowerCase());
+      const habilidadesVaga = (vaga.habilidades_obrigatorias || []).map((h: string) => h.toLowerCase());
+      
+      const match = habilidadesCandidato.filter((h: string) => 
+        habilidadesVaga.some((v: string) => h.includes(v) || v.includes(h))
       );
+      
+      const scoreBasico = habilidadesVaga.length > 0 
+        ? Math.round((match.length / habilidadesVaga.length) * 100)
+        : 50;
+
+      matchResult = {
+        scoreTotal: scoreBasico,
+        scoreHabilidades: scoreBasico,
+        scoreExperiencia: Math.min(candidato.experiencia_anos * 10, 100),
+        scoreFormacao: 50,
+        habilidadesMatch: match,
+        habilidadesFaltantes: habilidadesVaga.filter((h: string) => !match.includes(h)),
+        habilidadesExtras: habilidadesCandidato.filter((h: string) => !habilidadesVaga.includes(h)),
+        analise: 'Análise calculada automaticamente com base nas habilidades.',
+        recomendacao: scoreBasico >= 70 ? 'Recomendado' : scoreBasico >= 50 ? 'Considerar' : 'Não Recomendado',
+        pontosFortes: match.slice(0, 3),
+        pontosAtencao: [],
+      };
     }
 
-    console.log(`Match score calculated: ${matchResult.scoreTotal}% - ${matchResult.recomendacao}`);
+    // Garantir que scores estão no range correto
+    matchResult.scoreTotal = Math.max(0, Math.min(100, matchResult.scoreTotal));
+    matchResult.scoreHabilidades = Math.max(0, Math.min(100, matchResult.scoreHabilidades));
+    matchResult.scoreExperiencia = Math.max(0, Math.min(100, matchResult.scoreExperiencia));
+    matchResult.scoreFormacao = Math.max(0, Math.min(100, matchResult.scoreFormacao));
 
     return new Response(
-      JSON.stringify({ success: true, data: matchResult }),
-      { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      JSON.stringify({
+        success: true,
+        candidatoId,
+        vagaId,
+        vagaTitulo: vaga.titulo,
+        ...matchResult,
+      }),
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
+
   } catch (error) {
-    console.error("Error in match-score function:", error);
     return new Response(
-      JSON.stringify({ success: false, error: error instanceof Error ? error.message : "Erro desconhecido" }),
-      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      JSON.stringify({ 
+        error: 'Erro interno',
+        details: error instanceof Error ? error.message : 'Erro desconhecido'
+      }),
+      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }
 });
