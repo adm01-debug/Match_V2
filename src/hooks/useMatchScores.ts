@@ -1,21 +1,12 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { Database } from '@/integrations/supabase/types';
 
-interface MatchScore {
-  id: string;
-  candidato_id: string;
-  vaga_id: string;
-  score_total: number;
-  score_habilidades: number | null;
-  score_experiencia: number | null;
-  score_formacao: number | null;
-  score_localizacao: number | null;
-  detalhes: Record<string, any> | null;
-  recomendacao: 'alta' | 'media' | 'baixa' | null;
-  created_at: string;
+type MatchScoreRow = Database['public']['Tables']['match_scores']['Row'];
+
+interface MatchScore extends MatchScoreRow {
   candidato?: { nome: string; email: string } | null;
-  vaga?: { titulo: string; departamento: string } | null;
 }
 
 interface CalcularMatchParams {
@@ -34,8 +25,7 @@ export function useMatchScores(filtros?: { candidatoId?: string; vagaId?: string
         .from('match_scores')
         .select(`
           *,
-          candidato:candidatos(nome, email),
-          vaga:vagas(titulo, departamento)
+          candidato:candidatos(nome, email)
         `)
         .order('score_total', { ascending: false });
 
@@ -51,7 +41,7 @@ export function useMatchScores(filtros?: { candidatoId?: string; vagaId?: string
 
       const { data, error } = await query;
       if (error) throw error;
-      return data as MatchScore[];
+      return (data || []) as MatchScore[];
     },
   });
 
@@ -67,9 +57,9 @@ export function useMatchScores(filtros?: { candidatoId?: string; vagaId?: string
           .select('*')
           .eq('candidato_id', candidatoId)
           .eq('vaga_id', vagaId)
-          .single();
+          .maybeSingle();
 
-        if (error && error.code !== 'PGRST116') throw error;
+        if (error) throw error;
         return data as MatchScore | null;
       },
       enabled: !!candidatoId && !!vagaId,

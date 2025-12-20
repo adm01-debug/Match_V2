@@ -1,23 +1,15 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { Database } from '@/integrations/supabase/types';
 
-interface Profile {
-  id: string;
-  email: string | null;
-  full_name: string | null;
-  avatar_url: string | null;
-  role: string | null;
-  departamento: string | null;
-  created_at: string;
-  updated_at: string;
-}
+type ProfileRow = Database['public']['Tables']['profiles']['Row'];
+type ProfileUpdate = Database['public']['Tables']['profiles']['Update'];
 
-interface ProfileUpdate {
-  full_name?: string;
-  avatar_url?: string;
-  role?: string;
-  departamento?: string;
+interface Profile extends ProfileRow {
+  // Campos adicionais que podemos precisar
+  role?: string | null;
+  departamento?: string | null;
 }
 
 export function useProfiles() {
@@ -27,9 +19,12 @@ export function useProfiles() {
   const { data: profiles = [], isLoading, error } = useQuery({
     queryKey: ['profiles'],
     queryFn: async () => {
-      const { data, error } = await supabase.from('profiles').select('*').order('full_name');
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .order('nome');
       if (error) throw error;
-      return data as Profile[];
+      return (data || []) as Profile[];
     },
   });
 
@@ -37,8 +32,12 @@ export function useProfiles() {
     queryKey: ['profile', userId],
     queryFn: async () => {
       if (!userId) return null;
-      const { data, error } = await supabase.from('profiles').select('*').eq('id', userId).single();
-      if (error && error.code !== 'PGRST116') throw error;
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('user_id', userId)
+        .maybeSingle();
+      if (error) throw error;
       return data as Profile | null;
     },
     enabled: !!userId,
@@ -49,15 +48,24 @@ export function useProfiles() {
     queryFn: async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return null;
-      const { data, error } = await supabase.from('profiles').select('*').eq('id', user.id).single();
-      if (error && error.code !== 'PGRST116') throw error;
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('user_id', user.id)
+        .maybeSingle();
+      if (error) throw error;
       return data as Profile | null;
     },
   });
 
   const updateProfile = useMutation({
     mutationFn: async ({ id, ...dados }: ProfileUpdate & { id: string }) => {
-      const { data, error } = await supabase.from('profiles').update(dados).eq('id', id).select().single();
+      const { data, error } = await supabase
+        .from('profiles')
+        .update(dados)
+        .eq('id', id)
+        .select()
+        .single();
       if (error) throw error;
       return data;
     },
@@ -68,7 +76,8 @@ export function useProfiles() {
     },
   });
 
-  const recrutadores = profiles.filter(p => p.role === 'recrutador' || p.role === 'admin');
+  // Filtrar por role (usando campo adicional ou lógica)
+  const recrutadores = profiles.filter(p => p.role === 'recrutador' || p.role === 'admin' || p.role === 'rh');
   const gestores = profiles.filter(p => p.role === 'gestor' || p.role === 'admin');
 
   return {

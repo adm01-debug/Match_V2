@@ -1,27 +1,27 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { Database, Json } from '@/integrations/supabase/types';
 
-interface ResultadoProva {
-  id: string;
-  prova_id: string;
-  candidato_id: string;
-  processo_id: string | null;
+type ResultadoRow = Database['public']['Tables']['resultados_provas']['Row'];
+
+interface ResultadoProva extends Omit<ResultadoRow, 'respostas'> {
   respostas: Record<string, any>;
-  nota: number;
-  percentual: number;
-  aprovado: boolean;
-  tempo_gasto_minutos: number | null;
-  iniciado_em: string;
-  finalizado_em: string | null;
-  created_at: string;
   prova?: { titulo: string; categoria: string; nota_minima: number } | null;
   candidato?: { nome: string; email: string } | null;
+}
+
+function parseRespostas(json: Json): Record<string, any> {
+  if (typeof json === 'object' && json !== null && !Array.isArray(json)) {
+    return json as Record<string, any>;
+  }
+  return {};
 }
 
 interface IniciarProvaParams {
   provaId: string;
   candidatoId: string;
+  candidatoNome: string;
   processoId?: string;
 }
 
@@ -30,7 +30,6 @@ interface FinalizarProvaParams {
   respostas: Record<string, any>;
   nota: number;
   percentual: number;
-  aprovado: boolean;
   tempoGasto: number;
 }
 
@@ -45,8 +44,7 @@ export function useResultadosProvas(filtros?: { provaId?: string; candidatoId?: 
         .from('resultados_provas')
         .select(`
           *,
-          prova:provas(titulo, categoria, nota_minima),
-          candidato:candidatos(nome, email)
+          prova:provas(titulo, categoria, nota_minima)
         `)
         .order('created_at', { ascending: false });
 
@@ -56,22 +54,28 @@ export function useResultadosProvas(filtros?: { provaId?: string; candidatoId?: 
 
       const { data, error } = await query;
       if (error) throw error;
-      return data as ResultadoProva[];
+      
+      return (data || []).map(r => ({
+        ...r,
+        respostas: parseRespostas(r.respostas),
+      })) as ResultadoProva[];
     },
   });
 
   const iniciarProva = useMutation({
-    mutationFn: async ({ provaId, candidatoId, processoId }: IniciarProvaParams) => {
+    mutationFn: async ({ provaId, candidatoId, candidatoNome, processoId }: IniciarProvaParams) => {
       const { data, error } = await supabase
         .from('resultados_provas')
         .insert({
           prova_id: provaId,
           candidato_id: candidatoId,
-          processo_id: processoId,
-          respostas: {},
+          candidato_nome: candidatoNome,
+          processo_id: processoId || null,
+          respostas: {} as unknown as Json,
           nota: 0,
           percentual: 0,
-          aprovado: false,
+          tempo_gasto: 0,
+          status: 'em_andamento',
           iniciado_em: new Date().toISOString(),
         })
         .select()
@@ -85,15 +89,15 @@ export function useResultadosProvas(filtros?: { provaId?: string; candidatoId?: 
   });
 
   const finalizarProva = useMutation({
-    mutationFn: async ({ resultadoId, respostas, nota, percentual, aprovado, tempoGasto }: FinalizarProvaParams) => {
+    mutationFn: async ({ resultadoId, respostas, nota, percentual, tempoGasto }: FinalizarProvaParams) => {
       const { data, error } = await supabase
         .from('resultados_provas')
         .update({
-          respostas,
+          respostas: respostas as unknown as Json,
           nota,
           percentual,
-          aprovado,
-          tempo_gasto_minutos: tempoGasto,
+          tempo_gasto: tempoGasto,
+          status: 'finalizado',
           finalizado_em: new Date().toISOString(),
         })
         .eq('id', resultadoId)
@@ -104,22 +108,28 @@ export function useResultadosProvas(filtros?: { provaId?: string; candidatoId?: 
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['resultados-provas'] });
+      // Verificar aprovação com base na nota mínima (60% padrão)
+      const aprovado = data.percentual >= 60;
       toast({
-        title: data.aprovado ? 'Prova concluída - Aprovado!' : 'Prova concluída',
+        title: aprovado ? 'Prova concluída - Aprovado!' : 'Prova concluída',
         description: `Nota: ${data.nota} (${data.percentual}%)`,
-        variant: data.aprovado ? 'default' : 'destructive',
+        variant: aprovado ? 'default' : 'destructive',
       });
     },
   });
 
+  // Calcular aprovados com base em percentual >= 60
+  const aprovados = resultados.filter(r => r.status === 'finalizado' && r.percentual >= 60);
+  const reprovados = resultados.filter(r => r.status === 'finalizado' && r.percentual < 60);
+  
   const stats = {
     total: resultados.length,
-    aprovados: resultados.filter(r => r.aprovado).length,
-    reprovados: resultados.filter(r => !r.aprovado && r.finalizado_em).length,
-    emAndamento: resultados.filter(r => !r.finalizado_em).length,
+    aprovados: aprovados.length,
+    reprovados: reprovados.length,
+    emAndamento: resultados.filter(r => r.status === 'em_andamento').length,
     mediaNotas: resultados.length > 0 ? Math.round(resultados.reduce((a, r) => a + r.nota, 0) / resultados.length) : 0,
-    taxaAprovacao: resultados.filter(r => r.finalizado_em).length > 0
-      ? Math.round((resultados.filter(r => r.aprovado).length / resultados.filter(r => r.finalizado_em).length) * 100)
+    taxaAprovacao: resultados.filter(r => r.status === 'finalizado').length > 0
+      ? Math.round((aprovados.length / resultados.filter(r => r.status === 'finalizado').length) * 100)
       : 0,
   };
 

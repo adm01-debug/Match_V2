@@ -1,33 +1,13 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { Database } from '@/integrations/supabase/types';
 
-interface Indicacao {
-  id: string;
-  indicador_nome: string;
-  indicador_email: string;
-  indicador_telefone: string | null;
-  candidato_nome: string;
-  candidato_email: string;
-  candidato_telefone: string | null;
-  vaga_id: string | null;
-  relacionamento: string | null;
-  motivo_indicacao: string | null;
-  status: 'pendente' | 'aprovada' | 'rejeitada' | 'contratado';
-  created_at: string;
+type IndicacaoRow = Database['public']['Tables']['indicacoes']['Row'];
+type IndicacaoInsert = Database['public']['Tables']['indicacoes']['Insert'];
+
+interface Indicacao extends IndicacaoRow {
   vaga?: { titulo: string; departamento: string } | null;
-}
-
-interface IndicacaoInsert {
-  indicador_nome: string;
-  indicador_email: string;
-  indicador_telefone?: string | null;
-  candidato_nome: string;
-  candidato_email: string;
-  candidato_telefone?: string | null;
-  vaga_id?: string | null;
-  relacionamento?: string | null;
-  motivo_indicacao?: string | null;
 }
 
 export function useIndicacoes(filtros?: { status?: string; vagaId?: string }) {
@@ -54,7 +34,7 @@ export function useIndicacoes(filtros?: { status?: string; vagaId?: string }) {
 
       const { data, error } = await query;
       if (error) throw error;
-      return data as Indicacao[];
+      return (data || []) as Indicacao[];
     },
   });
 
@@ -62,7 +42,7 @@ export function useIndicacoes(filtros?: { status?: string; vagaId?: string }) {
     mutationFn: async (dados: IndicacaoInsert) => {
       const { data, error } = await supabase
         .from('indicacoes')
-        .insert({ ...dados, status: 'pendente' })
+        .insert(dados)
         .select()
         .single();
 
@@ -79,7 +59,7 @@ export function useIndicacoes(filtros?: { status?: string; vagaId?: string }) {
   });
 
   const updateStatus = useMutation({
-    mutationFn: async ({ id, status }: { id: string; status: Indicacao['status'] }) => {
+    mutationFn: async ({ id, status }: { id: string; status: string }) => {
       const { data, error } = await supabase
         .from('indicacoes')
         .update({ status })
