@@ -1,7 +1,7 @@
 // Hooks de dados principais
 export { useVagas, useVaga } from './useVagas';
 export { useCandidatos } from './useCandidatos';
-export { useProcessosSeletivos, useProcessoSeletivo } from './useProcessosSeletivos';
+export { useProcessosSeletivos } from './useProcessosSeletivos';
 export { useProcessos } from './useProcessos';
 export { useEntrevistas } from './useEntrevistas';
 export { useAvaliacoes } from './useAvaliacoes';
@@ -33,4 +33,4 @@ export { useRealtimeNotifications } from './useRealtimeNotifications';
 
 // Hooks utilitários
 export { useToast } from './use-toast';
-export { useMobile } from './use-mobile';
+export { useIsMobile as useMobile } from './use-mobile';

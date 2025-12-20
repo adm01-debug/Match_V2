@@ -1,5 +1,12 @@
-import { useState } from "react";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { useMemo, useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -9,7 +16,7 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { Send, Loader2, Eye, User } from "lucide-react";
 import { emailTemplatesMock, variaveisDisponiveis } from "@/data/emailTemplatesData";
-import { registrarComunicacao } from "@/hooks/useComunicacoes";
+import { useComunicacoes } from "@/hooks/useComunicacoes";
 
 interface Candidato {
   id: string;
@@ -26,42 +33,41 @@ interface EnviarEmailDialogProps {
 }
 
 export function EnviarEmailDialog({ open, onOpenChange, candidato, onSuccess }: EnviarEmailDialogProps) {
+  const { registrarComunicacao } = useComunicacoes();
+
   const [selectedTemplate, setSelectedTemplate] = useState<string>("");
   const [assunto, setAssunto] = useState("");
   const [conteudo, setConteudo] = useState("");
   const [sending, setSending] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
 
-  const activeTemplates = emailTemplatesMock.filter(t => t.ativo);
+  const activeTemplates = useMemo(() => emailTemplatesMock.filter((t) => t.ativo), []);
 
   const handleTemplateSelect = (templateId: string) => {
     setSelectedTemplate(templateId);
-    const template = emailTemplatesMock.find(t => t.id === templateId);
-    if (template) {
-      // Substitui variáveis com dados reais
-      let processedSubject = template.assunto;
-      let processedContent = template.conteudo;
+    const template = emailTemplatesMock.find((t) => t.id === templateId);
+    if (!template) return;
 
-      processedSubject = processedSubject
-        .replace(/{{candidato_nome}}/g, candidato.nome)
-        .replace(/{{vaga_titulo}}/g, candidato.vagaTitulo || "Vaga em Aberto")
-        .replace(/{{empresa_nome}}/g, "Promo Brindes");
+    // Substitui variáveis com dados do candidato
+    const processedSubject = template.assunto
+      .replace(/{{candidato_nome}}/g, candidato.nome)
+      .replace(/{{vaga_titulo}}/g, candidato.vagaTitulo || "Vaga em Aberto")
+      .replace(/{{empresa_nome}}/g, "Promo Brindes");
 
-      processedContent = processedContent
-        .replace(/{{candidato_nome}}/g, candidato.nome)
-        .replace(/{{vaga_titulo}}/g, candidato.vagaTitulo || "Vaga em Aberto")
-        .replace(/{{empresa_nome}}/g, "Promo Brindes")
-        .replace(/{{data_entrevista}}/g, "[DATA A DEFINIR]")
-        .replace(/{{hora_entrevista}}/g, "[HORA A DEFINIR]")
-        .replace(/{{local_entrevista}}/g, "[LOCAL A DEFINIR]")
-        .replace(/{{recrutador_nome}}/g, "Equipe RH")
-        .replace(/{{prazo_testes}}/g, "3 dias")
-        .replace(/{{salario_proposto}}/g, "[A COMBINAR]")
-        .replace(/{{data_inicio}}/g, "[A DEFINIR]");
+    const processedContent = template.conteudo
+      .replace(/{{candidato_nome}}/g, candidato.nome)
+      .replace(/{{vaga_titulo}}/g, candidato.vagaTitulo || "Vaga em Aberto")
+      .replace(/{{empresa_nome}}/g, "Promo Brindes")
+      .replace(/{{data_entrevista}}/g, "[DATA A DEFINIR]")
+      .replace(/{{hora_entrevista}}/g, "[HORA A DEFINIR]")
+      .replace(/{{local_entrevista}}/g, "[LOCAL A DEFINIR]")
+      .replace(/{{recrutador_nome}}/g, "Equipe RH")
+      .replace(/{{prazo_testes}}/g, "3 dias")
+      .replace(/{{salario_proposto}}/g, "[A COMBINAR]")
+      .replace(/{{data_inicio}}/g, "[A DEFINIR]");
 
-      setAssunto(processedSubject);
-      setConteudo(processedContent);
-    }
+    setAssunto(processedSubject);
+    setConteudo(processedContent);
   };
 
   const handleSend = async () => {
@@ -71,37 +77,33 @@ export function EnviarEmailDialog({ open, onOpenChange, candidato, onSuccess }: 
     }
 
     setSending(true);
-    
+
     try {
-      const template = emailTemplatesMock.find(t => t.id === selectedTemplate);
-      
-      // Registra no banco de dados
       await registrarComunicacao({
-        candidatoId: candidato.id,
-        templateNome: template?.nome || "E-mail Personalizado",
-        templateEtapa: template?.etapa || "comunicacao",
-        assunto: assunto,
-        conteudo: conteudo,
+        candidato_id: candidato.id,
+        tipo: 'email',
+        assunto,
+        conteudo,
       });
 
-      // Simula envio
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      toast.success(`E-mail enviado para ${candidato.email}`, {
-        description: "O e-mail foi registrado e o candidato será notificado.",
+      // Simula envio (o envio real será feito por função de backend)
+      await new Promise((resolve) => setTimeout(resolve, 800));
+
+      toast.success(`E-mail registrado para ${candidato.email}`, {
+        description: "A comunicação foi salva no histórico.",
       });
-      
+
       onOpenChange(false);
       onSuccess?.();
-      
-      // Reset form
+
+      // Reset
       setSelectedTemplate("");
       setAssunto("");
       setConteudo("");
       setShowPreview(false);
     } catch (error) {
       console.error("Erro ao enviar e-mail:", error);
-      toast.error("Erro ao enviar e-mail", {
+      toast.error("Erro ao registrar e-mail", {
         description: "Tente novamente em alguns instantes.",
       });
     } finally {
@@ -124,9 +126,7 @@ export function EnviarEmailDialog({ open, onOpenChange, candidato, onSuccess }: 
             <Send className="h-5 w-5" />
             Enviar E-mail
           </DialogTitle>
-          <DialogDescription>
-            Envie um e-mail para o candidato selecionado
-          </DialogDescription>
+          <DialogDescription>Envie um e-mail para o candidato selecionado</DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4 py-4">
@@ -149,7 +149,7 @@ export function EnviarEmailDialog({ open, onOpenChange, candidato, onSuccess }: 
                 <SelectValue placeholder="Selecione um template ou escreva do zero..." />
               </SelectTrigger>
               <SelectContent>
-                {activeTemplates.map(template => (
+                {activeTemplates.map((template) => (
                   <SelectItem key={template.id} value={template.id}>
                     {template.nome}
                   </SelectItem>
@@ -161,7 +161,7 @@ export function EnviarEmailDialog({ open, onOpenChange, candidato, onSuccess }: 
           {/* Assunto */}
           <div className="space-y-2">
             <Label>Assunto *</Label>
-            <Input 
+            <Input
               value={assunto}
               onChange={(e) => setAssunto(e.target.value)}
               placeholder="Digite o assunto do e-mail..."
@@ -182,13 +182,13 @@ export function EnviarEmailDialog({ open, onOpenChange, candidato, onSuccess }: 
                 {showPreview ? "Editar" : "Preview"}
               </Button>
             </div>
-            
+
             {showPreview ? (
               <div className="min-h-[200px] p-4 bg-muted/30 rounded-lg border whitespace-pre-wrap text-sm">
                 {conteudo || "Nenhum conteúdo..."}
               </div>
             ) : (
-              <Textarea 
+              <Textarea
                 value={conteudo}
                 onChange={(e) => setConteudo(e.target.value)}
                 placeholder="Digite o conteúdo do e-mail..."
@@ -202,10 +202,10 @@ export function EnviarEmailDialog({ open, onOpenChange, candidato, onSuccess }: 
             <div className="bg-muted/30 p-3 rounded-lg">
               <p className="text-sm font-medium mb-2">Variáveis disponíveis (clique para inserir):</p>
               <div className="flex flex-wrap gap-1">
-                {variaveisDisponiveis.map(v => (
-                  <Badge 
-                    key={v.nome} 
-                    variant="outline" 
+                {variaveisDisponiveis.map((v) => (
+                  <Badge
+                    key={v.nome}
+                    variant="outline"
                     className="cursor-pointer hover:bg-primary/10 text-xs"
                     onClick={() => copyVariable(v.nome)}
                   >
