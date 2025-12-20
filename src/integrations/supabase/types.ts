@@ -66,6 +66,8 @@ export type Database = {
         Row: {
           candidato_id: string | null
           created_at: string
+          curriculo_nome: string | null
+          curriculo_url: string | null
           email: string
           id: string
           nome: string
@@ -76,6 +78,8 @@ export type Database = {
         Insert: {
           candidato_id?: string | null
           created_at?: string
+          curriculo_nome?: string | null
+          curriculo_url?: string | null
           email: string
           id?: string
           nome: string
@@ -86,6 +90,8 @@ export type Database = {
         Update: {
           candidato_id?: string | null
           created_at?: string
+          curriculo_nome?: string | null
+          curriculo_url?: string | null
           email?: string
           id?: string
           nome?: string
