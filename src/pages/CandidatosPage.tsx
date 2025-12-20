@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { format, subDays, startOfDay, endOfDay } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 import { Layout } from '@/components/layout/Layout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -6,12 +8,15 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Calendar } from '@/components/ui/calendar';
+import { Slider } from '@/components/ui/slider';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { 
   Users, Search, Filter, Target, Mail, Phone, Briefcase, 
-  GraduationCap, Sparkles, Calendar, Loader2, UserPlus,
-  TrendingUp, ChevronRight, Trash2, MessageSquare
+  GraduationCap, Sparkles, Calendar as CalendarIcon, Loader2, UserPlus,
+  TrendingUp, ChevronRight, Trash2, MessageSquare, X
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
@@ -82,6 +87,9 @@ export default function CandidatosPage() {
   const [skillFilter, setSkillFilter] = useState('todas');
   const [sortBy, setSortBy] = useState('created_at');
   const [selectedCandidato, setSelectedCandidato] = useState<Candidato | null>(null);
+  const [dateFrom, setDateFrom] = useState<Date | undefined>(undefined);
+  const [dateTo, setDateTo] = useState<Date | undefined>(undefined);
+  const [minExperiences, setMinExperiences] = useState<number>(0);
 
   const allSkills = [...new Set(candidatos.flatMap(c => c.habilidades || []))].sort();
 
@@ -195,7 +203,14 @@ export default function CandidatosPage() {
           h.toLowerCase().includes(skillFilter.toLowerCase())
         ));
 
-      return matchesSearch && matchesStatus && matchesSkill;
+      const candidatoDate = new Date(c.created_at);
+      const matchesDateFrom = !dateFrom || candidatoDate >= startOfDay(dateFrom);
+      const matchesDateTo = !dateTo || candidatoDate <= endOfDay(dateTo);
+      
+      const experienceCount = c.experiencias?.length || 0;
+      const matchesExperience = experienceCount >= minExperiences;
+
+      return matchesSearch && matchesStatus && matchesSkill && matchesDateFrom && matchesDateTo && matchesExperience;
     })
     .sort((a, b) => {
       if (sortBy === 'match_score') {
@@ -229,7 +244,7 @@ export default function CandidatosPage() {
         {/* Filters */}
         <Card>
           <CardContent className="pt-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <div className="lg:col-span-2">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -264,17 +279,110 @@ export default function CandidatosPage() {
                   ))}
                 </SelectContent>
               </Select>
+            </div>
 
-              <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Ordenar por" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="created_at">Mais recentes</SelectItem>
-                  <SelectItem value="match_score">Maior Match Score</SelectItem>
-                  <SelectItem value="nome">Nome (A-Z)</SelectItem>
-                </SelectContent>
-              </Select>
+            {/* Advanced Filters */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4 pt-4 border-t">
+              {/* Date From */}
+              <div>
+                <label className="text-xs text-muted-foreground mb-1 block">Data de cadastro (de)</label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className={cn(
+                        "w-full justify-start text-left font-normal",
+                        !dateFrom && "text-muted-foreground"
+                      )}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {dateFrom ? format(dateFrom, "dd/MM/yyyy", { locale: ptBR }) : "Selecionar"}
+                      {dateFrom && (
+                        <X 
+                          className="ml-auto h-4 w-4 hover:text-destructive" 
+                          onClick={(e) => { e.stopPropagation(); setDateFrom(undefined); }}
+                        />
+                      )}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={dateFrom}
+                      onSelect={setDateFrom}
+                      initialFocus
+                      className="p-3 pointer-events-auto"
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+
+              {/* Date To */}
+              <div>
+                <label className="text-xs text-muted-foreground mb-1 block">Data de cadastro (até)</label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className={cn(
+                        "w-full justify-start text-left font-normal",
+                        !dateTo && "text-muted-foreground"
+                      )}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {dateTo ? format(dateTo, "dd/MM/yyyy", { locale: ptBR }) : "Selecionar"}
+                      {dateTo && (
+                        <X 
+                          className="ml-auto h-4 w-4 hover:text-destructive" 
+                          onClick={(e) => { e.stopPropagation(); setDateTo(undefined); }}
+                        />
+                      )}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={dateTo}
+                      onSelect={setDateTo}
+                      initialFocus
+                      className="p-3 pointer-events-auto"
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+
+              {/* Min Experience */}
+              <div>
+                <label className="text-xs text-muted-foreground mb-1 block">
+                  Experiências mínimas: {minExperiences === 0 ? "Todas" : minExperiences}
+                </label>
+                <div className="flex items-center gap-3 h-10 px-3 border rounded-md">
+                  <Briefcase className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                  <Slider
+                    value={[minExperiences]}
+                    onValueChange={(value) => setMinExperiences(value[0])}
+                    max={10}
+                    step={1}
+                    className="flex-1"
+                  />
+                  <span className="text-sm font-medium w-6 text-right">{minExperiences}</span>
+                </div>
+              </div>
+
+              {/* Sort */}
+              <div>
+                <label className="text-xs text-muted-foreground mb-1 block">Ordenar por</label>
+                <Select value={sortBy} onValueChange={setSortBy}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Ordenar por" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="created_at">Mais recentes</SelectItem>
+                    <SelectItem value="match_score">Maior Match Score</SelectItem>
+                    <SelectItem value="nome">Nome (A-Z)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
           </CardContent>
         </Card>
