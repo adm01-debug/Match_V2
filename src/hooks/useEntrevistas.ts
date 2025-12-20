@@ -50,6 +50,37 @@ export interface EvolucaoMensal {
   total: number;
 }
 
+// Converter de DB para formato usado na UI
+export function dbToEntrevista(db: EntrevistaDB) {
+  return {
+    id: db.id,
+    candidatoId: db.candidato_id || '',
+    candidatoNome: db.candidato_nome,
+    vagaId: db.vaga_id,
+    vagaTitulo: db.vaga_titulo,
+    tipo: db.tipo,
+    data: new Date(db.data),
+    horaInicio: db.hora_inicio,
+    horaFim: db.hora_fim,
+    local: db.local || undefined,
+    linkOnline: db.link_online || undefined,
+    entrevistadores: db.entrevistadores || [],
+    etapa: db.etapa,
+    status: db.status,
+    observacoes: db.observacoes || undefined,
+    feedback: db.feedback_resultado ? {
+      resultado: db.feedback_resultado,
+      notaGeral: db.feedback_nota || 0,
+      pontosFortes: db.feedback_pontos_fortes || [],
+      pontosAMelhorar: db.feedback_pontos_melhorar || [],
+      comentarios: db.feedback_comentarios || '',
+      recomendacao: db.feedback_recomendacao || '',
+      avaliadoPor: db.feedback_avaliado_por || '',
+      avaliadoEm: db.feedback_avaliado_em || ''
+    } : undefined
+  };
+}
+
 export function useEntrevistas() {
   return useQuery({
     queryKey: ['entrevistas'],
@@ -60,7 +91,7 @@ export function useEntrevistas() {
         .order('data', { ascending: false });
       
       if (error) throw error;
-      return data as EntrevistaDB[];
+      return (data as EntrevistaDB[]).map(dbToEntrevista);
     }
   });
 }
@@ -190,7 +221,22 @@ export function useCreateEntrevista() {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: async (entrevista: Omit<EntrevistaDB, 'id' | 'created_at' | 'updated_at'>) => {
+    mutationFn: async (entrevista: {
+      candidato_id?: string;
+      candidato_nome: string;
+      vaga_id: string;
+      vaga_titulo: string;
+      tipo: string;
+      data: string;
+      hora_inicio: string;
+      hora_fim: string;
+      local?: string;
+      link_online?: string;
+      entrevistadores: string[];
+      etapa: string;
+      status: string;
+      observacoes?: string;
+    }) => {
       const { data, error } = await supabase
         .from('entrevistas')
         .insert(entrevista)
@@ -213,7 +259,25 @@ export function useUpdateEntrevista() {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: async ({ id, ...updates }: Partial<EntrevistaDB> & { id: string }) => {
+    mutationFn: async ({ id, ...updates }: { id: string } & Partial<{
+      status: string;
+      data: string;
+      hora_inicio: string;
+      hora_fim: string;
+      local: string;
+      link_online: string;
+      entrevistadores: string[];
+      etapa: string;
+      observacoes: string;
+      feedback_resultado: string;
+      feedback_nota: number;
+      feedback_pontos_fortes: string[];
+      feedback_pontos_melhorar: string[];
+      feedback_comentarios: string;
+      feedback_recomendacao: string;
+      feedback_avaliado_por: string;
+      feedback_avaliado_em: string;
+    }>) => {
       const { data, error } = await supabase
         .from('entrevistas')
         .update(updates)
@@ -229,6 +293,21 @@ export function useUpdateEntrevista() {
       queryClient.invalidateQueries({ queryKey: ['entrevistas-stats'] });
       queryClient.invalidateQueries({ queryKey: ['entrevistas-evolucao'] });
       queryClient.invalidateQueries({ queryKey: ['entrevistas-pizza'] });
+    }
+  });
+}
+
+export function useCandidatosDisponiveis() {
+  return useQuery({
+    queryKey: ['candidatos-disponiveis'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('candidatos')
+        .select('id, nome')
+        .order('nome');
+      
+      if (error) throw error;
+      return data || [];
     }
   });
 }
