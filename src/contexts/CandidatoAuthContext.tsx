@@ -9,6 +9,8 @@ interface CandidatoProfile {
   nome: string;
   email: string;
   telefone: string | null;
+  curriculo_url: string | null;
+  curriculo_nome: string | null;
 }
 
 interface CandidatoAuthContextType {

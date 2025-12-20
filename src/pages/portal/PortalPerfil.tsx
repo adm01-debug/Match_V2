@@ -10,6 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { toast } from 'sonner';
 import { ArrowLeft, User, Mail, Phone, Save, Lock } from 'lucide-react';
+import CurriculoUpload from '@/components/portal/CurriculoUpload';
 
 const PortalPerfil = () => {
   const navigate = useNavigate();
@@ -18,7 +19,6 @@ const PortalPerfil = () => {
   
   const [nome, setNome] = useState(profile?.nome || '');
   const [telefone, setTelefone] = useState(profile?.telefone || '');
-  const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
@@ -56,7 +56,6 @@ const PortalPerfil = () => {
     },
     onSuccess: () => {
       toast.success('Senha alterada com sucesso!');
-      setCurrentPassword('');
       setNewPassword('');
       setConfirmPassword('');
     },
@@ -107,6 +106,14 @@ const PortalPerfil = () => {
             <CardDescription>{profile?.email}</CardDescription>
           </CardHeader>
         </Card>
+
+        {/* Curriculo Upload */}
+        <div className="mb-6">
+          <CurriculoUpload 
+            curriculoUrl={profile?.curriculo_url}
+            curriculoNome={profile?.curriculo_nome}
+          />
+        </div>
 
         {/* Edit Profile */}
         <Card className="mb-6">
