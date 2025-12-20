@@ -106,6 +106,101 @@ export type Database = {
           },
         ]
       }
+      entrevistas: {
+        Row: {
+          candidato_id: string | null
+          candidato_nome: string
+          created_at: string
+          created_by: string | null
+          data: string
+          entrevistadores: string[]
+          etapa: string
+          feedback_avaliado_em: string | null
+          feedback_avaliado_por: string | null
+          feedback_comentarios: string | null
+          feedback_nota: number | null
+          feedback_pontos_fortes: string[] | null
+          feedback_pontos_melhorar: string[] | null
+          feedback_recomendacao: string | null
+          feedback_resultado: string | null
+          hora_fim: string
+          hora_inicio: string
+          id: string
+          link_online: string | null
+          local: string | null
+          observacoes: string | null
+          status: string
+          tipo: string
+          updated_at: string
+          vaga_id: string
+          vaga_titulo: string
+        }
+        Insert: {
+          candidato_id?: string | null
+          candidato_nome: string
+          created_at?: string
+          created_by?: string | null
+          data: string
+          entrevistadores?: string[]
+          etapa: string
+          feedback_avaliado_em?: string | null
+          feedback_avaliado_por?: string | null
+          feedback_comentarios?: string | null
+          feedback_nota?: number | null
+          feedback_pontos_fortes?: string[] | null
+          feedback_pontos_melhorar?: string[] | null
+          feedback_recomendacao?: string | null
+          feedback_resultado?: string | null
+          hora_fim: string
+          hora_inicio: string
+          id?: string
+          link_online?: string | null
+          local?: string | null
+          observacoes?: string | null
+          status?: string
+          tipo: string
+          updated_at?: string
+          vaga_id: string
+          vaga_titulo: string
+        }
+        Update: {
+          candidato_id?: string | null
+          candidato_nome?: string
+          created_at?: string
+          created_by?: string | null
+          data?: string
+          entrevistadores?: string[]
+          etapa?: string
+          feedback_avaliado_em?: string | null
+          feedback_avaliado_por?: string | null
+          feedback_comentarios?: string | null
+          feedback_nota?: number | null
+          feedback_pontos_fortes?: string[] | null
+          feedback_pontos_melhorar?: string[] | null
+          feedback_recomendacao?: string | null
+          feedback_resultado?: string | null
+          hora_fim?: string
+          hora_inicio?: string
+          id?: string
+          link_online?: string | null
+          local?: string | null
+          observacoes?: string | null
+          status?: string
+          tipo?: string
+          updated_at?: string
+          vaga_id?: string
+          vaga_titulo?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "entrevistas_candidato_id_fkey"
+            columns: ["candidato_id"]
+            isOneToOne: false
+            referencedRelation: "candidatos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       match_scores: {
         Row: {
           analise: string | null
