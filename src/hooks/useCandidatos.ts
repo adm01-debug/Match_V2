@@ -1,25 +1,24 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { 
-  Candidato, 
-  CandidatoInsert, 
-  CandidatoUpdate,
-  MatchScore
-} from '@/integrations/supabase/types';
+import { Tables } from '@/integrations/supabase/types';
 import { useToast } from '@/hooks/use-toast';
+
+// Tipos baseados no schema do Supabase
+type CandidatoDB = Tables<'candidatos'>;
+type MatchScoreDB = Tables<'match_scores'>;
 
 interface UseCandidatosOptions {
   status?: string;
   skill?: string;
   origem?: string;
   search?: string;
-  orderBy?: 'nome' | 'created_at' | 'experiencia_anos';
+  orderBy?: 'nome' | 'created_at';
   orderDirection?: 'asc' | 'desc';
   limit?: number;
 }
 
-interface CandidatoComMatchScores extends Candidato {
-  match_scores?: MatchScore[];
+interface CandidatoComMatchScores extends CandidatoDB {
+  match_scores?: MatchScoreDB[];
 }
 
 interface UseCandidatosReturn {
@@ -30,15 +29,15 @@ interface UseCandidatosReturn {
   // CRUD
   fetchCandidatos: (options?: UseCandidatosOptions) => Promise<void>;
   fetchCandidatoById: (id: string) => Promise<CandidatoComMatchScores | null>;
-  createCandidato: (candidato: CandidatoInsert) => Promise<Candidato | null>;
-  updateCandidato: (id: string, updates: CandidatoUpdate) => Promise<Candidato | null>;
+  createCandidato: (candidato: Partial<CandidatoDB>) => Promise<CandidatoDB | null>;
+  updateCandidato: (id: string, updates: Partial<CandidatoDB>) => Promise<CandidatoDB | null>;
   deleteCandidato: (id: string) => Promise<boolean>;
   // Ações
   adicionarAoBancoTalentos: (id: string) => Promise<boolean>;
   removerDoBancoTalentos: (id: string) => Promise<boolean>;
   atualizarHabilidades: (id: string, habilidades: string[]) => Promise<boolean>;
   // Busca
-  searchCandidatos: (query: string) => Promise<Candidato[]>;
+  searchCandidatos: (query: string) => Promise<CandidatoDB[]>;
   refetch: () => Promise<void>;
 }
 
@@ -63,7 +62,7 @@ export function useCandidatos(initialOptions?: UseCandidatosOptions): UseCandida
       }
 
       if (options?.origem) {
-        query = query.eq('origem', options.origem);
+        query = query.eq('fonte', options.origem);
       }
 
       if (options?.skill) {
@@ -93,7 +92,7 @@ export function useCandidatos(initialOptions?: UseCandidatosOptions): UseCandida
           .select('*')
           .in('candidato_id', data.map(c => c.id));
 
-        const candidatosComScores = data.map(c => ({
+        const candidatosComScores: CandidatoComMatchScores[] = data.map(c => ({
           ...c,
           match_scores: matchScores?.filter(ms => ms.candidato_id === c.id) || [],
         }));
@@ -148,21 +147,28 @@ export function useCandidatos(initialOptions?: UseCandidatosOptions): UseCandida
     }
   }, [toast]);
 
-  const createCandidato = useCallback(async (candidato: CandidatoInsert): Promise<Candidato | null> => {
+  const createCandidato = useCallback(async (candidato: Partial<CandidatoDB>): Promise<CandidatoDB | null> => {
     try {
       const { data, error: createError } = await supabase
         .from('candidatos')
         .insert({
-          ...candidato,
-          status: candidato.status || 'ativo',
-          origem: candidato.origem || 'manual',
+          nome: candidato.nome || '',
+          email: candidato.email || '',
+          telefone: candidato.telefone,
+          resumo: candidato.resumo,
+          habilidades: candidato.habilidades || [],
+          experiencias: candidato.experiencias || [],
+          formacao: candidato.formacao || [],
+          fonte: candidato.fonte || 'manual',
+          status: candidato.status || 'novo',
+          arquivo_curriculo: candidato.arquivo_curriculo,
         })
         .select()
         .single();
 
       if (createError) throw createError;
 
-      setCandidatos(prev => [data, ...prev]);
+      setCandidatos(prev => [{ ...data, match_scores: [] }, ...prev]);
       setTotalCount(prev => prev + 1);
 
       toast({
@@ -182,7 +188,7 @@ export function useCandidatos(initialOptions?: UseCandidatosOptions): UseCandida
     }
   }, [toast]);
 
-  const updateCandidato = useCallback(async (id: string, updates: CandidatoUpdate): Promise<Candidato | null> => {
+  const updateCandidato = useCallback(async (id: string, updates: Partial<CandidatoDB>): Promise<CandidatoDB | null> => {
     try {
       const { data, error: updateError } = await supabase
         .from('candidatos')
@@ -265,12 +271,12 @@ export function useCandidatos(initialOptions?: UseCandidatosOptions): UseCandida
     return result !== null;
   }, [updateCandidato]);
 
-  const searchCandidatos = useCallback(async (query: string): Promise<Candidato[]> => {
+  const searchCandidatos = useCallback(async (query: string): Promise<CandidatoDB[]> => {
     try {
       const { data } = await supabase
         .from('candidatos')
         .select('*')
-        .or(`nome.ilike.%${query}%,email.ilike.%${query}%,cargo_atual.ilike.%${query}%`)
+        .or(`nome.ilike.%${query}%,email.ilike.%${query}%`)
         .limit(20);
 
       return data || [];
@@ -380,7 +386,7 @@ export function useCandidato(id: string | undefined) {
           filter: `id=eq.${id}`,
         },
         (payload) => {
-          setCandidato(prev => prev ? { ...prev, ...payload.new } : null);
+          setCandidato(prev => prev ? { ...prev, ...(payload.new as CandidatoDB) } : null);
         }
       )
       .subscribe();
@@ -454,5 +460,5 @@ export const ORIGENS_CANDIDATO = [
   { value: 'indicacao', label: 'Indicação', icon: '👥' },
   { value: 'site', label: 'Site Próprio', icon: '🌐' },
   { value: 'manual', label: 'Cadastro Manual', icon: '✍️' },
-  { value: 'parser', label: 'Parser de CV', icon: '🤖' },
+  { value: 'parser_curriculo', label: 'Parser de CV', icon: '🤖' },
 ] as const;

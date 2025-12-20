@@ -1,20 +1,16 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { Tables } from '@/integrations/supabase/types';
 import { useToast } from '@/hooks/use-toast';
 
-interface BateriaProva {
-  id: string;
-  nome: string;
-  descricao: string | null;
-  provas_ids: string[];
-  ativo: boolean;
-  created_at: string;
-}
+type BateriaProvaDB = Tables<'baterias_provas'>;
 
 interface BateriaProvaInsert {
   nome: string;
   descricao?: string;
-  provas_ids: string[];
+  departamento?: string;
+  nivel?: string;
+  duracao_total?: number;
   ativo?: boolean;
 }
 
@@ -30,13 +26,24 @@ export function useBateriasProvas() {
         .select('*')
         .order('created_at', { ascending: false });
       if (error) throw error;
-      return data as BateriaProva[];
+      return data as BateriaProvaDB[];
     },
   });
 
   const createBateria = useMutation({
     mutationFn: async (dados: BateriaProvaInsert) => {
-      const { data, error } = await supabase.from('baterias_provas').insert(dados).select().single();
+      const { data, error } = await supabase
+        .from('baterias_provas')
+        .insert({
+          nome: dados.nome,
+          descricao: dados.descricao,
+          departamento: dados.departamento || 'geral',
+          nivel: dados.nivel || 'junior',
+          duracao_total: dados.duracao_total || 0,
+          ativo: dados.ativo ?? true,
+        })
+        .select()
+        .single();
       if (error) throw error;
       return data;
     },
@@ -48,7 +55,15 @@ export function useBateriasProvas() {
 
   const updateBateria = useMutation({
     mutationFn: async ({ id, ...dados }: Partial<BateriaProvaInsert> & { id: string }) => {
-      const { data, error } = await supabase.from('baterias_provas').update(dados).eq('id', id).select().single();
+      const { data, error } = await supabase
+        .from('baterias_provas')
+        .update({
+          ...dados,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', id)
+        .select()
+        .single();
       if (error) throw error;
       return data;
     },

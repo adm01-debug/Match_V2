@@ -1,30 +1,23 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { Tables } from '@/integrations/supabase/types';
 import { useToast } from '@/hooks/use-toast';
 
-interface Candidatura {
-  id: string;
-  candidato_id: string;
-  vaga_id: string;
-  status: 'pendente' | 'em_analise' | 'aprovada' | 'rejeitada';
-  data_candidatura: string;
-  carta_apresentacao: string | null;
-  pretensao_salarial: number | null;
-  disponibilidade: string | null;
-  created_at: string;
-  candidato?: { nome: string; email: string; foto_url: string | null } | null;
+type CandidaturaDB = Tables<'candidaturas'>;
+
+interface Candidatura extends CandidaturaDB {
+  candidato?: { nome: string; email: string } | null;
   vaga?: { titulo: string; departamento: string } | null;
 }
 
 interface CandidaturaInsert {
-  candidato_id: string;
+  candidato_auth_id: string;
   vaga_id: string;
   carta_apresentacao?: string;
-  pretensao_salarial?: number;
-  disponibilidade?: string;
+  curriculo_url?: string;
 }
 
-export function useCandidaturas(filtros?: { vagaId?: string; candidatoId?: string; status?: string }) {
+export function useCandidaturas(filtros?: { vagaId?: string; candidatoAuthId?: string; status?: string }) {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -33,14 +26,21 @@ export function useCandidaturas(filtros?: { vagaId?: string; candidatoId?: strin
     queryFn: async () => {
       let query = supabase
         .from('candidaturas')
-        .select(`*, candidato:candidatos(nome, email, foto_url), vaga:vagas(titulo, departamento)`)
+        .select(`
+          *,
+          candidato:candidatos_auth(nome, email),
+          vaga:vagas(titulo, departamento)
+        `)
         .order('created_at', { ascending: false });
+      
       if (filtros?.vagaId) query = query.eq('vaga_id', filtros.vagaId);
-      if (filtros?.candidatoId) query = query.eq('candidato_id', filtros.candidatoId);
+      if (filtros?.candidatoAuthId) query = query.eq('candidato_auth_id', filtros.candidatoAuthId);
       if (filtros?.status) query = query.eq('status', filtros.status);
+      
       const { data, error } = await query;
       if (error) throw error;
-      return data as Candidatura[];
+      
+      return (data || []) as Candidatura[];
     },
   });
 
@@ -48,7 +48,15 @@ export function useCandidaturas(filtros?: { vagaId?: string; candidatoId?: strin
     mutationFn: async (dados: CandidaturaInsert) => {
       const { data, error } = await supabase
         .from('candidaturas')
-        .insert({ ...dados, status: 'pendente', data_candidatura: new Date().toISOString() })
+        .insert({
+          candidato_auth_id: dados.candidato_auth_id,
+          vaga_id: dados.vaga_id,
+          carta_apresentacao: dados.carta_apresentacao,
+          curriculo_url: dados.curriculo_url,
+          status: 'pendente',
+          etapa_atual: 'inscricao',
+          data_candidatura: new Date().toISOString(),
+        })
         .select()
         .single();
       if (error) throw error;
@@ -61,8 +69,13 @@ export function useCandidaturas(filtros?: { vagaId?: string; candidatoId?: strin
   });
 
   const updateStatus = useMutation({
-    mutationFn: async ({ id, status }: { id: string; status: Candidatura['status'] }) => {
-      const { data, error } = await supabase.from('candidaturas').update({ status }).eq('id', id).select().single();
+    mutationFn: async ({ id, status }: { id: string; status: string }) => {
+      const { data, error } = await supabase
+        .from('candidaturas')
+        .update({ status })
+        .eq('id', id)
+        .select()
+        .single();
       if (error) throw error;
       return data;
     },

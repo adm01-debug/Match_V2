@@ -168,20 +168,20 @@ export function useDashboard(): UseDashboardReturn {
         .from('processos_seletivos')
         .select('*', { count: 'exact', head: true })
         .eq('status', 'contratado')
-        .gte('data_conclusao', inicioMes.toISOString());
+        .gte('updated_at', inicioMes.toISOString());
 
       // Tempo médio (processos concluídos)
       const { data: processosConcluidos } = await supabase
         .from('processos_seletivos')
-        .select('data_inscricao, data_conclusao')
-        .not('data_conclusao', 'is', null)
-        .gte('data_conclusao', inicioMes.toISOString());
+        .select('data_inscricao, data_ultima_movimentacao')
+        .eq('status', 'contratado')
+        .gte('updated_at', inicioMes.toISOString());
 
       let tempoMedio = 0;
       if (processosConcluidos && processosConcluidos.length > 0) {
         const tempos = processosConcluidos.map(p => {
           const inicio = new Date(p.data_inscricao);
-          const fim = new Date(p.data_conclusao!);
+          const fim = new Date(p.data_ultima_movimentacao);
           return Math.floor((fim.getTime() - inicio.getTime()) / (1000 * 60 * 60 * 24));
         });
         tempoMedio = Math.round(tempos.reduce((a, b) => a + b, 0) / tempos.length);
@@ -261,7 +261,7 @@ export function useDashboard(): UseDashboardReturn {
         departamento: v.departamento,
         candidatos: v.total_candidatos,
         emProcesso: v.em_processo,
-        diasAberta: Math.floor((Date.now() - new Date(v.created_at!).getTime()) / (1000 * 60 * 60 * 24)),
+        diasAberta: Math.floor((Date.now() - new Date(v.created_at).getTime()) / (1000 * 60 * 60 * 24)),
         quantidade: v.quantidade,
         prioridade: v.prioridade,
       }));
@@ -294,56 +294,20 @@ export function useDashboard(): UseDashboardReturn {
         });
       }
 
-      // Entrevistas para agendar (candidatos em etapa de entrevista sem entrevista marcada)
-      const { data: emEntrevista } = await supabase
+      // Entrevistas para agendar (candidatos em etapa de entrevista)
+      const { count: emEntrevista } = await supabase
         .from('processos_seletivos')
-        .select('id')
+        .select('*', { count: 'exact', head: true })
         .eq('status', 'em_andamento')
         .in('etapa_atual', ['entrevista_rh', 'entrevista_gestor', 'entrevista_final']);
 
-      if (emEntrevista && emEntrevista.length > 0) {
-        const { data: comEntrevista } = await supabase
-          .from('entrevistas')
-          .select('processo_id')
-          .in('processo_id', emEntrevista.map(p => p.id))
-          .in('status', ['agendada', 'confirmada']);
-
-        const idsComEntrevista = new Set(comEntrevista?.map(e => e.processo_id));
-        const semEntrevista = emEntrevista.filter(p => !idsComEntrevista.has(p.id));
-
-        if (semEntrevista.length > 0) {
-          acoes.push({
-            tipo: 'agendar',
-            quantidade: semEntrevista.length,
-            descricao: 'entrevistas para agendar',
-            alerta: false,
-          });
-        }
-      }
-
-      // Avaliações pendentes
-      const { data: entrevistasRealizadas } = await supabase
-        .from('entrevistas')
-        .select('processo_id')
-        .eq('status', 'realizada');
-
-      if (entrevistasRealizadas && entrevistasRealizadas.length > 0) {
-        const { data: comAvaliacao } = await supabase
-          .from('avaliacoes')
-          .select('processo_id')
-          .in('processo_id', entrevistasRealizadas.map(e => e.processo_id));
-
-        const idsComAvaliacao = new Set(comAvaliacao?.map(a => a.processo_id));
-        const semAvaliacao = entrevistasRealizadas.filter(e => !idsComAvaliacao.has(e.processo_id));
-
-        if (semAvaliacao.length > 0) {
-          acoes.push({
-            tipo: 'avaliar',
-            quantidade: semAvaliacao.length,
-            descricao: 'avaliações para preencher',
-            alerta: false,
-          });
-        }
+      if (emEntrevista && emEntrevista > 0) {
+        acoes.push({
+          tipo: 'agendar',
+          quantidade: emEntrevista,
+          descricao: 'candidatos em etapa de entrevista',
+          alerta: false,
+        });
       }
 
       // Propostas aguardando resposta
@@ -371,32 +335,24 @@ export function useDashboard(): UseDashboardReturn {
   const fetchAgendaHoje = useCallback(async () => {
     try {
       const hoje = new Date();
-      hoje.setHours(0, 0, 0, 0);
-      const amanha = new Date(hoje);
-      amanha.setDate(amanha.getDate() + 1);
+      const hojeStr = hoje.toISOString().split('T')[0];
 
       const { data } = await supabase
         .from('entrevistas')
-        .select(`
-          *,
-          processo:processos_seletivos(
-            candidatos(nome)
-          )
-        `)
-        .gte('data_hora', hoje.toISOString())
-        .lt('data_hora', amanha.toISOString())
+        .select('*')
+        .eq('data', hojeStr)
         .in('status', ['agendada', 'confirmada'])
-        .order('data_hora', { ascending: true });
+        .order('hora_inicio', { ascending: true });
 
       if (!data) return;
 
       const agenda: AgendaDia[] = data.map(e => ({
         id: e.id,
-        hora: new Date(e.data_hora).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+        hora: e.hora_inicio,
         tipo: e.tipo,
         titulo: `Entrevista ${e.etapa.replace(/_/g, ' ')}`,
-        candidato: (e.processo as any)?.candidatos?.nome || 'N/A',
-        local: e.link_video || e.local || 'A definir',
+        candidato: e.candidato_nome,
+        local: e.link_online || e.local || 'A definir',
       }));
 
       setAgendaHoje(agenda);
@@ -409,11 +365,7 @@ export function useDashboard(): UseDashboardReturn {
     try {
       const { data } = await supabase
         .from('processos_seletivos')
-        .select(`
-          *,
-          candidatos(nome, foto_url),
-          vagas(titulo)
-        `)
+        .select('*')
         .eq('status', 'em_andamento')
         .gte('match_score', 80)
         .order('match_score', { ascending: false })
@@ -423,11 +375,11 @@ export function useDashboard(): UseDashboardReturn {
 
       const top: TopCandidato[] = data.map(p => ({
         id: p.id,
-        nome: (p.candidatos as any)?.nome || 'N/A',
-        foto: (p.candidatos as any)?.foto_url,
-        vaga: (p.vagas as any)?.titulo || 'N/A',
+        nome: p.candidato_nome,
+        foto: p.candidato_foto,
+        vaga: p.vaga_titulo,
         etapa: ETAPAS_LABELS[p.etapa_atual] || p.etapa_atual,
-        matchScore: p.match_score,
+        matchScore: p.match_score || 0,
         diasNoProcesso: Math.floor((Date.now() - new Date(p.data_inscricao).getTime()) / (1000 * 60 * 60 * 24)),
       }));
 

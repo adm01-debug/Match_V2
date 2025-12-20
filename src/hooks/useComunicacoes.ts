@@ -1,17 +1,18 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
 
 interface ComunicacaoInput {
   candidato_id: string;
-  tipo: string;
   assunto: string;
   conteudo: string;
-  processo_id?: string;
-  vaga_id?: string;
+  template_nome?: string;
+  template_etapa?: string;
 }
 
 export function useComunicacoes() {
   const queryClient = useQueryClient();
+  const { toast } = useToast();
 
   const registrarMutation = useMutation({
     mutationFn: async (input: ComunicacaoInput) => {
@@ -21,13 +22,12 @@ export function useComunicacoes() {
         .from('comunicacoes')
         .insert({
           candidato_id: input.candidato_id,
-          tipo: input.tipo,
           assunto: input.assunto,
           conteudo: input.conteudo,
-          processo_id: input.processo_id,
-          vaga_id: input.vaga_id,
-          remetente_id: user?.id,
-          status: 'enviado',
+          template_nome: input.template_nome || 'Comunicação Manual',
+          template_etapa: input.template_etapa || 'geral',
+          enviado_por: user?.id,
+          enviado_em: new Date().toISOString(),
         })
         .select()
         .single();
@@ -37,6 +37,14 @@ export function useComunicacoes() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['comunicacoes'] });
+      toast({ title: 'Comunicação registrada!' });
+    },
+    onError: (error: Error) => {
+      toast({ 
+        title: 'Erro ao registrar comunicação', 
+        description: error.message,
+        variant: 'destructive' 
+      });
     },
   });
 
