@@ -10,16 +10,8 @@ import { AlertasInteligentes } from "@/components/dashboard/AlertasInteligentes"
 import { TopCandidatos } from "@/components/dashboard/TopCandidatos";
 import { EntrevistasStats } from "@/components/dashboard/EntrevistasStats";
 import { EntrevistasChart } from "@/components/dashboard/EntrevistasChart";
-import { useVagasUrgentes } from "@/hooks/useVagas";
-import {
-  kpiData,
-  funilData,
-  vagasUrgentes as vagasUrgentesMock,
-  acoesPendentes,
-  agendaDia,
-  processos,
-} from "@/data/mockData";
-import { Briefcase, Users, Target, UserCheck, Clock } from "lucide-react";
+import { useDashboardData } from "@/hooks/useDashboardData";
+import { Briefcase, Users, Target, UserCheck, Clock, Loader2 } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -27,9 +19,33 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Dashboard() {
-  const { data: vagasUrgentes = vagasUrgentesMock } = useVagasUrgentes();
+  const { 
+    kpiData, 
+    funilData, 
+    vagasUrgentes, 
+    acoesPendentes, 
+    agendaDia, 
+    processos,
+    isLoading 
+  } = useDashboardData();
+
+  // Valores default enquanto carrega
+  const kpis = kpiData || {
+    vagasAbertas: 0,
+    vagasNovas: 0,
+    candidatosTotal: 0,
+    candidatosNovos: 0,
+    emProcesso: 0,
+    vagasEmProcesso: 0,
+    contratadosMes: 0,
+    metaContratacao: 5,
+    tempoMedio: 0,
+    metaTempo: 25,
+  };
+
   return (
     <Layout title="Dashboard">
       <div className="p-6 space-y-6 animate-fade-in">
@@ -55,47 +71,55 @@ export default function Dashboard() {
 
         {/* KPI Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-          <KPICard
-            title="Vagas Abertas"
-            value={kpiData.vagasAbertas}
-            subtitle={`+${kpiData.vagasNovas} novas`}
-            icon={Briefcase}
-            variant="primary"
-          />
-          <KPICard
-            title="Candidatos Total"
-            value={kpiData.candidatosTotal}
-            subtitle={`+${kpiData.candidatosNovos} este mês`}
-            icon={Users}
-            trend={{ value: "+45", positive: true }}
-            variant="default"
-          />
-          <KPICard
-            title="Em Processo"
-            value={kpiData.emProcesso}
-            subtitle={`em ${kpiData.vagasEmProcesso} vagas`}
-            icon={Target}
-            variant="warning"
-          />
-          <KPICard
-            title="Contratados no Mês"
-            value={kpiData.contratadosMes}
-            subtitle={`meta: ${kpiData.metaContratacao}`}
-            icon={UserCheck}
-            variant="success"
-          />
-          <KPICard
-            title="Tempo Médio"
-            value={`${kpiData.tempoMedio} dias`}
-            subtitle={`meta: ${kpiData.metaTempo}`}
-            icon={Clock}
-            variant={kpiData.tempoMedio > kpiData.metaTempo ? "danger" : "success"}
-          />
+          {isLoading ? (
+            Array.from({ length: 5 }).map((_, i) => (
+              <Skeleton key={i} className="h-28 rounded-lg" />
+            ))
+          ) : (
+            <>
+              <KPICard
+                title="Vagas Abertas"
+                value={kpis.vagasAbertas}
+                subtitle={`+${kpis.vagasNovas} novas`}
+                icon={Briefcase}
+                variant="primary"
+              />
+              <KPICard
+                title="Candidatos Total"
+                value={kpis.candidatosTotal}
+                subtitle={`+${kpis.candidatosNovos} este mês`}
+                icon={Users}
+                trend={{ value: `+${kpis.candidatosNovos}`, positive: true }}
+                variant="default"
+              />
+              <KPICard
+                title="Em Processo"
+                value={kpis.emProcesso}
+                subtitle={`em ${kpis.vagasEmProcesso} vagas`}
+                icon={Target}
+                variant="warning"
+              />
+              <KPICard
+                title="Contratados no Mês"
+                value={kpis.contratadosMes}
+                subtitle={`meta: ${kpis.metaContratacao}`}
+                icon={UserCheck}
+                variant="success"
+              />
+              <KPICard
+                title="Tempo Médio"
+                value={kpis.tempoMedio > 0 ? `${kpis.tempoMedio} dias` : '-'}
+                subtitle={`meta: ${kpis.metaTempo}`}
+                icon={Clock}
+                variant={kpis.tempoMedio > kpis.metaTempo ? "danger" : "success"}
+              />
+            </>
+          )}
         </div>
 
         {/* Insights e Alertas Inteligentes */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <SmartInsights kpiData={kpiData} funilData={funilData} />
+          <SmartInsights kpiData={kpis} funilData={funilData} />
           <AlertasInteligentes acoesPendentes={acoesPendentes} vagasUrgentes={vagasUrgentes} />
         </div>
 
@@ -138,24 +162,9 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Third Row */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Ações Pendentes */}
-          <div className="lg:col-span-2">
-            <AcoesPendentes acoes={acoesPendentes} />
-          </div>
-
-          {/* Agenda do Dia */}
-          <div>
-            <AgendaHoje agenda={agendaDia} />
-          </div>
-        </div>
-
         {/* Ações Pendentes Row */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-3">
-            <AcoesPendentes acoes={acoesPendentes} />
-          </div>
+        <div className="grid grid-cols-1 gap-6">
+          <AcoesPendentes acoes={acoesPendentes} />
         </div>
 
         {/* Ações Rápidas */}
