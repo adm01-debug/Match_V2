@@ -12,7 +12,9 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Calendar } from '@/components/ui/calendar';
 import { Slider } from '@/components/ui/slider';
 import { useToast } from '@/hooks/use-toast';
+// TODO: Migrar queries diretas para hooks - Issue #refactor-001
 import { supabase } from '@/integrations/supabase/client';
+import { useCandidatos, deleteCandidato as hookDeleteCandidato, updateCandidato as hookUpdateCandidato } from '@/hooks/useCandidatos';
 import { 
   Users, Search, Filter, Target, Mail, Phone, Briefcase, 
   GraduationCap, Sparkles, Calendar as CalendarIcon, Loader2, UserPlus,
@@ -872,4 +874,5 @@ export default function CandidatosPage() {
     </Layout>
   );
 }
+
 
