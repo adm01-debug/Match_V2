@@ -231,3 +231,43 @@ export interface Avaliacao {
   observacoesGerais: string;
   recomendacao: string;
 }
+
+
+// Tipos adicionais
+
+export interface Prova {
+  id: string;
+  titulo: string;
+  descricao: string | null;
+  categoria: 'logica' | 'tecnica' | 'portugues' | 'ingles' | 'excel' | 'comportamental' | 'fit_cultural';
+  nivel: 'junior' | 'pleno' | 'senior';
+  tempo_limite_minutos: number;
+  nota_minima: number;
+  ativo: boolean;
+  departamento: string | null;
+  created_at: string;
+}
+
+export interface Comunicacao {
+  id: string;
+  processo_seletivo_id: string | null;
+  candidato_id: string;
+  tipo: 'email' | 'whatsapp' | 'sms' | 'ligacao' | 'nota';
+  assunto: string | null;
+  conteudo: string;
+  remetente_id: string | null;
+  status: 'enviado' | 'entregue' | 'lido' | 'respondido' | 'erro';
+  data_envio: string | null;
+  created_at: string;
+}
+
+export interface Indicacao {
+  id: string;
+  indicador_nome: string;
+  indicador_email: string;
+  candidato_nome: string;
+  candidato_email: string;
+  vaga_id: string | null;
+  status: 'pendente' | 'aprovada' | 'rejeitada' | 'contratado';
+  created_at: string;
+}
