@@ -144,6 +144,36 @@ export default function CandidatosPage() {
     }
   };
 
+  const updateCandidatoStatus = async (id: string, newStatus: string) => {
+    try {
+      const { error } = await supabase
+        .from('candidatos')
+        .update({ status: newStatus })
+        .eq('id', id);
+      
+      if (error) throw error;
+
+      setCandidatos(prev => prev.map(c => 
+        c.id === id ? { ...c, status: newStatus } : c
+      ));
+      
+      if (selectedCandidato?.id === id) {
+        setSelectedCandidato(prev => prev ? { ...prev, status: newStatus } : null);
+      }
+      
+      toast({ 
+        title: "Status atualizado", 
+        description: `O status foi alterado para "${getStatusConfig(newStatus).label}".` 
+      });
+    } catch (error) {
+      toast({ 
+        title: "Erro ao atualizar", 
+        description: "Não foi possível atualizar o status.", 
+        variant: "destructive" 
+      });
+    }
+  };
+
   const getBestMatchScore = (candidatoId: string): MatchScore | null => {
     const scores = matchScores[candidatoId];
     if (!scores || scores.length === 0) return null;
@@ -345,10 +375,28 @@ export default function CandidatosPage() {
                     </SheetHeader>
 
                     <div className="space-y-6 mt-6">
-                      {/* Status */}
-                      <Badge className={cn("text-white", statusConfig.color)}>
-                        {statusConfig.label}
-                      </Badge>
+                      {/* Status Edit */}
+                      <div>
+                        <h4 className="text-sm font-medium mb-2">Alterar Status</h4>
+                        <Select 
+                          value={candidato.status || 'novo'} 
+                          onValueChange={(value) => updateCandidatoStatus(candidato.id, value)}
+                        >
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {statusOptions.filter(opt => opt.value !== 'todos').map(opt => (
+                              <SelectItem key={opt.value} value={opt.value}>
+                                <div className="flex items-center gap-2">
+                                  <div className={cn("w-2 h-2 rounded-full", getStatusConfig(opt.value).color)} />
+                                  {opt.label}
+                                </div>
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
 
                       {/* Contact */}
                       <div className="space-y-2">
