@@ -1,440 +1,481 @@
-import { useState, useMemo } from 'react';
-import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
-import { Layout } from '@/components/layout/Layout';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
-import { CompetenciaRating } from '@/components/avaliacao/CompetenciaRating';
-import { NotaResumo } from '@/components/avaliacao/NotaResumo';
-import { 
-  ArrowLeft, 
-  Save, 
-  Send, 
-  User, 
-  Briefcase,
-  CheckCircle,
+import { useState, useEffect } from "react";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
+import { Layout } from "@/components/layout/Layout";
+import { useAvaliacoes, useAvaliacao, COMPETENCIAS_TECNICAS, COMPETENCIAS_COMPORTAMENTAIS, PARECERES } from "@/hooks/useAvaliacoes";
+import { useProcessosSeletivos } from "@/hooks/useProcessosSeletivos";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Slider } from "@/components/ui/slider";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Progress } from "@/components/ui/progress";
+import { Separator } from "@/components/ui/separator";
+import {
+  ArrowLeft,
+  Save,
+  Send,
+  Star,
+  CheckCircle2,
   XCircle,
-  HelpCircle,
-  FileText,
-  Star
-} from 'lucide-react';
-import { toast } from '@/hooks/use-toast';
-import { 
-  competenciasTecnicas, 
-  competenciasComportamentais,
-} from '@/data/avaliacaoData';
-import { processos, candidatos, vagas } from '@/data/mockData';
-import { NotaCompetencia } from '@/types/recruitment';
-import { cn } from '@/lib/utils';
+  AlertCircle,
+  Briefcase,
+  Brain,
+  MessageSquare,
+  ThumbsUp,
+  ThumbsDown,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast";
 
-type Parecer = 'aprovar' | 'reprovar' | 'em_duvida';
+interface NotaCompetencia {
+  id: string;
+  nome: string;
+  tipo: string;
+  nota: number;
+}
 
 export default function AvaliacaoForm() {
-  const { processoId } = useParams();
+  const { id } = useParams();
   const [searchParams] = useSearchParams();
+  const processoIdParam = searchParams.get('processo');
   const navigate = useNavigate();
+  const { toast } = useToast();
 
-  const processo = processos.find(p => p.id === processoId);
-  const candidato = candidatos.find(c => c.id === processo?.candidatoId);
-  const vaga = vagas.find(v => v.id === processo?.vagaId);
+  const isEditing = !!id;
 
-  // State for ratings
-  const [notasTecnicas, setNotasTecnicas] = useState<Record<string, NotaCompetencia>>(
-    competenciasTecnicas.reduce((acc, comp) => ({
-      ...acc,
-      [comp.id]: { competenciaId: comp.id, nota: 0 as any, observacao: '' }
-    }), {})
+  // Hooks de dados
+  const { data: avaliacaoExistente, isLoading: loadingAvaliacao } = useAvaliacao(id);
+  const { createAvaliacao, updateAvaliacao, salvarRascunho, finalizarAvaliacao, isCreating, isUpdating } = useAvaliacoes();
+  const { data: processos = [], isLoading: loadingProcessos } = useProcessosSeletivos();
+
+  // State do formulário
+  const [processoId, setProcessoId] = useState<string>(processoIdParam || "");
+  const [notasTecnicas, setNotasTecnicas] = useState<NotaCompetencia[]>(
+    COMPETENCIAS_TECNICAS.map(c => ({ ...c, nota: 5 }))
   );
-
-  const [notasComportamentais, setNotasComportamentais] = useState<Record<string, NotaCompetencia>>(
-    competenciasComportamentais.reduce((acc, comp) => ({
-      ...acc,
-      [comp.id]: { competenciaId: comp.id, nota: 0 as any, observacao: '' }
-    }), {})
+  const [notasComportamentais, setNotasComportamentais] = useState<NotaCompetencia[]>(
+    COMPETENCIAS_COMPORTAMENTAIS.map(c => ({ ...c, nota: 5 }))
   );
+  const [pontosFortes, setPontosFortes] = useState("");
+  const [pontosDesenvolvimento, setPontosDesenvolvimento] = useState("");
+  const [observacoesGerais, setObservacoesGerais] = useState("");
+  const [parecer, setParecer] = useState<string>("em_duvida");
+  const [recomendacao, setRecomendacao] = useState("");
+  const [activeTab, setActiveTab] = useState("tecnicas");
 
-  const [pontosFortes, setPontosFortes] = useState('');
-  const [pontosDesenvolvimento, setPontosDesenvolvimento] = useState('');
-  const [parecer, setParecer] = useState<Parecer | ''>('');
-  const [observacoesGerais, setObservacoesGerais] = useState('');
-  const [recomendacao, setRecomendacao] = useState('');
+  // Carregar dados se editando
+  useEffect(() => {
+    if (avaliacaoExistente) {
+      setProcessoId(avaliacaoExistente.processo_id);
+      if (avaliacaoExistente.notas_tecnicas) {
+        setNotasTecnicas(avaliacaoExistente.notas_tecnicas as NotaCompetencia[]);
+      }
+      if (avaliacaoExistente.notas_comportamentais) {
+        setNotasComportamentais(avaliacaoExistente.notas_comportamentais as NotaCompetencia[]);
+      }
+      setPontosFortes(avaliacaoExistente.pontos_fortes || "");
+      setPontosDesenvolvimento(avaliacaoExistente.pontos_desenvolvimento || "");
+      setObservacoesGerais(avaliacaoExistente.observacoes_gerais || "");
+      setParecer(avaliacaoExistente.parecer || "em_duvida");
+      setRecomendacao(avaliacaoExistente.recomendacao || "");
+    }
+  }, [avaliacaoExistente]);
 
-  // Calculate averages
-  const mediaTecnica = useMemo(() => {
-    const notas = Object.values(notasTecnicas).filter(n => n.nota > 0);
-    if (notas.length === 0) return 0;
-    return notas.reduce((sum, n) => sum + n.nota, 0) / notas.length;
-  }, [notasTecnicas]);
+  // Calcular médias
+  const mediaTecnica = notasTecnicas.reduce((acc, n) => acc + n.nota, 0) / notasTecnicas.length;
+  const mediaComportamental = notasComportamentais.reduce((acc, n) => acc + n.nota, 0) / notasComportamentais.length;
+  const mediaGeral = (mediaTecnica + mediaComportamental) / 2;
 
-  const mediaComportamental = useMemo(() => {
-    const notas = Object.values(notasComportamentais).filter(n => n.nota > 0);
-    if (notas.length === 0) return 0;
-    return notas.reduce((sum, n) => sum + n.nota, 0) / notas.length;
-  }, [notasComportamentais]);
-
-  const mediaGeral = useMemo(() => {
-    if (mediaTecnica === 0 && mediaComportamental === 0) return 0;
-    if (mediaTecnica === 0) return mediaComportamental;
-    if (mediaComportamental === 0) return mediaTecnica;
-    return (mediaTecnica + mediaComportamental) / 2;
-  }, [mediaTecnica, mediaComportamental]);
-
-  const handleNotaTecnicaChange = (competenciaId: string, nota: number) => {
-    setNotasTecnicas(prev => ({
-      ...prev,
-      [competenciaId]: { ...prev[competenciaId], nota: nota as any }
-    }));
+  // Atualizar nota de competência
+  const handleNotaChange = (tipo: 'tecnica' | 'comportamental', id: string, nota: number) => {
+    if (tipo === 'tecnica') {
+      setNotasTecnicas(prev => prev.map(n => n.id === id ? { ...n, nota } : n));
+    } else {
+      setNotasComportamentais(prev => prev.map(n => n.id === id ? { ...n, nota } : n));
+    }
   };
 
-  const handleObservacaoTecnicaChange = (competenciaId: string, observacao: string) => {
-    setNotasTecnicas(prev => ({
-      ...prev,
-      [competenciaId]: { ...prev[competenciaId], observacao }
-    }));
-  };
-
-  const handleNotaComportamentalChange = (competenciaId: string, nota: number) => {
-    setNotasComportamentais(prev => ({
-      ...prev,
-      [competenciaId]: { ...prev[competenciaId], nota: nota as any }
-    }));
-  };
-
-  const handleObservacaoComportamentalChange = (competenciaId: string, observacao: string) => {
-    setNotasComportamentais(prev => ({
-      ...prev,
-      [competenciaId]: { ...prev[competenciaId], observacao }
-    }));
-  };
-
-  const handleSalvarRascunho = () => {
-    toast({
-      title: 'Rascunho salvo',
-      description: 'A avaliação foi salva como rascunho.',
-    });
-  };
-
-  const handleEnviarAvaliacao = () => {
-    // Validate
-    const notasTecnicasPreenchidas = Object.values(notasTecnicas).filter(n => n.nota > 0).length;
-    const notasComportamentaisPreenchidas = Object.values(notasComportamentais).filter(n => n.nota > 0).length;
-
-    if (notasTecnicasPreenchidas < competenciasTecnicas.length) {
-      toast({
-        title: 'Avaliação incompleta',
-        description: 'Preencha todas as notas técnicas.',
-        variant: 'destructive',
-      });
+  // Salvar rascunho
+  const handleSalvarRascunho = async () => {
+    if (!processoId) {
+      toast({ title: "Erro", description: "Selecione um candidato", variant: "destructive" });
       return;
     }
 
-    if (notasComportamentaisPreenchidas < competenciasComportamentais.length) {
-      toast({
-        title: 'Avaliação incompleta',
-        description: 'Preencha todas as notas comportamentais.',
-        variant: 'destructive',
+    try {
+      await salvarRascunho({
+        processo_id: processoId,
+        etapa: 'avaliacao',
+        notas_tecnicas: notasTecnicas,
+        notas_comportamentais: notasComportamentais,
+        nota_geral: mediaGeral * 10, // Converter para percentual
+        pontos_fortes: pontosFortes,
+        pontos_desenvolvimento: pontosDesenvolvimento,
+        observacoes_gerais: observacoesGerais,
       });
-      return;
+      toast({ title: "Rascunho salvo" });
+    } catch {
+      toast({ title: "Erro ao salvar", variant: "destructive" });
     }
-
-    if (!parecer) {
-      toast({
-        title: 'Parecer obrigatório',
-        description: 'Selecione um parecer para o candidato.',
-        variant: 'destructive',
-      });
-      return;
-    }
-
-    toast({
-      title: 'Avaliação enviada',
-      description: 'A avaliação foi registrada com sucesso!',
-    });
-
-    navigate('/pipeline');
   };
 
-  if (!processo || !candidato || !vaga) {
+  // Finalizar avaliação
+  const handleFinalizar = async () => {
+    if (!processoId) {
+      toast({ title: "Erro", description: "Selecione um candidato", variant: "destructive" });
+      return;
+    }
+
+    if (!parecer || parecer === "em_duvida") {
+      toast({ title: "Atenção", description: "Selecione um parecer final", variant: "destructive" });
+      return;
+    }
+
+    try {
+      if (isEditing && id) {
+        await finalizarAvaliacao(id, parecer, recomendacao);
+      } else {
+        await createAvaliacao({
+          processo_id: processoId,
+          etapa: 'avaliacao',
+          parecer,
+          notas_tecnicas: notasTecnicas,
+          notas_comportamentais: notasComportamentais,
+          nota_geral: mediaGeral * 10,
+          pontos_fortes: pontosFortes,
+          pontos_desenvolvimento: pontosDesenvolvimento,
+          observacoes_gerais: observacoesGerais,
+          recomendacao,
+        });
+      }
+      toast({ title: "Avaliação finalizada" });
+      navigate(-1);
+    } catch {
+      toast({ title: "Erro ao finalizar", variant: "destructive" });
+    }
+  };
+
+  // Processo selecionado
+  const processoSelecionado = processos.find(p => p.id === processoId);
+
+  const loading = loadingAvaliacao || loadingProcessos;
+  const saving = isCreating || isUpdating;
+
+  if (loading) {
     return (
-      <Layout>
-        <div className="flex flex-col items-center justify-center h-full">
-          <p className="text-muted-foreground">Processo não encontrado</p>
-          <Button variant="link" onClick={() => navigate('/pipeline')}>
-            Voltar ao Pipeline
-          </Button>
+      <Layout title="Avaliação">
+        <div className="p-6 space-y-6">
+          <Skeleton className="h-10 w-48" />
+          <Skeleton className="h-96" />
         </div>
       </Layout>
     );
   }
 
   return (
-    <Layout>
-      <div className="space-y-6 max-w-5xl mx-auto">
+    <Layout title={isEditing ? "Editar Avaliação" : "Nova Avaliação"}>
+      <div className="p-6 space-y-6 animate-fade-in">
         {/* Header */}
         <div className="flex items-center gap-4">
           <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
             <ArrowLeft className="h-5 w-5" />
           </Button>
-          <div className="flex-1">
-            <h1 className="text-2xl font-bold text-foreground">Formulário de Avaliação</h1>
-            <p className="text-muted-foreground">Avalie o candidato nas competências técnicas e comportamentais</p>
+          <div>
+            <h1 className="text-2xl font-bold">
+              {isEditing ? "Editar Avaliação" : "Nova Avaliação"}
+            </h1>
+            <p className="text-muted-foreground">
+              Avalie as competências técnicas e comportamentais do candidato
+            </p>
           </div>
         </div>
 
-        {/* Candidate Info Card */}
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-start gap-6">
-              <div className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center">
-                <User className="h-8 w-8 text-primary" />
-              </div>
-              <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                  <p className="text-sm text-muted-foreground">Candidato</p>
-                  <p className="font-semibold text-lg">{candidato.nome}</p>
-                  <p className="text-sm text-muted-foreground">{candidato.cargoAtual || 'Não informado'}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">Vaga</p>
-                  <p className="font-semibold">{vaga.titulo}</p>
-                  <p className="text-sm text-muted-foreground">{vaga.departamento}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">Etapa Atual</p>
-                  <Badge variant="outline" className="mt-1">
-                    {processo.etapaAtual.replace(/_/g, ' ')}
-                  </Badge>
-                  <div className="flex items-center gap-2 mt-2">
-                    <span className="text-sm text-muted-foreground">Match:</span>
-                    <Badge className="bg-green-500/10 text-green-600 border-green-500/20">
-                      {processo.matchScore}%
-                    </Badge>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Coluna Principal */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Seleção de Candidato */}
+            {!isEditing && (
+              <Card>
+                <CardHeader>
+                  <CardTitle>Candidato</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <Select value={processoId} onValueChange={setProcessoId}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecione o candidato" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {processos.filter(p => p.status === 'em_andamento').map(p => (
+                        <SelectItem key={p.id} value={p.id}>
+                          <div className="flex items-center gap-2">
+                            <Avatar className="h-6 w-6">
+                              <AvatarImage src={p.candidato?.foto_url} />
+                              <AvatarFallback>{p.candidato?.nome?.charAt(0)}</AvatarFallback>
+                            </Avatar>
+                            <span>{p.candidato?.nome}</span>
+                            <span className="text-muted-foreground">- {p.vaga?.titulo}</span>
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Candidato Selecionado */}
+            {processoSelecionado && (
+              <Card>
+                <CardContent className="p-4">
+                  <div className="flex items-center gap-4">
+                    <Avatar className="h-16 w-16">
+                      <AvatarImage src={processoSelecionado.candidato?.foto_url} />
+                      <AvatarFallback className="text-xl">
+                        {processoSelecionado.candidato?.nome?.charAt(0)}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <p className="text-lg font-semibold">{processoSelecionado.candidato?.nome}</p>
+                      <p className="text-muted-foreground">{processoSelecionado.vaga?.titulo}</p>
+                      <Badge variant="outline" className="mt-1">
+                        {processoSelecionado.etapa_atual.replace(/_/g, ' ')}
+                      </Badge>
+                    </div>
                   </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Tabs de Competências */}
+            <Card>
+              <Tabs value={activeTab} onValueChange={setActiveTab}>
+                <CardHeader>
+                  <TabsList className="grid w-full grid-cols-3">
+                    <TabsTrigger value="tecnicas" className="flex items-center gap-2">
+                      <Briefcase className="h-4 w-4" />
+                      Técnicas
+                    </TabsTrigger>
+                    <TabsTrigger value="comportamentais" className="flex items-center gap-2">
+                      <Brain className="h-4 w-4" />
+                      Comportamentais
+                    </TabsTrigger>
+                    <TabsTrigger value="observacoes" className="flex items-center gap-2">
+                      <MessageSquare className="h-4 w-4" />
+                      Observações
+                    </TabsTrigger>
+                  </TabsList>
+                </CardHeader>
+
+                <CardContent>
+                  {/* Competências Técnicas */}
+                  <TabsContent value="tecnicas" className="space-y-6 mt-0">
+                    {notasTecnicas.map(comp => (
+                      <div key={comp.id} className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <Label>{comp.nome}</Label>
+                          <span className={cn(
+                            "font-bold",
+                            comp.nota >= 8 ? "text-green-600" :
+                            comp.nota >= 6 ? "text-amber-600" : "text-red-600"
+                          )}>
+                            {comp.nota}/10
+                          </span>
+                        </div>
+                        <Slider
+                          value={[comp.nota]}
+                          onValueChange={([value]) => handleNotaChange('tecnica', comp.id, value)}
+                          min={1}
+                          max={10}
+                          step={1}
+                          className="py-2"
+                        />
+                      </div>
+                    ))}
+                    <Separator />
+                    <div className="flex items-center justify-between text-lg">
+                      <span className="font-medium">Média Técnica:</span>
+                      <span className={cn(
+                        "font-bold",
+                        mediaTecnica >= 8 ? "text-green-600" :
+                        mediaTecnica >= 6 ? "text-amber-600" : "text-red-600"
+                      )}>
+                        {mediaTecnica.toFixed(1)}/10
+                      </span>
+                    </div>
+                  </TabsContent>
+
+                  {/* Competências Comportamentais */}
+                  <TabsContent value="comportamentais" className="space-y-6 mt-0">
+                    {notasComportamentais.map(comp => (
+                      <div key={comp.id} className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <Label>{comp.nome}</Label>
+                          <span className={cn(
+                            "font-bold",
+                            comp.nota >= 8 ? "text-green-600" :
+                            comp.nota >= 6 ? "text-amber-600" : "text-red-600"
+                          )}>
+                            {comp.nota}/10
+                          </span>
+                        </div>
+                        <Slider
+                          value={[comp.nota]}
+                          onValueChange={([value]) => handleNotaChange('comportamental', comp.id, value)}
+                          min={1}
+                          max={10}
+                          step={1}
+                          className="py-2"
+                        />
+                      </div>
+                    ))}
+                    <Separator />
+                    <div className="flex items-center justify-between text-lg">
+                      <span className="font-medium">Média Comportamental:</span>
+                      <span className={cn(
+                        "font-bold",
+                        mediaComportamental >= 8 ? "text-green-600" :
+                        mediaComportamental >= 6 ? "text-amber-600" : "text-red-600"
+                      )}>
+                        {mediaComportamental.toFixed(1)}/10
+                      </span>
+                    </div>
+                  </TabsContent>
+
+                  {/* Observações */}
+                  <TabsContent value="observacoes" className="space-y-4 mt-0">
+                    <div className="space-y-2">
+                      <Label>Pontos Fortes</Label>
+                      <Textarea
+                        value={pontosFortes}
+                        onChange={(e) => setPontosFortes(e.target.value)}
+                        placeholder="Descreva os principais pontos fortes do candidato..."
+                        rows={3}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Pontos de Desenvolvimento</Label>
+                      <Textarea
+                        value={pontosDesenvolvimento}
+                        onChange={(e) => setPontosDesenvolvimento(e.target.value)}
+                        placeholder="Áreas que precisam de desenvolvimento..."
+                        rows={3}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Observações Gerais</Label>
+                      <Textarea
+                        value={observacoesGerais}
+                        onChange={(e) => setObservacoesGerais(e.target.value)}
+                        placeholder="Outras observações relevantes..."
+                        rows={3}
+                      />
+                    </div>
+                  </TabsContent>
+                </CardContent>
+              </Tabs>
+            </Card>
+          </div>
+
+          {/* Coluna Lateral - Resumo */}
+          <div className="space-y-6">
+            {/* Nota Geral */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Star className="h-5 w-5 text-amber-500" />
+                  Nota Geral
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className={cn(
+                  "text-center p-6 rounded-lg",
+                  mediaGeral >= 8 ? "bg-green-100" :
+                  mediaGeral >= 6 ? "bg-amber-100" : "bg-red-100"
+                )}>
+                  <p className={cn(
+                    "text-5xl font-bold",
+                    mediaGeral >= 8 ? "text-green-600" :
+                    mediaGeral >= 6 ? "text-amber-600" : "text-red-600"
+                  )}>
+                    {(mediaGeral * 10).toFixed(0)}%
+                  </p>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    {mediaGeral.toFixed(1)}/10
+                  </p>
                 </div>
-              </div>
+
+                <div className="space-y-3 mt-4">
+                  <div className="flex items-center justify-between text-sm">
+                    <span>Técnica</span>
+                    <span className="font-medium">{mediaTecnica.toFixed(1)}</span>
+                  </div>
+                  <Progress value={mediaTecnica * 10} className="h-2" />
+
+                  <div className="flex items-center justify-between text-sm">
+                    <span>Comportamental</span>
+                    <span className="font-medium">{mediaComportamental.toFixed(1)}</span>
+                  </div>
+                  <Progress value={mediaComportamental * 10} className="h-2" />
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Parecer Final */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Parecer Final</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <RadioGroup value={parecer} onValueChange={setParecer}>
+                  {PARECERES.map(p => (
+                    <div key={p.value} className={cn(
+                      "flex items-center space-x-3 p-3 rounded-lg border cursor-pointer",
+                      parecer === p.value && (
+                        p.value === 'aprovar' ? "border-green-500 bg-green-50" :
+                        p.value === 'reprovar' ? "border-red-500 bg-red-50" :
+                        "border-amber-500 bg-amber-50"
+                      )
+                    )}>
+                      <RadioGroupItem value={p.value} id={p.value} />
+                      <Label htmlFor={p.value} className="flex items-center gap-2 cursor-pointer">
+                        {p.value === 'aprovar' && <ThumbsUp className="h-4 w-4 text-green-600" />}
+                        {p.value === 'reprovar' && <ThumbsDown className="h-4 w-4 text-red-600" />}
+                        {p.value === 'em_duvida' && <AlertCircle className="h-4 w-4 text-amber-600" />}
+                        {p.label}
+                      </Label>
+                    </div>
+                  ))}
+                </RadioGroup>
+
+                <div className="space-y-2">
+                  <Label>Recomendação</Label>
+                  <Textarea
+                    value={recomendacao}
+                    onChange={(e) => setRecomendacao(e.target.value)}
+                    placeholder="Justifique seu parecer..."
+                    rows={3}
+                  />
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Ações */}
+            <div className="flex flex-col gap-2">
+              <Button onClick={handleFinalizar} disabled={saving || !processoId}>
+                <Send className="h-4 w-4 mr-2" />
+                {saving ? "Salvando..." : "Finalizar Avaliação"}
+              </Button>
+              <Button variant="outline" onClick={handleSalvarRascunho} disabled={saving || !processoId}>
+                <Save className="h-4 w-4 mr-2" />
+                Salvar Rascunho
+              </Button>
             </div>
-          </CardContent>
-        </Card>
-
-        {/* Score Summary - Sticky */}
-        <div className="sticky top-4 z-10">
-          <Card className="border-primary/20 bg-background/95 backdrop-blur">
-            <CardContent className="p-4">
-              <div className="grid grid-cols-3 gap-4">
-                <NotaResumo titulo="Técnica" nota={mediaTecnica} tipo="tecnica" />
-                <NotaResumo titulo="Comportamental" nota={mediaComportamental} tipo="comportamental" />
-                <NotaResumo titulo="Média Geral" nota={mediaGeral} tipo="geral" />
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Technical Competencies */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <span className="text-xl">🔧</span>
-              Competências Técnicas
-            </CardTitle>
-            <CardDescription>
-              Avalie o candidato nas competências técnicas necessárias para a função
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {competenciasTecnicas.map(comp => (
-              <CompetenciaRating
-                key={comp.id}
-                competencia={comp}
-                nota={notasTecnicas[comp.id]?.nota || 0}
-                observacao={notasTecnicas[comp.id]?.observacao}
-                onNotaChange={(nota) => handleNotaTecnicaChange(comp.id, nota)}
-                onObservacaoChange={(obs) => handleObservacaoTecnicaChange(comp.id, obs)}
-              />
-            ))}
-          </CardContent>
-        </Card>
-
-        {/* Behavioral Competencies */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <span className="text-xl">💡</span>
-              Competências Comportamentais
-            </CardTitle>
-            <CardDescription>
-              Avalie o candidato nas competências comportamentais e soft skills
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {competenciasComportamentais.map(comp => (
-              <CompetenciaRating
-                key={comp.id}
-                competencia={comp}
-                nota={notasComportamentais[comp.id]?.nota || 0}
-                observacao={notasComportamentais[comp.id]?.observacao}
-                onNotaChange={(nota) => handleNotaComportamentalChange(comp.id, nota)}
-                onObservacaoChange={(obs) => handleObservacaoComportamentalChange(comp.id, obs)}
-              />
-            ))}
-          </CardContent>
-        </Card>
-
-        {/* Qualitative Feedback */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <FileText className="h-5 w-5" />
-              Feedback Qualitativo
-            </CardTitle>
-            <CardDescription>
-              Descreva os pontos fortes e áreas de desenvolvimento do candidato
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="space-y-2">
-              <Label htmlFor="pontos-fortes">Pontos Fortes</Label>
-              <Textarea
-                id="pontos-fortes"
-                placeholder="Descreva os principais pontos fortes observados no candidato..."
-                value={pontosFortes}
-                onChange={(e) => setPontosFortes(e.target.value)}
-                className="min-h-[100px]"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="pontos-desenvolvimento">Pontos de Desenvolvimento</Label>
-              <Textarea
-                id="pontos-desenvolvimento"
-                placeholder="Descreva as áreas que o candidato precisa desenvolver..."
-                value={pontosDesenvolvimento}
-                onChange={(e) => setPontosDesenvolvimento(e.target.value)}
-                className="min-h-[100px]"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="observacoes">Observações Gerais</Label>
-              <Textarea
-                id="observacoes"
-                placeholder="Outras observações relevantes sobre o candidato..."
-                value={observacoesGerais}
-                onChange={(e) => setObservacoesGerais(e.target.value)}
-                className="min-h-[100px]"
-              />
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Parecer */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Star className="h-5 w-5" />
-              Parecer Final
-            </CardTitle>
-            <CardDescription>
-              Indique sua decisão sobre o candidato para esta etapa
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <RadioGroup
-              value={parecer}
-              onValueChange={(value) => setParecer(value as Parecer)}
-              className="grid grid-cols-1 md:grid-cols-3 gap-4"
-            >
-              <Label
-                htmlFor="aprovar"
-                className={cn(
-                  'flex flex-col items-center gap-3 p-6 rounded-lg border-2 cursor-pointer transition-all',
-                  parecer === 'aprovar'
-                    ? 'border-green-500 bg-green-500/10'
-                    : 'border-border hover:border-green-500/50'
-                )}
-              >
-                <RadioGroupItem value="aprovar" id="aprovar" className="sr-only" />
-                <CheckCircle className={cn(
-                  'h-10 w-10',
-                  parecer === 'aprovar' ? 'text-green-500' : 'text-muted-foreground'
-                )} />
-                <span className="font-semibold">Aprovar</span>
-                <span className="text-sm text-muted-foreground text-center">
-                  Avançar para próxima etapa
-                </span>
-              </Label>
-
-              <Label
-                htmlFor="em_duvida"
-                className={cn(
-                  'flex flex-col items-center gap-3 p-6 rounded-lg border-2 cursor-pointer transition-all',
-                  parecer === 'em_duvida'
-                    ? 'border-yellow-500 bg-yellow-500/10'
-                    : 'border-border hover:border-yellow-500/50'
-                )}
-              >
-                <RadioGroupItem value="em_duvida" id="em_duvida" className="sr-only" />
-                <HelpCircle className={cn(
-                  'h-10 w-10',
-                  parecer === 'em_duvida' ? 'text-yellow-500' : 'text-muted-foreground'
-                )} />
-                <span className="font-semibold">Em Dúvida</span>
-                <span className="text-sm text-muted-foreground text-center">
-                  Precisa de mais avaliações
-                </span>
-              </Label>
-
-              <Label
-                htmlFor="reprovar"
-                className={cn(
-                  'flex flex-col items-center gap-3 p-6 rounded-lg border-2 cursor-pointer transition-all',
-                  parecer === 'reprovar'
-                    ? 'border-red-500 bg-red-500/10'
-                    : 'border-border hover:border-red-500/50'
-                )}
-              >
-                <RadioGroupItem value="reprovar" id="reprovar" className="sr-only" />
-                <XCircle className={cn(
-                  'h-10 w-10',
-                  parecer === 'reprovar' ? 'text-red-500' : 'text-muted-foreground'
-                )} />
-                <span className="font-semibold">Reprovar</span>
-                <span className="text-sm text-muted-foreground text-center">
-                  Não prosseguir no processo
-                </span>
-              </Label>
-            </RadioGroup>
-
-            <div className="space-y-2">
-              <Label htmlFor="recomendacao">Recomendação / Justificativa</Label>
-              <Textarea
-                id="recomendacao"
-                placeholder="Justifique seu parecer e faça recomendações para a próxima etapa..."
-                value={recomendacao}
-                onChange={(e) => setRecomendacao(e.target.value)}
-                className="min-h-[100px]"
-              />
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Actions */}
-        <div className="flex items-center justify-between pb-8">
-          <Button variant="outline" onClick={() => navigate(-1)}>
-            Cancelar
-          </Button>
-          <div className="flex gap-3">
-            <Button variant="outline" onClick={handleSalvarRascunho}>
-              <Save className="h-4 w-4 mr-2" />
-              Salvar Rascunho
-            </Button>
-            <Button onClick={handleEnviarAvaliacao}>
-              <Send className="h-4 w-4 mr-2" />
-              Enviar Avaliação
-            </Button>
           </div>
         </div>
       </div>
