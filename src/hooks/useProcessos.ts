@@ -283,7 +283,6 @@ export function useProcessos(initialOptions?: UseProcessosOptions): UseProcessos
       if (updateError) throw updateError;
 
       // Log da movimentação (usando console já que historico_etapas não existe)
-      console.log('Movimentação de etapa:', {
         processo_id: id,
         etapa_anterior: etapaAnterior,
         etapa_nova: novaEtapa,
@@ -446,3 +445,4 @@ export function useProcessosCandidato(candidatoId: string | undefined) {
 
   return { processos, loading };
 }
+
