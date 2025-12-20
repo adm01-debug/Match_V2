@@ -8,6 +8,7 @@ import { AcoesRapidas } from "@/components/dashboard/AcoesRapidas";
 import { SmartInsights } from "@/components/dashboard/SmartInsights";
 import { AlertasInteligentes } from "@/components/dashboard/AlertasInteligentes";
 import { TopCandidatos } from "@/components/dashboard/TopCandidatos";
+import { EntrevistasStats } from "@/components/dashboard/EntrevistasStats";
 import {
   kpiData,
   funilData,
@@ -113,6 +114,19 @@ export default function Dashboard() {
           {/* Vagas Urgentes */}
           <div className="lg:col-span-2">
             <VagasUrgentes vagas={vagasUrgentes} />
+          </div>
+
+          {/* Estatísticas de Entrevistas */}
+          <div>
+            <EntrevistasStats />
+          </div>
+        </div>
+
+        {/* Third Row */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Ações Pendentes */}
+          <div className="lg:col-span-2">
+            <AcoesPendentes acoes={acoesPendentes} />
           </div>
 
           {/* Agenda do Dia */}
