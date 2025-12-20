@@ -14,10 +14,10 @@ export default function ResumeParserPage() {
 
         <ResumeParser 
           onParsed={(data) => {
-            console.log('Parsed resume data:', data);
           }}
         />
       </div>
     </Layout>
   );
 }
+
