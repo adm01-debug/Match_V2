@@ -33,12 +33,11 @@ interface EnviarEmailDialogProps {
 }
 
 export function EnviarEmailDialog({ open, onOpenChange, candidato, onSuccess }: EnviarEmailDialogProps) {
-  const { registrarComunicacao } = useComunicacoes();
+  const { registrarComunicacao, isRegistrando } = useComunicacoes();
 
   const [selectedTemplate, setSelectedTemplate] = useState<string>("");
   const [assunto, setAssunto] = useState("");
   const [conteudo, setConteudo] = useState("");
-  const [sending, setSending] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
 
   const activeTemplates = useMemo(() => emailTemplatesMock.filter((t) => t.ativo), []);
@@ -76,18 +75,16 @@ export function EnviarEmailDialog({ open, onOpenChange, candidato, onSuccess }: 
       return;
     }
 
-    setSending(true);
-
     try {
+      const template = emailTemplatesMock.find((t) => t.id === selectedTemplate);
+      
       await registrarComunicacao({
         candidato_id: candidato.id,
-        tipo: 'email',
         assunto,
         conteudo,
+        template_nome: template?.nome || 'E-mail personalizado',
+        template_etapa: template?.etapa || 'geral',
       });
-
-      // Simula envio (o envio real será feito por função de backend)
-      await new Promise((resolve) => setTimeout(resolve, 800));
 
       toast.success(`E-mail registrado para ${candidato.email}`, {
         description: "A comunicação foi salva no histórico.",
@@ -106,8 +103,6 @@ export function EnviarEmailDialog({ open, onOpenChange, candidato, onSuccess }: 
       toast.error("Erro ao registrar e-mail", {
         description: "Tente novamente em alguns instantes.",
       });
-    } finally {
-      setSending(false);
     }
   };
 
@@ -218,11 +213,11 @@ export function EnviarEmailDialog({ open, onOpenChange, candidato, onSuccess }: 
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)} disabled={sending}>
+          <Button variant="outline" onClick={() => onOpenChange(false)} disabled={isRegistrando}>
             Cancelar
           </Button>
-          <Button onClick={handleSend} disabled={sending || !assunto.trim() || !conteudo.trim()}>
-            {sending ? (
+          <Button onClick={handleSend} disabled={isRegistrando || !assunto.trim() || !conteudo.trim()}>
+            {isRegistrando ? (
               <>
                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                 Enviando...

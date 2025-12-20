@@ -1,36 +1,22 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { Database, Json } from '@/integrations/supabase/types';
 
-interface Questao {
-  id: string;
-  prova_id: string;
-  texto: string;
-  tipo: 'multipla_escolha' | 'verdadeiro_falso' | 'dissertativa';
-  opcoes: string[] | null;
-  resposta_correta: number | null;
-  pontos: number;
-  ordem: number;
-  created_at: string;
+type QuestaoRow = Database['public']['Tables']['questoes']['Row'];
+type QuestaoInsert = Database['public']['Tables']['questoes']['Insert'];
+type QuestaoUpdate = Database['public']['Tables']['questoes']['Update'];
+
+// Interface local para trabalhar com questões
+interface Questao extends Omit<QuestaoRow, 'alternativas'> {
+  alternativas: Array<{ id: string; texto: string; correta?: boolean }>;
 }
 
-interface QuestaoInsert {
-  prova_id: string;
-  texto: string;
-  tipo: 'multipla_escolha' | 'verdadeiro_falso' | 'dissertativa';
-  opcoes?: string[] | null;
-  resposta_correta?: number | null;
-  pontos?: number;
-  ordem?: number;
-}
-
-interface QuestaoUpdate {
-  texto?: string;
-  tipo?: 'multipla_escolha' | 'verdadeiro_falso' | 'dissertativa';
-  opcoes?: string[] | null;
-  resposta_correta?: number | null;
-  pontos?: number;
-  ordem?: number;
+function parseAlternativas(json: Json): Array<{ id: string; texto: string; correta?: boolean }> {
+  if (Array.isArray(json)) {
+    return json as Array<{ id: string; texto: string; correta?: boolean }>;
+  }
+  return [];
 }
 
 export function useQuestoes(provaId?: string) {
@@ -49,13 +35,19 @@ export function useQuestoes(provaId?: string) {
         .order('ordem', { ascending: true });
 
       if (error) throw error;
-      return data as Questao[];
+      
+      return (data || []).map(q => ({
+        ...q,
+        alternativas: parseAlternativas(q.alternativas),
+      })) as Questao[];
     },
     enabled: !!provaId,
   });
 
   const createQuestao = useMutation({
-    mutationFn: async (dados: QuestaoInsert) => {
+    mutationFn: async (dados: Omit<QuestaoInsert, 'prova_id'>) => {
+      if (!provaId) throw new Error('Prova ID é obrigatório');
+      
       // Calcular próxima ordem
       const maxOrdem = questoes.length > 0 
         ? Math.max(...questoes.map(q => q.ordem)) 
@@ -63,7 +55,11 @@ export function useQuestoes(provaId?: string) {
 
       const { data, error } = await supabase
         .from('questoes')
-        .insert({ ...dados, ordem: dados.ordem ?? maxOrdem + 1 })
+        .insert({ 
+          ...dados, 
+          prova_id: provaId,
+          ordem: dados.ordem ?? maxOrdem + 1 
+        })
         .select()
         .single();
 
@@ -130,7 +126,7 @@ export function useQuestoes(provaId?: string) {
     },
   });
 
-  const pontuacaoTotal = questoes.reduce((acc, q) => acc + q.pontos, 0);
+  const pontuacaoTotal = questoes.reduce((acc, q) => acc + q.pontuacao, 0);
 
   return {
     questoes,

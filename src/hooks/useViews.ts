@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 
-// Tipos das Views
+// Tipos das Views (definidos localmente já que as views não existem no banco)
 export interface PipelineView {
   id: string;
   etapa_atual: string;
@@ -10,12 +10,12 @@ export interface PipelineView {
   data_inscricao: string;
   data_ultima_movimentacao: string;
   dias_na_etapa: number;
-  candidato_id: string;
+  candidato_id: string | null;
   candidato_nome: string;
   candidato_email: string;
   candidato_foto: string | null;
   cargo_atual: string | null;
-  vaga_id: string;
+  vaga_id: string | null;
   vaga_titulo: string;
   vaga_departamento: string;
   vaga_prioridade: string;
@@ -52,14 +52,19 @@ export interface VagasKpisView {
   contratados: number;
 }
 
-// Hook para v_pipeline
+// Hook para pipeline (usando processos_seletivos diretamente)
 export function usePipelineView(vagaId?: string) {
   return useQuery({
     queryKey: ['v_pipeline', vagaId],
     queryFn: async () => {
       let query = supabase
-        .from('v_pipeline')
-        .select('*')
+        .from('processos_seletivos')
+        .select(`
+          *,
+          candidatos(nome, email),
+          vagas(titulo, departamento, prioridade)
+        `)
+        .eq('status', 'em_andamento')
         .order('match_score', { ascending: false, nullsFirst: false });
 
       if (vagaId) {
@@ -68,12 +73,33 @@ export function usePipelineView(vagaId?: string) {
 
       const { data, error } = await query;
       if (error) throw error;
-      return data as PipelineView[];
+      
+      // Transformar para o formato esperado
+      const transformed: PipelineView[] = (data || []).map((p: any) => ({
+        id: p.id,
+        etapa_atual: p.etapa_atual,
+        status: p.status,
+        match_score: p.match_score,
+        data_inscricao: p.data_inscricao,
+        data_ultima_movimentacao: p.data_ultima_movimentacao,
+        dias_na_etapa: p.dias_na_etapa || 0,
+        candidato_id: p.candidato_id,
+        candidato_nome: p.candidatos?.nome || p.candidato_nome || '',
+        candidato_email: p.candidatos?.email || '',
+        candidato_foto: p.candidato_foto,
+        cargo_atual: null,
+        vaga_id: p.vaga_id,
+        vaga_titulo: p.vagas?.titulo || p.vaga_titulo || '',
+        vaga_departamento: p.vagas?.departamento || '',
+        vaga_prioridade: p.vagas?.prioridade || 'media',
+      }));
+      
+      return transformed;
     },
   });
 }
 
-// Hook para v_agenda_entrevistas
+// Hook para agenda de entrevistas (usando entrevistas diretamente)
 export function useAgendaEntrevistasView(filtros?: {
   dataInicio?: string;
   dataFim?: string;
@@ -83,15 +109,15 @@ export function useAgendaEntrevistasView(filtros?: {
     queryKey: ['v_agenda_entrevistas', filtros],
     queryFn: async () => {
       let query = supabase
-        .from('v_agenda_entrevistas')
+        .from('entrevistas')
         .select('*')
-        .order('data_hora', { ascending: true });
+        .order('data', { ascending: true });
 
       if (filtros?.dataInicio) {
-        query = query.gte('data_hora', filtros.dataInicio);
+        query = query.gte('data', filtros.dataInicio);
       }
       if (filtros?.dataFim) {
-        query = query.lte('data_hora', filtros.dataFim);
+        query = query.lte('data', filtros.dataFim);
       }
       if (filtros?.status) {
         query = query.eq('status', filtros.status);
@@ -99,20 +125,39 @@ export function useAgendaEntrevistasView(filtros?: {
 
       const { data, error } = await query;
       if (error) throw error;
-      return data as AgendaEntrevistasView[];
+      
+      // Transformar para o formato esperado
+      const transformed: AgendaEntrevistasView[] = (data || []).map((e: any) => ({
+        id: e.id,
+        tipo: e.tipo,
+        etapa: e.etapa,
+        data_hora: `${e.data}T${e.hora_inicio}`,
+        duracao_minutos: 60, // Default
+        local: e.local,
+        link_video: e.link_online,
+        status: e.status,
+        entrevistadores_nomes: e.entrevistadores || [],
+        candidato_nome: e.candidato_nome,
+        candidato_email: '',
+        candidato_foto: null,
+        vaga_titulo: e.vaga_titulo,
+        vaga_departamento: '',
+      }));
+      
+      return transformed;
     },
   });
 }
 
-// Hook para v_vagas_kpis
+// Hook para KPIs de vagas (usando vagas diretamente)
 export function useVagasKpisView(status?: string) {
   return useQuery({
     queryKey: ['v_vagas_kpis', status],
     queryFn: async () => {
       let query = supabase
-        .from('v_vagas_kpis')
+        .from('vagas')
         .select('*')
-        .order('dias_aberta', { ascending: false });
+        .order('created_at', { ascending: false });
 
       if (status) {
         query = query.eq('status', status);
@@ -120,7 +165,23 @@ export function useVagasKpisView(status?: string) {
 
       const { data, error } = await query;
       if (error) throw error;
-      return data as VagasKpisView[];
+      
+      // Transformar para o formato esperado
+      const transformed: VagasKpisView[] = (data || []).map((v: any) => ({
+        id: v.id,
+        titulo: v.titulo,
+        departamento: v.departamento,
+        status: v.status,
+        prioridade: v.prioridade,
+        quantidade: v.quantidade,
+        created_at: v.created_at,
+        dias_aberta: Math.floor((Date.now() - new Date(v.created_at).getTime()) / (1000 * 60 * 60 * 24)),
+        total_candidatos: v.total_candidatos || 0,
+        em_processo: v.em_processo || 0,
+        contratados: v.contratados || 0,
+      }));
+      
+      return transformed;
     },
   });
 }
@@ -131,7 +192,7 @@ export function useDashboardKPIs() {
   const { data: pipeline, isLoading: loadingPipeline } = usePipelineView();
 
   const kpis = {
-    vagasAbertas: vagasKpis?.filter(v => v.status === 'aberta').length || 0,
+    vagasAbertas: vagasKpis?.filter(v => v.status === 'publicada').length || 0,
     totalCandidatos: vagasKpis?.reduce((acc, v) => acc + v.total_candidatos, 0) || 0,
     emProcesso: vagasKpis?.reduce((acc, v) => acc + v.em_processo, 0) || 0,
     contratados: vagasKpis?.reduce((acc, v) => acc + v.contratados, 0) || 0,

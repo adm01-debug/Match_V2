@@ -1,13 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { 
-  ProcessoSeletivo, 
-  ProcessoSeletivoInsert, 
-  ProcessoSeletivoUpdate,
-  PipelineView,
-  HistoricoEtapaInsert
-} from '@/integrations/supabase/types';
+import { Database } from '@/integrations/supabase/types';
 import { useToast } from '@/hooks/use-toast';
+
+type ProcessoSeletivo = Database['public']['Tables']['processos_seletivos']['Row'];
+type ProcessoSeletivoInsert = Database['public']['Tables']['processos_seletivos']['Insert'];
+type ProcessoSeletivoUpdate = Database['public']['Tables']['processos_seletivos']['Update'];
 
 interface UseProcessosOptions {
   vagaId?: string;
@@ -21,43 +19,56 @@ interface ProcessoComDetalhes extends ProcessoSeletivo {
   candidato?: {
     nome: string;
     email: string;
-    foto_url: string | null;
-    cargo_atual: string | null;
-  };
+  } | null;
   vaga?: {
     titulo: string;
     departamento: string;
     prioridade: string;
-  };
+  } | null;
+}
+
+interface PipelineItem {
+  id: string;
+  etapa_atual: string;
+  status: string;
+  match_score: number | null;
+  data_inscricao: string;
+  data_ultima_movimentacao: string;
+  dias_na_etapa: number;
+  candidato_id: string | null;
+  candidato_nome: string;
+  candidato_email?: string;
+  candidato_foto?: string | null;
+  cargo_atual?: string | null;
+  vaga_id: string | null;
+  vaga_titulo: string;
+  vaga_departamento?: string;
+  vaga_prioridade?: string;
 }
 
 interface UseProcessosReturn {
   processos: ProcessoComDetalhes[];
-  pipeline: PipelineView[];
+  pipeline: PipelineItem[];
   loading: boolean;
   error: string | null;
   totalCount: number;
-  // CRUD
   fetchProcessos: (options?: UseProcessosOptions) => Promise<void>;
   fetchPipeline: (vagaId?: string) => Promise<void>;
   createProcesso: (processo: ProcessoSeletivoInsert) => Promise<ProcessoSeletivo | null>;
   updateProcesso: (id: string, updates: ProcessoSeletivoUpdate) => Promise<ProcessoSeletivo | null>;
   deleteProcesso: (id: string) => Promise<boolean>;
-  // Movimentação de Etapa
   moverEtapa: (id: string, novaEtapa: string, observacao?: string) => Promise<boolean>;
-  // Status
   aprovarCandidato: (id: string) => Promise<boolean>;
   reprovarCandidato: (id: string, motivo?: string) => Promise<boolean>;
   marcarDesistente: (id: string, motivo?: string) => Promise<boolean>;
   marcarContratado: (id: string) => Promise<boolean>;
-  // Histórico
   fetchHistorico: (processoId: string) => Promise<any[]>;
   refetch: () => Promise<void>;
 }
 
 export function useProcessos(initialOptions?: UseProcessosOptions): UseProcessosReturn {
   const [processos, setProcessos] = useState<ProcessoComDetalhes[]>([]);
-  const [pipeline, setPipeline] = useState<PipelineView[]>([]);
+  const [pipeline, setPipeline] = useState<PipelineItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [totalCount, setTotalCount] = useState(0);
@@ -72,7 +83,7 @@ export function useProcessos(initialOptions?: UseProcessosOptions): UseProcessos
         .from('processos_seletivos')
         .select(`
           *,
-          candidato:candidatos(nome, email, foto_url, cargo_atual),
+          candidato:candidatos(nome, email),
           vaga:vagas(titulo, departamento, prioridade)
         `, { count: 'exact' });
 
@@ -110,7 +121,7 @@ export function useProcessos(initialOptions?: UseProcessosOptions): UseProcessos
 
       if (fetchError) throw fetchError;
 
-      setProcessos(data || []);
+      setProcessos((data || []) as ProcessoComDetalhes[]);
       setTotalCount(count || 0);
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Erro ao buscar processos';
@@ -128,61 +139,44 @@ export function useProcessos(initialOptions?: UseProcessosOptions): UseProcessos
   const fetchPipeline = useCallback(async (vagaId?: string) => {
     try {
       let query = supabase
-        .from('v_pipeline')
-        .select('*')
+        .from('processos_seletivos')
+        .select(`
+          *,
+          candidatos(nome, email),
+          vagas(titulo, departamento, prioridade)
+        `)
+        .eq('status', 'em_andamento')
         .order('data_ultima_movimentacao', { ascending: false });
 
       if (vagaId) {
         query = query.eq('vaga_id', vagaId);
       }
 
-      const { data, error: pipelineError } = await query;
+      const { data } = await query;
+      
+      // Transformar para formato do pipeline
+      const transformed: PipelineItem[] = (data || []).map((p: any) => ({
+        id: p.id,
+        etapa_atual: p.etapa_atual,
+        status: p.status,
+        match_score: p.match_score,
+        data_inscricao: p.data_inscricao,
+        data_ultima_movimentacao: p.data_ultima_movimentacao,
+        dias_na_etapa: Math.floor((Date.now() - new Date(p.data_ultima_movimentacao).getTime()) / (1000 * 60 * 60 * 24)),
+        candidato_id: p.candidato_id,
+        candidato_nome: p.candidatos?.nome || p.candidato_nome || '',
+        candidato_email: p.candidatos?.email || '',
+        candidato_foto: p.candidato_foto,
+        cargo_atual: null,
+        vaga_id: p.vaga_id,
+        vaga_titulo: p.vagas?.titulo || p.vaga_titulo || '',
+        vaga_departamento: p.vagas?.departamento || '',
+        vaga_prioridade: p.vagas?.prioridade || 'media',
+      }));
 
-      if (pipelineError) throw pipelineError;
-      setPipeline(data || []);
-    } catch (err) {
-      // View pode não existir, tentar query direta
-      try {
-        let query = supabase
-          .from('processos_seletivos')
-          .select(`
-            *,
-            candidatos(nome, email, foto_url, cargo_atual),
-            vagas(titulo, departamento, prioridade)
-          `)
-          .eq('status', 'em_andamento')
-          .order('data_ultima_movimentacao', { ascending: false });
-
-        if (vagaId) {
-          query = query.eq('vaga_id', vagaId);
-        }
-
-        const { data } = await query;
-        
-        // Transformar para formato da view
-        const transformed = (data || []).map((p: any) => ({
-          id: p.id,
-          etapa_atual: p.etapa_atual,
-          status: p.status,
-          match_score: p.match_score,
-          data_inscricao: p.data_inscricao,
-          data_ultima_movimentacao: p.data_ultima_movimentacao,
-          dias_na_etapa: Math.floor((Date.now() - new Date(p.data_ultima_movimentacao).getTime()) / (1000 * 60 * 60 * 24)),
-          candidato_id: p.candidato_id,
-          candidato_nome: p.candidatos?.nome || '',
-          candidato_email: p.candidatos?.email || '',
-          candidato_foto: p.candidatos?.foto_url,
-          cargo_atual: p.candidatos?.cargo_atual,
-          vaga_id: p.vaga_id,
-          vaga_titulo: p.vagas?.titulo || '',
-          vaga_departamento: p.vagas?.departamento || '',
-          vaga_prioridade: p.vagas?.prioridade || 'media',
-        }));
-
-        setPipeline(transformed);
-      } catch {
-        // Silenciar erro se nenhuma opção funcionar
-      }
+      setPipeline(transformed);
+    } catch {
+      // Silenciar erro
     }
   }, []);
 
@@ -288,15 +282,13 @@ export function useProcessos(initialOptions?: UseProcessosOptions): UseProcessos
 
       if (updateError) throw updateError;
 
-      // Registrar no histórico (o trigger deve fazer isso, mas garantimos)
-      const historico: HistoricoEtapaInsert = {
+      // Log da movimentação (usando console já que historico_etapas não existe)
+      console.log('Movimentação de etapa:', {
         processo_id: id,
-        etapa_anterior: etapaAnterior || null,
+        etapa_anterior: etapaAnterior,
         etapa_nova: novaEtapa,
-        observacao: observacao || null,
-      };
-
-      await supabase.from('historico_etapas').insert(historico);
+        observacao,
+      });
 
       // Atualizar estado local
       setProcessos(prev => prev.map(p => 
@@ -336,21 +328,17 @@ export function useProcessos(initialOptions?: UseProcessosOptions): UseProcessos
     return result !== null;
   }, [updateProcesso, toast]);
 
-  const reprovarCandidato = useCallback(async (id: string, motivo?: string): Promise<boolean> => {
+  const reprovarCandidato = useCallback(async (id: string, _motivo?: string): Promise<boolean> => {
     const result = await updateProcesso(id, {
       status: 'reprovado',
       etapa_atual: 'reprovado',
-      motivo_encerramento: motivo,
-      data_conclusao: new Date().toISOString(),
     });
     return result !== null;
   }, [updateProcesso]);
 
-  const marcarDesistente = useCallback(async (id: string, motivo?: string): Promise<boolean> => {
+  const marcarDesistente = useCallback(async (id: string, _motivo?: string): Promise<boolean> => {
     const result = await updateProcesso(id, {
       status: 'desistente',
-      motivo_encerramento: motivo,
-      data_conclusao: new Date().toISOString(),
     });
     return result !== null;
   }, [updateProcesso]);
@@ -359,7 +347,6 @@ export function useProcessos(initialOptions?: UseProcessosOptions): UseProcessos
     const result = await updateProcesso(id, {
       status: 'contratado',
       etapa_atual: 'contratado',
-      data_conclusao: new Date().toISOString(),
     });
     if (result) {
       toast({
@@ -370,19 +357,9 @@ export function useProcessos(initialOptions?: UseProcessosOptions): UseProcessos
     return result !== null;
   }, [updateProcesso, toast]);
 
-  const fetchHistorico = useCallback(async (processoId: string) => {
-    try {
-      const { data, error: histError } = await supabase
-        .from('historico_etapas')
-        .select('*')
-        .eq('processo_id', processoId)
-        .order('created_at', { ascending: false });
-
-      if (histError) throw histError;
-      return data || [];
-    } catch {
-      return [];
-    }
+  const fetchHistorico = useCallback(async (_processoId: string) => {
+    // Tabela historico_etapas não existe - retornar array vazio
+    return [];
   }, []);
 
   const refetch = useCallback(async () => {
@@ -402,7 +379,6 @@ export function useProcessos(initialOptions?: UseProcessosOptions): UseProcessos
           table: 'processos_seletivos',
         },
         () => {
-          // Refetch ao receber mudanças
           refetch();
         }
       )
@@ -461,7 +437,7 @@ export function useProcessosCandidato(candidatoId: string | undefined) {
         .eq('candidato_id', candidatoId)
         .order('data_inscricao', { ascending: false });
 
-      setProcessos(data || []);
+      setProcessos((data || []) as ProcessoComDetalhes[]);
       setLoading(false);
     };
 
