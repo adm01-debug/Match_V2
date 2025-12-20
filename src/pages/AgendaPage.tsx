@@ -1,482 +1,431 @@
-import { useState, useMemo } from 'react';
-import { format, isSameDay, startOfMonth, endOfMonth, eachDayOfInterval, startOfWeek, endOfWeek, addMonths, subMonths, addWeeks, subWeeks, addDays, subDays } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
-import { ChevronLeft, ChevronRight, Plus, Calendar as CalendarIcon, List, Loader2, LayoutGrid, CalendarDays, Clock } from 'lucide-react';
-import { Layout } from '@/components/layout/Layout';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Skeleton } from '@/components/ui/skeleton';
-import { useEntrevistas, useCreateEntrevista, useUpdateEntrevista } from '@/hooks/useEntrevistas';
-import EntrevistaCard from '@/components/agenda/EntrevistaCard';
-import AgendarEntrevistaDialog from '@/components/agenda/AgendarEntrevistaDialog';
-import EntrevistaDetalhesDialog from '@/components/agenda/EntrevistaDetalhesDialog';
-import { WeekView } from '@/components/agenda/WeekView';
-import { DayView } from '@/components/agenda/DayView';
-import { GoogleCalendarExport } from '@/components/agenda/GoogleCalendarExport';
-import { cn } from '@/lib/utils';
-import { Entrevista, EntrevistaFeedback } from '@/data/agendaData';
+import { useState, useMemo } from "react";
+import { useSearchParams, useNavigate } from "react-router-dom";
+import { Layout } from "@/components/layout/Layout";
+import { useEntrevistas } from "@/hooks/useEntrevistas";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Calendar } from "@/components/ui/calendar";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import {
+  Calendar as CalendarIcon,
+  Clock,
+  MapPin,
+  Video,
+  Phone,
+  User,
+  Plus,
+  CheckCircle2,
+  XCircle,
+  AlertCircle,
+  RefreshCw,
+  Filter,
+} from "lucide-react";
+import { format, isSameDay, startOfMonth, endOfMonth, eachDayOfInterval, isToday, parseISO } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import { cn } from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast";
 
-type ViewMode = 'month' | 'week' | 'day' | 'list';
+const statusConfig = {
+  agendada: { label: "Agendada", color: "bg-blue-100 text-blue-700", icon: CalendarIcon },
+  confirmada: { label: "Confirmada", color: "bg-green-100 text-green-700", icon: CheckCircle2 },
+  realizada: { label: "Realizada", color: "bg-purple-100 text-purple-700", icon: CheckCircle2 },
+  cancelada: { label: "Cancelada", color: "bg-red-100 text-red-700", icon: XCircle },
+  no_show: { label: "No-Show", color: "bg-amber-100 text-amber-700", icon: AlertCircle },
+};
 
-const AgendaPage = () => {
-  const [currentDate, setCurrentDate] = useState(new Date());
+const tipoConfig = {
+  telefone: { label: "Telefone", icon: Phone },
+  video: { label: "Videoconferência", icon: Video },
+  presencial: { label: "Presencial", icon: MapPin },
+};
+
+export default function AgendaPage() {
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [activeTab, setActiveTab] = useState("calendario");
+  const [filtroStatus, setFiltroStatus] = useState<string>("todos");
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [detalhesDialogOpen, setDetalhesDialogOpen] = useState(false);
-  const [selectedEntrevista, setSelectedEntrevista] = useState<Entrevista | null>(null);
-  const [viewMode, setViewMode] = useState<ViewMode>('month');
+  const [feedbackDialog, setFeedbackDialog] = useState(false);
+  const [entrevistaSelecionada, setEntrevistaSelecionada] = useState<any>(null);
 
-  const { data: entrevistas = [], isLoading, error } = useEntrevistas();
-  const createMutation = useCreateEntrevista();
-  const updateMutation = useUpdateEntrevista();
+  // Hook de entrevistas
+  const {
+    data: entrevistas = [],
+    isLoading,
+    confirmarEntrevista,
+    cancelarEntrevista,
+    registrarNoShow,
+    registrarFeedback,
+    refetch,
+  } = useEntrevistas();
 
-  const monthStart = startOfMonth(currentDate);
-  const monthEnd = endOfMonth(currentDate);
-  const calendarStart = startOfWeek(monthStart, { locale: ptBR });
-  const calendarEnd = endOfWeek(monthEnd, { locale: ptBR });
-  const calendarDays = eachDayOfInterval({ start: calendarStart, end: calendarEnd });
+  // Filtrar entrevistas
+  const entrevistasFiltradas = useMemo(() => {
+    return entrevistas.filter(e => {
+      if (filtroStatus !== "todos" && e.status !== filtroStatus) return false;
+      return true;
+    });
+  }, [entrevistas, filtroStatus]);
 
-  const getEntrevistasForDay = (day: Date) => {
-    return entrevistas.filter((e) => isSameDay(new Date(e.data), day));
-  };
+  // Entrevistas do dia selecionado
+  const entrevistasDoDia = useMemo(() => {
+    return entrevistasFiltradas.filter(e => 
+      isSameDay(parseISO(e.data_hora), selectedDate)
+    ).sort((a, b) => new Date(a.data_hora).getTime() - new Date(b.data_hora).getTime());
+  }, [entrevistasFiltradas, selectedDate]);
 
-  const entrevistasHoje = useMemo(() => {
-    return entrevistas.filter((e) => isSameDay(new Date(e.data), new Date()));
-  }, [entrevistas]);
-
-  const entrevistasSelecionadas = useMemo(() => {
-    return entrevistas.filter((e) => isSameDay(new Date(e.data), selectedDate));
+  // Dias com entrevistas no mês
+  const diasComEntrevistas = useMemo(() => {
+    const inicio = startOfMonth(selectedDate);
+    const fim = endOfMonth(selectedDate);
+    const dias = eachDayOfInterval({ start: inicio, end: fim });
+    
+    return dias.filter(dia => 
+      entrevistas.some(e => isSameDay(parseISO(e.data_hora), dia))
+    );
   }, [entrevistas, selectedDate]);
 
+  // Próximas entrevistas
   const proximasEntrevistas = useMemo(() => {
-    const hoje = new Date();
-    return entrevistas
-      .filter((e) => new Date(e.data) >= hoje && e.status !== 'cancelada' && e.status !== 'realizada')
-      .sort((a, b) => new Date(a.data).getTime() - new Date(b.data).getTime())
+    const agora = new Date();
+    return entrevistasFiltradas
+      .filter(e => new Date(e.data_hora) >= agora && ['agendada', 'confirmada'].includes(e.status))
+      .sort((a, b) => new Date(a.data_hora).getTime() - new Date(b.data_hora).getTime())
       .slice(0, 10);
-  }, [entrevistas]);
+  }, [entrevistasFiltradas]);
 
-  const handleNavigate = (direction: 'prev' | 'next') => {
-    if (viewMode === 'month') {
-      setCurrentDate(direction === 'prev' ? subMonths(currentDate, 1) : addMonths(currentDate, 1));
-    } else if (viewMode === 'week') {
-      setCurrentDate(direction === 'prev' ? subWeeks(currentDate, 1) : addWeeks(currentDate, 1));
-    } else if (viewMode === 'day') {
-      const newDate = direction === 'prev' ? subDays(selectedDate, 1) : addDays(selectedDate, 1);
-      setSelectedDate(newDate);
-      setCurrentDate(newDate);
+  // Handlers
+  const handleConfirmar = async (id: string) => {
+    try {
+      await confirmarEntrevista(id);
+      toast({ title: "Entrevista confirmada" });
+    } catch {
+      toast({ title: "Erro", variant: "destructive" });
     }
   };
 
-  const getNavigationLabel = () => {
-    if (viewMode === 'month') {
-      return format(currentDate, 'MMMM yyyy', { locale: ptBR });
-    } else if (viewMode === 'week') {
-      const weekStart = startOfWeek(currentDate, { locale: ptBR });
-      const weekEnd = endOfWeek(currentDate, { locale: ptBR });
-      return `${format(weekStart, 'd MMM', { locale: ptBR })} - ${format(weekEnd, 'd MMM yyyy', { locale: ptBR })}`;
-    } else if (viewMode === 'day') {
-      return format(selectedDate, "EEEE, d 'de' MMMM", { locale: ptBR });
+  const handleCancelar = async (id: string) => {
+    if (!confirm("Deseja cancelar esta entrevista?")) return;
+    try {
+      await cancelarEntrevista(id);
+      toast({ title: "Entrevista cancelada" });
+    } catch {
+      toast({ title: "Erro", variant: "destructive" });
     }
-    return 'Próximas Entrevistas';
   };
 
-  const handleSaveEntrevista = (novaEntrevista: Omit<Entrevista, 'id'>) => {
-    createMutation.mutate({
-      candidato_nome: novaEntrevista.candidatoNome,
-      vaga_id: novaEntrevista.vagaId,
-      vaga_titulo: novaEntrevista.vagaTitulo,
-      tipo: novaEntrevista.tipo,
-      data: format(novaEntrevista.data, 'yyyy-MM-dd'),
-      hora_inicio: novaEntrevista.horaInicio,
-      hora_fim: novaEntrevista.horaFim,
-      local: novaEntrevista.local,
-      link_online: novaEntrevista.linkOnline,
-      entrevistadores: novaEntrevista.entrevistadores,
-      etapa: novaEntrevista.etapa,
-      status: 'agendada',
-      observacoes: novaEntrevista.observacoes,
-    });
+  const handleNoShow = async (id: string) => {
+    try {
+      await registrarNoShow(id);
+      toast({ title: "No-show registrado", variant: "destructive" });
+    } catch {
+      toast({ title: "Erro", variant: "destructive" });
+    }
   };
 
-  const handleOpenDetalhes = (entrevista: Entrevista) => {
-    setSelectedEntrevista(entrevista);
-    setDetalhesDialogOpen(true);
+  const handleRegistrarFeedback = async (feedback: string, avaliacao: number) => {
+    if (!entrevistaSelecionada) return;
+    try {
+      await registrarFeedback(entrevistaSelecionada.id, { feedback, avaliacao });
+      toast({ title: "Feedback registrado" });
+      setFeedbackDialog(false);
+      setEntrevistaSelecionada(null);
+    } catch {
+      toast({ title: "Erro", variant: "destructive" });
+    }
   };
 
-  const handleUpdateEntrevista = (updated: Entrevista) => {
-    updateMutation.mutate({
-      id: updated.id,
-      data: format(updated.data, 'yyyy-MM-dd'),
-      hora_inicio: updated.horaInicio,
-      hora_fim: updated.horaFim,
-      local: updated.local,
-      link_online: updated.linkOnline,
-      entrevistadores: updated.entrevistadores,
-      etapa: updated.etapa,
-      observacoes: updated.observacoes,
-    });
-    setSelectedEntrevista(updated);
-  };
+  // Render Card de Entrevista
+  const EntrevistaCard = ({ entrevista }: { entrevista: any }) => {
+    const status = statusConfig[entrevista.status as keyof typeof statusConfig];
+    const tipo = tipoConfig[entrevista.tipo as keyof typeof tipoConfig];
+    const StatusIcon = status?.icon || CalendarIcon;
+    const TipoIcon = tipo?.icon || CalendarIcon;
 
-  const handleCancelEntrevista = (id: string) => {
-    updateMutation.mutate({ id, status: 'cancelada' });
-  };
+    return (
+      <Card className="hover:shadow-md transition-shadow">
+        <CardContent className="p-4">
+          <div className="flex items-start gap-4">
+            <Avatar className="h-12 w-12">
+              <AvatarImage src={entrevista.processo?.candidato?.foto_url} />
+              <AvatarFallback>
+                {entrevista.processo?.candidato?.nome?.charAt(0) || '?'}
+              </AvatarFallback>
+            </Avatar>
 
-  const handleConfirmEntrevista = (id: string) => {
-    updateMutation.mutate({ id, status: 'confirmada' });
-    setSelectedEntrevista(prev => prev ? { ...prev, status: 'confirmada' as const } : null);
-  };
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center justify-between mb-1">
+                <p className="font-medium truncate">
+                  {entrevista.processo?.candidato?.nome}
+                </p>
+                <Badge className={cn("border-0", status?.color)}>
+                  {status?.label}
+                </Badge>
+              </div>
 
-  const handleMarcarRealizada = (id: string, feedback: EntrevistaFeedback) => {
-    updateMutation.mutate({
-      id,
-      status: 'realizada',
-      feedback_resultado: feedback.resultado,
-      feedback_nota: feedback.notaGeral,
-      feedback_pontos_fortes: feedback.pontosFortes,
-      feedback_pontos_melhorar: feedback.pontosAMelhorar,
-      feedback_comentarios: feedback.comentarios,
-      feedback_recomendacao: feedback.recomendacao,
-      feedback_avaliado_por: feedback.avaliadoPor,
-      feedback_avaliado_em: new Date().toISOString(),
-    });
-  };
+              <p className="text-sm text-muted-foreground truncate">
+                {entrevista.processo?.vaga?.titulo}
+              </p>
 
-  const estatisticas = useMemo(() => {
-    const esteMes = entrevistas.filter(
-      (e) => {
-        const entData = new Date(e.data);
-        return entData >= monthStart && entData <= monthEnd;
-      }
+              <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
+                <span className="flex items-center gap-1">
+                  <Clock className="h-4 w-4" />
+                  {format(parseISO(entrevista.data_hora), "HH:mm")}
+                </span>
+                <span className="flex items-center gap-1">
+                  <TipoIcon className="h-4 w-4" />
+                  {tipo?.label}
+                </span>
+                {entrevista.entrevistador && (
+                  <span className="flex items-center gap-1">
+                    <User className="h-4 w-4" />
+                    {entrevista.entrevistador.full_name}
+                  </span>
+                )}
+              </div>
+
+              {entrevista.local && (
+                <p className="text-sm text-muted-foreground mt-1 flex items-center gap-1">
+                  <MapPin className="h-4 w-4" />
+                  {entrevista.local}
+                </p>
+              )}
+
+              {/* Ações */}
+              <div className="flex items-center gap-2 mt-3">
+                {entrevista.status === 'agendada' && (
+                  <>
+                    <Button size="sm" variant="outline" onClick={() => handleConfirmar(entrevista.id)}>
+                      Confirmar
+                    </Button>
+                    <Button size="sm" variant="ghost" onClick={() => handleCancelar(entrevista.id)}>
+                      Cancelar
+                    </Button>
+                  </>
+                )}
+                {entrevista.status === 'confirmada' && (
+                  <>
+                    <Button size="sm" onClick={() => {
+                      setEntrevistaSelecionada(entrevista);
+                      setFeedbackDialog(true);
+                    }}>
+                      Registrar Feedback
+                    </Button>
+                    <Button size="sm" variant="ghost" onClick={() => handleNoShow(entrevista.id)}>
+                      No-Show
+                    </Button>
+                  </>
+                )}
+                <Button 
+                  size="sm" 
+                  variant="ghost"
+                  onClick={() => navigate(`/candidatos/${entrevista.processo?.candidato_id}`)}
+                >
+                  Ver Perfil
+                </Button>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     );
-    return {
-      hoje: entrevistasHoje.length,
-      esteMes: esteMes.length,
-      agendadas: entrevistas.filter((e) => e.status === 'agendada').length,
-      confirmadas: entrevistas.filter((e) => e.status === 'confirmada').length,
-    };
-  }, [entrevistas, entrevistasHoje, monthStart, monthEnd]);
-
-  const goToToday = () => {
-    const today = new Date();
-    setCurrentDate(today);
-    setSelectedDate(today);
   };
 
   if (isLoading) {
     return (
-      <Layout>
-        <div className="space-y-6">
-          <div className="flex items-center justify-between">
-            <Skeleton className="h-10 w-48" />
-            <Skeleton className="h-10 w-40" />
+      <Layout title="Agenda">
+        <div className="p-6 space-y-6">
+          <Skeleton className="h-10 w-48" />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <Skeleton className="h-80" />
+            <Skeleton className="h-80 md:col-span-2" />
           </div>
-          <div className="grid grid-cols-4 gap-4">
-            {[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-20" />)}
-          </div>
-          <Skeleton className="h-[500px]" />
         </div>
       </Layout>
     );
   }
 
   return (
-    <Layout>
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-foreground">Agenda</h1>
-          <p className="text-muted-foreground">
-            Gerencie suas entrevistas e compromissos
-          </p>
+    <Layout title="Agenda de Entrevistas">
+      <div className="p-6 space-y-6 animate-fade-in">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold">Agenda de Entrevistas</h1>
+            <p className="text-muted-foreground">
+              {entrevistas.filter(e => ['agendada', 'confirmada'].includes(e.status)).length} entrevistas pendentes
+            </p>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <Select value={filtroStatus} onValueChange={setFiltroStatus}>
+              <SelectTrigger className="w-40">
+                <Filter className="h-4 w-4 mr-2" />
+                <SelectValue placeholder="Status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="todos">Todos</SelectItem>
+                <SelectItem value="agendada">Agendadas</SelectItem>
+                <SelectItem value="confirmada">Confirmadas</SelectItem>
+                <SelectItem value="realizada">Realizadas</SelectItem>
+                <SelectItem value="cancelada">Canceladas</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <Button variant="outline" size="icon" onClick={() => refetch()}>
+              <RefreshCw className="h-4 w-4" />
+            </Button>
+
+            <Button onClick={() => setDialogOpen(true)}>
+              <Plus className="h-4 w-4 mr-2" />
+              Nova Entrevista
+            </Button>
+          </div>
         </div>
-        <div className="flex items-center gap-2">
-          <GoogleCalendarExport entrevistas={proximasEntrevistas as Entrevista[]} />
-          <Button onClick={() => setDialogOpen(true)} disabled={createMutation.isPending}>
-            {createMutation.isPending ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Plus className="h-4 w-4 mr-2" />}
-            Agendar Entrevista
-          </Button>
-        </div>
-      </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card>
-          <CardContent className="pt-4">
-            <div className="text-2xl font-bold text-primary">{estatisticas.hoje}</div>
-            <p className="text-sm text-muted-foreground">Entrevistas Hoje</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-4">
-            <div className="text-2xl font-bold text-foreground">{estatisticas.esteMes}</div>
-            <p className="text-sm text-muted-foreground">Este Mês</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-4">
-            <div className="text-2xl font-bold text-yellow-600">{estatisticas.agendadas}</div>
-            <p className="text-sm text-muted-foreground">Agendadas</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-4">
-            <div className="text-2xl font-bold text-green-600">{estatisticas.confirmadas}</div>
-            <p className="text-sm text-muted-foreground">Confirmadas</p>
-          </CardContent>
-        </Card>
-      </div>
+        {/* Tabs */}
+        <Tabs value={activeTab} onValueChange={setActiveTab}>
+          <TabsList>
+            <TabsTrigger value="calendario">Calendário</TabsTrigger>
+            <TabsTrigger value="proximas">Próximas ({proximasEntrevistas.length})</TabsTrigger>
+            <TabsTrigger value="todas">Todas ({entrevistasFiltradas.length})</TabsTrigger>
+          </TabsList>
 
-      {/* Main Content */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Calendar */}
-        <Card className="lg:col-span-2">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => handleNavigate('prev')}
-                >
-                  <ChevronLeft className="h-4 w-4" />
-                </Button>
-                <CardTitle className="text-lg min-w-[220px] text-center capitalize">
-                  {getNavigationLabel()}
-                </CardTitle>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => handleNavigate('next')}
-                >
-                  <ChevronRight className="h-4 w-4" />
-                </Button>
-              </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={goToToday}
-              >
-                Hoje
-              </Button>
-            </div>
-            <Tabs value={viewMode} onValueChange={(v) => setViewMode(v as ViewMode)}>
-              <TabsList>
-                <TabsTrigger value="month" title="Mês">
-                  <LayoutGrid className="h-4 w-4" />
-                </TabsTrigger>
-                <TabsTrigger value="week" title="Semana">
-                  <CalendarDays className="h-4 w-4" />
-                </TabsTrigger>
-                <TabsTrigger value="day" title="Dia">
-                  <Clock className="h-4 w-4" />
-                </TabsTrigger>
-                <TabsTrigger value="list" title="Lista">
-                  <List className="h-4 w-4" />
-                </TabsTrigger>
-              </TabsList>
-            </Tabs>
-          </CardHeader>
-          <CardContent>
-            {viewMode === 'month' && (
-              <div>
-                {/* Week days header */}
-                <div className="grid grid-cols-7 gap-1 mb-2">
-                  {['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'].map((day) => (
-                    <div
-                      key={day}
-                      className="text-center text-sm font-medium text-muted-foreground py-2"
-                    >
-                      {day}
-                    </div>
-                  ))}
-                </div>
+          {/* Tab Calendário */}
+          <TabsContent value="calendario" className="mt-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <Card>
+                <CardContent className="p-4">
+                  <Calendar
+                    mode="single"
+                    selected={selectedDate}
+                    onSelect={(date) => date && setSelectedDate(date)}
+                    locale={ptBR}
+                    modifiers={{
+                      hasEvent: diasComEntrevistas,
+                    }}
+                    modifiersStyles={{
+                      hasEvent: { fontWeight: 'bold', textDecoration: 'underline' },
+                    }}
+                    className="rounded-md"
+                  />
+                </CardContent>
+              </Card>
 
-                {/* Calendar grid */}
-                <div className="grid grid-cols-7 gap-1">
-                  {calendarDays.map((day) => {
-                    const dayEntrevistas = getEntrevistasForDay(day);
-                    const isCurrentMonth = day.getMonth() === currentDate.getMonth();
-                    const isToday = isSameDay(day, new Date());
-                    const isSelected = isSameDay(day, selectedDate);
+              <div className="md:col-span-2 space-y-4">
+                <h2 className="text-lg font-semibold flex items-center gap-2">
+                  <CalendarIcon className="h-5 w-5" />
+                  {format(selectedDate, "EEEE, d 'de' MMMM", { locale: ptBR })}
+                  {isToday(selectedDate) && (
+                    <Badge variant="secondary">Hoje</Badge>
+                  )}
+                </h2>
 
-                    return (
-                      <div
-                        key={day.toISOString()}
-                        className={cn(
-                          "min-h-[80px] p-1 border rounded-md cursor-pointer transition-colors",
-                          !isCurrentMonth && "bg-muted/30 text-muted-foreground",
-                          isToday && "border-primary",
-                          isSelected && "bg-primary/10 border-primary",
-                          "hover:bg-accent"
-                        )}
-                        onClick={() => setSelectedDate(day)}
-                        onDoubleClick={() => {
-                          setSelectedDate(day);
-                          setViewMode('day');
-                        }}
-                      >
-                        <div
-                          className={cn(
-                            "text-sm font-medium mb-1",
-                            isToday && "text-primary font-bold"
-                          )}
-                        >
-                          {format(day, 'd')}
-                        </div>
-                        <div className="space-y-1">
-                          {dayEntrevistas.slice(0, 2).map((ent) => (
-                            <div
-                              key={ent.id}
-                              className={cn(
-                                "text-xs px-1 py-0.5 rounded truncate",
-                                ent.status === 'confirmada' && "bg-green-500/20 text-green-700",
-                                ent.status === 'agendada' && "bg-yellow-500/20 text-yellow-700",
-                                ent.status === 'realizada' && "bg-muted text-muted-foreground",
-                                ent.status === 'cancelada' && "bg-red-500/20 text-red-700"
-                              )}
-                            >
-                              {ent.horaInicio} {ent.candidatoNome.split(' ')[0]}
-                            </div>
-                          ))}
-                          {dayEntrevistas.length > 2 && (
-                            <div className="text-xs text-muted-foreground">
-                              +{dayEntrevistas.length - 2} mais
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
-
-            {viewMode === 'week' && (
-              <WeekView
-                currentDate={currentDate}
-                entrevistas={entrevistas as Entrevista[]}
-                onSelectEntrevista={handleOpenDetalhes}
-                onSelectDate={(date) => {
-                  setSelectedDate(date);
-                  setViewMode('day');
-                }}
-              />
-            )}
-
-            {viewMode === 'day' && (
-              <DayView
-                currentDate={selectedDate}
-                entrevistas={entrevistas as Entrevista[]}
-                onSelectEntrevista={handleOpenDetalhes}
-              />
-            )}
-
-            {viewMode === 'list' && (
-              <div className="space-y-3">
-                {proximasEntrevistas.length === 0 ? (
-                  <p className="text-center text-muted-foreground py-8">
-                    Nenhuma entrevista agendada
-                  </p>
+                {entrevistasDoDia.length === 0 ? (
+                  <Card>
+                    <CardContent className="py-8 text-center text-muted-foreground">
+                      <CalendarIcon className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                      Nenhuma entrevista neste dia
+                    </CardContent>
+                  </Card>
                 ) : (
-                  proximasEntrevistas.map((ent) => (
-                    <div key={ent.id} className="flex items-start gap-4">
-                      <div className="text-sm text-muted-foreground min-w-[100px]">
-                        {format(new Date(ent.data), "dd/MM/yyyy", { locale: ptBR })}
-                      </div>
-                      <EntrevistaCard entrevista={ent as Entrevista} onClick={() => handleOpenDetalhes(ent as Entrevista)} />
-                    </div>
-                  ))
+                  <div className="space-y-3">
+                    {entrevistasDoDia.map(entrevista => (
+                      <EntrevistaCard key={entrevista.id} entrevista={entrevista} />
+                    ))}
+                  </div>
                 )}
               </div>
-            )}
-          </CardContent>
-        </Card>
+            </div>
+          </TabsContent>
 
-        {/* Sidebar - Selected Day */}
-        <div className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg flex items-center gap-2">
-                <CalendarIcon className="h-5 w-5" />
-                {isSameDay(selectedDate, new Date())
-                  ? 'Hoje'
-                  : format(selectedDate, "dd 'de' MMMM", { locale: ptBR })}
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              {entrevistasSelecionadas.length === 0 ? (
-                <div className="text-center py-6 text-muted-foreground">
-                  <CalendarIcon className="h-12 w-12 mx-auto mb-2 opacity-50" />
-                  <p>Nenhuma entrevista neste dia</p>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="mt-4"
-                    onClick={() => setDialogOpen(true)}
-                  >
-                    <Plus className="h-4 w-4 mr-2" />
-                    Agendar
-                  </Button>
-                </div>
+          {/* Tab Próximas */}
+          <TabsContent value="proximas" className="mt-4">
+            <div className="space-y-3">
+              {proximasEntrevistas.length === 0 ? (
+                <Card>
+                  <CardContent className="py-8 text-center text-muted-foreground">
+                    Nenhuma entrevista agendada
+                  </CardContent>
+                </Card>
               ) : (
-                entrevistasSelecionadas.map((ent) => (
-                  <EntrevistaCard key={ent.id} entrevista={ent as Entrevista} onClick={() => handleOpenDetalhes(ent as Entrevista)} />
+                proximasEntrevistas.map(entrevista => (
+                  <div key={entrevista.id}>
+                    <p className="text-sm text-muted-foreground mb-2">
+                      {format(parseISO(entrevista.data_hora), "EEEE, d 'de' MMMM", { locale: ptBR })}
+                    </p>
+                    <EntrevistaCard entrevista={entrevista} />
+                  </div>
                 ))
               )}
-            </CardContent>
-          </Card>
+            </div>
+          </TabsContent>
 
-          {/* Legend */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-sm">Legenda</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded bg-green-500" />
-                <span className="text-sm">Confirmada</span>
+          {/* Tab Todas */}
+          <TabsContent value="todas" className="mt-4">
+            <div className="space-y-3">
+              {entrevistasFiltradas.map(entrevista => (
+                <EntrevistaCard key={entrevista.id} entrevista={entrevista} />
+              ))}
+            </div>
+          </TabsContent>
+        </Tabs>
+
+        {/* Dialog Feedback */}
+        <Dialog open={feedbackDialog} onOpenChange={setFeedbackDialog}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Registrar Feedback da Entrevista</DialogTitle>
+            </DialogHeader>
+            <form onSubmit={(e) => {
+              e.preventDefault();
+              const form = e.target as HTMLFormElement;
+              const feedback = (form.elements.namedItem('feedback') as HTMLTextAreaElement).value;
+              const avaliacao = parseInt((form.elements.namedItem('avaliacao') as HTMLSelectElement).value);
+              handleRegistrarFeedback(feedback, avaliacao);
+            }}>
+              <div className="space-y-4">
+                <div>
+                  <Label>Avaliação Geral</Label>
+                  <Select name="avaliacao" defaultValue="3">
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="5">⭐⭐⭐⭐⭐ Excelente</SelectItem>
+                      <SelectItem value="4">⭐⭐⭐⭐ Muito Bom</SelectItem>
+                      <SelectItem value="3">⭐⭐⭐ Bom</SelectItem>
+                      <SelectItem value="2">⭐⭐ Regular</SelectItem>
+                      <SelectItem value="1">⭐ Insatisfatório</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label>Feedback</Label>
+                  <Textarea name="feedback" placeholder="Observações da entrevista..." rows={4} />
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded bg-yellow-500" />
-                <span className="text-sm">Agendada</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded bg-muted-foreground" />
-                <span className="text-sm">Realizada</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded bg-red-500" />
-                <span className="text-sm">Cancelada</span>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+              <DialogFooter className="mt-4">
+                <Button type="button" variant="outline" onClick={() => setFeedbackDialog(false)}>
+                  Cancelar
+                </Button>
+                <Button type="submit">Salvar</Button>
+              </DialogFooter>
+            </form>
+          </DialogContent>
+        </Dialog>
       </div>
-
-      {/* Dialogs */}
-      <AgendarEntrevistaDialog
-        open={dialogOpen}
-        onOpenChange={setDialogOpen}
-        onSave={handleSaveEntrevista}
-        selectedDate={selectedDate}
-      />
-
-      <EntrevistaDetalhesDialog
-        entrevista={selectedEntrevista}
-        open={detalhesDialogOpen}
-        onOpenChange={setDetalhesDialogOpen}
-        onUpdate={handleUpdateEntrevista}
-        onCancel={handleCancelEntrevista}
-        onConfirm={handleConfirmEntrevista}
-        onMarcarRealizada={handleMarcarRealizada}
-      />
-    </div>
     </Layout>
   );
-};
-
-export default AgendaPage;
+}
