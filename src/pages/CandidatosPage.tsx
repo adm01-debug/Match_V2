@@ -129,7 +129,6 @@ export default function CandidatosPage() {
         setMatchScores(scoresMap);
       }
     } catch (error) {
-      console.error('Error fetching candidatos:', error);
       toast({
         title: "Erro ao carregar",
         description: "Não foi possível carregar os candidatos.",
@@ -873,3 +872,4 @@ export default function CandidatosPage() {
     </Layout>
   );
 }
+
