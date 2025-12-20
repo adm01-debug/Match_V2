@@ -1111,3 +1111,36 @@ export interface AvaliacaoUpdate {
   parecer?: 'aprovar' | 'reprovar' | 'em_duvida';
   observacoes?: string | null;
 }
+
+
+// Tabela avaliacoes
+export interface Avaliacao {
+  id: string;
+  processo_seletivo_id: string;
+  avaliador_id: string | null;
+  tipo: 'tecnica' | 'comportamental' | 'cultural';
+  competencias: Record<string, number>;
+  nota_geral: number;
+  parecer: 'aprovar' | 'reprovar' | 'em_duvida';
+  observacoes: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface AvaliacaoInsert {
+  id?: string;
+  processo_seletivo_id: string;
+  avaliador_id?: string | null;
+  tipo: 'tecnica' | 'comportamental' | 'cultural';
+  competencias: Record<string, number>;
+  nota_geral: number;
+  parecer: 'aprovar' | 'reprovar' | 'em_duvida';
+  observacoes?: string | null;
+}
+
+export interface AvaliacaoUpdate {
+  competencias?: Record<string, number>;
+  nota_geral?: number;
+  parecer?: 'aprovar' | 'reprovar' | 'em_duvida';
+  observacoes?: string | null;
+}
