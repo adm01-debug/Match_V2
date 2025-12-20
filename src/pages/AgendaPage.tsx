@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { entrevistasMock, Entrevista } from '@/data/agendaData';
+import { entrevistasMock, Entrevista, EntrevistaFeedback } from '@/data/agendaData';
 import EntrevistaCard from '@/components/agenda/EntrevistaCard';
 import AgendarEntrevistaDialog from '@/components/agenda/AgendarEntrevistaDialog';
 import EntrevistaDetalhesDialog from '@/components/agenda/EntrevistaDetalhesDialog';
@@ -73,6 +73,12 @@ const AgendaPage = () => {
   const handleConfirmEntrevista = (id: string) => {
     setEntrevistas(entrevistas.map((e) => e.id === id ? { ...e, status: 'confirmada' as const } : e));
     setSelectedEntrevista(prev => prev ? { ...prev, status: 'confirmada' as const } : null);
+  };
+
+  const handleMarcarRealizada = (id: string, feedback: EntrevistaFeedback) => {
+    setEntrevistas(entrevistas.map((e) => 
+      e.id === id ? { ...e, status: 'realizada' as const, feedback } : e
+    ));
   };
 
   const estatisticas = useMemo(() => {
@@ -346,6 +352,7 @@ const AgendaPage = () => {
         onUpdate={handleUpdateEntrevista}
         onCancel={handleCancelEntrevista}
         onConfirm={handleConfirmEntrevista}
+        onMarcarRealizada={handleMarcarRealizada}
       />
     </div>
     </Layout>
