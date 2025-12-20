@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { Calendar as CalendarIcon, Plus, X } from 'lucide-react';
@@ -29,13 +29,8 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
-import {
-  Entrevista,
-  vagasDisponiveis,
-  candidatosDisponiveis,
-  entrevistadoresDisponiveis,
-  locaisDisponiveis,
-} from '@/data/agendaData';
+import { useCandidatosDisponiveis } from '@/hooks/useEntrevistas';
+import { Entrevista } from '@/data/agendaData';
 
 interface AgendarEntrevistaDialogProps {
   open: boolean;
@@ -52,6 +47,30 @@ const etapas = [
   'Entrevista Final',
 ];
 
+const vagasDisponiveis = [
+  { id: 'vaga-1', titulo: 'Operador de Gravação' },
+  { id: 'vaga-2', titulo: 'Designer Gráfico' },
+  { id: 'vaga-3', titulo: 'Vendedor Externo' },
+  { id: 'vaga-4', titulo: 'Analista Financeiro' },
+];
+
+const entrevistadoresDisponiveis = [
+  'Maria Santos (RH)',
+  'Carlos Supervisor',
+  'João Diretor',
+  'Gerente Comercial',
+  'Diretor de Arte',
+  'CFO',
+  'CTO',
+];
+
+const locaisDisponiveis = [
+  'Sala de Reuniões 1',
+  'Sala de Reuniões 2',
+  'Sala da Diretoria',
+  'Auditório',
+];
+
 const AgendarEntrevistaDialog = ({
   open,
   onOpenChange,
@@ -60,6 +79,7 @@ const AgendarEntrevistaDialog = ({
 }: AgendarEntrevistaDialogProps) => {
   const [data, setData] = useState<Date | undefined>(selectedDate || new Date());
   const [candidatoId, setCandidatoId] = useState('');
+  const [candidatoNome, setCandidatoNome] = useState('');
   const [vagaId, setVagaId] = useState('');
   const [tipo, setTipo] = useState<'presencial' | 'online' | 'telefone'>('presencial');
   const [horaInicio, setHoraInicio] = useState('09:00');
@@ -69,6 +89,14 @@ const AgendarEntrevistaDialog = ({
   const [etapa, setEtapa] = useState('');
   const [entrevistadores, setEntrevistadores] = useState<string[]>([]);
   const [observacoes, setObservacoes] = useState('');
+
+  const { data: candidatosDB = [] } = useCandidatosDisponiveis();
+
+  useEffect(() => {
+    if (selectedDate) {
+      setData(selectedDate);
+    }
+  }, [selectedDate]);
 
   const handleAddEntrevistador = (entrevistador: string) => {
     if (!entrevistadores.includes(entrevistador)) {
@@ -80,23 +108,30 @@ const AgendarEntrevistaDialog = ({
     setEntrevistadores(entrevistadores.filter((e) => e !== entrevistador));
   };
 
+  const handleCandidatoChange = (id: string) => {
+    setCandidatoId(id);
+    const candidato = candidatosDB.find((c) => c.id === id);
+    if (candidato) {
+      setCandidatoNome(candidato.nome);
+    }
+  };
+
   const handleSave = () => {
-    if (!data || !candidatoId || !vagaId || !etapa || entrevistadores.length === 0) {
+    if (!data || !candidatoNome || !vagaId || !etapa || entrevistadores.length === 0) {
       toast.error('Preencha todos os campos obrigatórios');
       return;
     }
 
-    const candidato = candidatosDisponiveis.find((c) => c.id === candidatoId);
     const vaga = vagasDisponiveis.find((v) => v.id === vagaId);
 
-    if (!candidato || !vaga) {
-      toast.error('Candidato ou vaga inválidos');
+    if (!vaga) {
+      toast.error('Vaga inválida');
       return;
     }
 
     const novaEntrevista: Omit<Entrevista, 'id'> = {
-      candidatoId,
-      candidatoNome: candidato.nome,
+      candidatoId: candidatoId || undefined,
+      candidatoNome,
       vagaId,
       vagaTitulo: vaga.titulo,
       tipo,
@@ -117,6 +152,7 @@ const AgendarEntrevistaDialog = ({
     
     // Reset form
     setCandidatoId('');
+    setCandidatoNome('');
     setVagaId('');
     setTipo('presencial');
     setHoraInicio('09:00');
@@ -139,18 +175,26 @@ const AgendarEntrevistaDialog = ({
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label>Candidato *</Label>
-              <Select value={candidatoId} onValueChange={setCandidatoId}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Selecione o candidato" />
-                </SelectTrigger>
-                <SelectContent>
-                  {candidatosDisponiveis.map((c) => (
-                    <SelectItem key={c.id} value={c.id}>
-                      {c.nome}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              {candidatosDB.length > 0 ? (
+                <Select value={candidatoId} onValueChange={handleCandidatoChange}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecione o candidato" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {candidatosDB.map((c) => (
+                      <SelectItem key={c.id} value={c.id}>
+                        {c.nome}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              ) : (
+                <Input
+                  placeholder="Nome do candidato"
+                  value={candidatoNome}
+                  onChange={(e) => setCandidatoNome(e.target.value)}
+                />
+              )}
             </div>
 
             <div className="space-y-2">

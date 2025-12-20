@@ -1,26 +1,30 @@
 import { useState, useMemo } from 'react';
 import { format, isSameDay, startOfMonth, endOfMonth, eachDayOfInterval, startOfWeek, endOfWeek, addMonths, subMonths } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { ChevronLeft, ChevronRight, Plus, Calendar as CalendarIcon, List } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Plus, Calendar as CalendarIcon, List, Loader2 } from 'lucide-react';
 import { Layout } from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { entrevistasMock, Entrevista, EntrevistaFeedback } from '@/data/agendaData';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Skeleton } from '@/components/ui/skeleton';
+import { useEntrevistas, useCreateEntrevista, useUpdateEntrevista } from '@/hooks/useEntrevistas';
 import EntrevistaCard from '@/components/agenda/EntrevistaCard';
 import AgendarEntrevistaDialog from '@/components/agenda/AgendarEntrevistaDialog';
 import EntrevistaDetalhesDialog from '@/components/agenda/EntrevistaDetalhesDialog';
 import { cn } from '@/lib/utils';
+import { Entrevista, EntrevistaFeedback } from '@/data/agendaData';
 
 const AgendaPage = () => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const [entrevistas, setEntrevistas] = useState<Entrevista[]>(entrevistasMock);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [detalhesDialogOpen, setDetalhesDialogOpen] = useState(false);
   const [selectedEntrevista, setSelectedEntrevista] = useState<Entrevista | null>(null);
   const [viewMode, setViewMode] = useState<'calendar' | 'list'>('calendar');
+
+  const { data: entrevistas = [], isLoading, error } = useEntrevistas();
+  const createMutation = useCreateEntrevista();
+  const updateMutation = useUpdateEntrevista();
 
   const monthStart = startOfMonth(currentMonth);
   const monthEnd = endOfMonth(currentMonth);
@@ -29,31 +33,41 @@ const AgendaPage = () => {
   const calendarDays = eachDayOfInterval({ start: calendarStart, end: calendarEnd });
 
   const getEntrevistasForDay = (day: Date) => {
-    return entrevistas.filter((e) => isSameDay(e.data, day));
+    return entrevistas.filter((e) => isSameDay(new Date(e.data), day));
   };
 
   const entrevistasHoje = useMemo(() => {
-    return entrevistas.filter((e) => isSameDay(e.data, new Date()));
+    return entrevistas.filter((e) => isSameDay(new Date(e.data), new Date()));
   }, [entrevistas]);
 
   const entrevistasSelecionadas = useMemo(() => {
-    return entrevistas.filter((e) => isSameDay(e.data, selectedDate));
+    return entrevistas.filter((e) => isSameDay(new Date(e.data), selectedDate));
   }, [entrevistas, selectedDate]);
 
   const proximasEntrevistas = useMemo(() => {
     const hoje = new Date();
     return entrevistas
-      .filter((e) => e.data >= hoje && e.status !== 'cancelada' && e.status !== 'realizada')
-      .sort((a, b) => a.data.getTime() - b.data.getTime())
+      .filter((e) => new Date(e.data) >= hoje && e.status !== 'cancelada' && e.status !== 'realizada')
+      .sort((a, b) => new Date(a.data).getTime() - new Date(b.data).getTime())
       .slice(0, 10);
   }, [entrevistas]);
 
   const handleSaveEntrevista = (novaEntrevista: Omit<Entrevista, 'id'>) => {
-    const entrevistaComId: Entrevista = {
-      ...novaEntrevista,
-      id: `ent-${Date.now()}`,
-    };
-    setEntrevistas([...entrevistas, entrevistaComId]);
+    createMutation.mutate({
+      candidato_nome: novaEntrevista.candidatoNome,
+      vaga_id: novaEntrevista.vagaId,
+      vaga_titulo: novaEntrevista.vagaTitulo,
+      tipo: novaEntrevista.tipo,
+      data: format(novaEntrevista.data, 'yyyy-MM-dd'),
+      hora_inicio: novaEntrevista.horaInicio,
+      hora_fim: novaEntrevista.horaFim,
+      local: novaEntrevista.local,
+      link_online: novaEntrevista.linkOnline,
+      entrevistadores: novaEntrevista.entrevistadores,
+      etapa: novaEntrevista.etapa,
+      status: 'agendada',
+      observacoes: novaEntrevista.observacoes,
+    });
   };
 
   const handleOpenDetalhes = (entrevista: Entrevista) => {
@@ -62,29 +76,50 @@ const AgendaPage = () => {
   };
 
   const handleUpdateEntrevista = (updated: Entrevista) => {
-    setEntrevistas(entrevistas.map((e) => e.id === updated.id ? updated : e));
+    updateMutation.mutate({
+      id: updated.id,
+      data: format(updated.data, 'yyyy-MM-dd'),
+      hora_inicio: updated.horaInicio,
+      hora_fim: updated.horaFim,
+      local: updated.local,
+      link_online: updated.linkOnline,
+      entrevistadores: updated.entrevistadores,
+      etapa: updated.etapa,
+      observacoes: updated.observacoes,
+    });
     setSelectedEntrevista(updated);
   };
 
   const handleCancelEntrevista = (id: string) => {
-    setEntrevistas(entrevistas.map((e) => e.id === id ? { ...e, status: 'cancelada' as const } : e));
+    updateMutation.mutate({ id, status: 'cancelada' });
   };
 
   const handleConfirmEntrevista = (id: string) => {
-    setEntrevistas(entrevistas.map((e) => e.id === id ? { ...e, status: 'confirmada' as const } : e));
+    updateMutation.mutate({ id, status: 'confirmada' });
     setSelectedEntrevista(prev => prev ? { ...prev, status: 'confirmada' as const } : null);
   };
 
   const handleMarcarRealizada = (id: string, feedback: EntrevistaFeedback) => {
-    setEntrevistas(entrevistas.map((e) => 
-      e.id === id ? { ...e, status: 'realizada' as const, feedback } : e
-    ));
+    updateMutation.mutate({
+      id,
+      status: 'realizada',
+      feedback_resultado: feedback.resultado,
+      feedback_nota: feedback.notaGeral,
+      feedback_pontos_fortes: feedback.pontosFortes,
+      feedback_pontos_melhorar: feedback.pontosAMelhorar,
+      feedback_comentarios: feedback.comentarios,
+      feedback_recomendacao: feedback.recomendacao,
+      feedback_avaliado_por: feedback.avaliadoPor,
+      feedback_avaliado_em: new Date().toISOString(),
+    });
   };
 
   const estatisticas = useMemo(() => {
-    const hoje = new Date();
     const esteMes = entrevistas.filter(
-      (e) => e.data >= monthStart && e.data <= monthEnd
+      (e) => {
+        const entData = new Date(e.data);
+        return entData >= monthStart && entData <= monthEnd;
+      }
     );
     return {
       hoje: entrevistasHoje.length,
@@ -93,6 +128,23 @@ const AgendaPage = () => {
       confirmadas: entrevistas.filter((e) => e.status === 'confirmada').length,
     };
   }, [entrevistas, entrevistasHoje, monthStart, monthEnd]);
+
+  if (isLoading) {
+    return (
+      <Layout>
+        <div className="space-y-6">
+          <div className="flex items-center justify-between">
+            <Skeleton className="h-10 w-48" />
+            <Skeleton className="h-10 w-40" />
+          </div>
+          <div className="grid grid-cols-4 gap-4">
+            {[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-20" />)}
+          </div>
+          <Skeleton className="h-[500px]" />
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <Layout>
@@ -105,8 +157,8 @@ const AgendaPage = () => {
             Gerencie suas entrevistas e compromissos
           </p>
         </div>
-        <Button onClick={() => setDialogOpen(true)}>
-          <Plus className="h-4 w-4 mr-2" />
+        <Button onClick={() => setDialogOpen(true)} disabled={createMutation.isPending}>
+          {createMutation.isPending ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Plus className="h-4 w-4 mr-2" />}
           Agendar Entrevista
         </Button>
       </div>
@@ -265,9 +317,9 @@ const AgendaPage = () => {
                   proximasEntrevistas.map((ent) => (
                     <div key={ent.id} className="flex items-start gap-4">
                       <div className="text-sm text-muted-foreground min-w-[100px]">
-                        {format(ent.data, "dd/MM/yyyy", { locale: ptBR })}
+                        {format(new Date(ent.data), "dd/MM/yyyy", { locale: ptBR })}
                       </div>
-                      <EntrevistaCard entrevista={ent} onClick={() => handleOpenDetalhes(ent)} />
+                      <EntrevistaCard entrevista={ent as any} onClick={() => handleOpenDetalhes(ent as any)} />
                     </div>
                   ))
                 )}
@@ -304,7 +356,7 @@ const AgendaPage = () => {
                 </div>
               ) : (
                 entrevistasSelecionadas.map((ent) => (
-                  <EntrevistaCard key={ent.id} entrevista={ent} onClick={() => handleOpenDetalhes(ent)} />
+                  <EntrevistaCard key={ent.id} entrevista={ent as any} onClick={() => handleOpenDetalhes(ent as any)} />
                 ))
               )}
             </CardContent>
