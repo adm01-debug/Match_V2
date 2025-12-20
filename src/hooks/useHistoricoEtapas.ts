@@ -1,4 +1,4 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
@@ -20,59 +20,98 @@ interface HistoricoEtapaInsert {
   responsavel_id?: string | null;
 }
 
+// Simular histórico a partir dos processos seletivos (até a tabela ser criada)
 export function useHistoricoEtapas(processoSeletivoId?: string) {
   const { toast } = useToast();
-  const queryClient = useQueryClient();
+  const [historico, setHistorico] = useState<HistoricoEtapa[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+  const [isRegistrando, setIsRegistrando] = useState(false);
 
-  const { data: historico = [], isLoading, error } = useQuery({
-    queryKey: ['historico-etapas', processoSeletivoId],
-    queryFn: async () => {
-      let query = supabase
-        .from('historico_etapas')
-        .select('*')
-        .order('created_at', { ascending: false });
-
+  const fetchHistorico = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      // Como a tabela historico_etapas não existe, vamos simular a partir dos processos
       if (processoSeletivoId) {
-        query = query.eq('processo_seletivo_id', processoSeletivoId);
+        const { data: processo } = await supabase
+          .from('processos_seletivos')
+          .select('*')
+          .eq('id', processoSeletivoId)
+          .single();
+
+        if (processo) {
+          // Criar um "histórico" baseado na etapa atual
+          setHistorico([{
+            id: crypto.randomUUID(),
+            processo_seletivo_id: processo.id,
+            etapa_anterior: null,
+            etapa_nova: processo.etapa_atual,
+            motivo: null,
+            responsavel_id: null,
+            created_at: processo.data_ultima_movimentacao,
+          }]);
+        }
+      } else {
+        setHistorico([]);
       }
+    } catch (err) {
+      setError(err instanceof Error ? err : new Error('Erro ao buscar histórico'));
+    } finally {
+      setIsLoading(false);
+    }
+  }, [processoSeletivoId]);
 
-      const { data, error } = await query;
-      if (error) throw error;
-      return data as HistoricoEtapa[];
-    },
-    enabled: true,
-  });
+  useEffect(() => {
+    fetchHistorico();
+  }, [fetchHistorico]);
 
-  const registrarMudancaEtapa = useMutation({
-    mutationFn: async (dados: HistoricoEtapaInsert) => {
-      const { data, error } = await supabase
-        .from('historico_etapas')
-        .insert(dados)
-        .select()
-        .single();
+  const registrarMudancaEtapa = async (dados: HistoricoEtapaInsert): Promise<HistoricoEtapa> => {
+    setIsRegistrando(true);
+    try {
+      // Atualizar o processo seletivo com a nova etapa
+      const { error: updateError } = await supabase
+        .from('processos_seletivos')
+        .update({
+          etapa_atual: dados.etapa_nova,
+          data_ultima_movimentacao: new Date().toISOString(),
+        })
+        .eq('id', dados.processo_seletivo_id);
 
-      if (error) throw error;
-      return data;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['historico-etapas'] });
-      queryClient.invalidateQueries({ queryKey: ['processos-seletivos'] });
-    },
-    onError: (error: Error) => {
+      if (updateError) throw updateError;
+
+      const novoRegistro: HistoricoEtapa = {
+        id: crypto.randomUUID(),
+        processo_seletivo_id: dados.processo_seletivo_id,
+        etapa_anterior: dados.etapa_anterior || null,
+        etapa_nova: dados.etapa_nova,
+        motivo: dados.motivo || null,
+        responsavel_id: dados.responsavel_id || null,
+        created_at: new Date().toISOString(),
+      };
+
+      setHistorico(prev => [novoRegistro, ...prev]);
+      toast({ title: 'Etapa atualizada com sucesso!' });
+      
+      return novoRegistro;
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Erro ao registrar mudança';
       toast({
         title: 'Erro ao registrar mudança',
-        description: error.message,
+        description: errorMessage,
         variant: 'destructive',
       });
-    },
-  });
+      throw err;
+    } finally {
+      setIsRegistrando(false);
+    }
+  };
 
   return {
     historico,
     isLoading,
     error,
-    registrarMudancaEtapa: registrarMudancaEtapa.mutateAsync,
-    isRegistrando: registrarMudancaEtapa.isPending,
+    registrarMudancaEtapa,
+    isRegistrando,
   };
 }
 

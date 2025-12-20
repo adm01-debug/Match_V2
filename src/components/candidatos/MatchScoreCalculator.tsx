@@ -61,24 +61,32 @@ export function MatchScoreCalculator({ candidatoId, candidatoNome, onScoreCalcul
 
       if (error) throw error;
 
-      setResultado(data as MatchResult);
-      onScoreCalculated?.(data.scoreTotal);
+      const matchResult = data as MatchResult;
+      setResultado(matchResult);
+      onScoreCalculated?.(matchResult.scoreTotal);
+
+      // Buscar título da vaga para salvar
+      const vagaInfo = vagas.find(v => v.id === vagaSelecionada);
 
       // Salvar no banco
       await supabase.from('match_scores').insert({
         candidato_id: candidatoId,
         vaga_id: vagaSelecionada,
-        score_total: data.scoreTotal,
-        score_habilidades: data.scoreHabilidades,
-        score_experiencia: data.scoreExperiencia,
-        score_formacao: data.scoreFormacao,
-        habilidades_match: data.habilidadesMatch,
-        habilidades_faltantes: data.habilidadesFaltantes,
-        analise: data.analise,
-        recomendacao: data.recomendacao,
+        vaga_titulo: vagaInfo?.titulo || 'Vaga',
+        score_total: matchResult.scoreTotal,
+        score_habilidades: matchResult.scoreHabilidades,
+        score_experiencia: matchResult.scoreExperiencia,
+        score_formacao: matchResult.scoreFormacao,
+        habilidades_match: matchResult.habilidadesMatch || [],
+        habilidades_faltantes: matchResult.habilidadesFaltantes || [],
+        habilidades_extras: matchResult.habilidadesExtras || [],
+        pontos_fortes: matchResult.pontosFortes || [],
+        pontos_atencao: matchResult.pontosAtencao || [],
+        analise: matchResult.analise,
+        recomendacao: matchResult.recomendacao,
       });
 
-      toast({ title: "Sucesso", description: `Match Score: ${data.scoreTotal}%` });
+      toast({ title: "Sucesso", description: `Match Score: ${matchResult.scoreTotal}%` });
     } catch (err: any) {
       setErro(err.message || "Erro ao calcular match score");
       toast({ title: "Erro", description: "Falha ao calcular", variant: "destructive" });
