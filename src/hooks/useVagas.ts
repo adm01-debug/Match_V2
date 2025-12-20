@@ -1,0 +1,260 @@
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
+import { Vaga, VagaUrgente, StatusVaga, Prioridade, TipoContrato, Modalidade, PerguntaTriagem } from '@/types/recruitment';
+import { Json } from '@/integrations/supabase/types';
+
+// Database type mapping (using unknown for JSONB)
+interface VagaDB {
+  id: string;
+  titulo: string;
+  departamento: string;
+  gestor_nome: string | null;
+  recrutador_nome: string | null;
+  quantidade: number;
+  tipo_contrato: string;
+  modalidade: string;
+  cidade: string | null;
+  estado: string | null;
+  salario_min: number | null;
+  salario_max: number | null;
+  salario_a_combinar: boolean;
+  beneficios: string[] | null;
+  descricao_empresa: string | null;
+  responsabilidades: string | null;
+  requisitos_obrigatorios: string | null;
+  requisitos_desejaveis: string | null;
+  perguntas_triagem: Json | null;
+  skills_avaliacao: string[] | null;
+  status: string;
+  prioridade: string;
+  data_criacao: string;
+  data_publicacao: string | null;
+  data_encerramento: string | null;
+  total_candidatos: number;
+  em_processo: number;
+  contratados: number;
+  created_at: string;
+  updated_at: string;
+}
+
+// Convert database row to Vaga type
+function dbToVaga(row: VagaDB): Vaga {
+  return {
+    id: row.id,
+    titulo: row.titulo,
+    departamento: row.departamento,
+    gestorId: '', // Not stored in DB
+    gestorNome: row.gestor_nome || '',
+    recrutadorId: '', // Not stored in DB
+    recrutadorNome: row.recrutador_nome || '',
+    quantidade: row.quantidade,
+    tipoContrato: row.tipo_contrato as TipoContrato,
+    modalidade: row.modalidade as Modalidade,
+    cidade: row.cidade || '',
+    estado: row.estado || '',
+    salarioMin: row.salario_min || undefined,
+    salarioMax: row.salario_max || undefined,
+    salarioACombinar: row.salario_a_combinar,
+    beneficios: row.beneficios || [],
+    descricaoEmpresa: row.descricao_empresa || '',
+    responsabilidades: row.responsabilidades || '',
+    requisitosObrigatorios: row.requisitos_obrigatorios || '',
+    requisitosDesejaveis: row.requisitos_desejaveis || '',
+    perguntasTriagem: (row.perguntas_triagem as unknown as PerguntaTriagem[] | null) || [],
+    skillsAvaliacao: row.skills_avaliacao || [],
+    status: row.status as StatusVaga,
+    prioridade: row.prioridade as Prioridade,
+    dataCriacao: new Date(row.data_criacao),
+    dataPublicacao: row.data_publicacao ? new Date(row.data_publicacao) : undefined,
+    dataEncerramento: row.data_encerramento ? new Date(row.data_encerramento) : undefined,
+    totalCandidatos: row.total_candidatos,
+    emProcesso: row.em_processo,
+    contratados: row.contratados,
+  };
+}
+
+// Convert Vaga to database insert format
+function vagaToDB(vaga: Partial<Omit<Vaga, 'id'>>) {
+  return {
+    titulo: vaga.titulo,
+    departamento: vaga.departamento,
+    gestor_nome: vaga.gestorNome,
+    recrutador_nome: vaga.recrutadorNome,
+    quantidade: vaga.quantidade,
+    tipo_contrato: vaga.tipoContrato,
+    modalidade: vaga.modalidade,
+    cidade: vaga.cidade,
+    estado: vaga.estado,
+    salario_min: vaga.salarioMin,
+    salario_max: vaga.salarioMax,
+    salario_a_combinar: vaga.salarioACombinar,
+    beneficios: vaga.beneficios,
+    descricao_empresa: vaga.descricaoEmpresa,
+    responsabilidades: vaga.responsabilidades,
+    requisitos_obrigatorios: vaga.requisitosObrigatorios,
+    requisitos_desejaveis: vaga.requisitosDesejaveis,
+    perguntas_triagem: vaga.perguntasTriagem as unknown as Json,
+    skills_avaliacao: vaga.skillsAvaliacao,
+    status: vaga.status,
+    prioridade: vaga.prioridade,
+    data_publicacao: vaga.dataPublicacao?.toISOString(),
+    data_encerramento: vaga.dataEncerramento?.toISOString(),
+    total_candidatos: vaga.totalCandidatos,
+    em_processo: vaga.emProcesso,
+    contratados: vaga.contratados,
+  };
+}
+
+// Fetch all vagas
+export function useVagas() {
+  return useQuery({
+    queryKey: ['vagas'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('vagas')
+        .select('*')
+        .order('data_criacao', { ascending: false });
+
+      if (error) throw error;
+      return (data as unknown as VagaDB[]).map(dbToVaga);
+    },
+  });
+}
+
+// Fetch single vaga
+export function useVaga(id: string) {
+  return useQuery({
+    queryKey: ['vagas', id],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('vagas')
+        .select('*')
+        .eq('id', id)
+        .maybeSingle();
+
+      if (error) throw error;
+      if (!data) return null;
+      return dbToVaga(data as unknown as VagaDB);
+    },
+  });
+}
+
+// Fetch vagas for select dropdown (simplified)
+export function useVagasSelect() {
+  return useQuery({
+    queryKey: ['vagas-select'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('vagas')
+        .select('id, titulo')
+        .in('status', ['publicada', 'em_selecao'])
+        .order('titulo');
+
+      if (error) throw error;
+      return data as { id: string; titulo: string }[];
+    },
+  });
+}
+
+// Fetch urgent vagas for dashboard
+export function useVagasUrgentes() {
+  return useQuery({
+    queryKey: ['vagas-urgentes'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('vagas')
+        .select('*')
+        .in('prioridade', ['urgente', 'alta'])
+        .in('status', ['publicada', 'em_selecao'])
+        .order('prioridade')
+        .limit(5);
+
+      if (error) throw error;
+      
+      return (data as unknown as VagaDB[]).map((row): VagaUrgente => {
+        const diasAberta = Math.floor(
+          (new Date().getTime() - new Date(row.data_criacao).getTime()) / (1000 * 60 * 60 * 24)
+        );
+        return {
+          id: row.id,
+          titulo: row.titulo,
+          candidatos: row.total_candidatos,
+          emProcesso: row.em_processo,
+          diasAberta,
+          quantidade: row.quantidade,
+          prioridade: row.prioridade as Prioridade,
+        };
+      });
+    },
+  });
+}
+
+// Create vaga
+export function useCreateVaga() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (vaga: Omit<Vaga, 'id' | 'dataCriacao'>) => {
+      const dbData = vagaToDB(vaga);
+      const { data, error } = await supabase
+        .from('vagas')
+        .insert(dbData as any)
+        .select()
+        .single();
+
+      if (error) throw error;
+      return dbToVaga(data as unknown as VagaDB);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['vagas'] });
+      queryClient.invalidateQueries({ queryKey: ['vagas-select'] });
+      queryClient.invalidateQueries({ queryKey: ['vagas-urgentes'] });
+    },
+  });
+}
+
+// Update vaga
+export function useUpdateVaga() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ id, ...vaga }: Partial<Vaga> & { id: string }) => {
+      const dbData = vagaToDB(vaga);
+      const { data, error } = await supabase
+        .from('vagas')
+        .update(dbData as any)
+        .eq('id', id)
+        .select()
+        .single();
+
+      if (error) throw error;
+      return dbToVaga(data as unknown as VagaDB);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['vagas'] });
+      queryClient.invalidateQueries({ queryKey: ['vagas-select'] });
+      queryClient.invalidateQueries({ queryKey: ['vagas-urgentes'] });
+    },
+  });
+}
+
+// Delete vaga
+export function useDeleteVaga() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase
+        .from('vagas')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['vagas'] });
+      queryClient.invalidateQueries({ queryKey: ['vagas-select'] });
+      queryClient.invalidateQueries({ queryKey: ['vagas-urgentes'] });
+    },
+  });
+}

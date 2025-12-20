@@ -317,6 +317,105 @@ export type Database = {
         }
         Relationships: []
       }
+      vagas: {
+        Row: {
+          beneficios: string[] | null
+          cidade: string | null
+          contratados: number
+          created_at: string
+          data_criacao: string
+          data_encerramento: string | null
+          data_publicacao: string | null
+          departamento: string
+          descricao_empresa: string | null
+          em_processo: number
+          estado: string | null
+          gestor_nome: string | null
+          id: string
+          modalidade: string
+          perguntas_triagem: Json | null
+          prioridade: string
+          quantidade: number
+          recrutador_nome: string | null
+          requisitos_desejaveis: string | null
+          requisitos_obrigatorios: string | null
+          responsabilidades: string | null
+          salario_a_combinar: boolean
+          salario_max: number | null
+          salario_min: number | null
+          skills_avaliacao: string[] | null
+          status: string
+          tipo_contrato: string
+          titulo: string
+          total_candidatos: number
+          updated_at: string
+        }
+        Insert: {
+          beneficios?: string[] | null
+          cidade?: string | null
+          contratados?: number
+          created_at?: string
+          data_criacao?: string
+          data_encerramento?: string | null
+          data_publicacao?: string | null
+          departamento: string
+          descricao_empresa?: string | null
+          em_processo?: number
+          estado?: string | null
+          gestor_nome?: string | null
+          id?: string
+          modalidade?: string
+          perguntas_triagem?: Json | null
+          prioridade?: string
+          quantidade?: number
+          recrutador_nome?: string | null
+          requisitos_desejaveis?: string | null
+          requisitos_obrigatorios?: string | null
+          responsabilidades?: string | null
+          salario_a_combinar?: boolean
+          salario_max?: number | null
+          salario_min?: number | null
+          skills_avaliacao?: string[] | null
+          status?: string
+          tipo_contrato?: string
+          titulo: string
+          total_candidatos?: number
+          updated_at?: string
+        }
+        Update: {
+          beneficios?: string[] | null
+          cidade?: string | null
+          contratados?: number
+          created_at?: string
+          data_criacao?: string
+          data_encerramento?: string | null
+          data_publicacao?: string | null
+          departamento?: string
+          descricao_empresa?: string | null
+          em_processo?: number
+          estado?: string | null
+          gestor_nome?: string | null
+          id?: string
+          modalidade?: string
+          perguntas_triagem?: Json | null
+          prioridade?: string
+          quantidade?: number
+          recrutador_nome?: string | null
+          requisitos_desejaveis?: string | null
+          requisitos_obrigatorios?: string | null
+          responsabilidades?: string | null
+          salario_a_combinar?: boolean
+          salario_max?: number | null
+          salario_min?: number | null
+          skills_avaliacao?: string[] | null
+          status?: string
+          tipo_contrato?: string
+          titulo?: string
+          total_candidatos?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

@@ -30,6 +30,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { useCandidatosDisponiveis } from '@/hooks/useEntrevistas';
+import { useVagasSelect } from '@/hooks/useVagas';
 import { Entrevista } from '@/data/agendaData';
 
 interface AgendarEntrevistaDialogProps {
@@ -45,13 +46,6 @@ const etapas = [
   'Entrevista Técnica',
   'Entrevista Gestor',
   'Entrevista Final',
-];
-
-const vagasDisponiveis = [
-  { id: 'vaga-1', titulo: 'Operador de Gravação' },
-  { id: 'vaga-2', titulo: 'Designer Gráfico' },
-  { id: 'vaga-3', titulo: 'Vendedor Externo' },
-  { id: 'vaga-4', titulo: 'Analista Financeiro' },
 ];
 
 const entrevistadoresDisponiveis = [
@@ -91,6 +85,7 @@ const AgendarEntrevistaDialog = ({
   const [observacoes, setObservacoes] = useState('');
 
   const { data: candidatosDB = [] } = useCandidatosDisponiveis();
+  const { data: vagasDisponiveis = [] } = useVagasSelect();
 
   useEffect(() => {
     if (selectedDate) {

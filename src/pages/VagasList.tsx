@@ -11,7 +11,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { vagas } from "@/data/mockData";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useVagas } from "@/hooks/useVagas";
 import { StatusVaga, Prioridade } from "@/types/recruitment";
 import { Plus, Search, Filter, LayoutGrid, List, X } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -23,6 +24,8 @@ export default function VagasList() {
   const [prioridadeFilter, setPrioridadeFilter] = useState<string>("todas");
   const [departamentoFilter, setDepartamentoFilter] = useState<string>("todos");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+
+  const { data: vagas = [], isLoading } = useVagas();
 
   // Get unique departments
   const departamentos = [...new Set(vagas.map((v) => v.departamento))];
@@ -179,7 +182,18 @@ export default function VagasList() {
         </div>
 
         {/* Vagas Grid/List */}
-        {filteredVagas.length === 0 ? (
+        {isLoading ? (
+          <div className={cn(
+            "gap-4",
+            viewMode === "grid" 
+              ? "grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3" 
+              : "flex flex-col"
+          )}>
+            {[1, 2, 3].map((i) => (
+              <Skeleton key={i} className="h-48 w-full rounded-lg" />
+            ))}
+          </div>
+        ) : filteredVagas.length === 0 ? (
           <div className="text-center py-12">
             <div className="mx-auto w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
               <Search className="h-8 w-8 text-muted-foreground" />
