@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { BateriaProvas } from '@/types/tests';
-import { departamentosInfo, niveisInfo, todasProvas } from '@/data/testsData';
+import { departamentosInfo, niveisInfo,  } from '@/config/testsConfig';
 import { Clock, FileText, CheckCircle, Circle, Play } from 'lucide-react';
 
 interface BateriaCardProps {
@@ -15,11 +15,11 @@ export function BateriaCard({ bateria, onSelect }: BateriaCardProps) {
   const nivel = niveisInfo[bateria.nivel];
   
   const provasObrigatorias = bateria.obrigatorias.map(id => 
-    todasProvas.find(p => p.id === id)
+    .find(p => p.id === id)
   ).filter(Boolean);
   
   const provasOpcionais = bateria.opcionais.map(id => 
-    todasProvas.find(p => p.id === id)
+    .find(p => p.id === id)
   ).filter(Boolean);
 
   return (
@@ -92,3 +92,4 @@ export function BateriaCard({ bateria, onSelect }: BateriaCardProps) {
     </Card>
   );
 }
+
