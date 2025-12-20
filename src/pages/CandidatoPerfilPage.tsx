@@ -9,6 +9,10 @@ import { ExperienciaTab } from "@/components/candidato/ExperienciaTab";
 import { FormacaoTab } from "@/components/candidato/FormacaoTab";
 import { AvaliacoesTab } from "@/components/candidato/AvaliacoesTab";
 import { HistoricoTab } from "@/components/candidato/HistoricoTab";
+import { ComunicacaoTab } from "@/components/candidato/ComunicacaoTab";
+import { DocumentosTab } from "@/components/candidato/DocumentosTab";
+import { NotasTab } from "@/components/candidato/NotasTab";
+import { EnviarEmailDialog } from "@/components/comunicacao/EnviarEmailDialog";
 import { candidatoPerfilMock } from "@/data/candidatoPerfilData";
 import { 
   ArrowLeft, 
@@ -19,7 +23,10 @@ import {
   History,
   Calendar,
   CheckCircle,
-  XCircle
+  XCircle,
+  MessageSquare,
+  Folder,
+  StickyNote
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -27,12 +34,13 @@ export default function CandidatoPerfilPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("curriculo");
+  const [emailDialogOpen, setEmailDialogOpen] = useState(false);
 
   // Por enquanto usando dados mockados
   const candidato = candidatoPerfilMock;
 
   const handleEmail = () => {
-    toast.info("Abrindo composição de e-mail...");
+    setEmailDialogOpen(true);
   };
 
   const handleLigar = () => {
@@ -112,6 +120,18 @@ export default function CandidatoPerfilPage() {
               <ClipboardCheck className="h-4 w-4" />
               Avaliações
             </TabsTrigger>
+            <TabsTrigger value="comunicacao" className="gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              <MessageSquare className="h-4 w-4" />
+              Comunicação
+            </TabsTrigger>
+            <TabsTrigger value="documentos" className="gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              <Folder className="h-4 w-4" />
+              Documentos
+            </TabsTrigger>
+            <TabsTrigger value="notas" className="gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              <StickyNote className="h-4 w-4" />
+              Notas
+            </TabsTrigger>
             <TabsTrigger value="historico" className="gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               <History className="h-4 w-4" />
               Histórico
@@ -131,12 +151,33 @@ export default function CandidatoPerfilPage() {
             <TabsContent value="avaliacoes" className="m-0">
               <AvaliacoesTab candidato={candidato} />
             </TabsContent>
+            <TabsContent value="comunicacao" className="m-0">
+              <ComunicacaoTab candidato={candidato} />
+            </TabsContent>
+            <TabsContent value="documentos" className="m-0">
+              <DocumentosTab candidato={candidato} />
+            </TabsContent>
+            <TabsContent value="notas" className="m-0">
+              <NotasTab candidatoId={candidato.id} />
+            </TabsContent>
             <TabsContent value="historico" className="m-0">
               <HistoricoTab candidato={candidato} />
             </TabsContent>
           </div>
         </Tabs>
       </div>
+
+      {/* Dialog de E-mail */}
+      <EnviarEmailDialog
+        open={emailDialogOpen}
+        onOpenChange={setEmailDialogOpen}
+        candidato={{
+          id: candidato.id,
+          nome: candidato.nome,
+          email: candidato.email,
+          vagaTitulo: candidato.vagaAtual,
+        }}
+      />
     </Layout>
   );
 }
