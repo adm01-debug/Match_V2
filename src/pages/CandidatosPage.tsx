@@ -21,7 +21,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { ComunicacaoHistorico } from '@/components/candidatos/ComunicacaoHistorico';
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend, LineChart, Line, XAxis, YAxis, CartesianGrid } from 'recharts';
 
 interface Candidato {
   id: string;
@@ -252,6 +252,46 @@ export default function CandidatosPage() {
     return { novos, emProcesso, aprovados, reprovados };
   }, [candidatos]);
 
+  // Evolution over time (last 30 days)
+  const evolutionData = useMemo(() => {
+    const last30Days: { date: string; label: string; count: number; accumulated: number }[] = [];
+    const today = new Date();
+    
+    // Create array of last 30 days
+    for (let i = 29; i >= 0; i--) {
+      const date = subDays(today, i);
+      last30Days.push({
+        date: format(date, 'yyyy-MM-dd'),
+        label: format(date, 'dd/MM', { locale: ptBR }),
+        count: 0,
+        accumulated: 0,
+      });
+    }
+    
+    // Count candidates per day
+    candidatos.forEach(c => {
+      const candidatoDate = format(new Date(c.created_at), 'yyyy-MM-dd');
+      const dayData = last30Days.find(d => d.date === candidatoDate);
+      if (dayData) {
+        dayData.count++;
+      }
+    });
+    
+    // Calculate accumulated
+    let accumulated = candidatos.filter(c => {
+      const candidatoDate = new Date(c.created_at);
+      return candidatoDate < subDays(today, 29);
+    }).length;
+    
+    last30Days.forEach(day => {
+      accumulated += day.count;
+      day.accumulated = accumulated;
+    });
+    
+    // Return only every 3rd day for cleaner display
+    return last30Days.filter((_, i) => i % 3 === 0 || i === last30Days.length - 1);
+  }, [candidatos]);
+
   return (
     <Layout>
       <div className="space-y-6">
@@ -363,6 +403,75 @@ export default function CandidatosPage() {
               </CardContent>
             </Card>
           </div>
+        )}
+
+        {/* Evolution Chart */}
+        {!isLoading && candidatos.length > 0 && (
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium flex items-center gap-2">
+                <TrendingUp className="h-4 w-4" />
+                Evolução de Candidatos (últimos 30 dias)
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="h-[200px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={evolutionData}>
+                    <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                    <XAxis 
+                      dataKey="label" 
+                      tick={{ fontSize: 11 }} 
+                      tickLine={false}
+                      axisLine={false}
+                    />
+                    <YAxis 
+                      tick={{ fontSize: 11 }} 
+                      tickLine={false}
+                      axisLine={false}
+                      width={40}
+                    />
+                    <Tooltip
+                      contentStyle={{ 
+                        backgroundColor: 'hsl(var(--popover))', 
+                        border: '1px solid hsl(var(--border))',
+                        borderRadius: '8px'
+                      }}
+                      formatter={(value: number, name: string) => [
+                        value,
+                        name === 'accumulated' ? 'Total Acumulado' : 'Novos no dia'
+                      ]}
+                      labelFormatter={(label) => `Data: ${label}`}
+                    />
+                    <Legend 
+                      formatter={(value) => (
+                        <span className="text-xs">
+                          {value === 'accumulated' ? 'Total Acumulado' : 'Novos no dia'}
+                        </span>
+                      )}
+                    />
+                    <Line 
+                      type="monotone" 
+                      dataKey="accumulated" 
+                      stroke="hsl(var(--primary))" 
+                      strokeWidth={2}
+                      dot={false}
+                      activeDot={{ r: 4 }}
+                    />
+                    <Line 
+                      type="monotone" 
+                      dataKey="count" 
+                      stroke="hsl(var(--muted-foreground))" 
+                      strokeWidth={1}
+                      strokeDasharray="4 4"
+                      dot={false}
+                      activeDot={{ r: 3 }}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+            </CardContent>
+          </Card>
         )}
 
         {/* Filters */}
