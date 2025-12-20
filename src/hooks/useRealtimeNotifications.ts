@@ -4,7 +4,7 @@ import { toast } from '@/hooks/use-toast';
 
 export interface Notification {
   id: string;
-  type: 'high_match' | 'stage_change' | 'new_candidate' | 'urgent';
+  type: 'high_match' | 'stage_change' | 'new_candidate' | 'urgent' | 'interview_scheduled' | 'interview_updated';
   title: string;
   message: string;
   candidatoNome?: string;
@@ -61,7 +61,7 @@ export function useRealtimeNotifications() {
   useEffect(() => {
     console.log('Setting up realtime notifications...');
 
-    const channel = supabase
+    const matchScoresChannel = supabase
       .channel('match-scores-notifications')
       .on(
         'postgres_changes',
@@ -101,12 +101,83 @@ export function useRealtimeNotifications() {
         }
       )
       .subscribe((status) => {
-        console.log('Realtime subscription status:', status);
+        console.log('Match scores subscription status:', status);
+      });
+
+    // Subscribe to entrevistas table for interview notifications
+    const entrevistasChannel = supabase
+      .channel('entrevistas-notifications')
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'entrevistas',
+        },
+        (payload) => {
+          console.log('New interview scheduled:', payload);
+          const entrevista = payload.new as {
+            candidato_nome: string;
+            vaga_titulo: string;
+            data: string;
+            hora_inicio: string;
+            tipo: string;
+            etapa: string;
+          };
+
+          addNotification({
+            type: 'interview_scheduled',
+            title: '📅 Nova Entrevista Agendada',
+            message: `Entrevista com ${entrevista.candidato_nome} para ${entrevista.vaga_titulo} em ${new Date(entrevista.data).toLocaleDateString('pt-BR')} às ${entrevista.hora_inicio.slice(0, 5)}`,
+            candidatoNome: entrevista.candidato_nome,
+            etapa: entrevista.etapa,
+          });
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'entrevistas',
+        },
+        (payload) => {
+          console.log('Interview updated:', payload);
+          const entrevista = payload.new as {
+            candidato_nome: string;
+            vaga_titulo: string;
+            data: string;
+            hora_inicio: string;
+            status: string;
+            etapa: string;
+          };
+
+          const statusLabels: Record<string, string> = {
+            'agendada': 'reagendada',
+            'confirmada': 'confirmada',
+            'realizada': 'marcada como realizada',
+            'cancelada': 'cancelada',
+          };
+
+          const statusLabel = statusLabels[entrevista.status] || 'atualizada';
+
+          addNotification({
+            type: 'interview_updated',
+            title: '🔄 Entrevista Atualizada',
+            message: `Entrevista com ${entrevista.candidato_nome} foi ${statusLabel}`,
+            candidatoNome: entrevista.candidato_nome,
+            etapa: entrevista.etapa,
+          });
+        }
+      )
+      .subscribe((status) => {
+        console.log('Entrevistas subscription status:', status);
       });
 
     return () => {
-      console.log('Cleaning up realtime subscription...');
-      supabase.removeChannel(channel);
+      console.log('Cleaning up realtime subscriptions...');
+      supabase.removeChannel(matchScoresChannel);
+      supabase.removeChannel(entrevistasChannel);
     };
   }, [addNotification]);
 
