@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { format, subDays, startOfDay, endOfDay } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { Layout } from '@/components/layout/Layout';
@@ -16,11 +16,12 @@ import { supabase } from '@/integrations/supabase/client';
 import { 
   Users, Search, Filter, Target, Mail, Phone, Briefcase, 
   GraduationCap, Sparkles, Calendar as CalendarIcon, Loader2, UserPlus,
-  TrendingUp, ChevronRight, Trash2, MessageSquare, X
+  TrendingUp, ChevronRight, Trash2, MessageSquare, X, UserCheck, UserX, Clock
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { ComunicacaoHistorico } from '@/components/candidatos/ComunicacaoHistorico';
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 
 interface Candidato {
   id: string;
@@ -59,13 +60,13 @@ const statusOptions = [
 
 const getStatusConfig = (status: string) => {
   switch (status) {
-    case 'novo': return { label: 'Novo', color: 'bg-blue-500' };
-    case 'em_triagem': return { label: 'Em Triagem', color: 'bg-yellow-500' };
-    case 'entrevista': return { label: 'Entrevista', color: 'bg-purple-500' };
-    case 'aprovado': return { label: 'Aprovado', color: 'bg-green-500' };
-    case 'reprovado': return { label: 'Reprovado', color: 'bg-red-500' };
-    case 'banco_talentos': return { label: 'Banco de Talentos', color: 'bg-indigo-500' };
-    default: return { label: status, color: 'bg-gray-500' };
+    case 'novo': return { label: 'Novo', color: 'bg-blue-500', chartColor: '#3b82f6' };
+    case 'em_triagem': return { label: 'Em Triagem', color: 'bg-yellow-500', chartColor: '#eab308' };
+    case 'entrevista': return { label: 'Entrevista', color: 'bg-purple-500', chartColor: '#a855f7' };
+    case 'aprovado': return { label: 'Aprovado', color: 'bg-green-500', chartColor: '#22c55e' };
+    case 'reprovado': return { label: 'Reprovado', color: 'bg-red-500', chartColor: '#ef4444' };
+    case 'banco_talentos': return { label: 'Banco de Talentos', color: 'bg-indigo-500', chartColor: '#6366f1' };
+    default: return { label: status || 'Novo', color: 'bg-gray-500', chartColor: '#6b7280' };
   }
 };
 
@@ -224,6 +225,33 @@ export default function CandidatosPage() {
       return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
     });
 
+  // Statistics by status
+  const statusStats = useMemo(() => {
+    const counts: Record<string, number> = {};
+    candidatos.forEach(c => {
+      const status = c.status || 'novo';
+      counts[status] = (counts[status] || 0) + 1;
+    });
+    
+    return statusOptions
+      .filter(opt => opt.value !== 'todos')
+      .map(opt => ({
+        name: opt.label,
+        value: counts[opt.value] || 0,
+        color: getStatusConfig(opt.value).chartColor,
+      }))
+      .filter(item => item.value > 0);
+  }, [candidatos]);
+
+  const quickStats = useMemo(() => {
+    const novos = candidatos.filter(c => c.status === 'novo' || !c.status).length;
+    const emProcesso = candidatos.filter(c => ['em_triagem', 'entrevista'].includes(c.status || '')).length;
+    const aprovados = candidatos.filter(c => c.status === 'aprovado').length;
+    const reprovados = candidatos.filter(c => c.status === 'reprovado').length;
+    
+    return { novos, emProcesso, aprovados, reprovados };
+  }, [candidatos]);
+
   return (
     <Layout>
       <div className="space-y-6">
@@ -240,6 +268,102 @@ export default function CandidatosPage() {
             Novo Candidato via Parser
           </Button>
         </div>
+
+        {/* Statistics */}
+        {!isLoading && candidatos.length > 0 && (
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            {/* Quick Stats */}
+            <div className="lg:col-span-2 grid grid-cols-2 md:grid-cols-4 gap-3">
+              <Card>
+                <CardContent className="p-4 flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-blue-500/10">
+                    <Users className="h-5 w-5 text-blue-500" />
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold">{quickStats.novos}</p>
+                    <p className="text-xs text-muted-foreground">Novos</p>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-4 flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-yellow-500/10">
+                    <Clock className="h-5 w-5 text-yellow-500" />
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold">{quickStats.emProcesso}</p>
+                    <p className="text-xs text-muted-foreground">Em Processo</p>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-4 flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-green-500/10">
+                    <UserCheck className="h-5 w-5 text-green-500" />
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold">{quickStats.aprovados}</p>
+                    <p className="text-xs text-muted-foreground">Aprovados</p>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-4 flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-red-500/10">
+                    <UserX className="h-5 w-5 text-red-500" />
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold">{quickStats.reprovados}</p>
+                    <p className="text-xs text-muted-foreground">Reprovados</p>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Pie Chart */}
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-medium">Distribuição por Status</CardTitle>
+              </CardHeader>
+              <CardContent className="pb-4">
+                <div className="h-[140px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={statusStats}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={35}
+                        outerRadius={55}
+                        paddingAngle={2}
+                        dataKey="value"
+                      >
+                        {statusStats.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.color} />
+                        ))}
+                      </Pie>
+                      <Tooltip 
+                        formatter={(value: number) => [`${value} candidatos`, '']}
+                        contentStyle={{ 
+                          backgroundColor: 'hsl(var(--popover))', 
+                          border: '1px solid hsl(var(--border))',
+                          borderRadius: '8px'
+                        }}
+                      />
+                      <Legend 
+                        layout="vertical" 
+                        align="right" 
+                        verticalAlign="middle"
+                        iconSize={8}
+                        formatter={(value) => <span className="text-xs">{value}</span>}
+                      />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
 
         {/* Filters */}
         <Card>
