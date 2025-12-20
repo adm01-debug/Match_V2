@@ -12,7 +12,12 @@ import {
   Edit,
   X,
   Check,
-  AlertTriangle
+  AlertTriangle,
+  CheckCircle,
+  XCircle,
+  AlertCircle,
+  Plus,
+  Trash2
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -46,13 +51,17 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Slider } from '@/components/ui/slider';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
 import { toast } from 'sonner';
 import {
   Entrevista,
+  EntrevistaFeedback,
   entrevistadoresDisponiveis,
   locaisDisponiveis,
 } from '@/data/agendaData';
@@ -64,6 +73,7 @@ interface EntrevistaDetalhesDialogProps {
   onUpdate: (entrevista: Entrevista) => void;
   onCancel: (id: string) => void;
   onConfirm: (id: string) => void;
+  onMarcarRealizada?: (id: string, feedback: EntrevistaFeedback) => void;
 }
 
 const tipoConfig = {
@@ -95,12 +105,22 @@ const EntrevistaDetalhesDialog = ({
   onUpdate,
   onCancel,
   onConfirm,
+  onMarcarRealizada,
 }: EntrevistaDetalhesDialogProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [showCancelDialog, setShowCancelDialog] = useState(false);
+  const [activeTab, setActiveTab] = useState('detalhes');
   
   // Edit form state
   const [editData, setEditData] = useState<Entrevista | null>(null);
+  
+  // Feedback state
+  const [resultado, setResultado] = useState<'aprovado' | 'reprovado' | 'pendente'>('pendente');
+  const [notaGeral, setNotaGeral] = useState([7]);
+  const [pontosFortes, setPontosFortes] = useState<string[]>(['']);
+  const [pontosAMelhorar, setPontosAMelhorar] = useState<string[]>(['']);
+  const [comentarios, setComentarios] = useState('');
+  const [recomendacao, setRecomendacao] = useState('');
 
   const handleStartEdit = () => {
     if (entrevista) {
@@ -157,11 +177,49 @@ const EntrevistaDetalhesDialog = ({
     }
   };
 
+  const addPontoForte = () => setPontosFortes([...pontosFortes, '']);
+  const addPontoAMelhorar = () => setPontosAMelhorar([...pontosAMelhorar, '']);
+  
+  const updatePontoForte = (index: number, value: string) => {
+    const updated = [...pontosFortes];
+    updated[index] = value;
+    setPontosFortes(updated);
+  };
+  
+  const updatePontoAMelhorar = (index: number, value: string) => {
+    const updated = [...pontosAMelhorar];
+    updated[index] = value;
+    setPontosAMelhorar(updated);
+  };
+  
+  const removePontoForte = (index: number) => setPontosFortes(pontosFortes.filter((_, i) => i !== index));
+  const removePontoAMelhorar = (index: number) => setPontosAMelhorar(pontosAMelhorar.filter((_, i) => i !== index));
+
+  const handleSubmitFeedback = () => {
+    if (!entrevista || !onMarcarRealizada) return;
+    
+    const feedback: EntrevistaFeedback = {
+      resultado,
+      notaGeral: notaGeral[0],
+      pontosFortes: pontosFortes.filter(p => p.trim() !== ''),
+      pontosAMelhorar: pontosAMelhorar.filter(p => p.trim() !== ''),
+      comentarios,
+      recomendacao,
+      avaliadoPor: 'Usuário Atual',
+      avaliadoEm: new Date().toISOString()
+    };
+
+    onMarcarRealizada(entrevista.id, feedback);
+    onOpenChange(false);
+    toast.success('Entrevista marcada como realizada!');
+  };
+
   if (!entrevista) return null;
 
   const TipoIcon = tipoConfig[entrevista.tipo].icon;
   const canEdit = entrevista.status !== 'realizada' && entrevista.status !== 'cancelada';
   const canConfirm = entrevista.status === 'agendada';
+  const canMarkAsRealized = entrevista.status === 'confirmada' || entrevista.status === 'agendada';
 
   return (
     <>
@@ -427,35 +485,92 @@ const EntrevistaDetalhesDialog = ({
             </div>
           )}
 
-          <DialogFooter className="gap-2">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="mt-4">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="detalhes">Detalhes</TabsTrigger>
+              <TabsTrigger value="feedback">
+                {entrevista.status === 'realizada' ? 'Feedback' : 'Marcar Realizada'}
+              </TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="feedback" className="space-y-4 mt-4">
+              {entrevista.status === 'realizada' && entrevista.feedback ? (
+                <div className="space-y-4">
+                  <div className="flex items-center gap-3">
+                    {entrevista.feedback.resultado === 'aprovado' ? (
+                      <Badge className="bg-green-500"><CheckCircle className="h-3 w-3 mr-1" />Aprovado</Badge>
+                    ) : entrevista.feedback.resultado === 'reprovado' ? (
+                      <Badge variant="destructive"><XCircle className="h-3 w-3 mr-1" />Reprovado</Badge>
+                    ) : (
+                      <Badge variant="secondary">Pendente</Badge>
+                    )}
+                    <span className="text-sm text-muted-foreground">Nota: {entrevista.feedback.notaGeral}/10</span>
+                  </div>
+                  <Separator />
+                  {entrevista.feedback.pontosFortes.length > 0 && (
+                    <div>
+                      <Label className="text-green-600">Pontos Fortes</Label>
+                      <ul className="mt-1 space-y-1">{entrevista.feedback.pontosFortes.map((p, i) => <li key={i} className="text-sm flex items-center gap-2"><CheckCircle className="h-3 w-3 text-green-500" />{p}</li>)}</ul>
+                    </div>
+                  )}
+                  {entrevista.feedback.pontosAMelhorar.length > 0 && (
+                    <div>
+                      <Label className="text-orange-600">Pontos a Melhorar</Label>
+                      <ul className="mt-1 space-y-1">{entrevista.feedback.pontosAMelhorar.map((p, i) => <li key={i} className="text-sm flex items-center gap-2"><AlertCircle className="h-3 w-3 text-orange-500" />{p}</li>)}</ul>
+                    </div>
+                  )}
+                  {entrevista.feedback.comentarios && <div><Label>Comentários</Label><p className="text-sm text-muted-foreground mt-1">{entrevista.feedback.comentarios}</p></div>}
+                  {entrevista.feedback.recomendacao && <div><Label>Recomendação</Label><p className="text-sm mt-1">{entrevista.feedback.recomendacao}</p></div>}
+                  <p className="text-xs text-muted-foreground">Avaliado por {entrevista.feedback.avaliadoPor} em {new Date(entrevista.feedback.avaliadoEm).toLocaleString('pt-BR')}</p>
+                </div>
+              ) : canMarkAsRealized ? (
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label>Resultado *</Label>
+                    <Select value={resultado} onValueChange={(v) => setResultado(v as typeof resultado)}>
+                      <SelectTrigger><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="aprovado"><div className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-green-500" />Aprovado</div></SelectItem>
+                        <SelectItem value="reprovado"><div className="flex items-center gap-2"><XCircle className="h-4 w-4 text-red-500" />Reprovado</div></SelectItem>
+                        <SelectItem value="pendente"><div className="flex items-center gap-2"><AlertCircle className="h-4 w-4 text-yellow-500" />Pendente</div></SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Nota Geral: {notaGeral[0]}/10</Label>
+                    <Slider value={notaGeral} onValueChange={setNotaGeral} max={10} min={1} step={0.5} />
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between"><Label>Pontos Fortes</Label><Button variant="ghost" size="sm" onClick={addPontoForte}><Plus className="h-4 w-4" /></Button></div>
+                    {pontosFortes.map((p, i) => <div key={i} className="flex gap-2"><Input value={p} onChange={(e) => updatePontoForte(i, e.target.value)} placeholder="Ex: Boa comunicação" />{pontosFortes.length > 1 && <Button variant="ghost" size="icon" onClick={() => removePontoForte(i)}><Trash2 className="h-4 w-4" /></Button>}</div>)}
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between"><Label>Pontos a Melhorar</Label><Button variant="ghost" size="sm" onClick={addPontoAMelhorar}><Plus className="h-4 w-4" /></Button></div>
+                    {pontosAMelhorar.map((p, i) => <div key={i} className="flex gap-2"><Input value={p} onChange={(e) => updatePontoAMelhorar(i, e.target.value)} placeholder="Ex: Experiência técnica" />{pontosAMelhorar.length > 1 && <Button variant="ghost" size="icon" onClick={() => removePontoAMelhorar(i)}><Trash2 className="h-4 w-4" /></Button>}</div>)}
+                  </div>
+                  <div className="space-y-2"><Label>Comentários</Label><Textarea value={comentarios} onChange={(e) => setComentarios(e.target.value)} rows={2} /></div>
+                  <div className="space-y-2"><Label>Recomendação</Label><Input value={recomendacao} onChange={(e) => setRecomendacao(e.target.value)} placeholder="Ex: Avançar para próxima etapa" /></div>
+                  <Button className="w-full" onClick={handleSubmitFeedback}><CheckCircle className="h-4 w-4 mr-2" />Marcar como Realizada</Button>
+                </div>
+              ) : (
+                <p className="text-center text-muted-foreground py-4">Não disponível para esta entrevista.</p>
+              )}
+            </TabsContent>
+          </Tabs>
+
+          <DialogFooter className="gap-2 mt-4">
             {isEditing ? (
               <>
-                <Button variant="outline" onClick={handleCancelEdit}>
-                  Cancelar
-                </Button>
-                <Button onClick={handleSaveEdit}>
-                  <Check className="h-4 w-4 mr-2" />
-                  Salvar Alterações
-                </Button>
+                <Button variant="outline" onClick={handleCancelEdit}>Cancelar</Button>
+                <Button onClick={handleSaveEdit}><Check className="h-4 w-4 mr-2" />Salvar</Button>
               </>
             ) : (
               <>
                 {canEdit && (
                   <>
-                    <Button variant="destructive" size="sm" onClick={() => setShowCancelDialog(true)}>
-                      <X className="h-4 w-4 mr-2" />
-                      Cancelar Entrevista
-                    </Button>
-                    <Button variant="outline" size="sm" onClick={handleStartEdit}>
-                      <Edit className="h-4 w-4 mr-2" />
-                      Editar
-                    </Button>
-                    {canConfirm && (
-                      <Button size="sm" onClick={handleConfirmEntrevista}>
-                        <Check className="h-4 w-4 mr-2" />
-                        Confirmar
-                      </Button>
-                    )}
+                    <Button variant="destructive" size="sm" onClick={() => setShowCancelDialog(true)}><X className="h-4 w-4 mr-2" />Cancelar</Button>
+                    <Button variant="outline" size="sm" onClick={handleStartEdit}><Edit className="h-4 w-4 mr-2" />Editar</Button>
+                    {canConfirm && <Button size="sm" onClick={handleConfirmEntrevista}><Check className="h-4 w-4 mr-2" />Confirmar</Button>}
                   </>
                 )}
               </>

@@ -1,3 +1,14 @@
+export interface EntrevistaFeedback {
+  resultado: 'aprovado' | 'reprovado' | 'pendente';
+  notaGeral: number;
+  pontosFortes: string[];
+  pontosAMelhorar: string[];
+  comentarios: string;
+  recomendacao: string;
+  avaliadoPor: string;
+  avaliadoEm: string;
+}
+
 export interface Entrevista {
   id: string;
   candidatoId: string;
@@ -15,6 +26,7 @@ export interface Entrevista {
   etapa: string;
   status: 'agendada' | 'confirmada' | 'realizada' | 'cancelada' | 'reagendada';
   observacoes?: string;
+  feedback?: EntrevistaFeedback;
 }
 
 export const entrevistasMock: Entrevista[] = [
