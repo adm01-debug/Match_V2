@@ -266,6 +266,75 @@ export type Database = {
           },
         ]
       }
+      processos_seletivos: {
+        Row: {
+          candidato_foto: string | null
+          candidato_id: string | null
+          candidato_nome: string
+          created_at: string
+          data_inscricao: string
+          data_ultima_movimentacao: string
+          dias_na_etapa: number | null
+          etapa_atual: string
+          id: string
+          match_score: number | null
+          origem: string | null
+          status: string
+          updated_at: string
+          vaga_id: string | null
+          vaga_titulo: string
+        }
+        Insert: {
+          candidato_foto?: string | null
+          candidato_id?: string | null
+          candidato_nome: string
+          created_at?: string
+          data_inscricao?: string
+          data_ultima_movimentacao?: string
+          dias_na_etapa?: number | null
+          etapa_atual?: string
+          id?: string
+          match_score?: number | null
+          origem?: string | null
+          status?: string
+          updated_at?: string
+          vaga_id?: string | null
+          vaga_titulo: string
+        }
+        Update: {
+          candidato_foto?: string | null
+          candidato_id?: string | null
+          candidato_nome?: string
+          created_at?: string
+          data_inscricao?: string
+          data_ultima_movimentacao?: string
+          dias_na_etapa?: number | null
+          etapa_atual?: string
+          id?: string
+          match_score?: number | null
+          origem?: string | null
+          status?: string
+          updated_at?: string
+          vaga_id?: string | null
+          vaga_titulo?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "processos_seletivos_candidato_id_fkey"
+            columns: ["candidato_id"]
+            isOneToOne: false
+            referencedRelation: "candidatos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "processos_seletivos_vaga_id_fkey"
+            columns: ["vaga_id"]
+            isOneToOne: false
+            referencedRelation: "vagas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null

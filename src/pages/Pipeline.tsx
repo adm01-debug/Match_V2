@@ -1,10 +1,11 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { PipelineColumn } from "@/components/pipeline/PipelineColumn";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Select,
   SelectContent,
@@ -18,8 +19,9 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import { pipelineData, etapasConfig } from "@/data/pipelineData";
-import { vagas } from "@/data/mockData";
+import { etapasConfig } from "@/data/pipelineData";
+import { useVagas } from "@/hooks/useVagas";
+import { useProcessosSeletivos, useUpdateProcessoEtapa } from "@/hooks/useProcessosSeletivos";
 import { ProcessoSeletivo, EtapaProcesso } from "@/types/recruitment";
 import {
   DndContext,
@@ -47,9 +49,13 @@ export default function Pipeline() {
   const { toast } = useToast();
   const { notifyStageChange } = useNotifications();
   const [selectedVaga, setSelectedVaga] = useState<string>(vagaIdParam || "todas");
-  const [processos, setProcessos] = useState<ProcessoSeletivo[]>(pipelineData);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [selectedProcesso, setSelectedProcesso] = useState<ProcessoSeletivo | null>(null);
+
+  // Fetch data from Supabase
+  const { data: vagas = [], isLoading: isLoadingVagas } = useVagas();
+  const { data: processosDB = [], isLoading: isLoadingProcessos } = useProcessosSeletivos();
+  const updateProcessoEtapa = useUpdateProcessoEtapa();
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -64,9 +70,9 @@ export default function Pipeline() {
 
   // Filter processes by selected job
   const filteredProcessos = useMemo(() => {
-    if (selectedVaga === "todas") return processos;
-    return processos.filter((p) => p.vagaId === selectedVaga);
-  }, [processos, selectedVaga]);
+    if (selectedVaga === "todas") return processosDB;
+    return processosDB.filter((p) => p.vagaId === selectedVaga || p.vagaTitulo.toLowerCase().includes(selectedVaga.toLowerCase()));
+  }, [processosDB, selectedVaga]);
 
   // Group processes by stage
   const processosByEtapa = useMemo(() => {
@@ -94,13 +100,13 @@ export default function Pipeline() {
     setActiveId(event.active.id as string);
   };
 
-  const handleDragEnd = (event: DragEndEvent) => {
+  const handleDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event;
     setActiveId(null);
 
     if (!over) return;
 
-    const activeProcesso = processos.find((p) => p.id === active.id);
+    const activeProcesso = processosDB.find((p) => p.id === active.id);
     const overEtapa = over.id as EtapaProcesso;
 
     if (!activeProcesso || activeProcesso.etapaAtual === overEtapa) return;
@@ -108,25 +114,28 @@ export default function Pipeline() {
     const fromEtapaLabel = etapasConfig.find((e) => e.id === activeProcesso.etapaAtual)?.label || '';
     const toEtapaLabel = etapasConfig.find((e) => e.id === overEtapa)?.label || '';
 
-    // Update the process stage
-    setProcessos((prev) =>
-      prev.map((p) =>
-        p.id === active.id
-          ? { ...p, etapaAtual: overEtapa, diasNaEtapa: 0, dataUltimaMovimentacao: new Date() }
-          : p
-      )
-    );
+    try {
+      // Update in database
+      await updateProcessoEtapa.mutateAsync({ id: active.id as string, etapaAtual: overEtapa });
 
-    // Notify stage change via realtime notifications
-    notifyStageChange(activeProcesso.candidatoNome, fromEtapaLabel, toEtapaLabel);
+      // Notify stage change via realtime notifications
+      notifyStageChange(activeProcesso.candidatoNome, fromEtapaLabel, toEtapaLabel);
 
-    toast({
-      title: "Candidato movido",
-      description: `${activeProcesso.candidatoNome} foi movido para ${toEtapaLabel}`,
-    });
+      toast({
+        title: "Candidato movido",
+        description: `${activeProcesso.candidatoNome} foi movido para ${toEtapaLabel}`,
+      });
+    } catch (error) {
+      toast({
+        title: "Erro ao mover candidato",
+        description: "Não foi possível atualizar a etapa. Tente novamente.",
+        variant: "destructive",
+      });
+    }
   };
 
-  const activeProcesso = activeId ? processos.find((p) => p.id === activeId) : null;
+  const activeProcesso = activeId ? processosDB.find((p) => p.id === activeId) : null;
+  const isLoading = isLoadingProcessos || isLoadingVagas;
 
   return (
     <Layout title="Pipeline">
@@ -213,31 +222,41 @@ export default function Pipeline() {
 
         {/* Kanban Board */}
         <div className="flex-1 overflow-hidden px-6 pb-6">
-          <DndContext
-            sensors={sensors}
-            collisionDetection={closestCorners}
-            onDragStart={handleDragStart}
-            onDragEnd={handleDragEnd}
-          >
-            <div className="flex gap-3 h-full overflow-x-auto pb-4 scrollbar-thin">
-              {etapasConfig.map((etapa) => (
-                <PipelineColumn
-                  key={etapa.id}
-                  etapa={etapa}
-                  processos={processosByEtapa[etapa.id] || []}
-                  onCardClick={setSelectedProcesso}
-                />
+          {isLoading ? (
+            <div className="flex gap-3 h-full overflow-x-auto pb-4">
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <div key={i} className="min-w-[280px] flex-shrink-0">
+                  <Skeleton className="h-full w-full rounded-lg" />
+                </div>
               ))}
             </div>
+          ) : (
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCorners}
+              onDragStart={handleDragStart}
+              onDragEnd={handleDragEnd}
+            >
+              <div className="flex gap-3 h-full overflow-x-auto pb-4 scrollbar-thin">
+                {etapasConfig.map((etapa) => (
+                  <PipelineColumn
+                    key={etapa.id}
+                    etapa={etapa}
+                    processos={processosByEtapa[etapa.id] || []}
+                    onCardClick={setSelectedProcesso}
+                  />
+                ))}
+              </div>
 
-            <DragOverlay>
-              {activeProcesso && (
-                <div className="opacity-90">
-                  <CandidatoKanbanCard processo={activeProcesso} />
-                </div>
-              )}
-            </DragOverlay>
-          </DndContext>
+              <DragOverlay>
+                {activeProcesso && (
+                  <div className="opacity-90">
+                    <CandidatoKanbanCard processo={activeProcesso} />
+                  </div>
+                )}
+              </DragOverlay>
+            </DndContext>
+          )}
         </div>
       </div>
 
