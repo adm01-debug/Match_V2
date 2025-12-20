@@ -9,6 +9,7 @@ import { SmartInsights } from "@/components/dashboard/SmartInsights";
 import { AlertasInteligentes } from "@/components/dashboard/AlertasInteligentes";
 import { TopCandidatos } from "@/components/dashboard/TopCandidatos";
 import { EntrevistasStats } from "@/components/dashboard/EntrevistasStats";
+import { EntrevistasChart } from "@/components/dashboard/EntrevistasChart";
 import {
   kpiData,
   funilData,
@@ -109,6 +110,19 @@ export default function Dashboard() {
           </div>
         </div>
 
+        {/* Entrevistas Row */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Gráfico de Evolução */}
+          <div className="lg:col-span-2">
+            <EntrevistasChart />
+          </div>
+
+          {/* Estatísticas de Entrevistas */}
+          <div>
+            <EntrevistasStats />
+          </div>
+        </div>
+
         {/* Second Row */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Vagas Urgentes */}
@@ -116,9 +130,9 @@ export default function Dashboard() {
             <VagasUrgentes vagas={vagasUrgentes} />
           </div>
 
-          {/* Estatísticas de Entrevistas */}
+          {/* Agenda do Dia */}
           <div>
-            <EntrevistasStats />
+            <AgendaHoje agenda={agendaDia} />
           </div>
         </div>
 
@@ -135,10 +149,9 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Third Row */}
+        {/* Ações Pendentes Row */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Ações Pendentes */}
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-3">
             <AcoesPendentes acoes={acoesPendentes} />
           </div>
         </div>
