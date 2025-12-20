@@ -62,6 +62,111 @@ export type Database = {
         }
         Relationships: []
       }
+      candidatos_auth: {
+        Row: {
+          candidato_id: string | null
+          created_at: string
+          email: string
+          id: string
+          nome: string
+          telefone: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          candidato_id?: string | null
+          created_at?: string
+          email: string
+          id?: string
+          nome: string
+          telefone?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          candidato_id?: string | null
+          created_at?: string
+          email?: string
+          id?: string
+          nome?: string
+          telefone?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "candidatos_auth_candidato_id_fkey"
+            columns: ["candidato_id"]
+            isOneToOne: false
+            referencedRelation: "candidatos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      candidaturas: {
+        Row: {
+          candidato_auth_id: string
+          carta_apresentacao: string | null
+          created_at: string
+          curriculo_url: string | null
+          data_candidatura: string
+          etapa_atual: string
+          id: string
+          processo_id: string | null
+          status: string
+          updated_at: string
+          vaga_id: string
+        }
+        Insert: {
+          candidato_auth_id: string
+          carta_apresentacao?: string | null
+          created_at?: string
+          curriculo_url?: string | null
+          data_candidatura?: string
+          etapa_atual?: string
+          id?: string
+          processo_id?: string | null
+          status?: string
+          updated_at?: string
+          vaga_id: string
+        }
+        Update: {
+          candidato_auth_id?: string
+          carta_apresentacao?: string | null
+          created_at?: string
+          curriculo_url?: string | null
+          data_candidatura?: string
+          etapa_atual?: string
+          id?: string
+          processo_id?: string | null
+          status?: string
+          updated_at?: string
+          vaga_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "candidaturas_candidato_auth_id_fkey"
+            columns: ["candidato_auth_id"]
+            isOneToOne: false
+            referencedRelation: "candidatos_auth"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "candidaturas_processo_id_fkey"
+            columns: ["processo_id"]
+            isOneToOne: false
+            referencedRelation: "processos_seletivos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "candidaturas_vaga_id_fkey"
+            columns: ["vaga_id"]
+            isOneToOne: false
+            referencedRelation: "vagas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       comunicacoes: {
         Row: {
           assunto: string
