@@ -1,4 +1,4 @@
-import React, { createContext, useContext, ReactNode } from 'react';
+import React, { createContext, useContext, ReactNode, useCallback, useMemo, useState } from 'react';
 import { useRealtimeNotifications, Notification } from '@/hooks/useRealtimeNotifications';
 
 interface NotificationContextType {
@@ -14,13 +14,68 @@ interface NotificationContextType {
 const NotificationContext = createContext<NotificationContextType | undefined>(undefined);
 
 export function NotificationProvider({ children }: { children: ReactNode }) {
-  const notificationState = useRealtimeNotifications();
+  const [notifications, setNotifications] = useState<Notification[]>([]);
 
-  return (
-    <NotificationContext.Provider value={notificationState}>
-      {children}
-    </NotificationContext.Provider>
+  const addNotification = useCallback(
+    (notification: Omit<Notification, 'id' | 'timestamp' | 'read'>) => {
+      setNotifications((prev) => [
+        {
+          ...notification,
+          id: crypto.randomUUID(),
+          timestamp: new Date(),
+          read: false,
+        },
+        ...prev,
+      ].slice(0, 50));
+    },
+    []
   );
+
+  const markAsRead = useCallback((id: string) => {
+    setNotifications((prev) => prev.map((n) => (n.id === id ? { ...n, read: true } : n)));
+  }, []);
+
+  const markAllAsRead = useCallback(() => {
+    setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
+  }, []);
+
+  const clearAll = useCallback(() => {
+    setNotifications([]);
+  }, []);
+
+  const notifyStageChange = useCallback(
+    (candidatoNome: string, fromEtapa: string, toEtapa: string) => {
+      addNotification({
+        type: 'stage_change',
+        title: 'Pipeline atualizado',
+        message: `${candidatoNome}: ${fromEtapa} → ${toEtapa}`,
+        link: '/pipeline',
+      });
+    },
+    [addNotification]
+  );
+
+  const unreadCount = useMemo(() => notifications.filter((n) => !n.read).length, [notifications]);
+
+  // Assina realtime e injeta notificações no store local (sem dependência circular)
+  useRealtimeNotifications({
+    onNotification: addNotification,
+  });
+
+  const value = useMemo<NotificationContextType>(
+    () => ({
+      notifications,
+      unreadCount,
+      addNotification,
+      markAsRead,
+      markAllAsRead,
+      clearAll,
+      notifyStageChange,
+    }),
+    [notifications, unreadCount, addNotification, markAsRead, markAllAsRead, clearAll, notifyStageChange]
+  );
+
+  return <NotificationContext.Provider value={value}>{children}</NotificationContext.Provider>;
 }
 
 export function useNotifications() {
@@ -30,3 +85,4 @@ export function useNotifications() {
   }
   return context;
 }
+

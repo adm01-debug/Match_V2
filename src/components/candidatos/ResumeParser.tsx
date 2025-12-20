@@ -393,14 +393,14 @@ export function ResumeParser({ onParsed, onCandidatoSaved }: ResumeParserProps) 
       )}
 
       {/* Match Score Calculator */}
-      {parsedData && showMatchCalculator && (
-        <MatchScoreCalculator 
-          candidatoData={parsedData} 
-          candidatoId={savedCandidatoId || undefined}
-          onMatchSaved={() => {
+      {parsedData && savedCandidatoId && showMatchCalculator && (
+        <MatchScoreCalculator
+          candidatoId={savedCandidatoId}
+          candidatoNome={parsedData.nome}
+          onScoreCalculated={(score) => {
             toast({
-              title: "Match Score vinculado",
-              description: "O score foi salvo no perfil do candidato.",
+              title: "Match Score calculado",
+              description: `Score salvo no histórico: ${score}%`,
             });
           }}
         />
