@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
-import { format, isSameDay, startOfMonth, endOfMonth, eachDayOfInterval, startOfWeek, endOfWeek, addMonths, subMonths } from 'date-fns';
+import { format, isSameDay, startOfMonth, endOfMonth, eachDayOfInterval, startOfWeek, endOfWeek, addMonths, subMonths, addWeeks, subWeeks, addDays, subDays } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { ChevronLeft, ChevronRight, Plus, Calendar as CalendarIcon, List, Loader2 } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Plus, Calendar as CalendarIcon, List, Loader2, LayoutGrid, CalendarDays, Clock } from 'lucide-react';
 import { Layout } from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -11,23 +11,28 @@ import { useEntrevistas, useCreateEntrevista, useUpdateEntrevista } from '@/hook
 import EntrevistaCard from '@/components/agenda/EntrevistaCard';
 import AgendarEntrevistaDialog from '@/components/agenda/AgendarEntrevistaDialog';
 import EntrevistaDetalhesDialog from '@/components/agenda/EntrevistaDetalhesDialog';
+import { WeekView } from '@/components/agenda/WeekView';
+import { DayView } from '@/components/agenda/DayView';
+import { GoogleCalendarExport } from '@/components/agenda/GoogleCalendarExport';
 import { cn } from '@/lib/utils';
 import { Entrevista, EntrevistaFeedback } from '@/data/agendaData';
 
+type ViewMode = 'month' | 'week' | 'day' | 'list';
+
 const AgendaPage = () => {
-  const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [dialogOpen, setDialogOpen] = useState(false);
   const [detalhesDialogOpen, setDetalhesDialogOpen] = useState(false);
   const [selectedEntrevista, setSelectedEntrevista] = useState<Entrevista | null>(null);
-  const [viewMode, setViewMode] = useState<'calendar' | 'list'>('calendar');
+  const [viewMode, setViewMode] = useState<ViewMode>('month');
 
   const { data: entrevistas = [], isLoading, error } = useEntrevistas();
   const createMutation = useCreateEntrevista();
   const updateMutation = useUpdateEntrevista();
 
-  const monthStart = startOfMonth(currentMonth);
-  const monthEnd = endOfMonth(currentMonth);
+  const monthStart = startOfMonth(currentDate);
+  const monthEnd = endOfMonth(currentDate);
   const calendarStart = startOfWeek(monthStart, { locale: ptBR });
   const calendarEnd = endOfWeek(monthEnd, { locale: ptBR });
   const calendarDays = eachDayOfInterval({ start: calendarStart, end: calendarEnd });
@@ -51,6 +56,31 @@ const AgendaPage = () => {
       .sort((a, b) => new Date(a.data).getTime() - new Date(b.data).getTime())
       .slice(0, 10);
   }, [entrevistas]);
+
+  const handleNavigate = (direction: 'prev' | 'next') => {
+    if (viewMode === 'month') {
+      setCurrentDate(direction === 'prev' ? subMonths(currentDate, 1) : addMonths(currentDate, 1));
+    } else if (viewMode === 'week') {
+      setCurrentDate(direction === 'prev' ? subWeeks(currentDate, 1) : addWeeks(currentDate, 1));
+    } else if (viewMode === 'day') {
+      const newDate = direction === 'prev' ? subDays(selectedDate, 1) : addDays(selectedDate, 1);
+      setSelectedDate(newDate);
+      setCurrentDate(newDate);
+    }
+  };
+
+  const getNavigationLabel = () => {
+    if (viewMode === 'month') {
+      return format(currentDate, 'MMMM yyyy', { locale: ptBR });
+    } else if (viewMode === 'week') {
+      const weekStart = startOfWeek(currentDate, { locale: ptBR });
+      const weekEnd = endOfWeek(currentDate, { locale: ptBR });
+      return `${format(weekStart, 'd MMM', { locale: ptBR })} - ${format(weekEnd, 'd MMM yyyy', { locale: ptBR })}`;
+    } else if (viewMode === 'day') {
+      return format(selectedDate, "EEEE, d 'de' MMMM", { locale: ptBR });
+    }
+    return 'Próximas Entrevistas';
+  };
 
   const handleSaveEntrevista = (novaEntrevista: Omit<Entrevista, 'id'>) => {
     createMutation.mutate({
@@ -129,6 +159,12 @@ const AgendaPage = () => {
     };
   }, [entrevistas, entrevistasHoje, monthStart, monthEnd]);
 
+  const goToToday = () => {
+    const today = new Date();
+    setCurrentDate(today);
+    setSelectedDate(today);
+  };
+
   if (isLoading) {
     return (
       <Layout>
@@ -157,10 +193,13 @@ const AgendaPage = () => {
             Gerencie suas entrevistas e compromissos
           </p>
         </div>
-        <Button onClick={() => setDialogOpen(true)} disabled={createMutation.isPending}>
-          {createMutation.isPending ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Plus className="h-4 w-4 mr-2" />}
-          Agendar Entrevista
-        </Button>
+        <div className="flex items-center gap-2">
+          <GoogleCalendarExport entrevistas={proximasEntrevistas as Entrevista[]} />
+          <Button onClick={() => setDialogOpen(true)} disabled={createMutation.isPending}>
+            {createMutation.isPending ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Plus className="h-4 w-4 mr-2" />}
+            Agendar Entrevista
+          </Button>
+        </div>
       </div>
 
       {/* Stats */}
@@ -201,17 +240,17 @@ const AgendaPage = () => {
                 <Button
                   variant="outline"
                   size="icon"
-                  onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}
+                  onClick={() => handleNavigate('prev')}
                 >
                   <ChevronLeft className="h-4 w-4" />
                 </Button>
-                <CardTitle className="text-lg min-w-[180px] text-center">
-                  {format(currentMonth, 'MMMM yyyy', { locale: ptBR })}
+                <CardTitle className="text-lg min-w-[220px] text-center capitalize">
+                  {getNavigationLabel()}
                 </CardTitle>
                 <Button
                   variant="outline"
                   size="icon"
-                  onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}
+                  onClick={() => handleNavigate('next')}
                 >
                   <ChevronRight className="h-4 w-4" />
                 </Button>
@@ -219,27 +258,30 @@ const AgendaPage = () => {
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => {
-                  setCurrentMonth(new Date());
-                  setSelectedDate(new Date());
-                }}
+                onClick={goToToday}
               >
                 Hoje
               </Button>
             </div>
-            <Tabs value={viewMode} onValueChange={(v) => setViewMode(v as typeof viewMode)}>
+            <Tabs value={viewMode} onValueChange={(v) => setViewMode(v as ViewMode)}>
               <TabsList>
-                <TabsTrigger value="calendar">
-                  <CalendarIcon className="h-4 w-4" />
+                <TabsTrigger value="month" title="Mês">
+                  <LayoutGrid className="h-4 w-4" />
                 </TabsTrigger>
-                <TabsTrigger value="list">
+                <TabsTrigger value="week" title="Semana">
+                  <CalendarDays className="h-4 w-4" />
+                </TabsTrigger>
+                <TabsTrigger value="day" title="Dia">
+                  <Clock className="h-4 w-4" />
+                </TabsTrigger>
+                <TabsTrigger value="list" title="Lista">
                   <List className="h-4 w-4" />
                 </TabsTrigger>
               </TabsList>
             </Tabs>
           </CardHeader>
           <CardContent>
-            {viewMode === 'calendar' ? (
+            {viewMode === 'month' && (
               <div>
                 {/* Week days header */}
                 <div className="grid grid-cols-7 gap-1 mb-2">
@@ -257,7 +299,7 @@ const AgendaPage = () => {
                 <div className="grid grid-cols-7 gap-1">
                   {calendarDays.map((day) => {
                     const dayEntrevistas = getEntrevistasForDay(day);
-                    const isCurrentMonth = day.getMonth() === currentMonth.getMonth();
+                    const isCurrentMonth = day.getMonth() === currentDate.getMonth();
                     const isToday = isSameDay(day, new Date());
                     const isSelected = isSameDay(day, selectedDate);
 
@@ -272,6 +314,10 @@ const AgendaPage = () => {
                           "hover:bg-accent"
                         )}
                         onClick={() => setSelectedDate(day)}
+                        onDoubleClick={() => {
+                          setSelectedDate(day);
+                          setViewMode('day');
+                        }}
                       >
                         <div
                           className={cn(
@@ -307,7 +353,29 @@ const AgendaPage = () => {
                   })}
                 </div>
               </div>
-            ) : (
+            )}
+
+            {viewMode === 'week' && (
+              <WeekView
+                currentDate={currentDate}
+                entrevistas={entrevistas as Entrevista[]}
+                onSelectEntrevista={handleOpenDetalhes}
+                onSelectDate={(date) => {
+                  setSelectedDate(date);
+                  setViewMode('day');
+                }}
+              />
+            )}
+
+            {viewMode === 'day' && (
+              <DayView
+                currentDate={selectedDate}
+                entrevistas={entrevistas as Entrevista[]}
+                onSelectEntrevista={handleOpenDetalhes}
+              />
+            )}
+
+            {viewMode === 'list' && (
               <div className="space-y-3">
                 {proximasEntrevistas.length === 0 ? (
                   <p className="text-center text-muted-foreground py-8">
@@ -319,7 +387,7 @@ const AgendaPage = () => {
                       <div className="text-sm text-muted-foreground min-w-[100px]">
                         {format(new Date(ent.data), "dd/MM/yyyy", { locale: ptBR })}
                       </div>
-                      <EntrevistaCard entrevista={ent as any} onClick={() => handleOpenDetalhes(ent as any)} />
+                      <EntrevistaCard entrevista={ent as Entrevista} onClick={() => handleOpenDetalhes(ent as Entrevista)} />
                     </div>
                   ))
                 )}
@@ -356,7 +424,7 @@ const AgendaPage = () => {
                 </div>
               ) : (
                 entrevistasSelecionadas.map((ent) => (
-                  <EntrevistaCard key={ent.id} entrevista={ent as any} onClick={() => handleOpenDetalhes(ent as any)} />
+                  <EntrevistaCard key={ent.id} entrevista={ent as Entrevista} onClick={() => handleOpenDetalhes(ent as Entrevista)} />
                 ))
               )}
             </CardContent>
