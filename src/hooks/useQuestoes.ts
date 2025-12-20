@@ -1,0 +1,151 @@
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
+
+interface Questao {
+  id: string;
+  prova_id: string;
+  texto: string;
+  tipo: 'multipla_escolha' | 'verdadeiro_falso' | 'dissertativa';
+  opcoes: string[] | null;
+  resposta_correta: number | null;
+  pontos: number;
+  ordem: number;
+  created_at: string;
+}
+
+interface QuestaoInsert {
+  prova_id: string;
+  texto: string;
+  tipo: 'multipla_escolha' | 'verdadeiro_falso' | 'dissertativa';
+  opcoes?: string[] | null;
+  resposta_correta?: number | null;
+  pontos?: number;
+  ordem?: number;
+}
+
+interface QuestaoUpdate {
+  texto?: string;
+  tipo?: 'multipla_escolha' | 'verdadeiro_falso' | 'dissertativa';
+  opcoes?: string[] | null;
+  resposta_correta?: number | null;
+  pontos?: number;
+  ordem?: number;
+}
+
+export function useQuestoes(provaId?: string) {
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+
+  const { data: questoes = [], isLoading, error } = useQuery({
+    queryKey: ['questoes', provaId],
+    queryFn: async () => {
+      if (!provaId) return [];
+      
+      const { data, error } = await supabase
+        .from('questoes')
+        .select('*')
+        .eq('prova_id', provaId)
+        .order('ordem', { ascending: true });
+
+      if (error) throw error;
+      return data as Questao[];
+    },
+    enabled: !!provaId,
+  });
+
+  const createQuestao = useMutation({
+    mutationFn: async (dados: QuestaoInsert) => {
+      // Calcular próxima ordem
+      const maxOrdem = questoes.length > 0 
+        ? Math.max(...questoes.map(q => q.ordem)) 
+        : 0;
+
+      const { data, error } = await supabase
+        .from('questoes')
+        .insert({ ...dados, ordem: dados.ordem ?? maxOrdem + 1 })
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['questoes', provaId] });
+      toast({ title: 'Questão adicionada!' });
+    },
+    onError: (error: Error) => {
+      toast({ title: 'Erro ao adicionar questão', description: error.message, variant: 'destructive' });
+    },
+  });
+
+  const updateQuestao = useMutation({
+    mutationFn: async ({ id, ...dados }: QuestaoUpdate & { id: string }) => {
+      const { data, error } = await supabase
+        .from('questoes')
+        .update(dados)
+        .eq('id', id)
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['questoes', provaId] });
+      toast({ title: 'Questão atualizada!' });
+    },
+    onError: (error: Error) => {
+      toast({ title: 'Erro ao atualizar questão', description: error.message, variant: 'destructive' });
+    },
+  });
+
+  const deleteQuestao = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase
+        .from('questoes')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['questoes', provaId] });
+      toast({ title: 'Questão removida!' });
+    },
+    onError: (error: Error) => {
+      toast({ title: 'Erro ao remover questão', description: error.message, variant: 'destructive' });
+    },
+  });
+
+  const reordenarQuestoes = useMutation({
+    mutationFn: async (novaOrdem: { id: string; ordem: number }[]) => {
+      const updates = novaOrdem.map(({ id, ordem }) =>
+        supabase.from('questoes').update({ ordem }).eq('id', id)
+      );
+      await Promise.all(updates);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['questoes', provaId] });
+    },
+  });
+
+  const pontuacaoTotal = questoes.reduce((acc, q) => acc + q.pontos, 0);
+
+  return {
+    questoes,
+    isLoading,
+    error,
+    pontuacaoTotal,
+    totalQuestoes: questoes.length,
+    createQuestao: createQuestao.mutateAsync,
+    updateQuestao: updateQuestao.mutateAsync,
+    deleteQuestao: deleteQuestao.mutateAsync,
+    reordenarQuestoes: reordenarQuestoes.mutateAsync,
+    isCreating: createQuestao.isPending,
+    isUpdating: updateQuestao.isPending,
+    isDeleting: deleteQuestao.isPending,
+  };
+}
+
+export default useQuestoes;
