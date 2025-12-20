@@ -1,184 +1,222 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
 interface ParsedResume {
   nome: string;
   email: string;
-  telefone: string;
-  experiencias: {
+  telefone: string | null;
+  linkedin: string | null;
+  cidade: string | null;
+  estado: string | null;
+  cargo_atual: string | null;
+  empresa_atual: string | null;
+  experiencia_anos: number;
+  habilidades: string[];
+  experiencias: Array<{
     empresa: string;
     cargo: string;
     periodo: string;
     descricao: string;
-  }[];
-  habilidades: string[];
-  formacao: {
+  }>;
+  formacao: Array<{
     instituicao: string;
     curso: string;
     periodo: string;
-  }[];
-  resumo: string;
+    nivel: string;
+  }>;
+  resumo: string | null;
 }
 
 serve(async (req) => {
-  if (req.method === "OPTIONS") {
+  // Handle CORS preflight
+  if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
+    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
+    
+    if (!LOVABLE_API_KEY) {
+      return new Response(
+        JSON.stringify({ 
+          error: 'Configuração incompleta',
+          details: 'LOVABLE_API_KEY não configurada' 
+        }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
     const { fileContent, fileName } = await req.json();
 
     if (!fileContent) {
       return new Response(
-        JSON.stringify({ success: false, error: "Conteúdo do arquivo é obrigatório" }),
-        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        JSON.stringify({ error: 'Conteúdo do arquivo é obrigatório' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) {
-      console.error("LOVABLE_API_KEY not configured");
-      return new Response(
-        JSON.stringify({ success: false, error: "API key não configurada" }),
-        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
-
-    console.log(`Parsing resume: ${fileName}`);
-
-    const systemPrompt = `Você é um especialista em análise de currículos para recrutamento e seleção.
-Sua tarefa é extrair informações estruturadas de currículos em qualquer formato.
-
-IMPORTANTE:
-- Extraia TODAS as informações disponíveis
-- Se algum campo não estiver disponível, retorne string vazia ou array vazio
-- Mantenha a formatação original de datas e períodos
-- Liste TODAS as habilidades mencionadas, incluindo soft skills
-- Para experiências, capture a descrição completa das atividades
-
-Retorne APENAS um JSON válido, sem texto adicional.`;
-
-    const userPrompt = `Analise o seguinte currículo e extraia as informações no formato JSON especificado:
-
-CURRÍCULO:
-${fileContent}
-
-FORMATO DE SAÍDA (JSON):
+    const prompt = `Analise o seguinte currículo e extraia as informações em formato JSON.
+    
+O JSON deve ter exatamente esta estrutura:
 {
   "nome": "Nome completo do candidato",
   "email": "email@exemplo.com",
-  "telefone": "(XX) XXXXX-XXXX",
+  "telefone": "(11) 99999-9999 ou null",
+  "linkedin": "URL do LinkedIn ou null",
+  "cidade": "Cidade ou null",
+  "estado": "UF ou null",
+  "cargo_atual": "Cargo atual ou último cargo",
+  "empresa_atual": "Empresa atual ou última empresa",
+  "experiencia_anos": número de anos de experiência (inteiro),
+  "habilidades": ["habilidade1", "habilidade2", ...],
   "experiencias": [
     {
       "empresa": "Nome da empresa",
       "cargo": "Cargo ocupado",
-      "periodo": "MM/AAAA - MM/AAAA ou Atual",
-      "descricao": "Descrição das atividades e responsabilidades"
+      "periodo": "Jan/2020 - Dez/2023",
+      "descricao": "Principais responsabilidades e conquistas"
     }
   ],
-  "habilidades": ["Habilidade 1", "Habilidade 2"],
   "formacao": [
     {
       "instituicao": "Nome da instituição",
       "curso": "Nome do curso",
-      "periodo": "Ano início - Ano fim"
+      "periodo": "2015 - 2019",
+      "nivel": "Graduação/Pós-graduação/Mestrado/etc"
     }
   ],
-  "resumo": "Um breve resumo profissional do candidato em 2-3 frases"
+  "resumo": "Breve resumo profissional do candidato (2-3 frases)"
 }
 
-Retorne APENAS o JSON, sem explicações adicionais.`;
+Retorne APENAS o JSON, sem markdown, sem explicações.
 
-    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-      method: "POST",
+Currículo:
+${fileContent}`;
+
+    const response = await fetch('https://ai-gateway.lovable.dev/v1/chat/completions', {
+      method: 'POST',
       headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${LOVABLE_API_KEY}`,
       },
       body: JSON.stringify({
-        model: "google/gemini-2.5-flash",
+        model: 'gemini-2.5-flash',
         messages: [
-          { role: "system", content: systemPrompt },
-          { role: "user", content: userPrompt },
+          {
+            role: 'system',
+            content: 'Você é um especialista em análise de currículos. Extraia informações de forma precisa e estruturada. Sempre retorne JSON válido sem markdown.'
+          },
+          {
+            role: 'user',
+            content: prompt
+          }
         ],
+        max_tokens: 4096,
         temperature: 0.1,
       }),
     });
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error("AI gateway error:", response.status, errorText);
-      
-      if (response.status === 429) {
-        return new Response(
-          JSON.stringify({ success: false, error: "Limite de requisições excedido. Tente novamente em alguns segundos." }),
-          { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
-      }
-      if (response.status === 402) {
-        return new Response(
-          JSON.stringify({ success: false, error: "Créditos insuficientes. Adicione créditos à sua conta." }),
-          { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
-      }
-      
       return new Response(
-        JSON.stringify({ success: false, error: "Erro ao processar currículo" }),
-        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        JSON.stringify({ 
+          error: 'Erro no serviço de IA',
+          details: `Status: ${response.status}` 
+        }),
+        { status: 502, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
-    const data = await response.json();
-    const content = data.choices?.[0]?.message?.content;
+    const aiResponse = await response.json();
+    const content = aiResponse.choices?.[0]?.message?.content;
 
     if (!content) {
-      console.error("No content in AI response");
       return new Response(
-        JSON.stringify({ success: false, error: "Resposta vazia da IA" }),
-        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        JSON.stringify({ 
+          error: 'Resposta vazia da IA',
+          details: 'Nenhum conteúdo retornado' 
+        }),
+        { status: 502, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
-    // Clean and parse JSON response
+    // Limpar e parsear JSON
     let jsonContent = content.trim();
     
-    // Remove markdown code blocks if present
-    if (jsonContent.startsWith("```json")) {
+    // Remover markdown se presente
+    if (jsonContent.startsWith('```json')) {
       jsonContent = jsonContent.slice(7);
-    } else if (jsonContent.startsWith("```")) {
+    }
+    if (jsonContent.startsWith('```')) {
       jsonContent = jsonContent.slice(3);
     }
-    if (jsonContent.endsWith("```")) {
+    if (jsonContent.endsWith('```')) {
       jsonContent = jsonContent.slice(0, -3);
     }
     jsonContent = jsonContent.trim();
 
     let parsedData: ParsedResume;
+    
     try {
       parsedData = JSON.parse(jsonContent);
     } catch (parseError) {
-      console.error("JSON parse error:", parseError, "Content:", jsonContent);
       return new Response(
-        JSON.stringify({ success: false, error: "Erro ao processar resposta da IA" }),
-        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        JSON.stringify({ 
+          error: 'Erro ao processar resposta',
+          details: 'Resposta da IA não é JSON válido' 
+        }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
-    console.log("Resume parsed successfully:", parsedData.nome);
+    // Validar campos obrigatórios
+    if (!parsedData.nome || !parsedData.email) {
+      return new Response(
+        JSON.stringify({ 
+          error: 'Dados incompletos',
+          details: 'Nome e email são obrigatórios' 
+        }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Normalizar dados
+    const normalizedData: ParsedResume = {
+      nome: parsedData.nome,
+      email: parsedData.email.toLowerCase(),
+      telefone: parsedData.telefone || null,
+      linkedin: parsedData.linkedin || null,
+      cidade: parsedData.cidade || null,
+      estado: parsedData.estado || null,
+      cargo_atual: parsedData.cargo_atual || null,
+      empresa_atual: parsedData.empresa_atual || null,
+      experiencia_anos: parseInt(String(parsedData.experiencia_anos)) || 0,
+      habilidades: Array.isArray(parsedData.habilidades) ? parsedData.habilidades : [],
+      experiencias: Array.isArray(parsedData.experiencias) ? parsedData.experiencias : [],
+      formacao: Array.isArray(parsedData.formacao) ? parsedData.formacao : [],
+      resumo: parsedData.resumo || null,
+    };
 
     return new Response(
-      JSON.stringify({ success: true, data: parsedData }),
-      { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      JSON.stringify({ 
+        success: true,
+        data: normalizedData,
+        fileName,
+      }),
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
+
   } catch (error) {
-    console.error("Error in parse-resume function:", error);
     return new Response(
-      JSON.stringify({ success: false, error: error instanceof Error ? error.message : "Erro desconhecido" }),
-      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      JSON.stringify({ 
+        error: 'Erro interno',
+        details: error instanceof Error ? error.message : 'Erro desconhecido'
+      }),
+      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }
 });
