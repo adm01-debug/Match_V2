@@ -10,6 +10,7 @@ import { NotificationProvider } from "./contexts/NotificationContext";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import PortalProtectedRoute from "./components/portal/PortalProtectedRoute";
 import { Loader2 } from "lucide-react";
+import { ErrorBoundary } from "./components/ErrorBoundary";
 
 // Lazy loaded pages - Code splitting para melhor performance
 const Dashboard = lazy(() => import("./pages/Dashboard"));
@@ -54,6 +55,7 @@ const App = () => (
         <AuthProvider>
           <CandidatoAuthProvider>
             <NotificationProvider>
+              <ErrorBoundary>
               <Suspense fallback={<PageLoader />}>
                 <Routes>
                   {/* Portal do Candidato - Rotas Públicas */}
@@ -111,6 +113,7 @@ const App = () => (
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </Suspense>
+              </ErrorBoundary>
             </NotificationProvider>
           </CandidatoAuthProvider>
         </AuthProvider>
@@ -120,3 +123,4 @@ const App = () => (
 );
 
 export default App;
+
