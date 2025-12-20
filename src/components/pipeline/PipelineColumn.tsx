@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { ProcessoSeletivo, EtapaProcesso } from "@/types/recruitment";
 import { CandidatoKanbanCard } from "./CandidatoKanbanCard";
 import { useDroppable } from "@dnd-kit/core";
@@ -15,7 +16,7 @@ interface PipelineColumnProps {
   onCardClick?: (processo: ProcessoSeletivo) => void;
 }
 
-export function PipelineColumn({ etapa, processos, onCardClick }: PipelineColumnProps) {
+export const PipelineColumn = memo(function PipelineColumn({ etapa, processos, onCardClick }: PipelineColumnProps) {
   const { setNodeRef, isOver } = useDroppable({
     id: etapa.id,
   });
@@ -75,3 +76,4 @@ export function PipelineColumn({ etapa, processos, onCardClick }: PipelineColumn
     </div>
   );
 }
+
