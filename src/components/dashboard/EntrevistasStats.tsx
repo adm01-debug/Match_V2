@@ -1,42 +1,48 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
+import { Skeleton } from '@/components/ui/skeleton';
 import { CheckCircle, XCircle, Clock, TrendingUp, Users } from 'lucide-react';
-import { entrevistasMock } from '@/data/agendaData';
-import { useMemo } from 'react';
+import { useEntrevistasStats } from '@/hooks/useEntrevistas';
 
 export function EntrevistasStats() {
-  const stats = useMemo(() => {
-    const realizadas = entrevistasMock.filter(e => e.status === 'realizada');
-    const comFeedback = realizadas.filter(e => e.feedback);
-    const aprovados = comFeedback.filter(e => e.feedback?.resultado === 'aprovado').length;
-    const reprovados = comFeedback.filter(e => e.feedback?.resultado === 'reprovado').length;
-    const pendentes = comFeedback.filter(e => e.feedback?.resultado === 'pendente').length;
-    
-    const total = comFeedback.length;
-    const taxaAprovacao = total > 0 ? Math.round((aprovados / total) * 100) : 0;
-    const taxaReprovacao = total > 0 ? Math.round((reprovados / total) * 100) : 0;
-    
-    const notaMedia = comFeedback.length > 0
-      ? comFeedback.reduce((acc, e) => acc + (e.feedback?.notaGeral || 0), 0) / comFeedback.length
-      : 0;
+  const { data: stats, isLoading, error } = useEntrevistasStats();
 
-    const agendadas = entrevistasMock.filter(e => e.status === 'agendada').length;
-    const confirmadas = entrevistasMock.filter(e => e.status === 'confirmada').length;
+  if (isLoading) {
+    return (
+      <Card>
+        <CardHeader className="pb-3">
+          <CardTitle className="text-lg flex items-center gap-2">
+            <Users className="h-5 w-5" />
+            Entrevistas - Taxa de Conversão
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <Skeleton className="h-8 w-full" />
+          <Skeleton className="h-8 w-full" />
+          <Skeleton className="h-20 w-full" />
+        </CardContent>
+      </Card>
+    );
+  }
 
-    return {
-      realizadas: realizadas.length,
-      aprovados,
-      reprovados,
-      pendentes,
-      taxaAprovacao,
-      taxaReprovacao,
-      notaMedia: notaMedia.toFixed(1),
-      agendadas,
-      confirmadas,
-      total: entrevistasMock.length
-    };
-  }, []);
+  if (error || !stats) {
+    return (
+      <Card>
+        <CardHeader className="pb-3">
+          <CardTitle className="text-lg flex items-center gap-2">
+            <Users className="h-5 w-5" />
+            Entrevistas - Taxa de Conversão
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-sm text-muted-foreground text-center py-4">
+            Erro ao carregar estatísticas
+          </p>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card>

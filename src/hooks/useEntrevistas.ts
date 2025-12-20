@@ -1,0 +1,234 @@
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
+
+export interface EntrevistaDB {
+  id: string;
+  candidato_id: string | null;
+  candidato_nome: string;
+  vaga_id: string;
+  vaga_titulo: string;
+  tipo: 'presencial' | 'online' | 'telefone';
+  data: string;
+  hora_inicio: string;
+  hora_fim: string;
+  local: string | null;
+  link_online: string | null;
+  entrevistadores: string[];
+  etapa: string;
+  status: 'agendada' | 'confirmada' | 'realizada' | 'cancelada' | 'reagendada';
+  observacoes: string | null;
+  feedback_resultado: 'aprovado' | 'reprovado' | 'pendente' | null;
+  feedback_nota: number | null;
+  feedback_pontos_fortes: string[] | null;
+  feedback_pontos_melhorar: string[] | null;
+  feedback_comentarios: string | null;
+  feedback_recomendacao: string | null;
+  feedback_avaliado_por: string | null;
+  feedback_avaliado_em: string | null;
+  created_at: string;
+  updated_at: string;
+  created_by: string | null;
+}
+
+export interface EntrevistasStats {
+  total: number;
+  realizadas: number;
+  aprovados: number;
+  reprovados: number;
+  pendentes: number;
+  taxaAprovacao: number;
+  taxaReprovacao: number;
+  notaMedia: number;
+  agendadas: number;
+  confirmadas: number;
+}
+
+export interface EvolucaoMensal {
+  mes: string;
+  aprovados: number;
+  reprovados: number;
+  total: number;
+}
+
+export function useEntrevistas() {
+  return useQuery({
+    queryKey: ['entrevistas'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('entrevistas')
+        .select('*')
+        .order('data', { ascending: false });
+      
+      if (error) throw error;
+      return data as EntrevistaDB[];
+    }
+  });
+}
+
+export function useEntrevistasStats() {
+  return useQuery({
+    queryKey: ['entrevistas-stats'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('entrevistas')
+        .select('*');
+      
+      if (error) throw error;
+      
+      const entrevistas = data as EntrevistaDB[];
+      const realizadas = entrevistas.filter(e => e.status === 'realizada');
+      const comFeedback = realizadas.filter(e => e.feedback_resultado);
+      const aprovados = comFeedback.filter(e => e.feedback_resultado === 'aprovado').length;
+      const reprovados = comFeedback.filter(e => e.feedback_resultado === 'reprovado').length;
+      const pendentes = comFeedback.filter(e => e.feedback_resultado === 'pendente').length;
+      
+      const total = comFeedback.length;
+      const taxaAprovacao = total > 0 ? Math.round((aprovados / total) * 100) : 0;
+      const taxaReprovacao = total > 0 ? Math.round((reprovados / total) * 100) : 0;
+      
+      const notaMedia = comFeedback.length > 0
+        ? comFeedback.reduce((acc, e) => acc + (e.feedback_nota || 0), 0) / comFeedback.length
+        : 0;
+
+      const agendadas = entrevistas.filter(e => e.status === 'agendada').length;
+      const confirmadas = entrevistas.filter(e => e.status === 'confirmada').length;
+
+      return {
+        total: entrevistas.length,
+        realizadas: realizadas.length,
+        aprovados,
+        reprovados,
+        pendentes,
+        taxaAprovacao,
+        taxaReprovacao,
+        notaMedia: parseFloat(notaMedia.toFixed(1)),
+        agendadas,
+        confirmadas
+      } as EntrevistasStats;
+    }
+  });
+}
+
+export function useEntrevistasEvolucao() {
+  return useQuery({
+    queryKey: ['entrevistas-evolucao'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('entrevistas')
+        .select('*')
+        .eq('status', 'realizada')
+        .not('feedback_resultado', 'is', null);
+      
+      if (error) throw error;
+      
+      const entrevistas = data as EntrevistaDB[];
+      
+      // Agrupar por mês
+      const mesesMap = new Map<string, { aprovados: number; reprovados: number; total: number }>();
+      const mesesNomes = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+      
+      entrevistas.forEach(e => {
+        const date = new Date(e.data);
+        const mesKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+        const mesNome = mesesNomes[date.getMonth()];
+        
+        if (!mesesMap.has(mesKey)) {
+          mesesMap.set(mesKey, { aprovados: 0, reprovados: 0, total: 0 });
+        }
+        
+        const stats = mesesMap.get(mesKey)!;
+        stats.total++;
+        if (e.feedback_resultado === 'aprovado') stats.aprovados++;
+        if (e.feedback_resultado === 'reprovado') stats.reprovados++;
+      });
+      
+      // Converter para array ordenado
+      const resultado: EvolucaoMensal[] = Array.from(mesesMap.entries())
+        .sort((a, b) => a[0].localeCompare(b[0]))
+        .slice(-6) // Últimos 6 meses
+        .map(([key, stats]) => {
+          const [year, month] = key.split('-');
+          return {
+            mes: mesesNomes[parseInt(month) - 1],
+            ...stats
+          };
+        });
+      
+      return resultado;
+    }
+  });
+}
+
+export function useEntrevistasPizza() {
+  return useQuery({
+    queryKey: ['entrevistas-pizza'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('entrevistas')
+        .select('feedback_resultado')
+        .eq('status', 'realizada')
+        .not('feedback_resultado', 'is', null);
+      
+      if (error) throw error;
+      
+      const entrevistas = data as { feedback_resultado: string }[];
+      
+      const aprovados = entrevistas.filter(e => e.feedback_resultado === 'aprovado').length;
+      const reprovados = entrevistas.filter(e => e.feedback_resultado === 'reprovado').length;
+      const pendentes = entrevistas.filter(e => e.feedback_resultado === 'pendente').length;
+      
+      return [
+        { name: 'Aprovados', value: aprovados, color: '#22c55e' },
+        { name: 'Reprovados', value: reprovados, color: '#ef4444' },
+        { name: 'Pendentes', value: pendentes, color: '#eab308' },
+      ];
+    }
+  });
+}
+
+export function useCreateEntrevista() {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: async (entrevista: Omit<EntrevistaDB, 'id' | 'created_at' | 'updated_at'>) => {
+      const { data, error } = await supabase
+        .from('entrevistas')
+        .insert(entrevista)
+        .select()
+        .single();
+      
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['entrevistas'] });
+      queryClient.invalidateQueries({ queryKey: ['entrevistas-stats'] });
+      queryClient.invalidateQueries({ queryKey: ['entrevistas-evolucao'] });
+      queryClient.invalidateQueries({ queryKey: ['entrevistas-pizza'] });
+    }
+  });
+}
+
+export function useUpdateEntrevista() {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: async ({ id, ...updates }: Partial<EntrevistaDB> & { id: string }) => {
+      const { data, error } = await supabase
+        .from('entrevistas')
+        .update(updates)
+        .eq('id', id)
+        .select()
+        .single();
+      
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['entrevistas'] });
+      queryClient.invalidateQueries({ queryKey: ['entrevistas-stats'] });
+      queryClient.invalidateQueries({ queryKey: ['entrevistas-evolucao'] });
+      queryClient.invalidateQueries({ queryKey: ['entrevistas-pizza'] });
+    }
+  });
+}
