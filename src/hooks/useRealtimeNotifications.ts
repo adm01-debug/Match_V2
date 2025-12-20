@@ -1,255 +1,199 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { toast } from '@/hooks/use-toast';
+import { useNotifications } from '@/contexts/NotificationContext';
+import { RealtimeChannel } from '@supabase/supabase-js';
 
-export interface Notification {
-  id: string;
-  type: 'high_match' | 'stage_change' | 'new_candidate' | 'urgent' | 'interview_scheduled' | 'interview_updated';
-  title: string;
-  message: string;
-  candidatoNome?: string;
-  matchScore?: number;
-  etapa?: string;
-  timestamp: Date;
-  read: boolean;
+interface UseRealtimeNotificationsOptions {
+  enableMatchScores?: boolean;
+  enableVagas?: boolean;
+  enableProcessos?: boolean;
+  enableEntrevistas?: boolean;
 }
 
-export function useRealtimeNotifications() {
-  const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [unreadCount, setUnreadCount] = useState(0);
+export function useRealtimeNotifications(options: UseRealtimeNotificationsOptions = {}) {
+  const {
+    enableMatchScores = true,
+    enableVagas = true,
+    enableProcessos = true,
+    enableEntrevistas = true,
+  } = options;
 
-  // Add a new notification
-  const addNotification = useCallback((notification: Omit<Notification, 'id' | 'timestamp' | 'read'>) => {
-    const newNotification: Notification = {
-      ...notification,
-      id: `notif-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-      timestamp: new Date(),
-      read: false,
-    };
+  const { addNotification } = useNotifications();
+  const [isConnected, setIsConnected] = useState(false);
+  const channelsRef = useRef<RealtimeChannel[]>([]);
 
-    setNotifications(prev => [newNotification, ...prev].slice(0, 50)); // Keep max 50 notifications
-    setUnreadCount(prev => prev + 1);
+  const setupSubscriptions = useCallback(() => {
+    const channels: RealtimeChannel[] = [];
 
-    // Show toast for immediate feedback
-    toast({
-      title: notification.title,
-      description: notification.message,
+    // Match Scores - Notifica quando candidato tem match alto
+    if (enableMatchScores) {
+      const matchChannel = supabase
+        .channel('match-scores-realtime')
+        .on(
+          'postgres_changes',
+          { event: 'INSERT', schema: 'public', table: 'match_scores' },
+          (payload) => {
+            const score = payload.new as any;
+            if (score.score_total >= 80) {
+              addNotification({
+                type: 'success',
+                title: '🎯 Match Score Alto!',
+                message: `Candidato com ${score.score_total}% de compatibilidade`,
+                link: `/candidatos/${score.candidato_id}`,
+              });
+            }
+          }
+        )
+        .subscribe((status) => {
+          setIsConnected(status === 'SUBSCRIBED');
+        });
+      channels.push(matchChannel);
+    }
+
+    // Vagas - Notifica mudanças de status
+    if (enableVagas) {
+      const vagasChannel = supabase
+        .channel('vagas-realtime')
+        .on(
+          'postgres_changes',
+          { event: 'UPDATE', schema: 'public', table: 'vagas' },
+          (payload) => {
+            const vaga = payload.new as any;
+            const oldVaga = payload.old as any;
+
+            if (oldVaga.status !== vaga.status) {
+              if (vaga.status === 'publicada') {
+                addNotification({
+                  type: 'info',
+                  title: '📢 Vaga Publicada',
+                  message: `${vaga.titulo} está ativa`,
+                  link: `/vagas/${vaga.id}`,
+                });
+              } else if (vaga.status === 'encerrada') {
+                addNotification({
+                  type: 'warning',
+                  title: '🔒 Vaga Encerrada',
+                  message: vaga.titulo,
+                  link: `/vagas/${vaga.id}`,
+                });
+              }
+            }
+          }
+        )
+        .subscribe();
+      channels.push(vagasChannel);
+    }
+
+    // Processos Seletivos - Notifica mudanças de etapa e status
+    if (enableProcessos) {
+      const processosChannel = supabase
+        .channel('processos-realtime')
+        .on(
+          'postgres_changes',
+          { event: 'UPDATE', schema: 'public', table: 'processos_seletivos' },
+          (payload) => {
+            const processo = payload.new as any;
+            const oldProcesso = payload.old as any;
+
+            // Mudança de etapa
+            if (oldProcesso.etapa_atual !== processo.etapa_atual) {
+              addNotification({
+                type: 'info',
+                title: '📋 Pipeline Atualizado',
+                message: `Candidato movido para ${processo.etapa_atual.replace(/_/g, ' ')}`,
+                link: `/pipeline?processo=${processo.id}`,
+              });
+            }
+
+            // Contratação
+            if (processo.status === 'contratado' && oldProcesso.status !== 'contratado') {
+              addNotification({
+                type: 'success',
+                title: '🎉 Nova Contratação!',
+                message: 'Um candidato foi contratado',
+                link: `/pipeline?processo=${processo.id}`,
+              });
+            }
+          }
+        )
+        .subscribe();
+      channels.push(processosChannel);
+    }
+
+    // Entrevistas - Notifica agendamentos e atualizações
+    if (enableEntrevistas) {
+      const entrevistasChannel = supabase
+        .channel('entrevistas-realtime')
+        .on(
+          'postgres_changes',
+          { event: '*', schema: 'public', table: 'entrevistas' },
+          (payload) => {
+            const entrevista = payload.new as any;
+
+            if (payload.eventType === 'INSERT') {
+              addNotification({
+                type: 'info',
+                title: '📅 Entrevista Agendada',
+                message: `Nova entrevista ${entrevista.tipo}`,
+                link: '/agenda',
+              });
+            } else if (payload.eventType === 'UPDATE') {
+              const oldEntrevista = payload.old as any;
+
+              if (entrevista.status === 'confirmada' && oldEntrevista.status !== 'confirmada') {
+                addNotification({
+                  type: 'success',
+                  title: '✅ Entrevista Confirmada',
+                  message: 'Candidato confirmou presença',
+                  link: '/agenda',
+                });
+              } else if (entrevista.status === 'cancelada' && oldEntrevista.status !== 'cancelada') {
+                addNotification({
+                  type: 'warning',
+                  title: '❌ Entrevista Cancelada',
+                  message: 'Uma entrevista foi cancelada',
+                  link: '/agenda',
+                });
+              } else if (entrevista.status === 'no_show' && oldEntrevista.status !== 'no_show') {
+                addNotification({
+                  type: 'error',
+                  title: '⚠️ No-Show',
+                  message: 'Candidato não compareceu',
+                  link: '/agenda',
+                });
+              }
+            }
+          }
+        )
+        .subscribe();
+      channels.push(entrevistasChannel);
+    }
+
+    channelsRef.current = channels;
+  }, [enableMatchScores, enableVagas, enableProcessos, enableEntrevistas, addNotification]);
+
+  const cleanup = useCallback(() => {
+    channelsRef.current.forEach((channel) => {
+      supabase.removeChannel(channel);
     });
+    channelsRef.current = [];
+    setIsConnected(false);
   }, []);
 
-  // Mark notification as read
-  const markAsRead = useCallback((id: string) => {
-    setNotifications(prev =>
-      prev.map(n => (n.id === id && !n.read ? { ...n, read: true } : n))
-    );
-    setUnreadCount(prev => Math.max(0, prev - 1));
-  }, []);
+  const reconnect = useCallback(() => {
+    cleanup();
+    setupSubscriptions();
+  }, [cleanup, setupSubscriptions]);
 
-  // Mark all as read
-  const markAllAsRead = useCallback(() => {
-    setNotifications(prev => prev.map(n => ({ ...n, read: true })));
-    setUnreadCount(0);
-  }, []);
-
-  // Clear all notifications
-  const clearAll = useCallback(() => {
-    setNotifications([]);
-    setUnreadCount(0);
-  }, []);
-
-  // Subscribe to match_scores table for high score candidates
   useEffect(() => {
-    console.log('Setting up realtime notifications...');
-
-    const matchScoresChannel = supabase
-      .channel('match-scores-notifications')
-      .on(
-        'postgres_changes',
-        {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'match_scores',
-        },
-        (payload) => {
-          console.log('New match score received:', payload);
-          const newScore = payload.new as {
-            score_total: number;
-            vaga_titulo: string;
-            candidato_id: string;
-            recomendacao: string;
-          };
-
-          // Notify for high match scores (>= 80%)
-          if (newScore.score_total >= 80) {
-            addNotification({
-              type: 'high_match',
-              title: '⭐ Candidato com Alto Match!',
-              message: `Novo candidato com ${newScore.score_total}% de compatibilidade para ${newScore.vaga_titulo}`,
-              matchScore: newScore.score_total,
-            });
-          }
-
-          // Also notify for any new candidate analysis
-          if (newScore.score_total < 80 && newScore.score_total >= 60) {
-            addNotification({
-              type: 'new_candidate',
-              title: 'Novo Candidato Analisado',
-              message: `Candidato analisado para ${newScore.vaga_titulo} com ${newScore.score_total}% de match`,
-              matchScore: newScore.score_total,
-            });
-          }
-        }
-      )
-      .subscribe((status) => {
-        console.log('Match scores subscription status:', status);
-      });
-
-    // Subscribe to entrevistas table for interview notifications
-    const entrevistasChannel = supabase
-      .channel('entrevistas-notifications')
-      .on(
-        'postgres_changes',
-        {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'entrevistas',
-        },
-        (payload) => {
-          console.log('New interview scheduled:', payload);
-          const entrevista = payload.new as {
-            candidato_nome: string;
-            vaga_titulo: string;
-            data: string;
-            hora_inicio: string;
-            tipo: string;
-            etapa: string;
-          };
-
-          addNotification({
-            type: 'interview_scheduled',
-            title: '📅 Nova Entrevista Agendada',
-            message: `Entrevista com ${entrevista.candidato_nome} para ${entrevista.vaga_titulo} em ${new Date(entrevista.data).toLocaleDateString('pt-BR')} às ${entrevista.hora_inicio.slice(0, 5)}`,
-            candidatoNome: entrevista.candidato_nome,
-            etapa: entrevista.etapa,
-          });
-        }
-      )
-      .on(
-        'postgres_changes',
-        {
-          event: 'UPDATE',
-          schema: 'public',
-          table: 'entrevistas',
-        },
-        (payload) => {
-          console.log('Interview updated:', payload);
-          const entrevista = payload.new as {
-            candidato_nome: string;
-            vaga_titulo: string;
-            data: string;
-            hora_inicio: string;
-            status: string;
-            etapa: string;
-          };
-
-          const statusLabels: Record<string, string> = {
-            'agendada': 'reagendada',
-            'confirmada': 'confirmada',
-            'realizada': 'marcada como realizada',
-            'cancelada': 'cancelada',
-          };
-
-          const statusLabel = statusLabels[entrevista.status] || 'atualizada';
-
-          addNotification({
-            type: 'interview_updated',
-            title: '🔄 Entrevista Atualizada',
-            message: `Entrevista com ${entrevista.candidato_nome} foi ${statusLabel}`,
-            candidatoNome: entrevista.candidato_nome,
-            etapa: entrevista.etapa,
-          });
-        }
-      )
-      .subscribe((status) => {
-        console.log('Entrevistas subscription status:', status);
-      });
-
-    // Subscribe to processos_seletivos table for pipeline stage changes
-    const processosChannel = supabase
-      .channel('processos-notifications')
-      .on(
-        'postgres_changes',
-        {
-          event: 'UPDATE',
-          schema: 'public',
-          table: 'processos_seletivos',
-        },
-        (payload) => {
-          console.log('Pipeline update received:', payload);
-          const oldProcesso = payload.old as { etapa_atual: string };
-          const newProcesso = payload.new as {
-            candidato_nome: string;
-            etapa_atual: string;
-            vaga_titulo: string;
-          };
-
-          // Only notify if the stage actually changed
-          if (oldProcesso.etapa_atual !== newProcesso.etapa_atual) {
-            const etapaLabels: Record<string, string> = {
-              'novo': 'Novos',
-              'triagem': 'Triagem',
-              'entrevista_rh': 'Entrevista RH',
-              'entrevista_tecnica': 'Entrevista Técnica',
-              'entrevista_gestor': 'Entrevista Gestor',
-              'proposta': 'Proposta',
-              'contratado': 'Contratado',
-              'reprovado': 'Reprovado',
-            };
-
-            const fromLabel = etapaLabels[oldProcesso.etapa_atual] || oldProcesso.etapa_atual;
-            const toLabel = etapaLabels[newProcesso.etapa_atual] || newProcesso.etapa_atual;
-
-            addNotification({
-              type: 'stage_change',
-              title: '📋 Candidato Movido no Pipeline',
-              message: `${newProcesso.candidato_nome} foi movido de "${fromLabel}" para "${toLabel}" (${newProcesso.vaga_titulo})`,
-              candidatoNome: newProcesso.candidato_nome,
-              etapa: newProcesso.etapa_atual,
-            });
-          }
-        }
-      )
-      .subscribe((status) => {
-        console.log('Processos seletivos subscription status:', status);
-      });
-
-    return () => {
-      console.log('Cleaning up realtime subscriptions...');
-      supabase.removeChannel(matchScoresChannel);
-      supabase.removeChannel(entrevistasChannel);
-      supabase.removeChannel(processosChannel);
-    };
-  }, [addNotification]);
-
-  // Simulate pipeline stage changes (since pipeline is mocked)
-  // In production, this would also be a Supabase realtime subscription
-  const notifyStageChange = useCallback((candidatoNome: string, fromEtapa: string, toEtapa: string) => {
-    addNotification({
-      type: 'stage_change',
-      title: '📋 Mudança de Etapa',
-      message: `${candidatoNome} movido de ${fromEtapa} para ${toEtapa}`,
-      candidatoNome,
-      etapa: toEtapa,
-    });
-  }, [addNotification]);
+    setupSubscriptions();
+    return cleanup;
+  }, [setupSubscriptions, cleanup]);
 
   return {
-    notifications,
-    unreadCount,
-    addNotification,
-    markAsRead,
-    markAllAsRead,
-    clearAll,
-    notifyStageChange,
+    isConnected,
+    reconnect,
   };
 }
+
+export default useRealtimeNotifications;
