@@ -1,7 +1,19 @@
+import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Vaga, StatusVaga, Prioridade } from "@/types/recruitment";
+import { useDeleteVaga } from "@/hooks/useVagas";
 import { 
   Eye, 
   Edit, 
@@ -15,7 +27,9 @@ import {
   Clock,
   MoreHorizontal,
   Flame,
-  AlertTriangle
+  AlertTriangle,
+  Trash2,
+  Loader2
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
@@ -26,6 +40,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { toast } from "sonner";
 
 interface VagaCardProps {
   vaga: Vaga;
@@ -50,6 +65,9 @@ const prioridadeConfig: Record<Prioridade, { label: string; icon: any; className
 };
 
 export function VagaCard({ vaga }: VagaCardProps) {
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const deleteVaga = useDeleteVaga();
+  
   const status = statusConfig[vaga.status];
   const prioridade = prioridadeConfig[vaga.prioridade];
   const PrioridadeIcon = prioridade.icon;
@@ -65,8 +83,19 @@ export function VagaCard({ vaga }: VagaCardProps) {
     return "Não informado";
   };
 
+  const handleDelete = async () => {
+    try {
+      await deleteVaga.mutateAsync(vaga.id);
+      toast.success("Vaga excluída com sucesso!");
+      setShowDeleteDialog(false);
+    } catch (error) {
+      toast.error("Erro ao excluir vaga. Tente novamente.");
+    }
+  };
+
   return (
-    <Card className="card-hover border-l-4 border-l-primary">
+    <>
+      <Card className="card-hover border-l-4 border-l-primary">
       <CardContent className="p-5">
         {/* Header */}
         <div className="flex items-start justify-between gap-3 mb-4">
@@ -130,6 +159,14 @@ export function VagaCard({ vaga }: VagaCardProps) {
               <DropdownMenuItem className="flex items-center gap-2">
                 <Share2 className="h-4 w-4" />
                 Divulgar vaga
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem 
+                className="flex items-center gap-2 text-destructive focus:text-destructive"
+                onClick={() => setShowDeleteDialog(true)}
+              >
+                <Trash2 className="h-4 w-4" />
+                Excluir vaga
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -198,7 +235,41 @@ export function VagaCard({ vaga }: VagaCardProps) {
             </Button>
           )}
         </div>
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Excluir vaga</AlertDialogTitle>
+            <AlertDialogDescription>
+              Tem certeza que deseja excluir a vaga <strong>"{vaga.titulo}"</strong>? 
+              Esta ação não pode ser desfeita e todos os dados relacionados serão perdidos.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={deleteVaga.isPending}>Cancelar</AlertDialogCancel>
+            <AlertDialogAction 
+              onClick={handleDelete}
+              disabled={deleteVaga.isPending}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {deleteVaga.isPending ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Excluindo...
+                </>
+              ) : (
+                <>
+                  <Trash2 className="h-4 w-4 mr-2" />
+                  Excluir
+                </>
+              )}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
   );
 }
