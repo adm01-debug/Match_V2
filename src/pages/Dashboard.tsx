@@ -10,10 +10,11 @@ import { AlertasInteligentes } from "@/components/dashboard/AlertasInteligentes"
 import { TopCandidatos } from "@/components/dashboard/TopCandidatos";
 import { EntrevistasStats } from "@/components/dashboard/EntrevistasStats";
 import { EntrevistasChart } from "@/components/dashboard/EntrevistasChart";
+import { useVagasUrgentes } from "@/hooks/useVagas";
 import {
   kpiData,
   funilData,
-  vagasUrgentes,
+  vagasUrgentes as vagasUrgentesMock,
   acoesPendentes,
   agendaDia,
   processos,
@@ -28,6 +29,7 @@ import {
 } from "@/components/ui/select";
 
 export default function Dashboard() {
+  const { data: vagasUrgentes = vagasUrgentesMock } = useVagasUrgentes();
   return (
     <Layout title="Dashboard">
       <div className="p-6 space-y-6 animate-fade-in">
