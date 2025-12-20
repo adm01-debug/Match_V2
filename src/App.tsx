@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -8,29 +9,39 @@ import { CandidatoAuthProvider } from "./contexts/CandidatoAuthContext";
 import { NotificationProvider } from "./contexts/NotificationContext";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import PortalProtectedRoute from "./components/portal/PortalProtectedRoute";
-import Dashboard from "./pages/Dashboard";
-import VagasList from "./pages/VagasList";
-import VagaForm from "./pages/VagaForm";
-import VagaDetalhes from "./pages/VagaDetalhes";
-import Pipeline from "./pages/Pipeline";
-import AvaliacaoForm from "./pages/AvaliacaoForm";
-import TestsPage from "./pages/TestsPage";
-import ProvaEditor from "./pages/ProvaEditor";
-import ProvaAplicacao from "./pages/ProvaAplicacao";
-import ResumeParserPage from "./pages/ResumeParserPage";
-import CandidatosPage from "./pages/CandidatosPage";
-import AnalyticsPage from "./pages/AnalyticsPage";
-import ComunicacaoPage from "./pages/ComunicacaoPage";
-import AuthPage from "./pages/AuthPage";
-import AdminPage from "./pages/AdminPage";
-import CandidatoPerfilPage from "./pages/CandidatoPerfilPage";
-import AgendaPage from "./pages/AgendaPage";
-import IndicacoesPage from "./pages/IndicacoesPage";
-import PortalAuthPage from "./pages/portal/PortalAuthPage";
-import PortalDashboard from "./pages/portal/PortalDashboard";
-import PortalVagas from "./pages/portal/PortalVagas";
-import PortalPerfil from "./pages/portal/PortalPerfil";
-import NotFound from "./pages/NotFound";
+import { Loader2 } from "lucide-react";
+
+// Lazy loaded pages - Code splitting para melhor performance
+const Dashboard = lazy(() => import("./pages/Dashboard"));
+const VagasList = lazy(() => import("./pages/VagasList"));
+const VagaForm = lazy(() => import("./pages/VagaForm"));
+const VagaDetalhes = lazy(() => import("./pages/VagaDetalhes"));
+const Pipeline = lazy(() => import("./pages/Pipeline"));
+const AvaliacaoForm = lazy(() => import("./pages/AvaliacaoForm"));
+const TestsPage = lazy(() => import("./pages/TestsPage"));
+const ProvaEditor = lazy(() => import("./pages/ProvaEditor"));
+const ProvaAplicacao = lazy(() => import("./pages/ProvaAplicacao"));
+const ResumeParserPage = lazy(() => import("./pages/ResumeParserPage"));
+const CandidatosPage = lazy(() => import("./pages/CandidatosPage"));
+const AnalyticsPage = lazy(() => import("./pages/AnalyticsPage"));
+const ComunicacaoPage = lazy(() => import("./pages/ComunicacaoPage"));
+const AuthPage = lazy(() => import("./pages/AuthPage"));
+const AdminPage = lazy(() => import("./pages/AdminPage"));
+const CandidatoPerfilPage = lazy(() => import("./pages/CandidatoPerfilPage"));
+const AgendaPage = lazy(() => import("./pages/AgendaPage"));
+const IndicacoesPage = lazy(() => import("./pages/IndicacoesPage"));
+const PortalAuthPage = lazy(() => import("./pages/portal/PortalAuthPage"));
+const PortalDashboard = lazy(() => import("./pages/portal/PortalDashboard"));
+const PortalVagas = lazy(() => import("./pages/portal/PortalVagas"));
+const PortalPerfil = lazy(() => import("./pages/portal/PortalPerfil"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+
+// Loading fallback component
+const PageLoader = () => (
+  <div className="min-h-screen flex items-center justify-center">
+    <Loader2 className="h-8 w-8 animate-spin text-primary" />
+  </div>
+);
 
 const queryClient = new QueryClient();
 
@@ -43,36 +54,63 @@ const App = () => (
         <AuthProvider>
           <CandidatoAuthProvider>
             <NotificationProvider>
-              <Routes>
-                {/* Portal do Candidato */}
-                <Route path="/portal" element={<PortalAuthPage />} />
-                <Route path="/portal/dashboard" element={<PortalProtectedRoute><PortalDashboard /></PortalProtectedRoute>} />
-                <Route path="/portal/vagas" element={<PortalProtectedRoute><PortalVagas /></PortalProtectedRoute>} />
-                <Route path="/portal/perfil" element={<PortalProtectedRoute><PortalPerfil /></PortalProtectedRoute>} />
-                
-                {/* Sistema RH */}
-                <Route path="/auth" element={<AuthPage />} />
-                <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-                <Route path="/vagas" element={<ProtectedRoute><VagasList /></ProtectedRoute>} />
-                <Route path="/vagas/nova" element={<ProtectedRoute><VagaForm /></ProtectedRoute>} />
-                <Route path="/vagas/:id" element={<ProtectedRoute><VagaDetalhes /></ProtectedRoute>} />
-                <Route path="/vagas/:id/editar" element={<ProtectedRoute><VagaForm /></ProtectedRoute>} />
-                <Route path="/pipeline" element={<ProtectedRoute><Pipeline /></ProtectedRoute>} />
-                <Route path="/avaliacao/:processoId" element={<ProtectedRoute><AvaliacaoForm /></ProtectedRoute>} />
-                <Route path="/testes" element={<ProtectedRoute><TestsPage /></ProtectedRoute>} />
-                <Route path="/testes/nova" element={<ProtectedRoute><ProvaEditor /></ProtectedRoute>} />
-                <Route path="/testes/:id/editar" element={<ProtectedRoute><ProvaEditor /></ProtectedRoute>} />
-                <Route path="/testes/:provaId/aplicar" element={<ProtectedRoute><ProvaAplicacao /></ProtectedRoute>} />
-                <Route path="/parser-curriculo" element={<ProtectedRoute><ResumeParserPage /></ProtectedRoute>} />
-                <Route path="/talentos" element={<ProtectedRoute><CandidatosPage /></ProtectedRoute>} />
-                <Route path="/candidato/:id" element={<ProtectedRoute><CandidatoPerfilPage /></ProtectedRoute>} />
-                <Route path="/relatorios" element={<ProtectedRoute requiredRoles={['admin', 'rh']}><AnalyticsPage /></ProtectedRoute>} />
-                <Route path="/comunicacao" element={<ProtectedRoute><ComunicacaoPage /></ProtectedRoute>} />
-                <Route path="/agenda" element={<ProtectedRoute><AgendaPage /></ProtectedRoute>} />
-                <Route path="/indicacoes" element={<ProtectedRoute><IndicacoesPage /></ProtectedRoute>} />
-                <Route path="/admin" element={<ProtectedRoute requiredRoles={['admin']}><AdminPage /></ProtectedRoute>} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
+              <Suspense fallback={<PageLoader />}>
+                <Routes>
+                  {/* Portal do Candidato - Rotas Públicas */}
+                  <Route path="/portal" element={<PortalAuthPage />} />
+                  <Route 
+                    path="/portal/dashboard" 
+                    element={
+                      <PortalProtectedRoute>
+                        <PortalDashboard />
+                      </PortalProtectedRoute>
+                    } 
+                  />
+                  <Route 
+                    path="/portal/vagas" 
+                    element={
+                      <PortalProtectedRoute>
+                        <PortalVagas />
+                      </PortalProtectedRoute>
+                    } 
+                  />
+                  <Route 
+                    path="/portal/perfil" 
+                    element={
+                      <PortalProtectedRoute>
+                        <PortalPerfil />
+                      </PortalProtectedRoute>
+                    } 
+                  />
+
+                  {/* Autenticação */}
+                  <Route path="/auth" element={<AuthPage />} />
+
+                  {/* Rotas Protegidas - Sistema Interno */}
+                  <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+                  <Route path="/vagas" element={<ProtectedRoute><VagasList /></ProtectedRoute>} />
+                  <Route path="/vagas/nova" element={<ProtectedRoute><VagaForm /></ProtectedRoute>} />
+                  <Route path="/vagas/:id" element={<ProtectedRoute><VagaDetalhes /></ProtectedRoute>} />
+                  <Route path="/vagas/:id/editar" element={<ProtectedRoute><VagaForm /></ProtectedRoute>} />
+                  <Route path="/pipeline" element={<ProtectedRoute><Pipeline /></ProtectedRoute>} />
+                  <Route path="/avaliacao/:processoId" element={<ProtectedRoute><AvaliacaoForm /></ProtectedRoute>} />
+                  <Route path="/testes" element={<ProtectedRoute><TestsPage /></ProtectedRoute>} />
+                  <Route path="/testes/nova" element={<ProtectedRoute><ProvaEditor /></ProtectedRoute>} />
+                  <Route path="/testes/:id/editar" element={<ProtectedRoute><ProvaEditor /></ProtectedRoute>} />
+                  <Route path="/testes/:provaId/aplicar" element={<ProtectedRoute><ProvaAplicacao /></ProtectedRoute>} />
+                  <Route path="/parser-curriculo" element={<ProtectedRoute><ResumeParserPage /></ProtectedRoute>} />
+                  <Route path="/talentos" element={<ProtectedRoute><CandidatosPage /></ProtectedRoute>} />
+                  <Route path="/candidato/:id" element={<ProtectedRoute><CandidatoPerfilPage /></ProtectedRoute>} />
+                  <Route path="/relatorios" element={<ProtectedRoute><AnalyticsPage /></ProtectedRoute>} />
+                  <Route path="/comunicacao" element={<ProtectedRoute><ComunicacaoPage /></ProtectedRoute>} />
+                  <Route path="/agenda" element={<ProtectedRoute><AgendaPage /></ProtectedRoute>} />
+                  <Route path="/indicacoes" element={<ProtectedRoute><IndicacoesPage /></ProtectedRoute>} />
+                  <Route path="/admin" element={<ProtectedRoute><AdminPage /></ProtectedRoute>} />
+
+                  {/* 404 */}
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </Suspense>
             </NotificationProvider>
           </CandidatoAuthProvider>
         </AuthProvider>
