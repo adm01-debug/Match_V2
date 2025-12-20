@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Layout } from "@/components/layout/Layout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -9,7 +10,11 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
+import { useVagas } from "@/hooks/useVagas";
 import { 
   Users, 
   Plus, 
@@ -21,23 +26,29 @@ import {
   Share2,
   Copy,
   Mail,
-  TrendingUp,
   User,
   Briefcase,
-  DollarSign
+  DollarSign,
+  Loader2
 } from "lucide-react";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 interface Indicacao {
   id: string;
-  indicador: string;
-  indicadorEmail: string;
-  candidatoNome: string;
-  candidatoEmail: string;
-  candidatoTelefone: string;
-  vaga: string;
+  indicador_user_id: string | null;
+  indicador_nome: string;
+  indicador_email: string;
+  candidato_nome: string;
+  candidato_email: string;
+  candidato_telefone: string | null;
+  vaga_id: string | null;
+  vaga_titulo: string;
+  observacao: string | null;
   status: "pendente" | "em_analise" | "aprovado" | "contratado" | "reprovado";
-  dataCriacao: string;
-  bonus?: number;
+  bonus: number | null;
+  created_at: string;
+  updated_at: string;
 }
 
 const statusConfig = {
@@ -48,74 +59,99 @@ const statusConfig = {
   reprovado: { label: "Reprovado", color: "bg-red-500/20 text-red-400", icon: XCircle },
 };
 
-const mockIndicacoes: Indicacao[] = [
-  {
-    id: "1",
-    indicador: "Maria Santos",
-    indicadorEmail: "maria@empresa.com",
-    candidatoNome: "João Silva",
-    candidatoEmail: "joao@email.com",
-    candidatoTelefone: "(11) 99999-1111",
-    vaga: "Operador de Gravação",
-    status: "contratado",
-    dataCriacao: "15/11/2025",
-    bonus: 500,
-  },
-  {
-    id: "2",
-    indicador: "Carlos Mendes",
-    indicadorEmail: "carlos@empresa.com",
-    candidatoNome: "Ana Paula Costa",
-    candidatoEmail: "ana@email.com",
-    candidatoTelefone: "(11) 99999-2222",
-    vaga: "Auxiliar Administrativo",
-    status: "em_analise",
-    dataCriacao: "10/12/2025",
-  },
-  {
-    id: "3",
-    indicador: "Roberto Oliveira",
-    indicadorEmail: "roberto@empresa.com",
-    candidatoNome: "Lucas Ferreira",
-    candidatoEmail: "lucas@email.com",
-    candidatoTelefone: "(11) 99999-3333",
-    vaga: "Operador de Tampografia",
-    status: "pendente",
-    dataCriacao: "18/12/2025",
-  },
-  {
-    id: "4",
-    indicador: "Maria Santos",
-    indicadorEmail: "maria@empresa.com",
-    candidatoNome: "Pedro Henrique",
-    candidatoEmail: "pedro@email.com",
-    candidatoTelefone: "(11) 99999-4444",
-    vaga: "Operador de Gravação",
-    status: "aprovado",
-    dataCriacao: "05/12/2025",
-  },
-];
-
-const vagasMock = [
-  "Operador de Gravação",
-  "Operador de Tampografia",
-  "Auxiliar Administrativo",
-  "Analista de RH",
-  "Supervisor de Produção",
-];
-
 export default function IndicacoesPage() {
-  const [indicacoes, setIndicacoes] = useState<Indicacao[]>(mockIndicacoes);
+  const queryClient = useQueryClient();
+  const { user } = useAuth();
+  const { data: vagas = [] } = useVagas();
+  
   const [dialogOpen, setDialogOpen] = useState(false);
   const [novaIndicacao, setNovaIndicacao] = useState({
     candidatoNome: "",
     candidatoEmail: "",
     candidatoTelefone: "",
-    vaga: "",
+    vagaId: "",
     observacao: "",
   });
 
   const linkIndicacao = `${window.location.origin}/indicar`;
+
+  // Fetch indicações
+  const { data: indicacoes = [], isLoading } = useQuery({
+    queryKey: ['indicacoes'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('indicacoes')
+        .select('*')
+        .order('created_at', { ascending: false });
+      
+      if (error) throw error;
+      return data as Indicacao[];
+    }
+  });
+
+  // Create mutation
+  const createMutation = useMutation({
+    mutationFn: async (indicacao: {
+      candidatoNome: string;
+      candidatoEmail: string;
+      candidatoTelefone: string;
+      vagaId: string;
+      observacao: string;
+    }) => {
+      const vaga = vagas.find(v => v.id === indicacao.vagaId);
+      
+      const { error } = await supabase.from('indicacoes').insert({
+        indicador_user_id: user?.id || null,
+        indicador_nome: user?.user_metadata?.nome || user?.email || 'Usuário',
+        indicador_email: user?.email || '',
+        candidato_nome: indicacao.candidatoNome,
+        candidato_email: indicacao.candidatoEmail,
+        candidato_telefone: indicacao.candidatoTelefone || null,
+        vaga_id: indicacao.vagaId || null,
+        vaga_titulo: vaga?.titulo || 'Vaga não especificada',
+        observacao: indicacao.observacao || null,
+        status: 'pendente',
+      });
+      
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['indicacoes'] });
+      setDialogOpen(false);
+      setNovaIndicacao({
+        candidatoNome: "",
+        candidatoEmail: "",
+        candidatoTelefone: "",
+        vagaId: "",
+        observacao: "",
+      });
+      toast.success("Indicação registrada com sucesso!");
+    },
+    onError: (error: any) => {
+      toast.error("Erro ao registrar indicação", { description: error.message });
+    }
+  });
+
+  // Update status mutation
+  const updateStatusMutation = useMutation({
+    mutationFn: async ({ id, status }: { id: string; status: Indicacao['status'] }) => {
+      const bonus = status === 'contratado' ? 500 : 0;
+      
+      const { error } = await supabase
+        .from('indicacoes')
+        .update({ status, bonus })
+        .eq('id', id);
+      
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['indicacoes'] });
+      toast.success("Status atualizado");
+    },
+    onError: (error: any) => {
+      toast.error("Erro ao atualizar status", { description: error.message });
+    }
+  });
 
   const totalIndicacoes = indicacoes.length;
   const contratados = indicacoes.filter(i => i.status === "contratado").length;
@@ -134,43 +170,28 @@ export default function IndicacoesPage() {
   };
 
   const handleSubmit = () => {
-    if (!novaIndicacao.candidatoNome || !novaIndicacao.candidatoEmail || !novaIndicacao.vaga) {
+    if (!novaIndicacao.candidatoNome || !novaIndicacao.candidatoEmail || !novaIndicacao.vagaId) {
       toast.error("Preencha os campos obrigatórios");
       return;
     }
-
-    const indicacao: Indicacao = {
-      id: Date.now().toString(),
-      indicador: "Usuário Atual",
-      indicadorEmail: "usuario@empresa.com",
-      candidatoNome: novaIndicacao.candidatoNome,
-      candidatoEmail: novaIndicacao.candidatoEmail,
-      candidatoTelefone: novaIndicacao.candidatoTelefone,
-      vaga: novaIndicacao.vaga,
-      status: "pendente",
-      dataCriacao: new Date().toLocaleDateString("pt-BR"),
-    };
-
-    setIndicacoes([indicacao, ...indicacoes]);
-    setDialogOpen(false);
-    setNovaIndicacao({
-      candidatoNome: "",
-      candidatoEmail: "",
-      candidatoTelefone: "",
-      vaga: "",
-      observacao: "",
-    });
-    toast.success("Indicação registrada com sucesso!");
+    createMutation.mutate(novaIndicacao);
   };
 
-  const handleStatusChange = (id: string, newStatus: Indicacao["status"]) => {
-    setIndicacoes(indicacoes.map(i => 
-      i.id === id 
-        ? { ...i, status: newStatus, bonus: newStatus === "contratado" ? 500 : i.bonus }
-        : i
-    ));
-    toast.success("Status atualizado");
-  };
+  const vagasPublicadas = vagas.filter(v => v.status === 'publicada');
+
+  if (isLoading) {
+    return (
+      <Layout>
+        <div className="space-y-6">
+          <Skeleton className="h-10 w-64" />
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            {[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-24" />)}
+          </div>
+          <Skeleton className="h-64" />
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <Layout>
@@ -231,15 +252,15 @@ export default function IndicacoesPage() {
                 <div className="space-y-2">
                   <Label>Vaga de Interesse *</Label>
                   <Select 
-                    value={novaIndicacao.vaga}
-                    onValueChange={(value) => setNovaIndicacao({...novaIndicacao, vaga: value})}
+                    value={novaIndicacao.vagaId}
+                    onValueChange={(value) => setNovaIndicacao({...novaIndicacao, vagaId: value})}
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Selecione uma vaga..." />
                     </SelectTrigger>
                     <SelectContent>
-                      {vagasMock.map(vaga => (
-                        <SelectItem key={vaga} value={vaga}>{vaga}</SelectItem>
+                      {vagasPublicadas.map(vaga => (
+                        <SelectItem key={vaga.id} value={vaga.id}>{vaga.titulo}</SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
@@ -255,8 +276,12 @@ export default function IndicacoesPage() {
               </div>
               <DialogFooter>
                 <Button variant="outline" onClick={() => setDialogOpen(false)}>Cancelar</Button>
-                <Button onClick={handleSubmit}>
-                  <Users className="h-4 w-4 mr-2" />
+                <Button onClick={handleSubmit} disabled={createMutation.isPending}>
+                  {createMutation.isPending ? (
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  ) : (
+                    <Users className="h-4 w-4 mr-2" />
+                  )}
                   Registrar Indicação
                 </Button>
               </DialogFooter>
@@ -378,20 +403,20 @@ export default function IndicacoesPage() {
                                     <User className="h-5 w-5 text-primary" />
                                   </div>
                                   <div className="min-w-0">
-                                    <h3 className="font-semibold truncate">{indicacao.candidatoNome}</h3>
-                                    <p className="text-sm text-muted-foreground truncate">{indicacao.candidatoEmail}</p>
+                                    <h3 className="font-semibold truncate">{indicacao.candidato_nome}</h3>
+                                    <p className="text-sm text-muted-foreground truncate">{indicacao.candidato_email}</p>
                                   </div>
                                 </div>
                                 <div className="flex flex-wrap gap-2 mt-3">
                                   <Badge variant="outline" className="gap-1">
                                     <Briefcase className="h-3 w-3" />
-                                    {indicacao.vaga}
+                                    {indicacao.vaga_titulo}
                                   </Badge>
                                   <Badge className={statusConfig[indicacao.status].color}>
                                     <StatusIcon className="h-3 w-3 mr-1" />
                                     {statusConfig[indicacao.status].label}
                                   </Badge>
-                                  {indicacao.bonus && (
+                                  {indicacao.bonus && indicacao.bonus > 0 && (
                                     <Badge className="bg-green-500/20 text-green-400">
                                       <DollarSign className="h-3 w-3 mr-1" />
                                       R$ {indicacao.bonus}
@@ -399,13 +424,16 @@ export default function IndicacoesPage() {
                                   )}
                                 </div>
                                 <p className="text-xs text-muted-foreground mt-2">
-                                  Indicado por <span className="font-medium">{indicacao.indicador}</span> em {indicacao.dataCriacao}
+                                  Indicado por <span className="font-medium">{indicacao.indicador_nome}</span> em {format(new Date(indicacao.created_at), "dd/MM/yyyy", { locale: ptBR })}
                                 </p>
                               </div>
                               <div className="shrink-0">
                                 <Select
                                   value={indicacao.status}
-                                  onValueChange={(value) => handleStatusChange(indicacao.id, value as Indicacao["status"])}
+                                  onValueChange={(value) => updateStatusMutation.mutate({ 
+                                    id: indicacao.id, 
+                                    status: value as Indicacao["status"] 
+                                  })}
                                 >
                                   <SelectTrigger className="w-[140px]">
                                     <SelectValue />
@@ -435,38 +463,38 @@ export default function IndicacoesPage() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <TrendingUp className="h-5 w-5" />
+              <Gift className="h-5 w-5 text-primary" />
               Regras do Programa
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="space-y-2">
-                <h4 className="font-semibold">Como Funciona</h4>
-                <ul className="text-sm text-muted-foreground space-y-1">
-                  <li>• Indique pessoas que você conhece</li>
-                  <li>• O RH analisa o perfil indicado</li>
-                  <li>• Acompanhe o status da indicação</li>
-                  <li>• Receba bônus após contratação</li>
-                </ul>
+                <div className="flex items-center gap-2 text-primary font-medium">
+                  <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-sm">1</div>
+                  Indique
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  Indique amigos, familiares ou conhecidos para as vagas disponíveis
+                </p>
               </div>
               <div className="space-y-2">
-                <h4 className="font-semibold">Bônus</h4>
-                <ul className="text-sm text-muted-foreground space-y-1">
-                  <li>• R$ 500 por indicação contratada</li>
-                  <li>• Pagamento após período de experiência</li>
-                  <li>• Sem limite de indicações</li>
-                  <li>• Bônus extra para vagas críticas</li>
-                </ul>
+                <div className="flex items-center gap-2 text-primary font-medium">
+                  <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-sm">2</div>
+                  Acompanhe
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  Acompanhe o status das suas indicações no sistema
+                </p>
               </div>
               <div className="space-y-2">
-                <h4 className="font-semibold">Requisitos</h4>
-                <ul className="text-sm text-muted-foreground space-y-1">
-                  <li>• Indicador deve ser funcionário ativo</li>
-                  <li>• Indicado não pode ter participado antes</li>
-                  <li>• Informações precisas do candidato</li>
-                  <li>• Sem parentesco de 1º grau</li>
-                </ul>
+                <div className="flex items-center gap-2 text-primary font-medium">
+                  <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-sm">3</div>
+                  Receba
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  Receba R$ 500,00 de bônus para cada indicação contratada
+                </p>
               </div>
             </div>
           </CardContent>

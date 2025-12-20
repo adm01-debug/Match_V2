@@ -312,6 +312,65 @@ export type Database = {
           },
         ]
       }
+      indicacoes: {
+        Row: {
+          bonus: number | null
+          candidato_email: string
+          candidato_nome: string
+          candidato_telefone: string | null
+          created_at: string
+          id: string
+          indicador_email: string
+          indicador_nome: string
+          indicador_user_id: string | null
+          observacao: string | null
+          status: string
+          updated_at: string
+          vaga_id: string | null
+          vaga_titulo: string
+        }
+        Insert: {
+          bonus?: number | null
+          candidato_email: string
+          candidato_nome: string
+          candidato_telefone?: string | null
+          created_at?: string
+          id?: string
+          indicador_email: string
+          indicador_nome: string
+          indicador_user_id?: string | null
+          observacao?: string | null
+          status?: string
+          updated_at?: string
+          vaga_id?: string | null
+          vaga_titulo: string
+        }
+        Update: {
+          bonus?: number | null
+          candidato_email?: string
+          candidato_nome?: string
+          candidato_telefone?: string | null
+          created_at?: string
+          id?: string
+          indicador_email?: string
+          indicador_nome?: string
+          indicador_user_id?: string | null
+          observacao?: string | null
+          status?: string
+          updated_at?: string
+          vaga_id?: string | null
+          vaga_titulo?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "indicacoes_vaga_id_fkey"
+            columns: ["vaga_id"]
+            isOneToOne: false
+            referencedRelation: "vagas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       match_scores: {
         Row: {
           analise: string | null
