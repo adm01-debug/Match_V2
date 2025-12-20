@@ -1,3 +1,4 @@
+import { memo, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -33,7 +34,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   return null;
 };
 
-export function EntrevistasChart() {
+export const EntrevistasChart = memo(function EntrevistasChart() {
   const { data: evolucaoData, isLoading: loadingEvolucao } = useEntrevistasEvolucao();
   const { data: pizzaData, isLoading: loadingPizza } = useEntrevistasPizza();
 
@@ -209,4 +210,4 @@ export function EntrevistasChart() {
       </CardContent>
     </Card>
   );
-}
+);
