@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { categoriasInfo } from '@/data/testsData';
+import { categoriasInfo } from '@/config/testsConfig';
 import { CategoriaProva } from '@/types/tests';
 import { Brain, Heart, Code, Globe, Target, Users, LucideIcon } from 'lucide-react';
 
@@ -48,3 +48,4 @@ export function CategoriaCard({ categoria, count, onClick, isSelected }: Categor
     </Card>
   );
 }
+
