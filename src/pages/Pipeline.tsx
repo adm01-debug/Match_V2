@@ -36,7 +36,8 @@ import {
 } from "@dnd-kit/core";
 import { sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 import { CandidatoKanbanCard } from "@/components/pipeline/CandidatoKanbanCard";
-import { Users, Target, Clock, CheckCircle2, Settings, User, Mail, Phone, Calendar, Star } from "lucide-react";
+import { Users, Target, Clock, CheckCircle2, Settings, User, Mail, Phone, Calendar, Star, Filter } from "lucide-react";
+import { Slider } from "@/components/ui/slider";
 import { useToast } from "@/hooks/use-toast";
 import { useNotifications } from "@/contexts/NotificationContext";
 import { cn } from "@/lib/utils";
@@ -49,6 +50,7 @@ export default function Pipeline() {
   const { toast } = useToast();
   const { notifyStageChange } = useNotifications();
   const [selectedVaga, setSelectedVaga] = useState<string>(vagaIdParam || "todas");
+  const [minMatchScore, setMinMatchScore] = useState<number>(0);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [selectedProcesso, setSelectedProcesso] = useState<ProcessoSeletivo | null>(null);
 
@@ -68,11 +70,20 @@ export default function Pipeline() {
     })
   );
 
-  // Filter processes by selected job
+  // Filter processes by selected job and match score
   const filteredProcessos = useMemo(() => {
-    if (selectedVaga === "todas") return processosDB;
-    return processosDB.filter((p) => p.vagaId === selectedVaga || p.vagaTitulo.toLowerCase().includes(selectedVaga.toLowerCase()));
-  }, [processosDB, selectedVaga]);
+    let filtered = processosDB;
+    
+    if (selectedVaga !== "todas") {
+      filtered = filtered.filter((p) => p.vagaId === selectedVaga || p.vagaTitulo.toLowerCase().includes(selectedVaga.toLowerCase()));
+    }
+    
+    if (minMatchScore > 0) {
+      filtered = filtered.filter((p) => p.matchScore >= minMatchScore);
+    }
+    
+    return filtered;
+  }, [processosDB, selectedVaga, minMatchScore]);
 
   // Group processes by stage
   const processosByEtapa = useMemo(() => {
@@ -151,7 +162,7 @@ export default function Pipeline() {
             </div>
             <div className="flex items-center gap-3">
               <Select value={selectedVaga} onValueChange={setSelectedVaga}>
-                <SelectTrigger className="w-[250px]">
+                <SelectTrigger className="w-[220px]">
                   <SelectValue placeholder="Filtrar por vaga" />
                 </SelectTrigger>
                 <SelectContent className="bg-popover">
@@ -165,6 +176,19 @@ export default function Pipeline() {
                     ))}
                 </SelectContent>
               </Select>
+              <div className="flex items-center gap-2 px-3 py-2 border rounded-md bg-background min-w-[200px]">
+                <Filter className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                <Slider
+                  value={[minMatchScore]}
+                  onValueChange={(value) => setMinMatchScore(value[0])}
+                  max={100}
+                  step={5}
+                  className="flex-1"
+                />
+                <span className="text-sm font-medium w-12 text-right">
+                  {minMatchScore > 0 ? `≥${minMatchScore}%` : "Todos"}
+                </span>
+              </div>
               <Button variant="outline" size="icon">
                 <Settings className="h-4 w-4" />
               </Button>
