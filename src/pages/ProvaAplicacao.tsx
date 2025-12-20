@@ -1,453 +1,172 @@
-import { useState, useCallback, useMemo } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { Layout } from '@/components/layout/Layout';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Separator } from '@/components/ui/separator';
-import { ProvaTimer } from '@/components/tests/ProvaTimer';
-import { QuestaoAplicacao } from '@/components/tests/QuestaoAplicacao';
-import { ResultadoProvaView } from '@/components/tests/ResultadoProvaView';
-import { todasProvas, categoriasInfo } from '@/data/testsData';
-import { Questao, Prova, ResultadoProva } from '@/types/tests';
-import { useToast } from '@/hooks/use-toast';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { 
-  ArrowLeft, 
-  ArrowRight, 
-  Play, 
-  Send, 
-  Clock, 
-  FileText,
-  CheckCircle,
-  AlertTriangle,
-  User,
-  Building
-} from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { useState, useEffect } from "react";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
+import { Layout } from "@/components/layout/Layout";
+import { useProvas, useProva } from "@/hooks/useProvas";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { ArrowLeft, ArrowRight, Clock, CheckCircle2, AlertCircle, Send, Timer, FileText } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast";
 
-// Questões de demonstração para a prova
-const questoesDemo: Questao[] = [
-  {
-    id: 'demo-1',
-    enunciado: 'Qual é o resultado da expressão: 2 + 2 * 3?',
-    tipo: 'multipla_escolha',
-    alternativas: ['12', '8', '10', '6'],
-    respostaCorreta: 1,
-    pontuacao: 10,
-    dificuldade: 'facil'
-  },
-  {
-    id: 'demo-2',
-    enunciado: 'Em JavaScript, o operador "===" compara valor e tipo.',
-    tipo: 'verdadeiro_falso',
-    alternativas: ['Verdadeiro', 'Falso'],
-    respostaCorreta: 0,
-    pontuacao: 10,
-    dificuldade: 'facil'
-  },
-  {
-    id: 'demo-3',
-    enunciado: 'Qual estrutura de dados utiliza o conceito LIFO (Last In, First Out)?',
-    tipo: 'multipla_escolha',
-    alternativas: ['Fila (Queue)', 'Pilha (Stack)', 'Lista Encadeada', 'Árvore Binária'],
-    respostaCorreta: 1,
-    pontuacao: 15,
-    dificuldade: 'medio'
-  },
-  {
-    id: 'demo-4',
-    enunciado: 'O que significa SQL?',
-    tipo: 'multipla_escolha',
-    alternativas: [
-      'Structured Query Language', 
-      'Simple Question Language', 
-      'Standard Query Logic',
-      'System Query Language'
-    ],
-    respostaCorreta: 0,
-    pontuacao: 10,
-    dificuldade: 'facil'
-  },
-  {
-    id: 'demo-5',
-    enunciado: 'Uma função recursiva sempre precisa de um caso base para evitar loop infinito.',
-    tipo: 'verdadeiro_falso',
-    alternativas: ['Verdadeiro', 'Falso'],
-    respostaCorreta: 0,
-    pontuacao: 10,
-    dificuldade: 'medio'
-  },
-  {
-    id: 'demo-6',
-    enunciado: 'Qual a complexidade de tempo média para busca em uma tabela hash?',
-    tipo: 'multipla_escolha',
-    alternativas: ['O(n)', 'O(log n)', 'O(1)', 'O(n²)'],
-    respostaCorreta: 2,
-    pontuacao: 20,
-    dificuldade: 'dificil'
-  },
-  {
-    id: 'demo-7',
-    enunciado: 'Explique com suas palavras a diferença entre programação síncrona e assíncrona.',
-    tipo: 'dissertativa',
-    pontuacao: 25,
-    dificuldade: 'medio'
-  }
-];
-
-type AplicacaoStatus = 'inicio' | 'em_andamento' | 'finalizada';
+interface Questao { id: string; texto: string; tipo: 'multipla_escolha' | 'verdadeiro_falso' | 'dissertativa'; opcoes: string[]; pontos: number; }
 
 export default function ProvaAplicacao() {
-  const { provaId } = useParams();
+  const { id } = useParams();
+  const [searchParams] = useSearchParams();
+  const processoId = searchParams.get('processo');
+  const candidatoId = searchParams.get('candidato');
   const navigate = useNavigate();
   const { toast } = useToast();
-  
-  const prova = todasProvas.find(p => p.id === provaId) || todasProvas[0];
-  const questoes = questoesDemo;
-  
-  const [status, setStatus] = useState<AplicacaoStatus>('inicio');
+  const { data: prova, isLoading } = useProva(id);
+  const { iniciarProva, salvarRespostas, finalizarProva } = useProvas();
+
+  const [resultadoId, setResultadoId] = useState<string | null>(null);
   const [questaoAtual, setQuestaoAtual] = useState(0);
-  const [respostas, setRespostas] = useState<(string | number | null)[]>(
-    new Array(questoes.length).fill(null)
-  );
-  const [resultado, setResultado] = useState<ResultadoProva | null>(null);
-  const [showConfirmFinish, setShowConfirmFinish] = useState(false);
-  const [tempoInicio, setTempoInicio] = useState<Date | null>(null);
+  const [respostas, setRespostas] = useState<Record<string, number | string>>({});
+  const [tempoRestante, setTempoRestante] = useState<number | null>(null);
+  const [iniciada, setIniciada] = useState(false);
+  const [finalizada, setFinalizada] = useState(false);
+  const [salvando, setSalvando] = useState(false);
 
-  // Calcular progresso
-  const questoesRespondidas = respostas.filter(r => r !== null && r !== '').length;
-  const progressoPercentual = (questoesRespondidas / questoes.length) * 100;
+  const questoes: Questao[] = prova?.questoes as Questao[] || [];
 
-  const handleResponder = useCallback((resposta: string | number) => {
-    setRespostas(prev => {
-      const newRespostas = [...prev];
-      newRespostas[questaoAtual] = resposta;
-      return newRespostas;
-    });
-  }, [questaoAtual]);
+  useEffect(() => {
+    if (!iniciada || finalizada || tempoRestante === null) return;
+    const timer = setInterval(() => {
+      setTempoRestante(prev => {
+        if (prev === null || prev <= 0) { clearInterval(timer); handleFinalizar(); return 0; }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [iniciada, finalizada, tempoRestante]);
 
-  const handleIniciarProva = () => {
-    setStatus('em_andamento');
-    setTempoInicio(new Date());
-    toast({
-      title: "Prova iniciada!",
-      description: `Você tem ${prova?.duracao || 30} minutos para completar.`
-    });
+  const formatarTempo = (segundos: number) => {
+    const mins = Math.floor(segundos / 60);
+    const secs = segundos % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
-  const calcularResultado = useCallback((): ResultadoProva => {
-    const tempoFim = new Date();
-    const tempoGasto = tempoInicio 
-      ? Math.floor((tempoFim.getTime() - tempoInicio.getTime()) / 1000)
-      : 0;
-    
-    let totalPontos = 0;
-    const respostasAvaliadas = questoes.map((questao, index) => {
-      const resposta = respostas[index];
-      let correta = false;
-      let pontos = 0;
-      
-      if (questao.tipo === 'multipla_escolha' || questao.tipo === 'verdadeiro_falso') {
-        correta = resposta === questao.respostaCorreta;
-        pontos = correta ? questao.pontuacao : 0;
-      } else {
-        // Dissertativa/prática: pontuação pendente
-        pontos = 0;
-        correta = false;
-      }
-      
-      totalPontos += pontos;
-      
-      return {
-        questaoId: questao.id,
-        resposta: resposta as string | number,
-        correta,
-        pontos
-      };
-    });
-
-    const pontuacaoMaxima = questoes.reduce((sum, q) => sum + q.pontuacao, 0);
-    const percentual = (totalPontos / pontuacaoMaxima) * 100;
-    
-    return {
-      id: `res-${Date.now()}`,
-      provaId: prova?.id || '',
-      candidatoId: 'candidato-demo',
-      nota: totalPontos,
-      percentual,
-      tempoGasto,
-      respostas: respostasAvaliadas,
-      iniciadoEm: tempoInicio?.toISOString() || '',
-      finalizadoEm: tempoFim.toISOString(),
-      status: percentual >= (prova?.notaMinima || 60) ? 'aprovado' : 'reprovado'
-    };
-  }, [questoes, respostas, tempoInicio, prova]);
-
-  const handleFinalizarProva = () => {
-    const res = calcularResultado();
-    setResultado(res);
-    setStatus('finalizada');
-    toast({
-      title: res.status === 'aprovado' ? "Parabéns!" : "Prova finalizada",
-      description: res.status === 'aprovado' 
-        ? `Você foi aprovado com ${res.percentual.toFixed(0)}%!`
-        : `Sua nota foi ${res.percentual.toFixed(0)}%. Continue estudando!`
-    });
-    setShowConfirmFinish(false);
+  const handleIniciar = async () => {
+    if (!id || !candidatoId) { toast({ title: "Erro", description: "Dados incompletos", variant: "destructive" }); return; }
+    try {
+      const resultado = await iniciarProva(id, candidatoId, processoId || undefined);
+      setResultadoId(resultado.id);
+      setTempoRestante((prova?.duracao_minutos || 60) * 60);
+      setIniciada(true);
+    } catch { toast({ title: "Erro", description: "Erro ao iniciar", variant: "destructive" }); }
   };
 
-  const handleTimeUp = useCallback(() => {
-    toast({
-      title: "Tempo esgotado!",
-      description: "A prova será finalizada automaticamente.",
-      variant: "destructive"
-    });
-    handleFinalizarProva();
-  }, []);
+  const handleSalvarResposta = (questaoId: string, valor: number | string) => setRespostas(prev => ({ ...prev, [questaoId]: valor }));
+  const handleProxima = () => { if (questaoAtual < questoes.length - 1) setQuestaoAtual(prev => prev + 1); };
+  const handleAnterior = () => { if (questaoAtual > 0) setQuestaoAtual(prev => prev - 1); };
 
-  // Tela inicial
-  if (status === 'inicio') {
-    const categoriaInfo = prova ? categoriasInfo[prova.categoria] : null;
-    
+  const handleSalvarProgresso = async () => {
+    if (!resultadoId) return;
+    setSalvando(true);
+    try {
+      await salvarRespostas(resultadoId, Object.entries(respostas).map(([questao_id, resposta]) => ({ questao_id, resposta })));
+      toast({ title: "Salvo", description: "Progresso salvo" });
+    } catch { toast({ title: "Erro", variant: "destructive" }); }
+    finally { setSalvando(false); }
+  };
+
+  const handleFinalizar = async () => {
+    if (!resultadoId) return;
+    const respondidas = Object.keys(respostas).length;
+    if (respondidas < questoes.length && !confirm(`Respondeu ${respondidas}/${questoes.length}. Finalizar?`)) return;
+    setSalvando(true);
+    try {
+      const resultado = await finalizarProva(resultadoId, Object.entries(respostas).map(([questao_id, resposta]) => ({ questao_id, resposta })));
+      setFinalizada(true);
+      toast({ title: resultado.status === 'aprovado' ? "Parabéns!" : "Finalizado", description: `Nota: ${resultado.nota.toFixed(1)}%`, variant: resultado.status === 'aprovado' ? 'default' : 'destructive' });
+    } catch { toast({ title: "Erro", variant: "destructive" }); }
+    finally { setSalvando(false); }
+  };
+
+  if (isLoading) return <Layout title="Prova"><div className="p-6"><Skeleton className="h-64" /></div></Layout>;
+  if (!prova) return <Layout title="Não encontrada"><div className="p-6 text-center"><AlertCircle className="h-12 w-12 mx-auto mb-4" /><p>Prova não encontrada</p><Button onClick={() => navigate(-1)} className="mt-4">Voltar</Button></div></Layout>;
+
+  if (!iniciada) {
     return (
-      <Layout>
-        <div className="max-w-2xl mx-auto space-y-6">
-          <Button variant="ghost" onClick={() => navigate('/testes')}>
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Voltar
-          </Button>
-
+      <Layout title={prova.titulo}>
+        <div className="p-6 max-w-2xl mx-auto space-y-6">
+          <Button variant="ghost" onClick={() => navigate(-1)}><ArrowLeft className="h-4 w-4 mr-2" />Voltar</Button>
           <Card>
-            <CardHeader className="text-center">
-              <div className={cn(
-                "w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center",
-                categoriaInfo?.cor || "bg-primary"
-              )}>
-                <FileText className="h-8 w-8 text-white" />
+            <CardHeader><CardTitle className="text-2xl">{prova.titulo}</CardTitle><CardDescription>{prova.descricao}</CardDescription></CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex items-center gap-2"><FileText className="h-5 w-5" /><div><p className="font-medium">{prova.total_questoes}</p><p className="text-xs text-muted-foreground">Questões</p></div></div>
+                <div className="flex items-center gap-2"><Clock className="h-5 w-5" /><div><p className="font-medium">{prova.duracao_minutos} min</p><p className="text-xs text-muted-foreground">Duração</p></div></div>
+                <div className="flex items-center gap-2"><CheckCircle2 className="h-5 w-5" /><div><p className="font-medium">{prova.nota_minima}%</p><p className="text-xs text-muted-foreground">Nota mínima</p></div></div>
+                <div className="flex items-center gap-2"><Timer className="h-5 w-5" /><div><p className="font-medium">{prova.pontuacao_maxima}</p><p className="text-xs text-muted-foreground">Pontos</p></div></div>
               </div>
-              <CardTitle className="text-2xl">{prova?.titulo}</CardTitle>
-              <CardDescription className="text-base mt-2">
-                {prova?.descricao}
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="grid grid-cols-2 gap-4 text-center">
-                <div className="p-4 rounded-lg bg-muted">
-                  <Clock className="h-6 w-6 mx-auto text-muted-foreground mb-2" />
-                  <p className="text-2xl font-bold">{prova?.duracao || 30}</p>
-                  <p className="text-sm text-muted-foreground">minutos</p>
-                </div>
-                <div className="p-4 rounded-lg bg-muted">
-                  <FileText className="h-6 w-6 mx-auto text-muted-foreground mb-2" />
-                  <p className="text-2xl font-bold">{questoes.length}</p>
-                  <p className="text-sm text-muted-foreground">questões</p>
-                </div>
-              </div>
-
-              <Separator />
-
-              <div className="space-y-3">
-                <h4 className="font-medium">Informações do Candidato</h4>
-                <div className="flex items-center gap-3 p-3 rounded-lg bg-muted">
-                  <User className="h-5 w-5 text-muted-foreground" />
-                  <div>
-                    <p className="font-medium">João Silva</p>
-                    <p className="text-sm text-muted-foreground">joao.silva@email.com</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3 p-3 rounded-lg bg-muted">
-                  <Building className="h-5 w-5 text-muted-foreground" />
-                  <div>
-                    <p className="font-medium">Desenvolvedor Full Stack</p>
-                    <p className="text-sm text-muted-foreground">Vaga #12345</p>
-                  </div>
-                </div>
-              </div>
-
-              <Separator />
-
-              <div className="space-y-2 text-sm text-muted-foreground">
-                <p className="flex items-center gap-2">
-                  <CheckCircle className="h-4 w-4 text-green-500" />
-                  Nota mínima para aprovação: {prova?.notaMinima || 60}%
-                </p>
-                <p className="flex items-center gap-2">
-                  <AlertTriangle className="h-4 w-4 text-yellow-500" />
-                  O tempo começará a contar ao iniciar a prova
-                </p>
-                <p className="flex items-center gap-2">
-                  <AlertTriangle className="h-4 w-4 text-yellow-500" />
-                  Não é possível pausar após iniciar
-                </p>
-              </div>
-
-              <Button className="w-full" size="lg" onClick={handleIniciarProva}>
-                <Play className="h-5 w-5 mr-2" />
-                Iniciar Prova
-              </Button>
+              <Alert><AlertCircle className="h-4 w-4" /><AlertDescription>Ao iniciar, o cronômetro começará. Salve o progresso regularmente.</AlertDescription></Alert>
             </CardContent>
+            <CardFooter><Button onClick={handleIniciar} className="w-full" size="lg">Iniciar Prova</Button></CardFooter>
           </Card>
         </div>
       </Layout>
     );
   }
 
-  // Tela de resultado
-  if (status === 'finalizada' && resultado && prova) {
+  if (finalizada) {
     return (
-      <Layout>
-        <div className="max-w-3xl mx-auto">
-          <ResultadoProvaView
-            prova={prova}
-            resultado={resultado}
-            questoes={questoes}
-            onVoltar={() => navigate('/testes')}
-          />
+      <Layout title="Prova Finalizada">
+        <div className="p-6 max-w-2xl mx-auto text-center space-y-6">
+          <CheckCircle2 className="h-16 w-16 mx-auto text-green-500" />
+          <h1 className="text-2xl font-bold">Prova Finalizada!</h1>
+          <p className="text-muted-foreground">Respostas enviadas com sucesso.</p>
+          <Button onClick={() => navigate(-1)}>Voltar</Button>
         </div>
       </Layout>
     );
   }
 
-  // Tela de aplicação
+  const questao = questoes[questaoAtual];
+  const progresso = (Object.keys(respostas).length / questoes.length) * 100;
+  const tempoAlerta = tempoRestante !== null && tempoRestante < 300;
+
   return (
-    <Layout>
-      <div className="space-y-4">
-        {/* Header fixo */}
-        <div className="sticky top-0 z-10 bg-background/95 backdrop-blur border-b -mx-4 px-4 py-3">
-          <div className="flex items-center justify-between gap-4 flex-wrap">
-            <div>
-              <h1 className="font-bold text-lg">{prova?.titulo}</h1>
-              <p className="text-sm text-muted-foreground">
-                Questão {questaoAtual + 1} de {questoes.length}
-              </p>
-            </div>
-            
-            <div className="flex items-center gap-3">
-              <ProvaTimer 
-                duracaoMinutos={prova?.duracao || 30} 
-                onTimeUp={handleTimeUp} 
-              />
-              <Button 
-                variant="destructive"
-                onClick={() => setShowConfirmFinish(true)}
-              >
-                <Send className="h-4 w-4 mr-2" />
-                Finalizar
-              </Button>
-            </div>
-          </div>
-          
-          <div className="mt-3">
-            <div className="flex items-center justify-between text-sm mb-1">
-              <span className="text-muted-foreground">
-                {questoesRespondidas} de {questoes.length} respondidas
-              </span>
-              <span className="font-medium">{progressoPercentual.toFixed(0)}%</span>
-            </div>
-            <Progress value={progressoPercentual} className="h-2" />
+    <Layout title={prova.titulo}>
+      <div className="p-6 max-w-3xl mx-auto space-y-6">
+        <div className="flex items-center justify-between">
+          <div><h1 className="text-xl font-bold">{prova.titulo}</h1><p className="text-sm text-muted-foreground">Questão {questaoAtual + 1} de {questoes.length}</p></div>
+          <div className={cn("flex items-center gap-2 px-4 py-2 rounded-lg font-mono text-lg", tempoAlerta ? "bg-red-100 text-red-700" : "bg-muted")}>
+            <Clock className={cn("h-5 w-5", tempoAlerta && "animate-pulse")} />{tempoRestante !== null && formatarTempo(tempoRestante)}
           </div>
         </div>
-
-        {/* Navegação por questões */}
-        <div className="flex gap-2 flex-wrap">
-          {questoes.map((_, index) => {
-            const respondida = respostas[index] !== null && respostas[index] !== '';
-            const atual = index === questaoAtual;
-            
-            return (
-              <Button
-                key={index}
-                variant={atual ? "default" : respondida ? "secondary" : "outline"}
-                size="sm"
-                className={cn(
-                  "w-10 h-10",
-                  respondida && !atual && "bg-green-500/20 hover:bg-green-500/30"
-                )}
-                onClick={() => setQuestaoAtual(index)}
-              >
-                {index + 1}
-              </Button>
-            );
-          })}
+        <div className="space-y-2"><div className="flex justify-between text-sm"><span>{Object.keys(respostas).length} respondidas</span><span>{Math.round(progresso)}%</span></div><Progress value={progresso} className="h-2" /></div>
+        <div className="flex flex-wrap gap-2">
+          {questoes.map((q, i) => (<Button key={q.id} variant={questaoAtual === i ? "default" : respostas[q.id] !== undefined ? "secondary" : "outline"} size="sm" className="w-10 h-10" onClick={() => setQuestaoAtual(i)}>{i + 1}</Button>))}
         </div>
-
-        {/* Questão atual */}
-        <QuestaoAplicacao
-          questao={questoes[questaoAtual]}
-          index={questaoAtual}
-          totalQuestoes={questoes.length}
-          resposta={respostas[questaoAtual]}
-          onResponder={handleResponder}
-        />
-
-        {/* Navegação */}
-        <div className="flex justify-between gap-4">
-          <Button
-            variant="outline"
-            disabled={questaoAtual === 0}
-            onClick={() => setQuestaoAtual(prev => prev - 1)}
-          >
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Anterior
-          </Button>
-          
-          {questaoAtual < questoes.length - 1 ? (
-            <Button
-              onClick={() => setQuestaoAtual(prev => prev + 1)}
-            >
-              Próxima
-              <ArrowRight className="h-4 w-4 ml-2" />
-            </Button>
-          ) : (
-            <Button
-              variant="default"
-              onClick={() => setShowConfirmFinish(true)}
-            >
-              <Send className="h-4 w-4 mr-2" />
-              Finalizar Prova
-            </Button>
-          )}
-        </div>
-      </div>
-
-      {/* Dialog de confirmação */}
-      <AlertDialog open={showConfirmFinish} onOpenChange={setShowConfirmFinish}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Finalizar Prova?</AlertDialogTitle>
-            <AlertDialogDescription className="space-y-2">
-              <p>
-                Você respondeu {questoesRespondidas} de {questoes.length} questões.
-              </p>
-              {questoesRespondidas < questoes.length && (
-                <p className="text-yellow-600">
-                  Atenção: {questoes.length - questoesRespondidas} questão(ões) não foi(ram) respondida(s).
-                </p>
+        {questao && (
+          <Card>
+            <CardHeader><div className="flex items-center justify-between"><Badge variant="outline">{questao.tipo.replace('_', ' ')}</Badge><span className="text-sm text-muted-foreground">{questao.pontos} pts</span></div><CardTitle className="text-lg mt-2">{questao.texto}</CardTitle></CardHeader>
+            <CardContent>
+              {questao.tipo === 'dissertativa' ? (
+                <Textarea placeholder="Digite sua resposta..." value={respostas[questao.id] as string || ''} onChange={(e) => handleSalvarResposta(questao.id, e.target.value)} rows={6} />
+              ) : (
+                <RadioGroup value={respostas[questao.id]?.toString() || ''} onValueChange={(v) => handleSalvarResposta(questao.id, parseInt(v))}>
+                  {questao.opcoes.map((opcao, i) => (<div key={i} className="flex items-center space-x-3 p-3 rounded-lg hover:bg-muted"><RadioGroupItem value={i.toString()} id={`op-${i}`} /><Label htmlFor={`op-${i}`} className="flex-1 cursor-pointer">{opcao}</Label></div>))}
+                </RadioGroup>
               )}
-              <p>
-                Após finalizar, não será possível alterar suas respostas.
-              </p>
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Continuar Respondendo</AlertDialogCancel>
-            <AlertDialogAction onClick={handleFinalizarProva}>
-              Finalizar Prova
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+            </CardContent>
+            <CardFooter className="flex justify-between">
+              <Button variant="outline" onClick={handleAnterior} disabled={questaoAtual === 0}><ArrowLeft className="h-4 w-4 mr-2" />Anterior</Button>
+              <Button variant="outline" onClick={handleSalvarProgresso} disabled={salvando}>{salvando ? "Salvando..." : "Salvar"}</Button>
+              {questaoAtual === questoes.length - 1 ? <Button onClick={handleFinalizar} disabled={salvando}><Send className="h-4 w-4 mr-2" />Finalizar</Button> : <Button onClick={handleProxima}>Próxima<ArrowRight className="h-4 w-4 ml-2" /></Button>}
+            </CardFooter>
+          </Card>
+        )}
+      </div>
     </Layout>
   );
 }
