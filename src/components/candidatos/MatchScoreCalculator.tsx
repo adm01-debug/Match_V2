@@ -1,30 +1,21 @@
-import { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useToast } from '@/hooks/use-toast';
-import { Loader2, Target, ArrowRight, Save } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
-import { MatchScoreCard } from './MatchScoreCard';
-import { vagas } from '@/data/mockData';
+import { useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useVagas } from "@/hooks/useVagas";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Progress } from "@/components/ui/progress";
+import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Calculator, Star, CheckCircle2, XCircle, AlertCircle, Sparkles, TrendingUp } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast";
 
-interface ParsedResume {
-  nome: string;
-  email: string;
-  telefone: string;
-  experiencias: {
-    empresa: string;
-    cargo: string;
-    periodo: string;
-    descricao: string;
-  }[];
-  habilidades: string[];
-  formacao: {
-    instituicao: string;
-    curso: string;
-    periodo: string;
-  }[];
-  resumo: string;
+interface MatchScoreCalculatorProps {
+  candidatoId: string;
+  candidatoNome?: string;
+  onScoreCalculated?: (score: number) => void;
 }
 
 interface MatchResult {
@@ -36,242 +27,248 @@ interface MatchResult {
   habilidadesFaltantes: string[];
   habilidadesExtras: string[];
   analise: string;
-  recomendacao: 'forte' | 'moderado' | 'fraco' | 'nao_recomendado';
+  recomendacao: string;
   pontosFortes: string[];
   pontosAtencao: string[];
 }
 
-interface MatchScoreCalculatorProps {
-  candidatoData: ParsedResume;
-  candidatoId?: string;
-  onMatchSaved?: () => void;
-}
-
-export function MatchScoreCalculator({ candidatoData, candidatoId, onMatchSaved }: MatchScoreCalculatorProps) {
+export function MatchScoreCalculator({ candidatoId, candidatoNome, onScoreCalculated }: MatchScoreCalculatorProps) {
   const { toast } = useToast();
-  const [selectedVagaId, setSelectedVagaId] = useState<string>('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
-  const [matchResult, setMatchResult] = useState<MatchResult | null>(null);
+  const { data: vagas = [], isLoading: loadingVagas } = useVagas();
+  
+  const [vagaSelecionada, setVagaSelecionada] = useState<string>("");
+  const [calculando, setCalculando] = useState(false);
+  const [resultado, setResultado] = useState<MatchResult | null>(null);
+  const [erro, setErro] = useState<string | null>(null);
 
-  const vagasAbertas = vagas.filter(v => v.status === 'publicada' || v.status === 'aprovada');
-  const selectedVaga = vagas.find(v => v.id === selectedVagaId);
+  // Filtrar apenas vagas ativas
+  const vagasAtivas = vagas.filter(v => ['publicada', 'em_selecao'].includes(v.status));
 
-  const calculateMatch = async () => {
-    if (!selectedVaga) {
-      toast({
-        title: "Selecione uma vaga",
-        description: "Escolha uma vaga para calcular a compatibilidade.",
-        variant: "destructive",
-      });
+  const handleCalcular = async () => {
+    if (!vagaSelecionada) {
+      toast({ title: "Atenção", description: "Selecione uma vaga", variant: "destructive" });
       return;
     }
 
-    setIsLoading(true);
-    setMatchResult(null);
+    setCalculando(true);
+    setErro(null);
+    setResultado(null);
 
     try {
-      const parseRequisitos = (texto: string): string[] => {
-        return texto
-          .split(/[,;\n]/)
-          .map(r => r.trim())
-          .filter(r => r.length > 0);
-      };
-
-      const vagaRequisitos = {
-        titulo: selectedVaga.titulo,
-        departamento: selectedVaga.departamento,
-        nivel: 'pleno',
-        habilidadesObrigatorias: [
-          ...parseRequisitos(selectedVaga.requisitosObrigatorios),
-          ...selectedVaga.skillsAvaliacao
-        ],
-        habilidadesDesejaveis: parseRequisitos(selectedVaga.requisitosDesejaveis),
-        experienciaMinima: 2,
-        formacaoMinima: 'Superior completo',
-        descricao: selectedVaga.responsabilidades,
-      };
-
       const { data, error } = await supabase.functions.invoke('match-score', {
-        body: { 
-          vaga: vagaRequisitos, 
-          candidato: candidatoData 
-        },
-      });
-
-      if (error) throw new Error(error.message);
-      if (!data.success) throw new Error(data.error || 'Erro ao calcular match score');
-
-      setMatchResult(data.data);
-
-      toast({
-        title: "Match Score Calculado!",
-        description: `Compatibilidade: ${data.data.scoreTotal}% - ${data.data.recomendacao}`,
-      });
-    } catch (error) {
-      console.error('Error calculating match:', error);
-      toast({
-        title: "Erro ao calcular",
-        description: error instanceof Error ? error.message : "Não foi possível calcular o match score.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const saveMatchScore = async () => {
-    if (!matchResult || !selectedVaga || !candidatoId) {
-      toast({
-        title: "Erro",
-        description: "Dados incompletos para salvar o match score.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    setIsSaving(true);
-
-    try {
-      const { error } = await supabase.from('match_scores').insert({
-        candidato_id: candidatoId,
-        vaga_id: selectedVaga.id,
-        vaga_titulo: selectedVaga.titulo,
-        score_total: matchResult.scoreTotal,
-        score_habilidades: matchResult.scoreHabilidades,
-        score_experiencia: matchResult.scoreExperiencia,
-        score_formacao: matchResult.scoreFormacao,
-        habilidades_match: matchResult.habilidadesMatch,
-        habilidades_faltantes: matchResult.habilidadesFaltantes,
-        habilidades_extras: matchResult.habilidadesExtras,
-        analise: matchResult.analise,
-        recomendacao: matchResult.recomendacao,
-        pontos_fortes: matchResult.pontosFortes,
-        pontos_atencao: matchResult.pontosAtencao,
+        body: { candidatoId, vagaId: vagaSelecionada }
       });
 
       if (error) throw error;
 
-      toast({
-        title: "Match Score salvo!",
-        description: `Score de ${matchResult.scoreTotal}% para ${selectedVaga.titulo} foi salvo.`,
+      setResultado(data as MatchResult);
+      onScoreCalculated?.(data.scoreTotal);
+
+      // Salvar no banco
+      await supabase.from('match_scores').insert({
+        candidato_id: candidatoId,
+        vaga_id: vagaSelecionada,
+        score_total: data.scoreTotal,
+        score_habilidades: data.scoreHabilidades,
+        score_experiencia: data.scoreExperiencia,
+        score_formacao: data.scoreFormacao,
+        habilidades_match: data.habilidadesMatch,
+        habilidades_faltantes: data.habilidadesFaltantes,
+        analise: data.analise,
+        recomendacao: data.recomendacao,
       });
 
-      onMatchSaved?.();
-    } catch (error) {
-      console.error('Error saving match score:', error);
-      toast({
-        title: "Erro ao salvar",
-        description: "Não foi possível salvar o match score.",
-        variant: "destructive",
-      });
+      toast({ title: "Sucesso", description: `Match Score: ${data.scoreTotal}%` });
+    } catch (err: any) {
+      setErro(err.message || "Erro ao calcular match score");
+      toast({ title: "Erro", description: "Falha ao calcular", variant: "destructive" });
     } finally {
-      setIsSaving(false);
+      setCalculando(false);
     }
   };
 
+  const getScoreColor = (score: number) => {
+    if (score >= 80) return "text-green-600";
+    if (score >= 60) return "text-amber-600";
+    return "text-red-600";
+  };
+
+  const getScoreBg = (score: number) => {
+    if (score >= 80) return "bg-green-100";
+    if (score >= 60) return "bg-amber-100";
+    return "bg-red-100";
+  };
+
+  const getRecomendacaoIcon = (recomendacao: string) => {
+    if (recomendacao.toLowerCase().includes('altamente')) return <Star className="h-5 w-5 text-green-500" />;
+    if (recomendacao.toLowerCase().includes('recomendado')) return <CheckCircle2 className="h-5 w-5 text-blue-500" />;
+    if (recomendacao.toLowerCase().includes('considera')) return <AlertCircle className="h-5 w-5 text-amber-500" />;
+    return <XCircle className="h-5 w-5 text-red-500" />;
+  };
+
+  if (loadingVagas) {
+    return <Skeleton className="h-48" />;
+  }
+
   return (
-    <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Target className="h-5 w-5 text-primary" />
-            Calcular Match Score
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex flex-col md:flex-row gap-4 items-end">
-            <div className="flex-1">
-              <label className="text-sm font-medium mb-2 block">Candidato</label>
-              <div className="p-3 bg-muted rounded-lg">
-                <p className="font-medium">{candidatoData.nome}</p>
-                <p className="text-sm text-muted-foreground">
-                  {candidatoData.habilidades.length} habilidades • {candidatoData.experiencias.length} experiências
-                </p>
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <Sparkles className="h-5 w-5 text-purple-500" />
+          Match Score AI
+        </CardTitle>
+        <CardDescription>
+          Calcule a compatibilidade {candidatoNome ? `de ${candidatoNome}` : 'do candidato'} com uma vaga
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="flex gap-4">
+          <Select value={vagaSelecionada} onValueChange={setVagaSelecionada}>
+            <SelectTrigger className="flex-1">
+              <SelectValue placeholder="Selecione uma vaga" />
+            </SelectTrigger>
+            <SelectContent>
+              {vagasAtivas.length === 0 ? (
+                <div className="p-2 text-sm text-muted-foreground">Nenhuma vaga ativa</div>
+              ) : (
+                vagasAtivas.map(vaga => (
+                  <SelectItem key={vaga.id} value={vaga.id}>
+                    <div className="flex items-center gap-2">
+                      <span>{vaga.titulo}</span>
+                      <Badge variant="outline" className="text-xs">{vaga.departamento}</Badge>
+                    </div>
+                  </SelectItem>
+                ))
+              )}
+            </SelectContent>
+          </Select>
+          <Button onClick={handleCalcular} disabled={calculando || !vagaSelecionada}>
+            <Calculator className="h-4 w-4 mr-2" />
+            {calculando ? "Calculando..." : "Calcular"}
+          </Button>
+        </div>
+
+        {erro && (
+          <Alert variant="destructive">
+            <AlertCircle className="h-4 w-4" />
+            <AlertDescription>{erro}</AlertDescription>
+          </Alert>
+        )}
+
+        {resultado && (
+          <div className="space-y-4 animate-fade-in">
+            {/* Score Principal */}
+            <div className={cn("p-6 rounded-lg text-center", getScoreBg(resultado.scoreTotal))}>
+              <p className="text-sm text-muted-foreground mb-1">Match Score</p>
+              <p className={cn("text-5xl font-bold", getScoreColor(resultado.scoreTotal))}>
+                {resultado.scoreTotal}%
+              </p>
+              <div className="flex items-center justify-center gap-2 mt-2">
+                {getRecomendacaoIcon(resultado.recomendacao)}
+                <span className="text-sm font-medium">{resultado.recomendacao}</span>
               </div>
             </div>
 
-            <ArrowRight className="h-5 w-5 text-muted-foreground hidden md:block" />
-
-            <div className="flex-1">
-              <label className="text-sm font-medium mb-2 block">Vaga</label>
-              <Select value={selectedVagaId} onValueChange={setSelectedVagaId}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Selecione uma vaga..." />
-                </SelectTrigger>
-                <SelectContent>
-                  {vagasAbertas.map((vaga) => (
-                    <SelectItem key={vaga.id} value={vaga.id}>
-                      {vaga.titulo} - {vaga.departamento}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <Button 
-              onClick={calculateMatch} 
-              disabled={!selectedVagaId || isLoading}
-              className="min-w-[140px]"
-            >
-              {isLoading ? (
-                <>
-                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  Calculando...
-                </>
-              ) : (
-                <>
-                  <Target className="h-4 w-4 mr-2" />
-                  Calcular Match
-                </>
-              )}
-            </Button>
-          </div>
-
-          {selectedVaga && (
-            <div className="p-3 bg-primary/5 rounded-lg border border-primary/20">
-              <p className="text-sm font-medium">{selectedVaga.titulo}</p>
-              <p className="text-xs text-muted-foreground mt-1">
-                {selectedVaga.departamento} • {selectedVaga.cidade}/{selectedVaga.estado} • {selectedVaga.modalidade}
-              </p>
-              {selectedVaga.skillsAvaliacao && selectedVaga.skillsAvaliacao.length > 0 && (
-                <p className="text-xs text-muted-foreground mt-1">
-                  Skills: {selectedVaga.skillsAvaliacao.slice(0, 3).join(', ')}
-                  {selectedVaga.skillsAvaliacao.length > 3 && '...'}
+            {/* Scores Detalhados */}
+            <div className="grid grid-cols-3 gap-4">
+              <div className="text-center">
+                <p className="text-sm text-muted-foreground">Habilidades</p>
+                <p className={cn("text-2xl font-bold", getScoreColor(resultado.scoreHabilidades))}>
+                  {resultado.scoreHabilidades}%
                 </p>
+                <Progress value={resultado.scoreHabilidades} className="h-1 mt-1" />
+              </div>
+              <div className="text-center">
+                <p className="text-sm text-muted-foreground">Experiência</p>
+                <p className={cn("text-2xl font-bold", getScoreColor(resultado.scoreExperiencia))}>
+                  {resultado.scoreExperiencia}%
+                </p>
+                <Progress value={resultado.scoreExperiencia} className="h-1 mt-1" />
+              </div>
+              <div className="text-center">
+                <p className="text-sm text-muted-foreground">Formação</p>
+                <p className={cn("text-2xl font-bold", getScoreColor(resultado.scoreFormacao))}>
+                  {resultado.scoreFormacao}%
+                </p>
+                <Progress value={resultado.scoreFormacao} className="h-1 mt-1" />
+              </div>
+            </div>
+
+            {/* Habilidades */}
+            <div className="space-y-3">
+              {resultado.habilidadesMatch.length > 0 && (
+                <div>
+                  <p className="text-sm font-medium text-green-700 mb-1">✅ Habilidades Compatíveis</p>
+                  <div className="flex flex-wrap gap-1">
+                    {resultado.habilidadesMatch.map((h, i) => (
+                      <Badge key={i} variant="outline" className="bg-green-50 text-green-700 border-green-200">{h}</Badge>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {resultado.habilidadesFaltantes.length > 0 && (
+                <div>
+                  <p className="text-sm font-medium text-red-700 mb-1">❌ Habilidades Faltantes</p>
+                  <div className="flex flex-wrap gap-1">
+                    {resultado.habilidadesFaltantes.map((h, i) => (
+                      <Badge key={i} variant="outline" className="bg-red-50 text-red-700 border-red-200">{h}</Badge>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {resultado.habilidadesExtras.length > 0 && (
+                <div>
+                  <p className="text-sm font-medium text-blue-700 mb-1">➕ Habilidades Extras</p>
+                  <div className="flex flex-wrap gap-1">
+                    {resultado.habilidadesExtras.map((h, i) => (
+                      <Badge key={i} variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">{h}</Badge>
+                    ))}
+                  </div>
+                </div>
               )}
             </div>
-          )}
-        </CardContent>
-      </Card>
 
-      {matchResult && selectedVaga && (
-        <>
-          <MatchScoreCard
-            matchResult={matchResult}
-            candidatoNome={candidatoData.nome}
-            vagaTitulo={selectedVaga.titulo}
-          />
-          
-          {candidatoId && (
-            <div className="flex justify-end">
-              <Button onClick={saveMatchScore} disabled={isSaving}>
-                {isSaving ? (
-                  <>
-                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                    Salvando...
-                  </>
-                ) : (
-                  <>
-                    <Save className="h-4 w-4 mr-2" />
-                    Salvar Match Score
-                  </>
-                )}
-              </Button>
+            {/* Análise */}
+            {resultado.analise && (
+              <div className="p-4 bg-muted rounded-lg">
+                <p className="text-sm font-medium mb-1 flex items-center gap-1">
+                  <TrendingUp className="h-4 w-4" />
+                  Análise
+                </p>
+                <p className="text-sm text-muted-foreground">{resultado.analise}</p>
+              </div>
+            )}
+
+            {/* Pontos Fortes e Atenção */}
+            <div className="grid grid-cols-2 gap-4">
+              {resultado.pontosFortes.length > 0 && (
+                <div>
+                  <p className="text-sm font-medium text-green-700 mb-1">💪 Pontos Fortes</p>
+                  <ul className="text-sm space-y-1">
+                    {resultado.pontosFortes.map((p, i) => (
+                      <li key={i} className="text-muted-foreground">• {p}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {resultado.pontosAtencao.length > 0 && (
+                <div>
+                  <p className="text-sm font-medium text-amber-700 mb-1">⚠️ Pontos de Atenção</p>
+                  <ul className="text-sm space-y-1">
+                    {resultado.pontosAtencao.map((p, i) => (
+                      <li key={i} className="text-muted-foreground">• {p}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
-          )}
-        </>
-      )}
-    </div>
+          </div>
+        )}
+      </CardContent>
+    </Card>
   );
 }
+
+export default MatchScoreCalculator;
