@@ -3,7 +3,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Prova } from '@/types/tests';
-import { categoriasInfo, departamentosInfo, niveisInfo } from '@/data/testsData';
+import { categoriasInfo, departamentosInfo, niveisInfo } from '@/config/testsConfig';
 import { Clock, Users, BarChart3, FileText, Play, Edit, Copy, Trash2 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -155,3 +155,4 @@ export function ProvaCard({ prova, onSelect, onEdit, onDuplicate, onDelete, comp
     </Card>
   );
 }
+
