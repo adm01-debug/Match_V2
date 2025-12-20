@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Select,
   SelectContent,
@@ -15,8 +16,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { vagas } from "@/data/mockData";
-import { Vaga, TipoContrato, Modalidade, Prioridade, StatusVaga } from "@/types/recruitment";
+import { useVaga, useCreateVaga, useUpdateVaga } from "@/hooks/useVagas";
+import { TipoContrato, Modalidade, Prioridade } from "@/types/recruitment";
 import { 
   ArrowLeft, 
   Save, 
@@ -26,11 +27,10 @@ import {
   Trash2,
   Building2,
   MapPin,
-  DollarSign,
-  Users,
   FileText,
   Target,
-  Share2
+  Share2,
+  Loader2
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -88,38 +88,75 @@ export default function VagaForm() {
   const { toast } = useToast();
   const isEditing = !!id;
   
-  const existingVaga = isEditing ? vagas.find((v) => v.id === id) : null;
+  const { data: existingVaga, isLoading: isLoadingVaga } = useVaga(id || '');
+  const createVaga = useCreateVaga();
+  const updateVaga = useUpdateVaga();
 
   const [formData, setFormData] = useState({
-    titulo: existingVaga?.titulo || "",
-    departamento: existingVaga?.departamento || "",
-    quantidade: existingVaga?.quantidade || 1,
-    gestorId: existingVaga?.gestorId || "",
-    recrutadorId: existingVaga?.recrutadorId || "r1",
-    prioridade: existingVaga?.prioridade || "media" as Prioridade,
-    tipoContrato: existingVaga?.tipoContrato || "clt" as TipoContrato,
-    modalidade: existingVaga?.modalidade || "presencial" as Modalidade,
-    cidade: existingVaga?.cidade || "São Paulo",
-    estado: existingVaga?.estado || "SP",
-    salarioMin: existingVaga?.salarioMin || "",
-    salarioMax: existingVaga?.salarioMax || "",
-    salarioACombinar: existingVaga?.salarioACombinar || false,
+    titulo: "",
+    departamento: "",
+    quantidade: 1,
+    gestorNome: "",
+    recrutadorNome: "Maria Santos",
+    prioridade: "media" as Prioridade,
+    tipoContrato: "clt" as TipoContrato,
+    modalidade: "presencial" as Modalidade,
+    cidade: "São Paulo",
+    estado: "SP",
+    salarioMin: "" as string | number,
+    salarioMax: "" as string | number,
+    salarioACombinar: false,
     horarioTrabalho: "Segunda a Sexta, 08:00 às 18:00",
-    beneficios: existingVaga?.beneficios || [] as string[],
-    descricaoEmpresa: existingVaga?.descricaoEmpresa || "A Promo Brindes é uma empresa líder no mercado de brindes promocionais há mais de 11 anos, atendendo grandes clientes corporativos em todo o Brasil.",
-    responsabilidades: existingVaga?.responsabilidades || "",
-    requisitosObrigatorios: existingVaga?.requisitosObrigatorios || "",
-    requisitosDesejaveis: existingVaga?.requisitosDesejaveis || "",
+    beneficios: [] as string[],
+    descricaoEmpresa: "A Promo Brindes é uma empresa líder no mercado de brindes promocionais há mais de 11 anos, atendendo grandes clientes corporativos em todo o Brasil.",
+    responsabilidades: "",
+    requisitosObrigatorios: "",
+    requisitosDesejaveis: "",
     canaisDivulgacao: ["portal", "linkedin", "indeed"],
   });
 
   const [perguntasTriagem, setPerguntasTriagem] = useState<Array<{
     pergunta: string;
     eliminatoria: boolean;
-  }>>(existingVaga?.perguntasTriagem?.map(p => ({ pergunta: p.pergunta, eliminatoria: p.eliminatoria })) || []);
+  }>>([]);
 
-  const [skills, setSkills] = useState<string[]>(existingVaga?.skillsAvaliacao || []);
+  const [skills, setSkills] = useState<string[]>([]);
   const [newSkill, setNewSkill] = useState("");
+
+  // Load existing vaga data when editing
+  useEffect(() => {
+    if (existingVaga) {
+      setFormData({
+        titulo: existingVaga.titulo,
+        departamento: existingVaga.departamento,
+        quantidade: existingVaga.quantidade,
+        gestorNome: existingVaga.gestorNome,
+        recrutadorNome: existingVaga.recrutadorNome,
+        prioridade: existingVaga.prioridade,
+        tipoContrato: existingVaga.tipoContrato,
+        modalidade: existingVaga.modalidade,
+        cidade: existingVaga.cidade,
+        estado: existingVaga.estado,
+        salarioMin: existingVaga.salarioMin || "",
+        salarioMax: existingVaga.salarioMax || "",
+        salarioACombinar: existingVaga.salarioACombinar,
+        horarioTrabalho: "Segunda a Sexta, 08:00 às 18:00",
+        beneficios: existingVaga.beneficios,
+        descricaoEmpresa: existingVaga.descricaoEmpresa,
+        responsabilidades: existingVaga.responsabilidades,
+        requisitosObrigatorios: existingVaga.requisitosObrigatorios,
+        requisitosDesejaveis: existingVaga.requisitosDesejaveis,
+        canaisDivulgacao: ["portal", "linkedin", "indeed"],
+      });
+      setPerguntasTriagem(
+        existingVaga.perguntasTriagem?.map(p => ({ 
+          pergunta: p.pergunta, 
+          eliminatoria: p.eliminatoria 
+        })) || []
+      );
+      setSkills(existingVaga.skillsAvaliacao || []);
+    }
+  }, [existingVaga]);
 
   const handleChange = (field: string, value: any) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -168,8 +205,8 @@ export default function VagaForm() {
     setSkills((prev) => prev.filter((s) => s !== skill));
   };
 
-  const handleSave = (publish: boolean = false) => {
-    if (!formData.titulo || !formData.departamento || !formData.gestorId) {
+  const handleSave = async (publish: boolean = false) => {
+    if (!formData.titulo || !formData.departamento) {
       toast({
         title: "Campos obrigatórios",
         description: "Preencha todos os campos obrigatórios.",
@@ -178,15 +215,75 @@ export default function VagaForm() {
       return;
     }
 
-    toast({
-      title: publish ? "Vaga publicada!" : "Vaga salva!",
-      description: publish 
-        ? "A vaga foi publicada e está disponível para candidaturas."
-        : "As alterações foram salvas com sucesso.",
-    });
-    
-    navigate("/vagas");
+    const vagaData = {
+      titulo: formData.titulo,
+      departamento: formData.departamento,
+      gestorNome: formData.gestorNome,
+      recrutadorNome: formData.recrutadorNome,
+      quantidade: formData.quantidade,
+      tipoContrato: formData.tipoContrato,
+      modalidade: formData.modalidade,
+      cidade: formData.cidade,
+      estado: formData.estado,
+      salarioMin: formData.salarioMin ? Number(formData.salarioMin) : undefined,
+      salarioMax: formData.salarioMax ? Number(formData.salarioMax) : undefined,
+      salarioACombinar: formData.salarioACombinar,
+      beneficios: formData.beneficios,
+      descricaoEmpresa: formData.descricaoEmpresa,
+      responsabilidades: formData.responsabilidades,
+      requisitosObrigatorios: formData.requisitosObrigatorios,
+      requisitosDesejaveis: formData.requisitosDesejaveis,
+      perguntasTriagem: perguntasTriagem.map(p => ({
+        pergunta: p.pergunta,
+        tipo: 'sim_nao' as const,
+        eliminatoria: p.eliminatoria,
+      })),
+      skillsAvaliacao: skills,
+      status: publish ? 'publicada' : 'rascunho',
+      prioridade: formData.prioridade,
+      dataPublicacao: publish ? new Date() : undefined,
+      totalCandidatos: existingVaga?.totalCandidatos || 0,
+      emProcesso: existingVaga?.emProcesso || 0,
+      contratados: existingVaga?.contratados || 0,
+    };
+
+    try {
+      if (isEditing && id) {
+        await updateVaga.mutateAsync({ id, ...vagaData });
+      } else {
+        await createVaga.mutateAsync(vagaData);
+      }
+
+      toast({
+        title: publish ? "Vaga publicada!" : "Vaga salva!",
+        description: publish 
+          ? "A vaga foi publicada e está disponível para candidaturas."
+          : "As alterações foram salvas com sucesso.",
+      });
+      
+      navigate("/vagas");
+    } catch (error) {
+      toast({
+        title: "Erro ao salvar",
+        description: "Ocorreu um erro ao salvar a vaga. Tente novamente.",
+        variant: "destructive",
+      });
+    }
   };
+
+  const isSaving = createVaga.isPending || updateVaga.isPending;
+
+  if (isEditing && isLoadingVaga) {
+    return (
+      <Layout title="Carregando...">
+        <div className="p-6 space-y-6 max-w-5xl mx-auto">
+          <Skeleton className="h-10 w-48" />
+          <Skeleton className="h-64 w-full" />
+          <Skeleton className="h-64 w-full" />
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <Layout title={isEditing ? "Editar Vaga" : "Nova Vaga"}>
@@ -259,39 +356,23 @@ export default function VagaForm() {
                 </div>
 
                 <div>
-                  <Label htmlFor="gestor">Gestor Responsável *</Label>
-                  <Select
-                    value={formData.gestorId}
-                    onValueChange={(v) => handleChange("gestorId", v)}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecione o gestor" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-popover">
-                      {gestores.map((g) => (
-                        <SelectItem key={g.id} value={g.id}>
-                          {g.nome} ({g.departamento})
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <Label htmlFor="gestor">Gestor Responsável</Label>
+                  <Input
+                    id="gestor"
+                    value={formData.gestorNome}
+                    onChange={(e) => handleChange("gestorNome", e.target.value)}
+                    placeholder="Nome do gestor responsável"
+                  />
                 </div>
 
                 <div>
-                  <Label htmlFor="recrutador">Recrutador Responsável *</Label>
-                  <Select
-                    value={formData.recrutadorId}
-                    onValueChange={(v) => handleChange("recrutadorId", v)}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecione o recrutador" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-popover">
-                      {recrutadores.map((r) => (
-                        <SelectItem key={r.id} value={r.id}>{r.nome}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <Label htmlFor="recrutador">Recrutador Responsável</Label>
+                  <Input
+                    id="recrutador"
+                    value={formData.recrutadorNome}
+                    onChange={(e) => handleChange("recrutadorNome", e.target.value)}
+                    placeholder="Nome do recrutador responsável"
+                  />
                 </div>
 
                 <div>
@@ -608,17 +689,25 @@ export default function VagaForm() {
 
           {/* Actions */}
           <div className="flex items-center justify-between pt-4 border-t">
-            <Button variant="outline" onClick={() => navigate("/vagas")}>
+            <Button variant="outline" onClick={() => navigate("/vagas")} disabled={isSaving}>
               <X className="h-4 w-4 mr-2" />
               Cancelar
             </Button>
             <div className="flex gap-3">
-              <Button variant="outline" onClick={() => handleSave(false)}>
-                <Save className="h-4 w-4 mr-2" />
+              <Button variant="outline" onClick={() => handleSave(false)} disabled={isSaving}>
+                {isSaving ? (
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                ) : (
+                  <Save className="h-4 w-4 mr-2" />
+                )}
                 Salvar Rascunho
               </Button>
-              <Button onClick={() => handleSave(true)}>
-                <Send className="h-4 w-4 mr-2" />
+              <Button onClick={() => handleSave(true)} disabled={isSaving}>
+                {isSaving ? (
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                ) : (
+                  <Send className="h-4 w-4 mr-2" />
+                )}
                 Publicar Vaga
               </Button>
             </div>

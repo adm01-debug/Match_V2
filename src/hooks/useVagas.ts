@@ -189,13 +189,69 @@ export function useVagasUrgentes() {
   });
 }
 
+// Create vaga input type (flexible for form data)
+interface CreateVagaInput {
+  titulo: string;
+  departamento: string;
+  gestorNome?: string;
+  recrutadorNome?: string;
+  quantidade?: number;
+  tipoContrato?: TipoContrato;
+  modalidade?: Modalidade;
+  cidade?: string;
+  estado?: string;
+  salarioMin?: number;
+  salarioMax?: number;
+  salarioACombinar?: boolean;
+  beneficios?: string[];
+  descricaoEmpresa?: string;
+  responsabilidades?: string;
+  requisitosObrigatorios?: string;
+  requisitosDesejaveis?: string;
+  perguntasTriagem?: PerguntaTriagem[];
+  skillsAvaliacao?: string[];
+  status?: string;
+  prioridade?: string;
+  dataPublicacao?: Date;
+  totalCandidatos?: number;
+  emProcesso?: number;
+  contratados?: number;
+}
+
 // Create vaga
 export function useCreateVaga() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (vaga: Omit<Vaga, 'id' | 'dataCriacao'>) => {
-      const dbData = vagaToDB(vaga);
+    mutationFn: async (vaga: CreateVagaInput) => {
+      const dbData = {
+        titulo: vaga.titulo,
+        departamento: vaga.departamento,
+        gestor_nome: vaga.gestorNome,
+        recrutador_nome: vaga.recrutadorNome,
+        quantidade: vaga.quantidade,
+        tipo_contrato: vaga.tipoContrato,
+        modalidade: vaga.modalidade,
+        cidade: vaga.cidade,
+        estado: vaga.estado,
+        salario_min: vaga.salarioMin,
+        salario_max: vaga.salarioMax,
+        salario_a_combinar: vaga.salarioACombinar,
+        beneficios: vaga.beneficios,
+        descricao_empresa: vaga.descricaoEmpresa,
+        responsabilidades: vaga.responsabilidades,
+        requisitos_obrigatorios: vaga.requisitosObrigatorios,
+        requisitos_desejaveis: vaga.requisitosDesejaveis,
+        perguntas_triagem: vaga.perguntasTriagem as unknown as Json,
+        skills_avaliacao: vaga.skillsAvaliacao,
+        status: vaga.status,
+        prioridade: vaga.prioridade,
+        data_publicacao: vaga.dataPublicacao?.toISOString(),
+        total_candidatos: vaga.totalCandidatos,
+        em_processo: vaga.emProcesso,
+        contratados: vaga.contratados,
+      };
+      
       const { data, error } = await supabase
         .from('vagas')
         .insert(dbData as any)
@@ -218,8 +274,35 @@ export function useUpdateVaga() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ id, ...vaga }: Partial<Vaga> & { id: string }) => {
-      const dbData = vagaToDB(vaga);
+    mutationFn: async ({ id, ...vaga }: Partial<CreateVagaInput> & { id: string }) => {
+      const dbData: Record<string, unknown> = {};
+      
+      if (vaga.titulo !== undefined) dbData.titulo = vaga.titulo;
+      if (vaga.departamento !== undefined) dbData.departamento = vaga.departamento;
+      if (vaga.gestorNome !== undefined) dbData.gestor_nome = vaga.gestorNome;
+      if (vaga.recrutadorNome !== undefined) dbData.recrutador_nome = vaga.recrutadorNome;
+      if (vaga.quantidade !== undefined) dbData.quantidade = vaga.quantidade;
+      if (vaga.tipoContrato !== undefined) dbData.tipo_contrato = vaga.tipoContrato;
+      if (vaga.modalidade !== undefined) dbData.modalidade = vaga.modalidade;
+      if (vaga.cidade !== undefined) dbData.cidade = vaga.cidade;
+      if (vaga.estado !== undefined) dbData.estado = vaga.estado;
+      if (vaga.salarioMin !== undefined) dbData.salario_min = vaga.salarioMin;
+      if (vaga.salarioMax !== undefined) dbData.salario_max = vaga.salarioMax;
+      if (vaga.salarioACombinar !== undefined) dbData.salario_a_combinar = vaga.salarioACombinar;
+      if (vaga.beneficios !== undefined) dbData.beneficios = vaga.beneficios;
+      if (vaga.descricaoEmpresa !== undefined) dbData.descricao_empresa = vaga.descricaoEmpresa;
+      if (vaga.responsabilidades !== undefined) dbData.responsabilidades = vaga.responsabilidades;
+      if (vaga.requisitosObrigatorios !== undefined) dbData.requisitos_obrigatorios = vaga.requisitosObrigatorios;
+      if (vaga.requisitosDesejaveis !== undefined) dbData.requisitos_desejaveis = vaga.requisitosDesejaveis;
+      if (vaga.perguntasTriagem !== undefined) dbData.perguntas_triagem = vaga.perguntasTriagem as unknown as Json;
+      if (vaga.skillsAvaliacao !== undefined) dbData.skills_avaliacao = vaga.skillsAvaliacao;
+      if (vaga.status !== undefined) dbData.status = vaga.status;
+      if (vaga.prioridade !== undefined) dbData.prioridade = vaga.prioridade;
+      if (vaga.dataPublicacao !== undefined) dbData.data_publicacao = vaga.dataPublicacao?.toISOString();
+      if (vaga.totalCandidatos !== undefined) dbData.total_candidatos = vaga.totalCandidatos;
+      if (vaga.emProcesso !== undefined) dbData.em_processo = vaga.emProcesso;
+      if (vaga.contratados !== undefined) dbData.contratados = vaga.contratados;
+      
       const { data, error } = await supabase
         .from('vagas')
         .update(dbData as any)
