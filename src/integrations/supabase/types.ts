@@ -14,6 +14,81 @@ export type Database = {
   }
   public: {
     Tables: {
+      bateria_provas_rel: {
+        Row: {
+          bateria_id: string
+          id: string
+          obrigatoria: boolean
+          ordem: number
+          prova_id: string
+        }
+        Insert: {
+          bateria_id: string
+          id?: string
+          obrigatoria?: boolean
+          ordem?: number
+          prova_id: string
+        }
+        Update: {
+          bateria_id?: string
+          id?: string
+          obrigatoria?: boolean
+          ordem?: number
+          prova_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bateria_provas_rel_bateria_id_fkey"
+            columns: ["bateria_id"]
+            isOneToOne: false
+            referencedRelation: "baterias_provas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bateria_provas_rel_prova_id_fkey"
+            columns: ["prova_id"]
+            isOneToOne: false
+            referencedRelation: "provas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      baterias_provas: {
+        Row: {
+          ativo: boolean
+          created_at: string
+          departamento: string
+          descricao: string | null
+          duracao_total: number
+          id: string
+          nivel: string
+          nome: string
+          updated_at: string
+        }
+        Insert: {
+          ativo?: boolean
+          created_at?: string
+          departamento?: string
+          descricao?: string | null
+          duracao_total?: number
+          id?: string
+          nivel?: string
+          nome: string
+          updated_at?: string
+        }
+        Update: {
+          ativo?: boolean
+          created_at?: string
+          departamento?: string
+          descricao?: string | null
+          duracao_total?: number
+          id?: string
+          nivel?: string
+          nome?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       candidatos: {
         Row: {
           arquivo_curriculo: string | null
@@ -534,6 +609,180 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      provas: {
+        Row: {
+          aplicacoes: number
+          ativo: boolean
+          categoria: string
+          created_at: string
+          departamentos: string[]
+          descricao: string | null
+          duracao: number
+          id: string
+          media_notas: number | null
+          niveis_aplicaveis: string[]
+          nota_minima: number
+          pontuacao_maxima: number
+          tags: string[] | null
+          titulo: string
+          total_questoes: number
+          updated_at: string
+        }
+        Insert: {
+          aplicacoes?: number
+          ativo?: boolean
+          categoria: string
+          created_at?: string
+          departamentos?: string[]
+          descricao?: string | null
+          duracao?: number
+          id?: string
+          media_notas?: number | null
+          niveis_aplicaveis?: string[]
+          nota_minima?: number
+          pontuacao_maxima?: number
+          tags?: string[] | null
+          titulo: string
+          total_questoes?: number
+          updated_at?: string
+        }
+        Update: {
+          aplicacoes?: number
+          ativo?: boolean
+          categoria?: string
+          created_at?: string
+          departamentos?: string[]
+          descricao?: string | null
+          duracao?: number
+          id?: string
+          media_notas?: number | null
+          niveis_aplicaveis?: string[]
+          nota_minima?: number
+          pontuacao_maxima?: number
+          tags?: string[] | null
+          titulo?: string
+          total_questoes?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      questoes: {
+        Row: {
+          alternativas: Json | null
+          created_at: string
+          dificuldade: string
+          enunciado: string
+          id: string
+          ordem: number
+          pontuacao: number
+          prova_id: string
+          resposta_correta: string | null
+          tipo: string
+        }
+        Insert: {
+          alternativas?: Json | null
+          created_at?: string
+          dificuldade?: string
+          enunciado: string
+          id?: string
+          ordem?: number
+          pontuacao?: number
+          prova_id: string
+          resposta_correta?: string | null
+          tipo: string
+        }
+        Update: {
+          alternativas?: Json | null
+          created_at?: string
+          dificuldade?: string
+          enunciado?: string
+          id?: string
+          ordem?: number
+          pontuacao?: number
+          prova_id?: string
+          resposta_correta?: string | null
+          tipo?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "questoes_prova_id_fkey"
+            columns: ["prova_id"]
+            isOneToOne: false
+            referencedRelation: "provas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      resultados_provas: {
+        Row: {
+          candidato_id: string | null
+          candidato_nome: string
+          created_at: string
+          finalizado_em: string | null
+          id: string
+          iniciado_em: string
+          nota: number
+          percentual: number
+          processo_id: string | null
+          prova_id: string
+          respostas: Json | null
+          status: string
+          tempo_gasto: number
+        }
+        Insert: {
+          candidato_id?: string | null
+          candidato_nome: string
+          created_at?: string
+          finalizado_em?: string | null
+          id?: string
+          iniciado_em?: string
+          nota?: number
+          percentual?: number
+          processo_id?: string | null
+          prova_id: string
+          respostas?: Json | null
+          status?: string
+          tempo_gasto?: number
+        }
+        Update: {
+          candidato_id?: string | null
+          candidato_nome?: string
+          created_at?: string
+          finalizado_em?: string | null
+          id?: string
+          iniciado_em?: string
+          nota?: number
+          percentual?: number
+          processo_id?: string | null
+          prova_id?: string
+          respostas?: Json | null
+          status?: string
+          tempo_gasto?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "resultados_provas_candidato_id_fkey"
+            columns: ["candidato_id"]
+            isOneToOne: false
+            referencedRelation: "candidatos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "resultados_provas_processo_id_fkey"
+            columns: ["processo_id"]
+            isOneToOne: false
+            referencedRelation: "processos_seletivos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "resultados_provas_prova_id_fkey"
+            columns: ["prova_id"]
+            isOneToOne: false
+            referencedRelation: "provas"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_roles: {
         Row: {

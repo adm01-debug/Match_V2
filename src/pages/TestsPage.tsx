@@ -6,20 +6,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from '@/components/ui/sheet';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { Progress } from '@/components/ui/progress';
+import { Skeleton } from '@/components/ui/skeleton';
 import { ProvaCard } from '@/components/tests/ProvaCard';
 import { BateriaCard } from '@/components/tests/BateriaCard';
 import { TestFilters } from '@/components/tests/TestFilters';
 import { CategoriaCard } from '@/components/tests/CategoriaCard';
-import { 
-  todasProvas, 
-  bateriasProvas, 
-  categoriasInfo, 
-  departamentosInfo, 
-  niveisInfo 
-} from '@/data/testsData';
+import { useProvas, useBaterias, useProvasStats, useDeleteProva, useDuplicateProva } from '@/hooks/useProvas';
+import { categoriasInfo, departamentosInfo, niveisInfo } from '@/data/testsData';
 import { Prova, BateriaProvas, CategoriaProva, Departamento, NivelCargo } from '@/types/tests';
 import { useToast } from '@/hooks/use-toast';
 import { 
@@ -28,15 +23,10 @@ import {
   Layers, 
   Clock, 
   Users, 
-  BarChart3, 
-  CheckCircle,
   BookOpen,
-  Brain,
-  Heart,
-  Code,
-  Globe,
-  Target,
-  TrendingUp
+  CheckCircle,
+  TrendingUp,
+  AlertCircle
 } from 'lucide-react';
 
 export default function TestsPage() {
@@ -50,9 +40,16 @@ export default function TestsPage() {
   const [selectedProva, setSelectedProva] = useState<Prova | null>(null);
   const [selectedBateria, setSelectedBateria] = useState<BateriaProvas | null>(null);
 
+  // Dados reais do Supabase
+  const { data: provas = [], isLoading: loadingProvas } = useProvas();
+  const { data: baterias = [], isLoading: loadingBaterias } = useBaterias();
+  const { data: stats, isLoading: loadingStats } = useProvasStats();
+  const deleteProva = useDeleteProva();
+  const duplicateProva = useDuplicateProva();
+
   // Filter provas
   const filteredProvas = useMemo(() => {
-    return todasProvas.filter((prova) => {
+    return provas.filter((prova) => {
       const matchSearch = searchTerm === '' || 
         prova.titulo.toLowerCase().includes(searchTerm.toLowerCase()) ||
         prova.descricao.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -68,7 +65,7 @@ export default function TestsPage() {
 
       return matchSearch && matchCategoria && matchDepartamento && matchNivel;
     });
-  }, [searchTerm, selectedCategoria, selectedDepartamento, selectedNivel]);
+  }, [provas, searchTerm, selectedCategoria, selectedDepartamento, selectedNivel]);
 
   // Count provas by categoria
   const provasByCategoria = useMemo(() => {
@@ -80,19 +77,11 @@ export default function TestsPage() {
       situacional: 0,
       competencias: 0
     };
-    todasProvas.forEach(prova => {
+    provas.forEach(prova => {
       counts[prova.categoria]++;
     });
     return counts;
-  }, []);
-
-  // Stats
-  const stats = useMemo(() => ({
-    totalProvas: todasProvas.length,
-    totalAplicacoes: todasProvas.reduce((sum, p) => sum + p.aplicacoes, 0),
-    mediaDuracao: Math.round(todasProvas.reduce((sum, p) => sum + p.duracao, 0) / todasProvas.length),
-    totalBaterias: bateriasProvas.length
-  }), []);
+  }, [provas]);
 
   const clearFilters = () => {
     setSearchTerm('');
@@ -105,20 +94,39 @@ export default function TestsPage() {
     navigate(`/testes/${prova.id}/editar`);
   };
 
-  const handleDuplicateProva = (prova: Prova) => {
-    toast({
-      title: "Prova duplicada",
-      description: `Cópia de "${prova.titulo}" criada com sucesso!`
-    });
+  const handleDuplicateProva = async (prova: Prova) => {
+    try {
+      await duplicateProva.mutateAsync(prova.id);
+      toast({
+        title: "Prova duplicada",
+        description: `Cópia de "${prova.titulo}" criada com sucesso!`
+      });
+    } catch (error) {
+      toast({
+        title: "Erro ao duplicar",
+        description: "Não foi possível duplicar a prova.",
+        variant: "destructive"
+      });
+    }
   };
 
-  const handleDeleteProva = (prova: Prova) => {
-    toast({
-      title: "Prova excluída",
-      description: `"${prova.titulo}" foi removida.`,
-      variant: "destructive"
-    });
+  const handleDeleteProva = async (prova: Prova) => {
+    try {
+      await deleteProva.mutateAsync(prova.id);
+      toast({
+        title: "Prova excluída",
+        description: `"${prova.titulo}" foi removida.`,
+      });
+    } catch (error) {
+      toast({
+        title: "Erro ao excluir",
+        description: "Não foi possível excluir a prova.",
+        variant: "destructive"
+      });
+    }
   };
+
+  const isLoading = loadingProvas || loadingBaterias || loadingStats;
 
   return (
     <Layout>
@@ -139,191 +147,234 @@ export default function TestsPage() {
 
         {/* Stats Cards */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <Card>
-            <CardContent className="p-4">
-              <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-primary/10">
-                  <FileText className="h-5 w-5 text-primary" />
-                </div>
-                <div>
-                  <p className="text-2xl font-bold">{stats.totalProvas}</p>
-                  <p className="text-xs text-muted-foreground">Provas Disponíveis</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-4">
-              <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-green-500/10">
-                  <Users className="h-5 w-5 text-green-500" />
-                </div>
-                <div>
-                  <p className="text-2xl font-bold">{(stats.totalAplicacoes / 1000).toFixed(1)}k</p>
-                  <p className="text-xs text-muted-foreground">Total de Aplicações</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-4">
-              <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-orange-500/10">
-                  <Clock className="h-5 w-5 text-orange-500" />
-                </div>
-                <div>
-                  <p className="text-2xl font-bold">{stats.mediaDuracao}min</p>
-                  <p className="text-xs text-muted-foreground">Duração Média</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-4">
-              <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-purple-500/10">
-                  <Layers className="h-5 w-5 text-purple-500" />
-                </div>
-                <div>
-                  <p className="text-2xl font-bold">{stats.totalBaterias}</p>
-                  <p className="text-xs text-muted-foreground">Baterias Prontas</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Tabs */}
-        <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList>
-            <TabsTrigger value="biblioteca">
-              <BookOpen className="h-4 w-4 mr-2" />
-              Biblioteca de Provas
-            </TabsTrigger>
-            <TabsTrigger value="baterias">
-              <Layers className="h-4 w-4 mr-2" />
-              Baterias Pré-configuradas
-            </TabsTrigger>
-            <TabsTrigger value="categorias">
-              <Brain className="h-4 w-4 mr-2" />
-              Por Categoria
-            </TabsTrigger>
-          </TabsList>
-
-          {/* Biblioteca Tab */}
-          <TabsContent value="biblioteca" className="space-y-4">
-            <TestFilters
-              searchTerm={searchTerm}
-              onSearchChange={setSearchTerm}
-              selectedCategoria={selectedCategoria}
-              onCategoriaChange={setSelectedCategoria}
-              selectedDepartamento={selectedDepartamento}
-              onDepartamentoChange={setSelectedDepartamento}
-              selectedNivel={selectedNivel}
-              onNivelChange={setSelectedNivel}
-              onClearFilters={clearFilters}
-            />
-
-            <div className="flex items-center justify-between">
-              <p className="text-sm text-muted-foreground">
-                {filteredProvas.length} prova(s) encontrada(s)
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {filteredProvas.map((prova) => (
-                <ProvaCard
-                  key={prova.id}
-                  prova={prova}
-                  onSelect={setSelectedProva}
-                  onEdit={handleEditProva}
-                  onDuplicate={handleDuplicateProva}
-                  onDelete={handleDeleteProva}
-                />
-              ))}
-            </div>
-
-            {filteredProvas.length === 0 && (
+          {isLoading ? (
+            Array.from({ length: 4 }).map((_, i) => (
+              <Skeleton key={i} className="h-20 rounded-lg" />
+            ))
+          ) : (
+            <>
               <Card>
-                <CardContent className="p-12 text-center">
-                  <FileText className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                  <h3 className="font-medium mb-2">Nenhuma prova encontrada</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Tente ajustar os filtros ou termos de busca
-                  </p>
+                <CardContent className="p-4">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-lg bg-primary/10">
+                      <FileText className="h-5 w-5 text-primary" />
+                    </div>
+                    <div>
+                      <p className="text-2xl font-bold">{stats?.totalProvas || 0}</p>
+                      <p className="text-xs text-muted-foreground">Provas Disponíveis</p>
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
-            )}
-          </TabsContent>
+              <Card>
+                <CardContent className="p-4">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-lg bg-green-500/10">
+                      <Users className="h-5 w-5 text-green-500" />
+                    </div>
+                    <div>
+                      <p className="text-2xl font-bold">
+                        {stats?.totalAplicacoes ? (stats.totalAplicacoes / 1000).toFixed(1) + 'k' : '0'}
+                      </p>
+                      <p className="text-xs text-muted-foreground">Total de Aplicações</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-4">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-lg bg-orange-500/10">
+                      <Clock className="h-5 w-5 text-orange-500" />
+                    </div>
+                    <div>
+                      <p className="text-2xl font-bold">{stats?.mediaDuracao || 0}min</p>
+                      <p className="text-xs text-muted-foreground">Duração Média</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-4">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-lg bg-purple-500/10">
+                      <Layers className="h-5 w-5 text-purple-500" />
+                    </div>
+                    <div>
+                      <p className="text-2xl font-bold">{stats?.totalBaterias || 0}</p>
+                      <p className="text-xs text-muted-foreground">Baterias Prontas</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </>
+          )}
+        </div>
 
-          {/* Baterias Tab */}
-          <TabsContent value="baterias" className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {bateriasProvas.map((bateria) => (
-                <BateriaCard
-                  key={bateria.id}
-                  bateria={bateria}
-                  onSelect={setSelectedBateria}
-                />
-              ))}
-            </div>
-          </TabsContent>
+        {/* Empty State */}
+        {!isLoading && provas.length === 0 && (
+          <Card>
+            <CardContent className="p-12 text-center">
+              <AlertCircle className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+              <h3 className="font-medium mb-2">Nenhuma prova cadastrada</h3>
+              <p className="text-sm text-muted-foreground mb-4">
+                Comece criando sua primeira prova para avaliar candidatos
+              </p>
+              <Button onClick={() => navigate('/testes/nova')}>
+                <Plus className="h-4 w-4 mr-2" />
+                Criar Primeira Prova
+              </Button>
+            </CardContent>
+          </Card>
+        )}
 
-          {/* Categorias Tab */}
-          <TabsContent value="categorias" className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {(Object.keys(categoriasInfo) as CategoriaProva[]).map((categoria) => (
-                <CategoriaCard
-                  key={categoria}
-                  categoria={categoria}
-                  count={provasByCategoria[categoria]}
-                  onClick={() => {
-                    setSelectedCategoria(categoria);
-                    setActiveTab('biblioteca');
-                  }}
-                  isSelected={selectedCategoria === categoria}
-                />
-              ))}
-            </div>
+        {/* Tabs */}
+        {provas.length > 0 && (
+          <Tabs value={activeTab} onValueChange={setActiveTab}>
+            <TabsList>
+              <TabsTrigger value="biblioteca">
+                <BookOpen className="h-4 w-4 mr-2" />
+                Biblioteca de Provas
+              </TabsTrigger>
+              <TabsTrigger value="baterias">
+                <Layers className="h-4 w-4 mr-2" />
+                Baterias Pré-configuradas
+              </TabsTrigger>
+              <TabsTrigger value="categorias">
+                <FileText className="h-4 w-4 mr-2" />
+                Por Categoria
+              </TabsTrigger>
+            </TabsList>
 
-            {/* Detailed breakdown by category */}
-            <div className="space-y-6">
-              {(Object.keys(categoriasInfo) as CategoriaProva[]).map((categoria) => {
-                const provasCategoria = todasProvas.filter(p => p.categoria === categoria);
-                const info = categoriasInfo[categoria];
-                
-                return (
-                  <Card key={categoria}>
-                    <CardHeader>
-                      <CardTitle className="flex items-center gap-2">
-                        <div className={`w-8 h-8 rounded-lg ${info.cor} flex items-center justify-center`}>
-                          <FileText className="h-4 w-4 text-white" />
+            {/* Biblioteca Tab */}
+            <TabsContent value="biblioteca" className="space-y-4">
+              <TestFilters
+                searchTerm={searchTerm}
+                onSearchChange={setSearchTerm}
+                selectedCategoria={selectedCategoria}
+                onCategoriaChange={setSelectedCategoria}
+                selectedDepartamento={selectedDepartamento}
+                onDepartamentoChange={setSelectedDepartamento}
+                selectedNivel={selectedNivel}
+                onNivelChange={setSelectedNivel}
+                onClearFilters={clearFilters}
+              />
+
+              <div className="flex items-center justify-between">
+                <p className="text-sm text-muted-foreground">
+                  {filteredProvas.length} prova(s) encontrada(s)
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {filteredProvas.map((prova) => (
+                  <ProvaCard
+                    key={prova.id}
+                    prova={prova}
+                    onSelect={setSelectedProva}
+                    onEdit={handleEditProva}
+                    onDuplicate={handleDuplicateProva}
+                    onDelete={handleDeleteProva}
+                  />
+                ))}
+              </div>
+
+              {filteredProvas.length === 0 && provas.length > 0 && (
+                <Card>
+                  <CardContent className="p-12 text-center">
+                    <FileText className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+                    <h3 className="font-medium mb-2">Nenhuma prova encontrada</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Tente ajustar os filtros ou termos de busca
+                    </p>
+                  </CardContent>
+                </Card>
+              )}
+            </TabsContent>
+
+            {/* Baterias Tab */}
+            <TabsContent value="baterias" className="space-y-4">
+              {baterias.length === 0 ? (
+                <Card>
+                  <CardContent className="p-12 text-center">
+                    <Layers className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+                    <h3 className="font-medium mb-2">Nenhuma bateria configurada</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Configure baterias de provas para aplicar múltiplos testes
+                    </p>
+                  </CardContent>
+                </Card>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {baterias.map((bateria) => (
+                    <BateriaCard
+                      key={bateria.id}
+                      bateria={bateria}
+                      onSelect={setSelectedBateria}
+                    />
+                  ))}
+                </div>
+              )}
+            </TabsContent>
+
+            {/* Categorias Tab */}
+            <TabsContent value="categorias" className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {(Object.keys(categoriasInfo) as CategoriaProva[]).map((categoria) => (
+                  <CategoriaCard
+                    key={categoria}
+                    categoria={categoria}
+                    count={provasByCategoria[categoria]}
+                    onClick={() => {
+                      setSelectedCategoria(categoria);
+                      setActiveTab('biblioteca');
+                    }}
+                    isSelected={selectedCategoria === categoria}
+                  />
+                ))}
+              </div>
+
+              {/* Detailed breakdown by category */}
+              <div className="space-y-6">
+                {(Object.keys(categoriasInfo) as CategoriaProva[]).map((categoria) => {
+                  const provasCategoria = provas.filter(p => p.categoria === categoria);
+                  const info = categoriasInfo[categoria];
+                  
+                  if (provasCategoria.length === 0) return null;
+                  
+                  return (
+                    <Card key={categoria}>
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                          <div className={`w-8 h-8 rounded-lg ${info.cor} flex items-center justify-center`}>
+                            <FileText className="h-4 w-4 text-white" />
+                          </div>
+                          {info.nome}
+                          <Badge variant="secondary" className="ml-auto">
+                            {provasCategoria.length} provas
+                          </Badge>
+                        </CardTitle>
+                        <CardDescription>{info.descricao}</CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                          {provasCategoria.map((prova) => (
+                            <ProvaCard
+                              key={prova.id}
+                              prova={prova}
+                              compact
+                              onSelect={setSelectedProva}
+                            />
+                          ))}
                         </div>
-                        {info.nome}
-                        <Badge variant="secondary" className="ml-auto">
-                          {provasCategoria.length} provas
-                        </Badge>
-                      </CardTitle>
-                      <CardDescription>{info.descricao}</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                        {provasCategoria.map((prova) => (
-                          <ProvaCard
-                            key={prova.id}
-                            prova={prova}
-                            compact
-                            onSelect={setSelectedProva}
-                          />
-                        ))}
-                      </div>
-                    </CardContent>
-                  </Card>
-                );
-              })}
-            </div>
-          </TabsContent>
-        </Tabs>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
+              </div>
+            </TabsContent>
+          </Tabs>
+        )}
 
         {/* Prova Detail Sheet */}
         <Sheet open={!!selectedProva} onOpenChange={() => setSelectedProva(null)}>
@@ -398,7 +449,7 @@ export default function TestsPage() {
                     <div className="flex flex-wrap gap-2">
                       {selectedProva.departamentos.map((dep) => (
                         <Badge key={dep} variant="outline">
-                          {departamentosInfo[dep].nome}
+                          {departamentosInfo[dep]?.nome || dep}
                         </Badge>
                       ))}
                     </div>
@@ -409,22 +460,24 @@ export default function TestsPage() {
                     <div className="flex flex-wrap gap-2">
                       {selectedProva.niveisAplicaveis.map((nivel) => (
                         <Badge key={nivel} variant="secondary">
-                          {niveisInfo[nivel].nome}
+                          {niveisInfo[nivel]?.nome || nivel}
                         </Badge>
                       ))}
                     </div>
                   </div>
 
-                  <div>
-                    <h4 className="font-medium mb-2">Tags</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {selectedProva.tags.map((tag) => (
-                        <Badge key={tag} variant="outline" className="text-xs">
-                          #{tag}
-                        </Badge>
-                      ))}
+                  {selectedProva.tags.length > 0 && (
+                    <div>
+                      <h4 className="font-medium mb-2">Tags</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {selectedProva.tags.map((tag) => (
+                          <Badge key={tag} variant="outline" className="text-xs">
+                            #{tag}
+                          </Badge>
+                        ))}
+                      </div>
                     </div>
-                  </div>
+                  )}
 
                   <Separator />
 
@@ -453,18 +506,20 @@ export default function TestsPage() {
                 </SheetHeader>
                 
                 <div className="space-y-6 mt-6">
-                  <div className="flex gap-2">
-                    <Badge>{departamentosInfo[selectedBateria.departamento].nome}</Badge>
-                    <Badge variant="secondary">{niveisInfo[selectedBateria.nivel].nome}</Badge>
+                  <div className="flex flex-wrap gap-2">
+                    <Badge variant="outline">
+                      {departamentosInfo[selectedBateria.departamento]?.nome || selectedBateria.departamento}
+                    </Badge>
+                    <Badge variant="secondary">
+                      {niveisInfo[selectedBateria.nivel]?.nome || selectedBateria.nivel}
+                    </Badge>
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
                     <Card>
                       <CardContent className="p-4 text-center">
                         <Clock className="h-5 w-5 mx-auto text-muted-foreground mb-1" />
-                        <p className="text-lg font-bold">
-                          {Math.floor(selectedBateria.duracaoTotal / 60)}h {selectedBateria.duracaoTotal % 60}min
-                        </p>
+                        <p className="text-lg font-bold">{selectedBateria.duracaoTotal} min</p>
                         <p className="text-xs text-muted-foreground">Duração Total</p>
                       </CardContent>
                     </Card>
@@ -479,48 +534,14 @@ export default function TestsPage() {
 
                   <Separator />
 
-                  <div>
-                    <h4 className="font-medium mb-3 flex items-center gap-2">
-                      <CheckCircle className="h-4 w-4 text-green-500" />
-                      Provas Obrigatórias
-                    </h4>
-                    <div className="space-y-2">
-                      {selectedBateria.obrigatorias.map((id) => {
-                        const prova = todasProvas.find(p => p.id === id);
-                        return prova ? (
-                          <ProvaCard
-                            key={id}
-                            prova={prova}
-                            compact
-                            onSelect={setSelectedProva}
-                          />
-                        ) : null;
-                      })}
-                    </div>
+                  <div className="flex gap-2">
+                    <Button className="flex-1">
+                      Aplicar Bateria
+                    </Button>
+                    <Button variant="outline">
+                      Editar
+                    </Button>
                   </div>
-
-                  <div>
-                    <h4 className="font-medium mb-3">Provas Opcionais</h4>
-                    <div className="space-y-2">
-                      {selectedBateria.opcionais.map((id) => {
-                        const prova = todasProvas.find(p => p.id === id);
-                        return prova ? (
-                          <ProvaCard
-                            key={id}
-                            prova={prova}
-                            compact
-                            onSelect={setSelectedProva}
-                          />
-                        ) : null;
-                      })}
-                    </div>
-                  </div>
-
-                  <Separator />
-
-                  <Button className="w-full">
-                    Aplicar Bateria Completa
-                  </Button>
                 </div>
               </>
             )}
