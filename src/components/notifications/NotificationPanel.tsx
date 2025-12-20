@@ -1,4 +1,4 @@
-import { Bell, Check, CheckCheck, Star, Users, ArrowRight, Trash2, X } from 'lucide-react';
+import { Bell, Check, CheckCheck, Star, Users, ArrowRight, Trash2, X, Calendar, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -30,6 +30,10 @@ const getNotificationIcon = (type: Notification['type']) => {
       return <Users className="h-4 w-4 text-blue-500" />;
     case 'urgent':
       return <Bell className="h-4 w-4 text-destructive" />;
+    case 'interview_scheduled':
+      return <Calendar className="h-4 w-4 text-green-500" />;
+    case 'interview_updated':
+      return <RefreshCw className="h-4 w-4 text-orange-500" />;
     default:
       return <Bell className="h-4 w-4" />;
   }
@@ -45,6 +49,10 @@ const getNotificationColor = (type: Notification['type']) => {
       return 'bg-blue-500/10 border-blue-500/20';
     case 'urgent':
       return 'bg-destructive/10 border-destructive/20';
+    case 'interview_scheduled':
+      return 'bg-green-500/10 border-green-500/20';
+    case 'interview_updated':
+      return 'bg-orange-500/10 border-orange-500/20';
     default:
       return 'bg-muted';
   }
