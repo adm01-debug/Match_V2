@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -64,7 +65,7 @@ const prioridadeConfig: Record<Prioridade, { label: string; icon: any; className
   baixa: { label: "Baixa", icon: null, className: "bg-muted text-muted-foreground" },
 };
 
-export function VagaCard({ vaga }: VagaCardProps) {
+export const VagaCard = memo(function VagaCard({ vaga }: VagaCardProps) {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const deleteVaga = useDeleteVaga();
   
@@ -272,4 +273,4 @@ export function VagaCard({ vaga }: VagaCardProps) {
       </AlertDialog>
     </>
   );
-}
+});
