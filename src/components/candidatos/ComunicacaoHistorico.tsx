@@ -156,7 +156,7 @@ export function ComunicacaoHistorico({ candidatoId }: ComunicacaoHistoricoProps)
 
   if (isLoading) {
     return (
-      <div className="space-y-3">
+      <div role="region" aria-label="Histórico comunicação" className="space-y-3">
         {[1, 2, 3].map((i) => (
           <div key={i} className="p-3 border rounded-lg space-y-2">
             <Skeleton className="h-4 w-3/4" />
