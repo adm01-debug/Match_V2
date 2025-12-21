@@ -15,7 +15,7 @@ export function Layout({ children, title }: LayoutProps) {
 
   return (
     <SidebarProvider defaultOpen={true}>
-      <div className="min-h-screen flex w-full bg-background">
+      <div role="region" aria-label="Layout principal" className="min-h-screen flex w-full bg-background">
         <AppSidebar />
         <SidebarInset className="flex flex-col flex-1">
           <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-card px-6">
