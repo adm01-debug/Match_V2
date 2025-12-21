@@ -1,118 +1,118 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+import { toast } from 'sonner';
 
-interface HistoricoEtapa {
+// Tipos
+export interface HistoricoEtapa {
   id: string;
-  processo_seletivo_id: string;
+  processo_id: string;
   etapa_anterior: string | null;
   etapa_nova: string;
-  motivo: string | null;
+  data_mudanca: string;
   responsavel_id: string | null;
+  observacao: string | null;
   created_at: string;
+  responsavel?: {
+    id: string;
+    full_name: string;
+  };
 }
 
-interface HistoricoEtapaInsert {
-  processo_seletivo_id: string;
-  etapa_anterior?: string | null;
+export interface CreateHistoricoInput {
+  processo_id: string;
+  etapa_anterior: string | null;
   etapa_nova: string;
-  motivo?: string | null;
-  responsavel_id?: string | null;
+  responsavel_id?: string;
+  observacao?: string;
 }
 
-// Simular histórico a partir dos processos seletivos (até a tabela ser criada)
-export function useHistoricoEtapas(processoSeletivoId?: string) {
-  const { toast } = useToast();
-  const [historico, setHistorico] = useState<HistoricoEtapa[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
-  const [isRegistrando, setIsRegistrando] = useState(false);
+// Query Keys
+const historicoKeys = {
+  all: ['historico-etapas'] as const,
+  byProcesso: (processoId: string) => [...historicoKeys.all, 'processo', processoId] as const,
+};
 
-  const fetchHistorico = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      // Como a tabela historico_etapas não existe, vamos simular a partir dos processos
-      if (processoSeletivoId) {
-        const { data: processo } = await supabase
-          .from('processos_seletivos')
-          .select('*')
-          .eq('id', processoSeletivoId)
-          .single();
+// Fetch Historico by Processo
+async function fetchHistoricoByProcesso(processoId: string): Promise<HistoricoEtapa[]> {
+  const { data, error } = await supabase
+    .from('historico_etapas')
+    .select(`
+      *,
+      responsavel:profiles(id, full_name)
+    `)
+    .eq('processo_id', processoId)
+    .order('data_mudanca', { ascending: false });
 
-        if (processo) {
-          // Criar um "histórico" baseado na etapa atual
-          setHistorico([{
-            id: crypto.randomUUID(),
-            processo_seletivo_id: processo.id,
-            etapa_anterior: null,
-            etapa_nova: processo.etapa_atual,
-            motivo: null,
-            responsavel_id: null,
-            created_at: processo.data_ultima_movimentacao,
-          }]);
-        }
-      } else {
-        setHistorico([]);
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err : new Error('Erro ao buscar histórico'));
-    } finally {
-      setIsLoading(false);
+  if (error) {
+    // Se a tabela não existir, retornar array vazio
+    if (error.code === '42P01') {
+      return [];
     }
-  }, [processoSeletivoId]);
+    throw error;
+  }
+  
+  return data || [];
+}
 
-  useEffect(() => {
-    fetchHistorico();
-  }, [fetchHistorico]);
+// Create Historico
+async function createHistorico(input: CreateHistoricoInput): Promise<HistoricoEtapa> {
+  const { data, error } = await supabase
+    .from('historico_etapas')
+    .insert({
+      ...input,
+      data_mudanca: new Date().toISOString(),
+    })
+    .select()
+    .single();
 
-  const registrarMudancaEtapa = async (dados: HistoricoEtapaInsert): Promise<HistoricoEtapa> => {
-    setIsRegistrando(true);
-    try {
-      // Atualizar o processo seletivo com a nova etapa
-      const { error: updateError } = await supabase
-        .from('processos_seletivos')
-        .update({
-          etapa_atual: dados.etapa_nova,
-          data_ultima_movimentacao: new Date().toISOString(),
-        })
-        .eq('id', dados.processo_seletivo_id);
+  if (error) throw error;
+  return data;
+}
 
-      if (updateError) throw updateError;
+// Hooks
+export function useHistoricoEtapas(processoId: string) {
+  return useQuery({
+    queryKey: historicoKeys.byProcesso(processoId),
+    queryFn: () => fetchHistoricoByProcesso(processoId),
+    enabled: !!processoId,
+  });
+}
 
-      const novoRegistro: HistoricoEtapa = {
-        id: crypto.randomUUID(),
-        processo_seletivo_id: dados.processo_seletivo_id,
-        etapa_anterior: dados.etapa_anterior || null,
-        etapa_nova: dados.etapa_nova,
-        motivo: dados.motivo || null,
-        responsavel_id: dados.responsavel_id || null,
-        created_at: new Date().toISOString(),
-      };
+export function useCreateHistoricoEtapa() {
+  const queryClient = useQueryClient();
 
-      setHistorico(prev => [novoRegistro, ...prev]);
-      toast({ title: 'Etapa atualizada com sucesso!' });
-      
-      return novoRegistro;
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Erro ao registrar mudança';
-      toast({
-        title: 'Erro ao registrar mudança',
-        description: errorMessage,
-        variant: 'destructive',
+  return useMutation({
+    mutationFn: createHistorico,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ 
+        queryKey: historicoKeys.byProcesso(data.processo_id) 
       });
-      throw err;
-    } finally {
-      setIsRegistrando(false);
-    }
-  };
-
-  return {
-    historico,
-    isLoading,
-    error,
-    registrarMudancaEtapa,
-    isRegistrando,
-  };
+      toast.success('Histórico registrado com sucesso!');
+    },
+    onError: (error: Error) => {
+      toast.error(`Erro ao registrar histórico: ${error.message}`);
+    },
+  });
 }
 
-export default useHistoricoEtapas;
+// Constantes de etapas
+export const ETAPAS_PROCESSO = [
+  { value: 'triagem', label: 'Triagem', ordem: 1 },
+  { value: 'entrevista_rh', label: 'Entrevista RH', ordem: 2 },
+  { value: 'teste_tecnico', label: 'Teste Técnico', ordem: 3 },
+  { value: 'entrevista_gestor', label: 'Entrevista Gestor', ordem: 4 },
+  { value: 'proposta', label: 'Proposta', ordem: 5 },
+  { value: 'contratado', label: 'Contratado', ordem: 6 },
+  { value: 'reprovado', label: 'Reprovado', ordem: -1 },
+  { value: 'desistencia', label: 'Desistência', ordem: -2 },
+] as const;
+
+export function getEtapaLabel(value: string): string {
+  const etapa = ETAPAS_PROCESSO.find(e => e.value === value);
+  return etapa?.label || value;
+}
+
+export function getEtapaOrdem(value: string): number {
+  const etapa = ETAPAS_PROCESSO.find(e => e.value === value);
+  return etapa?.ordem || 0;
+}
