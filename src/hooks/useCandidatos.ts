@@ -122,7 +122,7 @@ export function useCreateCandidato() {
       if (error) throw error;
       return data;
     },
-    onSuccess: () => {
+    onError: (error) => { console.error('Mutation error:', error); toast.error('Ocorreu um erro'); }, onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['candidatos'] });
       queryClient.invalidateQueries({ queryKey: ['candidatos-stats'] });
     },
@@ -144,7 +144,7 @@ export function useUpdateCandidato() {
       if (error) throw error;
       return data;
     },
-    onSuccess: (data) => {
+    onError: (error) => { console.error('Mutation error:', error); toast.error('Ocorreu um erro'); }, onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['candidatos'] });
       queryClient.invalidateQueries({ queryKey: ['candidato', data.id] });
       queryClient.invalidateQueries({ queryKey: ['candidatos-stats'] });
@@ -165,7 +165,7 @@ export function useDeleteCandidato() {
       if (error) throw error;
       return id;
     },
-    onSuccess: () => {
+    onError: (error) => { console.error('Mutation error:', error); toast.error('Ocorreu um erro'); }, onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['candidatos'] });
       queryClient.invalidateQueries({ queryKey: ['candidatos-stats'] });
     },
