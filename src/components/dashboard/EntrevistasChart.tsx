@@ -211,3 +211,5 @@ export const EntrevistasChart = memo(function EntrevistasChart() {
     </Card>
   );
 );
+
+EntrevistasChart.displayName = "EntrevistasChart";
