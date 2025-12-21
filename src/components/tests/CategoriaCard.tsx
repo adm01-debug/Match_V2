@@ -25,7 +25,7 @@ export function CategoriaCard({ categoria, count, onClick, isSelected }: Categor
   const Icon = iconMap[info.icone] || Brain;
 
   return (
-    <Card 
+    <Card role="article" aria-label="Categoria" 
       className={`cursor-pointer transition-all hover:shadow-md ${
         isSelected ? 'ring-2 ring-primary' : ''
       }`}
