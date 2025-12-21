@@ -34,7 +34,7 @@ const prioridadeConfig = {
 
 export function VagasUrgentes({ vagas }: VagasUrgentesProps) {
   return (
-    <Card className="h-full">
+    <Card role="article" aria-label="Vagas urgentes" className="h-full">
       <CardHeader className="pb-4">
         <div className="flex items-center gap-2">
           <Flame className="h-5 w-5 text-destructive" />
