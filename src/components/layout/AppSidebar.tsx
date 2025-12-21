@@ -124,7 +124,7 @@ export function AppSidebar() {
   };
 
   return (
-    <Sidebar
+    <Sidebar role="navigation" aria-label="Menu de navegação principal"
       className={cn(
         "border-r-0 transition-all duration-300",
         collapsed ? "w-[70px]" : "w-[260px]"
