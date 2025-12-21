@@ -41,7 +41,7 @@ export function useCandidatos(filters?: {
           *,
           match_scores(score, criterios)
         `)
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false , staleTime: 5 * 60 * 1000, gcTime: 10 * 60 * 1000, retry: 3});
 
       if (filters?.status) {
         query = query.eq('status', filters.status);
