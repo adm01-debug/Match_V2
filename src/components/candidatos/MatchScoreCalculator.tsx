@@ -119,7 +119,7 @@ export function MatchScoreCalculator({ candidatoId, candidatoNome, onScoreCalcul
   }
 
   return (
-    <Card>
+    <Card role="article" aria-label="Calculadora match">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Sparkles className="h-5 w-5 text-purple-500" />
