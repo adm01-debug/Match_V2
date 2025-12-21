@@ -78,4 +78,6 @@ export const KPICard = memo(function KPICard({
       </CardContent>
     </Card>
   );
-}
+});
+
+KPICard.displayName = "KPICard";
