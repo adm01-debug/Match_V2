@@ -1,3 +1,10 @@
+/**
+ * @fileoverview match-score Edge Function
+ * @description Handles match-score operations for the Match ATS system
+ * @version 1.0.0
+ * @author Match ATS Team
+ */
+
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
