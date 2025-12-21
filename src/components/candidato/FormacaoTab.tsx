@@ -32,7 +32,7 @@ export function FormacaoTab({ candidato }: FormacaoTabProps) {
   return (
     <div className="space-y-6">
       {/* Formação Acadêmica */}
-      <Card>
+      <Card role="article" aria-label="Formação acadêmica">
         <CardHeader>
           <CardTitle className="text-lg flex items-center gap-2">
             <GraduationCap className="h-5 w-5 text-primary" />
