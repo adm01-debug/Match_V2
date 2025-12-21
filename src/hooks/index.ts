@@ -1,36 +1,146 @@
-// Hooks de dados principais
-export { useVagas, useVaga } from './useVagas';
-export { useCandidatos } from './useCandidatos';
-export { useProcessosSeletivos } from './useProcessosSeletivos';
-export { useProcessos } from './useProcessos';
-export { useEntrevistas } from './useEntrevistas';
-export { useAvaliacoes } from './useAvaliacoes';
-export { useComunicacoes } from './useComunicacoes';
+// ============================================
+// HOOKS INDEX - Exportação centralizada
+// ============================================
 
-// Hooks de provas e testes
-export { useProvas, useProva } from './useProvas';
-export { useQuestoes } from './useQuestoes';
-export { useResultadosProvas } from './useResultadosProvas';
-export { useBateriasProvas } from './useBateriasProvas';
+// Candidatos
+export {
+  useCandidatos,
+  useCandidato,
+  useCandidatosStats,
+  useCreateCandidato,
+  useUpdateCandidato,
+  useDeleteCandidato,
+  useCandidatosSelect,
+  STATUS_CANDIDATO,
+  ORIGENS_CANDIDATO,
+} from './useCandidatos';
 
-// Hooks de match e score
-export { useMatchScores } from './useMatchScores';
-export { useCandidatoPerfil } from './useCandidatoPerfil';
+// Vagas
+export {
+  useVagas,
+  useVaga,
+  useVagasSelect,
+  useVagasUrgentes,
+  useCreateVaga,
+  useUpdateVaga,
+  useDeleteVaga,
+} from './useVagas';
 
-// Hooks de dashboard e analytics
-export { useDashboardData } from './useDashboardData';
-export { useDashboard } from './useDashboard';
-export { usePipelineView, useAgendaEntrevistasView, useVagasKpisView, useDashboardKPIs } from './useViews';
+// Processos Seletivos
+export {
+  useProcessos,
+  useProcessosCandidato,
+} from './useProcessos';
 
-// Hooks de usuários e perfis
-export { useProfiles } from './useProfiles';
-export { useCandidaturas } from './useCandidaturas';
-export { useIndicacoes } from './useIndicacoes';
+export {
+  useProcessosSeletivos,
+} from './useProcessosSeletivos';
 
-// Hooks de histórico e notificações
-export { useHistoricoEtapas } from './useHistoricoEtapas';
-export { useRealtimeNotifications } from './useRealtimeNotifications';
+// Entrevistas
+export {
+  useEntrevistas,
+  useEntrevistasStats,
+  useEntrevistasEvolucao,
+  useEntrevistasPizza,
+  useCreateEntrevista,
+  useUpdateEntrevista,
+  useCandidatosDisponiveis,
+} from './useEntrevistas';
 
-// Hooks utilitários
-export { useToast } from './use-toast';
-export { useIsMobile as useMobile } from './use-mobile';
+// Provas e Testes
+export {
+  useProvas,
+  useProvasAtivas,
+  useProva,
+  useCreateProva,
+  useUpdateProva,
+  useDeleteProva,
+  useDuplicateProva,
+  useBaterias,
+  useProvasStats,
+} from './useProvas';
+
+export {
+  useQuestoes,
+} from './useQuestoes';
+
+export {
+  useBateriasProvas,
+} from './useBateriasProvas';
+
+export {
+  useResultadosProvas,
+} from './useResultadosProvas';
+
+// Avaliações
+export {
+  useAvaliacoes,
+  useAvaliacoesProcesso,
+  useAvaliacao,
+  COMPETENCIAS_TECNICAS,
+  COMPETENCIAS_COMPORTAMENTAIS,
+  PARECERES,
+} from './useAvaliacoes';
+
+// Dashboard
+export {
+  useDashboard,
+} from './useDashboard';
+
+export {
+  useDashboardData,
+} from './useDashboardData';
+
+// Comunicação
+export {
+  useComunicacoes,
+} from './useComunicacoes';
+
+// Indicações
+export {
+  useIndicacoes,
+} from './useIndicacoes';
+
+// Candidaturas
+export {
+  useCandidaturas,
+} from './useCandidaturas';
+
+// Match Scores
+export {
+  useMatchScores,
+} from './useMatchScores';
+
+// Profiles
+export {
+  useProfiles,
+} from './useProfiles';
+
+// Views
+export {
+  useViews,
+} from './useViews';
+
+// Histórico
+export {
+  useHistoricoEtapas,
+} from './useHistoricoEtapas';
+
+// Candidato Perfil
+export {
+  useCandidatoPerfil,
+} from './useCandidatoPerfil';
+
+// Notifications
+export {
+  useRealtimeNotifications,
+} from './useRealtimeNotifications';
+
+// Analytics
+export {
+  useAnalytics,
+} from './useAnalytics';
+
+// UI Hooks
+export { useMobile } from './use-mobile';
+export { useToast, toast } from './use-toast';
