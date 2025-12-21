@@ -35,7 +35,7 @@ export function QuestaoAplicacao({
   const respondida = resposta !== null && resposta !== '';
 
   return (
-    <Card className={cn(
+    <Card role="article" aria-label="Aplicação questão" className={cn(
       "transition-all",
       respondida && "ring-2 ring-green-500/30"
     )}>
