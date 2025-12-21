@@ -1,3 +1,10 @@
+/**
+ * @fileoverview send-whatsapp Edge Function
+ * @description Handles send-whatsapp operations for the Match ATS system
+ * @version 1.0.0
+ * @author Match ATS Team
+ */
+
 // Edge Function: Envio de mensagens WhatsApp
 // Compatível com: Evolution API, Z-API, Twilio
 
