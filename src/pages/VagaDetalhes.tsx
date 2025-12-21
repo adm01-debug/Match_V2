@@ -1,3 +1,4 @@
+import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
@@ -69,6 +70,8 @@ export default function VagaDetalhes() {
   };
 
   const handlePublicar = async () => {
+  usePageTitle('Detalhes da Vaga');
+
     if (id) await publicarVaga(id);
   };
 
