@@ -13,7 +13,7 @@ interface CandidatoProfile {
   curriculo_nome: string | null;
 }
 
-interface CandidatoAuthContextType {
+export interface CandidatoAuthContextType {
   user: User | null;
   session: Session | null;
   loading: boolean;
@@ -132,3 +132,4 @@ export const useCandidatoAuth = () => {
   }
   return context;
 };
+
