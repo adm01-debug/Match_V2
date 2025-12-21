@@ -27,7 +27,7 @@ export function ProvaCard({ prova, onSelect, onEdit, onDuplicate, onDelete, comp
   
   if (compact) {
     return (
-      <Card 
+      <Card role="article" aria-label="Card prova" 
         className="cursor-pointer hover:shadow-md transition-shadow border-l-4"
         style={{ borderLeftColor: `var(--${prova.categoria}-color, hsl(var(--primary)))` }}
         onClick={() => onSelect?.(prova)}
