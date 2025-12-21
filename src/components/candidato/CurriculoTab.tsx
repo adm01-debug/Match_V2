@@ -39,7 +39,7 @@ export function CurriculoTab({ candidato }: CurriculoTabProps) {
   return (
     <div className="space-y-6">
       {/* Resumo Profissional */}
-      <Card>
+      <Card role="article" aria-label="Currículo do candidato">
         <CardHeader>
           <CardTitle className="text-lg flex items-center gap-2">
             <FileText className="h-5 w-5 text-primary" />
