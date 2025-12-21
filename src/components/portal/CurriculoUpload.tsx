@@ -192,7 +192,7 @@ const CurriculoUpload: React.FC<CurriculoUploadProps> = ({
   };
 
   return (
-    <Card>
+    <Card role="article" aria-label="Upload currículo">
       <CardHeader>
         <CardTitle className="text-lg flex items-center gap-2">
           <FileText className="h-5 w-5" />
