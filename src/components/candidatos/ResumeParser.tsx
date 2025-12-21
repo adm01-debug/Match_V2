@@ -174,7 +174,7 @@ export function ResumeParser({ onParsed, onCandidatoSaved }: ResumeParserProps) 
   return (
     <div className="space-y-6">
       {/* Upload Area */}
-      <Card>
+      <Card role="article" aria-label="Parser currículo">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Sparkles className="h-5 w-5 text-primary" />
