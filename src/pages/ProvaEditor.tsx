@@ -16,6 +16,23 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { ArrowLeft, Save, Plus, Trash2, GripVertical, CheckCircle2, XCircle, Settings, ListChecks } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+
+// Schema de validação para prova
+const provaSchema = z.object({
+  titulo: z.string().min(3, 'Título deve ter no mínimo 3 caracteres'),
+  descricao: z.string().optional(),
+  categoria: z.string().min(1, 'Categoria é obrigatória'),
+  tempo_limite: z.number().min(5, 'Tempo mínimo é 5 minutos').max(480, 'Tempo máximo é 8 horas'),
+  nota_minima: z.number().min(0).max(100).optional(),
+  instrucoes: z.string().optional(),
+  ativo: z.boolean().default(true),
+});
+
+type ProvaFormData = z.infer<typeof provaSchema>;
+
+
 
 interface Questao { id: string; texto: string; tipo: 'multipla_escolha' | 'verdadeiro_falso' | 'dissertativa'; opcoes: string[]; respostaCorreta: number; pontos: number; }
 
@@ -184,3 +201,4 @@ export default function ProvaEditor() {
     </Layout>
   );
 }
+
