@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CandidatoPerfil } from "@/data/candidatoPerfilData";
@@ -11,7 +12,7 @@ interface PerfilHeaderProps {
   onFavoritar?: () => void;
 }
 
-export function PerfilHeader({ candidato, onEmail, onLigar, onFavoritar }: PerfilHeaderProps) {
+export const PerfilHeader = memo(function PerfilHeader({ candidato, onEmail, onLigar, onFavoritar }: PerfilHeaderProps) {
   const getMatchScoreColor = (score: number) => {
     if (score >= 80) return "bg-success/10 text-success border-success/20";
     if (score >= 60) return "bg-warning/10 text-warning border-warning/20";
@@ -116,4 +117,4 @@ export function PerfilHeader({ candidato, onEmail, onLigar, onFavoritar }: Perfi
       </div>
     </div>
   );
-}
+});
