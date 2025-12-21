@@ -33,6 +33,27 @@ import {
   Loader2
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+
+// Schema de validação
+const vagaSchema = z.object({
+  titulo: z.string().min(3, 'Título deve ter no mínimo 3 caracteres'),
+  departamento: z.string().min(1, 'Departamento é obrigatório'),
+  localizacao: z.string().optional(),
+  tipo_contrato: z.string().min(1, 'Tipo de contrato é obrigatório'),
+  nivel_experiencia: z.string().min(1, 'Nível de experiência é obrigatório'),
+  faixa_salarial: z.string().optional(),
+  descricao: z.string().min(10, 'Descrição deve ter no mínimo 10 caracteres'),
+  requisitos: z.string().optional(),
+  beneficios: z.string().optional(),
+  prioridade: z.string().default('normal'),
+  status: z.string().default('aberta'),
+});
+
+type VagaFormData = z.infer<typeof vagaSchema>;
+
+
 
 const departamentos = [
   "Produção",
@@ -717,3 +738,4 @@ export default function VagaForm() {
     </Layout>
   );
 }
+
