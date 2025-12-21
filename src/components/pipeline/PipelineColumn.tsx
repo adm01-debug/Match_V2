@@ -29,7 +29,7 @@ export const PipelineColumn = memo(function PipelineColumn({ etapa, processos, o
       )}
     >
       {/* Header */}
-      <div className="p-3 border-b bg-card rounded-t-xl">
+      <div role="region" aria-label="Coluna pipeline" className="p-3 border-b bg-card rounded-t-xl">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div
