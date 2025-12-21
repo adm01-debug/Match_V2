@@ -48,3 +48,5 @@ export const FunilChart = memo(function FunilChart({ data }: FunilChartProps) {
     </Card>
   );
 });
+
+FunilChart.displayName = "FunilChart";
