@@ -87,7 +87,7 @@ export function MatchScoreCard({ matchResult, candidatoNome, vagaTitulo }: Match
   const RecomendacaoIcon = recomendacaoConfig.icon;
 
   return (
-    <Card className="overflow-hidden">
+    <Card role="article" aria-label="Score de match" className="overflow-hidden">
       <CardHeader className="pb-2">
         <CardTitle className="flex items-center justify-between">
           <div className="flex items-center gap-2">
