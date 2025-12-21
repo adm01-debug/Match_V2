@@ -1,3 +1,4 @@
+import { usePageTitle } from '@/hooks/usePageTitle';
 import { Layout } from "@/components/layout/Layout";
 import { KPICard } from "@/components/dashboard/KPICard";
 import { FunilChart } from "@/components/dashboard/FunilChart";
@@ -22,6 +23,8 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Dashboard() {
+  usePageTitle('Dashboard');
+
   const { 
     kpiData, 
     funilData, 
