@@ -1,3 +1,4 @@
+import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { VagaCard } from "@/components/vagas/VagaCard";
@@ -52,6 +53,8 @@ export default function VagasList() {
   const hasActiveFilters = statusFilter !== "todas" || prioridadeFilter !== "todas" || departamentoFilter !== "todos" || searchTerm !== "";
 
   const clearFilters = () => {
+  usePageTitle('Vagas');
+
     setSearchTerm("");
     setStatusFilter("todas");
     setPrioridadeFilter("todas");
