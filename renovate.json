@@ -1,0 +1,45 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":automergeMinor",
+    ":automergePatch"
+  ],
+  "labels": ["dependencies"],
+  "packageRules": [
+    {
+      "matchPackagePatterns": ["*"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true
+    },
+    {
+      "matchPackagePatterns": ["@types/*"],
+      "automerge": true,
+      "automergeType": "branch"
+    },
+    {
+      "matchPackageNames": ["react", "react-dom"],
+      "groupName": "React"
+    },
+    {
+      "matchPackagePatterns": ["@radix-ui/*"],
+      "groupName": "Radix UI"
+    },
+    {
+      "matchPackagePatterns": ["@tanstack/*"],
+      "groupName": "TanStack"
+    },
+    {
+      "matchPackageNames": ["vitest", "@vitest/*"],
+      "groupName": "Vitest"
+    },
+    {
+      "matchPackagePatterns": ["eslint*", "@typescript-eslint/*"],
+      "groupName": "ESLint"
+    }
+  ],
+  "schedule": ["before 6am on monday"],
+  "timezone": "America/Sao_Paulo",
+  "prConcurrentLimit": 5,
+  "prHourlyLimit": 2
+}
