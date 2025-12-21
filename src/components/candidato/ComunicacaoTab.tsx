@@ -16,7 +16,7 @@ export function ComunicacaoTab({ candidato }: ComunicacaoTabProps) {
   return (
     <div className="space-y-6">
       {/* Ações Rápidas */}
-      <Card>
+      <Card role="article" aria-label="Comunicações com candidato">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <MessageSquare className="h-5 w-5" />
