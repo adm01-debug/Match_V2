@@ -118,3 +118,5 @@ export const PerfilHeader = memo(function PerfilHeader({ candidato, onEmail, onL
     </div>
   );
 });
+
+PerfilHeader.displayName = "PerfilHeader";
