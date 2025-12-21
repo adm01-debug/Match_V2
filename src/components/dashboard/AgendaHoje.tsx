@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { AgendaDia } from "@/types/recruitment";
@@ -34,7 +35,7 @@ const tipoConfig = {
 
 export function AgendaHoje({ agenda }: AgendaProps) {
   return (
-    <Card className="h-full">
+    <Card role="article" aria-label="Agenda de hoje" className="h-full">
       <CardHeader className="pb-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
