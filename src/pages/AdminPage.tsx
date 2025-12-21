@@ -1,3 +1,4 @@
+import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState, useEffect } from 'react';
 import { Layout } from '@/components/layout/Layout';
 import { useAuth, AppRole } from '@/contexts/AuthContext';
@@ -63,6 +64,8 @@ const roleDescriptions: Record<AppRole, string> = {
 };
 
 const AdminPage = () => {
+  usePageTitle('Administração');
+
   const { user } = useAuth();
   const { toast } = useToast();
   const [users, setUsers] = useState<UserProfile[]>([]);
