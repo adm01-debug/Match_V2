@@ -1,3 +1,4 @@
+import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState, useCallback, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
@@ -55,6 +56,8 @@ export default function Pipeline() {
 
   // Atualizar URL quando vaga mudar
   useEffect(() => {
+  usePageTitle('Pipeline');
+
     if (vagaSelecionada && vagaSelecionada !== "todas") {
       setSearchParams({ vaga: vagaSelecionada });
     } else {
