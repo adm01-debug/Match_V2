@@ -1,3 +1,4 @@
+import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState, useMemo } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
@@ -48,6 +49,8 @@ const tipoConfig = {
 };
 
 export default function AgendaPage() {
+  usePageTitle('Agenda');
+
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { toast } = useToast();
