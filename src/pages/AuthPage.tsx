@@ -1,3 +1,4 @@
+import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -26,6 +27,8 @@ const signupSchema = z.object({
 });
 
 const AuthPage = () => {
+  usePageTitle('Login');
+
   const navigate = useNavigate();
   const { user, signIn, signUp, loading: authLoading } = useAuth();
   const { toast } = useToast();
