@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { LucideIcon } from "lucide-react";
@@ -37,7 +38,7 @@ const variantStyles = {
   },
 };
 
-export function KPICard({
+export const KPICard = memo(function KPICard({
   title,
   value,
   subtitle,
