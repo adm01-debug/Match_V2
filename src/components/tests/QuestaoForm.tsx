@@ -205,7 +205,7 @@ export function QuestaoForm({ questao, onSave, onCancel }: QuestaoFormProps) {
 
       {/* Dissertativa - Orientações */}
       {(tipo === 'dissertativa' || tipo === 'pratica') && (
-        <Card className="bg-muted/50">
+        <Card role="article" aria-label="Formulário questão" className="bg-muted/50">
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground">
               {tipo === 'dissertativa' 
