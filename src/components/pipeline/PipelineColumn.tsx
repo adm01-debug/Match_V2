@@ -77,3 +77,4 @@ export const PipelineColumn = memo(function PipelineColumn({ etapa, processos, o
   );
 }
 
+PipelineColumn.displayName = "PipelineColumn";
