@@ -1,3 +1,4 @@
+import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
@@ -66,6 +67,8 @@ export default function ProvaEditor() {
   const [activeTab, setActiveTab] = useState("info");
 
   useEffect(() => {
+  usePageTitle('Editor de Prova');
+
     if (provaExistente) {
       setTitulo(provaExistente.titulo);
       setDescricao(provaExistente.descricao || "");
