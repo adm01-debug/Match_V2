@@ -1,3 +1,4 @@
+import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState, useEffect } from "react";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
@@ -56,6 +57,8 @@ interface NotaCompetencia {
 }
 
 export default function AvaliacaoForm() {
+  usePageTitle('Avaliação');
+
   const { id } = useParams();
   const [searchParams] = useSearchParams();
   const processoIdParam = searchParams.get('processo');
