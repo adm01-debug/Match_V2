@@ -25,7 +25,7 @@ export function useQuestoes(provaId?: string) {
 
   const { data: questoes = [], isLoading, error } = useQuery({
     queryKey: ['questoes', provaId],
-    queryFn: async () => {
+    staleTime: 5 * 60 * 1000, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
       if (!provaId) return [];
       
       const { data, error } = await supabase
