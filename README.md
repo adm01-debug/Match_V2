@@ -1,4 +1,12 @@
-# Welcome to your Lovable project
+# Match ATS
+
+[![CI](https://github.com/adm01-debug/match/actions/workflows/ci.yml/badge.svg)](https://github.com/adm01-debug/match/actions/workflows/ci.yml)
+[![E2E Tests](https://github.com/adm01-debug/match/actions/workflows/e2e.yml/badge.svg)](https://github.com/adm01-debug/match/actions/workflows/e2e.yml)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.6-blue.svg)](https://www.typescriptlang.org/)
+[![React](https://img.shields.io/badge/React-18.3-blue.svg)](https://reactjs.org/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+
 
 ## Project info
 
