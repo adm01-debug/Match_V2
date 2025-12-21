@@ -1,3 +1,4 @@
+import { usePageTitle } from '@/hooks/usePageTitle';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCandidatoAuth } from '@/contexts/CandidatoAuthContext';
@@ -10,6 +11,8 @@ import { toast } from 'sonner';
 import { Briefcase, User, Mail, Phone, Lock, ArrowRight } from 'lucide-react';
 
 const PortalAuthPage = () => {
+  usePageTitle('Portal - Login');
+
   const navigate = useNavigate();
   const { user, isCandidato, signIn, signUp, loading } = useCandidatoAuth();
   
