@@ -38,7 +38,7 @@ export function QuestaoCard({ questao, index, onEdit, onDelete, showAnswer = tru
   const dificuldade = dificuldadeConfig[questao.dificuldade];
 
   return (
-    <Card className="group hover:shadow-md transition-shadow">
+    <Card role="article" aria-label="Questão" className="group hover:shadow-md transition-shadow">
       <CardContent className="p-4">
         <div className="flex gap-3">
           {/* Drag handle & Number */}
