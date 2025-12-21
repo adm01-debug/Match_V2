@@ -89,6 +89,74 @@ export type Database = {
         }
         Relationships: []
       }
+      avaliacoes: {
+        Row: {
+          id: string
+          processo_seletivo_id: string
+          candidato_id: string
+          avaliador_id: string
+          tipo: string
+          competencias: Json | null
+          nota_geral: number | null
+          parecer: string | null
+          observacoes: string | null
+          data_avaliacao: string
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          processo_seletivo_id: string
+          candidato_id: string
+          avaliador_id: string
+          tipo: string
+          competencias?: Json | null
+          nota_geral?: number | null
+          parecer?: string | null
+          observacoes?: string | null
+          data_avaliacao?: string
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          processo_seletivo_id?: string
+          candidato_id?: string
+          avaliador_id?: string
+          tipo?: string
+          competencias?: Json | null
+          nota_geral?: number | null
+          parecer?: string | null
+          observacoes?: string | null
+          data_avaliacao?: string
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "avaliacoes_processo_seletivo_id_fkey"
+            columns: ["processo_seletivo_id"]
+            isOneToOne: false
+            referencedRelation: "processos_seletivos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "avaliacoes_candidato_id_fkey"
+            columns: ["candidato_id"]
+            isOneToOne: false
+            referencedRelation: "candidatos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "avaliacoes_avaliador_id_fkey"
+            columns: ["avaliador_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+
       candidatos: {
         Row: {
           arquivo_curriculo: string | null
@@ -1054,3 +1122,4 @@ export const Constants = {
     },
   },
 } as const
+
