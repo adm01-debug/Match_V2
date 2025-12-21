@@ -1,3 +1,4 @@
+import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState, useMemo } from 'react';
 import { Layout } from '@/components/layout/Layout';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -28,6 +29,8 @@ const etapasLabels: Record<string, string> = {
 };
 
 export default function AnalyticsPage() {
+  usePageTitle('Analytics');
+
   const [periodo, setPeriodo] = useState('6m');
 
   // Buscar processos seletivos para funil
