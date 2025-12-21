@@ -35,7 +35,7 @@ export function ProvaTimer({ duracaoMinutos, onTimeUp, isPaused = false }: Prova
   const isWarning = percentual <= 50 && !isUrgent;
 
   return (
-    <div className={cn(
+    <div role="region" aria-label="Timer prova" className={cn(
       "flex items-center gap-2 px-4 py-2 rounded-lg font-mono text-lg transition-colors",
       isUrgent && "bg-red-500/20 text-red-600 animate-pulse",
       isWarning && "bg-yellow-500/20 text-yellow-600",
