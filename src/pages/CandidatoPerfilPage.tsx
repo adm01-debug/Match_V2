@@ -1,3 +1,4 @@
+import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
@@ -45,6 +46,8 @@ const statusStyles: Record<string, { bg: string; text: string; label: string }> 
 };
 
 export default function CandidatoPerfilPage() {
+  usePageTitle('Perfil do Candidato');
+
   const { id } = useParams();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("resumo");
