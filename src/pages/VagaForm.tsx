@@ -1,3 +1,4 @@
+import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
@@ -146,6 +147,8 @@ export default function VagaForm() {
 
   // Load existing vaga data when editing
   useEffect(() => {
+  usePageTitle('Formulário de Vaga');
+
     if (existingVaga) {
       setFormData({
         titulo: existingVaga.titulo,
