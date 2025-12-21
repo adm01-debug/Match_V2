@@ -56,7 +56,7 @@ export function DocumentosTab({ candidato }: DocumentosTabProps) {
   return (
     <div className="space-y-6">
       {/* Header com Upload */}
-      <Card>
+      <Card role="article" aria-label="Documentos do candidato">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
