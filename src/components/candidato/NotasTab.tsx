@@ -102,7 +102,7 @@ export function NotasTab({ candidatoId }: NotasTabProps) {
   return (
     <div className="space-y-6">
       {/* Adicionar Nova Nota */}
-      <Card>
+      <Card role="article" aria-label="Notas">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Plus className="h-5 w-5" />
