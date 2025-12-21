@@ -1,3 +1,4 @@
+import { usePageTitle } from '@/hooks/usePageTitle';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
@@ -45,6 +46,8 @@ const statusColors: Record<string, string> = {
 };
 
 const PortalDashboard = () => {
+  usePageTitle('Portal - Dashboard');
+
   const navigate = useNavigate();
   const { profile, signOut, loading: authLoading } = useCandidatoAuth();
 
