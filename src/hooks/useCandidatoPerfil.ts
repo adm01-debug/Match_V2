@@ -103,7 +103,7 @@ export function useCandidatoPerfil(candidatoId: string | undefined) {
       if (error) throw error;
       return data;
     },
-    onSuccess: () => {
+    onError: (error) => { console.error('Mutation error:', error); toast.error('Ocorreu um erro'); }, onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['candidato-perfil', candidatoId] });
       queryClient.invalidateQueries({ queryKey: ['candidatos'] });
     },
