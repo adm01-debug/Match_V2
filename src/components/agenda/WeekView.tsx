@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { memo,  useMemo  } from 'react';
 import { format, startOfWeek, addDays, isSameDay, parseISO } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
