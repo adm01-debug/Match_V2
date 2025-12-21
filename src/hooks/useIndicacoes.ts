@@ -16,7 +16,7 @@ export function useIndicacoes(filtros?: { status?: string; vagaId?: string }) {
 
   const { data: indicacoes = [], isLoading, error } = useQuery({
     queryKey: ['indicacoes', filtros],
-    queryFn: async () => {
+    staleTime: 5 * 60 * 1000, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
       let query = supabase
         .from('indicacoes')
         .select(`
