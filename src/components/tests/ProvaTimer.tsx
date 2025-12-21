@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { memo,  useState, useEffect, useCallback  } from 'react';
 import { Clock, AlertTriangle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
