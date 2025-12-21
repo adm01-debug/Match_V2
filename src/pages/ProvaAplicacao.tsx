@@ -1,3 +1,4 @@
+import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState, useEffect } from "react";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
@@ -38,6 +39,8 @@ export default function ProvaAplicacao() {
   const questoes: Questao[] = prova?.questoes as Questao[] || [];
 
   useEffect(() => {
+  usePageTitle('Aplicação de Prova');
+
     if (!iniciada || finalizada || tempoRestante === null) return;
     const timer = setInterval(() => {
       setTempoRestante(prev => {
