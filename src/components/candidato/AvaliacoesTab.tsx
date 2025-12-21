@@ -70,7 +70,7 @@ export function AvaliacoesTab({ candidato }: AvaliacoesTabProps) {
   return (
     <div className="space-y-6">
       {/* Resumo das Avaliações */}
-      <Card>
+      <Card role="article" aria-label="Avaliações do candidato">
         <CardHeader>
           <CardTitle className="text-lg flex items-center gap-2">
             <ClipboardCheck className="h-5 w-5 text-primary" />
