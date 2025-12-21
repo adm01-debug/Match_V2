@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
@@ -10,7 +11,7 @@ export function EntrevistasStats() {
 
   if (isLoading) {
     return (
-      <Card>
+      <Card role="article" aria-label="Estatísticas de entrevistas">
         <CardHeader className="pb-3">
           <CardTitle className="text-lg flex items-center gap-2">
             <Users className="h-5 w-5" />
