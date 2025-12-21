@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { AcaoPendente } from "@/types/recruitment";
 import { AlertCircle, Clock, Calendar, ClipboardCheck, FileText } from "lucide-react";
@@ -32,7 +33,7 @@ const tipoConfig = {
 
 export function AcoesPendentes({ acoes }: AcoesPendentesProps) {
   return (
-    <Card className="h-full">
+    <Card role="article" aria-label="Ações pendentes" className="h-full">
       <CardHeader className="pb-4">
         <div className="flex items-center gap-2">
           <AlertCircle className="h-5 w-5 text-warning" />
