@@ -45,7 +45,7 @@ export function WeekView({ currentDate, entrevistas, onSelectEntrevista, onSelec
   };
 
   return (
-    <div className="overflow-auto">
+    <div role="region" aria-label="Visualização semana" className="overflow-auto">
       <div className="min-w-[800px]">
         {/* Header */}
         <div className="grid grid-cols-8 border-b">
