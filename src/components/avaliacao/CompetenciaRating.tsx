@@ -26,7 +26,7 @@ export function CompetenciaRating({
   onObservacaoChange,
 }: CompetenciaRatingProps) {
   return (
-    <div className="space-y-3 p-4 rounded-lg border border-border bg-card">
+    <div role="region" aria-label="Avaliação competência" className="space-y-3 p-4 rounded-lg border border-border bg-card">
       <div className="flex items-start justify-between gap-4">
         <div className="flex-1">
           <div className="flex items-center gap-2">
