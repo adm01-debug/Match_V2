@@ -1,3 +1,4 @@
+import { usePageTitle } from '@/hooks/usePageTitle';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -39,6 +40,8 @@ const contratoLabels: Record<string, string> = {
 };
 
 const PortalVagas = () => {
+  usePageTitle('Portal - Vagas');
+
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { profile } = useCandidatoAuth();
