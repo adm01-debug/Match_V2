@@ -50,7 +50,7 @@ export default function TestsPage() {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  const { data: provas = [], isLoading, deleteProva, duplicarProva, refetch } = useProvas();
+  const { data: provas = [], isLoading, isError, deleteProva, duplicarProva, refetch } = useProvas();
 
   const [searchQuery, setSearchQuery] = useState("");
   const [filtroCategoria, setFiltroCategoria] = useState<string>("todas");
