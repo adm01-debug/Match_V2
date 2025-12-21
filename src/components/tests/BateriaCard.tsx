@@ -2,26 +2,27 @@ import { memo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { BateriaProvas } from '@/types/tests';
-import { departamentosInfo, niveisInfo,  } from '@/config/testsConfig';
-import { Clock, FileText, CheckCircle, Circle, Play } from 'lucide-react';
+import { departamentosInfo, niveisInfo } from '@/config/testsConfig';
+import { Clock, FileText, Play } from 'lucide-react';
+
+interface BateriaProvas {
+  id: string;
+  nome: string;
+  descricao?: string;
+  departamento: string;
+  nivel: string;
+  duracao_total: number;
+  ativo: boolean;
+}
 
 interface BateriaCardProps {
   bateria: BateriaProvas;
   onSelect?: (bateria: BateriaProvas) => void;
 }
 
-export function BateriaCard({ bateria, onSelect }: BateriaCardProps) {
-  const departamento = departamentosInfo[bateria.departamento];
-  const nivel = niveisInfo[bateria.nivel];
-  
-  const provasObrigatorias = bateria.obrigatorias.map(id => 
-    .find(p => p.id === id)
-  ).filter(Boolean);
-  
-  const provasOpcionais = bateria.opcionais.map(id => 
-    .find(p => p.id === id)
-  ).filter(Boolean);
+export const BateriaCard = memo(function BateriaCard({ bateria, onSelect }: BateriaCardProps) {
+  const departamento = departamentosInfo[bateria.departamento] || { nome: bateria.departamento };
+  const nivel = niveisInfo[bateria.nivel] || { nome: bateria.nivel };
 
   return (
     <Card role="article" aria-label="Bateria de testes" className="hover:shadow-lg transition-shadow">
@@ -41,45 +42,18 @@ export function BateriaCard({ bateria, onSelect }: BateriaCardProps) {
         <div className="flex items-center gap-4 text-sm text-muted-foreground">
           <span className="flex items-center gap-1">
             <Clock className="h-4 w-4" />
-            {Math.floor(bateria.duracaoTotal / 60)}h {bateria.duracaoTotal % 60}min
+            {Math.floor(bateria.duracao_total / 60)}h {bateria.duracao_total % 60}min
           </span>
           <span className="flex items-center gap-1">
             <FileText className="h-4 w-4" />
-            {bateria.provas.length} provas
+            Bateria de provas
           </span>
         </div>
 
-        <div className="space-y-2">
-          <h4 className="text-sm font-medium flex items-center gap-2">
-            <CheckCircle className="h-4 w-4 text-green-500" />
-            Obrigatórias ({provasObrigatorias.length})
-          </h4>
-          <div className="flex flex-wrap gap-1">
-            {provasObrigatorias.map((prova) => (
-              <Badge key={prova?.id} variant="outline" className="text-xs">
-                {prova?.titulo}
-              </Badge>
-            ))}
-          </div>
-        </div>
-
-        <div className="space-y-2">
-          <h4 className="text-sm font-medium flex items-center gap-2">
-            <Circle className="h-4 w-4 text-muted-foreground" />
-            Opcionais ({provasOpcionais.length})
-          </h4>
-          <div className="flex flex-wrap gap-1">
-            {provasOpcionais.slice(0, 4).map((prova) => (
-              <Badge key={prova?.id} variant="outline" className="text-xs bg-muted/50">
-                {prova?.titulo}
-              </Badge>
-            ))}
-            {provasOpcionais.length > 4 && (
-              <Badge variant="outline" className="text-xs bg-muted/50">
-                +{provasOpcionais.length - 4}
-              </Badge>
-            )}
-          </div>
+        <div className="flex items-center gap-2">
+          <Badge variant={bateria.ativo ? "default" : "secondary"}>
+            {bateria.ativo ? "Ativa" : "Inativa"}
+          </Badge>
         </div>
 
         <Button 
@@ -92,5 +66,6 @@ export function BateriaCard({ bateria, onSelect }: BateriaCardProps) {
       </CardContent>
     </Card>
   );
-}
+});
 
+BateriaCard.displayName = "BateriaCard";

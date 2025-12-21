@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 
 // Mock Supabase
 vi.mock('@/integrations/supabase/client', () => ({
@@ -57,9 +57,7 @@ const createWrapper = () => {
     },
   });
   return ({ children }: { children: ReactNode }) => (
-    <QueryClientProvider client={queryClient}>
-      {children}
-    </QueryClientProvider>
+    React.createElement(QueryClientProvider, { client: queryClient }, children)
   );
 };
 

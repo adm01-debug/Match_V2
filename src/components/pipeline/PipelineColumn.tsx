@@ -75,6 +75,6 @@ export const PipelineColumn = memo(function PipelineColumn({ etapa, processos, o
       </ScrollArea>
     </div>
   );
-}
+});
 
 PipelineColumn.displayName = "PipelineColumn";
