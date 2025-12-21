@@ -14,7 +14,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { useVagas } from "@/hooks/useVagas";
 import { StatusVaga, Prioridade } from "@/types/recruitment";
-import { Plus, Search, Filter, LayoutGrid, List, X } from "lucide-react";
+import { Plus, Search, Filter, LayoutGrid, List, X , AlertCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 
