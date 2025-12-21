@@ -11,7 +11,7 @@ import { TopCandidatos } from "@/components/dashboard/TopCandidatos";
 import { EntrevistasStats } from "@/components/dashboard/EntrevistasStats";
 import { EntrevistasChart } from "@/components/dashboard/EntrevistasChart";
 import { useDashboardData } from "@/hooks/useDashboardData";
-import { Briefcase, Users, Target, UserCheck, Clock, Loader2 } from "lucide-react";
+import { Briefcase, Users, Target, UserCheck, Clock, Loader2 , AlertCircle } from "lucide-react";
 import {
   Select,
   SelectContent,
