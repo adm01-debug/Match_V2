@@ -32,6 +32,21 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+
+// Schema de validação para avaliação
+const avaliacaoSchema = z.object({
+  tipo: z.string().min(1, 'Tipo de avaliação é obrigatório'),
+  competencias: z.record(z.number().min(1).max(5)).optional(),
+  nota_geral: z.number().min(1).max(10).optional(),
+  parecer: z.string().min(1, 'Parecer é obrigatório'),
+  observacoes: z.string().optional(),
+});
+
+type AvaliacaoFormData = z.infer<typeof avaliacaoSchema>;
+
+
 
 interface NotaCompetencia {
   id: string;
@@ -482,3 +497,4 @@ export default function AvaliacaoForm() {
     </Layout>
   );
 }
+
