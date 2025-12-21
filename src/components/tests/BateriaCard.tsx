@@ -23,7 +23,7 @@ export function BateriaCard({ bateria, onSelect }: BateriaCardProps) {
   ).filter(Boolean);
 
   return (
-    <Card className="hover:shadow-lg transition-shadow">
+    <Card role="article" aria-label="Bateria de testes" className="hover:shadow-lg transition-shadow">
       <CardHeader className="pb-2">
         <div className="flex items-start justify-between">
           <div>
