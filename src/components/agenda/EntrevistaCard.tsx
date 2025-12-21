@@ -36,7 +36,7 @@ const EntrevistaCard = ({ entrevista, onClick }: EntrevistaCardProps) => {
   const statusStyle = statusConfig[entrevista.status];
 
   return (
-    <Card 
+    <Card role="article" aria-label="Card entrevista" 
       className={cn(
         "p-3 cursor-pointer hover:shadow-md transition-all border-l-4",
         entrevista.status === 'confirmada' && "border-l-green-500",
