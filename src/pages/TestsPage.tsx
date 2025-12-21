@@ -1,3 +1,4 @@
+import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
@@ -58,6 +59,8 @@ export default function TestsPage() {
 
   // Filtrar provas
   const provasFiltradas = useMemo(() => {
+  usePageTitle('Testes');
+
     return provas.filter(p => {
       if (searchQuery && !p.titulo.toLowerCase().includes(searchQuery.toLowerCase())) return false;
       if (filtroCategoria !== "todas" && p.categoria !== filtroCategoria) return false;
