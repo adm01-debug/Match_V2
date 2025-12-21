@@ -1,3 +1,4 @@
+import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
@@ -63,6 +64,8 @@ export default function ComunicacaoPage() {
 
   // Carregar dados
   useEffect(() => {
+  usePageTitle('Comunicação');
+
     loadData();
   }, []);
 
