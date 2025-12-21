@@ -1,3 +1,10 @@
+/**
+ * @fileoverview send-email Edge Function
+ * @description Handles send-email operations for the Match ATS system
+ * @version 1.0.0
+ * @author Match ATS Team
+ */
+
 // Edge Function: Envio de emails via Resend
 // Deploy: supabase functions deploy send-email
 
