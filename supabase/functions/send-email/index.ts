@@ -3,6 +3,24 @@
 
 import { serve } from "https://deno.land/std@0.208.0/http/server.ts";
 
+// Rate limiting helper
+const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
+const RATE_LIMIT = 100;
+const RATE_WINDOW = 60000; // 1 minute
+
+function checkRateLimit(clientId: string): boolean {
+  const now = Date.now();
+  const client = rateLimitMap.get(clientId);
+  if (!client || now > client.resetTime) {
+    rateLimitMap.set(clientId, { count: 1, resetTime: now + RATE_WINDOW });
+    return true;
+  }
+  if (client.count >= RATE_LIMIT) return false;
+  client.count++;
+  return true;
+}
+
+
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 const FROM_EMAIL = Deno.env.get("FROM_EMAIL") || "noreply@match-ats.com";
 
