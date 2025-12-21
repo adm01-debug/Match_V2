@@ -48,6 +48,7 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
+        <AnalyticsProvider>
     <TooltipProvider>
       <Toaster />
       <Sonner />
@@ -119,8 +120,10 @@ const App = () => (
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
-  </QueryClientProvider>
+  </AnalyticsProvider>
+      </QueryClientProvider>
 );
 
 export default App;
+
 
