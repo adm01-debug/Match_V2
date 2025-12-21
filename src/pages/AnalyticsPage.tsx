@@ -15,7 +15,7 @@ import {
 import { 
   TrendingUp, TrendingDown, Clock, Users, Target, Briefcase, 
   Calendar, Award, BarChart3, PieChartIcon, Activity, Zap
-} from 'lucide-react';
+, AlertCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { format, subMonths, startOfMonth, endOfMonth, differenceInDays } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
