@@ -124,7 +124,7 @@ export function EnviarEmailDialog({ open, onOpenChange, candidato, onSuccess }: 
           <DialogDescription>Envie um e-mail para o candidato selecionado</DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-4 py-4">
+        <div role="region" aria-label="Enviar email" className="space-y-4 py-4">
           {/* Destinatário */}
           <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
             <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
