@@ -1,3 +1,4 @@
+import { usePageTitle } from '@/hooks/usePageTitle';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -13,6 +14,8 @@ import { ArrowLeft, User, Mail, Phone, Save, Lock } from 'lucide-react';
 import CurriculoUpload from '@/components/portal/CurriculoUpload';
 
 const PortalPerfil = () => {
+  usePageTitle('Portal - Meu Perfil');
+
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { profile, user } = useCandidatoAuth();
