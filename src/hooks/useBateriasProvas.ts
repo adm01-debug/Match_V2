@@ -47,7 +47,7 @@ export function useBateriasProvas() {
       if (error) throw error;
       return data;
     },
-    onSuccess: () => {
+    onError: (error) => { console.error('Mutation error:', error); toast.error('Ocorreu um erro'); }, onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['baterias-provas'] });
       toast({ title: 'Bateria criada!' });
     },
@@ -67,7 +67,7 @@ export function useBateriasProvas() {
       if (error) throw error;
       return data;
     },
-    onSuccess: () => {
+    onError: (error) => { console.error('Mutation error:', error); toast.error('Ocorreu um erro'); }, onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['baterias-provas'] });
       toast({ title: 'Bateria atualizada!' });
     },
@@ -78,7 +78,7 @@ export function useBateriasProvas() {
       const { error } = await supabase.from('baterias_provas').delete().eq('id', id);
       if (error) throw error;
     },
-    onSuccess: () => {
+    onError: (error) => { console.error('Mutation error:', error); toast.error('Ocorreu um erro'); }, onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['baterias-provas'] });
       toast({ title: 'Bateria removida!' });
     },
