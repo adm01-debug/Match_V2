@@ -83,7 +83,7 @@ export function TopCandidatos({ processos }: TopCandidatosProps) {
 
   if (topCandidatos.length === 0) {
     return (
-      <Card>
+      <Card role="article" aria-label="Top candidatos">
         <CardContent className="flex flex-col items-center justify-center py-8 text-center">
           <Trophy className="h-8 w-8 text-muted-foreground/50 mb-3" />
           <p className="text-sm text-muted-foreground">
