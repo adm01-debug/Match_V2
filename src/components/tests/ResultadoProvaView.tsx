@@ -54,7 +54,7 @@ export function ResultadoProvaView({ prova, resultado, questoes, onVoltar }: Res
   return (
     <div className="space-y-6">
       {/* Header com resultado principal */}
-      <Card className={cn(
+      <Card role="article" aria-label="Resultado prova" className={cn(
         "border-2",
         aprovado ? "border-green-500 bg-green-500/5" : "border-red-500 bg-red-500/5"
       )}>
