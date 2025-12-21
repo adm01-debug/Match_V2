@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -135,7 +136,7 @@ export function AlertasInteligentes({ acoesPendentes, vagasUrgentes }: AlertasIn
 
   if (alertas.length === 0) {
     return (
-      <Card>
+      <Card role="article" aria-label="Alertas inteligentes">
         <CardContent className="flex flex-col items-center justify-center py-8 text-center">
           <div className="p-3 rounded-full bg-emerald-500/10 mb-3">
             <Zap className="h-6 w-6 text-emerald-500" />
