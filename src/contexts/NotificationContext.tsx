@@ -1,6 +1,30 @@
 import React, { createContext, useContext, ReactNode, useCallback, useMemo, useState } from 'react';
 import { useRealtimeNotifications, Notification } from '@/hooks/useRealtimeNotifications';
 
+// Tipos exportados
+export type NotificationType = 'info' | 'success' | 'warning' | 'error';
+
+export interface Notification {
+  id: string;
+  type: NotificationType;
+  title: string;
+  message: string;
+  read: boolean;
+  createdAt: Date;
+}
+
+export interface NotificationContextValue {
+  notifications: Notification[];
+  unreadCount: number;
+  addNotification: (notification: Omit<Notification, 'id' | 'read' | 'createdAt'>) => void;
+  markAsRead: (id: string) => void;
+  markAllAsRead: () => void;
+  removeNotification: (id: string) => void;
+  clearAll: () => void;
+}
+
+
+
 interface NotificationContextType {
   notifications: Notification[];
   unreadCount: number;
@@ -85,4 +109,5 @@ export function useNotifications() {
   }
   return context;
 }
+
 
