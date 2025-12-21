@@ -1,0 +1,73 @@
+{
+  "info": {
+    "name": "Match ATS API",
+    "description": "API collection for Match ATS Edge Functions",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Match Score",
+      "request": {
+        "method": "POST",
+        "url": "{{base_url}}/functions/v1/match-score",
+        "header": [
+          {"key": "Authorization", "value": "Bearer {{anon_key}}"},
+          {"key": "Content-Type", "value": "application/json"}
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"candidatoId\": \"uuid\", \"vagaId\": \"uuid\"}"
+        }
+      }
+    },
+    {
+      "name": "Parse Resume",
+      "request": {
+        "method": "POST",
+        "url": "{{base_url}}/functions/v1/parse-resume",
+        "header": [
+          {"key": "Authorization", "value": "Bearer {{anon_key}}"},
+          {"key": "Content-Type", "value": "application/json"}
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"fileUrl\": \"https://example.com/resume.pdf\"}"
+        }
+      }
+    },
+    {
+      "name": "Send Email",
+      "request": {
+        "method": "POST",
+        "url": "{{base_url}}/functions/v1/send-email",
+        "header": [
+          {"key": "Authorization", "value": "Bearer {{anon_key}}"},
+          {"key": "Content-Type", "value": "application/json"}
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"to\": \"email@example.com\", \"subject\": \"Test\", \"body\": \"Hello\"}"
+        }
+      }
+    },
+    {
+      "name": "Send WhatsApp",
+      "request": {
+        "method": "POST",
+        "url": "{{base_url}}/functions/v1/send-whatsapp",
+        "header": [
+          {"key": "Authorization", "value": "Bearer {{anon_key}}"},
+          {"key": "Content-Type", "value": "application/json"}
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"phone\": \"+5511999999999\", \"message\": \"Hello\"}"
+        }
+      }
+    }
+  ],
+  "variable": [
+    {"key": "base_url", "value": "https://your-project.supabase.co"},
+    {"key": "anon_key", "value": "your-anon-key"}
+  ]
+}
