@@ -274,3 +274,5 @@ export const VagaCard = memo(function VagaCard({ vaga }: VagaCardProps) {
     </>
   );
 });
+
+VagaCard.displayName = "VagaCard";
