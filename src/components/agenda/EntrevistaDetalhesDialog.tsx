@@ -232,7 +232,7 @@ const EntrevistaDetalhesDialog = ({
       }}>
         <DialogContent className="max-w-lg">
           <DialogHeader>
-            <div className="flex items-center justify-between">
+            <div role="region" aria-label="Detalhes entrevista" className="flex items-center justify-between">
               <DialogTitle className="flex items-center gap-2">
                 {isEditing ? 'Editar Entrevista' : 'Detalhes da Entrevista'}
               </DialogTitle>
