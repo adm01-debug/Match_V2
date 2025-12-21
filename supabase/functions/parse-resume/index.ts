@@ -1,3 +1,10 @@
+/**
+ * @fileoverview parse-resume Edge Function
+ * @description Handles parse-resume operations for the Match ATS system
+ * @version 1.0.0
+ * @author Match ATS Team
+ */
+
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
