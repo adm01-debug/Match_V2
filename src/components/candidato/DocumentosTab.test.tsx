@@ -1,0 +1,3 @@
+import { describe, it, expect, vi } from 'vitest';
+vi.mock('@/integrations/supabase/client', () => ({ supabase: { from: vi.fn().mockReturnThis() } }));
+describe('DocumentosTab', () => { it('importable', async () => { expect(await import('./DocumentosTab')).toBeDefined(); }); });
