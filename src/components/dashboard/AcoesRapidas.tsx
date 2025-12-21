@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { Button } from "@/components/ui/button";
 import { Plus, Users, BarChart3, Briefcase } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -31,7 +32,7 @@ export function AcoesRapidas() {
   ];
 
   return (
-    <div className="flex flex-wrap gap-3">
+    <div role="region" aria-label="Ações rápidas" className="flex flex-wrap gap-3">
       {acoes.map((acao) => (
         <Button
           key={acao.label}
