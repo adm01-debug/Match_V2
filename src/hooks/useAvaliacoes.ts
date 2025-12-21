@@ -125,7 +125,7 @@ export function useAvaliacoes(options: UseAvaliacoesOptions = {}) {
       if (error) throw error;
       return data as AvaliacaoDB;
     },
-    onSuccess: () => {
+    onError: (error) => { console.error('Mutation error:', error); toast.error('Ocorreu um erro'); }, onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['avaliacoes'] });
     },
   });
@@ -145,7 +145,7 @@ export function useAvaliacoes(options: UseAvaliacoesOptions = {}) {
       if (error) throw error;
       return data as AvaliacaoDB;
     },
-    onSuccess: () => {
+    onError: (error) => { console.error('Mutation error:', error); toast.error('Ocorreu um erro'); }, onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['avaliacoes'] });
     },
   });
@@ -155,7 +155,7 @@ export function useAvaliacoes(options: UseAvaliacoesOptions = {}) {
       const { error } = await db.from('avaliacoes').delete().eq('id', id);
       if (error) throw error;
     },
-    onSuccess: () => {
+    onError: (error) => { console.error('Mutation error:', error); toast.error('Ocorreu um erro'); }, onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['avaliacoes'] });
     },
   });
