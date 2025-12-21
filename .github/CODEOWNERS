@@ -1,0 +1,22 @@
+# Code Owners for Match ATS
+
+# Global owners
+* @adm01-debug
+
+# Frontend
+/src/components/ @adm01-debug
+/src/pages/ @adm01-debug
+/src/hooks/ @adm01-debug
+
+# Backend / Supabase
+/supabase/ @adm01-debug
+
+# Configuration
+/*.config.* @adm01-debug
+/package.json @adm01-debug
+
+# Documentation
+*.md @adm01-debug
+
+# CI/CD
+/.github/ @adm01-debug
