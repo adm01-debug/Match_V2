@@ -1,3 +1,4 @@
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
