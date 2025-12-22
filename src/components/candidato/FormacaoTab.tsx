@@ -146,3 +146,5 @@ export function FormacaoTab({ candidato }: FormacaoTabProps) {
     </div>
   );
 }
+
+export default memo(FormacaoTab);
