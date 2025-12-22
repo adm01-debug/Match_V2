@@ -143,3 +143,5 @@ export function DocumentosTab({ candidato }: DocumentosTabProps) {
     </div>
   );
 }
+
+export default memo(DocumentosTab);
