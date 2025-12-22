@@ -143,3 +143,5 @@ export function WeekView({ currentDate, entrevistas, onSelectEntrevista, onSelec
     </div>
   );
 }
+
+export default memo(WeekView);
