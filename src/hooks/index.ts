@@ -1,146 +1,30 @@
-// ============================================
-// HOOKS INDEX - Exportação centralizada
-// ============================================
-
-// Candidatos
-export {
-  useCandidatos,
-  useCandidato,
-  useCandidatosStats,
-  useCreateCandidato,
-  useUpdateCandidato,
-  useDeleteCandidato,
-  useCandidatosSelect,
-  STATUS_CANDIDATO,
-  ORIGENS_CANDIDATO,
-} from './useCandidatos';
-
-// Vagas
-export {
-  useVagas,
-  useVaga,
-  useVagasSelect,
-  useVagasUrgentes,
-  useCreateVaga,
-  useUpdateVaga,
-  useDeleteVaga,
-} from './useVagas';
-
-// Processos Seletivos
-export {
-  useProcessos,
-  useProcessosCandidato,
-} from './useProcessos';
-
-export {
-  useProcessosSeletivos,
-} from './useProcessosSeletivos';
-
-// Entrevistas
-export {
-  useEntrevistas,
-  useEntrevistasStats,
-  useEntrevistasEvolucao,
-  useEntrevistasPizza,
-  useCreateEntrevista,
-  useUpdateEntrevista,
-  useCandidatosDisponiveis,
-} from './useEntrevistas';
-
-// Provas e Testes
-export {
-  useProvas,
-  useProvasAtivas,
-  useProva,
-  useCreateProva,
-  useUpdateProva,
-  useDeleteProva,
-  useDuplicateProva,
-  useBaterias,
-  useProvasStats,
-} from './useProvas';
-
-export {
-  useQuestoes,
-} from './useQuestoes';
-
-export {
-  useBateriasProvas,
-} from './useBateriasProvas';
-
-export {
-  useResultadosProvas,
-} from './useResultadosProvas';
-
-// Avaliações
-export {
-  useAvaliacoes,
-  useAvaliacoesProcesso,
-  useAvaliacao,
-  COMPETENCIAS_TECNICAS,
-  COMPETENCIAS_COMPORTAMENTAIS,
-  PARECERES,
-} from './useAvaliacoes';
-
-// Dashboard
-export {
-  useDashboard,
-} from './useDashboard';
-
-export {
-  useDashboardData,
-} from './useDashboardData';
-
-// Comunicação
-export {
-  useComunicacoes,
-} from './useComunicacoes';
-
-// Indicações
-export {
-  useIndicacoes,
-} from './useIndicacoes';
-
-// Candidaturas
-export {
-  useCandidaturas,
-} from './useCandidaturas';
-
-// Match Scores
-export {
-  useMatchScores,
-} from './useMatchScores';
-
-// Profiles
-export {
-  useProfiles,
-} from './useProfiles';
-
-// Views
-export {
-  useViews,
-} from './useViews';
-
-// Histórico
-export {
-  useHistoricoEtapas,
-} from './useHistoricoEtapas';
-
-// Candidato Perfil
-export {
-  useCandidatoPerfil,
-} from './useCandidatoPerfil';
-
-// Notifications
-export {
-  useRealtimeNotifications,
-} from './useRealtimeNotifications';
-
-// Analytics
-export {
-  useAnalytics,
-} from './useAnalytics';
-
-// UI Hooks
-export { useMobile } from './use-mobile';
-export { useToast, toast } from './use-toast';
+// Hooks exports
+export * from './useAnalytics';
+export * from './useAvaliacoes';
+export * from './useBateriasProvas';
+export * from './useCandidatoPerfil';
+export * from './useCandidatos';
+export * from './useCandidaturas';
+export * from './useComunicacoes';
+export * from './useDashboard';
+export * from './useDashboardData';
+export * from './useEntrevistas';
+export * from './useHistoricoEtapas';
+export * from './useIndicacoes';
+export * from './useMatchScores';
+export * from './usePageTitle';
+export * from './useProcessos';
+export * from './useProcessosSeletivos';
+export * from './useProfiles';
+export * from './useProvas';
+export * from './useQuestoes';
+export * from './useRealtimeNotifications';
+export * from './useResultadosProvas';
+export * from './useVagas';
+export * from './useViews';
+export * from './useFocusTrap';
+export * from './useReducedMotion';
+export * from './useAnnounce';
+export * from './useSessionTimeout';
+export * from './use-mobile';
+export * from './use-toast';
