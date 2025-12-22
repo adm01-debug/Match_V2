@@ -151,3 +151,5 @@ END:VCALENDAR`;
 
   return null;
 }
+
+export default memo(GoogleCalendarExport);
