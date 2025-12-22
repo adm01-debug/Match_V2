@@ -1,7 +1,9 @@
+import { usePageTitle } from '@/hooks/usePageTitle';
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
 
 const NotFound = () => {
+  usePageTitle("404 - Página não encontrada");
   const location = useLocation();
 
   useEffect(() => {
