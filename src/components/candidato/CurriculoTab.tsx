@@ -154,3 +154,5 @@ export function CurriculoTab({ candidato }: CurriculoTabProps) {
     </div>
   );
 }
+
+export default memo(CurriculoTab);
