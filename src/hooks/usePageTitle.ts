@@ -42,3 +42,5 @@ export const PAGE_TITLES = {
 } as const;
 
 export default usePageTitle;
+
+export type UsePageTitleReturn = ReturnType<typeof usePageTitle>;
