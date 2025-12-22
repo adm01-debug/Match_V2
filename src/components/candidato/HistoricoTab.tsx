@@ -154,3 +154,5 @@ export function HistoricoTab({ candidato }: HistoricoTabProps) {
     </div>
   );
 }
+
+export default memo(HistoricoTab);
