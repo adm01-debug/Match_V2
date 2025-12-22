@@ -341,3 +341,5 @@ export function useDeleteVaga() {
     },
   });
 }
+
+export type UseVagasReturn = ReturnType<typeof useVagas>;
