@@ -1,3 +1,4 @@
+import { Skeleton } from '@/components/ui/skeleton';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { Suspense,  useState, useEffect  } from 'react';
