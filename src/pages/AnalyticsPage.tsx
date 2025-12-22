@@ -1,3 +1,4 @@
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState, useMemo } from 'react';
 import { Layout } from '@/components/layout/Layout';
