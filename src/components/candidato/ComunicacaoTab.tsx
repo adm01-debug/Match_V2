@@ -58,3 +58,5 @@ export function ComunicacaoTab({ candidato }: ComunicacaoTabProps) {
     </div>
   );
 }
+
+export default memo(ComunicacaoTab);
