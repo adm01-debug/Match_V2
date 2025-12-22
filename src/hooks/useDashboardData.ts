@@ -312,3 +312,5 @@ export function useDashboardData() {
     isError: kpisQuery.isError || funilQuery.isError,
   };
 }
+
+export type UseDashboardDataReturn = ReturnType<typeof useDashboardData>;
