@@ -140,3 +140,5 @@ export function HistoricoComunicacoes({ candidatoId, className }: HistoricoComun
     </Card>
   );
 }
+
+export default memo(HistoricoComunicacoes);
