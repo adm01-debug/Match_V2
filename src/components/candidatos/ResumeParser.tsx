@@ -408,3 +408,5 @@ export function ResumeParser({ onParsed, onCandidatoSaved }: ResumeParserProps) 
     </div>
   );
 }
+
+export default memo(ResumeParser);
