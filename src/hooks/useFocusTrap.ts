@@ -38,3 +38,5 @@ export const useFocusTrap = (isActive: boolean) => {
 
   return containerRef;
 };
+
+export type UseFocusTrapReturn = ReturnType<typeof useFocusTrap>;
