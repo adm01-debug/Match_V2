@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useCallback,  useState, useEffect  } from 'react';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { Calendar as CalendarIcon, Plus, X } from 'lucide-react';
