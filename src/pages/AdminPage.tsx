@@ -1,6 +1,6 @@
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { usePageTitle } from '@/hooks/usePageTitle';
-import { useState, useEffect } from 'react';
+import { useState, useEffect } , useCallback } from 'react';
 import { Layout } from '@/components/layout/Layout';
 import { useAuth, AppRole } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
