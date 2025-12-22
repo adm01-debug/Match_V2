@@ -53,7 +53,7 @@ export function useProvas() {
       if (error) throw error;
       return (data || []).map(dbToProva);
     },
-    staleTime: 60000,
+    placeholderData: [], staleTime: 60000,
   });
 }
 
@@ -71,7 +71,7 @@ export function useProvasAtivas() {
       if (error) throw error;
       return (data || []).map(dbToProva);
     },
-    staleTime: 60000,
+    placeholderData: [], staleTime: 60000,
   });
 }
 
@@ -252,7 +252,7 @@ export function useBaterias() {
         dbToBateria(b, provasPorBateria[b.id] || [])
       );
     },
-    staleTime: 60000,
+    placeholderData: [], staleTime: 60000,
   });
 }
 
@@ -285,6 +285,6 @@ export function useProvasStats() {
         totalBaterias: totalBaterias || 0,
       };
     },
-    staleTime: 60000,
+    placeholderData: [], staleTime: 60000,
   });
 }
