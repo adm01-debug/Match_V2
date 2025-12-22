@@ -31,7 +31,7 @@ export function useCandidaturas(filtros?: { vagaId?: string; candidatoAuthId?: s
           candidato:candidatos_auth(nome, email),
           vaga:vagas(titulo, departamento)
         `)
-        .order('created_at', { ascending: false , staleTime: 5 * 60 * 1000, gcTime: 10 * 60 * 1000, retry: 3});
+        .order('created_at', { ascending: false , placeholderData: [], staleTime: 5 * 60 * 1000, gcTime: 10 * 60 * 1000, retry: 3});
       
       if (filtros?.vagaId) query = query.eq('vaga_id', filtros.vagaId);
       if (filtros?.candidatoAuthId) query = query.eq('candidato_auth_id', filtros.candidatoAuthId);
