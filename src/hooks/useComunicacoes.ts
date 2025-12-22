@@ -80,3 +80,5 @@ export function useComunicacoes(candidatoId?: string) {
 }
 
 export default useComunicacoes;
+
+export type UseComunicacoesReturn = ReturnType<typeof useComunicacoes>;
