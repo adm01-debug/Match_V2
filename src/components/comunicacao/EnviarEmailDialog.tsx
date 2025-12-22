@@ -235,3 +235,5 @@ export function EnviarEmailDialog({ open, onOpenChange, candidato, onSuccess }: 
     </Dialog>
   );
 }
+
+export default memo(EnviarEmailDialog);
