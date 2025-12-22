@@ -96,7 +96,7 @@ export function useAvaliacoes(options: UseAvaliacoesOptions = {}) {
       let query = db
         .from('avaliacoes')
         .select('*')
-        .order('created_at', { ascending: false , staleTime: 5 * 60 * 1000, gcTime: 10 * 60 * 1000, retry: 3});
+        .order('created_at', { ascending: false , placeholderData: [], staleTime: 5 * 60 * 1000, gcTime: 10 * 60 * 1000, retry: 3});
 
       if (processoId) query = query.eq('processo_id', processoId);
       if (avaliadorId) query = query.eq('avaliador_id', avaliadorId);
