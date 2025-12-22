@@ -384,3 +384,5 @@ export function ComunicacaoHistorico({ candidatoId }: ComunicacaoHistoricoProps)
     </div>
   );
 }
+
+export default memo(ComunicacaoHistorico);
