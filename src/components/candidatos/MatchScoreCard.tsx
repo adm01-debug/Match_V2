@@ -257,3 +257,5 @@ export function MatchScoreCard({ matchResult, candidatoNome, vagaTitulo }: Match
     </Card>
   );
 }
+
+export default memo(MatchScoreCard);
