@@ -105,3 +105,5 @@ export function ExperienciaTab({ candidato }: ExperienciaTabProps) {
     </div>
   );
 }
+
+export default memo(ExperienciaTab);
