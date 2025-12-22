@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { useMemo,  memo  } from 'react';
 import { Bell, Check, CheckCheck, Star, Users, ArrowRight, Trash2, X, Calendar, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
