@@ -167,7 +167,7 @@ export default function Pipeline() {
                 const candidatos = processosPorEtapa[etapa] || [];
 
                 return (
-                  <div key={etapa} className="flex-shrink-0 w-72">
+                  <div role="main" key={etapa} className="flex-shrink-0 w-72">
                     <Card className="h-full">
                       <CardHeader className="pb-2">
                         <div className="flex items-center justify-between">
