@@ -280,4 +280,4 @@ export function MatchScoreCalculator({ candidatoId, candidatoNome, onScoreCalcul
   );
 }
 
-export default MatchScoreCalculator;
+export default memo(MatchScoreCalculator);
