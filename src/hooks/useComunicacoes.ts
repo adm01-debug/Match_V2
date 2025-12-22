@@ -20,7 +20,7 @@ export function useComunicacoes(candidatoId?: string) {
   // Query para buscar comunicações de um candidato
   const { data: comunicacoes = [], isLoading, error } = useQuery({
     queryKey: ['comunicacoes', candidatoId],
-    staleTime: 5 * 60 * 1000, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
+    placeholderData: [], staleTime: 5 * 60 * 1000, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
       if (!candidatoId) return [];
       
       const { data, error } = await supabase
