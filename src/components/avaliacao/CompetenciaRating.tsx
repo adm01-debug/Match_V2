@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { useMemo,  memo  } from 'react';
 import { Star, Info } from 'lucide-react';
 import { Competencia } from '@/types/recruitment';
 import { notasDescricao } from '@/data/avaliacaoData';
