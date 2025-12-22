@@ -14,3 +14,5 @@ export const useAnnounce = () => {
 
   return announce;
 };
+
+export type UseAnnounceReturn = ReturnType<typeof useAnnounce>;
