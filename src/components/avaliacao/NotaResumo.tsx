@@ -60,3 +60,5 @@ export function NotaResumo({ titulo, nota, maxNota = 5, tipo = 'geral' }: NotaRe
     </div>
   );
 }
+
+export default memo(NotaResumo);
