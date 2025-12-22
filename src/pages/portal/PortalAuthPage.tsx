@@ -1,6 +1,6 @@
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { usePageTitle } from '@/hooks/usePageTitle';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } , useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCandidatoAuth } from '@/contexts/CandidatoAuthContext';
 import { Button } from '@/components/ui/button';
