@@ -12,9 +12,19 @@ serve(async (req) => {
 
   try {
     const GITHUB_PAT = Deno.env.get('GITHUB_PAT');
+    
+    // Debug: verificar se token existe e seu formato
+    console.log(`Token exists: ${!!GITHUB_PAT}`);
+    console.log(`Token length: ${GITHUB_PAT?.length || 0}`);
+    console.log(`Token starts with: ${GITHUB_PAT?.substring(0, 4) || 'N/A'}`);
+    console.log(`Token trimmed length: ${GITHUB_PAT?.trim().length || 0}`);
+    
     if (!GITHUB_PAT) {
       throw new Error('GITHUB_PAT is not configured');
     }
+    
+    // Usar token limpo (sem espaços)
+    const cleanToken = GITHUB_PAT.trim();
 
     const { endpoint, method = 'GET', body } = await req.json();
     
@@ -23,7 +33,7 @@ serve(async (req) => {
     const response = await fetch(`https://api.github.com${endpoint}`, {
       method,
       headers: {
-        'Authorization': `Bearer ${GITHUB_PAT}`,
+        'Authorization': `Bearer ${cleanToken}`,
         'Accept': 'application/vnd.github.v3+json',
         'User-Agent': 'Lovable-GitHub-Integration',
         'X-GitHub-Api-Version': '2022-11-28',
