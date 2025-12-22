@@ -185,3 +185,5 @@ export function AvaliacoesTab({ candidato }: AvaliacoesTabProps) {
     </div>
   );
 }
+
+export default memo(AvaliacoesTab);
