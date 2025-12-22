@@ -39,7 +39,7 @@ export function useResultadosProvas(filtros?: { provaId?: string; candidatoId?: 
 
   const { data: resultados = [], isLoading, error } = useQuery({
     queryKey: ['resultados-provas', filtros],
-    staleTime: 5 * 60 * 1000, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
+    placeholderData: [], staleTime: 5 * 60 * 1000, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
       let query = supabase
         .from('resultados_provas')
         .select(`
