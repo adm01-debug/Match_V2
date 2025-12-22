@@ -34,7 +34,7 @@ export function useCandidatoPerfil(candidatoId: string | undefined) {
     refetch,
   } = useQuery({
     queryKey: ['candidato-perfil', candidatoId],
-    staleTime: 5 * 60 * 1000, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
+    placeholderData: [], staleTime: 5 * 60 * 1000, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
       if (!candidatoId) return null;
 
       // Buscar candidato
