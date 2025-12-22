@@ -331,7 +331,7 @@ export default function TestsPage() {
               const IconeCategoria = iconeMap[categoria.icone] || FileText;
 
               return (
-                <div key={categoria.id}>
+                <div role="main" key={categoria.id}>
                   <div className="flex items-center gap-2 mb-3">
                     <div className={cn("p-2 rounded-lg", categoria.cor)}>
                       <IconeCategoria className="h-5 w-5 text-white" />
