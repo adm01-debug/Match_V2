@@ -141,3 +141,5 @@ export function DayView({ currentDate, entrevistas, onSelectEntrevista }: DayVie
     </div>
   );
 }
+
+export default memo(DayView);
