@@ -10,6 +10,15 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
+
+// Timeout configuration
+const TIMEOUT_MS = 30000;
+const createTimeoutSignal = () => {
+  const controller = new AbortController();
+  setTimeout(() => controller.abort(), TIMEOUT_MS);
+  return controller.signal;
+};
+
 // Input validation schema
 const RequestSchema = z.object({
   // Add your schema here
