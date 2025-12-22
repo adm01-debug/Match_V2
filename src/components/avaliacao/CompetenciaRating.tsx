@@ -84,3 +84,5 @@ export function CompetenciaRating({
     </div>
   );
 }
+
+export default memo(CompetenciaRating);
