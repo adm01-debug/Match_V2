@@ -14,3 +14,5 @@ export const useReducedMotion = () => {
 
   return prefersReducedMotion;
 };
+
+export type UseReducedMotionReturn = ReturnType<typeof useReducedMotion>;
