@@ -116,3 +116,5 @@ export function useMatchScores(filtros?: { candidatoId?: string; vagaId?: string
 }
 
 export default useMatchScores;
+
+export type UseMatchScoresReturn = ReturnType<typeof useMatchScores>;
