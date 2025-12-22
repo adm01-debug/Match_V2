@@ -235,3 +235,5 @@ export function NotasTab({ candidatoId }: NotasTabProps) {
     </div>
   );
 }
+
+export default memo(NotasTab);
