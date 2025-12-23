@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Formatting utilities for numbers, currencies, and text
+ * @module lib/formatters
+ */
+
 import { format, formatDistanceToNow, differenceInDays, parseISO } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
