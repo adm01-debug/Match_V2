@@ -55,6 +55,9 @@ export interface VagasKpisView {
 // Hook para pipeline (usando processos_seletivos diretamente)
 export function usePipelineView(vagaId?: string) {
   return useQuery({
+    staleTime: 1000 * 60 * 5, // 5 minutes
+    gcTime: 1000 * 60 * 30, // 30 minutes
+    retry: 3,
     queryKey: ['v_pipeline', vagaId],
     queryFn: async () => {
       let query = supabase
@@ -106,6 +109,9 @@ export function useAgendaEntrevistasView(filtros?: {
   status?: string;
 }) {
   return useQuery({
+    staleTime: 1000 * 60 * 5, // 5 minutes
+    gcTime: 1000 * 60 * 30, // 30 minutes
+    retry: 3,
     queryKey: ['v_agenda_entrevistas', filtros],
     queryFn: async () => {
       let query = supabase
@@ -152,6 +158,9 @@ export function useAgendaEntrevistasView(filtros?: {
 // Hook para KPIs de vagas (usando vagas diretamente)
 export function useVagasKpisView(status?: string) {
   return useQuery({
+    staleTime: 1000 * 60 * 5, // 5 minutes
+    gcTime: 1000 * 60 * 30, // 30 minutes
+    retry: 3,
     queryKey: ['v_vagas_kpis', status],
     queryFn: async () => {
       let query = supabase
