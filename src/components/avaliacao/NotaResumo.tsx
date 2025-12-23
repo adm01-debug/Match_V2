@@ -61,4 +61,6 @@ export function NotaResumo({ titulo, nota, maxNota = 5, tipo = 'geral' }: NotaRe
   );
 }
 
+NotaResumo.displayName = "NotaResumo";
+
 export default memo(NotaResumo);
