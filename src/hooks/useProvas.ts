@@ -45,6 +45,9 @@ function dbToBateria(row: any, provasIds: string[]): BateriaProvas {
 export function useProvas() {
   return useQuery({
     queryKey: ['provas'],
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 30,
+    retry: 3,
     queryFn: async (): Promise<Prova[]> => {
       const { data, error } = await supabase
         .from('provas')
@@ -62,6 +65,9 @@ export function useProvas() {
 export function useProvasAtivas() {
   return useQuery({
     queryKey: ['provas', 'ativas'],
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 30,
+    retry: 3,
     queryFn: async (): Promise<Prova[]> => {
       const { data, error } = await supabase
         .from('provas')
@@ -80,6 +86,9 @@ export function useProvasAtivas() {
 export function useProva(id: string) {
   return useQuery({
     queryKey: ['provas', id],
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 30,
+    retry: 3,
     queryFn: async (): Promise<Prova | null> => {
       const { data, error } = await supabase
         .from('provas')
@@ -236,6 +245,9 @@ export function useDuplicateProva() {
 export function useBaterias() {
   return useQuery({
     queryKey: ['baterias'],
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 30,
+    retry: 3,
     queryFn: async (): Promise<BateriaProvas[]> => {
       const { data: baterias, error } = await supabase
         .from('baterias_provas')
@@ -273,6 +285,9 @@ export function useBaterias() {
 export function useProvasStats() {
   return useQuery({
     queryKey: ['provas', 'stats'],
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 30,
+    retry: 3,
     queryFn: async () => {
       const { data: provas, error } = await supabase
         .from('provas')
