@@ -409,4 +409,6 @@ export function ResumeParser({ onParsed, onCandidatoSaved }: ResumeParserProps) 
   );
 }
 
+ResumeParser.displayName = "ResumeParser";
+
 export default memo(ResumeParser);
