@@ -1,9 +1,9 @@
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { usePageTitle } from '@/hooks/usePageTitle';
-import { useState, useMemo } , useCallback } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { Layout } from '@/components/layout/Layout';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/breadcrumb';
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
@@ -16,8 +16,8 @@ import {
 } from 'recharts';
 import { 
   TrendingUp, TrendingDown, Clock, Users, Target, Briefcase, 
-  Calendar, Award, BarChart3, PieChartIcon, Activity, Zap
-, AlertCircle } from 'lucide-react';
+  Calendar, Award, BarChart3, PieChart as PieChartIcon, Activity, Zap, AlertCircle
+} from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { format, subMonths, startOfMonth, endOfMonth, differenceInDays } from 'date-fns';
 import { ptBR } from 'date-fns/locale';

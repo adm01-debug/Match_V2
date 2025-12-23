@@ -23,6 +23,10 @@ export function useCandidaturas(filtros?: { vagaId?: string; candidatoAuthId?: s
 
   const { data: candidaturas = [], isLoading, error } = useQuery({
     queryKey: ['candidaturas', filtros],
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+    retry: 3,
+    placeholderData: [],
     queryFn: async () => {
       let query = supabase
         .from('candidaturas')
@@ -31,7 +35,7 @@ export function useCandidaturas(filtros?: { vagaId?: string; candidatoAuthId?: s
           candidato:candidatos_auth(nome, email),
           vaga:vagas(titulo, departamento)
         `)
-        .order('created_at', { ascending: false , placeholderData: [], staleTime: 5 * 60 * 1000, gcTime: 10 * 60 * 1000, retry: 3});
+        .order('created_at', { ascending: false });
       
       if (filtros?.vagaId) query = query.eq('vaga_id', filtros.vagaId);
       if (filtros?.candidatoAuthId) query = query.eq('candidato_auth_id', filtros.candidatoAuthId);
@@ -63,11 +67,11 @@ export function useCandidaturas(filtros?: { vagaId?: string; candidatoAuthId?: s
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['candidaturas'] },
-      onError: (error: Error) => {
-        console.error('Mutation error:', error);
-      });
+      queryClient.invalidateQueries({ queryKey: ['candidaturas'] });
       toast({ title: 'Candidatura registrada!' });
+    },
+    onError: (error: Error) => {
+      console.error('Mutation error:', error);
     },
   });
 
@@ -83,11 +87,11 @@ export function useCandidaturas(filtros?: { vagaId?: string; candidatoAuthId?: s
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['candidaturas'] },
-      onError: (error: Error) => {
-        console.error('Mutation error:', error);
-      });
+      queryClient.invalidateQueries({ queryKey: ['candidaturas'] });
       toast({ title: 'Status atualizado!' });
+    },
+    onError: (error: Error) => {
+      console.error('Mutation error:', error);
     },
   });
 
