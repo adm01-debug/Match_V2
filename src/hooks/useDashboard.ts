@@ -185,7 +185,9 @@ export function useDashboardStats() {
     queryKey: dashboardKeys.stats(),
     queryFn: fetchDashboardStats,
     staleTime: 1000 * 60 * 5, // 5 minutos
-  });
+  ,
+    gcTime: 1000 * 60 * 30, // 30 minutes
+    retry: 3});
 }
 
 export function useVagasUrgentes() {
@@ -193,7 +195,9 @@ export function useVagasUrgentes() {
     queryKey: dashboardKeys.vagasUrgentes(),
     queryFn: fetchVagasUrgentes,
     staleTime: 1000 * 60 * 5,
-  });
+  ,
+    gcTime: 1000 * 60 * 30, // 30 minutes
+    retry: 3});
 }
 
 export function useEntrevistasHoje() {
@@ -201,7 +205,9 @@ export function useEntrevistasHoje() {
     queryKey: dashboardKeys.entrevistasHoje(),
     queryFn: fetchEntrevistasHoje,
     staleTime: 1000 * 60 * 2,
-  });
+  ,
+    gcTime: 1000 * 60 * 30, // 30 minutes
+    retry: 3});
 }
 
 export function useTopCandidatos() {
@@ -209,7 +215,9 @@ export function useTopCandidatos() {
     queryKey: dashboardKeys.topCandidatos(),
     queryFn: fetchTopCandidatos,
     staleTime: 1000 * 60 * 5,
-  });
+  ,
+    gcTime: 1000 * 60 * 30, // 30 minutes
+    retry: 3});
 }
 
 export function useFunilRecrutamento() {
@@ -217,7 +225,9 @@ export function useFunilRecrutamento() {
     queryKey: dashboardKeys.funil(),
     queryFn: fetchFunil,
     staleTime: 1000 * 60 * 5,
-  });
+  ,
+    gcTime: 1000 * 60 * 30, // 30 minutes
+    retry: 3});
 }
 
 // Hook combinado (mantém compatibilidade)
