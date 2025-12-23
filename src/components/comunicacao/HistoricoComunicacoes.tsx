@@ -141,4 +141,6 @@ export function HistoricoComunicacoes({ candidatoId, className }: HistoricoComun
   );
 }
 
+HistoricoComunicacoes.displayName = "HistoricoComunicacoes";
+
 export default memo(HistoricoComunicacoes);
