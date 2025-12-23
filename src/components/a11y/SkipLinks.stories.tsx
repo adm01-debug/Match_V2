@@ -12,3 +12,24 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
+
+export const Loading: Story = {
+  args: {},
+  parameters: {
+    mockData: { loading: true },
+  },
+};
+
+export const WithError: Story = {
+  args: {},
+  parameters: {
+    mockData: { error: 'Erro ao carregar dados' },
+  },
+};
+
+export const Empty: Story = {
+  args: {},
+  parameters: {
+    mockData: { data: [] },
+  },
+};
