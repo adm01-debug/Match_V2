@@ -4,3 +4,18 @@ const meta: Meta<typeof PipelineColumn> = { title: 'Components/PipelineColumn', 
 export default meta;
 type Story = StoryObj<typeof meta>;
 export const Default: Story = {};
+
+export const Loading: Story = {
+  args: {},
+  parameters: { mockData: { loading: true } },
+};
+
+export const WithError: Story = {
+  args: {},
+  parameters: { mockData: { error: 'Erro' } },
+};
+
+export const Empty: Story = {
+  args: {},
+  parameters: { mockData: { data: [] } },
+};
