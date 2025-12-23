@@ -4,3 +4,18 @@ const meta: Meta<typeof CurriculoTab> = { title: 'Components/candidato/Curriculo
 export default meta;
 type Story = StoryObj<typeof CurriculoTab>;
 export const Default: Story = { args: {} };
+
+export const Loading: Story = {
+  args: {},
+  parameters: { mockData: { loading: true } },
+};
+
+export const WithError: Story = {
+  args: {},
+  parameters: { mockData: { error: 'Erro ao carregar' } },
+};
+
+export const Empty: Story = {
+  args: {},
+  parameters: { mockData: { data: [] } },
+};
