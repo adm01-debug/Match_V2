@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Validation utilities and schemas
+ * @module lib/validators
+ */
+
 // Validadores de formulário
 
 export const validators = {
