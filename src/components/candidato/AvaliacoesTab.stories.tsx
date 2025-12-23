@@ -4,3 +4,18 @@ const meta: Meta<typeof AvaliacoesTab> = { title: 'Components/candidato/Avaliaco
 export default meta;
 type Story = StoryObj<typeof AvaliacoesTab>;
 export const Default: Story = { args: {} };
+
+export const Loading: Story = {
+  args: {},
+  parameters: { mockData: { loading: true } },
+};
+
+export const WithError: Story = {
+  args: {},
+  parameters: { mockData: { error: 'Erro ao carregar' } },
+};
+
+export const Empty: Story = {
+  args: {},
+  parameters: { mockData: { data: [] } },
+};
