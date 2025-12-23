@@ -248,13 +248,13 @@ export function useCreateEntrevista() {
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['entrevistas'] },
-      onError: (error: Error) => {
-        console.error('Mutation error:', error);
-      });
+      queryClient.invalidateQueries({ queryKey: ['entrevistas'] });
       queryClient.invalidateQueries({ queryKey: ['entrevistas-stats'] });
       queryClient.invalidateQueries({ queryKey: ['entrevistas-evolucao'] });
       queryClient.invalidateQueries({ queryKey: ['entrevistas-pizza'] });
+    },
+    onError: (error: Error) => {
+      console.error('Mutation error:', error);
     }
   });
 }
@@ -293,13 +293,13 @@ export function useUpdateEntrevista() {
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['entrevistas'] },
-      onError: (error: Error) => {
-        console.error('Mutation error:', error);
-      });
+      queryClient.invalidateQueries({ queryKey: ['entrevistas'] });
       queryClient.invalidateQueries({ queryKey: ['entrevistas-stats'] });
       queryClient.invalidateQueries({ queryKey: ['entrevistas-evolucao'] });
       queryClient.invalidateQueries({ queryKey: ['entrevistas-pizza'] });
+    },
+    onError: (error: Error) => {
+      console.error('Mutation error:', error);
     }
   });
 }
