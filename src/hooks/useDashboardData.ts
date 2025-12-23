@@ -20,6 +20,9 @@ export function useDashboardData() {
   // KPIs
   const kpisQuery = useQuery({
     queryKey: ['dashboard-kpis'],
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 30,
+    retry: 3,
     queryFn: async (): Promise<KPIData> => {
       const inicioMes = startOfMonth(new Date()).toISOString();
       
@@ -102,6 +105,9 @@ export function useDashboardData() {
   // Funil de recrutamento
   const funilQuery = useQuery({
     queryKey: ['dashboard-funil'],
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 30,
+    retry: 3,
     queryFn: async (): Promise<FunilEtapa[]> => {
       const { data: processos } = await supabase
         .from('processos_seletivos')
@@ -134,6 +140,9 @@ export function useDashboardData() {
   // Vagas urgentes
   const vagasUrgentesQuery = useQuery({
     queryKey: ['dashboard-vagas-urgentes'],
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 30,
+    retry: 3,
     queryFn: async (): Promise<VagaUrgente[]> => {
       const { data: vagas } = await supabase
         .from('vagas')
@@ -163,6 +172,9 @@ export function useDashboardData() {
   // Ações pendentes
   const acoesPendentesQuery = useQuery({
     queryKey: ['dashboard-acoes-pendentes'],
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 30,
+    retry: 3,
     queryFn: async (): Promise<AcaoPendente[]> => {
       const acoes: AcaoPendente[] = [];
 
@@ -238,6 +250,9 @@ export function useDashboardData() {
   // Agenda do dia
   const agendaHojeQuery = useQuery({
     queryKey: ['dashboard-agenda-hoje'],
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 30,
+    retry: 3,
     queryFn: async (): Promise<AgendaDia[]> => {
       const hoje = format(new Date(), 'yyyy-MM-dd');
       
@@ -272,6 +287,9 @@ export function useDashboardData() {
   // Top candidatos (processos)
   const processosQuery = useQuery({
     queryKey: ['dashboard-processos'],
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 30,
+    retry: 3,
     queryFn: async (): Promise<ProcessoSeletivo[]> => {
       const { data } = await supabase
         .from('processos_seletivos')
