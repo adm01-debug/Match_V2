@@ -258,4 +258,6 @@ export function MatchScoreCard({ matchResult, candidatoNome, vagaTitulo }: Match
   );
 }
 
+MatchScoreCard.displayName = "MatchScoreCard";
+
 export default memo(MatchScoreCard);
