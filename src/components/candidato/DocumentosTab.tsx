@@ -144,4 +144,6 @@ export function DocumentosTab({ candidato }: DocumentosTabProps) {
   );
 }
 
+DocumentosTab.displayName = "DocumentosTab";
+
 export default memo(DocumentosTab);
