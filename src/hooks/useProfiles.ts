@@ -17,6 +17,9 @@ export function useProfiles() {
   const queryClient = useQueryClient();
 
   const { data: profiles = [], isLoading, error } = useQuery({
+    staleTime: 1000 * 60 * 5, // 5 minutes
+    gcTime: 1000 * 60 * 30, // 30 minutes
+    retry: 3,
     queryKey: ['profiles'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -29,6 +32,9 @@ export function useProfiles() {
   });
 
   const useProfile = (userId?: string) => useQuery({
+    staleTime: 1000 * 60 * 5, // 5 minutes
+    gcTime: 1000 * 60 * 30, // 30 minutes
+    retry: 3,
     queryKey: ['profile', userId],
     queryFn: async () => {
       if (!userId) return null;
@@ -44,6 +50,9 @@ export function useProfiles() {
   });
 
   const useCurrentProfile = () => useQuery({
+    staleTime: 1000 * 60 * 5, // 5 minutes
+    gcTime: 1000 * 60 * 30, // 30 minutes
+    retry: 3,
     queryKey: ['current-profile'],
     queryFn: async () => {
       const { data: { user } } = await supabase.auth.getUser();
