@@ -4,3 +4,18 @@ const meta: Meta<typeof AppSidebar> = { title: 'Components/layout/AppSidebar', c
 export default meta;
 type Story = StoryObj<typeof AppSidebar>;
 export const Default: Story = { args: {} };
+
+export const Loading: Story = {
+  args: {},
+  parameters: { mockData: { loading: true } },
+};
+
+export const WithError: Story = {
+  args: {},
+  parameters: { mockData: { error: 'Erro' } },
+};
+
+export const Empty: Story = {
+  args: {},
+  parameters: { mockData: { data: [] } },
+};
