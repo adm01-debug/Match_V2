@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Date utility functions for formatting and manipulation
+ * @module lib/dateUtils
+ */
+
 export const formatDate = (date: string | Date): string => {
   return new Intl.DateTimeFormat('pt-BR', { dateStyle: 'short' }).format(new Date(date));
 };
