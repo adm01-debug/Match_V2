@@ -263,13 +263,13 @@ export function useCreateVaga() {
       return dbToVaga(data as unknown as VagaDB);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['vagas'] },
-      onError: (error: Error) => {
-        console.error('Mutation error:', error);
-      });
+      queryClient.invalidateQueries({ queryKey: ['vagas'] });
       queryClient.invalidateQueries({ queryKey: ['vagas-select'] });
       queryClient.invalidateQueries({ queryKey: ['vagas-urgentes'] });
     },
+    onError: (error: Error) => {
+      console.error('Mutation error:', error);
+    }
   });
 }
 
@@ -318,13 +318,13 @@ export function useUpdateVaga() {
       return dbToVaga(data as unknown as VagaDB);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['vagas'] },
-      onError: (error: Error) => {
-        console.error('Mutation error:', error);
-      });
+      queryClient.invalidateQueries({ queryKey: ['vagas'] });
       queryClient.invalidateQueries({ queryKey: ['vagas-select'] });
       queryClient.invalidateQueries({ queryKey: ['vagas-urgentes'] });
     },
+    onError: (error: Error) => {
+      console.error('Mutation error:', error);
+    }
   });
 }
 
@@ -342,13 +342,13 @@ export function useDeleteVaga() {
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['vagas'] },
-      onError: (error: Error) => {
-        console.error('Mutation error:', error);
-      });
+      queryClient.invalidateQueries({ queryKey: ['vagas'] });
       queryClient.invalidateQueries({ queryKey: ['vagas-select'] });
       queryClient.invalidateQueries({ queryKey: ['vagas-urgentes'] });
     },
+    onError: (error: Error) => {
+      console.error('Mutation error:', error);
+    }
   });
 }
 
