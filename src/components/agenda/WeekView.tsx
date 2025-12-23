@@ -144,4 +144,6 @@ export function WeekView({ currentDate, entrevistas, onSelectEntrevista, onSelec
   );
 }
 
+WeekView.displayName = "WeekView";
+
 export default memo(WeekView);
