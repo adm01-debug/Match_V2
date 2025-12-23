@@ -108,25 +108,25 @@ async function fetchEntrevistasHoje(): Promise<EntrevistaHoje[]> {
     .select(`
       id,
       data,
-      horario,
+      hora_inicio,
       tipo,
-      candidatos!inner(nome),
-      vagas!inner(titulo),
-      profiles!inner(full_name)
+      candidato_nome,
+      vaga_titulo,
+      entrevistadores
     `)
     .eq('data', today)
-    .order('horario', { ascending: true })
+    .order('hora_inicio', { ascending: true })
     .limit(5);
 
   if (error) throw error;
 
   return (data || []).map(e => ({
     id: e.id,
-    candidato: (e.candidatos as any)?.nome || 'N/A',
-    vaga: (e.vagas as any)?.titulo || 'N/A',
-    horario: e.horario || 'N/A',
+    candidato: e.candidato_nome || 'N/A',
+    vaga: e.vaga_titulo || 'N/A',
+    horario: e.hora_inicio || 'N/A',
     tipo: e.tipo || 'presencial',
-    entrevistador: (e.profiles as any)?.full_name || 'N/A',
+    entrevistador: e.entrevistadores?.[0] || 'N/A',
   }));
 }
 
@@ -134,22 +134,16 @@ async function fetchEntrevistasHoje(): Promise<EntrevistaHoje[]> {
 async function fetchTopCandidatos(): Promise<TopCandidato[]> {
   const { data, error } = await supabase
     .from('processos_seletivos')
-    .select(`
-      id,
-      candidatos!inner(id, nome),
-      vagas!inner(titulo),
-      match_score,
-      etapa_atual
-    `)
+    .select('id, candidato_id, candidato_nome, vaga_titulo, match_score, etapa_atual')
     .order('match_score', { ascending: false })
     .limit(5);
 
   if (error) throw error;
 
   return (data || []).map(p => ({
-    id: (p.candidatos as any)?.id || p.id,
-    nome: (p.candidatos as any)?.nome || 'N/A',
-    vaga: (p.vagas as any)?.titulo || 'N/A',
+    id: p.candidato_id || p.id,
+    nome: p.candidato_nome || 'N/A',
+    vaga: p.vaga_titulo || 'N/A',
     matchScore: p.match_score || 0,
     status: p.etapa_atual || 'triagem',
   }));
@@ -184,10 +178,10 @@ export function useDashboardStats() {
   return useQuery({
     queryKey: dashboardKeys.stats(),
     queryFn: fetchDashboardStats,
-    staleTime: 1000 * 60 * 5, // 5 minutos
-  ,
-    gcTime: 1000 * 60 * 30, // 30 minutes
-    retry: 3});
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 30,
+    retry: 3,
+  });
 }
 
 export function useVagasUrgentes() {
@@ -195,9 +189,9 @@ export function useVagasUrgentes() {
     queryKey: dashboardKeys.vagasUrgentes(),
     queryFn: fetchVagasUrgentes,
     staleTime: 1000 * 60 * 5,
-  ,
-    gcTime: 1000 * 60 * 30, // 30 minutes
-    retry: 3});
+    gcTime: 1000 * 60 * 30,
+    retry: 3,
+  });
 }
 
 export function useEntrevistasHoje() {
@@ -205,9 +199,9 @@ export function useEntrevistasHoje() {
     queryKey: dashboardKeys.entrevistasHoje(),
     queryFn: fetchEntrevistasHoje,
     staleTime: 1000 * 60 * 2,
-  ,
-    gcTime: 1000 * 60 * 30, // 30 minutes
-    retry: 3});
+    gcTime: 1000 * 60 * 30,
+    retry: 3,
+  });
 }
 
 export function useTopCandidatos() {
@@ -215,9 +209,9 @@ export function useTopCandidatos() {
     queryKey: dashboardKeys.topCandidatos(),
     queryFn: fetchTopCandidatos,
     staleTime: 1000 * 60 * 5,
-  ,
-    gcTime: 1000 * 60 * 30, // 30 minutes
-    retry: 3});
+    gcTime: 1000 * 60 * 30,
+    retry: 3,
+  });
 }
 
 export function useFunilRecrutamento() {
@@ -225,9 +219,9 @@ export function useFunilRecrutamento() {
     queryKey: dashboardKeys.funil(),
     queryFn: fetchFunil,
     staleTime: 1000 * 60 * 5,
-  ,
-    gcTime: 1000 * 60 * 30, // 30 minutes
-    retry: 3});
+    gcTime: 1000 * 60 * 30,
+    retry: 3,
+  });
 }
 
 // Hook combinado (mantém compatibilidade)
