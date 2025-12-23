@@ -59,4 +59,6 @@ export function ComunicacaoTab({ candidato }: ComunicacaoTabProps) {
   );
 }
 
+ComunicacaoTab.displayName = "ComunicacaoTab";
+
 export default memo(ComunicacaoTab);
