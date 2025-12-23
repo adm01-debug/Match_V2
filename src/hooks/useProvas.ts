@@ -122,7 +122,10 @@ export function useCreateProva() {
       return dbToProva(data);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['provas'] });
+      queryClient.invalidateQueries({ queryKey: ['provas'] },
+      onError: (error: Error) => {
+        console.error('Mutation error:', error);
+      });
     },
   });
 }
@@ -153,7 +156,10 @@ export function useUpdateProva() {
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['provas'] });
+      queryClient.invalidateQueries({ queryKey: ['provas'] },
+      onError: (error: Error) => {
+        console.error('Mutation error:', error);
+      });
     },
   });
 }
@@ -172,7 +178,10 @@ export function useDeleteProva() {
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['provas'] });
+      queryClient.invalidateQueries({ queryKey: ['provas'] },
+      onError: (error: Error) => {
+        console.error('Mutation error:', error);
+      });
     },
   });
 }
@@ -215,7 +224,10 @@ export function useDuplicateProva() {
       return dbToProva(data);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['provas'] });
+      queryClient.invalidateQueries({ queryKey: ['provas'] },
+      onError: (error: Error) => {
+        console.error('Mutation error:', error);
+      });
     },
   });
 }
