@@ -155,4 +155,6 @@ export function HistoricoTab({ candidato }: HistoricoTabProps) {
   );
 }
 
+HistoricoTab.displayName = "HistoricoTab";
+
 export default memo(HistoricoTab);
