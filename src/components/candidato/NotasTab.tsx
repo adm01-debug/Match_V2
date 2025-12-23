@@ -236,4 +236,6 @@ export function NotasTab({ candidatoId }: NotasTabProps) {
   );
 }
 
+NotasTab.displayName = "NotasTab";
+
 export default memo(NotasTab);
