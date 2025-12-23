@@ -186,4 +186,6 @@ export function AvaliacoesTab({ candidato }: AvaliacoesTabProps) {
   );
 }
 
+AvaliacoesTab.displayName = "AvaliacoesTab";
+
 export default memo(AvaliacoesTab);
