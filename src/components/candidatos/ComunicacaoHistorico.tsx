@@ -385,4 +385,6 @@ export function ComunicacaoHistorico({ candidatoId }: ComunicacaoHistoricoProps)
   );
 }
 
+ComunicacaoHistorico.displayName = "ComunicacaoHistorico";
+
 export default memo(ComunicacaoHistorico);
