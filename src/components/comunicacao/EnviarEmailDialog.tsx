@@ -236,4 +236,6 @@ export function EnviarEmailDialog({ open, onOpenChange, candidato, onSuccess }: 
   );
 }
 
+EnviarEmailDialog.displayName = "EnviarEmailDialog";
+
 export default memo(EnviarEmailDialog);
