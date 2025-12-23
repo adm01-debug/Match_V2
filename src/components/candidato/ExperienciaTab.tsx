@@ -106,4 +106,6 @@ export function ExperienciaTab({ candidato }: ExperienciaTabProps) {
   );
 }
 
+ExperienciaTab.displayName = "ExperienciaTab";
+
 export default memo(ExperienciaTab);
