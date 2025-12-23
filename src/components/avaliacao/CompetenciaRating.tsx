@@ -85,4 +85,6 @@ export function CompetenciaRating({
   );
 }
 
+CompetenciaRating.displayName = "CompetenciaRating";
+
 export default memo(CompetenciaRating);
