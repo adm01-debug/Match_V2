@@ -152,4 +152,6 @@ END:VCALENDAR`;
   return null;
 }
 
+GoogleCalendarExport.displayName = "GoogleCalendarExport";
+
 export default memo(GoogleCalendarExport);
