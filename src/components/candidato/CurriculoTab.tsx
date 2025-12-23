@@ -155,4 +155,6 @@ export function CurriculoTab({ candidato }: CurriculoTabProps) {
   );
 }
 
+CurriculoTab.displayName = "CurriculoTab";
+
 export default memo(CurriculoTab);
