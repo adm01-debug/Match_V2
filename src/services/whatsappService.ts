@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Serviço de integração com WhatsApp
+ * @module whatsappService
+ */
+
 // Serviço de integração com WhatsApp
 // Pode ser integrado com WhatsApp Business API, Twilio, ou Z-API
 
