@@ -16,7 +16,7 @@ interface PipelineColumnProps {
   onCardClick?: (processo: ProcessoSeletivo) => void;
 }
 
-export const PipelineColumn = memo(function PipelineColumn({ etapa, processos, onCardClick }: PipelineColumnProps) {
+export const PipelineColumn = memo(function PipelineColumn({ etapa, processos, onCardClick }: PipelineColumnProps, (prev, next) => JSON.stringify(prev) === JSON.stringify(next)) {
   const { setNodeRef, isOver } = useDroppable({
     id: etapa.id,
   });
