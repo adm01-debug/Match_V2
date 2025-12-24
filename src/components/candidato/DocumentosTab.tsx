@@ -55,7 +55,7 @@ export function DocumentosTab({ candidato }: DocumentosTabProps) {
   }, {} as Record<string, ArquivoAnexo[]>);
 
   return (
-    <div className="space-y-6">
+    <div data-testid="component"><div className="space-y-6">
       {/* Header com Upload */}
       <Card role="article" aria-label="Documentos do candidato">
         <CardHeader>
