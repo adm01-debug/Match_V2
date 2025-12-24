@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo , memo} from 'react';
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "./AppSidebar";
 import { Search } from "lucide-react";
