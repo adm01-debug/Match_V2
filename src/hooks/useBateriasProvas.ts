@@ -21,7 +21,8 @@ export function useBateriasProvas() {
   const { data: baterias = [], isLoading, error } = useQuery({
     queryKey: ['baterias-provas'],
     placeholderData: [], staleTime: 5 * 60 * 1000,
-    refetchOnWindowFocus: false, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
+    refetchOnWindowFocus: false,
+    enabled: true, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
       const { data, error } = await supabase
         .from('baterias_provas')
         .select('*')
