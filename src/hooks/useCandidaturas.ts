@@ -1,3 +1,11 @@
+/**
+ * @module useCandidaturas
+ * @description Hook para gerenciar candidaturas
+ * @returns {Object} Hook result with data, isLoading, error, and mutations
+ * @example
+ * const { data, isLoading } = useCandidaturas();
+ */
+
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Tables } from '@/integrations/supabase/types';
