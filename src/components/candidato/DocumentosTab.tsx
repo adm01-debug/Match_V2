@@ -74,7 +74,7 @@ export function DocumentosTab({ candidato }: DocumentosTabProps) {
                 {candidato.arquivos.length} arquivo(s) anexado(s)
               </CardDescription>
             </div>
-            <Button onClick={handleUpload}>
+            <button type="button" onClick={handleUpload}>
               <Upload className="h-4 w-4 mr-2" />
               Upload
             </Button>
@@ -111,14 +111,14 @@ export function DocumentosTab({ candidato }: DocumentosTabProps) {
                     </div>
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
-                    <Button
+                    <button type="button"
                       variant="ghost"
                       size="icon"
                       onClick={() => handlePreview(arquivo)}
                     >
                       <Eye className="h-4 w-4" />
                     </Button>
-                    <Button
+                    <button type="button"
                       variant="ghost"
                       size="icon"
                       onClick={() => handleDownload(arquivo)}
@@ -138,7 +138,7 @@ export function DocumentosTab({ candidato }: DocumentosTabProps) {
           <CardContent className="py-12 text-center">
             <Folder className="h-12 w-12 mx-auto mb-4 text-muted-foreground/20" />
             <p className="text-muted-foreground">Nenhum documento anexado</p>
-            <Button variant="outline" className="mt-4" onClick={handleUpload}>
+            <button type="button" variant="outline" className="mt-4" onClick={handleUpload}>
               <Upload className="h-4 w-4 mr-2" />
               Fazer Upload
             </Button>
