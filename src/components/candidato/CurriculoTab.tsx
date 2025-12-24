@@ -157,4 +157,4 @@ export function CurriculoTab({ candidato }: CurriculoTabProps) {
 
 CurriculoTab.displayName = "CurriculoTab";
 
-export default memo(CurriculoTab);
+export default memo(CurriculoTab, (prev, next) => JSON.stringify(prev) === JSON.stringify(next));
