@@ -1,3 +1,4 @@
+import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { usePageTitle } from '@/hooks/usePageTitle';
@@ -5,6 +6,8 @@ import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
 
 const NotFound = () => {
+  useDocumentTitle('Página não encontrada');
+
   usePageTitle("404 - Página não encontrada");
   const location = useLocation();
 
