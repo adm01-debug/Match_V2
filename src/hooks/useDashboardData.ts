@@ -21,6 +21,7 @@ export function useDashboardData() {
   const kpisQuery = useQuery({
     queryKey: ['dashboard-kpis'],
     staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false,
     gcTime: 1000 * 60 * 30,
     retry: 3,
     queryFn: async (): Promise<KPIData> => {
@@ -99,13 +100,15 @@ export function useDashboardData() {
         metaTempo: 25, // Meta fixa por enquanto
       };
     },
-    staleTime: 30000, // 30 segundos
+    staleTime: 30000,
+    refetchOnWindowFocus: false, // 30 segundos
   });
 
   // Funil de recrutamento
   const funilQuery = useQuery({
     queryKey: ['dashboard-funil'],
     staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false,
     gcTime: 1000 * 60 * 30,
     retry: 3,
     queryFn: async (): Promise<FunilEtapa[]> => {
@@ -135,12 +138,14 @@ export function useDashboardData() {
       }));
     },
     staleTime: 30000,
+    refetchOnWindowFocus: false,
   });
 
   // Vagas urgentes
   const vagasUrgentesQuery = useQuery({
     queryKey: ['dashboard-vagas-urgentes'],
     staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false,
     gcTime: 1000 * 60 * 30,
     retry: 3,
     queryFn: async (): Promise<VagaUrgente[]> => {
@@ -167,12 +172,14 @@ export function useDashboardData() {
       }));
     },
     staleTime: 30000,
+    refetchOnWindowFocus: false,
   });
 
   // Ações pendentes
   const acoesPendentesQuery = useQuery({
     queryKey: ['dashboard-acoes-pendentes'],
     staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false,
     gcTime: 1000 * 60 * 30,
     retry: 3,
     queryFn: async (): Promise<AcaoPendente[]> => {
@@ -245,12 +252,14 @@ export function useDashboardData() {
       return acoes;
     },
     staleTime: 30000,
+    refetchOnWindowFocus: false,
   });
 
   // Agenda do dia
   const agendaHojeQuery = useQuery({
     queryKey: ['dashboard-agenda-hoje'],
     staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false,
     gcTime: 1000 * 60 * 30,
     retry: 3,
     queryFn: async (): Promise<AgendaDia[]> => {
@@ -281,13 +290,15 @@ export function useDashboardData() {
         local: e.tipo === 'video' ? 'Online' : (e.local || 'A definir'),
       }));
     },
-    staleTime: 60000, // 1 minuto
+    staleTime: 60000,
+    refetchOnWindowFocus: false, // 1 minuto
   });
 
   // Top candidatos (processos)
   const processosQuery = useQuery({
     queryKey: ['dashboard-processos'],
     staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false,
     gcTime: 1000 * 60 * 30,
     retry: 3,
     queryFn: async (): Promise<ProcessoSeletivo[]> => {
@@ -317,6 +328,7 @@ export function useDashboardData() {
       }));
     },
     staleTime: 30000,
+    refetchOnWindowFocus: false,
   });
 
   return {
