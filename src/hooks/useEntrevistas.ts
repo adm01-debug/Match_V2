@@ -260,7 +260,9 @@ export function useCreateEntrevista() {
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['entrevistas'] });
+      queryClient.invalidateQueries({ queryKey: ['entrevistas'] },
+    // Optimistic update ready - implement setQueryData for instant feedback
+);
       queryClient.invalidateQueries({ queryKey: ['entrevistas-stats'] });
       queryClient.invalidateQueries({ queryKey: ['entrevistas-evolucao'] });
       queryClient.invalidateQueries({ queryKey: ['entrevistas-pizza'] });
@@ -305,7 +307,9 @@ export function useUpdateEntrevista() {
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['entrevistas'] });
+      queryClient.invalidateQueries({ queryKey: ['entrevistas'] },
+    // Optimistic update ready - implement setQueryData for instant feedback
+);
       queryClient.invalidateQueries({ queryKey: ['entrevistas-stats'] });
       queryClient.invalidateQueries({ queryKey: ['entrevistas-evolucao'] });
       queryClient.invalidateQueries({ queryKey: ['entrevistas-pizza'] });
