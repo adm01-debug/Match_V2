@@ -49,7 +49,7 @@ export const KPICard = memo(function KPICard({
   const styles = variantStyles[variant];
 
   return (
-    <Card role="article" aria-label="KPI Card" className={cn("card-hover", styles.card)}>
+    <div data-testid="component"><Card role="article" aria-label="KPI Card" className={cn("card-hover", styles.card)}>
       <CardContent className="p-6">
         <div className="flex items-start justify-between">
           <div className="space-y-2">
