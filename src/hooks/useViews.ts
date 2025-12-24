@@ -58,7 +58,8 @@ export function usePipelineView(vagaId?: string) {
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,
     enabled: true,
-    placeholderData: (previousData) => previousData, // 5 minutes
+    placeholderData: (previousData) => previousData,
+    select: (data) => data, // 5 minutes
     gcTime: 1000 * 60 * 30, // 30 minutes
     retry: 3,
     queryKey: ['v_pipeline', vagaId],
@@ -115,7 +116,8 @@ export function useAgendaEntrevistasView(filtros?: {
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,
     enabled: true,
-    placeholderData: (previousData) => previousData, // 5 minutes
+    placeholderData: (previousData) => previousData,
+    select: (data) => data, // 5 minutes
     gcTime: 1000 * 60 * 30, // 30 minutes
     retry: 3,
     queryKey: ['v_agenda_entrevistas', filtros],
@@ -167,7 +169,8 @@ export function useVagasKpisView(status?: string) {
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,
     enabled: true,
-    placeholderData: (previousData) => previousData, // 5 minutes
+    placeholderData: (previousData) => previousData,
+    select: (data) => data, // 5 minutes
     gcTime: 1000 * 60 * 30, // 30 minutes
     retry: 3,
     queryKey: ['v_vagas_kpis', status],
