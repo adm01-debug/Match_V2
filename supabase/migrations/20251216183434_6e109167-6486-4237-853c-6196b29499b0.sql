@@ -1,3 +1,6 @@
+-- Rollback: Use supabase db reset or restore from backup
+-- This migration can be reverted by dropping added objects
+
 -- Criar tabela de histórico de comunicações
 CREATE TABLE public.comunicacoes (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
