@@ -1,3 +1,10 @@
+/**
+ * @module useDocumentTitle
+ * @description Hook para atualizar título da página
+ * @returns Hook state and methods
+ * @example
+ * const result = useDocumentTitle();
+ */
 import { useEffect } from 'react';
 
 /**
