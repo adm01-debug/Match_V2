@@ -17,7 +17,8 @@ export function useProfiles() {
   const queryClient = useQueryClient();
 
   const { data: profiles = [], isLoading, error } = useQuery({
-    staleTime: 1000 * 60 * 5, // 5 minutes
+    staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false, // 5 minutes
     gcTime: 1000 * 60 * 30, // 30 minutes
     retry: 3,
     queryKey: ['profiles'],
@@ -32,7 +33,8 @@ export function useProfiles() {
   });
 
   const useProfile = (userId?: string) => useQuery({
-    staleTime: 1000 * 60 * 5, // 5 minutes
+    staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false, // 5 minutes
     gcTime: 1000 * 60 * 30, // 30 minutes
     retry: 3,
     queryKey: ['profile', userId],
@@ -50,7 +52,8 @@ export function useProfiles() {
   });
 
   const useCurrentProfile = () => useQuery({
-    staleTime: 1000 * 60 * 5, // 5 minutes
+    staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false, // 5 minutes
     gcTime: 1000 * 60 * 30, // 30 minutes
     retry: 3,
     queryKey: ['current-profile'],
