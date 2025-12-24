@@ -1,3 +1,10 @@
+/**
+ * @module useAnnounce
+ * @description Hook para anúncios acessíveis via screen reader
+ * @returns Hook state and methods
+ * @example
+ * const result = useAnnounce();
+ */
 import { useCallback } from 'react';
 
 /**
