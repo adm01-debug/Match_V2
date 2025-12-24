@@ -1,5 +1,12 @@
 import { useEffect, useRef } from 'react';
 
+/**
+ * Hook para trap de foco em modais
+ * @description Hook para trap de foco em modais
+ * @returns {Object} Query result with data, isLoading, error, and mutations
+ * @example
+ * const { data, isLoading } = useFocusTrap();
+ */
 export const useFocusTrap = (isActive: boolean) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
