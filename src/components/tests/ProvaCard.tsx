@@ -80,7 +80,7 @@ export function ProvaCard({ prova, onSelect, onEdit, onDuplicate, onDelete, comp
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-8 w-8">
+              <button type="button" variant="ghost" size="icon" className="h-8 w-8">
                 <MoreVertical className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
@@ -148,7 +148,7 @@ export function ProvaCard({ prova, onSelect, onEdit, onDuplicate, onDelete, comp
         </div>
 
         <div className="flex gap-2 pt-2">
-          <Button 
+          <button type="button" 
             variant="default" 
             className="flex-1"
             onClick={() => onSelect?.(prova)}
