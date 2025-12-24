@@ -151,7 +151,7 @@ export function SmartInsights({ kpiData, funilData }: SmartInsightsProps) {
   return (
     <Card role="article" aria-label="Insights inteligentes" className="border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
       <CardHeader className="pb-3">
-        <div className="flex items-center justify-between">
+        <div data-testid="smart-insights" className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="p-1.5 rounded-lg bg-primary/10">
               <Sparkles className="h-4 w-4 text-primary" />
