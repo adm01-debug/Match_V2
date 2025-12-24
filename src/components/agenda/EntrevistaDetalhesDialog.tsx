@@ -246,7 +246,7 @@ const EntrevistaDetalhesDialog = ({
 
           {isEditing && editData ? (
             // Edit Mode
-            <div className="space-y-4 py-4">
+            <div data-testid="entrevista-detalhes-dialog" className="space-y-4 py-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label>Data</Label>
