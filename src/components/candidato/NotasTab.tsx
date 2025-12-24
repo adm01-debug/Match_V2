@@ -101,7 +101,7 @@ export function NotasTab({ candidatoId }: NotasTabProps) {
   };
 
   return (
-    <div className="space-y-6">
+    <div data-testid="notas-tab" className="space-y-6">
       {/* Adicionar Nova Nota */}
       <Card role="article" aria-label="Notas">
         <CardHeader>
