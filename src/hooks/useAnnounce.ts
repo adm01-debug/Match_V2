@@ -1,5 +1,12 @@
 import { useCallback } from 'react';
 
+/**
+ * Hook para anúncios de acessibilidade
+ * @description Hook para anúncios de acessibilidade
+ * @returns {Object} Query result with data, isLoading, error, and mutations
+ * @example
+ * const { data, isLoading } = useAnnounce();
+ */
 export const useAnnounce = () => {
   const announce = useCallback((message: string, priority: 'polite' | 'assertive' = 'polite') => {
     const el = document.createElement('div');
