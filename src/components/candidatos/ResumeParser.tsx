@@ -85,8 +85,7 @@ export function ResumeParser({ onParsed, onCandidatoSaved }: ResumeParserProps) 
         description: `Dados de ${data.data.nome || 'candidato'} extraídos com sucesso.`,
       });
     } catch (error) {
-      console.error('Error parsing resume:', error);
-      toast({
+toast({
         title: "Erro ao processar",
         description: error instanceof Error ? error.message : "Não foi possível processar o currículo.",
         variant: "destructive",
@@ -125,8 +124,7 @@ export function ResumeParser({ onParsed, onCandidatoSaved }: ResumeParserProps) 
         description: `${parsedData.nome} foi adicionado ao banco de dados.`,
       });
     } catch (error) {
-      console.error('Error saving candidato:', error);
-      toast({
+toast({
         title: "Erro ao salvar",
         description: error instanceof Error ? error.message : "Não foi possível salvar o candidato.",
         variant: "destructive",
