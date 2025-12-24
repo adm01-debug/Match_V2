@@ -34,7 +34,7 @@ export function ProvaCard({ prova, onSelect, onEdit, onDuplicate, onDelete, comp
         onClick={() => onSelect?.(prova)}
       >
         <CardContent className="p-4">
-          <div className="flex items-start justify-between">
+          <div data-testid="prova-card" className="flex items-start justify-between">
             <div className="flex-1">
               <h4 className="font-medium text-sm">{prova.titulo}</h4>
               <p className="text-xs text-muted-foreground mt-1 line-clamp-1">{prova.descricao}</p>
