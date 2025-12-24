@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth, AppRole } from '@/contexts/AuthContext';
 import { Loader2 } from 'lucide-react';
