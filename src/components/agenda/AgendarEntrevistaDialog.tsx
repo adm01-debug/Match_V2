@@ -219,7 +219,7 @@ const AgendarEntrevistaDialog = ({
               <Label>Data *</Label>
               <Popover>
                 <PopoverTrigger asChild>
-                  <Button
+                  <button type="button"
                     variant="outline"
                     className={cn(
                       "w-full justify-start text-left font-normal",
@@ -365,10 +365,10 @@ const AgendarEntrevistaDialog = ({
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)}>
+          <button type="button" variant="outline" onClick={() => onOpenChange(false)}>
             Cancelar
           </Button>
-          <Button onClick={handleSave}>
+          <button type="button" onClick={handleSave}>
             <Plus className="h-4 w-4 mr-2" />
             Agendar Entrevista
           </Button>
