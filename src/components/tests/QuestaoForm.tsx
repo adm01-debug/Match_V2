@@ -91,7 +91,7 @@ export function QuestaoForm({ questao, onSave, onCancel }: QuestaoFormProps) {
      tipo === 'verdadeiro_falso');
 
   return (
-    <div className="space-y-6">
+    <div data-testid="questao-form" className="space-y-6">
       {/* Tipo de questão */}
       <div className="space-y-2">
         <Label>Tipo de Questão</Label>
