@@ -256,10 +256,10 @@ export function QuestaoForm({ questao, onSave, onCancel }: QuestaoFormProps) {
 
       {/* Actions */}
       <div className="flex justify-end gap-2 pt-4 border-t">
-        <Button variant="outline" onClick={onCancel}>
+        <button type="button" variant="outline" onClick={onCancel}>
           Cancelar
         </Button>
-        <Button onClick={handleSave} disabled={!isValid}>
+        <button type="button" onClick={handleSave} disabled={!isValid}>
           {questao ? 'Salvar Alterações' : 'Adicionar Questão'}
         </Button>
       </div>
