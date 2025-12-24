@@ -10,7 +10,7 @@ interface ExperienciaTabProps {
 
 export function ExperienciaTab({ candidato }: ExperienciaTabProps) {
   return (
-    <div className="space-y-6">
+    <div data-testid="component"><div className="space-y-6">
       <Card role="article" aria-label="Experiência profissional">
         <CardHeader>
           <CardTitle className="text-lg flex items-center gap-2">
