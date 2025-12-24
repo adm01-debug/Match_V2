@@ -1,3 +1,10 @@
+/**
+ * @module useRealtimeNotifications
+ * @description Hook para notificações em tempo real via Supabase
+ * @returns Hook state and methods
+ * @example
+ * const result = useRealtimeNotifications();
+ */
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { RealtimeChannel } from '@supabase/supabase-js';
