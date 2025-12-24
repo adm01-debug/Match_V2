@@ -1,3 +1,4 @@
+import { toast } from 'sonner';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -183,6 +184,7 @@ export function useDashboardStats() {
     enabled: true,
     placeholderData: (previousData) => previousData,
     select: (data) => data,
+    onError: () => toast.error('Erro ao carregar dados'),
     gcTime: 1000 * 60 * 30,
     retry: 3,
   });
@@ -197,6 +199,7 @@ export function useVagasUrgentes() {
     enabled: true,
     placeholderData: (previousData) => previousData,
     select: (data) => data,
+    onError: () => toast.error('Erro ao carregar dados'),
     gcTime: 1000 * 60 * 30,
     retry: 3,
   });
@@ -211,6 +214,7 @@ export function useEntrevistasHoje() {
     enabled: true,
     placeholderData: (previousData) => previousData,
     select: (data) => data,
+    onError: () => toast.error('Erro ao carregar dados'),
     gcTime: 1000 * 60 * 30,
     retry: 3,
   });
@@ -225,6 +229,7 @@ export function useTopCandidatos() {
     enabled: true,
     placeholderData: (previousData) => previousData,
     select: (data) => data,
+    onError: () => toast.error('Erro ao carregar dados'),
     gcTime: 1000 * 60 * 30,
     retry: 3,
   });
@@ -239,6 +244,7 @@ export function useFunilRecrutamento() {
     enabled: true,
     placeholderData: (previousData) => previousData,
     select: (data) => data,
+    onError: () => toast.error('Erro ao carregar dados'),
     gcTime: 1000 * 60 * 30,
     retry: 3,
   });
