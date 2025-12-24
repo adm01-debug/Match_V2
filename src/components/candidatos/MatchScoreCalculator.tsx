@@ -131,7 +131,7 @@ export function MatchScoreCalculator({ candidatoId, candidatoNome, onScoreCalcul
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="flex gap-4">
+        <div data-testid="match-score-calculator" className="flex gap-4">
           <Select value={vagaSelecionada} onValueChange={setVagaSelecionada}>
             <SelectTrigger className="flex-1">
               <SelectValue placeholder="Selecione uma vaga" />
