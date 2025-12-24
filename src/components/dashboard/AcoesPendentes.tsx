@@ -35,7 +35,7 @@ export function AcoesPendentes({ acoes }: AcoesPendentesProps) {
   return (
     <Card role="article" aria-label="Ações pendentes" className="h-full">
       <CardHeader className="pb-4">
-        <div className="flex items-center gap-2">
+        <div data-testid="acoes-pendentes" className="flex items-center gap-2">
           <AlertCircle className="h-5 w-5 text-warning" />
           <CardTitle className="text-base font-semibold">Ações Pendentes</CardTitle>
         </div>
