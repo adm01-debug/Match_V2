@@ -38,7 +38,7 @@ export function AvaliacoesTab({ candidato }: AvaliacoesTabProps) {
 
   const renderStars = (nota: number, max: number = 5) => {
     return (
-      <div className="flex items-center gap-0.5">
+      <div data-testid="component"><div className="flex items-center gap-0.5">
         {Array.from({ length: max }).map((_, i) => (
           <Star 
             key={i} 
