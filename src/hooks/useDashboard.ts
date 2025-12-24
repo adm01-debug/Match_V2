@@ -182,6 +182,7 @@ export function useDashboardStats() {
     refetchOnWindowFocus: false,
     enabled: true,
     placeholderData: (previousData) => previousData,
+    select: (data) => data,
     gcTime: 1000 * 60 * 30,
     retry: 3,
   });
@@ -195,6 +196,7 @@ export function useVagasUrgentes() {
     refetchOnWindowFocus: false,
     enabled: true,
     placeholderData: (previousData) => previousData,
+    select: (data) => data,
     gcTime: 1000 * 60 * 30,
     retry: 3,
   });
@@ -208,6 +210,7 @@ export function useEntrevistasHoje() {
     refetchOnWindowFocus: false,
     enabled: true,
     placeholderData: (previousData) => previousData,
+    select: (data) => data,
     gcTime: 1000 * 60 * 30,
     retry: 3,
   });
@@ -221,6 +224,7 @@ export function useTopCandidatos() {
     refetchOnWindowFocus: false,
     enabled: true,
     placeholderData: (previousData) => previousData,
+    select: (data) => data,
     gcTime: 1000 * 60 * 30,
     retry: 3,
   });
@@ -234,6 +238,7 @@ export function useFunilRecrutamento() {
     refetchOnWindowFocus: false,
     enabled: true,
     placeholderData: (previousData) => previousData,
+    select: (data) => data,
     gcTime: 1000 * 60 * 30,
     retry: 3,
   });
