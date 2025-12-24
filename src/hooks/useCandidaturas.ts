@@ -24,6 +24,7 @@ export function useCandidaturas(filtros?: { vagaId?: string; candidatoAuthId?: s
   const { data: candidaturas = [], isLoading, error } = useQuery({
     queryKey: ['candidaturas', filtros],
     staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
     gcTime: 10 * 60 * 1000,
     retry: 3,
     placeholderData: [],
