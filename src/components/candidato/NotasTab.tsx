@@ -137,7 +137,7 @@ export function NotasTab({ candidatoId }: NotasTabProps) {
             placeholder="Digite sua nota..."
             className="min-h-[100px]"
           />
-          <Button onClick={handleAddNota} disabled={!novaNota.trim()}>
+          <button type="button" onClick={handleAddNota} disabled={!novaNota.trim()}>
             <StickyNote className="h-4 w-4 mr-2" />
             Adicionar Nota
           </Button>
@@ -175,14 +175,14 @@ export function NotasTab({ candidatoId }: NotasTabProps) {
                     <div className="flex items-center gap-1">
                       {editando === nota.id ? (
                         <>
-                          <Button
+                          <button type="button"
                             variant="ghost"
                             size="icon"
                             onClick={() => handleSaveEdit(nota.id)}
                           >
                             <Save className="h-4 w-4 text-success" />
                           </Button>
-                          <Button
+                          <button type="button"
                             variant="ghost"
                             size="icon"
                             onClick={() => setEditando(null)}
@@ -192,14 +192,14 @@ export function NotasTab({ candidatoId }: NotasTabProps) {
                         </>
                       ) : (
                         <>
-                          <Button
+                          <button type="button"
                             variant="ghost"
                             size="icon"
                             onClick={() => handleEdit(nota)}
                           >
                             <Edit className="h-4 w-4" />
                           </Button>
-                          <Button
+                          <button type="button"
                             variant="ghost"
                             size="icon"
                             onClick={() => handleDelete(nota.id)}
