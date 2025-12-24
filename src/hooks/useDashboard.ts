@@ -181,6 +181,7 @@ export function useDashboardStats() {
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,
     enabled: true,
+    placeholderData: (previousData) => previousData,
     gcTime: 1000 * 60 * 30,
     retry: 3,
   });
@@ -193,6 +194,7 @@ export function useVagasUrgentes() {
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,
     enabled: true,
+    placeholderData: (previousData) => previousData,
     gcTime: 1000 * 60 * 30,
     retry: 3,
   });
@@ -205,6 +207,7 @@ export function useEntrevistasHoje() {
     staleTime: 1000 * 60 * 2,
     refetchOnWindowFocus: false,
     enabled: true,
+    placeholderData: (previousData) => previousData,
     gcTime: 1000 * 60 * 30,
     retry: 3,
   });
@@ -217,6 +220,7 @@ export function useTopCandidatos() {
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,
     enabled: true,
+    placeholderData: (previousData) => previousData,
     gcTime: 1000 * 60 * 30,
     retry: 3,
   });
@@ -229,6 +233,7 @@ export function useFunilRecrutamento() {
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,
     enabled: true,
+    placeholderData: (previousData) => previousData,
     gcTime: 1000 * 60 * 30,
     retry: 3,
   });
