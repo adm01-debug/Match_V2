@@ -1,3 +1,5 @@
+import { Suspense } from 'react';
+import { Skeleton } from '@/components/ui/skeleton';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
@@ -11,7 +13,8 @@ const NotFound = () => {
   }, [location.pathname]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-muted">
+    <Suspense fallback={<div className="p-6"><Skeleton className="h-8 w-64 mb-4" /><Skeleton className="h-64" /></div>}>
+      <div className="flex min-h-screen items-center justify-center bg-muted">
       <div className="text-center">
         <h1 className="mb-4 text-4xl font-bold">404</h1>
         <p className="mb-4 text-xl text-muted-foreground">Oops! Page not found</p>
