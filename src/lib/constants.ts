@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Constantes da aplicação
+ * @module constants
+ */
+
 // Constantes do sistema Match ATS
 
 export const APP_NAME = 'Match ATS';
