@@ -1,3 +1,10 @@
+/**
+ * @module useFocusTrap
+ * @description Hook para capturar foco em modais
+ * @returns Hook state and methods
+ * @example
+ * const result = useFocusTrap();
+ */
 import { useEffect, useRef } from 'react';
 
 /**
