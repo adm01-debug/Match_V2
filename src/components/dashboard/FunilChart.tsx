@@ -29,7 +29,7 @@ export const FunilChart = memo(function FunilChart({ data }: FunilChartProps) {
       <CardContent className="space-y-3">
         {chartData.map((item) => (
           <div key={item.etapa} className="space-y-1.5">
-            <div className="flex items-center justify-between text-sm">
+            <div data-testid="funil-chart" className="flex items-center justify-between text-sm">
               <span className="text-muted-foreground">{item.etapa}</span>
               <span className="font-medium">{item.quantidade}</span>
             </div>
