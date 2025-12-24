@@ -1,3 +1,4 @@
+import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
@@ -107,6 +108,8 @@ export default function TestsPage() {
 
   // Render Card de Prova
   const ProvaCard = ({ prova }: { prova: any }) => {
+  useDocumentTitle('Provas');
+
     const categoria = getCategoriaById(prova.categoria);
     const nivel = getNivelById(prova.nivel);
     const IconeCategoria = categoria ? iconeMap[categoria.icone] || FileText : FileText;
