@@ -44,7 +44,8 @@ function dbToProcesso(row: ProcessoDB): ProcessoSeletivo {
 export function useProcessosSeletivos() {
   return useQuery({
     queryKey: ['processos-seletivos'],
-    placeholderData: [], staleTime: 5 * 60 * 1000,
+    placeholderData: [],
+    select: (data) => data, staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
       const { data, error } = await supabase
         .from('processos_seletivos')
@@ -61,7 +62,8 @@ export function useProcessosSeletivos() {
 export function useProcessosByVaga(vagaId: string) {
   return useQuery({
     queryKey: ['processos-seletivos', 'vaga', vagaId],
-    placeholderData: [], staleTime: 5 * 60 * 1000,
+    placeholderData: [],
+    select: (data) => data, staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
       const { data, error } = await supabase
         .from('processos_seletivos')
