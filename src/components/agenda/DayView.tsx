@@ -1,3 +1,8 @@
+/**
+ * @fileoverview DayView component
+ * @module DayView
+ */
+
 import { useMemo,  memo  , useCallback} from 'react';
 import { format, isSameDay } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
