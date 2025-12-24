@@ -84,10 +84,10 @@ export function CurriculoTab({ candidato }: CurriculoTabProps) {
                   </div>
                 </div>
                 <div className="flex gap-2">
-                  <Button variant="ghost" size="sm">
+                  <button type="button" variant="ghost" size="sm">
                     <Eye className="h-4 w-4" />
                   </Button>
-                  <Button variant="ghost" size="sm">
+                  <button type="button" variant="ghost" size="sm">
                     <Download className="h-4 w-4" />
                   </Button>
                 </div>
