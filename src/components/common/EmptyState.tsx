@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode , memo} from 'react';
 import { cn } from '@/lib/utils';
 
 interface EmptyStateProps {
