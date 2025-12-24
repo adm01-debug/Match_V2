@@ -1,4 +1,4 @@
-import { memo,  useState, useEffect, useMemo  } from 'react';
+import { memo,  useState, useEffect, useMemo  , useCallback} from 'react';
 import { format, isAfter, isBefore, startOfDay, endOfDay, formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { Mail, Clock, FileText, CalendarIcon, Filter, Search, ChevronRight, Send, BarChart3, X } from 'lucide-react';
