@@ -1,3 +1,4 @@
+import { toast } from 'sonner';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -134,6 +135,7 @@ export const useCandidatoPerfil = (candidatoId: string) => {
     enabled: !!candidatoId,
     placeholderData: (previousData) => previousData,
     select: (data) => data,
+    onError: () => toast.error('Erro ao carregar dados'),
     staleTime: 1000 * 60 * 5,
     gcTime: 1000 * 60 * 30,
     retry: 3,
