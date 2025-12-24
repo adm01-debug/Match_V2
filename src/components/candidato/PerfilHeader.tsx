@@ -20,7 +20,7 @@ export const PerfilHeader = memo(function PerfilHeader({ candidato, onEmail, onL
   };
 
   return (
-    <div className="bg-card rounded-lg border p-6">
+    <div data-testid="perfil-header" className="bg-card rounded-lg border p-6">
       <div className="flex flex-col md:flex-row gap-6">
         {/* Avatar */}
         <div className="flex-shrink-0">
