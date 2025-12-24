@@ -204,7 +204,7 @@ const CurriculoUpload: React.FC<CurriculoUploadProps> = ({
       </CardHeader>
       <CardContent>
         {curriculoUrl && curriculoNome ? (
-          <div className="space-y-4">
+          <div data-testid="curriculo-upload" className="space-y-4">
             {/* Current CV */}
             <div className="flex items-center gap-3 p-4 bg-green-500/10 border border-green-500/20 rounded-lg">
               <div className="text-2xl">{getFileIcon(curriculoNome)}</div>
