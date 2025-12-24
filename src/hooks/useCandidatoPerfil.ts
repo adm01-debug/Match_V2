@@ -76,6 +76,13 @@ interface EntrevistaResumo {
   entrevistador: string;
 }
 
+/**
+ * Hook para gerenciar perfil do candidato
+ * @description Hook para gerenciar perfil do candidato
+ * @returns {Object} Query result with data, isLoading, error, and mutations
+ * @example
+ * const { data, isLoading } = useCandidatoPerfil();
+ */
 export const useCandidatoPerfil = (candidatoId: string) => {
   return useQuery({
     queryKey: ['candidato-perfil', candidatoId],
