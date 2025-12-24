@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Recruitment process type definitions
+ * @module types
+ */
+
 // Types for the Recruitment System
 
 export type StatusVaga = 
