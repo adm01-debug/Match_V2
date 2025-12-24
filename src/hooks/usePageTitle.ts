@@ -1,3 +1,10 @@
+/**
+ * @module usePageTitle
+ * @description Hook para gerenciar título da página
+ * @returns Hook state and methods
+ * @example
+ * const result = usePageTitle();
+ */
 import { useEffect } from 'react';
 
 const APP_NAME = 'Match ATS';
