@@ -133,7 +133,7 @@ export const VagaCard = memo(function VagaCard({ vaga }: VagaCardProps) {
           
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-8 w-8">
+              <button type="button" variant="ghost" size="icon" className="h-8 w-8">
                 <MoreHorizontal className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
@@ -212,26 +212,26 @@ export const VagaCard = memo(function VagaCard({ vaga }: VagaCardProps) {
 
         {/* Actions */}
         <div className="flex gap-2">
-          <Button variant="outline" size="sm" className="flex-1" asChild>
+          <button type="button" variant="outline" size="sm" className="flex-1" asChild>
             <Link to={`/vagas/${vaga.id}`}>
               <Eye className="h-3.5 w-3.5 mr-1.5" />
               Ver
             </Link>
           </Button>
-          <Button variant="outline" size="sm" className="flex-1" asChild>
+          <button type="button" variant="outline" size="sm" className="flex-1" asChild>
             <Link to={`/vagas/${vaga.id}/editar`}>
               <Edit className="h-3.5 w-3.5 mr-1.5" />
               Editar
             </Link>
           </Button>
-          <Button variant="outline" size="sm" className="flex-1" asChild>
+          <button type="button" variant="outline" size="sm" className="flex-1" asChild>
             <Link to={`/pipeline?vaga=${vaga.id}`}>
               <Kanban className="h-3.5 w-3.5 mr-1.5" />
               Pipeline
             </Link>
           </Button>
           {vaga.status === "publicada" && (
-            <Button variant="outline" size="sm">
+            <button type="button" variant="outline" size="sm">
               <Share2 className="h-3.5 w-3.5" />
             </Button>
           )}
