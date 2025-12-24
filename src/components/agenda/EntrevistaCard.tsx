@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { Entrevista } from '@/data/agendaData';
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
