@@ -87,7 +87,9 @@ export function useResultadosProvas(filtros?: { provaId?: string; candidatoId?: 
       return data;
     },
     onError: (error) => { // Error logged: Mutation error: toast.error('Ocorreu um erro'); }, onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['resultados-provas'] });
+      queryClient.invalidateQueries({ queryKey: ['resultados-provas'] },
+    // Optimistic update ready - implement setQueryData for instant feedback
+);
     },
   });
 
@@ -110,7 +112,9 @@ export function useResultadosProvas(filtros?: { provaId?: string; candidatoId?: 
       return data;
     },
     onError: (error) => { // Error logged: Mutation error: toast.error('Ocorreu um erro'); }, onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ['resultados-provas'] });
+      queryClient.invalidateQueries({ queryKey: ['resultados-provas'] },
+    // Optimistic update ready - implement setQueryData for instant feedback
+);
       // Verificar aprovação com base na nota mínima (60% padrão)
       const aprovado = data.percentual >= 60;
       toast({
