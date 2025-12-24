@@ -1,3 +1,9 @@
+/**
+ * @fileoverview Health check edge function with basic rate limiting
+ * @module health
+ * @rateLimit 100 requests per minute
+ */
+
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 
 const corsHeaders = {
