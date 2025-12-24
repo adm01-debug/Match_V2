@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Cliente HTTP para chamadas de API
+ * @module apiClient
+ */
+
 import { supabase } from '@/integrations/supabase/client';
 
 export const apiClient = {
