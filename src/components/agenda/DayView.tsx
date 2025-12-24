@@ -47,7 +47,7 @@ export function DayView({ currentDate, entrevistas, onSelectEntrevista }: DayVie
   const isToday = isSameDay(currentDate, new Date());
 
   return (
-    <div role="region" aria-label="Visualização dia" className="space-y-4">
+    <div data-testid="day-view"><div role="region" aria-label="Visualização dia" className="space-y-4">
       {/* Day header */}
       <div className={cn(
         "text-center py-4 rounded-lg",
