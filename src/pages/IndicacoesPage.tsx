@@ -1,3 +1,4 @@
+import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
@@ -166,6 +167,8 @@ export default function IndicacoesPage() {
   const bonusTotal = indicacoes.reduce((acc, i) => acc + (i.bonus || 0), 0);
 
   const handleCopyLink = () => {
+  useDocumentTitle('Indicações');
+
     navigator.clipboard.writeText(linkIndicacao);
     toast.success("Link copiado!");
   };
