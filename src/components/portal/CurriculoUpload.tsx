@@ -1,3 +1,8 @@
+/**
+ * @fileoverview CurriculoUpload component
+ * @module CurriculoUpload
+ */
+
 import React, { useState, useRef , memo } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
