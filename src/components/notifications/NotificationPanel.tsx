@@ -80,7 +80,7 @@ export function NotificationPanel({
       </PopoverTrigger>
       <PopoverContent className="w-96 p-0" align="end">
         <div role="region" aria-label="Notificações" className="flex items-center justify-between p-4 border-b">
-          <div className="flex items-center gap-2">
+          <div data-testid="notification-panel" className="flex items-center gap-2">
             <Bell className="h-5 w-5 text-primary" />
             <h3 className="font-semibold">Notificações</h3>
             {unreadCount > 0 && (
