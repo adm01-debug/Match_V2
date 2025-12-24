@@ -6,6 +6,12 @@ const meta: Meta<typeof TopCandidatos> = {
   title: 'Components/dashboard/TopCandidatos',
   component: TopCandidatos,
   tags: ['autodocs'],
+
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvasElement).toBeInTheDocument();
+  },
+
 };
 
 export default meta;
