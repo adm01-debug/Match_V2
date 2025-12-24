@@ -6,6 +6,12 @@ const meta: Meta<typeof AcoesPendentes> = {
   title: 'Components/dashboard/AcoesPendentes',
   component: AcoesPendentes,
   tags: ['autodocs'],
+
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvasElement).toBeInTheDocument();
+  },
+
 };
 
 export default meta;
