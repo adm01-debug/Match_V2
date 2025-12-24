@@ -59,7 +59,9 @@ export function useComunicacoes(candidatoId?: string) {
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['comunicacoes'] });
+      queryClient.invalidateQueries({ queryKey: ['comunicacoes'] },
+    // Optimistic update ready - implement setQueryData for instant feedback
+);
       toast({ title: 'Comunicação registrada!' });
     },
     onError: (error: Error) => {
