@@ -1,3 +1,11 @@
+/**
+ * @module useProvas
+ * @description Hook para gerenciar provas
+ * @returns {Object} Hook result with data, isLoading, error, and mutations
+ * @example
+ * const { data, isLoading } = useProvas();
+ */
+
 import { useToast } from '@/hooks/use-toast';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
