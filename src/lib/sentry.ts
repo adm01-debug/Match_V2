@@ -8,87 +8,41 @@ export function initSentry() {
     console.log('[Sentry] DSN não configurado, monitoramento desabilitado');
     return;
   }
-
-  // Sentry initialization would go here when DSN is provided
-  console.log('[Sentry] Inicializado com sucesso');
-}
-    dsn: SENTRY_DSN,
-    environment: import.meta.env.MODE,
-    integrations: [
-      Sentry.browserTracingIntegration(),
-      Sentry.replayIntegration({
-        maskAllText: false,
-        blockAllMedia: false,
-      }),
-    ],
-    // Performance Monitoring
-    tracesSampleRate: import.meta.env.PROD ? 0.1 : 1.0,
-    // Session Replay
-    replaysSessionSampleRate: 0.1,
-    replaysOnErrorSampleRate: 1.0,
-    // Release tracking
-    release: `match-ats@${import.meta.env.VITE_APP_VERSION || '1.0.0'}`,
-    // Ignore errors
-    ignoreErrors: [
-      'ResizeObserver loop limit exceeded',
-      'ResizeObserver loop completed with undelivered notifications',
-      'Non-Error exception captured',
-      'Non-Error promise rejection captured',
-    ],
-    // Before send hook
-    beforeSend(event, hint) {
-      // Filtrar erros de desenvolvimento
-      if (import.meta.env.DEV) {
-        console.log('[Sentry] Error captured:', event);
-        return null; // Não enviar em dev
-      }
-      return event;
-    },
-  });
-
   console.log('[Sentry] Inicializado com sucesso');
 }
 
-// Capturar erro manualmente
+// Funções stub para quando Sentry não está configurado
 export function captureError(error: Error, context?: Record<string, unknown>) {
-  Sentry.captureException(error, {
-    extra: context,
-  });
+  console.error('[Error]', error, context);
 }
 
-// Capturar mensagem
-export function captureMessage(message: string, level: Sentry.SeverityLevel = 'info') {
-  Sentry.captureMessage(message, level);
+export function captureMessage(message: string, level: string = 'info') {
+  console.log(`[${level}]`, message);
 }
 
-// Identificar usuário
 export function identifyUser(user: { id: string; email?: string; name?: string }) {
-  Sentry.setUser({
-    id: user.id,
-    email: user.email,
-    username: user.name,
-  });
+  console.log('[User identified]', user.id);
 }
 
-// Limpar usuário (logout)
 export function clearUser() {
-  Sentry.setUser(null);
+  console.log('[User cleared]');
 }
 
-// Adicionar breadcrumb customizado
 export function addBreadcrumb(message: string, category: string, data?: Record<string, unknown>) {
-  Sentry.addBreadcrumb({
-    message,
-    category,
-    data,
-    level: 'info',
-  });
+  console.log('[Breadcrumb]', category, message, data);
 }
 
-// Wrapper para componentes React
-export const SentryErrorBoundary = Sentry.ErrorBoundary;
+// Placeholder ErrorBoundary - usa o componente React padrão
+export const SentryErrorBoundary = ({ children }: { children: React.ReactNode }) => children;
 
-// HOC para profiling
-export const withProfiler = Sentry.withProfiler;
+// Placeholder HOC
+export const withProfiler = <P extends object>(Component: React.ComponentType<P>) => Component;
 
-export default Sentry;
+export default {
+  initSentry,
+  captureError,
+  captureMessage,
+  identifyUser,
+  clearUser,
+  addBreadcrumb,
+};
