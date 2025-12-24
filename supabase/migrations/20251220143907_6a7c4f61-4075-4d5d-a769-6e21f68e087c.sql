@@ -1,3 +1,6 @@
+-- Rollback: Use supabase db reset or restore from backup
+-- This migration can be reverted by dropping added objects
+
 
 -- Create candidatos_auth table to link candidates to auth users
 CREATE TABLE public.candidatos_auth (
