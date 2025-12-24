@@ -149,4 +149,4 @@ export function FormacaoTab({ candidato }: FormacaoTabProps) {
 
 FormacaoTab.displayName = "FormacaoTab";
 
-export default memo(FormacaoTab);
+export default memo(FormacaoTab, (prev, next) => JSON.stringify(prev) === JSON.stringify(next));
