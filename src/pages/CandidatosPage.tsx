@@ -1,3 +1,4 @@
+import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
@@ -67,6 +68,8 @@ const statusOptions = [
 ];
 
 const getStatusConfig = (status: string) => {
+  useDocumentTitle('Candidatos');
+
   switch (status) {
     case 'novo': return { label: 'Novo', color: 'bg-blue-500', chartColor: '#3b82f6' };
     case 'em_triagem': return { label: 'Em Triagem', color: 'bg-yellow-500', chartColor: '#eab308' };
