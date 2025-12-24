@@ -1,3 +1,4 @@
+import { toast } from 'sonner';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { format, startOfMonth, differenceInDays } from 'date-fns';
@@ -25,6 +26,7 @@ export function useDashboardData() {
     enabled: true,
     placeholderData: (previousData) => previousData,
     select: (data) => data,
+    onError: () => toast.error('Erro ao carregar dados'),
     gcTime: 1000 * 60 * 30,
     retry: 3,
     queryFn: async (): Promise<KPIData> => {
@@ -107,7 +109,8 @@ export function useDashboardData() {
     refetchOnWindowFocus: false,
     enabled: true,
     placeholderData: (previousData) => previousData,
-    select: (data) => data, // 30 segundos
+    select: (data) => data,
+    onError: () => toast.error('Erro ao carregar dados'), // 30 segundos
   });
 
   // Funil de recrutamento
@@ -118,6 +121,7 @@ export function useDashboardData() {
     enabled: true,
     placeholderData: (previousData) => previousData,
     select: (data) => data,
+    onError: () => toast.error('Erro ao carregar dados'),
     gcTime: 1000 * 60 * 30,
     retry: 3,
     queryFn: async (): Promise<FunilEtapa[]> => {
@@ -151,6 +155,7 @@ export function useDashboardData() {
     enabled: true,
     placeholderData: (previousData) => previousData,
     select: (data) => data,
+    onError: () => toast.error('Erro ao carregar dados'),
   });
 
   // Vagas urgentes
@@ -161,6 +166,7 @@ export function useDashboardData() {
     enabled: true,
     placeholderData: (previousData) => previousData,
     select: (data) => data,
+    onError: () => toast.error('Erro ao carregar dados'),
     gcTime: 1000 * 60 * 30,
     retry: 3,
     queryFn: async (): Promise<VagaUrgente[]> => {
@@ -191,6 +197,7 @@ export function useDashboardData() {
     enabled: true,
     placeholderData: (previousData) => previousData,
     select: (data) => data,
+    onError: () => toast.error('Erro ao carregar dados'),
   });
 
   // Ações pendentes
@@ -201,6 +208,7 @@ export function useDashboardData() {
     enabled: true,
     placeholderData: (previousData) => previousData,
     select: (data) => data,
+    onError: () => toast.error('Erro ao carregar dados'),
     gcTime: 1000 * 60 * 30,
     retry: 3,
     queryFn: async (): Promise<AcaoPendente[]> => {
@@ -277,6 +285,7 @@ export function useDashboardData() {
     enabled: true,
     placeholderData: (previousData) => previousData,
     select: (data) => data,
+    onError: () => toast.error('Erro ao carregar dados'),
   });
 
   // Agenda do dia
@@ -287,6 +296,7 @@ export function useDashboardData() {
     enabled: true,
     placeholderData: (previousData) => previousData,
     select: (data) => data,
+    onError: () => toast.error('Erro ao carregar dados'),
     gcTime: 1000 * 60 * 30,
     retry: 3,
     queryFn: async (): Promise<AgendaDia[]> => {
@@ -321,7 +331,8 @@ export function useDashboardData() {
     refetchOnWindowFocus: false,
     enabled: true,
     placeholderData: (previousData) => previousData,
-    select: (data) => data, // 1 minuto
+    select: (data) => data,
+    onError: () => toast.error('Erro ao carregar dados'), // 1 minuto
   });
 
   // Top candidatos (processos)
@@ -332,6 +343,7 @@ export function useDashboardData() {
     enabled: true,
     placeholderData: (previousData) => previousData,
     select: (data) => data,
+    onError: () => toast.error('Erro ao carregar dados'),
     gcTime: 1000 * 60 * 30,
     retry: 3,
     queryFn: async (): Promise<ProcessoSeletivo[]> => {
@@ -365,6 +377,7 @@ export function useDashboardData() {
     enabled: true,
     placeholderData: (previousData) => previousData,
     select: (data) => data,
+    onError: () => toast.error('Erro ao carregar dados'),
   });
 
   return {
