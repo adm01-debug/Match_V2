@@ -1,3 +1,11 @@
+/**
+ * @module useAvaliacoes
+ * @description Hook para gerenciar avaliações de candidatos
+ * @returns {Object} Hook result with data, isLoading, error, and mutations
+ * @example
+ * const { data, isLoading } = useAvaliacoes();
+ */
+
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Avaliacao, Competencia, NotaCompetencia } from '@/types/recruitment';
