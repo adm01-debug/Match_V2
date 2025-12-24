@@ -1,3 +1,8 @@
+/**
+ * @fileoverview ProvaCard component
+ * @module ProvaCard
+ */
+
 import { memo , memo} from 'react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
