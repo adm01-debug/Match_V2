@@ -1,3 +1,6 @@
+-- Rollback: Use supabase db reset or restore from backup
+-- This migration can be reverted by dropping added objects
+
 -- Adicionar policy UPDATE para bateria_provas_rel
 CREATE POLICY "Usuários autenticados podem atualizar relações"
 ON public.bateria_provas_rel
