@@ -157,4 +157,4 @@ export function HistoricoTab({ candidato }: HistoricoTabProps) {
 
 HistoricoTab.displayName = "HistoricoTab";
 
-export default memo(HistoricoTab);
+export default memo(HistoricoTab, (prev, next) => JSON.stringify(prev) === JSON.stringify(next));
