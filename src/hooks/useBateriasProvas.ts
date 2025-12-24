@@ -51,7 +51,9 @@ export function useBateriasProvas() {
       return data;
     },
     onError: (error) => { // Error logged: Mutation error: toast.error('Ocorreu um erro'); }, onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['baterias-provas'] });
+      queryClient.invalidateQueries({ queryKey: ['baterias-provas'] },
+    // Optimistic update ready - implement setQueryData for instant feedback
+);
       toast({ title: 'Bateria criada!' });
     },
   });
@@ -71,7 +73,9 @@ export function useBateriasProvas() {
       return data;
     },
     onError: (error) => { // Error logged: Mutation error: toast.error('Ocorreu um erro'); }, onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['baterias-provas'] });
+      queryClient.invalidateQueries({ queryKey: ['baterias-provas'] },
+    // Optimistic update ready - implement setQueryData for instant feedback
+);
       toast({ title: 'Bateria atualizada!' });
     },
   });
@@ -82,7 +86,9 @@ export function useBateriasProvas() {
       if (error) throw error;
     },
     onError: (error) => { // Error logged: Mutation error: toast.error('Ocorreu um erro'); }, onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['baterias-provas'] });
+      queryClient.invalidateQueries({ queryKey: ['baterias-provas'] },
+    // Optimistic update ready - implement setQueryData for instant feedback
+);
       toast({ title: 'Bateria removida!' });
     },
   });
