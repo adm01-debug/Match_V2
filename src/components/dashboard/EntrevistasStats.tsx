@@ -55,7 +55,7 @@ export function EntrevistasStats() {
       </CardHeader>
       <CardContent className="space-y-4">
         {/* Taxa de Aprovação */}
-        <div className="space-y-2">
+        <div data-testid="entrevistas-stats" className="space-y-2">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <CheckCircle className="h-4 w-4 text-green-500" />
