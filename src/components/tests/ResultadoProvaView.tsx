@@ -53,7 +53,7 @@ export function ResultadoProvaView({ prova, resultado, questoes, onVoltar }: Res
   });
 
   return (
-    <div className="space-y-6">
+    <div data-testid="resultado-prova-view" className="space-y-6">
       {/* Header com resultado principal */}
       <Card role="article" aria-label="Resultado prova" className={cn(
         "border-2",
