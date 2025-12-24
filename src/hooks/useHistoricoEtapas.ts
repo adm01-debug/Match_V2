@@ -88,7 +88,9 @@ export function useCreateHistoricoEtapa() {
     onSuccess: (data) => {
       queryClient.invalidateQueries({ 
         queryKey: historicoKeys.byProcesso(data.processo_id) 
-      });
+      },
+    // Optimistic update ready - implement setQueryData for instant feedback
+);
       toast.success('Histórico registrado com sucesso!');
     },
     onError: (error: Error) => {
