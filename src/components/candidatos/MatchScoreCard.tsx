@@ -91,7 +91,7 @@ export function MatchScoreCard({ matchResult, candidatoNome, vagaTitulo }: Match
     <Card role="article" aria-label="Score de match" className="overflow-hidden">
       <CardHeader className="pb-2">
         <CardTitle className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
+          <div data-testid="match-score-card" className="flex items-center gap-2">
             <Target className="h-5 w-5 text-primary" />
             Match Score
           </div>
