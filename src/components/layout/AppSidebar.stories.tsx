@@ -14,6 +14,12 @@ export const Loading: Story = {
 export const WithError: Story = {
   args: {},
   parameters: { mockData: { error: 'Erro' } },
+
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvasElement).toBeInTheDocument();
+  },
+
 };
 
 export const Empty: Story = {
