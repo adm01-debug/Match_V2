@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 /**
  * @module useCandidatoPerfil
  * @description Hook para gerenciar perfil do candidato
