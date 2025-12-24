@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Contexto de notificações em tempo real
+ * @module NotificationContext
+ */
+
 import React, { createContext, useContext, ReactNode, useCallback, useMemo, useState } from 'react';
 import { useRealtimeNotifications, Notification } from '@/hooks/useRealtimeNotifications';
 
