@@ -119,7 +119,7 @@ END:VCALENDAR`;
 
   if (entrevista) {
     return (
-      <DropdownMenu>
+      <div data-testid="calendar-export"><DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline" size="sm">
             <Calendar className="h-4 w-4 mr-2" />
