@@ -1,3 +1,8 @@
+/**
+ * @fileoverview ComunicacaoTab component
+ * @module ComunicacaoTab
+ */
+
 import { memo , useCallback} from 'react';
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
