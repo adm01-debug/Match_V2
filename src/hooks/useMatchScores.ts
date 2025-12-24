@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 /**
  * @module useMatchScores
  * @description Hook para cálculo de match scores
