@@ -15,7 +15,7 @@ export function ComunicacaoTab({ candidato }: ComunicacaoTabProps) {
   const [emailDialogOpen, setEmailDialogOpen] = useState(false);
 
   return (
-    <div className="space-y-6">
+    <div data-testid="component"><div className="space-y-6">
       {/* Ações Rápidas */}
       <Card role="article" aria-label="Comunicações com candidato">
         <CardHeader>
