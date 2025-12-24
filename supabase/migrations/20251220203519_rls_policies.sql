@@ -1,3 +1,6 @@
+-- Rollback: Use supabase db reset or restore from backup
+-- This migration can be reverted by dropping added objects
+
 -- Migration: Row Level Security Policies
 -- Garante que usuários só acessem dados permitidos
 
