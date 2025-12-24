@@ -105,15 +105,15 @@ export const PerfilHeader = memo(function PerfilHeader({ candidato, onEmail, onL
 
         {/* Ações */}
         <div className="flex flex-row md:flex-col gap-2">
-          <Button variant="outline" size="sm" onClick={onEmail} aria-label="Action button">
+          <button type="button" variant="outline" size="sm" onClick={onEmail} aria-label="Action button">
             <Mail className="h-4 w-4 mr-2" />
             E-mail
           </Button>
-          <Button variant="outline" size="sm" onClick={onLigar}>
+          <button type="button" variant="outline" size="sm" onClick={onLigar}>
             <Phone className="h-4 w-4 mr-2" />
             Ligar
           </Button>
-          <Button variant="ghost" size="sm" onClick={onFavoritar}>
+          <button type="button" variant="ghost" size="sm" onClick={onFavoritar}>
             <Star className="h-4 w-4 mr-2" />
             Favoritar
           </Button>
