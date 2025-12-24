@@ -24,6 +24,7 @@ export function useDashboardData() {
     refetchOnWindowFocus: false,
     enabled: true,
     placeholderData: (previousData) => previousData,
+    select: (data) => data,
     gcTime: 1000 * 60 * 30,
     retry: 3,
     queryFn: async (): Promise<KPIData> => {
@@ -105,7 +106,8 @@ export function useDashboardData() {
     staleTime: 30000,
     refetchOnWindowFocus: false,
     enabled: true,
-    placeholderData: (previousData) => previousData, // 30 segundos
+    placeholderData: (previousData) => previousData,
+    select: (data) => data, // 30 segundos
   });
 
   // Funil de recrutamento
@@ -115,6 +117,7 @@ export function useDashboardData() {
     refetchOnWindowFocus: false,
     enabled: true,
     placeholderData: (previousData) => previousData,
+    select: (data) => data,
     gcTime: 1000 * 60 * 30,
     retry: 3,
     queryFn: async (): Promise<FunilEtapa[]> => {
@@ -147,6 +150,7 @@ export function useDashboardData() {
     refetchOnWindowFocus: false,
     enabled: true,
     placeholderData: (previousData) => previousData,
+    select: (data) => data,
   });
 
   // Vagas urgentes
@@ -156,6 +160,7 @@ export function useDashboardData() {
     refetchOnWindowFocus: false,
     enabled: true,
     placeholderData: (previousData) => previousData,
+    select: (data) => data,
     gcTime: 1000 * 60 * 30,
     retry: 3,
     queryFn: async (): Promise<VagaUrgente[]> => {
@@ -185,6 +190,7 @@ export function useDashboardData() {
     refetchOnWindowFocus: false,
     enabled: true,
     placeholderData: (previousData) => previousData,
+    select: (data) => data,
   });
 
   // Ações pendentes
@@ -194,6 +200,7 @@ export function useDashboardData() {
     refetchOnWindowFocus: false,
     enabled: true,
     placeholderData: (previousData) => previousData,
+    select: (data) => data,
     gcTime: 1000 * 60 * 30,
     retry: 3,
     queryFn: async (): Promise<AcaoPendente[]> => {
@@ -269,6 +276,7 @@ export function useDashboardData() {
     refetchOnWindowFocus: false,
     enabled: true,
     placeholderData: (previousData) => previousData,
+    select: (data) => data,
   });
 
   // Agenda do dia
@@ -278,6 +286,7 @@ export function useDashboardData() {
     refetchOnWindowFocus: false,
     enabled: true,
     placeholderData: (previousData) => previousData,
+    select: (data) => data,
     gcTime: 1000 * 60 * 30,
     retry: 3,
     queryFn: async (): Promise<AgendaDia[]> => {
@@ -311,7 +320,8 @@ export function useDashboardData() {
     staleTime: 60000,
     refetchOnWindowFocus: false,
     enabled: true,
-    placeholderData: (previousData) => previousData, // 1 minuto
+    placeholderData: (previousData) => previousData,
+    select: (data) => data, // 1 minuto
   });
 
   // Top candidatos (processos)
@@ -321,6 +331,7 @@ export function useDashboardData() {
     refetchOnWindowFocus: false,
     enabled: true,
     placeholderData: (previousData) => previousData,
+    select: (data) => data,
     gcTime: 1000 * 60 * 30,
     retry: 3,
     queryFn: async (): Promise<ProcessoSeletivo[]> => {
@@ -353,6 +364,7 @@ export function useDashboardData() {
     refetchOnWindowFocus: false,
     enabled: true,
     placeholderData: (previousData) => previousData,
+    select: (data) => data,
   });
 
   return {
