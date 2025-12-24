@@ -121,7 +121,7 @@ END:VCALENDAR`;
     return (
       <div data-testid="calendar-export"><DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" aria-label="Action button">
             <Calendar className="h-4 w-4 mr-2" />
             Adicionar ao Calendário
           </Button>
