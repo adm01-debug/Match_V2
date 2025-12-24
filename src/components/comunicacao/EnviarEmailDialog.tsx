@@ -100,7 +100,6 @@ export function EnviarEmailDialog({ open, onOpenChange, candidato, onSuccess }: 
       setConteudo("");
       setShowPreview(false);
     } catch (error) {
-      console.error("Erro ao enviar e-mail:", error);
       toast.error("Erro ao registrar e-mail", {
         description: "Tente novamente em alguns instantes.",
       });
