@@ -133,7 +133,7 @@ export function AppSidebar() {
       collapsible="icon"
     >
       <SidebarHeader className="border-b border-sidebar-border">
-        <div className={cn(
+        <div data-testid="app-sidebar" className={cn(
           "flex items-center gap-3 px-4 py-4",
           collapsed && "justify-center px-2"
         )}>
