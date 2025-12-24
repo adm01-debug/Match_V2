@@ -99,7 +99,7 @@ export const VagaCard = memo(function VagaCard({ vaga }: VagaCardProps) {
       <Card className="card-hover border-l-4 border-l-primary">
       <CardContent className="p-5">
         {/* Header */}
-        <div className="flex items-start justify-between gap-3 mb-4">
+        <div data-testid="vaga-card" className="flex items-start justify-between gap-3 mb-4">
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1">
               <Badge variant="outline" className={cn("text-xs", status.className)}>
