@@ -20,7 +20,8 @@ export function useComunicacoes(candidatoId?: string) {
   // Query para buscar comunicações de um candidato
   const { data: comunicacoes = [], isLoading, error } = useQuery({
     queryKey: ['comunicacoes', candidatoId],
-    placeholderData: [], staleTime: 5 * 60 * 1000,
+    placeholderData: [],
+    select: (data) => data, staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
       if (!candidatoId) return [];
       
