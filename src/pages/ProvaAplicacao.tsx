@@ -1,3 +1,4 @@
+import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
@@ -56,6 +57,8 @@ export default function ProvaAplicacao() {
   }, [iniciada, finalizada, tempoRestante]);
 
   const formatarTempo = (segundos: number) => {
+  useDocumentTitle('Aplicar Prova');
+
     const mins = Math.floor(segundos / 60);
     const secs = segundos % 60;
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
