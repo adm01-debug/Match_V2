@@ -138,7 +138,7 @@ export function AlertasInteligentes({ acoesPendentes, vagasUrgentes }: AlertasIn
     return (
       <Card role="article" aria-label="Alertas inteligentes">
         <CardContent className="flex flex-col items-center justify-center py-8 text-center">
-          <div className="p-3 rounded-full bg-emerald-500/10 mb-3">
+          <div data-testid="alertas-inteligentes" className="p-3 rounded-full bg-emerald-500/10 mb-3">
             <Zap className="h-6 w-6 text-emerald-500" />
           </div>
           <p className="font-medium text-foreground">Tudo em dia!</p>
