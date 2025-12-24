@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import { CandidatoAuthProvider } from "./contexts/CandidatoAuthContext";
 import { NotificationProvider } from "./contexts/NotificationContext";
+import { AnalyticsProvider } from "./contexts/AnalyticsProvider";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import PortalProtectedRoute from "./components/portal/PortalProtectedRoute";
 import { Loader2 } from "lucide-react";
@@ -48,82 +49,80 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-        <AnalyticsProvider>
     <TooltipProvider>
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <AuthProvider>
-          <CandidatoAuthProvider>
-            <NotificationProvider>
-              <ErrorBoundary>
-              <Suspense fallback={<PageLoader />}>
-                <Routes>
-                  {/* Portal do Candidato - Rotas Públicas */}
-                  <Route path="/portal" element={<PortalAuthPage />} />
-                  <Route 
-                    path="/portal/dashboard" 
-                    element={
-                      <PortalProtectedRoute>
-                        <PortalDashboard />
-                      </PortalProtectedRoute>
-                    } 
-                  />
-                  <Route 
-                    path="/portal/vagas" 
-                    element={
-                      <PortalProtectedRoute>
-                        <PortalVagas />
-                      </PortalProtectedRoute>
-                    } 
-                  />
-                  <Route 
-                    path="/portal/perfil" 
-                    element={
-                      <PortalProtectedRoute>
-                        <PortalPerfil />
-                      </PortalProtectedRoute>
-                    } 
-                  />
+        <AnalyticsProvider>
+          <AuthProvider>
+            <CandidatoAuthProvider>
+              <NotificationProvider>
+                <ErrorBoundary>
+                  <Suspense fallback={<PageLoader />}>
+                    <Routes>
+                      {/* Portal do Candidato - Rotas Públicas */}
+                      <Route path="/portal" element={<PortalAuthPage />} />
+                      <Route 
+                        path="/portal/dashboard" 
+                        element={
+                          <PortalProtectedRoute>
+                            <PortalDashboard />
+                          </PortalProtectedRoute>
+                        } 
+                      />
+                      <Route 
+                        path="/portal/vagas" 
+                        element={
+                          <PortalProtectedRoute>
+                            <PortalVagas />
+                          </PortalProtectedRoute>
+                        } 
+                      />
+                      <Route 
+                        path="/portal/perfil" 
+                        element={
+                          <PortalProtectedRoute>
+                            <PortalPerfil />
+                          </PortalProtectedRoute>
+                        } 
+                      />
 
-                  {/* Autenticação */}
-                  <Route path="/auth" element={<AuthPage />} />
+                      {/* Autenticação */}
+                      <Route path="/auth" element={<AuthPage />} />
 
-                  {/* Rotas Protegidas - Sistema Interno */}
-                  <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-                  <Route path="/vagas" element={<ProtectedRoute><VagasList /></ProtectedRoute>} />
-                  <Route path="/vagas/nova" element={<ProtectedRoute><VagaForm /></ProtectedRoute>} />
-                  <Route path="/vagas/:id" element={<ProtectedRoute><VagaDetalhes /></ProtectedRoute>} />
-                  <Route path="/vagas/:id/editar" element={<ProtectedRoute><VagaForm /></ProtectedRoute>} />
-                  <Route path="/pipeline" element={<ProtectedRoute><Pipeline /></ProtectedRoute>} />
-                  <Route path="/avaliacao/:processoId" element={<ProtectedRoute><AvaliacaoForm /></ProtectedRoute>} />
-                  <Route path="/testes" element={<ProtectedRoute><TestsPage /></ProtectedRoute>} />
-                  <Route path="/testes/nova" element={<ProtectedRoute><ProvaEditor /></ProtectedRoute>} />
-                  <Route path="/testes/:id/editar" element={<ProtectedRoute><ProvaEditor /></ProtectedRoute>} />
-                  <Route path="/testes/:provaId/aplicar" element={<ProtectedRoute><ProvaAplicacao /></ProtectedRoute>} />
-                  <Route path="/parser-curriculo" element={<ProtectedRoute><ResumeParserPage /></ProtectedRoute>} />
-                  <Route path="/talentos" element={<ProtectedRoute><CandidatosPage /></ProtectedRoute>} />
-                  <Route path="/candidato/:id" element={<ProtectedRoute><CandidatoPerfilPage /></ProtectedRoute>} />
-                  <Route path="/relatorios" element={<ProtectedRoute><AnalyticsPage /></ProtectedRoute>} />
-                  <Route path="/comunicacao" element={<ProtectedRoute><ComunicacaoPage /></ProtectedRoute>} />
-                  <Route path="/agenda" element={<ProtectedRoute><AgendaPage /></ProtectedRoute>} />
-                  <Route path="/indicacoes" element={<ProtectedRoute><IndicacoesPage /></ProtectedRoute>} />
-                  <Route path="/admin" element={<ProtectedRoute><AdminPage /></ProtectedRoute>} />
+                      {/* Rotas Protegidas - Sistema Interno */}
+                      <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+                      <Route path="/vagas" element={<ProtectedRoute><VagasList /></ProtectedRoute>} />
+                      <Route path="/vagas/nova" element={<ProtectedRoute><VagaForm /></ProtectedRoute>} />
+                      <Route path="/vagas/:id" element={<ProtectedRoute><VagaDetalhes /></ProtectedRoute>} />
+                      <Route path="/vagas/:id/editar" element={<ProtectedRoute><VagaForm /></ProtectedRoute>} />
+                      <Route path="/pipeline" element={<ProtectedRoute><Pipeline /></ProtectedRoute>} />
+                      <Route path="/avaliacao/:processoId" element={<ProtectedRoute><AvaliacaoForm /></ProtectedRoute>} />
+                      <Route path="/testes" element={<ProtectedRoute><TestsPage /></ProtectedRoute>} />
+                      <Route path="/testes/nova" element={<ProtectedRoute><ProvaEditor /></ProtectedRoute>} />
+                      <Route path="/testes/:id/editar" element={<ProtectedRoute><ProvaEditor /></ProtectedRoute>} />
+                      <Route path="/testes/:provaId/aplicar" element={<ProtectedRoute><ProvaAplicacao /></ProtectedRoute>} />
+                      <Route path="/parser-curriculo" element={<ProtectedRoute><ResumeParserPage /></ProtectedRoute>} />
+                      <Route path="/talentos" element={<ProtectedRoute><CandidatosPage /></ProtectedRoute>} />
+                      <Route path="/candidato/:id" element={<ProtectedRoute><CandidatoPerfilPage /></ProtectedRoute>} />
+                      <Route path="/relatorios" element={<ProtectedRoute><AnalyticsPage /></ProtectedRoute>} />
+                      <Route path="/comunicacao" element={<ProtectedRoute><ComunicacaoPage /></ProtectedRoute>} />
+                      <Route path="/agenda" element={<ProtectedRoute><AgendaPage /></ProtectedRoute>} />
+                      <Route path="/indicacoes" element={<ProtectedRoute><IndicacoesPage /></ProtectedRoute>} />
+                      <Route path="/admin" element={<ProtectedRoute><AdminPage /></ProtectedRoute>} />
 
-                  {/* 404 */}
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </Suspense>
-              </ErrorBoundary>
-            </NotificationProvider>
-          </CandidatoAuthProvider>
-        </AuthProvider>
+                      {/* 404 */}
+                      <Route path="*" element={<NotFound />} />
+                    </Routes>
+                  </Suspense>
+                </ErrorBoundary>
+              </NotificationProvider>
+            </CandidatoAuthProvider>
+          </AuthProvider>
+        </AnalyticsProvider>
       </BrowserRouter>
     </TooltipProvider>
-  </AnalyticsProvider>
-      </QueryClientProvider>
+  </QueryClientProvider>
 );
 
 export default App;
-
-
