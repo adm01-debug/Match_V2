@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Configurações do React Query
+ * @module queryConfig
+ */
+
 export const queryConfig = {
   defaultStaleTime: 5 * 60 * 1000,
   defaultGcTime: 10 * 60 * 1000,
