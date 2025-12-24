@@ -69,7 +69,9 @@ export function useQuestoes(provaId?: string) {
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['questoes', provaId] });
+      queryClient.invalidateQueries({ queryKey: ['questoes', provaId] },
+    // Optimistic update ready - implement setQueryData for instant feedback
+);
       toast({ title: 'Questão adicionada!' });
     },
     onError: (error: Error) => {
@@ -90,7 +92,9 @@ export function useQuestoes(provaId?: string) {
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['questoes', provaId] });
+      queryClient.invalidateQueries({ queryKey: ['questoes', provaId] },
+    // Optimistic update ready - implement setQueryData for instant feedback
+);
       toast({ title: 'Questão atualizada!' });
     },
     onError: (error: Error) => {
@@ -108,7 +112,9 @@ export function useQuestoes(provaId?: string) {
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['questoes', provaId] });
+      queryClient.invalidateQueries({ queryKey: ['questoes', provaId] },
+    // Optimistic update ready - implement setQueryData for instant feedback
+);
       toast({ title: 'Questão removida!' });
     },
     onError: (error: Error) => {
@@ -124,7 +130,9 @@ export function useQuestoes(provaId?: string) {
       await Promise.all(updates);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['questoes', provaId] });
+      queryClient.invalidateQueries({ queryKey: ['questoes', provaId] },
+    // Optimistic update ready - implement setQueryData for instant feedback
+);
     },
   });
 
