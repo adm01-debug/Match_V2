@@ -1,3 +1,5 @@
+import { Suspense } from 'react';
+import { Skeleton } from '@/components/ui/skeleton';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState, useEffect, useCallback } from 'react';
@@ -212,7 +214,8 @@ const AdminPage = () => {
   };
 
   return (
-    <Layout>
+    <Suspense fallback={<div className="p-6"><Skeleton className="h-8 w-64 mb-4" /><Skeleton className="h-64" /></div>}>
+      <Layout>
       <div className="space-y-6">
         {/* Header */}
         <div>
