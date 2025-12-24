@@ -138,7 +138,9 @@ export function useCreateProva() {
       return dbToProva(data);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['provas'] });
+      queryClient.invalidateQueries({ queryKey: ['provas'] },
+    // Optimistic update ready - implement setQueryData for instant feedback
+);
     },
     onError: (error: Error) => {
       // Error logged: Mutation error:
@@ -172,7 +174,9 @@ export function useUpdateProva() {
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['provas'] });
+      queryClient.invalidateQueries({ queryKey: ['provas'] },
+    // Optimistic update ready - implement setQueryData for instant feedback
+);
     },
     onError: (error: Error) => {
       // Error logged: Mutation error:
@@ -194,7 +198,9 @@ export function useDeleteProva() {
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['provas'] });
+      queryClient.invalidateQueries({ queryKey: ['provas'] },
+    // Optimistic update ready - implement setQueryData for instant feedback
+);
     },
     onError: (error: Error) => {
       // Error logged: Mutation error:
@@ -240,7 +246,9 @@ export function useDuplicateProva() {
       return dbToProva(data);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['provas'] });
+      queryClient.invalidateQueries({ queryKey: ['provas'] },
+    // Optimistic update ready - implement setQueryData for instant feedback
+);
     },
     onError: (error: Error) => {
       // Error logged: Mutation error:
