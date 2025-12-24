@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 /**
  * @module useProfiles
  * @description Hook para gerenciar perfis
