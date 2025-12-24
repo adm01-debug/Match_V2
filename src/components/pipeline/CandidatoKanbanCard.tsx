@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo , memo} from 'react';
 import { Badge } from "@/components/ui/badge";
 import { ProcessoSeletivo, FonteCandidato } from "@/types/recruitment";
 import { User, Clock, GripVertical } from "lucide-react";
