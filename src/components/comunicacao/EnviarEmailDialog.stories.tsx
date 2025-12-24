@@ -6,6 +6,12 @@ const meta: Meta<typeof EnviarEmailDialog> = {
   title: 'Components/comunicacao/EnviarEmailDialog',
   component: EnviarEmailDialog,
   tags: ['autodocs'],
+
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvasElement).toBeInTheDocument();
+  },
+
 };
 
 export default meta;
