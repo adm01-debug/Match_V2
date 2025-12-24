@@ -111,7 +111,8 @@ export function useVagas() {
   return useQuery({
     queryKey: ['vagas'],
     placeholderData: [], staleTime: 5 * 60 * 1000,
-    refetchOnWindowFocus: false, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
+    refetchOnWindowFocus: false,
+    enabled: true, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
       const { data, error } = await supabase
         .from('vagas')
         .select('*')
@@ -128,7 +129,8 @@ export function useVaga(id: string) {
   return useQuery({
     queryKey: ['vagas', id],
     placeholderData: [], staleTime: 5 * 60 * 1000,
-    refetchOnWindowFocus: false, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
+    refetchOnWindowFocus: false,
+    enabled: true, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
       const { data, error } = await supabase
         .from('vagas')
         .select('*')
@@ -147,7 +149,8 @@ export function useVagasSelect() {
   return useQuery({
     queryKey: ['vagas-select'],
     placeholderData: [], staleTime: 5 * 60 * 1000,
-    refetchOnWindowFocus: false, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
+    refetchOnWindowFocus: false,
+    enabled: true, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
       const { data, error } = await supabase
         .from('vagas')
         .select('id, titulo')
@@ -165,7 +168,8 @@ export function useVagasUrgentes() {
   return useQuery({
     queryKey: ['vagas-urgentes'],
     placeholderData: [], staleTime: 5 * 60 * 1000,
-    refetchOnWindowFocus: false, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
+    refetchOnWindowFocus: false,
+    enabled: true, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
       const { data, error } = await supabase
         .from('vagas')
         .select('*')
