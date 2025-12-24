@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Assessment and test type definitions
+ * @module types
+ */
+
 export type NivelCargo = 'estagiario' | 'junior' | 'pleno' | 'senior' | 'especialista' | 'coordenador' | 'gerente' | 'diretor';
 
 export type CategoriaProva = 
