@@ -31,7 +31,7 @@ export function FormacaoTab({ candidato }: FormacaoTabProps) {
   };
 
   return (
-    <div className="space-y-6">
+    <div data-testid="component"><div className="space-y-6">
       {/* Formação Acadêmica */}
       <Card role="article" aria-label="Formação acadêmica">
         <CardHeader>
