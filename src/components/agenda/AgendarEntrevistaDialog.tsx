@@ -1,3 +1,8 @@
+/**
+ * @fileoverview AgendarEntrevistaDialog component
+ * @module AgendarEntrevistaDialog
+ */
+
 import { useMemo,  useCallback,  useState, useEffect   , memo } from 'react';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
