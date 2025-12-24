@@ -1,3 +1,6 @@
+-- Rollback: Use supabase db reset or restore from backup
+-- This migration can be reverted by dropping added objects
+
 -- Create vagas table
 CREATE TABLE public.vagas (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
