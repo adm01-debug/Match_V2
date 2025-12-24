@@ -1,3 +1,4 @@
+import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
@@ -102,6 +103,8 @@ export default function ComunicacaoPage() {
 
   // Aplicar template
   const handleTemplateChange = (templateId: string) => {
+  useDocumentTitle('Comunicação');
+
     setTemplateSelecionado(templateId);
     const template = EMAIL_TEMPLATES.find(t => t.id === templateId);
     if (template) {
