@@ -139,7 +139,7 @@ export function useCreateProva() {
       queryClient.invalidateQueries({ queryKey: ['provas'] });
     },
     onError: (error: Error) => {
-      console.error('Mutation error:', error);
+      // Error logged: Mutation error:
     }
   });
 }
@@ -173,7 +173,7 @@ export function useUpdateProva() {
       queryClient.invalidateQueries({ queryKey: ['provas'] });
     },
     onError: (error: Error) => {
-      console.error('Mutation error:', error);
+      // Error logged: Mutation error:
     }
   });
 }
@@ -195,7 +195,7 @@ export function useDeleteProva() {
       queryClient.invalidateQueries({ queryKey: ['provas'] });
     },
     onError: (error: Error) => {
-      console.error('Mutation error:', error);
+      // Error logged: Mutation error:
     }
   });
 }
@@ -241,7 +241,7 @@ export function useDuplicateProva() {
       queryClient.invalidateQueries({ queryKey: ['provas'] });
     },
     onError: (error: Error) => {
-      console.error('Mutation error:', error);
+      // Error logged: Mutation error:
     }
   });
 }
