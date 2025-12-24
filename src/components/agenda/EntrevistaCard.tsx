@@ -1,3 +1,8 @@
+/**
+ * @fileoverview EntrevistaCard component
+ * @module EntrevistaCard
+ */
+
 import { memo , memo} from 'react';
 import { Entrevista } from '@/data/agendaData';
 import { Badge } from '@/components/ui/badge';
