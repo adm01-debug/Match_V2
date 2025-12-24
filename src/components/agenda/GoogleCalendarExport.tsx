@@ -126,7 +126,7 @@ END:VCALENDAR`;
     return (
       <div data-testid="calendar-export"><DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" size="sm" aria-label="Action button">
+          <button type="button" variant="outline" size="sm" aria-label="Action button">
             <Calendar className="h-4 w-4 mr-2" />
             Adicionar ao Calendário
           </Button>
@@ -147,7 +147,7 @@ END:VCALENDAR`;
 
   if (entrevistas && entrevistas.length > 0) {
     return (
-      <Button variant="outline" size="sm" onClick={handleDownloadIcs}>
+      <button type="button" variant="outline" size="sm" onClick={handleDownloadIcs}>
         <Download className="h-4 w-4 mr-2" />
         Exportar Calendário ({entrevistas.length})
       </Button>
