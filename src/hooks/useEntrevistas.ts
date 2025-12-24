@@ -86,7 +86,8 @@ export function useEntrevistas() {
   return useQuery({
     queryKey: ['entrevistas'],
     placeholderData: [], staleTime: 5 * 60 * 1000,
-    refetchOnWindowFocus: false, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
+    refetchOnWindowFocus: false,
+    enabled: true, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
       const { data, error } = await supabase
         .from('entrevistas')
         .select('*')
@@ -102,7 +103,8 @@ export function useEntrevistasStats() {
   return useQuery({
     queryKey: ['entrevistas-stats'],
     placeholderData: [], staleTime: 5 * 60 * 1000,
-    refetchOnWindowFocus: false, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
+    refetchOnWindowFocus: false,
+    enabled: true, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
       const { data, error } = await supabase
         .from('entrevistas')
         .select('*');
@@ -147,7 +149,8 @@ export function useEntrevistasEvolucao() {
   return useQuery({
     queryKey: ['entrevistas-evolucao'],
     placeholderData: [], staleTime: 5 * 60 * 1000,
-    refetchOnWindowFocus: false, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
+    refetchOnWindowFocus: false,
+    enabled: true, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
       const { data, error } = await supabase
         .from('entrevistas')
         .select('*')
@@ -198,7 +201,8 @@ export function useEntrevistasPizza() {
   return useQuery({
     queryKey: ['entrevistas-pizza'],
     placeholderData: [], staleTime: 5 * 60 * 1000,
-    refetchOnWindowFocus: false, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
+    refetchOnWindowFocus: false,
+    enabled: true, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
       const { data, error } = await supabase
         .from('entrevistas')
         .select('feedback_resultado')
@@ -312,7 +316,8 @@ export function useCandidatosDisponiveis() {
   return useQuery({
     queryKey: ['candidatos-disponiveis'],
     placeholderData: [], staleTime: 5 * 60 * 1000,
-    refetchOnWindowFocus: false, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
+    refetchOnWindowFocus: false,
+    enabled: true, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
       const { data, error } = await supabase
         .from('candidatos')
         .select('id, nome')
