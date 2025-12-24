@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Schemas de validação Zod
+ * @module schemas
+ */
+
 import { z } from 'zod';
 
 // Schema para Vaga
