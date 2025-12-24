@@ -87,7 +87,9 @@ export function useMatchScores(filtros?: { candidatoId?: string; vagaId?: string
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['match-scores'] });
+      queryClient.invalidateQueries({ queryKey: ['match-scores'] },
+    // Optimistic update ready - implement setQueryData for instant feedback
+);
       toast({ title: 'Match calculado!', description: 'Score atualizado com sucesso.' });
     },
     onError: (error: Error) => {
