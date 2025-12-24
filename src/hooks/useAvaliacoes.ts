@@ -128,7 +128,9 @@ export function useAvaliacoes(options: UseAvaliacoesOptions = {}) {
       return data as AvaliacaoDB;
     },
     onError: (error) => { // Error logged: Mutation error: toast.error('Ocorreu um erro'); }, onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['avaliacoes'] });
+      queryClient.invalidateQueries({ queryKey: ['avaliacoes'] },
+    // Optimistic update ready - implement setQueryData for instant feedback
+);
     },
   });
 
@@ -148,7 +150,9 @@ export function useAvaliacoes(options: UseAvaliacoesOptions = {}) {
       return data as AvaliacaoDB;
     },
     onError: (error) => { // Error logged: Mutation error: toast.error('Ocorreu um erro'); }, onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['avaliacoes'] });
+      queryClient.invalidateQueries({ queryKey: ['avaliacoes'] },
+    // Optimistic update ready - implement setQueryData for instant feedback
+);
     },
   });
 
@@ -158,7 +162,9 @@ export function useAvaliacoes(options: UseAvaliacoesOptions = {}) {
       if (error) throw error;
     },
     onError: (error) => { // Error logged: Mutation error: toast.error('Ocorreu um erro'); }, onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['avaliacoes'] });
+      queryClient.invalidateQueries({ queryKey: ['avaliacoes'] },
+    // Optimistic update ready - implement setQueryData for instant feedback
+);
     },
   });
 
