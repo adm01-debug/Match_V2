@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Tratamento centralizado de erros
+ * @module errorHandler
+ */
+
 import { toast } from 'sonner';
 
 export const handleError = (error: unknown, context?: string) => {
