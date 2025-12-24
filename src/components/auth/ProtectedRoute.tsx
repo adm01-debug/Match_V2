@@ -29,7 +29,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requiredRoles
     
     if (!hasRequiredRole && roles.length > 0) {
       return (
-        <div className="min-h-screen flex flex-col items-center justify-center bg-background gap-4">
+        <div data-testid="protected-route" className="min-h-screen flex flex-col items-center justify-center bg-background gap-4">
           <h1 className="text-2xl font-bold text-foreground">Acesso Negado</h1>
           <p className="text-muted-foreground">
             Você não tem permissão para acessar esta página.
