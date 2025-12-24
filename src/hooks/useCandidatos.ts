@@ -41,7 +41,8 @@ export function useCandidatos(filters?: {
           *,
           match_scores(score, criterios)
         `)
-        .order('created_at', { ascending: false , placeholderData: [], staleTime: 5 * 60 * 1000,
+        .order('created_at', { ascending: false , placeholderData: [],
+    select: (data) => data, staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false, gcTime: 10 * 60 * 1000, retry: 3});
 
       if (filters?.status) {
