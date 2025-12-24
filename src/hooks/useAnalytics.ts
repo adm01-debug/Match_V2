@@ -1,3 +1,11 @@
+/**
+ * @module useAnalytics
+ * @description Hook para gerenciar analytics e métricas
+ * @returns {Object} Hook result with data, isLoading, error, and mutations
+ * @example
+ * const { data, isLoading } = useAnalytics();
+ */
+
 // Hook de Analytics
 // Pode ser integrado com Google Analytics, PostHog, Mixpanel, etc.
 
