@@ -1,3 +1,10 @@
+/**
+ * @module useToast
+ * @description Hook para exibir notificações toast
+ * @returns Hook state and methods
+ * @example
+ * const result = useToast();
+ */
 import * as React from "react";
 
 import type { ToastActionElement, ToastProps } from "@/components/ui/toast";
