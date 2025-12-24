@@ -1,3 +1,4 @@
+import { ErrorBoundary } from '@/components/common/ErrorBoundary';
 import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
@@ -123,6 +124,7 @@ const AuthPage = () => {
 
   if (authLoading) {
     return (
+      <ErrorBoundary>
       <div className="min-h-screen flex items-center justify-center bg-background">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
