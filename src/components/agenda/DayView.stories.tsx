@@ -18,6 +18,12 @@ export const WithError: Story = {
   parameters: {
     mockData: { error: 'Erro ao carregar dados' },
   },
+
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvasElement).toBeInTheDocument();
+  },
+
 };
 
 export const Empty: Story = {
