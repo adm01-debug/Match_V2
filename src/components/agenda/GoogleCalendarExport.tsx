@@ -154,4 +154,4 @@ END:VCALENDAR`;
 
 GoogleCalendarExport.displayName = "GoogleCalendarExport";
 
-export default memo(GoogleCalendarExport);
+export default memo(GoogleCalendarExport, (prev, next) => JSON.stringify(prev) === JSON.stringify(next));
