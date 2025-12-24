@@ -1,3 +1,6 @@
+-- Rollback: Use supabase db reset or restore from backup
+-- This migration can be reverted by dropping added objects
+
 -- Allow admins to insert new roles for any user
 CREATE POLICY "Admins can insert roles"
 ON public.user_roles FOR INSERT
