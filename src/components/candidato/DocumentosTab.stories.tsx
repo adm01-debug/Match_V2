@@ -1,3 +1,4 @@
+import { within, expect } from '@storybook/test';
 import type { Meta, StoryObj } from '@storybook/react';
 import { DocumentosTab } from './DocumentosTab';
 const meta: Meta<typeof DocumentosTab> = { title: 'Components/candidato/DocumentosTab', component: DocumentosTab, tags: ['autodocs'] };
