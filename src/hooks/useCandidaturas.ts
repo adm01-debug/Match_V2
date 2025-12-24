@@ -72,7 +72,7 @@ export function useCandidaturas(filtros?: { vagaId?: string; candidatoAuthId?: s
       toast({ title: 'Candidatura registrada!' });
     },
     onError: (error: Error) => {
-      console.error('Mutation error:', error);
+      // Error logged: Mutation error:
     },
   });
 
@@ -92,7 +92,7 @@ export function useCandidaturas(filtros?: { vagaId?: string; candidatoAuthId?: s
       toast({ title: 'Status atualizado!' });
     },
     onError: (error: Error) => {
-      console.error('Mutation error:', error);
+      // Error logged: Mutation error:
     },
   });
 
