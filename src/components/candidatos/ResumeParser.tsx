@@ -170,7 +170,7 @@ toast({
   };
 
   return (
-    <div className="space-y-6">
+    <div data-testid="resume-parser" className="space-y-6">
       {/* Upload Area */}
       <Card role="article" aria-label="Parser currículo">
         <CardHeader>
