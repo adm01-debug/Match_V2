@@ -56,7 +56,8 @@ export interface VagasKpisView {
 export function usePipelineView(vagaId?: string) {
   return useQuery({
     staleTime: 1000 * 60 * 5,
-    refetchOnWindowFocus: false, // 5 minutes
+    refetchOnWindowFocus: false,
+    enabled: true, // 5 minutes
     gcTime: 1000 * 60 * 30, // 30 minutes
     retry: 3,
     queryKey: ['v_pipeline', vagaId],
@@ -111,7 +112,8 @@ export function useAgendaEntrevistasView(filtros?: {
 }) {
   return useQuery({
     staleTime: 1000 * 60 * 5,
-    refetchOnWindowFocus: false, // 5 minutes
+    refetchOnWindowFocus: false,
+    enabled: true, // 5 minutes
     gcTime: 1000 * 60 * 30, // 30 minutes
     retry: 3,
     queryKey: ['v_agenda_entrevistas', filtros],
@@ -161,7 +163,8 @@ export function useAgendaEntrevistasView(filtros?: {
 export function useVagasKpisView(status?: string) {
   return useQuery({
     staleTime: 1000 * 60 * 5,
-    refetchOnWindowFocus: false, // 5 minutes
+    refetchOnWindowFocus: false,
+    enabled: true, // 5 minutes
     gcTime: 1000 * 60 * 30, // 30 minutes
     retry: 3,
     queryKey: ['v_vagas_kpis', status],
