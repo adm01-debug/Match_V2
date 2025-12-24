@@ -42,7 +42,7 @@ export function QuestaoAplicacao({
     )}>
       <CardContent className="p-6">
         {/* Header */}
-        <div className="flex items-start justify-between gap-4 mb-4">
+        <div data-testid="questao-aplicacao" className="flex items-start justify-between gap-4 mb-4">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center font-bold text-primary">
               {index + 1}
