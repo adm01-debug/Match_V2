@@ -1,3 +1,8 @@
+/**
+ * @fileoverview API type definitions for Match ATS
+ * @module types
+ */
+
 export interface ApiResponse<T> {
   data: T | null;
   error: ApiError | null;
