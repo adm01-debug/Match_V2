@@ -33,6 +33,12 @@ export const CustomMessage: Story = {
     isLoading: true,
     message: 'Salvando alterações...',
   },
+
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvasElement).toBeInTheDocument();
+  },
+
 };
 
 export const Hidden: Story = {
