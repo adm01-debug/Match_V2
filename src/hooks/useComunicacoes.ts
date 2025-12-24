@@ -1,3 +1,11 @@
+/**
+ * @module useComunicacoes
+ * @description Hook para gerenciar comunicações
+ * @returns {Object} Hook result with data, isLoading, error, and mutations
+ * @example
+ * const { data, isLoading } = useComunicacoes();
+ */
+
 import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
