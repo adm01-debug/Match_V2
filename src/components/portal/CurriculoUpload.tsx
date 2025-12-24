@@ -221,7 +221,7 @@ const CurriculoUpload: React.FC<CurriculoUploadProps> = ({
                 </p>
               </div>
               <div className="flex gap-2">
-                <Button 
+                <button type="button" 
                   variant="outline" 
                   size="icon"
                   onClick={handleDownload}
@@ -229,7 +229,7 @@ const CurriculoUpload: React.FC<CurriculoUploadProps> = ({
                 >
                   <Download className="h-4 w-4" />
                 </Button>
-                <Button 
+                <button type="button" 
                   variant="outline" 
                   size="icon"
                   onClick={() => deleteMutation.mutate()}
@@ -244,7 +244,7 @@ const CurriculoUpload: React.FC<CurriculoUploadProps> = ({
 
             {/* Replace option */}
             <div className="text-center">
-              <Button 
+              <button type="button" 
                 variant="outline" 
                 onClick={() => fileInputRef.current?.click()}
                 disabled={uploading}
