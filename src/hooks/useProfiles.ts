@@ -49,6 +49,7 @@ export function useProfiles() {
       return data as Profile | null;
     },
     enabled: !!userId,
+    placeholderData: (previousData) => previousData,
   });
 
   const useCurrentProfile = () => useQuery({
