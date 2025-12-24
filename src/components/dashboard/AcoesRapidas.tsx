@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo , memo} from 'react';
 import { Button } from "@/components/ui/button";
 import { Plus, Users, BarChart3, Briefcase } from "lucide-react";
 import { Link } from "react-router-dom";
