@@ -25,7 +25,8 @@ export function useQuestoes(provaId?: string) {
 
   const { data: questoes = [], isLoading, error } = useQuery({
     queryKey: ['questoes', provaId],
-    placeholderData: [], staleTime: 5 * 60 * 1000,
+    placeholderData: [],
+    select: (data) => data, staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
       if (!provaId) return [];
       
