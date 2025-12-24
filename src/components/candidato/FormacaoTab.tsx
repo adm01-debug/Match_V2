@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Formação Tab component with form validation
+ * @module FormacaoTab
+ */
+
 import { useMemo,  memo  } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
