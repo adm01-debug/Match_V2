@@ -1,3 +1,8 @@
+/**
+ * @fileoverview ComunicacaoHistorico component
+ * @module ComunicacaoHistorico
+ */
+
 import { memo,  useState, useEffect, useMemo  , useCallback} from 'react';
 import { format, isAfter, isBefore, startOfDay, endOfDay, formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
