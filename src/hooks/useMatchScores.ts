@@ -71,6 +71,7 @@ export function useMatchScores(filtros?: { candidatoId?: string; vagaId?: string
         return data as MatchScore | null;
       },
       enabled: !!candidatoId && !!vagaId,
+    placeholderData: (previousData) => previousData,
     });
   };
 
