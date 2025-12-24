@@ -6,6 +6,12 @@ const meta: Meta<typeof AgendaHoje> = {
   title: 'Components/dashboard/AgendaHoje',
   component: AgendaHoje,
   tags: ['autodocs'],
+
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvasElement).toBeInTheDocument();
+  },
+
 };
 
 export default meta;
