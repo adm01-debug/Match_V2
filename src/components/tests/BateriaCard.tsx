@@ -27,7 +27,7 @@ export const BateriaCard = memo(function BateriaCard({ bateria, onSelect }: Bate
   return (
     <Card role="article" aria-label="Bateria de testes" className="hover:shadow-lg transition-shadow">
       <CardHeader className="pb-2">
-        <div className="flex items-start justify-between">
+        <div data-testid="bateria-card" className="flex items-start justify-between">
           <div>
             <CardTitle className="text-lg">{bateria.nome}</CardTitle>
             <p className="text-sm text-muted-foreground mt-1">{bateria.descricao}</p>
