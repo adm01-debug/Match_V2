@@ -1,3 +1,10 @@
+/**
+ * @module useReducedMotion
+ * @description Hook para detectar preferência de movimento reduzido
+ * @returns Hook state and methods
+ * @example
+ * const result = useReducedMotion();
+ */
 import { useState, useEffect } from 'react';
 
 export const useReducedMotion = () => {
