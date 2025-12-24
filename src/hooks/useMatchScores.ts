@@ -19,7 +19,8 @@ export function useMatchScores(filtros?: { candidatoId?: string; vagaId?: string
   const queryClient = useQueryClient();
 
   const { data: matchScores = [], isLoading, error } = useQuery({
-    staleTime: 1000 * 60 * 5, // 5 minutes
+    staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false, // 5 minutes
     gcTime: 1000 * 60 * 30, // 30 minutes
     retry: 3,
     queryKey: ['match-scores', filtros],
@@ -51,7 +52,8 @@ export function useMatchScores(filtros?: { candidatoId?: string; vagaId?: string
   // Buscar score específico
   const useMatchScore = (candidatoId?: string, vagaId?: string) => {
     return useQuery({
-    staleTime: 1000 * 60 * 5, // 5 minutes
+    staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false, // 5 minutes
     gcTime: 1000 * 60 * 30, // 30 minutes
     retry: 3,
       queryKey: ['match-score', candidatoId, vagaId],
