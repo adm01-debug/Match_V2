@@ -1,3 +1,8 @@
+/**
+ * @fileoverview CompetenciaRating component
+ * @module CompetenciaRating
+ */
+
 import { useMemo,  memo  , useCallback} from 'react';
 import { Star, Info } from 'lucide-react';
 import { Competencia } from '@/types/recruitment';
