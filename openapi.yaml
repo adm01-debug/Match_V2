@@ -1,0 +1,31 @@
+openapi: 3.0.3
+info:
+  title: Match ATS API
+  version: 1.0.0
+  description: Applicant Tracking System API
+servers:
+  - url: https://api.match-ats.com/v1
+paths:
+  /candidatos:
+    get:
+      summary: List candidates
+      responses:
+        '200':
+          description: List of candidates
+    post:
+      summary: Create candidate
+      responses:
+        '201':
+          description: Created
+  /vagas:
+    get:
+      summary: List jobs
+      responses:
+        '200':
+          description: List of jobs
+  /health:
+    get:
+      summary: Health check
+      responses:
+        '200':
+          description: OK
