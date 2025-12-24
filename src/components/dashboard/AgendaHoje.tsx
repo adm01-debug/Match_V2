@@ -37,7 +37,7 @@ export function AgendaHoje({ agenda }: AgendaProps) {
   return (
     <Card role="article" aria-label="Agenda de hoje" className="h-full">
       <CardHeader className="pb-4">
-        <div className="flex items-center justify-between">
+        <div data-testid="agenda-hoje" className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Calendar className="h-5 w-5 text-primary" />
             <CardTitle className="text-base font-semibold">Agenda do Dia</CardTitle>
