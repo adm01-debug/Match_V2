@@ -73,7 +73,8 @@ async function createHistorico(input: CreateHistoricoInput): Promise<HistoricoEt
 export function useHistoricoEtapas(processoId: string) {
   return useQuery({
     queryKey: historicoKeys.byProcesso(processoId),
-    placeholderData: [], staleTime: 5 * 60 * 1000, gcTime: 10 * 60 * 1000, retry: 3, queryFn: () => fetchHistoricoByProcesso(processoId),
+    placeholderData: [], staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false, gcTime: 10 * 60 * 1000, retry: 3, queryFn: () => fetchHistoricoByProcesso(processoId),
     enabled: !!processoId,
   });
 }
