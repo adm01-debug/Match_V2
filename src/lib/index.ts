@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Exportações centralizadas das libs
+ * @module lib
+ */
+
 export * from './utils';
 export * from './constants';
 export * from './formatters';
