@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Utilitários para storage local e de sessão
+ * @module storageUtils
+ */
+
 const PREFIX = 'match_ats_';
 
 export const storage = {
