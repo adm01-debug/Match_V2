@@ -21,7 +21,7 @@ import { useEntrevistasEvolucao, useEntrevistasPizza } from '@/hooks/useEntrevis
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-background border rounded-lg shadow-lg p-3">
+      <div data-testid="entrevistas-chart" className="bg-background border rounded-lg shadow-lg p-3">
         <p className="font-medium text-sm mb-1">{label}</p>
         {payload.map((entry: any, index: number) => (
           <p key={index} className="text-sm" style={{ color: entry.color }}>
