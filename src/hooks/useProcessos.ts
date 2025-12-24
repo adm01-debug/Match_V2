@@ -147,14 +147,16 @@ async function updateEtapa(id: string, etapa: string) {
 export function useProcessos(filters: ProcessoFilters = {}) {
   return useQuery({
     queryKey: processosKeys.list(filters),
-    placeholderData: [], staleTime: 5 * 60 * 1000, gcTime: 10 * 60 * 1000, retry: 3, queryFn: () => fetchProcessos(filters),
+    placeholderData: [], staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false, gcTime: 10 * 60 * 1000, retry: 3, queryFn: () => fetchProcessos(filters),
   });
 }
 
 export function useProcesso(id: string) {
   return useQuery({
     queryKey: processosKeys.detail(id),
-    placeholderData: [], staleTime: 5 * 60 * 1000, gcTime: 10 * 60 * 1000, retry: 3, queryFn: () => fetchProcesso(id),
+    placeholderData: [], staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false, gcTime: 10 * 60 * 1000, retry: 3, queryFn: () => fetchProcesso(id),
     enabled: !!id,
   });
 }
@@ -162,7 +164,8 @@ export function useProcesso(id: string) {
 export function useProcessosCandidato(candidatoId: string) {
   return useQuery({
     queryKey: processosKeys.byCandidato(candidatoId),
-    placeholderData: [], staleTime: 5 * 60 * 1000, gcTime: 10 * 60 * 1000, retry: 3, queryFn: () => fetchProcessosByCandidato(candidatoId),
+    placeholderData: [], staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false, gcTime: 10 * 60 * 1000, retry: 3, queryFn: () => fetchProcessosByCandidato(candidatoId),
     enabled: !!candidatoId,
   });
 }
