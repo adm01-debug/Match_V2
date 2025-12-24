@@ -1,3 +1,6 @@
+-- Rollback: Use supabase db reset or restore from backup
+-- This migration can be reverted by dropping added objects
+
 -- Create enum for roles
 CREATE TYPE public.app_role AS ENUM ('admin', 'rh', 'gestor');
 
