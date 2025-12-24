@@ -167,7 +167,7 @@ export function ComunicacaoHistorico({ candidatoId }: ComunicacaoHistoricoProps)
   }
 
   return (
-    <div className="space-y-3">
+    <div data-testid="comunicacao-historico" className="space-y-3">
       {/* Estatísticas rápidas */}
       {comunicacoes.length > 0 && (
         <div className="flex items-center gap-4 p-3 bg-muted/50 rounded-lg text-xs">
