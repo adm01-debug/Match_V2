@@ -1,3 +1,4 @@
+import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
@@ -155,6 +156,8 @@ export default function AgendaPage() {
 
   // Render Card de Entrevista
   const EntrevistaCard = ({ entrevista }: { entrevista: any }) => {
+  useDocumentTitle('Agenda');
+
     const status = statusConfig[entrevista.status as keyof typeof statusConfig];
     const tipo = tipoConfig[entrevista.tipo as keyof typeof tipoConfig];
     const StatusIcon = status?.icon || CalendarIcon;
