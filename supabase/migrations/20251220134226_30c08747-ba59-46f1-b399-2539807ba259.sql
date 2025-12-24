@@ -1,3 +1,6 @@
+-- Rollback: Use supabase db reset or restore from backup
+-- This migration can be reverted by dropping added objects
+
 -- Create processos_seletivos table
 CREATE TABLE public.processos_seletivos (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
