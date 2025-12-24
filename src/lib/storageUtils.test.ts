@@ -1,17 +1,59 @@
-import { describe, it, expect, beforeEach } from 'vitest';
-import { storage } from './storageUtils';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { getItem, setItem, removeItem, clearStorage } from './storageUtils';
 
 describe('storageUtils', () => {
-  beforeEach(() => localStorage.clear());
-
-  it('sets and gets value', () => {
-    storage.set('test', { foo: 'bar' });
-    expect(storage.get('test')).toEqual({ foo: 'bar' });
+  beforeEach(() => {
+    localStorage.clear();
   });
 
-  it('removes value', () => {
-    storage.set('test', 'value');
-    storage.remove('test');
-    expect(storage.get('test')).toBeNull();
+  describe('setItem', () => {
+    it('stores string value', () => {
+      setItem('key', 'value');
+      expect(localStorage.getItem('key')).toBe('"value"');
+    });
+
+    it('stores object value', () => {
+      setItem('key', { foo: 'bar' });
+      expect(JSON.parse(localStorage.getItem('key') || '')).toEqual({ foo: 'bar' });
+    });
+
+    it('handles null value', () => {
+      setItem('key', null);
+      expect(localStorage.getItem('key')).toBe('null');
+    });
+  });
+
+  describe('getItem', () => {
+    it('retrieves stored value', () => {
+      setItem('key', 'value');
+      expect(getItem('key')).toBe('value');
+    });
+
+    it('returns default for missing key', () => {
+      expect(getItem('missing', 'default')).toBe('default');
+    });
+
+    it('parses JSON objects', () => {
+      setItem('obj', { a: 1 });
+      expect(getItem('obj')).toEqual({ a: 1 });
+    });
+  });
+
+  describe('removeItem', () => {
+    it('removes item from storage', () => {
+      setItem('key', 'value');
+      removeItem('key');
+      expect(getItem('key')).toBeNull();
+    });
+  });
+
+  describe('clearStorage', () => {
+    it('clears all items', () => {
+      setItem('key1', 'value1');
+      setItem('key2', 'value2');
+      clearStorage();
+      expect(getItem('key1')).toBeNull();
+      expect(getItem('key2')).toBeNull();
+    });
   });
 });
