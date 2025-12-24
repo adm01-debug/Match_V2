@@ -37,7 +37,7 @@ export function NotaResumo({ titulo, nota, maxNota = 5, tipo = 'geral' }: NotaRe
   };
 
   return (
-    <div role="region" aria-label="Resumo nota" className="p-4 rounded-lg border border-border bg-card">
+    <div data-testid="component"><div role="region" aria-label="Resumo nota" className="p-4 rounded-lg border border-border bg-card">
       <div className="flex items-center justify-between mb-2">
         <span className="text-sm font-medium text-muted-foreground flex items-center gap-2">
           <span>{getIcone()}</span>
