@@ -32,7 +32,7 @@ export function AcoesRapidas() {
   ];
 
   return (
-    <div role="region" aria-label="Ações rápidas" className="flex flex-wrap gap-3">
+    <div data-testid="acoes-rapidas" role="region" aria-label="Ações rápidas" className="flex flex-wrap gap-3">
       {acoes.map((acao) => (
         <Button
           key={acao.label}
