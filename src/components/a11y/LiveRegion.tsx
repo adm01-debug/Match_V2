@@ -6,8 +6,7 @@ interface LiveRegionProps {
 }
 
 export const LiveRegion = memo(({ children, mode = 'polite' }: LiveRegionProps) => (
-  <div
-    role="status"
+  <div data-testid="live-region" role="status"
     aria-live={mode}
     aria-atomic="true"
     className="sr-only"
