@@ -38,7 +38,7 @@ export function CurriculoTab({ candidato }: CurriculoTabProps) {
   };
 
   return (
-    <div className="space-y-6">
+    <div data-testid="component"><div className="space-y-6">
       {/* Resumo Profissional */}
       <Card role="article" aria-label="Currículo do candidato">
         <CardHeader>
