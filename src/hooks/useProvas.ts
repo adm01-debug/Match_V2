@@ -46,6 +46,7 @@ export function useProvas() {
   return useQuery({
     queryKey: ['provas'],
     staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false,
     gcTime: 1000 * 60 * 30,
     retry: 3,
     queryFn: async (): Promise<Prova[]> => {
@@ -58,6 +59,7 @@ export function useProvas() {
       return (data || []).map(dbToProva);
     },
     placeholderData: [], staleTime: 60000,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -66,6 +68,7 @@ export function useProvasAtivas() {
   return useQuery({
     queryKey: ['provas', 'ativas'],
     staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false,
     gcTime: 1000 * 60 * 30,
     retry: 3,
     queryFn: async (): Promise<Prova[]> => {
@@ -79,6 +82,7 @@ export function useProvasAtivas() {
       return (data || []).map(dbToProva);
     },
     placeholderData: [], staleTime: 60000,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -87,6 +91,7 @@ export function useProva(id: string) {
   return useQuery({
     queryKey: ['provas', id],
     staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false,
     gcTime: 1000 * 60 * 30,
     retry: 3,
     queryFn: async (): Promise<Prova | null> => {
@@ -246,6 +251,7 @@ export function useBaterias() {
   return useQuery({
     queryKey: ['baterias'],
     staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false,
     gcTime: 1000 * 60 * 30,
     retry: 3,
     queryFn: async (): Promise<BateriaProvas[]> => {
@@ -278,6 +284,7 @@ export function useBaterias() {
       );
     },
     placeholderData: [], staleTime: 60000,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -286,6 +293,7 @@ export function useProvasStats() {
   return useQuery({
     queryKey: ['provas', 'stats'],
     staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false,
     gcTime: 1000 * 60 * 30,
     retry: 3,
     queryFn: async () => {
@@ -314,5 +322,6 @@ export function useProvasStats() {
       };
     },
     placeholderData: [], staleTime: 60000,
+    refetchOnWindowFocus: false,
   });
 }
