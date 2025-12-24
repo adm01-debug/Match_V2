@@ -61,4 +61,4 @@ export function ComunicacaoTab({ candidato }: ComunicacaoTabProps) {
 
 ComunicacaoTab.displayName = "ComunicacaoTab";
 
-export default memo(ComunicacaoTab);
+export default memo(ComunicacaoTab, (prev, next) => JSON.stringify(prev) === JSON.stringify(next));
