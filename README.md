@@ -107,3 +107,68 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para ma
 ## 📧 Contato
 
 Para dúvidas ou sugestões, abra uma issue no repositório.
+
+
+## ✨ Features
+
+- 📋 **Pipeline de Recrutamento** - Kanban visual para gerenciar candidatos
+- 👥 **Gestão de Candidatos** - Perfis completos com histórico
+- 📅 **Agendamento de Entrevistas** - Integração com calendário
+- 📝 **Sistema de Provas** - Avaliações técnicas automatizadas
+- 📊 **Analytics & Dashboards** - Métricas em tempo real
+- 🔔 **Comunicação Integrada** - Email e WhatsApp
+- 🤖 **Match Score IA** - Ranking inteligente de candidatos
+- 🌐 **Portal do Candidato** - Acompanhamento de candidaturas
+
+
+## 🚀 Installation
+
+```bash
+# Clone o repositório
+git clone https://github.com/adm01-debug/match.git
+cd match
+
+# Instale as dependências
+npm install
+
+# Configure as variáveis de ambiente
+cp .env.example .env
+
+# Inicie o servidor de desenvolvimento
+npm run dev
+```
+
+
+## 📡 API
+
+### Edge Functions
+
+| Endpoint | Descrição |
+|----------|-----------|
+| `/functions/v1/match-score` | Calcula score de compatibilidade |
+| `/functions/v1/parse-resume` | Parser de currículos |
+| `/functions/v1/send-email` | Envio de emails |
+| `/functions/v1/send-whatsapp` | Envio de WhatsApp |
+
+### Database
+
+Utilizamos Supabase (PostgreSQL) com RLS (Row Level Security) habilitado.
+
+
+## 🏗️ Architecture
+
+```
+├── src/
+│   ├── components/     # Componentes React
+│   ├── hooks/          # Custom hooks
+│   ├── pages/          # Páginas da aplicação
+│   ├── services/       # Serviços e APIs
+│   ├── contexts/       # Context providers
+│   └── lib/            # Utilitários
+├── supabase/
+│   ├── functions/      # Edge functions
+│   └── migrations/     # Database migrations
+├── e2e/                # Testes E2E
+└── docs/               # Documentação
+```
+
