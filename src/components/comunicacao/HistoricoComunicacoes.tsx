@@ -53,7 +53,6 @@ export function HistoricoComunicacoes({ candidatoId, className }: HistoricoComun
         if (error) throw error;
         setComunicacoes(data || []);
       } catch (error) {
-        console.error("Erro ao buscar comunicações:", error);
       } finally {
         setLoading(false);
       }
