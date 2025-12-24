@@ -1,3 +1,4 @@
+import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
@@ -18,6 +19,8 @@ import { ArrowLeft, User, Mail, Phone, Save, Lock } from 'lucide-react';
 import CurriculoUpload from '@/components/portal/CurriculoUpload';
 
 const PortalPerfil = () => {
+  useDocumentTitle('Portal - Meu Perfil');
+
   usePageTitle('Portal - Meu Perfil');
 
   const navigate = useNavigate();
