@@ -61,8 +61,7 @@ function sendEvent(event: AnalyticsEvent): void {
     default:
       // Development - log no console
       if (process.env.NODE_ENV === 'development') {
-        console.log('[Analytics]', { category, action, label, value, metadata });
-      }
+        }
   }
 }
 
