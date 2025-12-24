@@ -1,9 +1,12 @@
+import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { usePageTitle } from '@/hooks/usePageTitle';
 // Update this page (the content is just a fallback if you fail to update the page)
 
 const Index = () => {
+  useDocumentTitle('Início');
+
   usePageTitle("Home");
   return (
     <Suspense fallback={<div className="p-6"><Skeleton className="h-8 w-64 mb-4" /><Skeleton className="h-64" /></div>}>
