@@ -144,4 +144,4 @@ export function DayView({ currentDate, entrevistas, onSelectEntrevista }: DayVie
 
 DayView.displayName = "DayView";
 
-export default memo(DayView);
+export default memo(DayView, (prev, next) => JSON.stringify(prev) === JSON.stringify(next));
