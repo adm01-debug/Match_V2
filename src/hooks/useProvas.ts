@@ -58,7 +58,8 @@ export function useProvas() {
       if (error) throw error;
       return (data || []).map(dbToProva);
     },
-    placeholderData: [], staleTime: 60000,
+    placeholderData: [],
+    select: (data) => data, staleTime: 60000,
     refetchOnWindowFocus: false,
   });
 }
@@ -81,7 +82,8 @@ export function useProvasAtivas() {
       if (error) throw error;
       return (data || []).map(dbToProva);
     },
-    placeholderData: [], staleTime: 60000,
+    placeholderData: [],
+    select: (data) => data, staleTime: 60000,
     refetchOnWindowFocus: false,
   });
 }
@@ -283,7 +285,8 @@ export function useBaterias() {
         dbToBateria(b, provasPorBateria[b.id] || [])
       );
     },
-    placeholderData: [], staleTime: 60000,
+    placeholderData: [],
+    select: (data) => data, staleTime: 60000,
     refetchOnWindowFocus: false,
   });
 }
@@ -321,7 +324,8 @@ export function useProvasStats() {
         totalBaterias: totalBaterias || 0,
       };
     },
-    placeholderData: [], staleTime: 60000,
+    placeholderData: [],
+    select: (data) => data, staleTime: 60000,
     refetchOnWindowFocus: false,
   });
 }
