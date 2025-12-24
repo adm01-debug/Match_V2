@@ -96,7 +96,7 @@ const CurriculoUpload: React.FC<CurriculoUploadProps> = ({
       setUploadProgress(0);
       onUploadComplete?.();
     },
-    onError: (error: any) => {
+    onError: (error: unknown) => {
       toast.error('Erro ao enviar currículo', { description: error.message });
       setUploading(false);
       setUploadProgress(0);
@@ -129,7 +129,7 @@ const CurriculoUpload: React.FC<CurriculoUploadProps> = ({
       toast.success('Currículo removido!');
       queryClient.invalidateQueries({ queryKey: ['candidato-profile'] });
     },
-    onError: (error: any) => {
+    onError: (error: unknown) => {
       toast.error('Erro ao remover currículo', { description: error.message });
     }
   });
