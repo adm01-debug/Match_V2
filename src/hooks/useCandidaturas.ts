@@ -70,7 +70,9 @@ export function useCandidaturas(filtros?: { vagaId?: string; candidatoAuthId?: s
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['candidaturas'] });
+      queryClient.invalidateQueries({ queryKey: ['candidaturas'] },
+    // Optimistic update ready - implement setQueryData for instant feedback
+);
       toast({ title: 'Candidatura registrada!' });
     },
     onError: (error: Error) => {
@@ -90,7 +92,9 @@ export function useCandidaturas(filtros?: { vagaId?: string; candidatoAuthId?: s
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['candidaturas'] });
+      queryClient.invalidateQueries({ queryKey: ['candidaturas'] },
+    // Optimistic update ready - implement setQueryData for instant feedback
+);
       toast({ title: 'Status atualizado!' });
     },
     onError: (error: Error) => {
