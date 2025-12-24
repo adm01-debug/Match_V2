@@ -87,4 +87,4 @@ export function CompetenciaRating({
 
 CompetenciaRating.displayName = "CompetenciaRating";
 
-export default memo(CompetenciaRating);
+export default memo(CompetenciaRating, (prev, next) => JSON.stringify(prev) === JSON.stringify(next));
