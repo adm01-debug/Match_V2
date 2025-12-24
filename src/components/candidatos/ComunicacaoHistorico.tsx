@@ -191,7 +191,7 @@ export function ComunicacaoHistorico({ candidatoId }: ComunicacaoHistoricoProps)
               <Separator orientation="vertical" className="h-4" />
               <Popover>
                 <PopoverTrigger asChild>
-                  <Button variant="ghost" size="sm" className="h-6 px-2 text-xs text-muted-foreground">
+                  <button type="button" variant="ghost" size="sm" className="h-6 px-2 text-xs text-muted-foreground">
                     <BarChart3 className="h-3 w-3 mr-1" />
                     Por etapa
                   </Button>
@@ -222,7 +222,7 @@ export function ComunicacaoHistorico({ candidatoId }: ComunicacaoHistoricoProps)
           className="h-8 text-xs pl-8 pr-8"
         />
         {searchTerm && (
-          <Button
+          <button type="button"
             variant="ghost"
             size="sm"
             onClick={() => setSearchTerm('')}
@@ -251,7 +251,7 @@ export function ComunicacaoHistorico({ candidatoId }: ComunicacaoHistoricoProps)
 
         <Popover>
           <PopoverTrigger asChild>
-            <Button variant="outline" size="sm" className={cn("h-8 text-xs", dataInicio && "text-primary")}>
+            <button type="button" variant="outline" size="sm" className={cn("h-8 text-xs", dataInicio && "text-primary")}>
               <CalendarIcon className="h-3 w-3 mr-1" />
               {dataInicio ? format(dataInicio, "dd/MM/yy") : "De"}
             </Button>
@@ -269,7 +269,7 @@ export function ComunicacaoHistorico({ candidatoId }: ComunicacaoHistoricoProps)
 
         <Popover>
           <PopoverTrigger asChild>
-            <Button variant="outline" size="sm" className={cn("h-8 text-xs", dataFim && "text-primary")}>
+            <button type="button" variant="outline" size="sm" className={cn("h-8 text-xs", dataFim && "text-primary")}>
               <CalendarIcon className="h-3 w-3 mr-1" />
               {dataFim ? format(dataFim, "dd/MM/yy") : "Até"}
             </Button>
@@ -286,7 +286,7 @@ export function ComunicacaoHistorico({ candidatoId }: ComunicacaoHistoricoProps)
         </Popover>
 
         {hasActiveFilters && (
-          <Button variant="ghost" size="sm" onClick={clearFilters} className="h-8 text-xs text-muted-foreground">
+          <button type="button" variant="ghost" size="sm" onClick={clearFilters} className="h-8 text-xs text-muted-foreground">
             Limpar
           </Button>
         )}
