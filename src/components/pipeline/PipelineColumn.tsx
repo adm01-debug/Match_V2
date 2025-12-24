@@ -22,7 +22,7 @@ export const PipelineColumn = memo(function PipelineColumn({ etapa, processos, o
   });
 
   return (
-    <div
+    <div data-testid="component"><div
       className={cn(
         "flex flex-col bg-muted/30 rounded-xl min-w-[260px] max-w-[260px] h-full border",
         isOver && "border-primary bg-primary/5"
