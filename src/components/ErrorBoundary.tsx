@@ -62,11 +62,11 @@ export class ErrorBoundary extends Component<Props, State> {
                 </details>
               )}
               <div className="flex gap-2 justify-center">
-                <Button variant="outline" onClick={this.handleReset} aria-label="Action button">
+                <button type="button" variant="outline" onClick={this.handleReset} aria-label="Action button">
                   <RefreshCw className="h-4 w-4 mr-2" />
                   Tentar novamente
                 </Button>
-                <Button onClick={() => window.location.href = '/'}>
+                <button type="button" onClick={() => window.location.href = '/'}>
                   Voltar ao início
                 </Button>
               </div>
