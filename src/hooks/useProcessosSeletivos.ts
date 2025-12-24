@@ -1,3 +1,11 @@
+/**
+ * @module useProcessosSeletivos
+ * @description Hook para processos seletivos
+ * @returns {Object} Hook result with data, isLoading, error, and mutations
+ * @example
+ * const { data, isLoading } = useProcessosSeletivos();
+ */
+
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { ProcessoSeletivo, EtapaProcesso, StatusProcesso, FonteCandidato } from '@/types/recruitment';
