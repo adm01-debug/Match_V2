@@ -41,7 +41,7 @@ export function QuestaoCard({ questao, index, onEdit, onDelete, showAnswer = tru
   return (
     <Card role="article" aria-label="Questão" className="group hover:shadow-md transition-shadow">
       <CardContent className="p-4">
-        <div className="flex gap-3">
+        <div data-testid="questao-card" className="flex gap-3">
           {/* Drag handle & Number */}
           <div className="flex flex-col items-center gap-2">
             <GripVertical className="h-4 w-4 text-muted-foreground/50 cursor-grab" />
