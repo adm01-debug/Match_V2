@@ -77,7 +77,6 @@ export function ComunicacaoHistorico({ candidatoId }: ComunicacaoHistoricoProps)
         .order('enviado_em', { ascending: false });
 
       if (error) {
-        console.error('Erro ao buscar comunicações:', error);
       } else {
         setComunicacoes(data || []);
       }
