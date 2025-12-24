@@ -45,7 +45,7 @@ export const KPICard = memo(function KPICard({
   icon: Icon,
   trend,
   variant = "default",
-}: KPICardProps) {
+}: KPICardProps, (prev, next) => JSON.stringify(prev) === JSON.stringify(next)) {
   const styles = variantStyles[variant];
 
   return (
