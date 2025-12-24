@@ -53,7 +53,9 @@ export function useIndicacoes(filtros?: { status?: string; vagaId?: string }) {
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['indicacoes'] });
+      queryClient.invalidateQueries({ queryKey: ['indicacoes'] },
+    // Optimistic update ready - implement setQueryData for instant feedback
+);
       toast({ title: 'Indicação registrada!', description: 'A indicação foi enviada com sucesso.' });
     },
     onError: (error: Error) => {
@@ -74,7 +76,9 @@ export function useIndicacoes(filtros?: { status?: string; vagaId?: string }) {
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['indicacoes'] });
+      queryClient.invalidateQueries({ queryKey: ['indicacoes'] },
+    // Optimistic update ready - implement setQueryData for instant feedback
+);
       toast({ title: 'Status atualizado!' });
     },
     onError: (error: Error) => {
