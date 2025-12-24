@@ -34,11 +34,11 @@ export function ComunicacaoTab({ candidato }: ComunicacaoTabProps) {
         </CardHeader>
         <CardContent>
           <div className="flex flex-wrap gap-3">
-            <Button onClick={() => setEmailDialogOpen(true)}>
+            <button type="button" onClick={() => setEmailDialogOpen(true)}>
               <Send className="h-4 w-4 mr-2" />
               Enviar E-mail
             </Button>
-            <Button variant="outline" disabled>
+            <button type="button" variant="outline" disabled>
               <Plus className="h-4 w-4 mr-2" />
               Agendar Lembrete (Em breve)
             </Button>
