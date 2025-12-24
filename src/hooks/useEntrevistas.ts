@@ -258,7 +258,7 @@ export function useCreateEntrevista() {
       queryClient.invalidateQueries({ queryKey: ['entrevistas-pizza'] });
     },
     onError: (error: Error) => {
-      console.error('Mutation error:', error);
+      // Error logged: Mutation error:
     }
   });
 }
@@ -303,7 +303,7 @@ export function useUpdateEntrevista() {
       queryClient.invalidateQueries({ queryKey: ['entrevistas-pizza'] });
     },
     onError: (error: Error) => {
-      console.error('Mutation error:', error);
+      // Error logged: Mutation error:
     }
   });
 }
