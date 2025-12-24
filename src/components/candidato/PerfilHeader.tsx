@@ -26,8 +26,7 @@ export const PerfilHeader = memo(function PerfilHeader({ candidato, onEmail, onL
         <div className="flex-shrink-0">
           <div className="h-24 w-24 rounded-full bg-primary/10 flex items-center justify-center">
             {candidato.foto ? (
-              <img 
-                src={candidato.foto} 
+              <img loading="lazy" src={candidato.foto} 
                 alt={candidato.nome} 
                 className="h-24 w-24 rounded-full object-cover" 
               />
