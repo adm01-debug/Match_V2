@@ -26,7 +26,7 @@ export function Layout({ children, title }: LayoutProps) {
               <h1 className="text-lg font-semibold text-foreground">{title}</h1>
             )}
 
-            <div className="flex-1" />
+            <div data-testid="layout" className="flex-1" />
 
             <div className="flex items-center gap-4">
               <div className="relative hidden md:block">
