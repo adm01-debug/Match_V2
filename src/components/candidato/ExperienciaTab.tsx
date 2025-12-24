@@ -108,4 +108,4 @@ export function ExperienciaTab({ candidato }: ExperienciaTabProps) {
 
 ExperienciaTab.displayName = "ExperienciaTab";
 
-export default memo(ExperienciaTab);
+export default memo(ExperienciaTab, (prev, next) => JSON.stringify(prev) === JSON.stringify(next));
