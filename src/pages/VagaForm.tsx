@@ -1,3 +1,4 @@
+import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
@@ -187,6 +188,8 @@ export default function VagaForm() {
   }, [existingVaga]);
 
   const handleChange = (field: string, value: any) => {
+  useDocumentTitle('Formulário de Vaga');
+
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
