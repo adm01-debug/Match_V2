@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Configuração do Sentry para monitoramento
+ * @module sentry
+ */
+
 // Configuração do Sentry para monitoramento de erros
 // Sentry é opcional - funciona mesmo sem estar configurado
 
