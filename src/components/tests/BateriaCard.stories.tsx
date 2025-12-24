@@ -6,6 +6,12 @@ const meta: Meta<typeof BateriaCard> = {
   title: 'Components/tests/BateriaCard',
   component: BateriaCard,
   tags: ['autodocs'],
+
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvasElement).toBeInTheDocument();
+  },
+
 };
 
 export default meta;
