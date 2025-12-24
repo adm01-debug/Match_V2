@@ -1,3 +1,8 @@
+/**
+ * @fileoverview WeekView component
+ * @module WeekView
+ */
+
 import { memo,  useMemo  , useCallback} from 'react';
 import { format, startOfWeek, addDays, isSameDay, parseISO } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
