@@ -1,3 +1,10 @@
+/**
+ * @module useCandidatoPerfil
+ * @description Hook para gerenciar perfil do candidato
+ * @returns Hook state and methods
+ * @example
+ * const result = useCandidatoPerfil();
+ */
 import { toast } from 'sonner';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
