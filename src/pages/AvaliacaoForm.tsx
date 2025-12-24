@@ -1,3 +1,4 @@
+import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
@@ -116,6 +117,8 @@ export default function AvaliacaoForm() {
 
   // Atualizar nota de competência
   const handleNotaChange = (tipo: 'tecnica' | 'comportamental', id: string, nota: number) => {
+  useDocumentTitle('Avaliação');
+
     if (tipo === 'tecnica') {
       setNotasTecnicas(prev => prev.map(n => n.id === id ? { ...n, nota } : n));
     } else {
