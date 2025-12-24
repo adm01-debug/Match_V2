@@ -33,7 +33,7 @@ export function CategoriaCard({ categoria, count, onClick, isSelected }: Categor
       onClick={onClick}
     >
       <CardContent className="p-4">
-        <div className="flex items-center gap-3">
+        <div data-testid="categoria-card" className="flex items-center gap-3">
           <div className={`w-12 h-12 rounded-lg ${info.cor} flex items-center justify-center`}>
             <Icon className="h-6 w-6 text-white" />
           </div>
