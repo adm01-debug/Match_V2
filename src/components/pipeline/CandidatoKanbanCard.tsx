@@ -56,7 +56,7 @@ export function CandidatoKanbanCard({ processo, onClick }: CandidatoKanbanCardPr
       {...attributes}
       {...listeners}
     >
-      <div className="flex items-start justify-between gap-2 mb-2">
+      <div data-testid="candidato-kanban-card" className="flex items-start justify-between gap-2 mb-2">
         <div className="flex items-center gap-2 min-w-0">
           <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
             <User className="h-4 w-4 text-primary" />
