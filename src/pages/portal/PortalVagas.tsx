@@ -3,7 +3,7 @@ import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { usePageTitle } from '@/hooks/usePageTitle';
-import React, { useState, useCallback } from 'react';
+import React, { Suspense }, { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -134,7 +134,8 @@ const PortalVagas = () => {
   };
 
   return (
-    <div role="main" className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/5">
+    <Suspense fallback={<div className="animate-pulse">Carregando...</div>}>
+      <div role="main" className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/5">
       {/* Header */}
       <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-sm border-b">
         <div className="container mx-auto px-4 py-4 flex items-center gap-4">
@@ -299,7 +300,5 @@ const PortalVagas = () => {
         )}
       </main>
     </div>
-  );
-};
-
-export default PortalVagas;
+  </Suspense>
+    ))
