@@ -50,6 +50,7 @@ export function useProfiles() {
     },
     enabled: !!userId,
     placeholderData: (previousData) => previousData,
+    select: (data) => data,
   });
 
   const useCurrentProfile = () => useQuery({
