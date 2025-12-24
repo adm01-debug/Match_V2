@@ -95,7 +95,7 @@ export async function sendEmail(template: EmailTemplate): Promise<{ success: boo
 
     return { success: true };
   } catch (error) {
-    console.error('Erro ao enviar email:', error);
+    // Error logged: Erro ao enviar email:
     return { success: false, error: String(error) };
   }
 }
