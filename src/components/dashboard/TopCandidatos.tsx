@@ -97,7 +97,7 @@ export function TopCandidatos({ processos }: TopCandidatosProps) {
   return (
     <Card>
       <CardHeader className="pb-3">
-        <div className="flex items-center justify-between">
+        <div data-testid="top-candidatos" className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="p-1.5 rounded-lg bg-amber-500/10">
               <Trophy className="h-4 w-4 text-amber-500" />
