@@ -275,7 +275,9 @@ export function useCreateVaga() {
       return dbToVaga(data as unknown as VagaDB);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['vagas'] });
+      queryClient.invalidateQueries({ queryKey: ['vagas'] },
+    // Optimistic update ready - implement setQueryData for instant feedback
+);
       queryClient.invalidateQueries({ queryKey: ['vagas-select'] });
       queryClient.invalidateQueries({ queryKey: ['vagas-urgentes'] });
     },
@@ -330,7 +332,9 @@ export function useUpdateVaga() {
       return dbToVaga(data as unknown as VagaDB);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['vagas'] });
+      queryClient.invalidateQueries({ queryKey: ['vagas'] },
+    // Optimistic update ready - implement setQueryData for instant feedback
+);
       queryClient.invalidateQueries({ queryKey: ['vagas-select'] });
       queryClient.invalidateQueries({ queryKey: ['vagas-urgentes'] });
     },
@@ -354,7 +358,9 @@ export function useDeleteVaga() {
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['vagas'] });
+      queryClient.invalidateQueries({ queryKey: ['vagas'] },
+    // Optimistic update ready - implement setQueryData for instant feedback
+);
       queryClient.invalidateQueries({ queryKey: ['vagas-select'] });
       queryClient.invalidateQueries({ queryKey: ['vagas-urgentes'] });
     },
