@@ -1,3 +1,4 @@
+import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { usePageTitle } from '@/hooks/usePageTitle';
@@ -29,6 +30,8 @@ const signupSchema = z.object({
 });
 
 const AuthPage = () => {
+  useDocumentTitle('Login');
+
   usePageTitle('Login');
 
   const navigate = useNavigate();
