@@ -1,3 +1,5 @@
+import { Suspense } from 'react';
+import { Skeleton } from '@/components/ui/skeleton';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import React, { useState, useEffect, useCallback } from 'react';
@@ -78,6 +80,7 @@ const PortalAuthPage = () => {
 
   if (loading) {
     return (
+      <Suspense fallback={<div className="p-6"><Skeleton className="h-8 w-64 mb-4" /><Skeleton className="h-64" /></div>}>
       <div role="main" className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 via-background to-secondary/5">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
