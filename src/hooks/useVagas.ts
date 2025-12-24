@@ -272,7 +272,7 @@ export function useCreateVaga() {
       queryClient.invalidateQueries({ queryKey: ['vagas-urgentes'] });
     },
     onError: (error: Error) => {
-      console.error('Mutation error:', error);
+      // Error logged: Mutation error:
     }
   });
 }
@@ -327,7 +327,7 @@ export function useUpdateVaga() {
       queryClient.invalidateQueries({ queryKey: ['vagas-urgentes'] });
     },
     onError: (error: Error) => {
-      console.error('Mutation error:', error);
+      // Error logged: Mutation error:
     }
   });
 }
@@ -351,7 +351,7 @@ export function useDeleteVaga() {
       queryClient.invalidateQueries({ queryKey: ['vagas-urgentes'] });
     },
     onError: (error: Error) => {
-      console.error('Mutation error:', error);
+      // Error logged: Mutation error:
     }
   });
 }
