@@ -257,7 +257,7 @@ const EntrevistaDetalhesDialog = ({
                   <Label>Data</Label>
                   <Popover>
                     <PopoverTrigger asChild>
-                      <Button variant="outline" className="w-full justify-start text-left font-normal">
+                      <button type="button" variant="outline" className="w-full justify-start text-left font-normal">
                         <CalendarIcon className="mr-2 h-4 w-4" />
                         {format(editData.data, "PPP", { locale: ptBR })}
                       </Button>
@@ -546,16 +546,16 @@ const EntrevistaDetalhesDialog = ({
                     <Slider value={notaGeral} onValueChange={setNotaGeral} max={10} min={1} step={0.5} />
                   </div>
                   <div className="space-y-2">
-                    <div className="flex items-center justify-between"><Label>Pontos Fortes</Label><Button variant="ghost" size="sm" onClick={addPontoForte}><Plus className="h-4 w-4" /></Button></div>
-                    {pontosFortes.map((p, i) => <div key={i} className="flex gap-2"><Input value={p} onChange={(e) => updatePontoForte(i, e.target.value)} placeholder="Ex: Boa comunicação" />{pontosFortes.length > 1 && <Button variant="ghost" size="icon" onClick={() => removePontoForte(i)}><Trash2 className="h-4 w-4" /></Button>}</div>)}
+                    <div className="flex items-center justify-between"><Label>Pontos Fortes</Label><button type="button" variant="ghost" size="sm" onClick={addPontoForte}><Plus className="h-4 w-4" /></Button></div>
+                    {pontosFortes.map((p, i) => <div key={i} className="flex gap-2"><Input value={p} onChange={(e) => updatePontoForte(i, e.target.value)} placeholder="Ex: Boa comunicação" />{pontosFortes.length > 1 && <button type="button" variant="ghost" size="icon" onClick={() => removePontoForte(i)}><Trash2 className="h-4 w-4" /></Button>}</div>)}
                   </div>
                   <div className="space-y-2">
-                    <div className="flex items-center justify-between"><Label>Pontos a Melhorar</Label><Button variant="ghost" size="sm" onClick={addPontoAMelhorar}><Plus className="h-4 w-4" /></Button></div>
-                    {pontosAMelhorar.map((p, i) => <div key={i} className="flex gap-2"><Input value={p} onChange={(e) => updatePontoAMelhorar(i, e.target.value)} placeholder="Ex: Experiência técnica" />{pontosAMelhorar.length > 1 && <Button variant="ghost" size="icon" onClick={() => removePontoAMelhorar(i)}><Trash2 className="h-4 w-4" /></Button>}</div>)}
+                    <div className="flex items-center justify-between"><Label>Pontos a Melhorar</Label><button type="button" variant="ghost" size="sm" onClick={addPontoAMelhorar}><Plus className="h-4 w-4" /></Button></div>
+                    {pontosAMelhorar.map((p, i) => <div key={i} className="flex gap-2"><Input value={p} onChange={(e) => updatePontoAMelhorar(i, e.target.value)} placeholder="Ex: Experiência técnica" />{pontosAMelhorar.length > 1 && <button type="button" variant="ghost" size="icon" onClick={() => removePontoAMelhorar(i)}><Trash2 className="h-4 w-4" /></Button>}</div>)}
                   </div>
                   <div className="space-y-2"><Label>Comentários</Label><Textarea value={comentarios} onChange={(e) => setComentarios(e.target.value)} rows={2} /></div>
                   <div className="space-y-2"><Label>Recomendação</Label><Input value={recomendacao} onChange={(e) => setRecomendacao(e.target.value)} placeholder="Ex: Avançar para próxima etapa" /></div>
-                  <Button className="w-full" onClick={handleSubmitFeedback}><CheckCircle className="h-4 w-4 mr-2" />Marcar como Realizada</Button>
+                  <button type="button" className="w-full" onClick={handleSubmitFeedback}><CheckCircle className="h-4 w-4 mr-2" />Marcar como Realizada</Button>
                 </div>
               ) : (
                 <p className="text-center text-muted-foreground py-4">Não disponível para esta entrevista.</p>
@@ -566,16 +566,16 @@ const EntrevistaDetalhesDialog = ({
           <DialogFooter className="gap-2 mt-4">
             {isEditing ? (
               <>
-                <Button variant="outline" onClick={handleCancelEdit}>Cancelar</Button>
-                <Button onClick={handleSaveEdit}><Check className="h-4 w-4 mr-2" />Salvar</Button>
+                <button type="button" variant="outline" onClick={handleCancelEdit}>Cancelar</Button>
+                <button type="button" onClick={handleSaveEdit}><Check className="h-4 w-4 mr-2" />Salvar</Button>
               </>
             ) : (
               <>
                 {canEdit && (
                   <>
-                    <Button variant="destructive" size="sm" onClick={() => setShowCancelDialog(true)}><X className="h-4 w-4 mr-2" />Cancelar</Button>
-                    <Button variant="outline" size="sm" onClick={handleStartEdit}><Edit className="h-4 w-4 mr-2" />Editar</Button>
-                    {canConfirm && <Button size="sm" onClick={handleConfirmEntrevista}><Check className="h-4 w-4 mr-2" />Confirmar</Button>}
+                    <button type="button" variant="destructive" size="sm" onClick={() => setShowCancelDialog(true)}><X className="h-4 w-4 mr-2" />Cancelar</Button>
+                    <button type="button" variant="outline" size="sm" onClick={handleStartEdit}><Edit className="h-4 w-4 mr-2" />Editar</Button>
+                    {canConfirm && <button type="button" size="sm" onClick={handleConfirmEntrevista}><Check className="h-4 w-4 mr-2" />Confirmar</Button>}
                   </>
                 )}
               </>
