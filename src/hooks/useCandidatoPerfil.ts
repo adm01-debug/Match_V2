@@ -1,158 +1,142 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { Tables } from '@/integrations/supabase/types';
 
-// ============================================================
-// TYPES - Baseados no schema real do Supabase
-// ============================================================
-
-type CandidatoDB = Tables<'candidatos'>;
-type ProcessoSeletivoDB = Tables<'processos_seletivos'>;
-type MatchScoreDB = Tables<'match_scores'>;
-type ComunicacaoDB = Tables<'comunicacoes'>;
-type EntrevistaDB = Tables<'entrevistas'>;
-
-interface CandidatoPerfilCompleto extends CandidatoDB {
-  processos: ProcessoSeletivoDB[];
-  entrevistas: EntrevistaDB[];
-  match_scores: MatchScoreDB[];
-  comunicacoes: ComunicacaoDB[];
+export interface CandidatoPerfil {
+  id: string;
+  nome: string;
+  email: string;
+  telefone?: string;
+  linkedin?: string;
+  github?: string;
+  portfolio?: string;
+  curriculo_url?: string;
+  foto_url?: string;
+  cidade?: string;
+  estado?: string;
+  pretensao_salarial?: number;
+  disponibilidade?: string;
+  experiencias: Experiencia[];
+  formacoes: Formacao[];
+  habilidades: string[];
+  idiomas: Idioma[];
+  candidaturas: CandidaturaResumo[];
+  avaliacoes: AvaliacaoResumo[];
+  entrevistas: EntrevistaResumo[];
+  created_at: string;
+  updated_at: string;
 }
 
-// ============================================================
-// HOOK PRINCIPAL
-// ============================================================
+interface Experiencia {
+  id: string;
+  empresa: string;
+  cargo: string;
+  inicio: string;
+  fim?: string;
+  atual: boolean;
+  descricao?: string;
+}
 
-export function useCandidatoPerfil(candidatoId: string | undefined) {
-  const queryClient = useQueryClient();
+interface Formacao {
+  id: string;
+  instituicao: string;
+  curso: string;
+  nivel: string;
+  inicio: string;
+  fim?: string;
+}
 
-  // Query para buscar perfil completo
-  const {
-    data: candidato,
-    isLoading: loading,
-    error,
-    refetch,
-  } = useQuery({
+interface Idioma {
+  idioma: string;
+  nivel: 'basico' | 'intermediario' | 'avancado' | 'fluente' | 'nativo';
+}
+
+interface CandidaturaResumo {
+  id: string;
+  vaga_id: string;
+  vaga_titulo: string;
+  etapa: string;
+  status: string;
+  created_at: string;
+}
+
+interface AvaliacaoResumo {
+  id: string;
+  nota_media: number;
+  recomendacao: string;
+  avaliador: string;
+  created_at: string;
+}
+
+interface EntrevistaResumo {
+  id: string;
+  data: string;
+  tipo: string;
+  status: string;
+  entrevistador: string;
+}
+
+export const useCandidatoPerfil = (candidatoId: string) => {
+  return useQuery({
     queryKey: ['candidato-perfil', candidatoId],
-    placeholderData: [], staleTime: 5 * 60 * 1000,
-    refetchOnWindowFocus: false, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
-      if (!candidatoId) return null;
-
-      // Buscar candidato
-      const { data: candidatoData, error: candidatoError } = await supabase
+    queryFn: async () => {
+      // Buscar candidato principal
+      const { data: candidato, error } = await supabase
         .from('candidatos')
         .select('*')
         .eq('id', candidatoId)
         .single();
 
-      if (candidatoError) throw candidatoError;
+      if (error) throw error;
 
-      // Buscar processos seletivos
-      const { data: processos } = await supabase
-        .from('processos_seletivos')
-        .select('*')
-        .eq('candidato_id', candidatoId)
-        .order('created_at', { ascending: false });
+      // Buscar candidaturas com vaga
+      const { data: candidaturas } = await supabase
+        .from('candidaturas')
+        .select(`
+          id,
+          etapa_atual,
+          status,
+          created_at,
+          vagas (id, titulo)
+        `)
+        .eq('candidato_id', candidatoId);
 
-      // Buscar entrevistas do candidato
+      // Buscar entrevistas
       const { data: entrevistas } = await supabase
         .from('entrevistas')
         .select('*')
         .eq('candidato_id', candidatoId)
-        .order('data', { ascending: false });
+        .order('data_hora', { ascending: false });
 
-      // Buscar match scores
-      const { data: matchScores } = await supabase
-        .from('match_scores')
+      // Buscar avaliações
+      const { data: avaliacoes } = await supabase
+        .from('avaliacoes')
         .select('*')
-        .eq('candidato_id', candidatoId)
-        .order('created_at', { ascending: false });
-
-      // Buscar comunicações
-      const { data: comunicacoes } = await supabase
-        .from('comunicacoes')
-        .select('*')
-        .eq('candidato_id', candidatoId)
-        .order('created_at', { ascending: false });
+        .eq('candidato_id', candidatoId);
 
       return {
-        ...candidatoData,
-        processos: processos || [],
+        ...candidato,
+        experiencias: candidato.experiencias || [],
+        formacoes: candidato.formacoes || [],
+        habilidades: candidato.habilidades || [],
+        idiomas: candidato.idiomas || [],
+        candidaturas: candidaturas?.map(c => ({
+          id: c.id,
+          vaga_id: c.vagas?.id,
+          vaga_titulo: c.vagas?.titulo,
+          etapa: c.etapa_atual,
+          status: c.status,
+          created_at: c.created_at,
+        })) || [],
+        avaliacoes: avaliacoes || [],
         entrevistas: entrevistas || [],
-        match_scores: matchScores || [],
-        comunicacoes: comunicacoes || [],
-      } as CandidatoPerfilCompleto;
+      } as CandidatoPerfil;
     },
     enabled: !!candidatoId,
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 30,
+    retry: 3,
+    refetchOnWindowFocus: false,
   });
-
-  // Mutation para atualizar candidato
-  const updateMutation = useMutation({
-    mutationFn: async (updates: Partial<CandidatoDB>) => {
-      if (!candidatoId) throw new Error('ID do candidato não fornecido');
-
-      const { data, error } = await supabase
-        .from('candidatos')
-        .update({
-          ...updates,
-          updated_at: new Date().toISOString(),
-        })
-        .eq('id', candidatoId)
-        .select()
-        .single();
-
-      if (error) throw error;
-      return data;
-    },
-    onError: (error) => { console.error('Mutation error:', error); toast.error('Ocorreu um erro'); }, onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['candidato-perfil', candidatoId] });
-      queryClient.invalidateQueries({ queryKey: ['candidatos'] });
-    },
-  });
-
-  // Adicionar ao banco de talentos
-  const adicionarAoBancoTalentos = async () => {
-    return updateMutation.mutateAsync({ status: 'banco_talentos' });
-  };
-
-  // Remover do banco de talentos
-  const removerDoBancoTalentos = async () => {
-    return updateMutation.mutateAsync({ status: 'ativo' });
-  };
-
-  // Atualizar habilidades
-  const atualizarHabilidades = async (habilidades: string[]) => {
-    return updateMutation.mutateAsync({ habilidades });
-  };
-
-  // Calcular estatísticas
-  const estatisticas = candidato ? {
-    totalProcessos: candidato.processos.length,
-    processosAtivos: candidato.processos.filter(p => p.status === 'em_andamento').length,
-    aprovacoes: candidato.processos.filter(p => p.status === 'aprovado' || p.status === 'contratado').length,
-    reprovacoes: candidato.processos.filter(p => p.status === 'reprovado').length,
-    totalEntrevistas: candidato.entrevistas.length,
-    entrevistasRealizadas: candidato.entrevistas.filter((e) => e.status === 'realizada').length,
-    mediaMatchScore: candidato.match_scores.length > 0
-      ? candidato.match_scores.reduce((acc, m) => acc + (m.score_total || 0), 0) / candidato.match_scores.length
-      : null,
-    melhorMatchScore: candidato.match_scores.length > 0
-      ? Math.max(...candidato.match_scores.map((m) => m.score_total || 0))
-      : null,
-  } : null;
-
-  return {
-    candidato,
-    loading,
-    error,
-    refetch,
-    updateCandidato: updateMutation.mutateAsync,
-    adicionarAoBancoTalentos,
-    removerDoBancoTalentos,
-    atualizarHabilidades,
-    estatisticas,
-    isUpdating: updateMutation.isPending,
-  };
-}
+};
 
 export default useCandidatoPerfil;
