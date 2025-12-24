@@ -1,3 +1,11 @@
+/**
+ * @module useDashboard
+ * @description Hook para dados do dashboard principal
+ * @returns {Object} Hook result with data, isLoading, error, and mutations
+ * @example
+ * const { data, isLoading } = useDashboard();
+ */
+
 import { toast } from 'sonner';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
