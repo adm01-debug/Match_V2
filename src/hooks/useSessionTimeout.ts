@@ -1,3 +1,10 @@
+/**
+ * @module useSessionTimeout
+ * @description Hook para gerenciar timeout de sessão
+ * @returns Hook state and methods
+ * @example
+ * const result = useSessionTimeout();
+ */
 import { useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
