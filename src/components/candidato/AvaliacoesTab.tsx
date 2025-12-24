@@ -188,4 +188,4 @@ export function AvaliacoesTab({ candidato }: AvaliacoesTabProps) {
 
 AvaliacoesTab.displayName = "AvaliacoesTab";
 
-export default memo(AvaliacoesTab);
+export default memo(AvaliacoesTab, (prev, next) => JSON.stringify(prev) === JSON.stringify(next));
