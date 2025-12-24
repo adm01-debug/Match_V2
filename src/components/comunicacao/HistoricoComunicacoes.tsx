@@ -71,7 +71,7 @@ export function HistoricoComunicacoes({ candidatoId, className }: HistoricoComun
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
+          <div data-testid="historico-comunicacoes" className="space-y-4">
             {[1, 2, 3].map((i) => (
               <div key={i} className="space-y-2">
                 <Skeleton className="h-4 w-3/4" />
