@@ -160,7 +160,7 @@ const AgendarEntrevistaDialog = ({
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <div data-testid="agendar-entrevista"><Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Agendar Nova Entrevista</DialogTitle>
