@@ -133,6 +133,7 @@ export const useCandidatoPerfil = (candidatoId: string) => {
     },
     enabled: !!candidatoId,
     placeholderData: (previousData) => previousData,
+    select: (data) => data,
     staleTime: 1000 * 60 * 5,
     gcTime: 1000 * 60 * 30,
     retry: 3,
