@@ -1,3 +1,6 @@
+-- Rollback: Use supabase db reset or restore from backup
+-- This migration can be reverted by dropping added objects
+
 -- Migration: Criar tabela avaliacoes
 -- Esta tabela armazena avaliações de candidatos em processos seletivos
 
