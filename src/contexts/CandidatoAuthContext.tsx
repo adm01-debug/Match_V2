@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Contexto de autenticação do candidato
+ * @module CandidatoAuthContext
+ */
+
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
