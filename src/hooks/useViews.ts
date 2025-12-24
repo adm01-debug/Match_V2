@@ -1,3 +1,4 @@
+import { toast } from 'sonner';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -59,7 +60,8 @@ export function usePipelineView(vagaId?: string) {
     refetchOnWindowFocus: false,
     enabled: true,
     placeholderData: (previousData) => previousData,
-    select: (data) => data, // 5 minutes
+    select: (data) => data,
+    onError: () => toast.error('Erro ao carregar dados'), // 5 minutes
     gcTime: 1000 * 60 * 30, // 30 minutes
     retry: 3,
     queryKey: ['v_pipeline', vagaId],
@@ -117,7 +119,8 @@ export function useAgendaEntrevistasView(filtros?: {
     refetchOnWindowFocus: false,
     enabled: true,
     placeholderData: (previousData) => previousData,
-    select: (data) => data, // 5 minutes
+    select: (data) => data,
+    onError: () => toast.error('Erro ao carregar dados'), // 5 minutes
     gcTime: 1000 * 60 * 30, // 30 minutes
     retry: 3,
     queryKey: ['v_agenda_entrevistas', filtros],
@@ -170,7 +173,8 @@ export function useVagasKpisView(status?: string) {
     refetchOnWindowFocus: false,
     enabled: true,
     placeholderData: (previousData) => previousData,
-    select: (data) => data, // 5 minutes
+    select: (data) => data,
+    onError: () => toast.error('Erro ao carregar dados'), // 5 minutes
     gcTime: 1000 * 60 * 30, // 30 minutes
     retry: 3,
     queryKey: ['v_vagas_kpis', status],
