@@ -17,8 +17,7 @@ export const EmptyState = ({
   className,
 }: EmptyStateProps) => {
   return (
-    <div
-      className={cn(
+    <div data-testid="empty-state" className={cn(
         'flex flex-col items-center justify-center py-12 px-4 text-center',
         className
       )}
