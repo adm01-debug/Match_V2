@@ -34,7 +34,7 @@ export function AcoesRapidas() {
   return (
     <div data-testid="acoes-rapidas" role="region" aria-label="Ações rápidas" className="flex flex-wrap gap-3">
       {acoes.map((acao) => (
-        <Button
+        <button type="button"
           key={acao.label}
           variant={acao.variant}
           asChild
