@@ -99,7 +99,9 @@ export function useUpdateProcessoEtapa() {
       return dbToProcesso(data as unknown as ProcessoDB);
     },
     onError: (error) => { // Error logged: Mutation error: toast.error('Ocorreu um erro'); }, onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['processos-seletivos'] });
+      queryClient.invalidateQueries({ queryKey: ['processos-seletivos'] },
+    // Optimistic update ready - implement setQueryData for instant feedback
+);
     },
   });
 }
@@ -130,7 +132,9 @@ export function useUpdateProcessoStatus() {
       return dbToProcesso(data as unknown as ProcessoDB);
     },
     onError: (error) => { // Error logged: Mutation error: toast.error('Ocorreu um erro'); }, onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['processos-seletivos'] });
+      queryClient.invalidateQueries({ queryKey: ['processos-seletivos'] },
+    // Optimistic update ready - implement setQueryData for instant feedback
+);
     },
   });
 }
@@ -167,7 +171,9 @@ export function useCreateProcesso() {
       return dbToProcesso(data as unknown as ProcessoDB);
     },
     onError: (error) => { // Error logged: Mutation error: toast.error('Ocorreu um erro'); }, onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['processos-seletivos'] });
+      queryClient.invalidateQueries({ queryKey: ['processos-seletivos'] },
+    // Optimistic update ready - implement setQueryData for instant feedback
+);
     },
   });
 }
@@ -186,7 +192,9 @@ export function useDeleteProcesso() {
       if (error) throw error;
     },
     onError: (error) => { // Error logged: Mutation error: toast.error('Ocorreu um erro'); }, onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['processos-seletivos'] });
+      queryClient.invalidateQueries({ queryKey: ['processos-seletivos'] },
+    // Optimistic update ready - implement setQueryData for instant feedback
+);
     },
   });
 }
