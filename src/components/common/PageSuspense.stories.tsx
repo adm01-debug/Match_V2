@@ -1,3 +1,4 @@
+import { within, expect } from '@storybook/test';
 import type { Meta, StoryObj } from '@storybook/react';
 import { PageSuspense } from './PageSuspense';
 import { Suspense, lazy } from 'react';
@@ -20,6 +21,10 @@ export const Default: Story = {
       </div>
     </PageSuspense>
   ),
+
+  play: async ({ canvasElement }) => {
+    await expect(canvasElement).toBeInTheDocument();
+  },
 };
 
 export const CustomFallback: Story = {
