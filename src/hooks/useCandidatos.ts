@@ -125,7 +125,9 @@ export function useCreateCandidato() {
       return data;
     },
     onError: (error) => { // Error logged: Mutation error: toast.error('Ocorreu um erro'); }, onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['candidatos'] });
+      queryClient.invalidateQueries({ queryKey: ['candidatos'] },
+    // Optimistic update ready - implement setQueryData for instant feedback
+);
       queryClient.invalidateQueries({ queryKey: ['candidatos-stats'] });
     },
   });
@@ -147,7 +149,9 @@ export function useUpdateCandidato() {
       return data;
     },
     onError: (error) => { // Error logged: Mutation error: toast.error('Ocorreu um erro'); }, onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ['candidatos'] });
+      queryClient.invalidateQueries({ queryKey: ['candidatos'] },
+    // Optimistic update ready - implement setQueryData for instant feedback
+);
       queryClient.invalidateQueries({ queryKey: ['candidato', data.id] });
       queryClient.invalidateQueries({ queryKey: ['candidatos-stats'] });
     },
@@ -168,7 +172,9 @@ export function useDeleteCandidato() {
       return id;
     },
     onError: (error) => { // Error logged: Mutation error: toast.error('Ocorreu um erro'); }, onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['candidatos'] });
+      queryClient.invalidateQueries({ queryKey: ['candidatos'] },
+    // Optimistic update ready - implement setQueryData for instant feedback
+);
       queryClient.invalidateQueries({ queryKey: ['candidatos-stats'] });
     },
   });
