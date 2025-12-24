@@ -4,4 +4,9 @@ import { QuestaoForm } from './QuestaoForm';
 const meta: Meta<typeof QuestaoForm> = { title: 'Components/tests/QuestaoForm', component: QuestaoForm, tags: ['autodocs'] };
 export default meta;
 type Story = StoryObj<typeof QuestaoForm>;
-export const Default: Story = { args: {} };
+export const Default: Story = { args: {} 
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvasElement).toBeInTheDocument();
+  },
+};
