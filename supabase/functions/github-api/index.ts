@@ -1,5 +1,27 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
+// Rate limiting
+const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minute
+const MAX_REQUESTS = 30;
+const requestCounts = new Map<string, { count: number; resetAt: number }>();
+
+const checkRateLimit = (clientId: string): boolean => {
+  const now = Date.now();
+  const record = requestCounts.get(clientId);
+  
+  if (!record || now > record.resetAt) {
+    requestCounts.set(clientId, { count: 1, resetAt: now + RATE_LIMIT_WINDOW });
+    return true;
+  }
+  
+  if (record.count >= MAX_REQUESTS) {
+    return false;
+  }
+  
+  record.count++;
+  return true;
+};
+
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
