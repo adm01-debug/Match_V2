@@ -1,3 +1,4 @@
+import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
@@ -86,6 +87,8 @@ export default function ProvaEditor() {
   }, [provaExistente]);
 
   const handleAddQuestao = () => {
+  useDocumentTitle('Editor de Prova');
+
     setQuestoes([...questoes, { id: `q-${Date.now()}`, texto: "", tipo: "multipla_escolha", opcoes: ["", "", "", ""], respostaCorreta: 0, pontos: 10 }]);
   };
 
