@@ -1,0 +1,28 @@
+# Development overrides for docker-compose
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      target: development
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - VITE_HMR_HOST=localhost
+    ports:
+      - "5173:5173"
+    command: npm run dev -- --host
+
+  storybook:
+    build:
+      context: .
+      target: development
+    volumes:
+      - .:/app
+      - /app/node_modules
+    ports:
+      - "6006:6006"
+    command: npm run storybook
