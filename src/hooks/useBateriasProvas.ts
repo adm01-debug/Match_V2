@@ -1,3 +1,11 @@
+/**
+ * @module useBateriasProvas
+ * @description Hook para gerenciar baterias de provas
+ * @returns {Object} Hook result with data, isLoading, error, and mutations
+ * @example
+ * const { data, isLoading } = useBateriasProvas();
+ */
+
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Tables } from '@/integrations/supabase/types';
