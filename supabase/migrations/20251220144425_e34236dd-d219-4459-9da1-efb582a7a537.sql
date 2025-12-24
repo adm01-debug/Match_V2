@@ -1,3 +1,6 @@
+-- Rollback: Use supabase db reset or restore from backup
+-- This migration can be reverted by dropping added objects
+
 
 -- Create storage bucket for resumes/CVs
 INSERT INTO storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
