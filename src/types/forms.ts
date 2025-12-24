@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Form type definitions and schemas
+ * @module types
+ */
+
 export interface FormField {
   name: string;
   label: string;
