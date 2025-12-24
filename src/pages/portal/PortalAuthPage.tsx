@@ -1,3 +1,4 @@
+import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
@@ -14,6 +15,8 @@ import { toast } from 'sonner';
 import { Briefcase, User, Mail, Phone, Lock, ArrowRight } from 'lucide-react';
 
 const PortalAuthPage = () => {
+  useDocumentTitle('Portal - Login');
+
   usePageTitle('Portal - Login');
 
   const navigate = useNavigate();
