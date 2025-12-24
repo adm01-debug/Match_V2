@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Utilitários para acessibilidade
+ * @module accessibilityUtils
+ */
+
 export const a11y = {
   srOnly: 'absolute w-[1px] h-[1px] p-0 -m-[1px] overflow-hidden whitespace-nowrap border-0',
   
