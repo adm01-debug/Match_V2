@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Serviço de envio de emails
+ * @module emailService
+ */
+
 // Serviço de Email
 // Para usar: configure uma Edge Function com Resend ou SendGrid
 
