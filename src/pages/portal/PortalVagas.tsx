@@ -1,3 +1,4 @@
+import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { usePageTitle } from '@/hooks/usePageTitle';
@@ -42,6 +43,8 @@ const contratoLabels: Record<string, string> = {
 };
 
 const PortalVagas = () => {
+  useDocumentTitle('Portal - Vagas');
+
   usePageTitle('Portal - Vagas');
 
   const navigate = useNavigate();
