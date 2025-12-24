@@ -32,7 +32,7 @@ export function HistoricoTab({ candidato }: HistoricoTabProps) {
   }, {} as Record<string, typeof candidato.historico>);
 
   return (
-    <div className="space-y-6">
+    <div data-testid="component"><div className="space-y-6">
       <Card role="article" aria-label="Histórico">
         <CardHeader>
           <CardTitle className="text-lg flex items-center gap-2">
