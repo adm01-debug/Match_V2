@@ -84,7 +84,9 @@ export function useProfiles() {
       return data;
     },
     onError: (error) => { // Error logged: Mutation error: toast.error('Ocorreu um erro'); }, onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['profiles'] });
+      queryClient.invalidateQueries({ queryKey: ['profiles'] },
+    // Optimistic update ready - implement setQueryData for instant feedback
+);
       queryClient.invalidateQueries({ queryKey: ['current-profile'] });
       toast({ title: 'Perfil atualizado!' });
     },
