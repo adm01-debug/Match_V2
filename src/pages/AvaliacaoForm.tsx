@@ -1,3 +1,5 @@
+import { Suspense } from 'react';
+import { Skeleton } from '@/components/ui/skeleton';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { usePageTitle } from '@/hooks/usePageTitle';
@@ -189,6 +191,7 @@ export default function AvaliacaoForm() {
 
   if (loading) {
     return (
+      <Suspense fallback={<div className="p-6"><Skeleton className="h-8 w-64 mb-4" /><Skeleton className="h-64" /></div>}>
       <Layout title="Avaliação">
         <div className="p-6 space-y-6">
           <Skeleton className="h-10 w-48" />
@@ -502,4 +505,3 @@ export default function AvaliacaoForm() {
     </Layout>
   );
 }
-
