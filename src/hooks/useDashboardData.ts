@@ -22,6 +22,7 @@ export function useDashboardData() {
     queryKey: ['dashboard-kpis'],
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,
+    enabled: true,
     gcTime: 1000 * 60 * 30,
     retry: 3,
     queryFn: async (): Promise<KPIData> => {
@@ -101,7 +102,8 @@ export function useDashboardData() {
       };
     },
     staleTime: 30000,
-    refetchOnWindowFocus: false, // 30 segundos
+    refetchOnWindowFocus: false,
+    enabled: true, // 30 segundos
   });
 
   // Funil de recrutamento
@@ -109,6 +111,7 @@ export function useDashboardData() {
     queryKey: ['dashboard-funil'],
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,
+    enabled: true,
     gcTime: 1000 * 60 * 30,
     retry: 3,
     queryFn: async (): Promise<FunilEtapa[]> => {
@@ -139,6 +142,7 @@ export function useDashboardData() {
     },
     staleTime: 30000,
     refetchOnWindowFocus: false,
+    enabled: true,
   });
 
   // Vagas urgentes
@@ -146,6 +150,7 @@ export function useDashboardData() {
     queryKey: ['dashboard-vagas-urgentes'],
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,
+    enabled: true,
     gcTime: 1000 * 60 * 30,
     retry: 3,
     queryFn: async (): Promise<VagaUrgente[]> => {
@@ -173,6 +178,7 @@ export function useDashboardData() {
     },
     staleTime: 30000,
     refetchOnWindowFocus: false,
+    enabled: true,
   });
 
   // Ações pendentes
@@ -180,6 +186,7 @@ export function useDashboardData() {
     queryKey: ['dashboard-acoes-pendentes'],
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,
+    enabled: true,
     gcTime: 1000 * 60 * 30,
     retry: 3,
     queryFn: async (): Promise<AcaoPendente[]> => {
@@ -253,6 +260,7 @@ export function useDashboardData() {
     },
     staleTime: 30000,
     refetchOnWindowFocus: false,
+    enabled: true,
   });
 
   // Agenda do dia
@@ -260,6 +268,7 @@ export function useDashboardData() {
     queryKey: ['dashboard-agenda-hoje'],
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,
+    enabled: true,
     gcTime: 1000 * 60 * 30,
     retry: 3,
     queryFn: async (): Promise<AgendaDia[]> => {
@@ -291,7 +300,8 @@ export function useDashboardData() {
       }));
     },
     staleTime: 60000,
-    refetchOnWindowFocus: false, // 1 minuto
+    refetchOnWindowFocus: false,
+    enabled: true, // 1 minuto
   });
 
   // Top candidatos (processos)
@@ -299,6 +309,7 @@ export function useDashboardData() {
     queryKey: ['dashboard-processos'],
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,
+    enabled: true,
     gcTime: 1000 * 60 * 30,
     retry: 3,
     queryFn: async (): Promise<ProcessoSeletivo[]> => {
@@ -329,6 +340,7 @@ export function useDashboardData() {
     },
     staleTime: 30000,
     refetchOnWindowFocus: false,
+    enabled: true,
   });
 
   return {
