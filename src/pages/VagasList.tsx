@@ -1,3 +1,4 @@
+import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
@@ -57,6 +58,8 @@ export default function VagasList() {
   const hasActiveFilters = statusFilter !== "todas" || prioridadeFilter !== "todas" || departamentoFilter !== "todos" || searchTerm !== "";
 
   const clearFilters = () => {
+  useDocumentTitle('Lista de Vagas');
+
   usePageTitle('Vagas');
 
     setSearchTerm("");
