@@ -85,7 +85,8 @@ export function dbToEntrevista(db: EntrevistaDB) {
 export function useEntrevistas() {
   return useQuery({
     queryKey: ['entrevistas'],
-    placeholderData: [], staleTime: 5 * 60 * 1000,
+    placeholderData: [],
+    select: (data) => data, staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,
     enabled: true, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
       const { data, error } = await supabase
@@ -102,7 +103,8 @@ export function useEntrevistas() {
 export function useEntrevistasStats() {
   return useQuery({
     queryKey: ['entrevistas-stats'],
-    placeholderData: [], staleTime: 5 * 60 * 1000,
+    placeholderData: [],
+    select: (data) => data, staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,
     enabled: true, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
       const { data, error } = await supabase
@@ -148,7 +150,8 @@ export function useEntrevistasStats() {
 export function useEntrevistasEvolucao() {
   return useQuery({
     queryKey: ['entrevistas-evolucao'],
-    placeholderData: [], staleTime: 5 * 60 * 1000,
+    placeholderData: [],
+    select: (data) => data, staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,
     enabled: true, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
       const { data, error } = await supabase
@@ -200,7 +203,8 @@ export function useEntrevistasEvolucao() {
 export function useEntrevistasPizza() {
   return useQuery({
     queryKey: ['entrevistas-pizza'],
-    placeholderData: [], staleTime: 5 * 60 * 1000,
+    placeholderData: [],
+    select: (data) => data, staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,
     enabled: true, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
       const { data, error } = await supabase
@@ -315,7 +319,8 @@ export function useUpdateEntrevista() {
 export function useCandidatosDisponiveis() {
   return useQuery({
     queryKey: ['candidatos-disponiveis'],
-    placeholderData: [], staleTime: 5 * 60 * 1000,
+    placeholderData: [],
+    select: (data) => data, staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,
     enabled: true, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
       const { data, error } = await supabase
