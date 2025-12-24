@@ -1,3 +1,6 @@
+-- Rollback: Use supabase db reset or restore from backup
+-- This migration can be reverted by dropping added objects
+
 -- ============================================================
 -- EVOLUÇÃO DO MODELO DE DADOS - MATCH ATS
 -- Tabelas: vagas, processos_seletivos, entrevistas, avaliacoes, provas, resultados_provas
