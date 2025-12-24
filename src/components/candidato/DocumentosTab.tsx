@@ -146,4 +146,4 @@ export function DocumentosTab({ candidato }: DocumentosTabProps) {
 
 DocumentosTab.displayName = "DocumentosTab";
 
-export default memo(DocumentosTab);
+export default memo(DocumentosTab, (prev, next) => JSON.stringify(prev) === JSON.stringify(next));
