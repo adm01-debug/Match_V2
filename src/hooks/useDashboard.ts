@@ -179,6 +179,7 @@ export function useDashboardStats() {
     queryKey: dashboardKeys.stats(),
     queryFn: fetchDashboardStats,
     staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false,
     gcTime: 1000 * 60 * 30,
     retry: 3,
   });
@@ -189,6 +190,7 @@ export function useVagasUrgentes() {
     queryKey: dashboardKeys.vagasUrgentes(),
     queryFn: fetchVagasUrgentes,
     staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false,
     gcTime: 1000 * 60 * 30,
     retry: 3,
   });
@@ -199,6 +201,7 @@ export function useEntrevistasHoje() {
     queryKey: dashboardKeys.entrevistasHoje(),
     queryFn: fetchEntrevistasHoje,
     staleTime: 1000 * 60 * 2,
+    refetchOnWindowFocus: false,
     gcTime: 1000 * 60 * 30,
     retry: 3,
   });
@@ -209,6 +212,7 @@ export function useTopCandidatos() {
     queryKey: dashboardKeys.topCandidatos(),
     queryFn: fetchTopCandidatos,
     staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false,
     gcTime: 1000 * 60 * 30,
     retry: 3,
   });
@@ -219,6 +223,7 @@ export function useFunilRecrutamento() {
     queryKey: dashboardKeys.funil(),
     queryFn: fetchFunil,
     staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false,
     gcTime: 1000 * 60 * 30,
     retry: 3,
   });
