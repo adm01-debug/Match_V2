@@ -5,6 +5,7 @@ import { EntrevistaDetalhesDialog } from './EntrevistaDetalhesDialog';
 const meta: Meta<typeof EntrevistaDetalhesDialog> = {
   title: 'Components/EntrevistaDetalhesDialog',
   component: EntrevistaDetalhesDialog,
+  argTypes: {},
   tags: ['autodocs'],
   parameters: { layout: 'centered' },
 };
