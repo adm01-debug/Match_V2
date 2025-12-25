@@ -1,3 +1,8 @@
+/**
+ * @fileoverview AppSidebar component
+ * @module AppSidebar
+ */
+
 import { memo , memo, useMemo} from 'react';
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import {
