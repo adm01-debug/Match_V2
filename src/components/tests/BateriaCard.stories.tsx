@@ -5,6 +5,7 @@ import { BateriaCard } from './BateriaCard';
 const meta: Meta<typeof BateriaCard> = {
   title: 'Components/tests/BateriaCard',
   component: BateriaCard,
+  argTypes: {},
   tags: ['autodocs'],
 
   play: async ({ canvasElement }) => {
