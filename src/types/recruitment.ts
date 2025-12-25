@@ -54,7 +54,7 @@ export type TipoEntrevista = 'telefone' | 'video' | 'presencial';
 export type StatusEntrevista = 'agendada' | 'confirmada' | 'realizada' | 'cancelada' | 'no_show';
 
 export interface PerguntaTriagem {
-  pergunta: string;
+  readonly pergunta: string;
   tipo: 'sim_nao' | 'texto' | 'numero' | 'opcoes';
   opcoes?: string[];
   eliminatoria: boolean;
@@ -62,12 +62,12 @@ export interface PerguntaTriagem {
 }
 
 export interface Skill {
-  nome: string;
+  readonly nome: string;
   nivel: 1 | 2 | 3 | 4 | 5;
 }
 
 export interface Vaga {
-  id: string;
+  readonly id: string;
   titulo: string;
   departamento: string;
   gestorId: string;
@@ -100,7 +100,7 @@ export interface Vaga {
 }
 
 export interface Candidato {
-  id: string;
+  readonly id: string;
   nome: string;
   email: string;
   telefone: string;
@@ -124,7 +124,7 @@ export interface Candidato {
 }
 
 export interface ProcessoSeletivo {
-  id: string;
+  readonly id: string;
   vagaId: string;
   vagaTitulo: string;
   candidatoId: string;
@@ -140,7 +140,7 @@ export interface ProcessoSeletivo {
 }
 
 export interface Entrevista {
-  id: string;
+  readonly id: string;
   processoId: string;
   candidatoNome: string;
   vagaTitulo: string;
@@ -155,7 +155,7 @@ export interface Entrevista {
 }
 
 export interface KPIData {
-  vagasAbertas: number;
+  readonly vagasAbertas: number;
   vagasNovas: number;
   candidatosTotal: number;
   candidatosNovos: number;
@@ -168,14 +168,14 @@ export interface KPIData {
 }
 
 export interface FunilEtapa {
-  etapa: string;
+  readonly etapa: string;
   quantidade: number;
   percentual: number;
   cor: string;
 }
 
 export interface VagaUrgente {
-  id: string;
+  readonly id: string;
   titulo: string;
   candidatos: number;
   emProcesso: number;
@@ -185,14 +185,14 @@ export interface VagaUrgente {
 }
 
 export interface AcaoPendente {
-  tipo: 'feedback' | 'agendar' | 'avaliar' | 'proposta';
+  readonly tipo: 'feedback' | 'agendar' | 'avaliar' | 'proposta';
   quantidade: number;
   descricao: string;
   alerta: boolean;
 }
 
 export interface AgendaDia {
-  id: string;
+  readonly id: string;
   hora: string;
   tipo: 'entrevista' | 'teste' | 'reuniao';
   titulo: string;
@@ -204,20 +204,20 @@ export interface AgendaDia {
 export type TipoCompetencia = 'tecnica' | 'comportamental';
 
 export interface Competencia {
-  id: string;
+  readonly id: string;
   nome: string;
   descricao: string;
   tipo: TipoCompetencia;
 }
 
 export interface NotaCompetencia {
-  competenciaId: string;
+  readonly competenciaId: string;
   nota: 1 | 2 | 3 | 4 | 5;
   observacao?: string;
 }
 
 export interface Avaliacao {
-  id: string;
+  readonly id: string;
   processoId: string;
   candidatoId: string;
   candidatoNome: string;
@@ -241,7 +241,7 @@ export interface Avaliacao {
 // Tipos adicionais
 
 export interface Prova {
-  id: string;
+  readonly id: string;
   titulo: string;
   descricao: string | null;
   categoria: 'logica' | 'tecnica' | 'portugues' | 'ingles' | 'excel' | 'comportamental' | 'fit_cultural';
@@ -254,7 +254,7 @@ export interface Prova {
 }
 
 export interface Comunicacao {
-  id: string;
+  readonly id: string;
   processo_seletivo_id: string | null;
   candidato_id: string;
   tipo: 'email' | 'whatsapp' | 'sms' | 'ligacao' | 'nota';
@@ -267,7 +267,7 @@ export interface Comunicacao {
 }
 
 export interface Indicacao {
-  id: string;
+  readonly id: string;
   indicador_nome: string;
   indicador_email: string;
   candidato_nome: string;
