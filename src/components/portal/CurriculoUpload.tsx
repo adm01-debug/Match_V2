@@ -307,4 +307,6 @@ const CurriculoUpload: React.FC<CurriculoUploadProps> = ({
   );
 };
 
+CurriculoUpload.displayName = "CurriculoUpload";
+
 export default CurriculoUpload;
