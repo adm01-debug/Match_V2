@@ -74,6 +74,7 @@ export function usePipelineView(vagaId?: string) {
     retry: 3,
     queryKey: ['v_pipeline', vagaId],
     queryFn: async () => {
+      try {
       let query = supabase
         .from('processos_seletivos')
         .select(`
@@ -133,6 +134,7 @@ export function useAgendaEntrevistasView(filtros?: {
     retry: 3,
     queryKey: ['v_agenda_entrevistas', filtros],
     queryFn: async () => {
+      try {
       let query = supabase
         .from('entrevistas')
         .select('*')
@@ -187,6 +189,7 @@ export function useVagasKpisView(status?: string) {
     retry: 3,
     queryKey: ['v_vagas_kpis', status],
     queryFn: async () => {
+      try {
       let query = supabase
         .from('vagas')
         .select('*')
