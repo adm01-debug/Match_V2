@@ -1,3 +1,8 @@
+/**
+ * @fileoverview HistoricoTab component
+ * @module HistoricoTab
+ */
+
 import { useMemo,  memo  } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CandidatoPerfil } from "@/data/candidatoPerfilData";
