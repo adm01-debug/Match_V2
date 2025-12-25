@@ -1,4 +1,9 @@
 /**
+ * @todo Implement Zod validation schema for form inputs
+ * @see https://react-hook-form.com/get-started#SchemaValidation
+ */
+
+/**
  * @fileoverview Formação Tab component with form validation
  * @module FormacaoTab
  */
