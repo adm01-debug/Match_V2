@@ -187,3 +187,6 @@ export function TopCandidatos({ processos }: TopCandidatosProps) {
     </Card>
   );
 }
+
+
+TopCandidatos.displayName = "TopCandidatos";
