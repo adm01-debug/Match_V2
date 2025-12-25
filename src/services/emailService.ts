@@ -1,4 +1,9 @@
 /**
+ * @note Consider implementing rate limiting for production
+ * @see https://www.npmjs.com/package/p-throttle
+ */
+
+/**
  * @fileoverview Serviço de envio de emails
  * @module emailService
  */
