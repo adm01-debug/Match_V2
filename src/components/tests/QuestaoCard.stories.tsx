@@ -5,6 +5,7 @@ import { QuestaoCard } from './QuestaoCard';
 const meta: Meta<typeof QuestaoCard> = {
   title: 'Components/tests/QuestaoCard',
   component: QuestaoCard,
+  argTypes: {},
   tags: ['autodocs'],
 };
 
