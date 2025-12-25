@@ -5,6 +5,7 @@ import { PerfilHeader } from './PerfilHeader';
 const meta: Meta<typeof PerfilHeader> = {
   title: 'Components/candidato/PerfilHeader',
   component: PerfilHeader,
+  argTypes: {},
   tags: ['autodocs'],
 };
 
