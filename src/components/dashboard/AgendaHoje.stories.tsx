@@ -5,6 +5,7 @@ import { AgendaHoje } from './AgendaHoje';
 const meta: Meta<typeof AgendaHoje> = {
   title: 'Components/dashboard/AgendaHoje',
   component: AgendaHoje,
+  argTypes: {},
   tags: ['autodocs'],
 
   play: async ({ canvasElement }) => {
