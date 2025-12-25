@@ -26,7 +26,7 @@ export type Departamento =
   | 'geral';
 
 export interface Questao {
-  id: string;
+  readonly id: string;
   enunciado: string;
   tipo: 'multipla_escolha' | 'dissertativa' | 'verdadeiro_falso' | 'pratica';
   alternativas?: string[];
@@ -36,7 +36,7 @@ export interface Questao {
 }
 
 export interface Prova {
-  id: string;
+  readonly id: string;
   titulo: string;
   descricao: string;
   categoria: CategoriaProva;
@@ -56,7 +56,7 @@ export interface Prova {
 }
 
 export interface BateriaProvas {
-  id: string;
+  readonly id: string;
   nome: string;
   descricao: string;
   departamento: Departamento;
@@ -68,7 +68,7 @@ export interface BateriaProvas {
 }
 
 export interface ResultadoProva {
-  id: string;
+  readonly id: string;
   provaId: string;
   candidatoId: string;
   nota: number;
