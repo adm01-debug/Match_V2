@@ -101,6 +101,7 @@ export function useAvaliacoes(options: UseAvaliacoesOptions = {}) {
   } = useQuery({
     queryKey: ['avaliacoes', processoId, avaliadorId, etapa],
     queryFn: async () => {
+      try {
       let query = db
         .from('avaliacoes')
         .select('*')
