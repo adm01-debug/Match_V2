@@ -1,7 +1,8 @@
 import { within, userEvent, expect } from '@storybook/test';
 import type { Meta, StoryObj } from '@storybook/react';
 import { WeekView } from './WeekView';
-const meta: Meta<typeof WeekView> = { title: 'Components/agenda/WeekView', component: WeekView, tags: ['autodocs'] };
+const meta: Meta<typeof WeekView> = { title: 'Components/agenda/WeekView', component: WeekView,
+  argTypes: {}, tags: ['autodocs'] };
 export default meta;
 type Story = StoryObj<typeof WeekView>;
 export const Default: Story = { args: {} };
