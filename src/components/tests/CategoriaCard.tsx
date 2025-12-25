@@ -55,3 +55,6 @@ export function CategoriaCard({ categoria, count, onClick, isSelected }: Categor
   );
 }
 
+
+
+CategoriaCard.displayName = "CategoriaCard";
