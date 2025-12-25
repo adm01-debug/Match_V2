@@ -25,10 +25,11 @@ const IPCheckLoading = memo(() => (
     className="min-h-screen flex items-center justify-center bg-background"
     data-testid="ip-guard-loading"
   >
-    <Card className="w-full max-w-md">
+    <Card className="w-full max-w-md" role="status" aria-label="Verificando acesso" aria-live="polite">
       <CardHeader className="text-center">
         <Shield className="w-12 h-12 mx-auto text-primary animate-pulse" />
         <CardTitle className="mt-4">Verificando Acesso</CardTitle>
+        <span className="sr-only">Por favor aguarde enquanto verificamos seu acesso</span>
       </CardHeader>
       <CardContent className="text-center">
         <p className="text-muted-foreground">
@@ -60,7 +61,7 @@ const AccessBlocked = memo(({
     className="min-h-screen flex items-center justify-center bg-background"
     data-testid="ip-guard-blocked"
   >
-    <Card className="w-full max-w-md border-destructive">
+    <Card className="w-full max-w-md" role="status" aria-label="Verificando acesso" aria-live="polite">
       <CardHeader className="text-center">
         <AlertTriangle className="w-12 h-12 mx-auto text-destructive" />
         <CardTitle className="mt-4 text-destructive">
@@ -69,7 +70,7 @@ const AccessBlocked = memo(({
       </CardHeader>
       <CardContent className="text-center space-y-4">
         <p className="text-muted-foreground">
-          {IP_SECURITY_CONFIG.blockedMessage}
+          {IP_SECURITY_CONFIG.blockedMessage" id="blocked-reason}
         </p>
         
         {showIP && clientIP && (
@@ -113,7 +114,7 @@ const IPCheckError = memo(({
     className="min-h-screen flex items-center justify-center bg-background"
     data-testid="ip-guard-error"
   >
-    <Card className="w-full max-w-md border-yellow-500">
+    <Card className="w-full max-w-md" role="status" aria-label="Verificando acesso" aria-live="polite">
       <CardHeader className="text-center">
         <AlertTriangle className="w-12 h-12 mx-auto text-yellow-500" />
         <CardTitle className="mt-4">Erro na Verificação</CardTitle>
