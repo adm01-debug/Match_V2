@@ -60,3 +60,6 @@ export function Layout({ children, title }: LayoutProps) {
     </SidebarProvider>
   );
 }
+
+
+Layout.displayName = "Layout";
