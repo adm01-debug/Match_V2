@@ -6,6 +6,41 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
+
+// Rate limiting configuration
+const RATE_LIMIT = 100;
+const WINDOW_MS = 60000;
+const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
+
+function checkRateLimit(ip: string): boolean {
+  const now = Date.now();
+  const record = rateLimitMap.get(ip);
+  
+  if (!record || now > record.resetAt) {
+    rateLimitMap.set(ip, { count: 1, resetAt: now + WINDOW_MS });
+    return true;
+  }
+  
+  if (record.count >= RATE_LIMIT) {
+    return false;
+  }
+  
+  record.count++;
+  return true;
+}
+
+function isValidIP(ip: string): boolean {
+  const ipv4Pattern = /^(\d{1,3}\.){3}\d{1,3}$/;
+  const ipv6Pattern = /^([0-9a-fA-F]{0,4}:){2,7}[0-9a-fA-F]{0,4}$/;
+  
+  if (ip === 'localhost' || ip === '::1') return true;
+  if (ipv4Pattern.test(ip)) {
+    const parts = ip.split('.').map(Number);
+    return parts.every(p => p >= 0 && p <= 255);
+  }
+  return ipv6Pattern.test(ip);
+}
+
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-forwarded-for, x-real-ip',
@@ -34,6 +69,15 @@ serve(async (req: Request) => {
     let clientIP = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() 
       || req.headers.get('x-real-ip') 
       || 'unknown';
+
+    // Check rate limit
+    if (!checkRateLimit(clientIP)) {
+      return new Response(
+        JSON.stringify({ error: 'Rate limit exceeded', retryAfter: 60 }),
+        { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json', 'Retry-After': '60' } }
+      );
+    }
+
 
     // Se foi enviado um IP no body, usar esse (para testes)
     if (req.method === 'POST') {
