@@ -80,4 +80,6 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 }
 
+ErrorBoundary.displayName = "ErrorBoundary";
+
 export default ErrorBoundary;
