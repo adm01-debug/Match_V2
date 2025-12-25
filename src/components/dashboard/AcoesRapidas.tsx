@@ -54,3 +54,6 @@ export function AcoesRapidas() {
     </div>
   );
 }
+
+
+AcoesRapidas.displayName = "AcoesRapidas";
