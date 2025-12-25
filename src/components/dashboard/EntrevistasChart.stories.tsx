@@ -5,6 +5,7 @@ import { EntrevistasChart } from './EntrevistasChart';
 const meta: Meta<typeof EntrevistasChart> = {
   title: 'Components/EntrevistasChart',
   component: EntrevistasChart,
+  argTypes: {},
   tags: ['autodocs'],
 };
 
