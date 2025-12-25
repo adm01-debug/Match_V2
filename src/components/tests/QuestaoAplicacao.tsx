@@ -1,3 +1,8 @@
+/**
+ * @fileoverview QuestaoAplicacao component
+ * @module QuestaoAplicacao
+ */
+
 import { memo , memo} from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
