@@ -79,3 +79,6 @@ export function AcoesPendentes({ acoes }: AcoesPendentesProps) {
     </Card>
   );
 }
+
+
+AcoesPendentes.displayName = "AcoesPendentes";
