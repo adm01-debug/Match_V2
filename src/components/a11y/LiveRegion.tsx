@@ -1,3 +1,8 @@
+/**
+ * @fileoverview LiveRegion component
+ * @module LiveRegion
+ */
+
 import { memo, ReactNode } from 'react';
 
 interface LiveRegionProps {
