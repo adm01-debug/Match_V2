@@ -97,3 +97,6 @@ export function AgendaHoje({ agenda }: AgendaProps) {
     </Card>
   );
 }
+
+
+AgendaHoje.displayName = "AgendaHoje";
