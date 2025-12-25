@@ -1,3 +1,4 @@
+import { toast } from 'sonner';
 import { useCallback } from 'react';
 /**
  * @module useMatchScores
@@ -34,6 +35,7 @@ export function useMatchScores(filtros?: { candidatoId?: string; vagaId?: string
     retry: 3,
     queryKey: ['match-scores', filtros],
     queryFn: async () => {
+      try {
       let query = supabase
         .from('match_scores')
         .select(`
@@ -67,6 +69,7 @@ export function useMatchScores(filtros?: { candidatoId?: string; vagaId?: string
     retry: 3,
       queryKey: ['match-score', candidatoId, vagaId],
       queryFn: async () => {
+      try {
         if (!candidatoId || !vagaId) return null;
         
         const { data, error } = await supabase
