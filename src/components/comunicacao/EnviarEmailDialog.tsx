@@ -1,3 +1,8 @@
+/**
+ * @fileoverview EnviarEmailDialog component
+ * @module EnviarEmailDialog
+ */
+
 import { useCallback,  memo  } from 'react';
 import { useMemo, useState } from "react";
 import {
