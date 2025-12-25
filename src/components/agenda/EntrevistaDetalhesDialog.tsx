@@ -614,4 +614,6 @@ const EntrevistaDetalhesDialog = ({
   );
 };
 
+EntrevistaDetalhesDialog.displayName = "EntrevistaDetalhesDialog";
+
 export default EntrevistaDetalhesDialog;
