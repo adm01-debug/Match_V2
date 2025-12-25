@@ -266,3 +266,6 @@ export function QuestaoForm({ questao, onSave, onCancel }: QuestaoFormProps) {
     </div>
   );
 }
+
+
+QuestaoForm.displayName = "QuestaoForm";
