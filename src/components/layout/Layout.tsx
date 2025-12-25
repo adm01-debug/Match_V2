@@ -20,7 +20,7 @@ export function Layout({ children, title }: LayoutProps) {
   const { notifications, unreadCount, markAsRead, markAllAsRead, clearAll } = useNotifications();
 
   return (
-    <SidebarProvider defaultOpen={true}>
+    <SkipLinks /><SidebarProvider defaultOpen={true}>
       <div role="region" aria-label="Layout principal" className="min-h-screen flex w-full bg-background">
         <AppSidebar />
         <SidebarInset className="flex flex-col flex-1">
