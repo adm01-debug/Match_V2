@@ -5,12 +5,12 @@
 
 export interface FormField {
   readonly name: string;
-  label: string;
-  type: 'text' | 'email' | 'password' | 'number' | 'date' | 'select' | 'textarea' | 'checkbox';
-  required?: boolean;
-  placeholder?: string;
-  options?: { value: string; label: string }[];
-  validation?: {
+  readonly  label: string;
+  readonly  type: 'text' | 'email' | 'password' | 'number' | 'date' | 'select' | 'textarea' | 'checkbox';
+  readonly  required?: boolean;
+  readonly  placeholder?: string;
+  readonly  options?: { value: string; label: string }[];
+  readonly  validation?: {
     min?: number;
     max?: number;
     pattern?: RegExp;
@@ -20,7 +20,7 @@ export interface FormField {
 
 export interface FormState {
   readonly isSubmitting: boolean;
-  isValid: boolean;
-  isDirty: boolean;
-  errors: Record<string, string>;
+  readonly  isValid: boolean;
+  readonly  isDirty: boolean;
+  readonly  errors: Record<string, string>;
 }
