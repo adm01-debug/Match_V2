@@ -5,6 +5,7 @@ import { VisuallyHidden } from './VisuallyHidden';
 const meta: Meta<typeof VisuallyHidden> = {
   title: 'Components/VisuallyHidden',
   component: VisuallyHidden,
+  argTypes: {},
   tags: ['autodocs'],
   parameters: { layout: 'centered' },
 };
