@@ -57,3 +57,6 @@ export function ProvaTimer({ duracaoMinutos, onTimeUp, isPaused = false }: Prova
     </div>
   );
 }
+
+
+ProvaTimer.displayName = "ProvaTimer";
