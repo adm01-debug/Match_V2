@@ -30,4 +30,6 @@ const PortalProtectedRoute: React.FC<PortalProtectedRouteProps> = ({ children })
   return <>{children}</>;
 };
 
+PortalProtectedRoute.displayName = "PortalProtectedRoute";
+
 export default PortalProtectedRoute;
