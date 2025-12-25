@@ -124,3 +124,6 @@ export function EntrevistasStats() {
     </Card>
   );
 }
+
+
+EntrevistasStats.displayName = "EntrevistasStats";
