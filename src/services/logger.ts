@@ -1,4 +1,9 @@
 /**
+ * @note Consider implementing rate limiting for production
+ * @see https://www.npmjs.com/package/p-throttle
+ */
+
+/**
  * Logger Service - MATCH ATS
  * 
  * Substitui console.log/error/warn em produção.
