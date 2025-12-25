@@ -36,7 +36,7 @@ const statusColors = {
 
 const hours = Array.from({ length: 12 }, (_, i) => i + 8); // 8:00 - 19:00
 
-export function WeekView({ currentDate, entrevistas, onSelectEntrevista, onSelectDate }: WeekViewProps) {
+export function WeekView({ currentDate, entrevistas, onSelectEntrevista, onSelectDate }: WeekViewProps): JSX.Element {
   const weekStart = startOfWeek(currentDate, { locale: ptBR });
   const weekDays = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));
 
