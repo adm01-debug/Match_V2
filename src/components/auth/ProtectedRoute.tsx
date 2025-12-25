@@ -50,4 +50,6 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requiredRoles
   return <>{children}</>;
 };
 
+ProtectedRoute.displayName = "ProtectedRoute";
+
 export default ProtectedRoute;
