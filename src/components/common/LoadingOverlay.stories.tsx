@@ -5,6 +5,7 @@ import { LoadingOverlay } from './LoadingOverlay';
 const meta: Meta<typeof LoadingOverlay> = {
   title: 'Common/LoadingOverlay',
   component: LoadingOverlay,
+  argTypes: {},
   tags: ['autodocs'],
   decorators: [
     (Story) => (
