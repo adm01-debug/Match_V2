@@ -94,3 +94,6 @@ export function CandidatoKanbanCard({ processo, onClick }: CandidatoKanbanCardPr
     </div>
   );
 }
+
+
+CandidatoKanbanCard.displayName = "CandidatoKanbanCard";
