@@ -5,6 +5,7 @@ import { AlertasInteligentes } from './AlertasInteligentes';
 const meta: Meta<typeof AlertasInteligentes> = {
   title: 'Components/AlertasInteligentes',
   component: AlertasInteligentes,
+  argTypes: {},
   tags: ['autodocs'],
 };
 
