@@ -5,6 +5,7 @@ import { AgendarEntrevistaDialog } from './AgendarEntrevistaDialog';
 const meta: Meta<typeof AgendarEntrevistaDialog> = {
   title: 'Components/AgendarEntrevistaDialog',
   component: AgendarEntrevistaDialog,
+  argTypes: {},
   tags: ['autodocs'],
   parameters: { layout: 'centered' },
 };
