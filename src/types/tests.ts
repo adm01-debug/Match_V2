@@ -27,60 +27,60 @@ export type Departamento =
 
 export interface Questao {
   readonly id: string;
-  enunciado: string;
-  tipo: 'multipla_escolha' | 'dissertativa' | 'verdadeiro_falso' | 'pratica';
-  alternativas?: string[];
-  respostaCorreta?: string | number;
-  pontuacao: number;
-  dificuldade: 'facil' | 'medio' | 'dificil';
+  readonly  enunciado: string;
+  readonly  tipo: 'multipla_escolha' | 'dissertativa' | 'verdadeiro_falso' | 'pratica';
+  readonly  alternativas?: string[];
+  readonly  respostaCorreta?: string | number;
+  readonly  pontuacao: number;
+  readonly  dificuldade: 'facil' | 'medio' | 'dificil';
 }
 
 export interface Prova {
   readonly id: string;
-  titulo: string;
-  descricao: string;
-  categoria: CategoriaProva;
-  departamentos: Departamento[];
-  niveisAplicaveis: NivelCargo[];
-  duracao: number; // em minutos
-  totalQuestoes: number;
-  pontuacaoMaxima: number;
-  notaMinima: number;
-  questoes: Questao[];
-  ativo: boolean;
-  criadoEm: string;
-  atualizadoEm: string;
-  aplicacoes: number;
-  mediaNotas: number;
-  tags: string[];
+  readonly  titulo: string;
+  readonly  descricao: string;
+  readonly  categoria: CategoriaProva;
+  readonly  departamentos: Departamento[];
+  readonly  niveisAplicaveis: NivelCargo[];
+  readonly  duracao: number; // em minutos
+  readonly  totalQuestoes: number;
+  readonly  pontuacaoMaxima: number;
+  readonly  notaMinima: number;
+  readonly  questoes: Questao[];
+  readonly  ativo: boolean;
+  readonly  criadoEm: string;
+  readonly  atualizadoEm: string;
+  readonly  aplicacoes: number;
+  readonly  mediaNotas: number;
+  readonly  tags: string[];
 }
 
 export interface BateriaProvas {
   readonly id: string;
-  nome: string;
-  descricao: string;
-  departamento: Departamento;
-  nivel: NivelCargo;
-  provas: string[]; // IDs das provas
-  duracaoTotal: number;
-  obrigatorias: string[];
-  opcionais: string[];
+  readonly  nome: string;
+  readonly  descricao: string;
+  readonly  departamento: Departamento;
+  readonly  nivel: NivelCargo;
+  readonly  provas: string[]; // IDs das provas
+  readonly  duracaoTotal: number;
+  readonly  obrigatorias: string[];
+  readonly  opcionais: string[];
 }
 
 export interface ResultadoProva {
   readonly id: string;
-  provaId: string;
-  candidatoId: string;
-  nota: number;
-  percentual: number;
-  tempoGasto: number;
-  respostas: {
+  readonly  provaId: string;
+  readonly  candidatoId: string;
+  readonly  nota: number;
+  readonly  percentual: number;
+  readonly  tempoGasto: number;
+  readonly  respostas: {
     questaoId: string;
     resposta: string | number;
     correta: boolean;
     pontos: number;
   }[];
-  iniciadoEm: string;
-  finalizadoEm: string;
-  status: 'aprovado' | 'reprovado' | 'em_analise';
+  readonly  iniciadoEm: string;
+  readonly  finalizadoEm: string;
+  readonly  status: 'aprovado' | 'reprovado' | 'em_analise';
 }
