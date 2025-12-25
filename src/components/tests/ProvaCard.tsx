@@ -162,3 +162,6 @@ export function ProvaCard({ prova, onSelect, onEdit, onDuplicate, onDelete, comp
   );
 }
 
+
+
+ProvaCard.displayName = "ProvaCard";
