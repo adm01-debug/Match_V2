@@ -262,7 +262,11 @@ export function useCreateEntrevista() {
       etapa: string;
       status: string;
       observacoes?: string;
-    }) => {
+    ,
+    onError: (error: Error) => {
+      console.error('Erro em entrevistas:', error);
+      toast.error('Erro ao processar entrevista');
+    }}) => {
       const { data, error } = await supabase
         .from('entrevistas')
         .insert(entrevista)
