@@ -1,3 +1,4 @@
+import { toast } from 'sonner';
 import { useCallback } from 'react';
 /**
  * @module useProfiles
@@ -32,6 +33,7 @@ export function useProfiles() {
     retry: 3,
     queryKey: ['profiles'],
     queryFn: async () => {
+      try {
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
@@ -48,6 +50,7 @@ export function useProfiles() {
     retry: 3,
     queryKey: ['profile', userId],
     queryFn: async () => {
+      try {
       if (!userId) return null;
       const { data, error } = await supabase
         .from('profiles')
@@ -69,6 +72,7 @@ export function useProfiles() {
     retry: 3,
     queryKey: ['current-profile'],
     queryFn: async () => {
+      try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return null;
       const { data, error } = await supabase
