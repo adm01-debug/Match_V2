@@ -5,6 +5,7 @@ import { VagasUrgentes } from './VagasUrgentes';
 const meta: Meta<typeof VagasUrgentes> = {
   title: 'Components/dashboard/VagasUrgentes',
   component: VagasUrgentes,
+  argTypes: {},
   tags: ['autodocs'],
 };
 
