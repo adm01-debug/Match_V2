@@ -6,6 +6,7 @@
  * const { data, isLoading } = useEntrevistas();
  */
 
+import { toast } from 'sonner';
 import { useToast } from '@/hooks/use-toast';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -97,6 +98,7 @@ export function useEntrevistas() {
     select: (data) => data, staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,
     enabled: true, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
+      try {
       const { data, error } = await supabase
         .from('entrevistas')
         .select('*')
@@ -115,6 +117,7 @@ export function useEntrevistasStats() {
     select: (data) => data, staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,
     enabled: true, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
+      try {
       const { data, error } = await supabase
         .from('entrevistas')
         .select('*');
@@ -162,6 +165,7 @@ export function useEntrevistasEvolucao() {
     select: (data) => data, staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,
     enabled: true, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
+      try {
       const { data, error } = await supabase
         .from('entrevistas')
         .select('*')
@@ -215,6 +219,7 @@ export function useEntrevistasPizza() {
     select: (data) => data, staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,
     enabled: true, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
+      try {
       const { data, error } = await supabase
         .from('entrevistas')
         .select('feedback_resultado')
@@ -335,6 +340,7 @@ export function useCandidatosDisponiveis() {
     select: (data) => data, staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,
     enabled: true, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
+      try {
       const { data, error } = await supabase
         .from('candidatos')
         .select('id, nome')
