@@ -5,6 +5,7 @@ import { LiveRegion } from './LiveRegion';
 const meta: Meta<typeof LiveRegion> = {
   title: 'Components/LiveRegion',
   component: LiveRegion,
+  argTypes: {},
   tags: ['autodocs'],
   parameters: { layout: 'centered' },
 };
