@@ -39,6 +39,7 @@ export function useCandidaturas(filtros?: { vagaId?: string; candidatoAuthId?: s
     placeholderData: [],
     select: (data) => data,
     queryFn: async () => {
+      try {
       let query = supabase
         .from('candidaturas')
         .select(`
