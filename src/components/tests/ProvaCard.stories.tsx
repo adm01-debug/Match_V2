@@ -5,6 +5,7 @@ import { ProvaCard } from './ProvaCard';
 const meta: Meta<typeof ProvaCard> = {
   title: 'Components/tests/ProvaCard',
   component: ProvaCard,
+  argTypes: {},
   tags: ['autodocs'],
 };
 
