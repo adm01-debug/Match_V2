@@ -1,3 +1,8 @@
+/**
+ * @fileoverview VagaCard component
+ * @module VagaCard
+ */
+
 import { memo } from 'react';
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
