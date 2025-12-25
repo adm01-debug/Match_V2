@@ -5,6 +5,7 @@ import { ProtectedRoute } from './ProtectedRoute';
 const meta: Meta<typeof ProtectedRoute> = {
   title: 'Components/ProtectedRoute',
   component: ProtectedRoute,
+  argTypes: {},
   tags: ['autodocs'],
   parameters: { layout: 'centered' },
 };
