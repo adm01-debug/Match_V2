@@ -5,6 +5,7 @@ import { CompetenciaRating } from './CompetenciaRating';
 const meta: Meta<typeof CompetenciaRating> = {
   title: 'Components/CompetenciaRating',
   component: CompetenciaRating,
+  argTypes: {},
   tags: ['autodocs'],
   parameters: { layout: 'centered' },
 };
