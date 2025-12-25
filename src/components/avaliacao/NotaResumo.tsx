@@ -1,3 +1,8 @@
+/**
+ * @fileoverview NotaResumo component
+ * @module NotaResumo
+ */
+
 import { memo } from 'react';
 import { cn } from '@/lib/utils';
 
