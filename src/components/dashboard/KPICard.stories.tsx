@@ -5,6 +5,7 @@ import { KPICard } from './KPICard';
 const meta: Meta<typeof KPICard> = {
   title: 'Components/dashboard/KPICard',
   component: KPICard,
+  argTypes: {},
   tags: ['autodocs'],
 };
 
