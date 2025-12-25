@@ -5,6 +5,7 @@ import { GoogleCalendarExport } from './GoogleCalendarExport';
 const meta: Meta<typeof GoogleCalendarExport> = {
   title: 'Components/GoogleCalendarExport',
   component: GoogleCalendarExport,
+  argTypes: {},
   tags: ['autodocs'],
   parameters: { layout: 'centered' },
 };
