@@ -6,6 +6,7 @@
  * const { data, isLoading } = useProcessosSeletivos();
  */
 
+import { toast } from 'sonner';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { ProcessoSeletivo, EtapaProcesso, StatusProcesso, FonteCandidato } from '@/types/recruitment';
@@ -55,6 +56,7 @@ export function useProcessosSeletivos() {
     placeholderData: [],
     select: (data) => data, staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
+      try {
       const { data, error } = await supabase
         .from('processos_seletivos')
         .select('*')
@@ -73,6 +75,7 @@ export function useProcessosByVaga(vagaId: string) {
     placeholderData: [],
     select: (data) => data, staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
+      try {
       const { data, error } = await supabase
         .from('processos_seletivos')
         .select('*')
