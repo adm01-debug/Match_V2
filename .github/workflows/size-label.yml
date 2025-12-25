@@ -6,6 +6,7 @@ on:
 jobs:
   size-label:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - uses: codelytv/pr-size-labeler@v1
         with:
