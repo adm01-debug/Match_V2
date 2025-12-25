@@ -1,4 +1,11 @@
 /**
+ * @fileoverview Logger Service
+ * @module services/logger
+ * @description Serviço centralizado de logging com suporte a múltiplos níveis
+ * @author MATCH ATS Team
+ */
+
+/**
  * @note Consider implementing rate limiting for production
  * @see https://www.npmjs.com/package/p-throttle
  */
@@ -16,7 +23,7 @@ type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 interface LogEntry {
   level: LogLevel;
   message: string;
-  data?: any;
+  data?: unknown;
   timestamp: string;
   context?: string;
 }
@@ -61,7 +68,7 @@ class Logger {
     return LOG_LEVELS[level] >= LOG_LEVELS[this.config.minLevel];
   }
 
-  private formatMessage(level: LogLevel, message: string, data?: any, context?: string): LogEntry {
+  private formatMessage(level: LogLevel, message: string, data?: unknown, context?: string): LogEntry {
     return {
       level,
       message,
@@ -71,7 +78,7 @@ class Logger {
     };
   }
 
-  private log(level: LogLevel, message: string, data?: any, context?: string): void {
+  private log(level: LogLevel, message: string, data?: unknown, context?: string): void {
     if (!this.shouldLog(level)) return;
 
     const entry = this.formatMessage(level, message, data, context);
@@ -119,19 +126,19 @@ class Logger {
   }
 
   // Métodos públicos
-  debug(message: string, data?: any, context?: string): void {
+  debug(message: string, data?: unknown, context?: string): void {
     this.log('debug', message, data, context);
   }
 
-  info(message: string, data?: any, context?: string): void {
+  info(message: string, data?: unknown, context?: string): void {
     this.log('info', message, data, context);
   }
 
-  warn(message: string, data?: any, context?: string): void {
+  warn(message: string, data?: unknown, context?: string): void {
     this.log('warn', message, data, context);
   }
 
-  error(message: string, data?: any, context?: string): void {
+  error(message: string, data?: unknown, context?: string): void {
     this.log('error', message, data, context);
   }
 
@@ -163,10 +170,10 @@ export const logger = new Logger();
 
 // Funções de conveniência para diferentes contextos
 export const createContextLogger = (context: string) => ({
-  debug: (message: string, data?: any) => logger.debug(message, data, context),
-  info: (message: string, data?: any) => logger.info(message, data, context),
-  warn: (message: string, data?: any) => logger.warn(message, data, context),
-  error: (message: string, data?: any) => logger.error(message, data, context),
+  debug: (message: string, data?: unknown) => logger.debug(message, data, context),
+  info: (message: string, data?: unknown) => logger.info(message, data, context),
+  warn: (message: string, data?: unknown) => logger.warn(message, data, context),
+  error: (message: string, data?: unknown) => logger.error(message, data, context),
 });
 
 // Loggers pré-configurados para diferentes módulos
