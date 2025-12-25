@@ -6,6 +6,7 @@ import { Suspense, lazy } from 'react';
 const meta: Meta<typeof PageSuspense> = {
   title: 'Common/PageSuspense',
   component: PageSuspense,
+  argTypes: {},
   tags: ['autodocs'],
 };
 
