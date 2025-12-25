@@ -6,6 +6,7 @@
  * const { data, isLoading } = useComunicacoes();
  */
 
+import { toast } from 'sonner';
 import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -31,6 +32,7 @@ export function useComunicacoes(candidatoId?: string) {
     placeholderData: [],
     select: (data) => data, staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
+      try {
       if (!candidatoId) return [];
       
       const { data, error } = await supabase
