@@ -5,6 +5,7 @@ import { VagaCard } from './VagaCard';
 const meta: Meta<typeof VagaCard> = {
   title: 'Components/vagas/VagaCard',
   component: VagaCard,
+  argTypes: {},
   tags: ['autodocs'],
 };
 
