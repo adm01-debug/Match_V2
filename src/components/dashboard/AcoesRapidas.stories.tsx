@@ -5,6 +5,7 @@ import { AcoesRapidas } from './AcoesRapidas';
 const meta: Meta<typeof AcoesRapidas> = {
   title: 'Components/AcoesRapidas',
   component: AcoesRapidas,
+  argTypes: {},
   tags: ['autodocs'],
 };
 
