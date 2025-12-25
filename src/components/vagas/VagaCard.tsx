@@ -169,7 +169,7 @@ export const VagaCard = memo(function VagaCard({ vaga }: VagaCardProps) {
               <DropdownMenuSeparator />
               <DropdownMenuItem 
                 className="flex items-center gap-2 text-destructive focus:text-destructive"
-                onClick={() => setShowDeleteDialog(true)}
+                onClick={() => setShowDeleteDialog(true)} aria-label="VagaCard action"
               >
                 <Trash2 className="h-4 w-4" />
                 Excluir vaga
