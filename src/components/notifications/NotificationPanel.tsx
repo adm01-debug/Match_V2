@@ -203,3 +203,6 @@ export function NotificationPanel({
     </Popover>
   );
 }
+
+
+NotificationPanel.displayName = "NotificationPanel";
