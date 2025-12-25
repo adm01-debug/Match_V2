@@ -6,6 +6,7 @@
  * const { data, isLoading } = useProvas();
  */
 
+import { toast } from 'sonner';
 import { useToast } from '@/hooks/use-toast';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -316,6 +317,7 @@ export function useProvasStats() {
     gcTime: 1000 * 60 * 30,
     retry: 3,
     queryFn: async () => {
+      try {
       const { data: provas, error } = await supabase
         .from('provas')
         .select('duracao, aplicacoes');
