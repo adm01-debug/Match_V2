@@ -109,4 +109,6 @@ const EntrevistaCard = ({ entrevista, onClick }: EntrevistaCardProps) => {
   );
 };
 
+EntrevistaCard.displayName = "EntrevistaCard";
+
 export default EntrevistaCard;
