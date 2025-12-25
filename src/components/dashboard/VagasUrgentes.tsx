@@ -107,3 +107,6 @@ export function VagasUrgentes({ vagas }: VagasUrgentesProps) {
     </Card>
   );
 }
+
+
+VagasUrgentes.displayName = "VagasUrgentes";
