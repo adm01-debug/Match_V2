@@ -5,6 +5,7 @@ import { EntrevistasStats } from './EntrevistasStats';
 const meta: Meta<typeof EntrevistasStats> = {
   title: 'Components/EntrevistasStats',
   component: EntrevistasStats,
+  argTypes: {},
   tags: ['autodocs'],
 };
 
