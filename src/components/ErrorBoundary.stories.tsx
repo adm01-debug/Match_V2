@@ -5,6 +5,7 @@ import { ErrorBoundary } from './ErrorBoundary';
 const meta: Meta<typeof ErrorBoundary> = {
   title: 'Components/ErrorBoundary',
   component: ErrorBoundary,
+  argTypes: {},
   tags: ['autodocs'],
   parameters: { layout: 'centered' },
 };
