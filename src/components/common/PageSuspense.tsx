@@ -1,3 +1,8 @@
+/**
+ * @fileoverview PageSuspense component
+ * @module PageSuspense
+ */
+
 import { Suspense, ReactNode , memo} from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 
