@@ -57,7 +57,7 @@ export function CandidatoKanbanCard({ processo, onClick }: CandidatoKanbanCardPr
         "hover:shadow-md hover:border-primary/30 transition-all duration-200",
         isDragging && "opacity-50 shadow-lg scale-105 z-50"
       )}
-      onClick={onClick}
+      onClick={onClick} aria-label="CandidatoKanbanCard action"
       {...attributes}
       {...listeners}
     >
