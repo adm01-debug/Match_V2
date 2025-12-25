@@ -5,6 +5,7 @@ import { NotificationPanel } from './NotificationPanel';
 const meta: Meta<typeof NotificationPanel> = {
   title: 'Components/notifications/NotificationPanel',
   component: NotificationPanel,
+  argTypes: {},
   tags: ['autodocs'],
 };
 
