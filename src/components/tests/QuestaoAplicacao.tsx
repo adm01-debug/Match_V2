@@ -169,3 +169,6 @@ export function QuestaoAplicacao({
     </Card>
   );
 }
+
+
+QuestaoAplicacao.displayName = "QuestaoAplicacao";
