@@ -140,3 +140,6 @@ export function QuestaoCard({ questao, index, onEdit, onDelete, showAnswer = tru
     </Card>
   );
 }
+
+
+QuestaoCard.displayName = "QuestaoCard";
