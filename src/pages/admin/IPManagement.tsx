@@ -4,7 +4,7 @@
  * @description Página para gerenciamento de IPs permitidos (Admin only)
  */
 
-import { memo, useState } from 'react';
+import { memo, useState , useMemo, useCallback} from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
@@ -78,6 +78,16 @@ const IPManagement = memo(() => {
         .from('allowed_ips')
         .select('*')
         .order('created_at', { ascending: false });
+
+  const activeIPs = useMemo(() => 
+    allowedIPs?.filter(ip => ip.is_active) ?? [], 
+    [allowedIPs]
+  );
+
+  const inactiveIPs = useMemo(() => 
+    allowedIPs?.filter(ip => !ip.is_active) ?? [], 
+    [allowedIPs]
+  );
       
       if (error) throw error;
       return data as AllowedIP[];
