@@ -7,6 +7,7 @@ import { Inbox, Search, FileX } from 'lucide-react';
 const meta: Meta<typeof EmptyState> = {
   title: 'Common/EmptyState',
   component: EmptyState,
+  argTypes: {},
   tags: ['autodocs'],
 };
 
