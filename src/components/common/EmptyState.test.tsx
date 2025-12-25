@@ -3,10 +3,12 @@ import { render, screen } from '@testing-library/react';
 import { EmptyState } from './EmptyState';
 
 describe('EmptyState', () => {
+  describe('Rendering', () => {EmptyState', () => {
   it('renders title', () => {
     render(<EmptyState title="No items" />);
     expect(screen.getByText('No items')).toBeInTheDocument();
   });
+});
 
   it('renders description', () => {
     render(<EmptyState title="No items" description="Add some items" />);
