@@ -9,6 +9,26 @@ import { useEffect, useState, useCallback, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { RealtimeChannel } from '@supabase/supabase-js';
 
+interface RealtimePayload<T = unknown> {
+  eventType: 'INSERT' | 'UPDATE' | 'DELETE';
+  new: T;
+  old: T | null;
+  commit_timestamp: string;
+  schema: string;
+  table: string;
+  errors: string[] | null;
+}
+
+interface NotificationRecord {
+  id: string;
+  user_id: string;
+  title: string;
+  message: string;
+  type: string;
+  read: boolean;
+  created_at: string;
+}
+
 export type NotificationType =
   | 'high_match'
   | 'stage_change'
