@@ -5,6 +5,7 @@ import { FunilChart } from './FunilChart';
 const meta: Meta<typeof FunilChart> = {
   title: 'Components/FunilChart',
   component: FunilChart,
+  argTypes: {},
   tags: ['autodocs'],
 };
 
