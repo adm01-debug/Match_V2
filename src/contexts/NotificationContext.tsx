@@ -113,6 +113,6 @@ export function useNotifications() {
     throw new Error('useNotifications must be used within a NotificationProvider');
   }
   return context;
-}
+};
 
-
+NotificationContext.displayName = 'NotificationContext';
