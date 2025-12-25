@@ -378,4 +378,6 @@ const AgendarEntrevistaDialog = ({
   );
 };
 
+AgendarEntrevistaDialog.displayName = "AgendarEntrevistaDialog";
+
 export default AgendarEntrevistaDialog;
