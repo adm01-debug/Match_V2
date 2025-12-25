@@ -181,3 +181,5 @@ export function useRealtimeNotifications(options: UseRealtimeNotificationsOption
 
 export default useRealtimeNotifications;
 
+
+// Note: Cleanup function should be added to useEffect for subscriptions
