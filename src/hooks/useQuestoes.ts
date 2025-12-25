@@ -6,6 +6,7 @@
  * const { data, isLoading } = useQuestoes();
  */
 
+import { toast } from 'sonner';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -36,6 +37,7 @@ export function useQuestoes(provaId?: string) {
     placeholderData: [],
     select: (data) => data, staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
+      try {
       if (!provaId) return [];
       
       const { data, error } = await supabase
