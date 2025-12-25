@@ -5,6 +5,7 @@ import { EnviarEmailDialog } from './EnviarEmailDialog';
 const meta: Meta<typeof EnviarEmailDialog> = {
   title: 'Components/comunicacao/EnviarEmailDialog',
   component: EnviarEmailDialog,
+  argTypes: {},
   tags: ['autodocs'],
 
   play: async ({ canvasElement }) => {
