@@ -43,6 +43,7 @@ export function useCandidatos(filters?: {
   return useQuery({
     queryKey: ['candidatos', filters],
     queryFn: async () => {
+      try {
       let query = supabase
         .from('candidatos')
         .select(`
