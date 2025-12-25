@@ -278,3 +278,6 @@ export function ResultadoProvaView({ prova, resultado, questoes, onVoltar }: Res
     </div>
   );
 }
+
+
+ResultadoProvaView.displayName = "ResultadoProvaView";
