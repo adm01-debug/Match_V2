@@ -1,3 +1,8 @@
+/**
+ * @fileoverview ProtectedRoute component
+ * @module ProtectedRoute
+ */
+
 import { memo , memo} from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth, AppRole } from '@/contexts/AuthContext';
