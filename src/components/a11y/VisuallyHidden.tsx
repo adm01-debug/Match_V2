@@ -1,3 +1,8 @@
+/**
+ * @fileoverview VisuallyHidden component
+ * @module VisuallyHidden
+ */
+
 import { memo, ReactNode } from 'react';
 
 interface VisuallyHiddenProps {
