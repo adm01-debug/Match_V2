@@ -245,128 +245,7 @@ const IPManagement = memo(() => {
 
       {/* Stats Cards */}
       <div className="grid gap-4 md:grid-cols-4">
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              IPs Ativos
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-green-600">
-              {allowedIPs?.filter(ip => ip.is_active).length ?? 0}
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              IPs Inativos
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-gray-400">
-              {allowedIPs?.filter(ip => !ip.is_active).length ?? 0}
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              Acessos (24h)
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-blue-600">
-              {accessLogs?.filter(l => l.action === 'ALLOWED').length ?? 0}
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              Bloqueios (24h)
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-red-600">
-              {accessLogs?.filter(l => l.action === 'BLOCKED').length ?? 0}
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* IPs Table */}
-      <Card>
-        <CardHeader>
-          <CardTitle>IPs Permitidos</CardTitle>
-          <CardDescription>
-            Lista de endereços IP autorizados a acessar o sistema
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          {isLoadingIPs ? (
-            <div className="flex justify-center py-8">
-              <RefreshCw className="w-6 h-6 animate-spin text-muted-foreground" />
-            </div>
-          ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>IP</TableHead>
-                  <TableHead>Descrição</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Adicionado por</TableHead>
-                  <TableHead>Data</TableHead>
-                  <TableHead className="text-right">Ações</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {allowedIPs?.map((ip) => (
-                  <TableRow key={ip.id}>
-                    <TableCell className="font-mono">{ip.ip}</TableCell>
-                    <TableCell>{ip.description}</TableCell>
-                    <TableCell>
-                      {ip.is_active ? (
-                        <Badge variant="default" className="bg-green-500">Ativo</Badge>
-                      ) : (
-                        <Badge variant="secondary">Inativo</Badge>
-                      )}
-                    </TableCell>
-                    <TableCell>{ip.added_by}</TableCell>
-                    <TableCell>
-                      {format(new Date(ip.created_at), "dd/MM/yyyy HH:mm", { locale: ptBR })}
-                    </TableCell>
-                    <TableCell className="text-right">
-                      {ip.is_active ? (
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => removeIPMutation.mutate(ip.id)}
-                          disabled={removeIPMutation.isPending}
-                        >
-                          <Trash2 className="w-4 h-4 text-destructive" />
-                        </Button>
-                      ) : (
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => reactivateIPMutation.mutate(ip.id)}
-                          disabled={reactivateIPMutation.isPending}
-                        >
-                          <RefreshCw className="w-4 h-4 text-green-500" />
-                        </Button>
-                      )}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          )}
-        </CardContent>
-      </Card>
-
-      {/* Access Logs */}
-      <Card>
+        <Card aria-live="polite">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <AlertTriangle className="w-5 h-5" />
@@ -385,10 +264,10 @@ const IPManagement = memo(() => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Horário</TableHead>
-                  <TableHead>IP</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Motivo</TableHead>
+                  <TableHead scope="col">Horário</TableHead>
+                  <TableHead scope="col">IP</TableHead>
+                  <TableHead scope="col">Status</TableHead>
+                  <TableHead scope="col">Motivo</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
