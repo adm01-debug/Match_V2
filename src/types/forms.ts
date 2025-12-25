@@ -4,7 +4,7 @@
  */
 
 export interface FormField {
-  name: string;
+  readonly name: string;
   label: string;
   type: 'text' | 'email' | 'password' | 'number' | 'date' | 'select' | 'textarea' | 'checkbox';
   required?: boolean;
@@ -19,7 +19,7 @@ export interface FormField {
 }
 
 export interface FormState {
-  isSubmitting: boolean;
+  readonly isSubmitting: boolean;
   isValid: boolean;
   isDirty: boolean;
   errors: Record<string, string>;
