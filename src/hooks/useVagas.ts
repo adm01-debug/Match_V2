@@ -6,6 +6,7 @@
  * const { data, isLoading } = useVagas();
  */
 
+import { toast } from 'sonner';
 import { useToast } from '@/hooks/use-toast';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -122,6 +123,7 @@ export function useVagas() {
     select: (data) => data, staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,
     enabled: true, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
+      try {
       const { data, error } = await supabase
         .from('vagas')
         .select('*')
@@ -141,6 +143,7 @@ export function useVaga(id: string) {
     select: (data) => data, staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,
     enabled: true, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
+      try {
       const { data, error } = await supabase
         .from('vagas')
         .select('*')
@@ -162,6 +165,7 @@ export function useVagasSelect() {
     select: (data) => data, staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,
     enabled: true, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
+      try {
       const { data, error } = await supabase
         .from('vagas')
         .select('id, titulo')
@@ -182,6 +186,7 @@ export function useVagasUrgentes() {
     select: (data) => data, staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,
     enabled: true, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
+      try {
       const { data, error } = await supabase
         .from('vagas')
         .select('*')
