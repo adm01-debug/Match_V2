@@ -121,3 +121,5 @@ export const useAuth = () => {
   }
   return context;
 };
+
+AuthContext.displayName = 'AuthContext';
