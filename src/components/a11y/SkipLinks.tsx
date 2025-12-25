@@ -1,3 +1,8 @@
+/**
+ * @fileoverview SkipLinks component
+ * @module SkipLinks
+ */
+
 import { memo } from 'react';
 
 export const SkipLinks = memo(() => {
