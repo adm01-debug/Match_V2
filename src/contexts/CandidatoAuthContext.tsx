@@ -138,3 +138,4 @@ export const useCandidatoAuth = () => {
   return context;
 };
 
+CandidatoAuthContext.displayName = 'CandidatoAuthContext';
