@@ -221,3 +221,6 @@ export function SmartInsights({ kpiData, funilData }: SmartInsightsProps) {
     </Card>
   );
 }
+
+
+SmartInsights.displayName = "SmartInsights";
