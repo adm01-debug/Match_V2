@@ -5,6 +5,7 @@ import { TopCandidatos } from './TopCandidatos';
 const meta: Meta<typeof TopCandidatos> = {
   title: 'Components/dashboard/TopCandidatos',
   component: TopCandidatos,
+  argTypes: {},
   tags: ['autodocs'],
 
   play: async ({ canvasElement }) => {
