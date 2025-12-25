@@ -5,6 +5,7 @@ import { AcoesPendentes } from './AcoesPendentes';
 const meta: Meta<typeof AcoesPendentes> = {
   title: 'Components/dashboard/AcoesPendentes',
   component: AcoesPendentes,
+  argTypes: {},
   tags: ['autodocs'],
 
   play: async ({ canvasElement }) => {
