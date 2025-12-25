@@ -5,6 +5,7 @@ import { CandidatoKanbanCard } from './CandidatoKanbanCard';
 const meta: Meta<typeof CandidatoKanbanCard> = {
   title: 'Components/pipeline/CandidatoKanbanCard',
   component: CandidatoKanbanCard,
+  argTypes: {},
   tags: ['autodocs'],
 };
 
