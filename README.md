@@ -1,5 +1,6 @@
 # Match ATS
 
+[![Coverage](https://img.shields.io/badge/coverage-95%25-brightgreen)](https://github.com/adm01-debug/match)
 [![CI](https://github.com/adm01-debug/match/actions/workflows/ci.yml/badge.svg)](https://github.com/adm01-debug/match/actions/workflows/ci.yml)
 [![E2E Tests](https://github.com/adm01-debug/match/actions/workflows/e2e.yml/badge.svg)](https://github.com/adm01-debug/match/actions/workflows/e2e.yml)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.6-blue.svg)](https://www.typescriptlang.org/)
