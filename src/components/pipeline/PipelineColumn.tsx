@@ -1,3 +1,8 @@
+/**
+ * @fileoverview PipelineColumn component
+ * @module PipelineColumn
+ */
+
 import { useMemo,  memo  } from 'react';
 import { ProcessoSeletivo, EtapaProcesso } from "@/types/recruitment";
 import { CandidatoKanbanCard } from "./CandidatoKanbanCard";
