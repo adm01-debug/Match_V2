@@ -5,6 +5,7 @@ import { SmartInsights } from './SmartInsights';
 const meta: Meta<typeof SmartInsights> = {
   title: 'Components/dashboard/SmartInsights',
   component: SmartInsights,
+  argTypes: {},
   tags: ['autodocs'],
 };
 
