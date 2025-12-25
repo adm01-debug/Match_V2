@@ -1,3 +1,8 @@
+/**
+ * @fileoverview AcoesRapidas component
+ * @module AcoesRapidas
+ */
+
 import { memo , memo, useMemo} from 'react';
 import { Button } from "@/components/ui/button";
 import { Plus, Users, BarChart3, Briefcase } from "lucide-react";
