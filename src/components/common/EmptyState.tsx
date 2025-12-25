@@ -1,3 +1,8 @@
+/**
+ * @fileoverview EmptyState component
+ * @module EmptyState
+ */
+
 import { ReactNode , memo} from 'react';
 import { cn } from '@/lib/utils';
 
