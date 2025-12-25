@@ -212,3 +212,6 @@ export function AlertasInteligentes({ acoesPendentes, vagasUrgentes }: AlertasIn
     </Card>
   );
 }
+
+
+AlertasInteligentes.displayName = "AlertasInteligentes";
