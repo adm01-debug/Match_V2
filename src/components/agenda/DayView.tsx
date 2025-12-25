@@ -33,7 +33,7 @@ const statusColors = {
 
 const hours = Array.from({ length: 12 }, (_, i) => i + 8); // 8:00 - 19:00
 
-export function DayView({ currentDate, entrevistas, onSelectEntrevista }: DayViewProps) {
+export function DayView({ currentDate, entrevistas, onSelectEntrevista }: DayViewProps): JSX.Element {
   const dayEntrevistas = entrevistas
     .filter((e) => isSameDay(new Date(e.data), currentDate))
     .sort((a, b) => a.horaInicio.localeCompare(b.horaInicio));
