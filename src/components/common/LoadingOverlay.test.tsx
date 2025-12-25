@@ -3,10 +3,12 @@ import { render, screen } from '@testing-library/react';
 import { LoadingOverlay } from './LoadingOverlay';
 
 describe('LoadingOverlay', () => {
+  describe('Rendering', () => {LoadingOverlay', () => {
   it('renders when isLoading is true', () => {
     render(<LoadingOverlay isLoading={true} />);
     expect(screen.getByText('Carregando...')).toBeInTheDocument();
   });
+});
 
   it('does not render when isLoading is false', () => {
     render(<LoadingOverlay isLoading={false} />);
