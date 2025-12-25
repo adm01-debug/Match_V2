@@ -9,7 +9,7 @@ export interface ApiResponse<T> {
 }
 
 export interface ApiError {
-  code: string;
+  readonly code: string;
   message: string;
   details?: string;
 }
@@ -23,7 +23,7 @@ export interface PaginatedResponse<T> {
 }
 
 export interface QueryParams {
-  page?: number;
+  readonly page?: number;
   pageSize?: number;
   sortBy?: string;
   sortOrder?: 'asc' | 'desc';
