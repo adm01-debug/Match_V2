@@ -74,3 +74,5 @@ function getPageName(pathname: string): string {
 }
 
 export default AnalyticsProvider;
+
+AnalyticsProvider.displayName = 'AnalyticsProvider';
