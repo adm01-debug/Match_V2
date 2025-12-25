@@ -1,3 +1,8 @@
+/**
+ * @fileoverview ResumeParser component
+ * @module ResumeParser
+ */
+
 import { memo,  useState, useCallback  , useMemo} from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
