@@ -1,5 +1,28 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
+// Input validation
+interface GitHubApiRequest {
+  owner?: string;
+  repo?: string;
+  action?: string;
+  path?: string;
+}
+
+function isValidRequest(body: GitHubApiRequest): { valid: boolean; error?: string } {
+  if (!body.owner || typeof body.owner !== 'string' || body.owner.length < 1) {
+    return { valid: false, error: 'Invalid owner' };
+  }
+  if (!body.repo || typeof body.repo !== 'string' || body.repo.length < 1) {
+    return { valid: false, error: 'Invalid repo' };
+  }
+  const validActions = ['getTree', 'getFile', 'updateFile', 'createFile'];
+  if (body.action && !validActions.includes(body.action)) {
+    return { valid: false, error: 'Invalid action' };
+  }
+  return { valid: true };
+}
+
+
 // Rate limiting
 const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minute
 const MAX_REQUESTS = 30;
