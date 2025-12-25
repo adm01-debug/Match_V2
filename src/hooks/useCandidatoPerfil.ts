@@ -95,6 +95,7 @@ export const useCandidatoPerfil = (candidatoId: string) => {
   return useQuery({
     queryKey: ['candidato-perfil', candidatoId],
     queryFn: async () => {
+      try {
       // Buscar candidato principal
       const { data: candidato, error } = await supabase
         .from('candidatos')
