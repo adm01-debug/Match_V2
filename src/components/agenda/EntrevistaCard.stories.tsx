@@ -5,6 +5,7 @@ import { EntrevistaCard } from './EntrevistaCard';
 const meta: Meta<typeof EntrevistaCard> = {
   title: 'Components/agenda/EntrevistaCard',
   component: EntrevistaCard,
+  argTypes: {},
   tags: ['autodocs'],
 };
 
