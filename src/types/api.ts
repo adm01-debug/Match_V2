@@ -4,29 +4,29 @@
  */
 
 export interface ApiResponse<T> {
-  data: T | null;
-  error: ApiError | null;
+  readonly  data: T | null;
+  readonly  error: ApiError | null;
 }
 
 export interface ApiError {
   readonly code: string;
-  message: string;
-  details?: string;
+  readonly  message: string;
+  readonly  details?: string;
 }
 
 export interface PaginatedResponse<T> {
-  data: T[];
-  total: number;
-  page: number;
-  pageSize: number;
-  hasMore: boolean;
+  readonly  data: T[];
+  readonly  total: number;
+  readonly  page: number;
+  readonly  pageSize: number;
+  readonly  hasMore: boolean;
 }
 
 export interface QueryParams {
   readonly page?: number;
-  pageSize?: number;
-  sortBy?: string;
-  sortOrder?: 'asc' | 'desc';
-  search?: string;
-  filters?: Record<string, unknown>;
+  readonly  pageSize?: number;
+  readonly  sortBy?: string;
+  readonly  sortOrder?: 'asc' | 'desc';
+  readonly  search?: string;
+  readonly  filters?: Record<string, unknown>;
 }
