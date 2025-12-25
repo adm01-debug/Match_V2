@@ -21,7 +21,7 @@ interface GoogleCalendarExportProps {
   entrevistas?: Entrevista[];
 }
 
-export function GoogleCalendarExport({ entrevista, entrevistas }: GoogleCalendarExportProps) {
+export function GoogleCalendarExport({ entrevista, entrevistas }: GoogleCalendarExportProps): JSX.Element {
   const formatDateTime = (date: Date, time: string): string => {
     const [hours, minutes] = time.split(':').map(Number);
     const dt = new Date(date);
