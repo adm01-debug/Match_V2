@@ -55,149 +55,149 @@ export type StatusEntrevista = 'agendada' | 'confirmada' | 'realizada' | 'cancel
 
 export interface PerguntaTriagem {
   readonly pergunta: string;
-  tipo: 'sim_nao' | 'texto' | 'numero' | 'opcoes';
-  opcoes?: string[];
-  eliminatoria: boolean;
-  respostaEsperada?: string;
+  readonly  tipo: 'sim_nao' | 'texto' | 'numero' | 'opcoes';
+  readonly  opcoes?: string[];
+  readonly  eliminatoria: boolean;
+  readonly  respostaEsperada?: string;
 }
 
 export interface Skill {
   readonly nome: string;
-  nivel: 1 | 2 | 3 | 4 | 5;
+  readonly  nivel: 1 | 2 | 3 | 4 | 5;
 }
 
 export interface Vaga {
   readonly id: string;
-  titulo: string;
-  departamento: string;
-  gestorId: string;
-  gestorNome: string;
-  recrutadorId: string;
-  recrutadorNome: string;
-  quantidade: number;
-  tipoContrato: TipoContrato;
-  modalidade: Modalidade;
-  cidade: string;
-  estado: string;
-  salarioMin?: number;
-  salarioMax?: number;
-  salarioACombinar: boolean;
-  beneficios: string[];
-  descricaoEmpresa: string;
-  responsabilidades: string;
-  requisitosObrigatorios: string;
-  requisitosDesejaveis: string;
-  perguntasTriagem: PerguntaTriagem[];
-  skillsAvaliacao: string[];
-  status: StatusVaga;
-  prioridade: Prioridade;
-  dataCriacao: Date;
-  dataPublicacao?: Date;
-  dataEncerramento?: Date;
-  totalCandidatos: number;
-  emProcesso: number;
-  contratados: number;
+  readonly  titulo: string;
+  readonly  departamento: string;
+  readonly  gestorId: string;
+  readonly  gestorNome: string;
+  readonly  recrutadorId: string;
+  readonly  recrutadorNome: string;
+  readonly  quantidade: number;
+  readonly  tipoContrato: TipoContrato;
+  readonly  modalidade: Modalidade;
+  readonly  cidade: string;
+  readonly  estado: string;
+  readonly  salarioMin?: number;
+  readonly  salarioMax?: number;
+  readonly  salarioACombinar: boolean;
+  readonly  beneficios: string[];
+  readonly  descricaoEmpresa: string;
+  readonly  responsabilidades: string;
+  readonly  requisitosObrigatorios: string;
+  readonly  requisitosDesejaveis: string;
+  readonly  perguntasTriagem: PerguntaTriagem[];
+  readonly  skillsAvaliacao: string[];
+  readonly  status: StatusVaga;
+  readonly  prioridade: Prioridade;
+  readonly  dataCriacao: Date;
+  readonly  dataPublicacao?: Date;
+  readonly  dataEncerramento?: Date;
+  readonly  totalCandidatos: number;
+  readonly  emProcesso: number;
+  readonly  contratados: number;
 }
 
 export interface Candidato {
   readonly id: string;
-  nome: string;
-  email: string;
-  telefone: string;
-  linkedin?: string;
-  cidade: string;
-  estado: string;
-  foto?: string;
-  cargoAtual?: string;
-  empresaAtual?: string;
-  experienciaAnos: number;
-  pretensaoSalarial?: number;
-  disponibilidade: 'imediata' | '15_dias' | '30_dias' | '60_dias' | 'negociar';
-  escolaridade: string;
-  skills: Skill[];
-  curriculoUrl?: string;
-  origem: FonteCandidato;
-  indicadoPor?: string;
-  status: StatusCandidato;
-  dataCadastro: Date;
-  ultimaAtualizacao: Date;
+  readonly  nome: string;
+  readonly  email: string;
+  readonly  telefone: string;
+  readonly  linkedin?: string;
+  readonly  cidade: string;
+  readonly  estado: string;
+  readonly  foto?: string;
+  readonly  cargoAtual?: string;
+  readonly  empresaAtual?: string;
+  readonly  experienciaAnos: number;
+  readonly  pretensaoSalarial?: number;
+  readonly  disponibilidade: 'imediata' | '15_dias' | '30_dias' | '60_dias' | 'negociar';
+  readonly  escolaridade: string;
+  readonly  skills: Skill[];
+  readonly  curriculoUrl?: string;
+  readonly  origem: FonteCandidato;
+  readonly  indicadoPor?: string;
+  readonly  status: StatusCandidato;
+  readonly  dataCadastro: Date;
+  readonly  ultimaAtualizacao: Date;
 }
 
 export interface ProcessoSeletivo {
   readonly id: string;
-  vagaId: string;
-  vagaTitulo: string;
-  candidatoId: string;
-  candidatoNome: string;
-  candidatoFoto?: string;
-  etapaAtual: EtapaProcesso;
-  status: StatusProcesso;
-  matchScore: number;
-  origem: FonteCandidato;
-  dataInscricao: Date;
-  dataUltimaMovimentacao: Date;
-  diasNaEtapa: number;
+  readonly  vagaId: string;
+  readonly  vagaTitulo: string;
+  readonly  candidatoId: string;
+  readonly  candidatoNome: string;
+  readonly  candidatoFoto?: string;
+  readonly  etapaAtual: EtapaProcesso;
+  readonly  status: StatusProcesso;
+  readonly  matchScore: number;
+  readonly  origem: FonteCandidato;
+  readonly  dataInscricao: Date;
+  readonly  dataUltimaMovimentacao: Date;
+  readonly  diasNaEtapa: number;
 }
 
 export interface Entrevista {
   readonly id: string;
-  processoId: string;
-  candidatoNome: string;
-  vagaTitulo: string;
-  tipo: TipoEntrevista;
-  etapa: EtapaProcesso;
-  dataHora: Date;
-  duracao: number;
-  local?: string;
-  linkVideo?: string;
-  entrevistadores: string[];
-  status: StatusEntrevista;
+  readonly  processoId: string;
+  readonly  candidatoNome: string;
+  readonly  vagaTitulo: string;
+  readonly  tipo: TipoEntrevista;
+  readonly  etapa: EtapaProcesso;
+  readonly  dataHora: Date;
+  readonly  duracao: number;
+  readonly  local?: string;
+  readonly  linkVideo?: string;
+  readonly  entrevistadores: string[];
+  readonly  status: StatusEntrevista;
 }
 
 export interface KPIData {
   readonly vagasAbertas: number;
-  vagasNovas: number;
-  candidatosTotal: number;
-  candidatosNovos: number;
-  emProcesso: number;
-  vagasEmProcesso: number;
-  contratadosMes: number;
-  metaContratacao: number;
-  tempoMedio: number;
-  metaTempo: number;
+  readonly  vagasNovas: number;
+  readonly  candidatosTotal: number;
+  readonly  candidatosNovos: number;
+  readonly  emProcesso: number;
+  readonly  vagasEmProcesso: number;
+  readonly  contratadosMes: number;
+  readonly  metaContratacao: number;
+  readonly  tempoMedio: number;
+  readonly  metaTempo: number;
 }
 
 export interface FunilEtapa {
   readonly etapa: string;
-  quantidade: number;
-  percentual: number;
-  cor: string;
+  readonly  quantidade: number;
+  readonly  percentual: number;
+  readonly  cor: string;
 }
 
 export interface VagaUrgente {
   readonly id: string;
-  titulo: string;
-  candidatos: number;
-  emProcesso: number;
-  diasAberta: number;
-  quantidade: number;
-  prioridade: Prioridade;
+  readonly  titulo: string;
+  readonly  candidatos: number;
+  readonly  emProcesso: number;
+  readonly  diasAberta: number;
+  readonly  quantidade: number;
+  readonly  prioridade: Prioridade;
 }
 
 export interface AcaoPendente {
   readonly tipo: 'feedback' | 'agendar' | 'avaliar' | 'proposta';
-  quantidade: number;
-  descricao: string;
-  alerta: boolean;
+  readonly  quantidade: number;
+  readonly  descricao: string;
+  readonly  alerta: boolean;
 }
 
 export interface AgendaDia {
   readonly id: string;
-  hora: string;
-  tipo: 'entrevista' | 'teste' | 'reuniao';
-  titulo: string;
-  candidato: string;
-  local?: string;
+  readonly  hora: string;
+  readonly  tipo: 'entrevista' | 'teste' | 'reuniao';
+  readonly  titulo: string;
+  readonly  candidato: string;
+  readonly  local?: string;
 }
 
 // Avaliação Types
@@ -205,36 +205,36 @@ export type TipoCompetencia = 'tecnica' | 'comportamental';
 
 export interface Competencia {
   readonly id: string;
-  nome: string;
-  descricao: string;
-  tipo: TipoCompetencia;
+  readonly  nome: string;
+  readonly  descricao: string;
+  readonly  tipo: TipoCompetencia;
 }
 
 export interface NotaCompetencia {
   readonly competenciaId: string;
-  nota: 1 | 2 | 3 | 4 | 5;
-  observacao?: string;
+  readonly  nota: 1 | 2 | 3 | 4 | 5;
+  readonly  observacao?: string;
 }
 
 export interface Avaliacao {
   readonly id: string;
-  processoId: string;
-  candidatoId: string;
-  candidatoNome: string;
-  vagaId: string;
-  vagaTitulo: string;
-  avaliadorId: string;
-  avaliadorNome: string;
-  etapa: EtapaProcesso;
-  dataAvaliacao: Date;
-  notasTecnicas: NotaCompetencia[];
-  notasComportamentais: NotaCompetencia[];
-  notaGeral: number;
-  pontosFortes: string;
-  pontosDesenvolvimento: string;
-  parecer: 'aprovar' | 'reprovar' | 'em_duvida';
-  observacoesGerais: string;
-  recomendacao: string;
+  readonly  processoId: string;
+  readonly  candidatoId: string;
+  readonly  candidatoNome: string;
+  readonly  vagaId: string;
+  readonly  vagaTitulo: string;
+  readonly  avaliadorId: string;
+  readonly  avaliadorNome: string;
+  readonly  etapa: EtapaProcesso;
+  readonly  dataAvaliacao: Date;
+  readonly  notasTecnicas: NotaCompetencia[];
+  readonly  notasComportamentais: NotaCompetencia[];
+  readonly  notaGeral: number;
+  readonly  pontosFortes: string;
+  readonly  pontosDesenvolvimento: string;
+  readonly  parecer: 'aprovar' | 'reprovar' | 'em_duvida';
+  readonly  observacoesGerais: string;
+  readonly  recomendacao: string;
 }
 
 
@@ -242,37 +242,37 @@ export interface Avaliacao {
 
 export interface Prova {
   readonly id: string;
-  titulo: string;
-  descricao: string | null;
-  categoria: 'logica' | 'tecnica' | 'portugues' | 'ingles' | 'excel' | 'comportamental' | 'fit_cultural';
-  nivel: 'junior' | 'pleno' | 'senior';
-  tempo_limite_minutos: number;
-  nota_minima: number;
-  ativo: boolean;
-  departamento: string | null;
-  created_at: string;
+  readonly  titulo: string;
+  readonly  descricao: string | null;
+  readonly  categoria: 'logica' | 'tecnica' | 'portugues' | 'ingles' | 'excel' | 'comportamental' | 'fit_cultural';
+  readonly  nivel: 'junior' | 'pleno' | 'senior';
+  readonly  tempo_limite_minutos: number;
+  readonly  nota_minima: number;
+  readonly  ativo: boolean;
+  readonly  departamento: string | null;
+  readonly  created_at: string;
 }
 
 export interface Comunicacao {
   readonly id: string;
-  processo_seletivo_id: string | null;
-  candidato_id: string;
-  tipo: 'email' | 'whatsapp' | 'sms' | 'ligacao' | 'nota';
-  assunto: string | null;
-  conteudo: string;
-  remetente_id: string | null;
-  status: 'enviado' | 'entregue' | 'lido' | 'respondido' | 'erro';
-  data_envio: string | null;
-  created_at: string;
+  readonly  processo_seletivo_id: string | null;
+  readonly  candidato_id: string;
+  readonly  tipo: 'email' | 'whatsapp' | 'sms' | 'ligacao' | 'nota';
+  readonly  assunto: string | null;
+  readonly  conteudo: string;
+  readonly  remetente_id: string | null;
+  readonly  status: 'enviado' | 'entregue' | 'lido' | 'respondido' | 'erro';
+  readonly  data_envio: string | null;
+  readonly  created_at: string;
 }
 
 export interface Indicacao {
   readonly id: string;
-  indicador_nome: string;
-  indicador_email: string;
-  candidato_nome: string;
-  candidato_email: string;
-  vaga_id: string | null;
-  status: 'pendente' | 'aprovada' | 'rejeitada' | 'contratado';
-  created_at: string;
+  readonly  indicador_nome: string;
+  readonly  indicador_email: string;
+  readonly  candidato_nome: string;
+  readonly  candidato_email: string;
+  readonly  vaga_id: string | null;
+  readonly  status: 'pendente' | 'aprovada' | 'rejeitada' | 'contratado';
+  readonly  created_at: string;
 }
