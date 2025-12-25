@@ -5,6 +5,7 @@ import { NavLink } from './NavLink';
 const meta: Meta<typeof NavLink> = {
   title: 'Components/NavLink',
   component: NavLink,
+  argTypes: {},
   tags: ['autodocs'],
   parameters: { layout: 'centered' },
 };
