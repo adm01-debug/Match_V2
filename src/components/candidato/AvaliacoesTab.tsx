@@ -3,7 +3,7 @@
  * @module AvaliacoesTab
  */
 
-import { useMemo,  memo  } from 'react';
+import { memo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { CandidatoPerfil } from "@/data/candidatoPerfilData";
@@ -43,7 +43,7 @@ export function AvaliacoesTab({ candidato }: AvaliacoesTabProps) {
 
   const renderStars = (nota: number, max: number = 5) => {
     return (
-      <div data-testid="component"><div className="flex items-center gap-0.5">
+      <div className="flex items-center gap-0.5">
         {Array.from({ length: max }).map((_, i) => (
           <Star 
             key={i} 
@@ -74,7 +74,7 @@ export function AvaliacoesTab({ candidato }: AvaliacoesTabProps) {
     : '0.0';
 
   return (
-    <div className="space-y-6">
+    <div data-testid="avaliacoes-tab" className="space-y-6">
       {/* Resumo das Avaliações */}
       <Card role="article" aria-label="Avaliações do candidato">
         <CardHeader>
@@ -193,4 +193,4 @@ export function AvaliacoesTab({ candidato }: AvaliacoesTabProps) {
 
 AvaliacoesTab.displayName = "AvaliacoesTab";
 
-export default memo(AvaliacoesTab, (prev, next) => JSON.stringify(prev) === JSON.stringify(next));
+export default memo(AvaliacoesTab);

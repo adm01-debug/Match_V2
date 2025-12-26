@@ -3,7 +3,7 @@
  * @module AgendarEntrevistaDialog
  */
 
-import { useMemo,  useCallback,  useState, useEffect   , memo } from 'react';
+import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { Calendar as CalendarIcon, Plus, X } from 'lucide-react';
@@ -165,7 +165,7 @@ const AgendarEntrevistaDialog = ({
   };
 
   return (
-    <div data-testid="agendar-entrevista"><Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Agendar Nova Entrevista</DialogTitle>
@@ -219,7 +219,8 @@ const AgendarEntrevistaDialog = ({
               <Label>Data *</Label>
               <Popover>
                 <PopoverTrigger asChild>
-                  <button type="button"
+                  <Button
+                    type="button"
                     variant="outline"
                     className={cn(
                       "w-full justify-start text-left font-normal",
@@ -365,10 +366,10 @@ const AgendarEntrevistaDialog = ({
         </div>
 
         <DialogFooter>
-          <button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+          <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
             Cancelar
           </Button>
-          <button type="button" onClick={handleSave}>
+          <Button type="button" onClick={handleSave}>
             <Plus className="h-4 w-4 mr-2" />
             Agendar Entrevista
           </Button>

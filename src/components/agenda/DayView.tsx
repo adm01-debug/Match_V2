@@ -3,7 +3,7 @@
  * @module DayView
  */
 
-import { useMemo,  memo  , useCallback} from 'react';
+import { memo } from 'react';
 import { format, isSameDay } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
@@ -38,11 +38,6 @@ export function DayView({ currentDate, entrevistas, onSelectEntrevista }: DayVie
     .filter((e) => isSameDay(new Date(e.data), currentDate))
     .sort((a, b) => a.horaInicio.localeCompare(b.horaInicio));
 
-  const getEntrevistaPosition = (hora: string) => {
-    const [h, m] = hora.split(':').map(Number);
-    return ((h - 8) * 60 + m) / 60;
-  };
-
   const getEntrevistaDuration = (horaInicio: string, horaFim: string) => {
     const [h1, m1] = horaInicio.split(':').map(Number);
     const [h2, m2] = horaFim.split(':').map(Number);
@@ -52,7 +47,7 @@ export function DayView({ currentDate, entrevistas, onSelectEntrevista }: DayVie
   const isToday = isSameDay(currentDate, new Date());
 
   return (
-    <div data-testid="day-view"><div role="region" aria-label="Visualização dia" className="space-y-4">
+    <div data-testid="day-view" role="region" aria-label="Visualização dia" className="space-y-4">
       {/* Day header */}
       <div className={cn(
         "text-center py-4 rounded-lg",
@@ -149,4 +144,4 @@ export function DayView({ currentDate, entrevistas, onSelectEntrevista }: DayVie
 
 DayView.displayName = "DayView";
 
-export default memo(DayView, (prev, next) => JSON.stringify(prev) === JSON.stringify(next));
+export default memo(DayView);

@@ -3,7 +3,7 @@
  * @module ErrorBoundary
  */
 
-import React, { memo }, { Component, ErrorInfo, ReactNode } from 'react';
+import { Component, ErrorInfo, ReactNode } from 'react';
 import { AlertTriangle, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -53,7 +53,7 @@ export class ErrorBoundary extends Component<Props, State> {
               <p className="text-sm text-muted-foreground text-center">
                 Ocorreu um erro inesperado. Tente recarregar a página ou voltar para o início.
               </p>
-              {process.env.NODE_ENV === 'development' && this.state.error && (
+              {this.state.error && (
                 <details className="text-xs bg-muted p-2 rounded">
                   <summary className="cursor-pointer font-medium">Detalhes do erro</summary>
                   <pre className="mt-2 whitespace-pre-wrap overflow-auto max-h-32">
@@ -62,11 +62,11 @@ export class ErrorBoundary extends Component<Props, State> {
                 </details>
               )}
               <div className="flex gap-2 justify-center">
-                <button type="button" variant="outline" onClick={this.handleReset} aria-label="Action button">
+                <Button type="button" variant="outline" onClick={this.handleReset} aria-label="Tentar novamente">
                   <RefreshCw className="h-4 w-4 mr-2" />
                   Tentar novamente
                 </Button>
-                <button type="button" onClick={() => window.location.href = '/'}>
+                <Button type="button" onClick={() => window.location.href = '/'}>
                   Voltar ao início
                 </Button>
               </div>

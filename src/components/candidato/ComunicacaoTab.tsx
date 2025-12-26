@@ -3,8 +3,7 @@
  * @module ComunicacaoTab
  */
 
-import { memo , useCallback} from 'react';
-import { useState } from "react";
+import { memo, useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Send, MessageSquare, Plus } from "lucide-react";
@@ -20,7 +19,7 @@ export function ComunicacaoTab({ candidato }: ComunicacaoTabProps) {
   const [emailDialogOpen, setEmailDialogOpen] = useState(false);
 
   return (
-    <div data-testid="component"><div className="space-y-6">
+    <div data-testid="comunicacao-tab" className="space-y-6">
       {/* Ações Rápidas */}
       <Card role="article" aria-label="Comunicações com candidato">
         <CardHeader>
@@ -34,11 +33,11 @@ export function ComunicacaoTab({ candidato }: ComunicacaoTabProps) {
         </CardHeader>
         <CardContent>
           <div className="flex flex-wrap gap-3">
-            <button type="button" onClick={() => setEmailDialogOpen(true)}>
+            <Button type="button" onClick={() => setEmailDialogOpen(true)}>
               <Send className="h-4 w-4 mr-2" />
               Enviar E-mail
             </Button>
-            <button type="button" variant="outline" disabled>
+            <Button type="button" variant="outline" disabled>
               <Plus className="h-4 w-4 mr-2" />
               Agendar Lembrete (Em breve)
             </Button>
@@ -66,4 +65,4 @@ export function ComunicacaoTab({ candidato }: ComunicacaoTabProps) {
 
 ComunicacaoTab.displayName = "ComunicacaoTab";
 
-export default memo(ComunicacaoTab, (prev, next) => JSON.stringify(prev) === JSON.stringify(next));
+export default memo(ComunicacaoTab);

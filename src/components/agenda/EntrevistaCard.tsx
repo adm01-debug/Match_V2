@@ -3,7 +3,7 @@
  * @module EntrevistaCard
  */
 
-import { memo , memo} from 'react';
+import { memo } from 'react';
 import { Entrevista } from '@/data/agendaData';
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
@@ -42,7 +42,10 @@ const EntrevistaCard = ({ entrevista, onClick }: EntrevistaCardProps) => {
   const statusStyle = statusConfig[entrevista.status];
 
   return (
-    <div data-testid="entrevista-card"><Card role="article" aria-label="Card entrevista" 
+    <Card 
+      data-testid="entrevista-card"
+      role="article" 
+      aria-label="Card entrevista"
       className={cn(
         "p-3 cursor-pointer hover:shadow-md transition-all border-l-4",
         entrevista.status === 'confirmada' && "border-l-green-500",
@@ -111,4 +114,4 @@ const EntrevistaCard = ({ entrevista, onClick }: EntrevistaCardProps) => {
 
 EntrevistaCard.displayName = "EntrevistaCard";
 
-export default EntrevistaCard;
+export default memo(EntrevistaCard);

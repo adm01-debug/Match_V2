@@ -3,7 +3,7 @@
  * @module GoogleCalendarExport
  */
 
-import { useMemo,  memo  } from 'react';
+import { memo } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -21,7 +21,7 @@ interface GoogleCalendarExportProps {
   entrevistas?: Entrevista[];
 }
 
-export function GoogleCalendarExport({ entrevista, entrevistas }: GoogleCalendarExportProps): JSX.Element {
+export function GoogleCalendarExport({ entrevista, entrevistas }: GoogleCalendarExportProps): JSX.Element | null {
   const formatDateTime = (date: Date, time: string): string => {
     const [hours, minutes] = time.split(':').map(Number);
     const dt = new Date(date);
@@ -124,9 +124,9 @@ END:VCALENDAR`;
 
   if (entrevista) {
     return (
-      <div data-testid="calendar-export"><DropdownMenu>
+      <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <button type="button" variant="outline" size="sm" aria-label="Action button">
+          <Button type="button" variant="outline" size="sm" aria-label="Adicionar ao calendário">
             <Calendar className="h-4 w-4 mr-2" />
             Adicionar ao Calendário
           </Button>
@@ -147,7 +147,7 @@ END:VCALENDAR`;
 
   if (entrevistas && entrevistas.length > 0) {
     return (
-      <button type="button" variant="outline" size="sm" onClick={handleDownloadIcs}>
+      <Button type="button" variant="outline" size="sm" onClick={handleDownloadIcs}>
         <Download className="h-4 w-4 mr-2" />
         Exportar Calendário ({entrevistas.length})
       </Button>
@@ -159,4 +159,4 @@ END:VCALENDAR`;
 
 GoogleCalendarExport.displayName = "GoogleCalendarExport";
 
-export default memo(GoogleCalendarExport, (prev, next) => JSON.stringify(prev) === JSON.stringify(next));
+export default memo(GoogleCalendarExport);
