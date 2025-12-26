@@ -3,7 +3,7 @@
  * @module EntrevistaDetalhesDialog
  */
 
-import { useMemo,  useCallback,  useState   , memo } from 'react';
+import { useState } from 'react';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { 
@@ -115,11 +115,7 @@ const EntrevistaDetalhesDialog = ({
   const [isEditing, setIsEditing] = useState(false);
   const [showCancelDialog, setShowCancelDialog] = useState(false);
   const [activeTab, setActiveTab] = useState('detalhes');
-  
-  // Edit form state
   const [editData, setEditData] = useState<Entrevista | null>(null);
-  
-  // Feedback state
   const [resultado, setResultado] = useState<'aprovado' | 'reprovado' | 'pendente'>('pendente');
   const [notaGeral, setNotaGeral] = useState([7]);
   const [pontosFortes, setPontosFortes] = useState<string[]>(['']);
@@ -184,25 +180,21 @@ const EntrevistaDetalhesDialog = ({
 
   const addPontoForte = () => setPontosFortes([...pontosFortes, '']);
   const addPontoAMelhorar = () => setPontosAMelhorar([...pontosAMelhorar, '']);
-  
   const updatePontoForte = (index: number, value: string) => {
     const updated = [...pontosFortes];
     updated[index] = value;
     setPontosFortes(updated);
   };
-  
   const updatePontoAMelhorar = (index: number, value: string) => {
     const updated = [...pontosAMelhorar];
     updated[index] = value;
     setPontosAMelhorar(updated);
   };
-  
   const removePontoForte = (index: number) => setPontosFortes(pontosFortes.filter((_, i) => i !== index));
   const removePontoAMelhorar = (index: number) => setPontosAMelhorar(pontosAMelhorar.filter((_, i) => i !== index));
 
   const handleSubmitFeedback = () => {
     if (!entrevista || !onMarcarRealizada) return;
-    
     const feedback: EntrevistaFeedback = {
       resultado,
       notaGeral: notaGeral[0],
@@ -213,7 +205,6 @@ const EntrevistaDetalhesDialog = ({
       avaliadoPor: 'Usuário Atual',
       avaliadoEm: new Date().toISOString()
     };
-
     onMarcarRealizada(entrevista.id, feedback);
     onOpenChange(false);
     toast.success('Entrevista marcada como realizada!');
@@ -237,10 +228,8 @@ const EntrevistaDetalhesDialog = ({
       }}>
         <DialogContent className="max-w-lg">
           <DialogHeader>
-            <div role="region" aria-label="Detalhes entrevista" className="flex items-center justify-between">
-              <DialogTitle className="flex items-center gap-2">
-                {isEditing ? 'Editar Entrevista' : 'Detalhes da Entrevista'}
-              </DialogTitle>
+            <div className="flex items-center justify-between">
+              <DialogTitle>{isEditing ? 'Editar Entrevista' : 'Detalhes da Entrevista'}</DialogTitle>
               {!isEditing && (
                 <Badge variant="outline" className={cn("ml-2", statusConfig[entrevista.status].color)}>
                   {statusConfig[entrevista.status].label}
@@ -250,55 +239,35 @@ const EntrevistaDetalhesDialog = ({
           </DialogHeader>
 
           {isEditing && editData ? (
-            // Edit Mode
-            <div data-testid="entrevista-detalhes-dialog" className="space-y-4 py-4">
+            <div className="space-y-4 py-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label>Data</Label>
                   <Popover>
                     <PopoverTrigger asChild>
-                      <button type="button" variant="outline" className="w-full justify-start text-left font-normal">
+                      <Button type="button" variant="outline" className="w-full justify-start text-left font-normal">
                         <CalendarIcon className="mr-2 h-4 w-4" />
                         {format(editData.data, "PPP", { locale: ptBR })}
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={editData.data}
-                        onSelect={(date) => date && setEditData({ ...editData, data: date })}
-                        locale={ptBR}
-                        className="pointer-events-auto"
-                      />
+                      <Calendar mode="single" selected={editData.data} onSelect={(date) => date && setEditData({ ...editData, data: date })} locale={ptBR} />
                     </PopoverContent>
                   </Popover>
                 </div>
-
                 <div className="space-y-2">
                   <Label>Etapa</Label>
                   <Select value={editData.etapa} onValueChange={(v) => setEditData({ ...editData, etapa: v })}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {etapas.map((e) => (
-                        <SelectItem key={e} value={e}>{e}</SelectItem>
-                      ))}
-                    </SelectContent>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent>{etapas.map((e) => <SelectItem key={e} value={e}>{e}</SelectItem>)}</SelectContent>
                   </Select>
                 </div>
               </div>
-
               <div className="grid grid-cols-3 gap-4">
                 <div className="space-y-2">
                   <Label>Tipo</Label>
-                  <Select 
-                    value={editData.tipo} 
-                    onValueChange={(v) => setEditData({ ...editData, tipo: v as typeof editData.tipo })}
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
+                  <Select value={editData.tipo} onValueChange={(v) => setEditData({ ...editData, tipo: v as typeof editData.tipo })}>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="presencial">Presencial</SelectItem>
                       <SelectItem value="online">Online</SelectItem>
@@ -306,276 +275,114 @@ const EntrevistaDetalhesDialog = ({
                     </SelectContent>
                   </Select>
                 </div>
-
                 <div className="space-y-2">
                   <Label>Hora Início</Label>
-                  <Input
-                    type="time"
-                    value={editData.horaInicio}
-                    onChange={(e) => setEditData({ ...editData, horaInicio: e.target.value })}
-                  />
+                  <Input type="time" value={editData.horaInicio} onChange={(e) => setEditData({ ...editData, horaInicio: e.target.value })} />
                 </div>
-
                 <div className="space-y-2">
                   <Label>Hora Fim</Label>
-                  <Input
-                    type="time"
-                    value={editData.horaFim}
-                    onChange={(e) => setEditData({ ...editData, horaFim: e.target.value })}
-                  />
+                  <Input type="time" value={editData.horaFim} onChange={(e) => setEditData({ ...editData, horaFim: e.target.value })} />
                 </div>
               </div>
-
               {editData.tipo === 'presencial' && (
                 <div className="space-y-2">
                   <Label>Local</Label>
                   <Select value={editData.local || ''} onValueChange={(v) => setEditData({ ...editData, local: v })}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecione o local" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {locaisDisponiveis.map((l) => (
-                        <SelectItem key={l} value={l}>{l}</SelectItem>
-                      ))}
-                    </SelectContent>
+                    <SelectTrigger><SelectValue placeholder="Selecione o local" /></SelectTrigger>
+                    <SelectContent>{locaisDisponiveis.map((l) => <SelectItem key={l} value={l}>{l}</SelectItem>)}</SelectContent>
                   </Select>
                 </div>
               )}
-
               {editData.tipo === 'online' && (
                 <div className="space-y-2">
-                  <Label>Link da Reunião</Label>
-                  <Input
-                    placeholder="https://meet.google.com/..."
-                    value={editData.linkOnline || ''}
-                    onChange={(e) => setEditData({ ...editData, linkOnline: e.target.value })}
-                  />
+                  <Label>Link</Label>
+                  <Input placeholder="https://..." value={editData.linkOnline || ''} onChange={(e) => setEditData({ ...editData, linkOnline: e.target.value })} />
                 </div>
               )}
-
               <div className="space-y-2">
                 <Label>Entrevistadores</Label>
                 <Select onValueChange={handleAddEntrevistador}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Adicionar entrevistador" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {entrevistadoresDisponiveis
-                      .filter((e) => !editData.entrevistadores.includes(e))
-                      .map((e) => (
-                        <SelectItem key={e} value={e}>{e}</SelectItem>
-                      ))}
-                  </SelectContent>
+                  <SelectTrigger><SelectValue placeholder="Adicionar" /></SelectTrigger>
+                  <SelectContent>{entrevistadoresDisponiveis.filter((e) => !editData.entrevistadores.includes(e)).map((e) => <SelectItem key={e} value={e}>{e}</SelectItem>)}</SelectContent>
                 </Select>
                 {editData.entrevistadores.length > 0 && (
                   <div className="flex flex-wrap gap-2 mt-2">
                     {editData.entrevistadores.map((e) => (
-                      <Badge key={e} variant="secondary" className="gap-1">
-                        {e}
-                        <X
-                          className="h-3 w-3 cursor-pointer"
-                          onClick={() => handleRemoveEntrevistador(e)}
-                        />
-                      </Badge>
+                      <Badge key={e} variant="secondary" className="gap-1">{e}<X className="h-3 w-3 cursor-pointer" onClick={() => handleRemoveEntrevistador(e)} /></Badge>
                     ))}
                   </div>
                 )}
               </div>
-
               <div className="space-y-2">
                 <Label>Observações</Label>
-                <Textarea
-                  placeholder="Notas adicionais..."
-                  value={editData.observacoes || ''}
-                  onChange={(e) => setEditData({ ...editData, observacoes: e.target.value })}
-                  rows={2}
-                />
+                <Textarea value={editData.observacoes || ''} onChange={(e) => setEditData({ ...editData, observacoes: e.target.value })} rows={2} />
               </div>
             </div>
           ) : (
-            // View Mode
             <div className="space-y-4 py-4">
               <div className="flex items-center gap-3">
                 <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
-                  <span className="text-lg font-semibold text-primary">
-                    {entrevista.candidatoNome.split(' ').map(n => n[0]).slice(0, 2).join('')}
-                  </span>
+                  <span className="text-lg font-semibold text-primary">{entrevista.candidatoNome.split(' ').map(n => n[0]).slice(0, 2).join('')}</span>
                 </div>
                 <div>
                   <h3 className="font-semibold text-lg">{entrevista.candidatoNome}</h3>
-                  <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                    <Briefcase className="h-4 w-4" />
-                    <span>{entrevista.vagaTitulo}</span>
-                  </div>
+                  <div className="flex items-center gap-1 text-sm text-muted-foreground"><Briefcase className="h-4 w-4" /><span>{entrevista.vagaTitulo}</span></div>
                 </div>
               </div>
-
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
                   <Label className="text-muted-foreground text-xs">Data</Label>
-                  <div className="flex items-center gap-2">
-                    <CalendarIcon className="h-4 w-4 text-muted-foreground" />
-                    <span>{format(entrevista.data, "dd 'de' MMMM 'de' yyyy", { locale: ptBR })}</span>
-                  </div>
+                  <div className="flex items-center gap-2"><CalendarIcon className="h-4 w-4 text-muted-foreground" /><span>{format(entrevista.data, "dd/MM/yyyy", { locale: ptBR })}</span></div>
                 </div>
-
                 <div className="space-y-1">
                   <Label className="text-muted-foreground text-xs">Horário</Label>
-                  <div className="flex items-center gap-2">
-                    <Clock className="h-4 w-4 text-muted-foreground" />
-                    <span>{entrevista.horaInicio} - {entrevista.horaFim}</span>
-                  </div>
+                  <div className="flex items-center gap-2"><Clock className="h-4 w-4 text-muted-foreground" /><span>{entrevista.horaInicio} - {entrevista.horaFim}</span></div>
                 </div>
               </div>
-
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
                   <Label className="text-muted-foreground text-xs">Tipo</Label>
-                  <Badge variant="secondary" className={cn(tipoConfig[entrevista.tipo].color)}>
-                    <TipoIcon className="h-3 w-3 mr-1" />
-                    {tipoConfig[entrevista.tipo].label}
-                  </Badge>
+                  <Badge variant="secondary" className={cn(tipoConfig[entrevista.tipo].color)}><TipoIcon className="h-3 w-3 mr-1" />{tipoConfig[entrevista.tipo].label}</Badge>
                 </div>
-
                 <div className="space-y-1">
                   <Label className="text-muted-foreground text-xs">Etapa</Label>
                   <Badge variant="outline">{entrevista.etapa}</Badge>
                 </div>
               </div>
-
               {(entrevista.local || entrevista.linkOnline) && (
                 <div className="space-y-1">
-                  <Label className="text-muted-foreground text-xs">
-                    {entrevista.tipo === 'presencial' ? 'Local' : 'Link'}
-                  </Label>
+                  <Label className="text-muted-foreground text-xs">{entrevista.tipo === 'presencial' ? 'Local' : 'Link'}</Label>
                   <div className="flex items-center gap-2 text-sm">
-                    {entrevista.tipo === 'presencial' ? (
-                      <>
-                        <MapPin className="h-4 w-4 text-muted-foreground" />
-                        <span>{entrevista.local}</span>
-                      </>
-                    ) : (
-                      <>
-                        <Video className="h-4 w-4 text-muted-foreground" />
-                        <a 
-                          href={entrevista.linkOnline} 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className="text-primary hover:underline truncate"
-                        >
-                          {entrevista.linkOnline}
-                        </a>
-                      </>
-                    )}
+                    {entrevista.tipo === 'presencial' ? (<><MapPin className="h-4 w-4 text-muted-foreground" /><span>{entrevista.local}</span></>) : (<><Video className="h-4 w-4 text-muted-foreground" /><a href={entrevista.linkOnline} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline truncate">{entrevista.linkOnline}</a></>)}
                   </div>
                 </div>
               )}
-
               <div className="space-y-1">
                 <Label className="text-muted-foreground text-xs">Entrevistadores</Label>
-                <div className="flex items-center gap-2">
-                  <Users className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm">{entrevista.entrevistadores.join(', ')}</span>
-                </div>
+                <div className="flex items-center gap-2"><Users className="h-4 w-4 text-muted-foreground" /><span className="text-sm">{entrevista.entrevistadores.join(', ')}</span></div>
               </div>
-
               {entrevista.observacoes && (
                 <div className="space-y-1">
                   <Label className="text-muted-foreground text-xs">Observações</Label>
-                  <p className="text-sm text-muted-foreground bg-muted p-2 rounded">
-                    {entrevista.observacoes}
-                  </p>
+                  <p className="text-sm text-muted-foreground bg-muted p-2 rounded">{entrevista.observacoes}</p>
                 </div>
               )}
             </div>
           )}
 
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="mt-4">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="detalhes">Detalhes</TabsTrigger>
-              <TabsTrigger value="feedback">
-                {entrevista.status === 'realizada' ? 'Feedback' : 'Marcar Realizada'}
-              </TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="feedback" className="space-y-4 mt-4">
-              {entrevista.status === 'realizada' && entrevista.feedback ? (
-                <div className="space-y-4">
-                  <div className="flex items-center gap-3">
-                    {entrevista.feedback.resultado === 'aprovado' ? (
-                      <Badge className="bg-green-500"><CheckCircle className="h-3 w-3 mr-1" />Aprovado</Badge>
-                    ) : entrevista.feedback.resultado === 'reprovado' ? (
-                      <Badge variant="destructive"><XCircle className="h-3 w-3 mr-1" />Reprovado</Badge>
-                    ) : (
-                      <Badge variant="secondary">Pendente</Badge>
-                    )}
-                    <span className="text-sm text-muted-foreground">Nota: {entrevista.feedback.notaGeral}/10</span>
-                  </div>
-                  <Separator />
-                  {entrevista.feedback.pontosFortes.length > 0 && (
-                    <div>
-                      <Label className="text-green-600">Pontos Fortes</Label>
-                      <ul className="mt-1 space-y-1">{entrevista.feedback.pontosFortes.map((p, i) => <li key={i} className="text-sm flex items-center gap-2"><CheckCircle className="h-3 w-3 text-green-500" />{p}</li>)}</ul>
-                    </div>
-                  )}
-                  {entrevista.feedback.pontosAMelhorar.length > 0 && (
-                    <div>
-                      <Label className="text-orange-600">Pontos a Melhorar</Label>
-                      <ul className="mt-1 space-y-1">{entrevista.feedback.pontosAMelhorar.map((p, i) => <li key={i} className="text-sm flex items-center gap-2"><AlertCircle className="h-3 w-3 text-orange-500" />{p}</li>)}</ul>
-                    </div>
-                  )}
-                  {entrevista.feedback.comentarios && <div><Label>Comentários</Label><p className="text-sm text-muted-foreground mt-1">{entrevista.feedback.comentarios}</p></div>}
-                  {entrevista.feedback.recomendacao && <div><Label>Recomendação</Label><p className="text-sm mt-1">{entrevista.feedback.recomendacao}</p></div>}
-                  <p className="text-xs text-muted-foreground">Avaliado por {entrevista.feedback.avaliadoPor} em {new Date(entrevista.feedback.avaliadoEm).toLocaleString('pt-BR')}</p>
-                </div>
-              ) : canMarkAsRealized ? (
-                <div className="space-y-4">
-                  <div className="space-y-2">
-                    <Label>Resultado *</Label>
-                    <Select value={resultado} onValueChange={(v) => setResultado(v as typeof resultado)}>
-                      <SelectTrigger><SelectValue /></SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="aprovado"><div className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-green-500" />Aprovado</div></SelectItem>
-                        <SelectItem value="reprovado"><div className="flex items-center gap-2"><XCircle className="h-4 w-4 text-red-500" />Reprovado</div></SelectItem>
-                        <SelectItem value="pendente"><div className="flex items-center gap-2"><AlertCircle className="h-4 w-4 text-yellow-500" />Pendente</div></SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Nota Geral: {notaGeral[0]}/10</Label>
-                    <Slider value={notaGeral} onValueChange={setNotaGeral} max={10} min={1} step={0.5} />
-                  </div>
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between"><Label>Pontos Fortes</Label><button type="button" variant="ghost" size="sm" onClick={addPontoForte}><Plus className="h-4 w-4" /></Button></div>
-                    {pontosFortes.map((p, i) => <div key={i} className="flex gap-2"><Input value={p} onChange={(e) => updatePontoForte(i, e.target.value)} placeholder="Ex: Boa comunicação" />{pontosFortes.length > 1 && <button type="button" variant="ghost" size="icon" onClick={() => removePontoForte(i)}><Trash2 className="h-4 w-4" /></Button>}</div>)}
-                  </div>
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between"><Label>Pontos a Melhorar</Label><button type="button" variant="ghost" size="sm" onClick={addPontoAMelhorar}><Plus className="h-4 w-4" /></Button></div>
-                    {pontosAMelhorar.map((p, i) => <div key={i} className="flex gap-2"><Input value={p} onChange={(e) => updatePontoAMelhorar(i, e.target.value)} placeholder="Ex: Experiência técnica" />{pontosAMelhorar.length > 1 && <button type="button" variant="ghost" size="icon" onClick={() => removePontoAMelhorar(i)}><Trash2 className="h-4 w-4" /></Button>}</div>)}
-                  </div>
-                  <div className="space-y-2"><Label>Comentários</Label><Textarea value={comentarios} onChange={(e) => setComentarios(e.target.value)} rows={2} /></div>
-                  <div className="space-y-2"><Label>Recomendação</Label><Input value={recomendacao} onChange={(e) => setRecomendacao(e.target.value)} placeholder="Ex: Avançar para próxima etapa" /></div>
-                  <button type="button" className="w-full" onClick={handleSubmitFeedback}><CheckCircle className="h-4 w-4 mr-2" />Marcar como Realizada</Button>
-                </div>
-              ) : (
-                <p className="text-center text-muted-foreground py-4">Não disponível para esta entrevista.</p>
-              )}
-            </TabsContent>
-          </Tabs>
-
           <DialogFooter className="gap-2 mt-4">
             {isEditing ? (
               <>
-                <button type="button" variant="outline" onClick={handleCancelEdit}>Cancelar</Button>
-                <button type="button" onClick={handleSaveEdit}><Check className="h-4 w-4 mr-2" />Salvar</Button>
+                <Button type="button" variant="outline" onClick={handleCancelEdit}>Cancelar</Button>
+                <Button type="button" onClick={handleSaveEdit}><Check className="h-4 w-4 mr-2" />Salvar</Button>
               </>
             ) : (
               <>
                 {canEdit && (
                   <>
-                    <button type="button" variant="destructive" size="sm" onClick={() => setShowCancelDialog(true)}><X className="h-4 w-4 mr-2" />Cancelar</Button>
-                    <button type="button" variant="outline" size="sm" onClick={handleStartEdit}><Edit className="h-4 w-4 mr-2" />Editar</Button>
-                    {canConfirm && <button type="button" size="sm" onClick={handleConfirmEntrevista}><Check className="h-4 w-4 mr-2" />Confirmar</Button>}
+                    <Button type="button" variant="destructive" size="sm" onClick={() => setShowCancelDialog(true)}><X className="h-4 w-4 mr-2" />Cancelar</Button>
+                    <Button type="button" variant="outline" size="sm" onClick={handleStartEdit}><Edit className="h-4 w-4 mr-2" />Editar</Button>
+                    {canConfirm && <Button type="button" size="sm" onClick={handleConfirmEntrevista}><Check className="h-4 w-4 mr-2" />Confirmar</Button>}
                   </>
                 )}
               </>
@@ -587,26 +394,12 @@ const EntrevistaDetalhesDialog = ({
       <AlertDialog open={showCancelDialog} onOpenChange={setShowCancelDialog}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle className="flex items-center gap-2">
-              <AlertTriangle className="h-5 w-5 text-destructive" />
-              Cancelar Entrevista
-            </AlertDialogTitle>
-            <AlertDialogDescription>
-              Tem certeza que deseja cancelar a entrevista de <strong>{entrevista.candidatoNome}</strong> agendada para{' '}
-              <strong>{format(entrevista.data, "dd/MM/yyyy", { locale: ptBR })}</strong> às{' '}
-              <strong>{entrevista.horaInicio}</strong>?
-              <br /><br />
-              Esta ação não pode ser desfeita.
-            </AlertDialogDescription>
+            <AlertDialogTitle className="flex items-center gap-2"><AlertTriangle className="h-5 w-5 text-destructive" />Cancelar Entrevista</AlertDialogTitle>
+            <AlertDialogDescription>Tem certeza que deseja cancelar a entrevista de <strong>{entrevista.candidatoNome}</strong>?</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Voltar</AlertDialogCancel>
-            <AlertDialogAction 
-              onClick={handleConfirmCancel}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-            >
-              Sim, Cancelar Entrevista
-            </AlertDialogAction>
+            <AlertDialogAction onClick={handleConfirmCancel} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">Sim, Cancelar</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

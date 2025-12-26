@@ -42,7 +42,7 @@ export function NotaResumo({ titulo, nota, maxNota = 5, tipo = 'geral' }: NotaRe
   };
 
   return (
-    <div data-testid="component"><div role="region" aria-label="Resumo nota" className="p-4 rounded-lg border border-border bg-card">
+    <div data-testid="nota-resumo" role="region" aria-label="Resumo nota" className="p-4 rounded-lg border border-border bg-card">
       <div className="flex items-center justify-between mb-2">
         <span className="text-sm font-medium text-muted-foreground flex items-center gap-2">
           <span>{getIcone()}</span>
@@ -68,4 +68,4 @@ export function NotaResumo({ titulo, nota, maxNota = 5, tipo = 'geral' }: NotaRe
 
 NotaResumo.displayName = "NotaResumo";
 
-export default memo(NotaResumo, (prev, next) => JSON.stringify(prev) === JSON.stringify(next));
+export default memo(NotaResumo);

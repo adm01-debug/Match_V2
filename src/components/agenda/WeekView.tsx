@@ -1,16 +1,13 @@
-
-
 /**
  * @fileoverview WeekView component
  * @module WeekView
  */
 
-import { memo,  useMemo  , useCallback} from 'react';
-import { format, startOfWeek, addDays, isSameDay, parseISO } from 'date-fns';
+import { memo } from 'react';
+import { format, startOfWeek, addDays, isSameDay } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
 import { Entrevista } from '@/data/agendaData';
-import { Badge } from '@/components/ui/badge';
 import { Clock, Video, MapPin, Phone } from 'lucide-react';
 
 interface WeekViewProps {
@@ -52,7 +49,7 @@ export function WeekView({ currentDate, entrevistas, onSelectEntrevista, onSelec
   };
 
   return (
-    <div data-testid="component"><div role="region" aria-label="Visualização semana" className="overflow-auto">
+    <div data-testid="week-view" role="region" aria-label="Visualização semana" className="overflow-auto">
       <div className="min-w-[800px]">
         {/* Header */}
         <div className="grid grid-cols-8 border-b">
@@ -153,4 +150,4 @@ export function WeekView({ currentDate, entrevistas, onSelectEntrevista, onSelec
 
 WeekView.displayName = "WeekView";
 
-export default memo(WeekView, (prev, next) => JSON.stringify(prev) === JSON.stringify(next));
+export default memo(WeekView);
