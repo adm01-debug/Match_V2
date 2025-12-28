@@ -3,7 +3,7 @@
  * @module ComunicacaoHistorico
  */
 
-import { memo,  useState, useEffect, useMemo  , useCallback} from 'react';
+import { memo, useState, useEffect, useMemo } from 'react';
 import { format, isAfter, isBefore, startOfDay, endOfDay, formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { Mail, Clock, FileText, CalendarIcon, Filter, Search, ChevronRight, Send, BarChart3, X } from 'lucide-react';
@@ -82,6 +82,7 @@ export function ComunicacaoHistorico({ candidatoId }: ComunicacaoHistoricoProps)
         .order('enviado_em', { ascending: false });
 
       if (error) {
+        console.error('Error fetching comunicacoes:', error);
       } else {
         setComunicacoes(data || []);
       }
@@ -95,12 +96,10 @@ export function ComunicacaoHistorico({ candidatoId }: ComunicacaoHistoricoProps)
 
   const filteredComunicacoes = useMemo(() => {
     return comunicacoes.filter((com) => {
-      // Filtro por etapa
       if (etapaFilter !== 'todas' && com.template_etapa !== etapaFilter) {
         return false;
       }
       
-      // Filtro por data início
       if (dataInicio) {
         const comDate = new Date(com.enviado_em);
         if (isBefore(comDate, startOfDay(dataInicio))) {
@@ -108,7 +107,6 @@ export function ComunicacaoHistorico({ candidatoId }: ComunicacaoHistoricoProps)
         }
       }
       
-      // Filtro por data fim
       if (dataFim) {
         const comDate = new Date(com.enviado_em);
         if (isAfter(comDate, endOfDay(dataFim))) {
@@ -116,7 +114,6 @@ export function ComunicacaoHistorico({ candidatoId }: ComunicacaoHistoricoProps)
         }
       }
       
-      // Filtro por texto
       if (searchTerm) {
         const term = searchTerm.toLowerCase();
         return (
@@ -130,7 +127,6 @@ export function ComunicacaoHistorico({ candidatoId }: ComunicacaoHistoricoProps)
     });
   }, [comunicacoes, etapaFilter, dataInicio, dataFim, searchTerm]);
 
-  // Estatísticas rápidas
   const stats = useMemo(() => {
     const byEtapa: Record<string, number> = {};
     comunicacoes.forEach(com => {
@@ -191,7 +187,7 @@ export function ComunicacaoHistorico({ candidatoId }: ComunicacaoHistoricoProps)
               <Separator orientation="vertical" className="h-4" />
               <Popover>
                 <PopoverTrigger asChild>
-                  <button type="button" variant="ghost" size="sm" className="h-6 px-2 text-xs text-muted-foreground">
+                  <Button type="button" variant="ghost" size="sm" className="h-6 px-2 text-xs text-muted-foreground">
                     <BarChart3 className="h-3 w-3 mr-1" />
                     Por etapa
                   </Button>
@@ -222,7 +218,8 @@ export function ComunicacaoHistorico({ candidatoId }: ComunicacaoHistoricoProps)
           className="h-8 text-xs pl-8 pr-8"
         />
         {searchTerm && (
-          <button type="button"
+          <Button
+            type="button"
             variant="ghost"
             size="sm"
             onClick={() => setSearchTerm('')}
@@ -251,7 +248,7 @@ export function ComunicacaoHistorico({ candidatoId }: ComunicacaoHistoricoProps)
 
         <Popover>
           <PopoverTrigger asChild>
-            <button type="button" variant="outline" size="sm" className={cn("h-8 text-xs", dataInicio && "text-primary")}>
+            <Button type="button" variant="outline" size="sm" className={cn("h-8 text-xs", dataInicio && "text-primary")}>
               <CalendarIcon className="h-3 w-3 mr-1" />
               {dataInicio ? format(dataInicio, "dd/MM/yy") : "De"}
             </Button>
@@ -269,7 +266,7 @@ export function ComunicacaoHistorico({ candidatoId }: ComunicacaoHistoricoProps)
 
         <Popover>
           <PopoverTrigger asChild>
-            <button type="button" variant="outline" size="sm" className={cn("h-8 text-xs", dataFim && "text-primary")}>
+            <Button type="button" variant="outline" size="sm" className={cn("h-8 text-xs", dataFim && "text-primary")}>
               <CalendarIcon className="h-3 w-3 mr-1" />
               {dataFim ? format(dataFim, "dd/MM/yy") : "Até"}
             </Button>
@@ -286,7 +283,7 @@ export function ComunicacaoHistorico({ candidatoId }: ComunicacaoHistoricoProps)
         </Popover>
 
         {hasActiveFilters && (
-          <button type="button" variant="ghost" size="sm" onClick={clearFilters} className="h-8 text-xs text-muted-foreground">
+          <Button type="button" variant="ghost" size="sm" onClick={clearFilters} className="h-8 text-xs text-muted-foreground">
             Limpar
           </Button>
         )}
@@ -311,7 +308,6 @@ export function ComunicacaoHistorico({ candidatoId }: ComunicacaoHistoricoProps)
                 onClick={() => setSelectedComunicacao(com)}
                 className="relative p-3 border rounded-lg hover:bg-muted/50 transition-colors cursor-pointer group"
               >
-                {/* Timeline indicator */}
                 {index < filteredComunicacoes.length - 1 && (
                   <div className="absolute left-6 top-full w-0.5 h-2 bg-border" />
                 )}

@@ -3,7 +3,7 @@
  * @module CurriculoUpload
  */
 
-import React, { useState, useRef , memo } from 'react';
+import React, { useState, useRef, memo } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useCandidatoAuth } from '@/contexts/CandidatoAuthContext';
@@ -38,18 +38,16 @@ const CurriculoUpload: React.FC<CurriculoUploadProps> = ({
     'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
   ];
 
-  const maxSize = 10 * 1024 * 1024; // 10MB
+  const maxSize = 10 * 1024 * 1024;
 
   const uploadMutation = useMutation({
     mutationFn: async (file: File) => {
       if (!user?.id || !profile?.id) throw new Error('Usuário não autenticado');
       
-      // Validate file type
       if (!allowedTypes.includes(file.type)) {
         throw new Error('Tipo de arquivo não permitido. Use PDF ou Word.');
       }
       
-      // Validate file size
       if (file.size > maxSize) {
         throw new Error('Arquivo muito grande. Máximo 10MB.');
       }
@@ -57,13 +55,11 @@ const CurriculoUpload: React.FC<CurriculoUploadProps> = ({
       setUploading(true);
       setUploadProgress(0);
       
-      // Create file path with user ID as folder
       const fileExt = file.name.split('.').pop();
       const fileName = `curriculo.${fileExt}`;
       const filePath = `${user.id}/${fileName}`;
       
-      // Upload to storage
-      const { error: uploadError, data } = await supabase.storage
+      const { error: uploadError } = await supabase.storage
         .from('curriculos')
         .upload(filePath, file, { 
           upsert: true,
@@ -74,12 +70,6 @@ const CurriculoUpload: React.FC<CurriculoUploadProps> = ({
       
       setUploadProgress(70);
       
-      // Get public URL
-      const { data: urlData } = supabase.storage
-        .from('curriculos')
-        .getPublicUrl(filePath);
-      
-      // Update profile with CV info
       const { error: updateError } = await supabase
         .from('candidatos_auth')
         .update({ 
@@ -101,7 +91,7 @@ const CurriculoUpload: React.FC<CurriculoUploadProps> = ({
       setUploadProgress(0);
       onUploadComplete?.();
     },
-    onError: (error: unknown) => {
+    onError: (error: Error) => {
       toast.error('Erro ao enviar currículo', { description: error.message });
       setUploading(false);
       setUploadProgress(0);
@@ -112,14 +102,12 @@ const CurriculoUpload: React.FC<CurriculoUploadProps> = ({
     mutationFn: async () => {
       if (!user?.id || !profile?.id || !curriculoUrl) return;
       
-      // Delete from storage
       const { error: deleteError } = await supabase.storage
         .from('curriculos')
         .remove([curriculoUrl]);
       
       if (deleteError) throw deleteError;
       
-      // Update profile
       const { error: updateError } = await supabase
         .from('candidatos_auth')
         .update({ 
@@ -134,7 +122,7 @@ const CurriculoUpload: React.FC<CurriculoUploadProps> = ({
       toast.success('Currículo removido!');
       queryClient.invalidateQueries({ queryKey: ['candidato-profile'] });
     },
-    onError: (error: unknown) => {
+    onError: (error: Error) => {
       toast.error('Erro ao remover currículo', { description: error.message });
     }
   });
@@ -179,7 +167,6 @@ const CurriculoUpload: React.FC<CurriculoUploadProps> = ({
       return;
     }
     
-    // Create download link
     const url = URL.createObjectURL(data);
     const a = document.createElement('a');
     a.href = url;
@@ -210,7 +197,6 @@ const CurriculoUpload: React.FC<CurriculoUploadProps> = ({
       <CardContent>
         {curriculoUrl && curriculoNome ? (
           <div data-testid="curriculo-upload" className="space-y-4">
-            {/* Current CV */}
             <div className="flex items-center gap-3 p-4 bg-green-500/10 border border-green-500/20 rounded-lg">
               <div className="text-2xl">{getFileIcon(curriculoNome)}</div>
               <div className="flex-1 min-w-0">
@@ -221,7 +207,8 @@ const CurriculoUpload: React.FC<CurriculoUploadProps> = ({
                 </p>
               </div>
               <div className="flex gap-2">
-                <button type="button" 
+                <Button 
+                  type="button"
                   variant="outline" 
                   size="icon"
                   onClick={handleDownload}
@@ -229,7 +216,8 @@ const CurriculoUpload: React.FC<CurriculoUploadProps> = ({
                 >
                   <Download className="h-4 w-4" />
                 </Button>
-                <button type="button" 
+                <Button 
+                  type="button"
                   variant="outline" 
                   size="icon"
                   onClick={() => deleteMutation.mutate()}
@@ -242,9 +230,9 @@ const CurriculoUpload: React.FC<CurriculoUploadProps> = ({
               </div>
             </div>
 
-            {/* Replace option */}
             <div className="text-center">
-              <button type="button" 
+              <Button 
+                type="button"
                 variant="outline" 
                 onClick={() => fileInputRef.current?.click()}
                 disabled={uploading}
@@ -309,4 +297,4 @@ const CurriculoUpload: React.FC<CurriculoUploadProps> = ({
 
 CurriculoUpload.displayName = "CurriculoUpload";
 
-export default CurriculoUpload;
+export default memo(CurriculoUpload);

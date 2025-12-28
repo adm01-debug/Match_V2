@@ -8,7 +8,7 @@
  * @module FormacaoTab
  */
 
-import { useMemo,  memo  } from 'react';
+import { memo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { CandidatoPerfil } from "@/data/candidatoPerfilData";
@@ -41,7 +41,7 @@ export function FormacaoTab({ candidato }: FormacaoTabProps) {
   };
 
   return (
-    <div data-testid="component"><div className="space-y-6">
+    <div data-testid="component" className="space-y-6">
       {/* Formação Acadêmica */}
       <Card role="article" aria-label="Formação acadêmica">
         <CardHeader>
@@ -159,4 +159,4 @@ export function FormacaoTab({ candidato }: FormacaoTabProps) {
 
 FormacaoTab.displayName = "FormacaoTab";
 
-export default memo(FormacaoTab, (prev, next) => JSON.stringify(prev) === JSON.stringify(next));
+export default memo(FormacaoTab);

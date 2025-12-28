@@ -17,9 +17,6 @@ interface IPGuardProps {
   readonly showIPOnBlock?: boolean;
 }
 
-/**
- * Componente de loading durante verificação
- */
 const IPCheckLoading = memo(() => (
   <div 
     className="min-h-screen flex items-center justify-center bg-background"
@@ -45,9 +42,6 @@ const IPCheckLoading = memo(() => (
 
 IPCheckLoading.displayName = 'IPCheckLoading';
 
-/**
- * Componente de acesso bloqueado
- */
 const AccessBlocked = memo(({ 
   clientIP, 
   showIP, 
@@ -70,7 +64,7 @@ const AccessBlocked = memo(({
       </CardHeader>
       <CardContent className="text-center space-y-4">
         <p className="text-muted-foreground">
-          {IP_SECURITY_CONFIG.blockedMessage" id="blocked-reason}
+          {IP_SECURITY_CONFIG.blockedMessage}
         </p>
         
         {showIP && clientIP && (
@@ -100,9 +94,6 @@ const AccessBlocked = memo(({
 
 AccessBlocked.displayName = 'AccessBlocked';
 
-/**
- * Componente de erro na verificação
- */
 const IPCheckError = memo(({ 
   error, 
   onRetry 
@@ -143,16 +134,6 @@ const IPCheckError = memo(({
 
 IPCheckError.displayName = 'IPCheckError';
 
-/**
- * IPGuard - Componente que protege rotas baseado em whitelist de IPs
- * 
- * @example
- * ```tsx
- * <IPGuard>
- *   <ProtectedContent />
- * </IPGuard>
- * ```
- */
 const IPGuard = memo(({ 
   children, 
   fallback,
@@ -167,17 +148,14 @@ const IPGuard = memo(({
     recheck 
   } = useIPVerification();
 
-  // Loading state
   if (isLoading) {
     return fallback ?? <IPCheckLoading />;
   }
 
-  // Error state
   if (isError) {
     return <IPCheckError error={error} onRetry={recheck} />;
   }
 
-  // Blocked state
   if (!isAllowed) {
     return (
       <AccessBlocked 
@@ -188,7 +166,6 @@ const IPGuard = memo(({
     );
   }
 
-  // Allowed - render children
   return <>{children}</>;
 });
 

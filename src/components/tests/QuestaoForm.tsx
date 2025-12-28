@@ -1,24 +1,18 @@
 /**
- * @todo Implement Zod validation schema for form inputs
- * @see https://react-hook-form.com/get-started#SchemaValidation
- */
-
-/**
  * @fileoverview Questão Form component with validation
  * @module QuestaoForm
  */
 
-import { useCallback,  memo,  useState   , memo} from 'react';
+import { memo, useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Questao } from '@/types/tests';
-import { Plus, Trash2, GripVertical, Check } from 'lucide-react';
+import { Plus, Trash2, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface QuestaoFormProps {
@@ -102,7 +96,6 @@ export function QuestaoForm({ questao, onSave, onCancel }: QuestaoFormProps) {
 
   return (
     <div data-testid="questao-form" className="space-y-6">
-      {/* Tipo de questão */}
       <div className="space-y-2">
         <Label>Tipo de Questão</Label>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
@@ -120,7 +113,6 @@ export function QuestaoForm({ questao, onSave, onCancel }: QuestaoFormProps) {
         </div>
       </div>
 
-      {/* Enunciado */}
       <div className="space-y-2">
         <Label>Enunciado da Questão *</Label>
         <Textarea
@@ -131,7 +123,6 @@ export function QuestaoForm({ questao, onSave, onCancel }: QuestaoFormProps) {
         />
       </div>
 
-      {/* Alternativas - Múltipla Escolha */}
       {tipo === 'multipla_escolha' && (
         <div className="space-y-3">
           <div className="flex items-center justify-between">
@@ -192,7 +183,6 @@ export function QuestaoForm({ questao, onSave, onCancel }: QuestaoFormProps) {
         </div>
       )}
 
-      {/* Alternativas - Verdadeiro/Falso */}
       {tipo === 'verdadeiro_falso' && (
         <div className="space-y-3">
           <Label>Resposta Correta</Label>
@@ -213,7 +203,6 @@ export function QuestaoForm({ questao, onSave, onCancel }: QuestaoFormProps) {
         </div>
       )}
 
-      {/* Dissertativa - Orientações */}
       {(tipo === 'dissertativa' || tipo === 'pratica') && (
         <Card role="article" aria-label="Formulário questão" className="bg-muted/50">
           <CardContent className="p-4">
@@ -227,7 +216,6 @@ export function QuestaoForm({ questao, onSave, onCancel }: QuestaoFormProps) {
         </Card>
       )}
 
-      {/* Pontuação e Dificuldade */}
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label>Pontuação</Label>
@@ -259,12 +247,11 @@ export function QuestaoForm({ questao, onSave, onCancel }: QuestaoFormProps) {
         </div>
       </div>
 
-      {/* Actions */}
       <div className="flex justify-end gap-2 pt-4 border-t">
-        <button type="button" variant="outline" onClick={onCancel}>
+        <Button type="button" variant="outline" onClick={onCancel}>
           Cancelar
         </Button>
-        <button type="button" onClick={handleSave} disabled={!isValid}>
+        <Button type="button" onClick={handleSave} disabled={!isValid}>
           {questao ? 'Salvar Alterações' : 'Adicionar Questão'}
         </Button>
       </div>
@@ -272,5 +259,6 @@ export function QuestaoForm({ questao, onSave, onCancel }: QuestaoFormProps) {
   );
 }
 
-
 QuestaoForm.displayName = "QuestaoForm";
+
+export default memo(QuestaoForm);
