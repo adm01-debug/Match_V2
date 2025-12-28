@@ -107,7 +107,6 @@ Retorne JSON com: score (0-100), confidence (0-100), insights (array), strengths
   }
 
   private fallbackAnalysis(candidato: CandidatoProfile, vaga: VagaRequirements): MatchAnalysis {
-    // Simple keyword matching fallback
     const candidatoText = [...candidato.skills, ...candidato.experiencias].join(' ').toLowerCase();
     const vagaText = [...vaga.requisitos, vaga.descricao].join(' ').toLowerCase();
     
@@ -163,11 +162,7 @@ Inclua: sobre a empresa, responsabilidades, requisitos, benefícios. Formato em 
         ? await this.callAnthropic(prompt)
         : await this.callOpenAI(prompt);
     } catch {
-      return `# ${title}
-
-## Requisitos
-${requirements.map(r => `- ${r}`).join('
-')}`;
+      return `# ${title}\n\n## Requisitos\n${requirements.map(r => `- ${r}`).join('\n')}`;
     }
   }
 }
