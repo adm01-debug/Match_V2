@@ -1,12 +1,8 @@
 /**
  * @module useResultadosProvas
  * @description Hook para resultados de provas
- * @returns {Object} Hook result with data, isLoading, error, and mutations
- * @example
- * const { data, isLoading } = useResultadosProvas();
  */
 
-import { toast } from 'sonner';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -48,11 +44,7 @@ export function useResultadosProvas(filtros?: { provaId?: string; candidatoId?: 
 
   const { data: resultados = [], isLoading, error } = useQuery({
     queryKey: ['resultados-provas', filtros],
-    placeholderData: [],
-    select: (data) => data, staleTime: 5 * 60 * 1000,
-    refetchOnWindowFocus: false,
-    enabled: true, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
-      try {
+    queryFn: async () => {
       let query = supabase
         .from('resultados_provas')
         .select(`
@@ -73,6 +65,11 @@ export function useResultadosProvas(filtros?: { provaId?: string; candidatoId?: 
         respostas: parseRespostas(r.respostas),
       })) as ResultadoProva[];
     },
+    placeholderData: [],
+    staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    gcTime: 10 * 60 * 1000,
+    retry: 3,
   });
 
   const iniciarProva = useMutation({
@@ -96,10 +93,8 @@ export function useResultadosProvas(filtros?: { provaId?: string; candidatoId?: 
       if (error) throw error;
       return data;
     },
-    onError: (error) => { // Error logged: Mutation error: toast.error('Ocorreu um erro'); }, onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['resultados-provas'] },
-    // Optimistic update ready - implement setQueryData for instant feedback
-);
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['resultados-provas'] });
     },
   });
 
@@ -121,11 +116,8 @@ export function useResultadosProvas(filtros?: { provaId?: string; candidatoId?: 
       if (error) throw error;
       return data;
     },
-    onError: (error) => { // Error logged: Mutation error: toast.error('Ocorreu um erro'); }, onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ['resultados-provas'] },
-    // Optimistic update ready - implement setQueryData for instant feedback
-);
-      // Verificar aprovação com base na nota mínima (60% padrão)
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['resultados-provas'] });
       const aprovado = data.percentual >= 60;
       toast({
         title: aprovado ? 'Prova concluída - Aprovado!' : 'Prova concluída',
@@ -135,7 +127,6 @@ export function useResultadosProvas(filtros?: { provaId?: string; candidatoId?: 
     },
   });
 
-  // Calcular aprovados com base em percentual >= 60
   const aprovados = resultados.filter(r => r.status === 'finalizado' && r.percentual >= 60);
   const reprovados = resultados.filter(r => r.status === 'finalizado' && r.percentual < 60);
   

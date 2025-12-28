@@ -1,18 +1,12 @@
 /**
  * @module useProvas
  * @description Hook para gerenciar provas
- * @returns {Object} Hook result with data, isLoading, error, and mutations
- * @example
- * const { data, isLoading } = useProvas();
  */
 
-import { toast } from 'sonner';
-import { useToast } from '@/hooks/use-toast';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import type { Prova, BateriaProvas, CategoriaProva, Departamento, NivelCargo } from '@/types/tests';
 
-// Converter dados do BD para o tipo Prova
 function dbToProva(row: any): Prova {
   return {
     id: row.id,
@@ -35,7 +29,6 @@ function dbToProva(row: any): Prova {
   };
 }
 
-// Converter dados do BD para BateriaProvas
 function dbToBateria(row: any, provasIds: string[]): BateriaProvas {
   return {
     id: row.id,
@@ -45,19 +38,14 @@ function dbToBateria(row: any, provasIds: string[]): BateriaProvas {
     nivel: row.nivel as NivelCargo,
     provas: provasIds,
     duracaoTotal: row.duracao_total || 0,
-    obrigatorias: provasIds, // Por simplicidade, todas obrigatórias
+    obrigatorias: provasIds,
     opcionais: [],
   };
 }
 
-// Hook para buscar todas as provas
 export function useProvas() {
   return useQuery({
     queryKey: ['provas'],
-    staleTime: 1000 * 60 * 5,
-    refetchOnWindowFocus: false,
-    gcTime: 1000 * 60 * 30,
-    retry: 3,
     queryFn: async (): Promise<Prova[]> => {
       const { data, error } = await supabase
         .from('provas')
@@ -67,20 +55,17 @@ export function useProvas() {
       if (error) throw error;
       return (data || []).map(dbToProva);
     },
-    placeholderData: [],
-    select: (data) => data, staleTime: 60000,
-    refetchOnWindowFocus: false,
-  });
-}
-
-// Hook para buscar provas ativas
-export function useProvasAtivas() {
-  return useQuery({
-    queryKey: ['provas', 'ativas'],
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,
     gcTime: 1000 * 60 * 30,
     retry: 3,
+    placeholderData: [],
+  });
+}
+
+export function useProvasAtivas() {
+  return useQuery({
+    queryKey: ['provas', 'ativas'],
     queryFn: async (): Promise<Prova[]> => {
       const { data, error } = await supabase
         .from('provas')
@@ -91,20 +76,17 @@ export function useProvasAtivas() {
       if (error) throw error;
       return (data || []).map(dbToProva);
     },
-    placeholderData: [],
-    select: (data) => data, staleTime: 60000,
-    refetchOnWindowFocus: false,
-  });
-}
-
-// Hook para buscar uma prova específica
-export function useProva(id: string) {
-  return useQuery({
-    queryKey: ['provas', id],
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,
     gcTime: 1000 * 60 * 30,
     retry: 3,
+    placeholderData: [],
+  });
+}
+
+export function useProva(id: string) {
+  return useQuery({
+    queryKey: ['provas', id],
     queryFn: async (): Promise<Prova | null> => {
       const { data, error } = await supabase
         .from('provas')
@@ -116,10 +98,13 @@ export function useProva(id: string) {
       return data ? dbToProva(data) : null;
     },
     enabled: !!id,
+    staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false,
+    gcTime: 1000 * 60 * 30,
+    retry: 3,
   });
 }
 
-// Hook para criar prova
 export function useCreateProva() {
   const queryClient = useQueryClient();
 
@@ -147,17 +132,11 @@ export function useCreateProva() {
       return dbToProva(data);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['provas'] },
-    // Optimistic update ready - implement setQueryData for instant feedback
-);
+      queryClient.invalidateQueries({ queryKey: ['provas'] });
     },
-    onError: (error: Error) => {
-      // Error logged: Mutation error:
-    }
   });
 }
 
-// Hook para atualizar prova
 export function useUpdateProva() {
   const queryClient = useQueryClient();
 
@@ -183,47 +162,30 @@ export function useUpdateProva() {
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['provas'] },
-    // Optimistic update ready - implement setQueryData for instant feedback
-);
+      queryClient.invalidateQueries({ queryKey: ['provas'] });
     },
-    onError: (error: Error) => {
-      // Error logged: Mutation error:
-    }
   });
 }
 
-// Hook para deletar prova
 export function useDeleteProva() {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase
-        .from('provas')
-        .delete()
-        .eq('id', id);
-
+      const { error } = await supabase.from('provas').delete().eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['provas'] },
-    // Optimistic update ready - implement setQueryData for instant feedback
-);
+      queryClient.invalidateQueries({ queryKey: ['provas'] });
     },
-    onError: (error: Error) => {
-      // Error logged: Mutation error:
-    }
   });
 }
 
-// Hook para duplicar prova
 export function useDuplicateProva() {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (provaId: string) => {
-      // Buscar prova original
       const { data: original, error: fetchError } = await supabase
         .from('provas')
         .select('*')
@@ -232,7 +194,6 @@ export function useDuplicateProva() {
 
       if (fetchError) throw fetchError;
 
-      // Criar cópia
       const { data, error } = await supabase
         .from('provas')
         .insert({
@@ -245,7 +206,7 @@ export function useDuplicateProva() {
           total_questoes: original.total_questoes,
           pontuacao_maxima: original.pontuacao_maxima,
           nota_minima: original.nota_minima,
-          ativo: false, // Começa inativa
+          ativo: false,
           tags: original.tags,
         })
         .select()
@@ -255,24 +216,14 @@ export function useDuplicateProva() {
       return dbToProva(data);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['provas'] },
-    // Optimistic update ready - implement setQueryData for instant feedback
-);
+      queryClient.invalidateQueries({ queryKey: ['provas'] });
     },
-    onError: (error: Error) => {
-      // Error logged: Mutation error:
-    }
   });
 }
 
-// Hook para buscar baterias
 export function useBaterias() {
   return useQuery({
     queryKey: ['baterias'],
-    staleTime: 1000 * 60 * 5,
-    refetchOnWindowFocus: false,
-    gcTime: 1000 * 60 * 30,
-    retry: 3,
     queryFn: async (): Promise<BateriaProvas[]> => {
       const { data: baterias, error } = await supabase
         .from('baterias_provas')
@@ -282,14 +233,12 @@ export function useBaterias() {
 
       if (error) throw error;
 
-      // Buscar relações
       const bateriaIds = (baterias || []).map(b => b.id);
       const { data: relacoes } = await supabase
         .from('bateria_provas_rel')
         .select('bateria_id, prova_id')
         .in('bateria_id', bateriaIds);
 
-      // Agrupar provas por bateria
       const provasPorBateria: Record<string, string[]> = {};
       (relacoes || []).forEach(rel => {
         if (!provasPorBateria[rel.bateria_id]) {
@@ -302,22 +251,18 @@ export function useBaterias() {
         dbToBateria(b, provasPorBateria[b.id] || [])
       );
     },
-    placeholderData: [],
-    select: (data) => data, staleTime: 60000,
-    refetchOnWindowFocus: false,
-  });
-}
-
-// Hook para estatísticas
-export function useProvasStats() {
-  return useQuery({
-    queryKey: ['provas', 'stats'],
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,
     gcTime: 1000 * 60 * 30,
     retry: 3,
+    placeholderData: [],
+  });
+}
+
+export function useProvasStats() {
+  return useQuery({
+    queryKey: ['provas', 'stats'],
     queryFn: async () => {
-      try {
       const { data: provas, error } = await supabase
         .from('provas')
         .select('duracao, aplicacoes');
@@ -342,8 +287,9 @@ export function useProvasStats() {
         totalBaterias: totalBaterias || 0,
       };
     },
-    placeholderData: [],
-    select: (data) => data, staleTime: 60000,
+    staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,
+    gcTime: 1000 * 60 * 30,
+    retry: 3,
   });
 }

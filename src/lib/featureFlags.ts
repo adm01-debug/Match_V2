@@ -7,6 +7,8 @@
  * }
  */
 
+import React from 'react';
+
 export const FeatureFlags = {
   /** Nova interface do dashboard */
   NEW_DASHBOARD: import.meta.env.VITE_FF_NEW_DASHBOARD === 'true',
@@ -38,16 +40,16 @@ export const useFeatureFlag = (flag: FeatureFlagKey): boolean => {
   return FeatureFlags[flag];
 };
 
-/**
- * Componente wrapper para feature flags
- */
-import React from 'react';
-
-export const FeatureGate: React.FC<{
+interface FeatureGateProps {
   flag: FeatureFlagKey;
   children: React.ReactNode;
   fallback?: React.ReactNode;
-}> = ({ flag, children, fallback = null }) => {
+}
+
+/**
+ * Componente wrapper para feature flags
+ */
+export const FeatureGate: React.FC<FeatureGateProps> = ({ flag, children, fallback = null }) => {
   if (FeatureFlags[flag]) {
     return <>{children}</>;
   }

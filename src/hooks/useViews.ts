@@ -1,16 +1,11 @@
 /**
  * @module useViews
  * @description Hook para gerenciar views e visualizações
- * @returns {Object} Hook result with data, isLoading, error, and mutations
- * @example
- * const { data, isLoading } = useViews();
  */
 
-import { toast } from 'sonner';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 
-// Tipos das Views (definidos localmente já que as views não existem no banco)
 export interface PipelineView {
   id: string;
   etapa_atual: string;
@@ -61,20 +56,10 @@ export interface VagasKpisView {
   contratados: number;
 }
 
-// Hook para pipeline (usando processos_seletivos diretamente)
 export function usePipelineView(vagaId?: string) {
   return useQuery({
-    staleTime: 1000 * 60 * 5,
-    refetchOnWindowFocus: false,
-    enabled: true,
-    placeholderData: (previousData) => previousData,
-    select: (data) => data,
-    onError: () => toast.error('Erro ao carregar dados'), // 5 minutes
-    gcTime: 1000 * 60 * 30, // 30 minutes
-    retry: 3,
     queryKey: ['v_pipeline', vagaId],
     queryFn: async () => {
-      try {
       let query = supabase
         .from('processos_seletivos')
         .select(`
@@ -92,7 +77,6 @@ export function usePipelineView(vagaId?: string) {
       const { data, error } = await query;
       if (error) throw error;
       
-      // Transformar para o formato esperado
       const transformed: PipelineView[] = (data || []).map((p: any) => ({
         id: p.id,
         etapa_atual: p.etapa_atual,
@@ -114,27 +98,21 @@ export function usePipelineView(vagaId?: string) {
       
       return transformed;
     },
+    staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false,
+    gcTime: 1000 * 60 * 30,
+    retry: 3,
   });
 }
 
-// Hook para agenda de entrevistas (usando entrevistas diretamente)
 export function useAgendaEntrevistasView(filtros?: {
   dataInicio?: string;
   dataFim?: string;
   status?: string;
 }) {
   return useQuery({
-    staleTime: 1000 * 60 * 5,
-    refetchOnWindowFocus: false,
-    enabled: true,
-    placeholderData: (previousData) => previousData,
-    select: (data) => data,
-    onError: () => toast.error('Erro ao carregar dados'), // 5 minutes
-    gcTime: 1000 * 60 * 30, // 30 minutes
-    retry: 3,
     queryKey: ['v_agenda_entrevistas', filtros],
     queryFn: async () => {
-      try {
       let query = supabase
         .from('entrevistas')
         .select('*')
@@ -153,13 +131,12 @@ export function useAgendaEntrevistasView(filtros?: {
       const { data, error } = await query;
       if (error) throw error;
       
-      // Transformar para o formato esperado
       const transformed: AgendaEntrevistasView[] = (data || []).map((e: any) => ({
         id: e.id,
         tipo: e.tipo,
         etapa: e.etapa,
         data_hora: `${e.data}T${e.hora_inicio}`,
-        duracao_minutos: 60, // Default
+        duracao_minutos: 60,
         local: e.local,
         link_video: e.link_online,
         status: e.status,
@@ -173,23 +150,17 @@ export function useAgendaEntrevistasView(filtros?: {
       
       return transformed;
     },
+    staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false,
+    gcTime: 1000 * 60 * 30,
+    retry: 3,
   });
 }
 
-// Hook para KPIs de vagas (usando vagas diretamente)
 export function useVagasKpisView(status?: string) {
   return useQuery({
-    staleTime: 1000 * 60 * 5,
-    refetchOnWindowFocus: false,
-    enabled: true,
-    placeholderData: (previousData) => previousData,
-    select: (data) => data,
-    onError: () => toast.error('Erro ao carregar dados'), // 5 minutes
-    gcTime: 1000 * 60 * 30, // 30 minutes
-    retry: 3,
     queryKey: ['v_vagas_kpis', status],
     queryFn: async () => {
-      try {
       let query = supabase
         .from('vagas')
         .select('*')
@@ -202,7 +173,6 @@ export function useVagasKpisView(status?: string) {
       const { data, error } = await query;
       if (error) throw error;
       
-      // Transformar para o formato esperado
       const transformed: VagasKpisView[] = (data || []).map((v: any) => ({
         id: v.id,
         titulo: v.titulo,
@@ -219,10 +189,13 @@ export function useVagasKpisView(status?: string) {
       
       return transformed;
     },
+    staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false,
+    gcTime: 1000 * 60 * 30,
+    retry: 3,
   });
 }
 
-// Hook combinado com KPIs calculados
 export function useDashboardKPIs() {
   const { data: vagasKpis, isLoading: loadingVagas } = useVagasKpisView();
   const { data: pipeline, isLoading: loadingPipeline } = usePipelineView();

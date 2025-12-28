@@ -1,19 +1,13 @@
 /**
  * @module useVagas
  * @description Hook para gerenciar vagas
- * @returns {Object} Hook result with data, isLoading, error, and mutations
- * @example
- * const { data, isLoading } = useVagas();
  */
 
-import { toast } from 'sonner';
-import { useToast } from '@/hooks/use-toast';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Vaga, VagaUrgente, StatusVaga, Prioridade, TipoContrato, Modalidade, PerguntaTriagem } from '@/types/recruitment';
 import { Json } from '@/integrations/supabase/types';
 
-// Database type mapping (using unknown for JSONB)
 interface VagaDB {
   id: string;
   titulo: string;
@@ -47,15 +41,14 @@ interface VagaDB {
   updated_at: string;
 }
 
-// Convert database row to Vaga type
 function dbToVaga(row: VagaDB): Vaga {
   return {
     id: row.id,
     titulo: row.titulo,
     departamento: row.departamento,
-    gestorId: '', // Not stored in DB
+    gestorId: '',
     gestorNome: row.gestor_nome || '',
-    recrutadorId: '', // Not stored in DB
+    recrutadorId: '',
     recrutadorNome: row.recrutador_nome || '',
     quantidade: row.quantidade,
     tipoContrato: row.tipo_contrato as TipoContrato,
@@ -83,47 +76,10 @@ function dbToVaga(row: VagaDB): Vaga {
   };
 }
 
-// Convert Vaga to database insert format
-function vagaToDB(vaga: Partial<Omit<Vaga, 'id'>>) {
-  return {
-    titulo: vaga.titulo,
-    departamento: vaga.departamento,
-    gestor_nome: vaga.gestorNome,
-    recrutador_nome: vaga.recrutadorNome,
-    quantidade: vaga.quantidade,
-    tipo_contrato: vaga.tipoContrato,
-    modalidade: vaga.modalidade,
-    cidade: vaga.cidade,
-    estado: vaga.estado,
-    salario_min: vaga.salarioMin,
-    salario_max: vaga.salarioMax,
-    salario_a_combinar: vaga.salarioACombinar,
-    beneficios: vaga.beneficios,
-    descricao_empresa: vaga.descricaoEmpresa,
-    responsabilidades: vaga.responsabilidades,
-    requisitos_obrigatorios: vaga.requisitosObrigatorios,
-    requisitos_desejaveis: vaga.requisitosDesejaveis,
-    perguntas_triagem: vaga.perguntasTriagem as unknown as Json,
-    skills_avaliacao: vaga.skillsAvaliacao,
-    status: vaga.status,
-    prioridade: vaga.prioridade,
-    data_publicacao: vaga.dataPublicacao?.toISOString(),
-    data_encerramento: vaga.dataEncerramento?.toISOString(),
-    total_candidatos: vaga.totalCandidatos,
-    em_processo: vaga.emProcesso,
-    contratados: vaga.contratados,
-  };
-}
-
-// Fetch all vagas
 export function useVagas() {
   return useQuery({
     queryKey: ['vagas'],
-    placeholderData: [],
-    select: (data) => data, staleTime: 5 * 60 * 1000,
-    refetchOnWindowFocus: false,
-    enabled: true, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
-      try {
+    queryFn: async () => {
       const { data, error } = await supabase
         .from('vagas')
         .select('*')
@@ -132,18 +88,18 @@ export function useVagas() {
       if (error) throw error;
       return (data as unknown as VagaDB[]).map(dbToVaga);
     },
+    placeholderData: [],
+    staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    gcTime: 10 * 60 * 1000,
+    retry: 3,
   });
 }
 
-// Fetch single vaga
 export function useVaga(id: string) {
   return useQuery({
     queryKey: ['vagas', id],
-    placeholderData: [],
-    select: (data) => data, staleTime: 5 * 60 * 1000,
-    refetchOnWindowFocus: false,
-    enabled: true, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
-      try {
+    queryFn: async () => {
       const { data, error } = await supabase
         .from('vagas')
         .select('*')
@@ -154,18 +110,18 @@ export function useVaga(id: string) {
       if (!data) return null;
       return dbToVaga(data as unknown as VagaDB);
     },
+    placeholderData: undefined,
+    staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    gcTime: 10 * 60 * 1000,
+    retry: 3,
   });
 }
 
-// Fetch vagas for select dropdown (simplified)
 export function useVagasSelect() {
   return useQuery({
     queryKey: ['vagas-select'],
-    placeholderData: [],
-    select: (data) => data, staleTime: 5 * 60 * 1000,
-    refetchOnWindowFocus: false,
-    enabled: true, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
-      try {
+    queryFn: async () => {
       const { data, error } = await supabase
         .from('vagas')
         .select('id, titulo')
@@ -175,18 +131,18 @@ export function useVagasSelect() {
       if (error) throw error;
       return data as { id: string; titulo: string }[];
     },
+    placeholderData: [],
+    staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    gcTime: 10 * 60 * 1000,
+    retry: 3,
   });
 }
 
-// Fetch urgent vagas for dashboard
 export function useVagasUrgentes() {
   return useQuery({
     queryKey: ['vagas-urgentes'],
-    placeholderData: [],
-    select: (data) => data, staleTime: 5 * 60 * 1000,
-    refetchOnWindowFocus: false,
-    enabled: true, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
-      try {
+    queryFn: async () => {
       const { data, error } = await supabase
         .from('vagas')
         .select('*')
@@ -212,10 +168,14 @@ export function useVagasUrgentes() {
         };
       });
     },
+    placeholderData: [],
+    staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    gcTime: 10 * 60 * 1000,
+    retry: 3,
   });
 }
 
-// Create vaga input type (flexible for form data)
 interface CreateVagaInput {
   titulo: string;
   departamento: string;
@@ -244,7 +204,6 @@ interface CreateVagaInput {
   contratados?: number;
 }
 
-// Create vaga
 export function useCreateVaga() {
   const queryClient = useQueryClient();
 
@@ -288,19 +247,13 @@ export function useCreateVaga() {
       return dbToVaga(data as unknown as VagaDB);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['vagas'] },
-    // Optimistic update ready - implement setQueryData for instant feedback
-);
+      queryClient.invalidateQueries({ queryKey: ['vagas'] });
       queryClient.invalidateQueries({ queryKey: ['vagas-select'] });
       queryClient.invalidateQueries({ queryKey: ['vagas-urgentes'] });
     },
-    onError: (error: Error) => {
-      // Error logged: Mutation error:
-    }
   });
 }
 
-// Update vaga
 export function useUpdateVaga() {
   const queryClient = useQueryClient();
 
@@ -345,41 +298,26 @@ export function useUpdateVaga() {
       return dbToVaga(data as unknown as VagaDB);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['vagas'] },
-    // Optimistic update ready - implement setQueryData for instant feedback
-);
+      queryClient.invalidateQueries({ queryKey: ['vagas'] });
       queryClient.invalidateQueries({ queryKey: ['vagas-select'] });
       queryClient.invalidateQueries({ queryKey: ['vagas-urgentes'] });
     },
-    onError: (error: Error) => {
-      // Error logged: Mutation error:
-    }
   });
 }
 
-// Delete vaga
 export function useDeleteVaga() {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase
-        .from('vagas')
-        .delete()
-        .eq('id', id);
-
+      const { error } = await supabase.from('vagas').delete().eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['vagas'] },
-    // Optimistic update ready - implement setQueryData for instant feedback
-);
+      queryClient.invalidateQueries({ queryKey: ['vagas'] });
       queryClient.invalidateQueries({ queryKey: ['vagas-select'] });
       queryClient.invalidateQueries({ queryKey: ['vagas-urgentes'] });
     },
-    onError: (error: Error) => {
-      // Error logged: Mutation error:
-    }
   });
 }
 
