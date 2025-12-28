@@ -3,7 +3,7 @@
  * @module CurriculoTab
  */
 
-import { useMemo,  memo  } from 'react';
+import { memo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -43,7 +43,7 @@ export function CurriculoTab({ candidato }: CurriculoTabProps) {
   };
 
   return (
-    <div data-testid="component"><div className="space-y-6">
+    <div data-testid="component" className="space-y-6">
       {/* Resumo Profissional */}
       <Card role="article" aria-label="Currículo do candidato">
         <CardHeader>
@@ -70,7 +70,7 @@ export function CurriculoTab({ candidato }: CurriculoTabProps) {
         <CardContent>
           <div className="space-y-3">
             {candidato.arquivos.map((arquivo) => (
-              <div 
+              <div
                 key={arquivo.id}
                 className="flex items-center justify-between p-3 bg-secondary/30 rounded-lg"
               >
@@ -84,10 +84,10 @@ export function CurriculoTab({ candidato }: CurriculoTabProps) {
                   </div>
                 </div>
                 <div className="flex gap-2">
-                  <button type="button" variant="ghost" size="sm">
+                  <Button type="button" variant="ghost" size="sm">
                     <Eye className="h-4 w-4" />
                   </Button>
-                  <button type="button" variant="ghost" size="sm">
+                  <Button type="button" variant="ghost" size="sm">
                     <Download className="h-4 w-4" />
                   </Button>
                 </div>

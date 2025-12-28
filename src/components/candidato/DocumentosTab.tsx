@@ -5,19 +5,19 @@
  * @module DocumentosTab
  */
 
-import { useMemo,  useCallback,  memo   } from 'react';
+import { memo, type ReactNode } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { 
-  FileText, 
-  Download, 
-  Eye, 
-  Upload, 
-  File, 
-  Award, 
+import {
+  FileText,
+  Download,
+  Eye,
+  Upload,
+  File,
+  Award,
   FileCheck,
-  Folder
+  Folder,
 } from "lucide-react";
 import { CandidatoPerfil, ArquivoAnexo } from "@/data/candidatoPerfilData";
 import { toast } from "sonner";
@@ -26,7 +26,7 @@ interface DocumentosTabProps {
   candidato: CandidatoPerfil;
 }
 
-const tipoIcons: Record<string, React.ReactNode> = {
+const tipoIcons: Record<string, ReactNode> = {
   curriculo: <FileText className="h-5 w-5 text-blue-400" />,
   certificado: <Award className="h-5 w-5 text-amber-400" />,
   carta: <FileCheck className="h-5 w-5 text-emerald-400" />,
@@ -62,7 +62,7 @@ export function DocumentosTab({ candidato }: DocumentosTabProps) {
   }, {} as Record<string, ArquivoAnexo[]>);
 
   return (
-    <div data-testid="component"><div className="space-y-6">
+    <div data-testid="component" className="space-y-6">
       {/* Header com Upload */}
       <Card role="article" aria-label="Documentos do candidato">
         <CardHeader>
@@ -76,7 +76,7 @@ export function DocumentosTab({ candidato }: DocumentosTabProps) {
                 {candidato.arquivos.length} arquivo(s) anexado(s)
               </CardDescription>
             </div>
-            <button type="button" onClick={handleUpload}>
+            <Button type="button" onClick={handleUpload}>
               <Upload className="h-4 w-4 mr-2" />
               Upload
             </Button>
@@ -113,14 +113,16 @@ export function DocumentosTab({ candidato }: DocumentosTabProps) {
                     </div>
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
-                    <button type="button"
+                    <Button
+                      type="button"
                       variant="ghost"
                       size="icon"
                       onClick={() => handlePreview(arquivo)}
                     >
                       <Eye className="h-4 w-4" />
                     </Button>
-                    <button type="button"
+                    <Button
+                      type="button"
                       variant="ghost"
                       size="icon"
                       onClick={() => handleDownload(arquivo)}
@@ -140,7 +142,7 @@ export function DocumentosTab({ candidato }: DocumentosTabProps) {
           <CardContent className="py-12 text-center">
             <Folder className="h-12 w-12 mx-auto mb-4 text-muted-foreground/20" />
             <p className="text-muted-foreground">Nenhum documento anexado</p>
-            <button type="button" variant="outline" className="mt-4" onClick={handleUpload}>
+            <Button type="button" variant="outline" className="mt-4" onClick={handleUpload}>
               <Upload className="h-4 w-4 mr-2" />
               Fazer Upload
             </Button>

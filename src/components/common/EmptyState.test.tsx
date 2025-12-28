@@ -3,12 +3,10 @@ import { render, screen } from '@testing-library/react';
 import { EmptyState } from './EmptyState';
 
 describe('EmptyState', () => {
-  describe('Rendering', () => {EmptyState', () => {
   it('renders title', () => {
     render(<EmptyState title="No items" />);
     expect(screen.getByText('No items')).toBeInTheDocument();
   });
-});
 
   it('renders description', () => {
     render(<EmptyState title="No items" description="Add some items" />);
@@ -21,12 +19,8 @@ describe('EmptyState', () => {
   });
 
   it('renders action', () => {
-    render(
-      <EmptyState
-        title="No items"
-        action={<button>Add Item</button>}
-      />
-    );
+    render(<EmptyState title="No items" action={<button type="button">Add Item</button>} />);
     expect(screen.getByRole('button')).toBeInTheDocument();
   });
 });
+
