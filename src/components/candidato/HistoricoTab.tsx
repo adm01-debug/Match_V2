@@ -3,7 +3,7 @@
  * @module HistoricoTab
  */
 
-import { useMemo,  memo  } from 'react';
+import { memo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CandidatoPerfil } from "@/data/candidatoPerfilData";
 import { History, User } from "lucide-react";
@@ -37,7 +37,7 @@ export function HistoricoTab({ candidato }: HistoricoTabProps) {
   }, {} as Record<string, typeof candidato.historico>);
 
   return (
-    <div data-testid="component"><div className="space-y-6">
+    <div data-testid="component" className="space-y-6">
       <Card role="article" aria-label="Histórico">
         <CardHeader>
           <CardTitle className="text-lg flex items-center gap-2">
@@ -162,4 +162,4 @@ export function HistoricoTab({ candidato }: HistoricoTabProps) {
 
 HistoricoTab.displayName = "HistoricoTab";
 
-export default memo(HistoricoTab, (prev, next) => JSON.stringify(prev) === JSON.stringify(next));
+export default memo(HistoricoTab);

@@ -3,7 +3,7 @@
  * @module AcoesRapidas
  */
 
-import { memo , memo, useMemo} from 'react';
+import { memo } from 'react';
 import { Button } from "@/components/ui/button";
 import { Plus, Users, BarChart3, Briefcase } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -39,11 +39,12 @@ export function AcoesRapidas() {
   return (
     <div data-testid="acoes-rapidas" role="region" aria-label="Ações rápidas" className="flex flex-wrap gap-3">
       {acoes.map((acao) => (
-        <button type="button"
+        <Button
           key={acao.label}
+          type="button"
           variant={acao.variant}
           asChild
-          className={acao.variant === "default" ? "gap-2" : "gap-2"}
+          className="gap-2"
         >
           <Link to={acao.href}>
             <acao.icon className="h-4 w-4" />
@@ -55,5 +56,6 @@ export function AcoesRapidas() {
   );
 }
 
-
 AcoesRapidas.displayName = "AcoesRapidas";
+
+export default memo(AcoesRapidas);

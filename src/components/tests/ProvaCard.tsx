@@ -3,21 +3,20 @@
  * @module ProvaCard
  */
 
-import { memo , memo} from 'react';
+import { memo } from 'react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Prova } from '@/types/tests';
-import { categoriasInfo, departamentosInfo, niveisInfo } from '@/config/testsConfig';
-import { Clock, Users, BarChart3, FileText, Play, Edit, Copy, Trash2 } from 'lucide-react';
+import { categoriasInfo, niveisInfo } from '@/config/testsConfig';
+import { Clock, Users, BarChart3, FileText, Play, Edit, Copy, Trash2, MoreVertical } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { MoreVertical } from 'lucide-react';
 
 interface ProvaCardProps {
   prova: Prova;
@@ -80,7 +79,7 @@ export function ProvaCard({ prova, onSelect, onEdit, onDuplicate, onDelete, comp
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button type="button" variant="ghost" size="icon" className="h-8 w-8">
+              <Button type="button" variant="ghost" size="icon" className="h-8 w-8">
                 <MoreVertical className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
@@ -148,7 +147,8 @@ export function ProvaCard({ prova, onSelect, onEdit, onDuplicate, onDelete, comp
         </div>
 
         <div className="flex gap-2 pt-2">
-          <button type="button" 
+          <Button 
+            type="button"
             variant="default" 
             className="flex-1"
             onClick={() => onSelect?.(prova)}
@@ -162,6 +162,6 @@ export function ProvaCard({ prova, onSelect, onEdit, onDuplicate, onDelete, comp
   );
 }
 
-
-
 ProvaCard.displayName = "ProvaCard";
+
+export default memo(ProvaCard);

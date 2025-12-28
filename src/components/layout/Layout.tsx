@@ -3,7 +3,7 @@
  * @module Layout
  */
 
-import { memo , memo} from 'react';
+import { memo } from 'react';
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "./AppSidebar";
 import { Search } from "lucide-react";
@@ -20,7 +20,7 @@ export function Layout({ children, title }: LayoutProps) {
   const { notifications, unreadCount, markAsRead, markAllAsRead, clearAll } = useNotifications();
 
   return (
-    <SkipLinks /><SidebarProvider defaultOpen={true}>
+    <SidebarProvider defaultOpen={true}>
       <div role="region" aria-label="Layout principal" className="min-h-screen flex w-full bg-background">
         <AppSidebar />
         <SidebarInset className="flex flex-col flex-1">
@@ -61,5 +61,6 @@ export function Layout({ children, title }: LayoutProps) {
   );
 }
 
-
 Layout.displayName = "Layout";
+
+export default memo(Layout);

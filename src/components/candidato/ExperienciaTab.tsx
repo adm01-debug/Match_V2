@@ -3,7 +3,7 @@
  * @module ExperienciaTab
  */
 
-import { useMemo,  memo  } from 'react';
+import { memo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { CandidatoPerfil } from "@/data/candidatoPerfilData";
@@ -15,7 +15,7 @@ interface ExperienciaTabProps {
 
 export function ExperienciaTab({ candidato }: ExperienciaTabProps) {
   return (
-    <div data-testid="component"><div className="space-y-6">
+    <div data-testid="component" className="space-y-6">
       <Card role="article" aria-label="Experiência profissional">
         <CardHeader>
           <CardTitle className="text-lg flex items-center gap-2">
@@ -113,4 +113,4 @@ export function ExperienciaTab({ candidato }: ExperienciaTabProps) {
 
 ExperienciaTab.displayName = "ExperienciaTab";
 
-export default memo(ExperienciaTab, (prev, next) => JSON.stringify(prev) === JSON.stringify(next));
+export default memo(ExperienciaTab);
