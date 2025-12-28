@@ -28,11 +28,7 @@ export function useBateriasProvas() {
 
   const { data: baterias = [], isLoading, error } = useQuery({
     queryKey: ['baterias-provas'],
-    placeholderData: [],
-    select: (data) => data, staleTime: 5 * 60 * 1000,
-    refetchOnWindowFocus: false,
-    enabled: true, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
-      try {
+    queryFn: async () => {
       const { data, error } = await supabase
         .from('baterias_provas')
         .select('*')
@@ -40,6 +36,11 @@ export function useBateriasProvas() {
       if (error) throw error;
       return data as BateriaProvaDB[];
     },
+    placeholderData: [],
+    staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    gcTime: 10 * 60 * 1000,
+    retry: 3,
   });
 
   const createBateria = useMutation({
@@ -59,11 +60,12 @@ export function useBateriasProvas() {
       if (error) throw error;
       return data;
     },
-    onError: (error) => { // Error logged: Mutation error: toast.error('Ocorreu um erro'); }, onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['baterias-provas'] },
-    // Optimistic update ready - implement setQueryData for instant feedback
-);
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['baterias-provas'] });
       toast({ title: 'Bateria criada!' });
+    },
+    onError: (error: Error) => {
+      console.error('Erro ao criar bateria:', error);
     },
   });
 
@@ -81,11 +83,12 @@ export function useBateriasProvas() {
       if (error) throw error;
       return data;
     },
-    onError: (error) => { // Error logged: Mutation error: toast.error('Ocorreu um erro'); }, onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['baterias-provas'] },
-    // Optimistic update ready - implement setQueryData for instant feedback
-);
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['baterias-provas'] });
       toast({ title: 'Bateria atualizada!' });
+    },
+    onError: (error: Error) => {
+      console.error('Erro ao atualizar bateria:', error);
     },
   });
 
@@ -94,11 +97,12 @@ export function useBateriasProvas() {
       const { error } = await supabase.from('baterias_provas').delete().eq('id', id);
       if (error) throw error;
     },
-    onError: (error) => { // Error logged: Mutation error: toast.error('Ocorreu um erro'); }, onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['baterias-provas'] },
-    // Optimistic update ready - implement setQueryData for instant feedback
-);
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['baterias-provas'] });
       toast({ title: 'Bateria removida!' });
+    },
+    onError: (error: Error) => {
+      console.error('Erro ao remover bateria:', error);
     },
   });
 

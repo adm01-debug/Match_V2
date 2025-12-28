@@ -41,6 +41,8 @@ export const useFeatureFlag = (flag: FeatureFlagKey): boolean => {
 /**
  * Componente wrapper para feature flags
  */
+import React from 'react';
+
 export const FeatureGate: React.FC<{
   flag: FeatureFlagKey;
   children: React.ReactNode;

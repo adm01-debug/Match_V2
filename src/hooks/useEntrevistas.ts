@@ -7,7 +7,6 @@
  */
 
 import { toast } from 'sonner';
-import { useToast } from '@/hooks/use-toast';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -94,11 +93,7 @@ export function dbToEntrevista(db: EntrevistaDB) {
 export function useEntrevistas() {
   return useQuery({
     queryKey: ['entrevistas'],
-    placeholderData: [],
-    select: (data) => data, staleTime: 5 * 60 * 1000,
-    refetchOnWindowFocus: false,
-    enabled: true, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
-      try {
+    queryFn: async () => {
       const { data, error } = await supabase
         .from('entrevistas')
         .select('*')
@@ -106,18 +101,19 @@ export function useEntrevistas() {
       
       if (error) throw error;
       return (data as EntrevistaDB[]).map(dbToEntrevista);
-    }
+    },
+    placeholderData: [],
+    staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    gcTime: 10 * 60 * 1000,
+    retry: 3,
   });
 }
 
 export function useEntrevistasStats() {
   return useQuery({
     queryKey: ['entrevistas-stats'],
-    placeholderData: [],
-    select: (data) => data, staleTime: 5 * 60 * 1000,
-    refetchOnWindowFocus: false,
-    enabled: true, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
-      try {
+    queryFn: async () => {
       const { data, error } = await supabase
         .from('entrevistas')
         .select('*');
@@ -154,18 +150,19 @@ export function useEntrevistasStats() {
         agendadas,
         confirmadas
       } as EntrevistasStats;
-    }
+    },
+    placeholderData: undefined,
+    staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    gcTime: 10 * 60 * 1000,
+    retry: 3,
   });
 }
 
 export function useEntrevistasEvolucao() {
   return useQuery({
     queryKey: ['entrevistas-evolucao'],
-    placeholderData: [],
-    select: (data) => data, staleTime: 5 * 60 * 1000,
-    refetchOnWindowFocus: false,
-    enabled: true, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
-      try {
+    queryFn: async () => {
       const { data, error } = await supabase
         .from('entrevistas')
         .select('*')
@@ -183,7 +180,6 @@ export function useEntrevistasEvolucao() {
       entrevistas.forEach(e => {
         const date = new Date(e.data);
         const mesKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
-        const mesNome = mesesNomes[date.getMonth()];
         
         if (!mesesMap.has(mesKey)) {
           mesesMap.set(mesKey, { aprovados: 0, reprovados: 0, total: 0 });
@@ -208,18 +204,19 @@ export function useEntrevistasEvolucao() {
         });
       
       return resultado;
-    }
+    },
+    placeholderData: [],
+    staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    gcTime: 10 * 60 * 1000,
+    retry: 3,
   });
 }
 
 export function useEntrevistasPizza() {
   return useQuery({
     queryKey: ['entrevistas-pizza'],
-    placeholderData: [],
-    select: (data) => data, staleTime: 5 * 60 * 1000,
-    refetchOnWindowFocus: false,
-    enabled: true, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
-      try {
+    queryFn: async () => {
       const { data, error } = await supabase
         .from('entrevistas')
         .select('feedback_resultado')
@@ -239,7 +236,12 @@ export function useEntrevistasPizza() {
         { name: 'Reprovados', value: reprovados, color: '#ef4444' },
         { name: 'Pendentes', value: pendentes, color: '#eab308' },
       ];
-    }
+    },
+    placeholderData: [],
+    staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    gcTime: 10 * 60 * 1000,
+    retry: 3,
   });
 }
 
@@ -262,11 +264,7 @@ export function useCreateEntrevista() {
       etapa: string;
       status: string;
       observacoes?: string;
-    ,
-    onError: (error: Error) => {
-      console.error('Erro em entrevistas:', error);
-      toast.error('Erro ao processar entrevista');
-    }}) => {
+    }) => {
       const { data, error } = await supabase
         .from('entrevistas')
         .insert(entrevista)
@@ -277,16 +275,15 @@ export function useCreateEntrevista() {
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['entrevistas'] },
-    // Optimistic update ready - implement setQueryData for instant feedback
-);
+      queryClient.invalidateQueries({ queryKey: ['entrevistas'] });
       queryClient.invalidateQueries({ queryKey: ['entrevistas-stats'] });
       queryClient.invalidateQueries({ queryKey: ['entrevistas-evolucao'] });
       queryClient.invalidateQueries({ queryKey: ['entrevistas-pizza'] });
     },
     onError: (error: Error) => {
-      // Error logged: Mutation error:
-    }
+      console.error('Erro em entrevistas:', error);
+      toast.error('Erro ao processar entrevista');
+    },
   });
 }
 
@@ -324,27 +321,21 @@ export function useUpdateEntrevista() {
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['entrevistas'] },
-    // Optimistic update ready - implement setQueryData for instant feedback
-);
+      queryClient.invalidateQueries({ queryKey: ['entrevistas'] });
       queryClient.invalidateQueries({ queryKey: ['entrevistas-stats'] });
       queryClient.invalidateQueries({ queryKey: ['entrevistas-evolucao'] });
       queryClient.invalidateQueries({ queryKey: ['entrevistas-pizza'] });
     },
     onError: (error: Error) => {
-      // Error logged: Mutation error:
-    }
+      console.error('Erro ao atualizar entrevista:', error);
+    },
   });
 }
 
 export function useCandidatosDisponiveis() {
   return useQuery({
     queryKey: ['candidatos-disponiveis'],
-    placeholderData: [],
-    select: (data) => data, staleTime: 5 * 60 * 1000,
-    refetchOnWindowFocus: false,
-    enabled: true, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
-      try {
+    queryFn: async () => {
       const { data, error } = await supabase
         .from('candidatos')
         .select('id, nome')
@@ -352,6 +343,11 @@ export function useCandidatosDisponiveis() {
       
       if (error) throw error;
       return data || [];
-    }
+    },
+    placeholderData: [],
+    staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    gcTime: 10 * 60 * 1000,
+    retry: 3,
   });
 }

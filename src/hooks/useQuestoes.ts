@@ -1,12 +1,8 @@
 /**
  * @module useQuestoes
  * @description Hook para gerenciar questões
- * @returns {Object} Hook result with data, isLoading, error, and mutations
- * @example
- * const { data, isLoading } = useQuestoes();
  */
 
-import { toast } from 'sonner';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -16,7 +12,6 @@ type QuestaoRow = Database['public']['Tables']['questoes']['Row'];
 type QuestaoInsert = Database['public']['Tables']['questoes']['Insert'];
 type QuestaoUpdate = Database['public']['Tables']['questoes']['Update'];
 
-// Interface local para trabalhar com questões
 interface Questao extends Omit<QuestaoRow, 'alternativas'> {
   alternativas: Array<{ id: string; texto: string; correta?: boolean }>;
 }
@@ -34,10 +29,7 @@ export function useQuestoes(provaId?: string) {
 
   const { data: questoes = [], isLoading, error } = useQuery({
     queryKey: ['questoes', provaId],
-    placeholderData: [],
-    select: (data) => data, staleTime: 5 * 60 * 1000,
-    refetchOnWindowFocus: false, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
-      try {
+    queryFn: async () => {
       if (!provaId) return [];
       
       const { data, error } = await supabase
@@ -54,13 +46,17 @@ export function useQuestoes(provaId?: string) {
       })) as Questao[];
     },
     enabled: !!provaId,
+    placeholderData: [],
+    staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    gcTime: 10 * 60 * 1000,
+    retry: 3,
   });
 
   const createQuestao = useMutation({
     mutationFn: async (dados: Omit<QuestaoInsert, 'prova_id'>) => {
       if (!provaId) throw new Error('Prova ID é obrigatório');
       
-      // Calcular próxima ordem
       const maxOrdem = questoes.length > 0 
         ? Math.max(...questoes.map(q => q.ordem)) 
         : 0;
@@ -79,9 +75,7 @@ export function useQuestoes(provaId?: string) {
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['questoes', provaId] },
-    // Optimistic update ready - implement setQueryData for instant feedback
-);
+      queryClient.invalidateQueries({ queryKey: ['questoes', provaId] });
       toast({ title: 'Questão adicionada!' });
     },
     onError: (error: Error) => {
@@ -102,33 +96,19 @@ export function useQuestoes(provaId?: string) {
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['questoes', provaId] },
-    // Optimistic update ready - implement setQueryData for instant feedback
-);
+      queryClient.invalidateQueries({ queryKey: ['questoes', provaId] });
       toast({ title: 'Questão atualizada!' });
-    },
-    onError: (error: Error) => {
-      toast({ title: 'Erro ao atualizar questão', description: error.message, variant: 'destructive' });
     },
   });
 
   const deleteQuestao = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase
-        .from('questoes')
-        .delete()
-        .eq('id', id);
-
+      const { error } = await supabase.from('questoes').delete().eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['questoes', provaId] },
-    // Optimistic update ready - implement setQueryData for instant feedback
-);
+      queryClient.invalidateQueries({ queryKey: ['questoes', provaId] });
       toast({ title: 'Questão removida!' });
-    },
-    onError: (error: Error) => {
-      toast({ title: 'Erro ao remover questão', description: error.message, variant: 'destructive' });
     },
   });
 
@@ -140,9 +120,7 @@ export function useQuestoes(provaId?: string) {
       await Promise.all(updates);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['questoes', provaId] },
-    // Optimistic update ready - implement setQueryData for instant feedback
-);
+      queryClient.invalidateQueries({ queryKey: ['questoes', provaId] });
     },
   });
 

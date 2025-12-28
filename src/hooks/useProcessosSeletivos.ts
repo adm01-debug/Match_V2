@@ -1,17 +1,12 @@
 /**
  * @module useProcessosSeletivos
  * @description Hook para processos seletivos
- * @returns {Object} Hook result with data, isLoading, error, and mutations
- * @example
- * const { data, isLoading } = useProcessosSeletivos();
  */
 
-import { toast } from 'sonner';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { ProcessoSeletivo, EtapaProcesso, StatusProcesso, FonteCandidato } from '@/types/recruitment';
 
-// Database type mapping
 interface ProcessoDB {
   id: string;
   vaga_id: string | null;
@@ -30,7 +25,6 @@ interface ProcessoDB {
   updated_at: string;
 }
 
-// Convert database row to ProcessoSeletivo type
 function dbToProcesso(row: ProcessoDB): ProcessoSeletivo {
   return {
     id: row.id,
@@ -49,14 +43,10 @@ function dbToProcesso(row: ProcessoDB): ProcessoSeletivo {
   };
 }
 
-// Fetch all processos seletivos
 export function useProcessosSeletivos() {
   return useQuery({
     queryKey: ['processos-seletivos'],
-    placeholderData: [],
-    select: (data) => data, staleTime: 5 * 60 * 1000,
-    refetchOnWindowFocus: false, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
-      try {
+    queryFn: async () => {
       const { data, error } = await supabase
         .from('processos_seletivos')
         .select('*')
@@ -65,17 +55,18 @@ export function useProcessosSeletivos() {
       if (error) throw error;
       return (data as unknown as ProcessoDB[]).map(dbToProcesso);
     },
+    placeholderData: [],
+    staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    gcTime: 10 * 60 * 1000,
+    retry: 3,
   });
 }
 
-// Fetch processos by vaga
 export function useProcessosByVaga(vagaId: string) {
   return useQuery({
     queryKey: ['processos-seletivos', 'vaga', vagaId],
-    placeholderData: [],
-    select: (data) => data, staleTime: 5 * 60 * 1000,
-    refetchOnWindowFocus: false, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
-      try {
+    queryFn: async () => {
       const { data, error } = await supabase
         .from('processos_seletivos')
         .select('*')
@@ -86,10 +77,14 @@ export function useProcessosByVaga(vagaId: string) {
       return (data as unknown as ProcessoDB[]).map(dbToProcesso);
     },
     enabled: !!vagaId && vagaId !== 'todas',
+    placeholderData: [],
+    staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    gcTime: 10 * 60 * 1000,
+    retry: 3,
   });
 }
 
-// Update processo etapa (for drag and drop)
 export function useUpdateProcessoEtapa() {
   const queryClient = useQueryClient();
 
@@ -109,15 +104,12 @@ export function useUpdateProcessoEtapa() {
       if (error) throw error;
       return dbToProcesso(data as unknown as ProcessoDB);
     },
-    onError: (error) => { // Error logged: Mutation error: toast.error('Ocorreu um erro'); }, onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['processos-seletivos'] },
-    // Optimistic update ready - implement setQueryData for instant feedback
-);
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['processos-seletivos'] });
     },
   });
 }
 
-// Update processo status
 export function useUpdateProcessoStatus() {
   const queryClient = useQueryClient();
 
@@ -142,15 +134,12 @@ export function useUpdateProcessoStatus() {
       if (error) throw error;
       return dbToProcesso(data as unknown as ProcessoDB);
     },
-    onError: (error) => { // Error logged: Mutation error: toast.error('Ocorreu um erro'); }, onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['processos-seletivos'] },
-    // Optimistic update ready - implement setQueryData for instant feedback
-);
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['processos-seletivos'] });
     },
   });
 }
 
-// Create processo
 export function useCreateProcesso() {
   const queryClient = useQueryClient();
 
@@ -181,15 +170,12 @@ export function useCreateProcesso() {
       if (error) throw error;
       return dbToProcesso(data as unknown as ProcessoDB);
     },
-    onError: (error) => { // Error logged: Mutation error: toast.error('Ocorreu um erro'); }, onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['processos-seletivos'] },
-    // Optimistic update ready - implement setQueryData for instant feedback
-);
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['processos-seletivos'] });
     },
   });
 }
 
-// Delete processo
 export function useDeleteProcesso() {
   const queryClient = useQueryClient();
 
@@ -202,10 +188,8 @@ export function useDeleteProcesso() {
 
       if (error) throw error;
     },
-    onError: (error) => { // Error logged: Mutation error: toast.error('Ocorreu um erro'); }, onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['processos-seletivos'] },
-    // Optimistic update ready - implement setQueryData for instant feedback
-);
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['processos-seletivos'] });
     },
   });
 }

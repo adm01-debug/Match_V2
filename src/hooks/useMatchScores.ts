@@ -1,5 +1,3 @@
-import { toast } from 'sonner';
-import { useCallback } from 'react';
 /**
  * @module useMatchScores
  * @description Hook para cálculo de match scores
@@ -29,13 +27,8 @@ export function useMatchScores(filtros?: { candidatoId?: string; vagaId?: string
   const queryClient = useQueryClient();
 
   const { data: matchScores = [], isLoading, error } = useQuery({
-    staleTime: 1000 * 60 * 5,
-    refetchOnWindowFocus: false, // 5 minutes
-    gcTime: 1000 * 60 * 30, // 30 minutes
-    retry: 3,
     queryKey: ['match-scores', filtros],
     queryFn: async () => {
-      try {
       let query = supabase
         .from('match_scores')
         .select(`
@@ -58,18 +51,17 @@ export function useMatchScores(filtros?: { candidatoId?: string; vagaId?: string
       if (error) throw error;
       return (data || []) as MatchScore[];
     },
+    staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false,
+    gcTime: 1000 * 60 * 30,
+    retry: 3,
   });
 
   // Buscar score específico
   const useMatchScore = (candidatoId?: string, vagaId?: string) => {
     return useQuery({
-    staleTime: 1000 * 60 * 5,
-    refetchOnWindowFocus: false, // 5 minutes
-    gcTime: 1000 * 60 * 30, // 30 minutes
-    retry: 3,
       queryKey: ['match-score', candidatoId, vagaId],
       queryFn: async () => {
-      try {
         if (!candidatoId || !vagaId) return null;
         
         const { data, error } = await supabase
@@ -83,8 +75,10 @@ export function useMatchScores(filtros?: { candidatoId?: string; vagaId?: string
         return data as MatchScore | null;
       },
       enabled: !!candidatoId && !!vagaId,
-    placeholderData: (previousData) => previousData,
-    select: (data) => data,
+      staleTime: 1000 * 60 * 5,
+      refetchOnWindowFocus: false,
+      gcTime: 1000 * 60 * 30,
+      retry: 3,
     });
   };
 
@@ -99,9 +93,7 @@ export function useMatchScores(filtros?: { candidatoId?: string; vagaId?: string
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['match-scores'] },
-    // Optimistic update ready - implement setQueryData for instant feedback
-);
+      queryClient.invalidateQueries({ queryKey: ['match-scores'] });
       toast({ title: 'Match calculado!', description: 'Score atualizado com sucesso.' });
     },
     onError: (error: Error) => {

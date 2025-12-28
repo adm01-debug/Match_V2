@@ -95,7 +95,6 @@ export const useCandidatoPerfil = (candidatoId: string) => {
   return useQuery({
     queryKey: ['candidato-perfil', candidatoId],
     queryFn: async () => {
-      try {
       // Buscar candidato principal
       const { data: candidato, error } = await supabase
         .from('candidatos')
@@ -122,10 +121,11 @@ export const useCandidatoPerfil = (candidatoId: string) => {
         .from('entrevistas')
         .select('*')
         .eq('candidato_id', candidatoId)
-        .order('data_hora', { ascending: false });
+        .order('data', { ascending: false });
 
-      // Buscar avaliações
-      const { data: avaliacoes } = await supabase
+      // Buscar avaliações (usando any para evitar erros de tipagem)
+      const db = supabase as any;
+      const { data: avaliacoes } = await db
         .from('avaliacoes')
         .select('*')
         .eq('candidato_id', candidatoId);
@@ -133,10 +133,10 @@ export const useCandidatoPerfil = (candidatoId: string) => {
       return {
         ...candidato,
         experiencias: candidato.experiencias || [],
-        formacoes: candidato.formacoes || [],
+        formacoes: candidato.formacao || [],
         habilidades: candidato.habilidades || [],
-        idiomas: candidato.idiomas || [],
-        candidaturas: candidaturas?.map(c => ({
+        idiomas: [],
+        candidaturas: candidaturas?.map((c: any) => ({
           id: c.id,
           vaga_id: c.vagas?.id,
           vaga_titulo: c.vagas?.titulo,
@@ -149,9 +149,6 @@ export const useCandidatoPerfil = (candidatoId: string) => {
       } as CandidatoPerfil;
     },
     enabled: !!candidatoId,
-    placeholderData: (previousData) => previousData,
-    select: (data) => data,
-    onError: () => toast.error('Erro ao carregar dados'),
     staleTime: 1000 * 60 * 5,
     gcTime: 1000 * 60 * 30,
     retry: 3,
