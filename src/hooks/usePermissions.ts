@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useMemo } from 'react';
+import React from 'react';
 
 export interface Permission {
   resource: string;
@@ -36,7 +37,6 @@ export function usePermissions() {
 
       if (error) throw error;
 
-      // Flatten permissions
       const permissions: Permission[] = [];
       data?.forEach((ur: any) => {
         ur.role?.role_permissions?.forEach((rp: any) => {
@@ -96,42 +96,34 @@ export function usePermissions() {
 
   const isAdmin = useMemo(() => hasRole('admin'), [userRoles]);
 
-  // Permission check shortcuts
   const can = {
-    // Candidatos
     viewCandidatos: () => hasPermission('candidatos', 'view'),
     createCandidato: () => hasPermission('candidatos', 'create'),
     editCandidato: () => hasPermission('candidatos', 'edit'),
     deleteCandidato: () => hasPermission('candidatos', 'delete'),
     exportCandidatos: () => hasPermission('candidatos', 'export'),
     
-    // Vagas
     viewVagas: () => hasPermission('vagas', 'view'),
     createVaga: () => hasPermission('vagas', 'create'),
     editVaga: () => hasPermission('vagas', 'edit'),
     deleteVaga: () => hasPermission('vagas', 'delete'),
     publishVaga: () => hasPermission('vagas', 'publish'),
     
-    // Entrevistas
     viewEntrevistas: () => hasPermission('entrevistas', 'view'),
     createEntrevista: () => hasPermission('entrevistas', 'create'),
     editEntrevista: () => hasPermission('entrevistas', 'edit'),
     deleteEntrevista: () => hasPermission('entrevistas', 'delete'),
     
-    // Avaliações
     viewAvaliacoes: () => hasPermission('avaliacoes', 'view'),
     createAvaliacao: () => hasPermission('avaliacoes', 'create'),
     editAvaliacao: () => hasPermission('avaliacoes', 'edit'),
     
-    // Relatórios
     viewRelatorios: () => hasPermission('relatorios', 'view'),
     exportRelatorios: () => hasPermission('relatorios', 'export'),
     
-    // Settings
     viewSettings: () => hasPermission('settings', 'view'),
     editSettings: () => hasPermission('settings', 'edit'),
     
-    // Users
     viewUsers: () => hasPermission('users', 'view'),
     createUser: () => hasPermission('users', 'create'),
     editUser: () => hasPermission('users', 'edit'),
@@ -163,7 +155,7 @@ export function withPermission<P extends object>(
     if (isLoading) return null;
     if (!hasPermission(resource, action)) return null;
     
-    return <WrappedComponent {...props} />;
+    return React.createElement(WrappedComponent, props);
   };
 }
 
