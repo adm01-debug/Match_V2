@@ -1,9 +1,7 @@
-import { ErrorBoundary } from '@/components/common/ErrorBoundary';
 import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { usePageTitle } from '@/hooks/usePageTitle';
-import { Suspense,  useState, useEffect  } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -32,7 +30,6 @@ const signupSchema = z.object({
 
 const AuthPage = () => {
   useDocumentTitle('Login');
-
   usePageTitle('Login');
 
   const navigate = useNavigate();
@@ -124,7 +121,6 @@ const AuthPage = () => {
 
   if (authLoading) {
     return (
-      <ErrorBoundary>
       <div className="min-h-screen flex items-center justify-center bg-background">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>

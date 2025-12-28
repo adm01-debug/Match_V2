@@ -219,7 +219,7 @@ const AdminPage = () => {
   return (
     <Suspense fallback={<div className="p-6"><Skeleton className="h-8 w-64 mb-4" /><Skeleton className="h-64" /></div>}>
       <Layout>
-      <div className="space-y-6">
+        <div className="space-y-6">
         {/* Header */}
         <div>
           <h1 className="text-3xl font-bold text-foreground">Administração</h1>
@@ -439,8 +439,9 @@ const AdminPage = () => {
             </DialogFooter>
           </DialogContent>
         </Dialog>
-      </div>
-    </Layout>
+        </div>
+      </Layout>
+    </Suspense>
   );
 };
 
