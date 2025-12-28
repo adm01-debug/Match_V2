@@ -6,7 +6,6 @@
  * const { data, isLoading } = useIndicacoes();
  */
 
-import { toast } from 'sonner';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -25,11 +24,7 @@ export function useIndicacoes(filtros?: { status?: string; vagaId?: string }) {
 
   const { data: indicacoes = [], isLoading, error } = useQuery({
     queryKey: ['indicacoes', filtros],
-    placeholderData: [],
-    select: (data) => data, staleTime: 5 * 60 * 1000,
-    refetchOnWindowFocus: false,
-    enabled: true, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
-      try {
+    queryFn: async () => {
       let query = supabase
         .from('indicacoes')
         .select(`
@@ -49,6 +44,11 @@ export function useIndicacoes(filtros?: { status?: string; vagaId?: string }) {
       if (error) throw error;
       return (data || []) as Indicacao[];
     },
+    placeholderData: [],
+    staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    gcTime: 10 * 60 * 1000,
+    retry: 3,
   });
 
   const createIndicacao = useMutation({
@@ -63,9 +63,7 @@ export function useIndicacoes(filtros?: { status?: string; vagaId?: string }) {
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['indicacoes'] },
-    // Optimistic update ready - implement setQueryData for instant feedback
-);
+      queryClient.invalidateQueries({ queryKey: ['indicacoes'] });
       toast({ title: 'Indicação registrada!', description: 'A indicação foi enviada com sucesso.' });
     },
     onError: (error: Error) => {
@@ -86,9 +84,7 @@ export function useIndicacoes(filtros?: { status?: string; vagaId?: string }) {
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['indicacoes'] },
-    // Optimistic update ready - implement setQueryData for instant feedback
-);
+      queryClient.invalidateQueries({ queryKey: ['indicacoes'] });
       toast({ title: 'Status atualizado!' });
     },
     onError: (error: Error) => {

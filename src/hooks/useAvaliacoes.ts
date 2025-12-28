@@ -101,13 +101,10 @@ export function useAvaliacoes(options: UseAvaliacoesOptions = {}) {
   } = useQuery({
     queryKey: ['avaliacoes', processoId, avaliadorId, etapa],
     queryFn: async () => {
-      try {
       let query = db
         .from('avaliacoes')
         .select('*')
-        .order('created_at', { ascending: false , placeholderData: [],
-    select: (data) => data, staleTime: 5 * 60 * 1000,
-    refetchOnWindowFocus: false, gcTime: 10 * 60 * 1000, retry: 3});
+        .order('created_at', { ascending: false });
 
       if (processoId) query = query.eq('processo_id', processoId);
       if (avaliadorId) query = query.eq('avaliador_id', avaliadorId);
@@ -117,6 +114,11 @@ export function useAvaliacoes(options: UseAvaliacoesOptions = {}) {
       if (error) throw error;
       return (data || []) as AvaliacaoDB[];
     },
+    placeholderData: [],
+    staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    gcTime: 10 * 60 * 1000,
+    retry: 3,
   });
 
   const createMutation = useMutation({
@@ -136,10 +138,11 @@ export function useAvaliacoes(options: UseAvaliacoesOptions = {}) {
       if (error) throw error;
       return data as AvaliacaoDB;
     },
-    onError: (error) => { // Error logged: Mutation error: toast.error('Ocorreu um erro'); }, onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['avaliacoes'] },
-    // Optimistic update ready - implement setQueryData for instant feedback
-);
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['avaliacoes'] });
+    },
+    onError: (error: Error) => {
+      console.error('Erro ao criar avaliação:', error);
     },
   });
 
@@ -158,10 +161,11 @@ export function useAvaliacoes(options: UseAvaliacoesOptions = {}) {
       if (error) throw error;
       return data as AvaliacaoDB;
     },
-    onError: (error) => { // Error logged: Mutation error: toast.error('Ocorreu um erro'); }, onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['avaliacoes'] },
-    // Optimistic update ready - implement setQueryData for instant feedback
-);
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['avaliacoes'] });
+    },
+    onError: (error: Error) => {
+      console.error('Erro ao atualizar avaliação:', error);
     },
   });
 
@@ -170,10 +174,11 @@ export function useAvaliacoes(options: UseAvaliacoesOptions = {}) {
       const { error } = await db.from('avaliacoes').delete().eq('id', id);
       if (error) throw error;
     },
-    onError: (error) => { // Error logged: Mutation error: toast.error('Ocorreu um erro'); }, onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['avaliacoes'] },
-    // Optimistic update ready - implement setQueryData for instant feedback
-);
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['avaliacoes'] });
+    },
+    onError: (error: Error) => {
+      console.error('Erro ao deletar avaliação:', error);
     },
   });
 
@@ -251,4 +256,3 @@ export function useAvaliacao(id: string | undefined) {
 }
 
 export default useAvaliacoes;
-

@@ -1,11 +1,6 @@
-import { toast } from 'sonner';
-import { useCallback } from 'react';
 /**
  * @module useProfiles
  * @description Hook para gerenciar perfis
- * @returns {Object} Hook result with data, isLoading, error, and mutations
- * @example
- * const { data, isLoading } = useProfiles();
  */
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -17,7 +12,6 @@ type ProfileRow = Database['public']['Tables']['profiles']['Row'];
 type ProfileUpdate = Database['public']['Tables']['profiles']['Update'];
 
 interface Profile extends ProfileRow {
-  // Campos adicionais que podemos precisar
   role?: string | null;
   departamento?: string | null;
 }
@@ -27,13 +21,8 @@ export function useProfiles() {
   const queryClient = useQueryClient();
 
   const { data: profiles = [], isLoading, error } = useQuery({
-    staleTime: 1000 * 60 * 5,
-    refetchOnWindowFocus: false, // 5 minutes
-    gcTime: 1000 * 60 * 30, // 30 minutes
-    retry: 3,
     queryKey: ['profiles'],
     queryFn: async () => {
-      try {
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
@@ -41,16 +30,15 @@ export function useProfiles() {
       if (error) throw error;
       return (data || []) as Profile[];
     },
+    staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false,
+    gcTime: 1000 * 60 * 30,
+    retry: 3,
   });
 
   const useProfile = (userId?: string) => useQuery({
-    staleTime: 1000 * 60 * 5,
-    refetchOnWindowFocus: false, // 5 minutes
-    gcTime: 1000 * 60 * 30, // 30 minutes
-    retry: 3,
     queryKey: ['profile', userId],
     queryFn: async () => {
-      try {
       if (!userId) return null;
       const { data, error } = await supabase
         .from('profiles')
@@ -61,18 +49,15 @@ export function useProfiles() {
       return data as Profile | null;
     },
     enabled: !!userId,
-    placeholderData: (previousData) => previousData,
-    select: (data) => data,
+    staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false,
+    gcTime: 1000 * 60 * 30,
+    retry: 3,
   });
 
   const useCurrentProfile = () => useQuery({
-    staleTime: 1000 * 60 * 5,
-    refetchOnWindowFocus: false, // 5 minutes
-    gcTime: 1000 * 60 * 30, // 30 minutes
-    retry: 3,
     queryKey: ['current-profile'],
     queryFn: async () => {
-      try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return null;
       const { data, error } = await supabase
@@ -83,6 +68,10 @@ export function useProfiles() {
       if (error) throw error;
       return data as Profile | null;
     },
+    staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false,
+    gcTime: 1000 * 60 * 30,
+    retry: 3,
   });
 
   const updateProfile = useMutation({
@@ -96,16 +85,13 @@ export function useProfiles() {
       if (error) throw error;
       return data;
     },
-    onError: (error) => { // Error logged: Mutation error: toast.error('Ocorreu um erro'); }, onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['profiles'] },
-    // Optimistic update ready - implement setQueryData for instant feedback
-);
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['profiles'] });
       queryClient.invalidateQueries({ queryKey: ['current-profile'] });
       toast({ title: 'Perfil atualizado!' });
     },
   });
 
-  // Filtrar por role (usando campo adicional ou lógica)
   const recrutadores = profiles.filter(p => p.role === 'recrutador' || p.role === 'admin' || p.role === 'rh');
   const gestores = profiles.filter(p => p.role === 'gestor' || p.role === 'admin');
 

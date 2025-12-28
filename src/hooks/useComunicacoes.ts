@@ -6,7 +6,6 @@
  * const { data, isLoading } = useComunicacoes();
  */
 
-import { toast } from 'sonner';
 import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -29,10 +28,7 @@ export function useComunicacoes(candidatoId?: string) {
   // Query para buscar comunicações de um candidato
   const { data: comunicacoes = [], isLoading, error } = useQuery({
     queryKey: ['comunicacoes', candidatoId],
-    placeholderData: [],
-    select: (data) => data, staleTime: 5 * 60 * 1000,
-    refetchOnWindowFocus: false, gcTime: 10 * 60 * 1000, retry: 3, queryFn: async () => {
-      try {
+    queryFn: async () => {
       if (!candidatoId) return [];
       
       const { data, error } = await supabase
@@ -45,6 +41,11 @@ export function useComunicacoes(candidatoId?: string) {
       return data as ComunicacaoRow[];
     },
     enabled: !!candidatoId,
+    placeholderData: [],
+    staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    gcTime: 10 * 60 * 1000,
+    retry: 3,
   });
 
   const registrarMutation = useMutation({
@@ -69,9 +70,7 @@ export function useComunicacoes(candidatoId?: string) {
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['comunicacoes'] },
-    // Optimistic update ready - implement setQueryData for instant feedback
-);
+      queryClient.invalidateQueries({ queryKey: ['comunicacoes'] });
       toast({ title: 'Comunicação registrada!' });
     },
     onError: (error: Error) => {

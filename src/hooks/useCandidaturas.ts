@@ -31,15 +31,7 @@ export function useCandidaturas(filtros?: { vagaId?: string; candidatoAuthId?: s
 
   const { data: candidaturas = [], isLoading, error } = useQuery({
     queryKey: ['candidaturas', filtros],
-    staleTime: 5 * 60 * 1000,
-    refetchOnWindowFocus: false,
-    enabled: true,
-    gcTime: 10 * 60 * 1000,
-    retry: 3,
-    placeholderData: [],
-    select: (data) => data,
     queryFn: async () => {
-      try {
       let query = supabase
         .from('candidaturas')
         .select(`
@@ -58,6 +50,11 @@ export function useCandidaturas(filtros?: { vagaId?: string; candidatoAuthId?: s
       
       return (data || []) as Candidatura[];
     },
+    staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    gcTime: 10 * 60 * 1000,
+    retry: 3,
+    placeholderData: [],
   });
 
   const createCandidatura = useMutation({
@@ -79,13 +76,11 @@ export function useCandidaturas(filtros?: { vagaId?: string; candidatoAuthId?: s
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['candidaturas'] },
-    // Optimistic update ready - implement setQueryData for instant feedback
-);
+      queryClient.invalidateQueries({ queryKey: ['candidaturas'] });
       toast({ title: 'Candidatura registrada!' });
     },
     onError: (error: Error) => {
-      // Error logged: Mutation error:
+      console.error('Erro ao criar candidatura:', error);
     },
   });
 
@@ -101,13 +96,11 @@ export function useCandidaturas(filtros?: { vagaId?: string; candidatoAuthId?: s
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['candidaturas'] },
-    // Optimistic update ready - implement setQueryData for instant feedback
-);
+      queryClient.invalidateQueries({ queryKey: ['candidaturas'] });
       toast({ title: 'Status atualizado!' });
     },
     onError: (error: Error) => {
-      // Error logged: Mutation error:
+      console.error('Erro ao atualizar status:', error);
     },
   });
 

@@ -43,22 +43,19 @@ export function useCandidatos(filters?: {
   return useQuery({
     queryKey: ['candidatos', filters],
     queryFn: async () => {
-      try {
       let query = supabase
         .from('candidatos')
         .select(`
           *,
-          match_scores(score, criterios)
+          match_scores(score_total)
         `)
-        .order('created_at', { ascending: false , placeholderData: [],
-    select: (data) => data, staleTime: 5 * 60 * 1000,
-    refetchOnWindowFocus: false, gcTime: 10 * 60 * 1000, retry: 3});
+        .order('created_at', { ascending: false });
 
       if (filters?.status) {
         query = query.eq('status', filters.status);
       }
       if (filters?.origem) {
-        query = query.eq('origem', filters.origem);
+        query = query.eq('fonte', filters.origem);
       }
       if (filters?.search) {
         query = query.or(`nome.ilike.%${filters.search}%,email.ilike.%${filters.search}%`);
@@ -68,6 +65,11 @@ export function useCandidatos(filters?: {
       if (error) throw error;
       return data;
     },
+    placeholderData: [],
+    staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    gcTime: 10 * 60 * 1000,
+    retry: 3,
   });
 }
 
@@ -81,7 +83,7 @@ export function useCandidato(id: string | undefined) {
         .from('candidatos')
         .select(`
           *,
-          match_scores(score, criterios),
+          match_scores(score_total),
           processos_seletivos(*, vagas(*)),
           candidaturas(*, vagas(*))
         `)
@@ -101,7 +103,7 @@ export function useCandidatosStats() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('candidatos')
-        .select('status, origem');
+        .select('status, fonte');
       
       if (error) throw error;
 
@@ -111,7 +113,7 @@ export function useCandidatosStats() {
 
       data.forEach(c => {
         byStatus[c.status || 'novo'] = (byStatus[c.status || 'novo'] || 0) + 1;
-        byOrigem[c.origem || 'outro'] = (byOrigem[c.origem || 'outro'] || 0) + 1;
+        byOrigem[c.fonte || 'outro'] = (byOrigem[c.fonte || 'outro'] || 0) + 1;
       });
 
       return { total, byStatus, byOrigem };
@@ -133,11 +135,12 @@ export function useCreateCandidato() {
       if (error) throw error;
       return data;
     },
-    onError: (error) => { // Error logged: Mutation error: toast.error('Ocorreu um erro'); }, onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['candidatos'] },
-    // Optimistic update ready - implement setQueryData for instant feedback
-);
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['candidatos'] });
       queryClient.invalidateQueries({ queryKey: ['candidatos-stats'] });
+    },
+    onError: (error: Error) => {
+      console.error('Erro ao criar candidato:', error);
     },
   });
 }
@@ -157,12 +160,13 @@ export function useUpdateCandidato() {
       if (error) throw error;
       return data;
     },
-    onError: (error) => { // Error logged: Mutation error: toast.error('Ocorreu um erro'); }, onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ['candidatos'] },
-    // Optimistic update ready - implement setQueryData for instant feedback
-);
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['candidatos'] });
       queryClient.invalidateQueries({ queryKey: ['candidato', data.id] });
       queryClient.invalidateQueries({ queryKey: ['candidatos-stats'] });
+    },
+    onError: (error: Error) => {
+      console.error('Erro ao atualizar candidato:', error);
     },
   });
 }
@@ -180,11 +184,12 @@ export function useDeleteCandidato() {
       if (error) throw error;
       return id;
     },
-    onError: (error) => { // Error logged: Mutation error: toast.error('Ocorreu um erro'); }, onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['candidatos'] },
-    // Optimistic update ready - implement setQueryData for instant feedback
-);
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['candidatos'] });
       queryClient.invalidateQueries({ queryKey: ['candidatos-stats'] });
+    },
+    onError: (error: Error) => {
+      console.error('Erro ao deletar candidato:', error);
     },
   });
 }
