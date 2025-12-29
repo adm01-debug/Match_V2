@@ -29,14 +29,10 @@ export function useDashboardData() {
   // KPIs
   const kpisQuery = useQuery({
     queryKey: ['dashboard-kpis'],
-    staleTime: 1000 * 60 * 5,
-    refetchOnWindowFocus: false,
-    enabled: true,
-    placeholderData: (previousData) => previousData,
-    select: (data) => data,
-    onError: () => toast.error('Erro ao carregar dados'),
+    staleTime: 30000,
     gcTime: 1000 * 60 * 30,
     retry: 3,
+    refetchOnWindowFocus: false,
     queryFn: async (): Promise<KPIData> => {
       const inicioMes = startOfMonth(new Date()).toISOString();
       
@@ -108,30 +104,20 @@ export function useDashboardData() {
         emProcesso: emProcesso || 0,
         vagasEmProcesso: vagasUnicas.size,
         contratadosMes: contratadosMes || 0,
-        metaContratacao: 5, // Meta fixa por enquanto
+        metaContratacao: 5,
         tempoMedio: tempoMedio || 0,
-        metaTempo: 25, // Meta fixa por enquanto
+        metaTempo: 25,
       };
     },
-    staleTime: 30000,
-    refetchOnWindowFocus: false,
-    enabled: true,
-    placeholderData: (previousData) => previousData,
-    select: (data) => data,
-    onError: () => toast.error('Erro ao carregar dados'), // 30 segundos
   });
 
   // Funil de recrutamento
   const funilQuery = useQuery({
     queryKey: ['dashboard-funil'],
-    staleTime: 1000 * 60 * 5,
-    refetchOnWindowFocus: false,
-    enabled: true,
-    placeholderData: (previousData) => previousData,
-    select: (data) => data,
-    onError: () => toast.error('Erro ao carregar dados'),
+    staleTime: 30000,
     gcTime: 1000 * 60 * 30,
     retry: 3,
+    refetchOnWindowFocus: false,
     queryFn: async (): Promise<FunilEtapa[]> => {
       const { data: processos } = await supabase
         .from('processos_seletivos')
@@ -158,25 +144,15 @@ export function useDashboardData() {
         cor: e.cor,
       }));
     },
-    staleTime: 30000,
-    refetchOnWindowFocus: false,
-    enabled: true,
-    placeholderData: (previousData) => previousData,
-    select: (data) => data,
-    onError: () => toast.error('Erro ao carregar dados'),
   });
 
   // Vagas urgentes
   const vagasUrgentesQuery = useQuery({
     queryKey: ['dashboard-vagas-urgentes'],
-    staleTime: 1000 * 60 * 5,
-    refetchOnWindowFocus: false,
-    enabled: true,
-    placeholderData: (previousData) => previousData,
-    select: (data) => data,
-    onError: () => toast.error('Erro ao carregar dados'),
+    staleTime: 30000,
     gcTime: 1000 * 60 * 30,
     retry: 3,
+    refetchOnWindowFocus: false,
     queryFn: async (): Promise<VagaUrgente[]> => {
       const { data: vagas } = await supabase
         .from('vagas')
@@ -200,25 +176,15 @@ export function useDashboardData() {
         prioridade: v.prioridade as Prioridade,
       }));
     },
-    staleTime: 30000,
-    refetchOnWindowFocus: false,
-    enabled: true,
-    placeholderData: (previousData) => previousData,
-    select: (data) => data,
-    onError: () => toast.error('Erro ao carregar dados'),
   });
 
   // Ações pendentes
   const acoesPendentesQuery = useQuery({
     queryKey: ['dashboard-acoes-pendentes'],
-    staleTime: 1000 * 60 * 5,
-    refetchOnWindowFocus: false,
-    enabled: true,
-    placeholderData: (previousData) => previousData,
-    select: (data) => data,
-    onError: () => toast.error('Erro ao carregar dados'),
+    staleTime: 30000,
     gcTime: 1000 * 60 * 30,
     retry: 3,
+    refetchOnWindowFocus: false,
     queryFn: async (): Promise<AcaoPendente[]> => {
       const acoes: AcaoPendente[] = [];
 
@@ -288,25 +254,15 @@ export function useDashboardData() {
 
       return acoes;
     },
-    staleTime: 30000,
-    refetchOnWindowFocus: false,
-    enabled: true,
-    placeholderData: (previousData) => previousData,
-    select: (data) => data,
-    onError: () => toast.error('Erro ao carregar dados'),
   });
 
   // Agenda do dia
   const agendaHojeQuery = useQuery({
     queryKey: ['dashboard-agenda-hoje'],
-    staleTime: 1000 * 60 * 5,
-    refetchOnWindowFocus: false,
-    enabled: true,
-    placeholderData: (previousData) => previousData,
-    select: (data) => data,
-    onError: () => toast.error('Erro ao carregar dados'),
+    staleTime: 60000,
     gcTime: 1000 * 60 * 30,
     retry: 3,
+    refetchOnWindowFocus: false,
     queryFn: async (): Promise<AgendaDia[]> => {
       const hoje = format(new Date(), 'yyyy-MM-dd');
       
@@ -335,25 +291,15 @@ export function useDashboardData() {
         local: e.tipo === 'video' ? 'Online' : (e.local || 'A definir'),
       }));
     },
-    staleTime: 60000,
-    refetchOnWindowFocus: false,
-    enabled: true,
-    placeholderData: (previousData) => previousData,
-    select: (data) => data,
-    onError: () => toast.error('Erro ao carregar dados'), // 1 minuto
   });
 
   // Top candidatos (processos)
   const processosQuery = useQuery({
     queryKey: ['dashboard-processos'],
-    staleTime: 1000 * 60 * 5,
-    refetchOnWindowFocus: false,
-    enabled: true,
-    placeholderData: (previousData) => previousData,
-    select: (data) => data,
-    onError: () => toast.error('Erro ao carregar dados'),
+    staleTime: 30000,
     gcTime: 1000 * 60 * 30,
     retry: 3,
+    refetchOnWindowFocus: false,
     queryFn: async (): Promise<ProcessoSeletivo[]> => {
       const { data } = await supabase
         .from('processos_seletivos')
@@ -380,12 +326,6 @@ export function useDashboardData() {
         diasNaEtapa: p.dias_na_etapa || 0,
       }));
     },
-    staleTime: 30000,
-    refetchOnWindowFocus: false,
-    enabled: true,
-    placeholderData: (previousData) => previousData,
-    select: (data) => data,
-    onError: () => toast.error('Erro ao carregar dados'),
   });
 
   return {
