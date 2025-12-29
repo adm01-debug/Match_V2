@@ -1,3 +1,17 @@
+interface VagaData {
+  id: string;
+  titulo: string;
+  descricao: string;
+  requisitos: string;
+  beneficios?: string;
+  salario_min?: number;
+  salario_max?: number;
+  regime_contratacao?: string;
+  local?: string;
+  departamento?: string;
+}
+
+
 interface JobBoard { id: string; name: string; type: 'indeed' | 'linkedin' | 'glassdoor' | 'catho' | 'gupy' | 'custom'; apiKey?: string; enabled: boolean; }
 interface JobPosting { vagaId: string; boardId: string; externalId?: string; status: 'pending' | 'published' | 'failed' | 'expired'; publishedAt?: string; url?: string; }
 
@@ -10,7 +24,7 @@ export const jobBoardService = {
     { id: 'gupy', name: 'Gupy', type: 'gupy', enabled: false },
   ] as JobBoard[],
 
-  async publishJob(vaga: any, boardIds: string[]): Promise<JobPosting[]> {
+  async publishJob(vaga: VagaData, boardIds: string[]): Promise<JobPosting[]> {
     const results: JobPosting[] = [];
     for (const boardId of boardIds) {
       const board = this.boards.find(b => b.id === boardId);
@@ -25,14 +39,14 @@ export const jobBoardService = {
     return results;
   },
 
-  async publishToBoard(board: JobBoard, vaga: any): Promise<string> {
+  async publishToBoard(board: JobBoard, vaga: VagaData): Promise<string> {
     const payload = this.formatJobData(board.type, vaga);
     // Simulated API call - in production, use actual board APIs
     // console.log(`Publishing to ${board.name}:`, payload);
     return `ext-${board.id}-${Date.now()}`;
   },
 
-  formatJobData(boardType: string, vaga: any) {
+  formatJobData(boardType: string, vaga: VagaData) {
     const base = { title: vaga.titulo, description: vaga.descricao, location: vaga.local, salary: vaga.salario, company: vaga.empresa };
     switch (boardType) {
       case 'indeed': return { ...base, sponsoredType: 'organic' };
@@ -77,4 +91,5 @@ export const jobBoardService = {
 };
 
 export default jobBoardService;
+
 
