@@ -140,7 +140,7 @@ export function useCreateCandidato() {
       queryClient.invalidateQueries({ queryKey: ['candidatos-stats'] });
     },
     onError: (error: Error) => {
-      console.error('Erro ao criar candidato:', error);
+      // Erro ao criar candidato - handled silently
     },
   });
 }
@@ -166,7 +166,7 @@ export function useUpdateCandidato() {
       queryClient.invalidateQueries({ queryKey: ['candidatos-stats'] });
     },
     onError: (error: Error) => {
-      console.error('Erro ao atualizar candidato:', error);
+      // Erro ao atualizar candidato - handled silently
     },
   });
 }
@@ -189,7 +189,7 @@ export function useDeleteCandidato() {
       queryClient.invalidateQueries({ queryKey: ['candidatos-stats'] });
     },
     onError: (error: Error) => {
-      console.error('Erro ao deletar candidato:', error);
+      // Erro ao deletar candidato - handled silently
     },
   });
 }
@@ -208,3 +208,4 @@ export function useCandidatosSelect() {
     },
   });
 }
+
