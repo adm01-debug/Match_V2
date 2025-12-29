@@ -101,7 +101,7 @@ Retorne JSON com: score (0-100), confidence (0-100), insights (array), strengths
       
       return JSON.parse(jsonMatch[0]) as MatchAnalysis;
     } catch (error) {
-      console.error('AI analysis error:', error);
+      // AI analysis error - using fallback
       return this.fallbackAnalysis(candidato, vaga);
     }
   }
@@ -145,7 +145,7 @@ Retorne JSON com: nome, email, telefone, skills (array), experiencias (array de 
       
       return JSON.parse(jsonMatch[0]);
     } catch (error) {
-      console.error('Resume parsing error:', error);
+      // Resume parsing error - using fallback
       return {};
     }
   }
@@ -169,3 +169,4 @@ Inclua: sobre a empresa, responsabilidades, requisitos, benefícios. Formato em 
 
 export const aiService = new AIService();
 export default aiService;
+
