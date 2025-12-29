@@ -1,5 +1,4 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 
 type Permission = 'read' | 'write' | 'delete' | 'admin';
@@ -50,25 +49,42 @@ const DEFAULT_PERMISSIONS: Record<string, PermissionMap> = {
   },
 };
 
-const PermissionContext = createContext<PermissionContextType | undefined>(undefined);
+const defaultContext: PermissionContextType = {
+  permissions: DEFAULT_PERMISSIONS.visualizador,
+  role: null,
+  hasPermission: () => true,
+  canRead: () => true,
+  canWrite: () => true,
+  canDelete: () => false,
+  isAdmin: false,
+  isLoading: false,
+};
+
+const PermissionContext = createContext<PermissionContextType>(defaultContext);
 
 export function PermissionProvider({ children }: { children: ReactNode }) {
-  const { user } = useAuth();
-  const [permissions, setPermissions] = useState<PermissionMap>({});
+  const [permissions, setPermissions] = useState<PermissionMap>(DEFAULT_PERMISSIONS.visualizador);
   const [role, setRole] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [userId, setUserId] = useState<string | null>(null);
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      setUserId(data.user?.id || null);
+    });
+  }, []);
 
   useEffect(() => {
     async function loadPermissions() {
-      if (!user?.id) {
-        setPermissions({});
+      if (!userId) {
+        setPermissions(DEFAULT_PERMISSIONS.visualizador);
         setRole(null);
         setIsLoading(false);
         return;
       }
 
       try {
-        const { data } = await supabase.from('profiles').select('role').eq('id', user.id).single();
+        const { data } = await supabase.from('profiles').select('role').eq('id', userId).single();
         const userRole = data?.role || 'visualizador';
         setRole(userRole);
         setPermissions(DEFAULT_PERMISSIONS[userRole] || DEFAULT_PERMISSIONS.visualizador);
@@ -81,7 +97,7 @@ export function PermissionProvider({ children }: { children: ReactNode }) {
     }
 
     loadPermissions();
-  }, [user?.id]);
+  }, [userId]);
 
   const hasPermission = (resource: Resource, permission: Permission): boolean => {
     return permissions[resource]?.includes(permission) || false;
@@ -100,9 +116,7 @@ export function PermissionProvider({ children }: { children: ReactNode }) {
 }
 
 export function usePermissionContext() {
-  const context = useContext(PermissionContext);
-  if (!context) throw new Error('usePermissionContext must be used within PermissionProvider');
-  return context;
+  return useContext(PermissionContext);
 }
 
 export default PermissionContext;
