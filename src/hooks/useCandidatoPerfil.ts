@@ -123,9 +123,8 @@ export const useCandidatoPerfil = (candidatoId: string) => {
         .eq('candidato_id', candidatoId)
         .order('data', { ascending: false });
 
-      // Buscar avaliações (usando any para evitar erros de tipagem)
-      const db = supabase as any;
-      const { data: avaliacoes } = await db
+      // Buscar avaliações
+      const { data: avaliacoes } = await supabase
         .from('avaliacoes')
         .select('*')
         .eq('candidato_id', candidatoId);
@@ -136,7 +135,7 @@ export const useCandidatoPerfil = (candidatoId: string) => {
         formacoes: candidato.formacao || [],
         habilidades: candidato.habilidades || [],
         idiomas: [],
-        candidaturas: candidaturas?.map((c: any) => ({
+        candidaturas: candidaturas?.map((c: Record<string, unknown>) => ({
           id: c.id,
           vaga_id: c.vagas?.id,
           vaga_titulo: c.vagas?.titulo,
@@ -157,3 +156,4 @@ export const useCandidatoPerfil = (candidatoId: string) => {
 };
 
 export default useCandidatoPerfil;
+
