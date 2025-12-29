@@ -43,12 +43,12 @@ export function useAuditLogs(filters?: AuditLogFilters) {
         const { data, error } = await query;
         
         if (error) {
-          console.warn('audit_logs table may not exist:', error.message);
+          // console.warn('audit_logs table may not exist:', error.message);
           return [];
         }
         return data as AuditLog[];
       } catch (e) {
-        console.warn('Error loading audit logs:', e);
+        // console.warn('Error loading audit logs:', e);
         return [];
       }
     },
@@ -104,3 +104,4 @@ export function useAuditLogs(filters?: AuditLogFilters) {
 }
 
 export default useAuditLogs;
+
