@@ -181,11 +181,11 @@ const AdminPage = () => {
       // Refresh users list
       await fetchUsers();
       setSelectedUser(null);
-    } catch (error: any) {
+    } catch (error) {
       toast({
         variant: 'destructive',
         title: 'Erro ao atualizar roles',
-        description: error.message,
+        description: error instanceof Error ? error.message : 'Erro desconhecido',
       });
     }
 
@@ -444,4 +444,5 @@ const AdminPage = () => {
 };
 
 export default AdminPage;
+
 
