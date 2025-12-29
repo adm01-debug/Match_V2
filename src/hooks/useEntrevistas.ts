@@ -281,7 +281,7 @@ export function useCreateEntrevista() {
       queryClient.invalidateQueries({ queryKey: ['entrevistas-pizza'] });
     },
     onError: (error: Error) => {
-      console.error('Erro em entrevistas:', error);
+      // Erro em entrevistas - handled silently
       toast.error('Erro ao processar entrevista');
     },
   });
@@ -327,7 +327,7 @@ export function useUpdateEntrevista() {
       queryClient.invalidateQueries({ queryKey: ['entrevistas-pizza'] });
     },
     onError: (error: Error) => {
-      console.error('Erro ao atualizar entrevista:', error);
+      // Erro ao atualizar entrevista - handled silently
     },
   });
 }
@@ -351,3 +351,4 @@ export function useCandidatosDisponiveis() {
     retry: 3,
   });
 }
+
