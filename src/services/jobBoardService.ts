@@ -28,7 +28,7 @@ export const jobBoardService = {
   async publishToBoard(board: JobBoard, vaga: any): Promise<string> {
     const payload = this.formatJobData(board.type, vaga);
     // Simulated API call - in production, use actual board APIs
-    console.log(`Publishing to ${board.name}:`, payload);
+    // console.log(`Publishing to ${board.name}:`, payload);
     return `ext-${board.id}-${Date.now()}`;
   },
 
@@ -52,7 +52,7 @@ export const jobBoardService = {
   },
 
   async unpublishJob(posting: JobPosting): Promise<boolean> {
-    console.log(`Unpublishing job ${posting.externalId} from ${posting.boardId}`);
+    // console.log(`Unpublishing job ${posting.externalId} from ${posting.boardId}`);
     return true;
   },
 
@@ -77,3 +77,4 @@ export const jobBoardService = {
 };
 
 export default jobBoardService;
+
