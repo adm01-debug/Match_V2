@@ -1,5 +1,4 @@
-import { useDocumentTitle } from '@/hooks/useDocumentTitle';
-import { Suspense, useMemo, useCallback } from 'react';
+import { Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { Layout } from "@/components/layout/Layout";
@@ -216,3 +215,4 @@ export default function Dashboard() {
     </ErrorBoundary>
   );
 }
+
