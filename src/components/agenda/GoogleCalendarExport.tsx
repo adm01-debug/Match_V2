@@ -22,9 +22,15 @@ interface GoogleCalendarExportProps {
 }
 
 export function GoogleCalendarExport({ entrevista, entrevistas }: GoogleCalendarExportProps): JSX.Element | null {
-  const formatDateTime = (date: Date, time: string): string => {
-    const [hours, minutes] = time.split(':').map(Number);
-    const dt = new Date(date);
+  const parseDate = (date: string | Date): Date => {
+    return typeof date === 'string' ? new Date(date) : date;
+  };
+
+  const formatDateTime = (date: string | Date, time: string): string => {
+    const parts = time.split(':').map(Number);
+    const hours = parts[0] ?? 0;
+    const minutes = parts[1] ?? 0;
+    const dt = parseDate(date);
     dt.setHours(hours, minutes, 0, 0);
     return dt.toISOString().replace(/-|:|\.\d{3}/g, '');
   };
@@ -33,13 +39,17 @@ export function GoogleCalendarExport({ entrevista, entrevistas }: GoogleCalendar
     const startDate = formatDateTime(e.data, e.horaInicio);
     const endDate = formatDateTime(e.data, e.horaFim);
     
+    const entrevistadoresText = e.entrevistadores
+      .map(ent => typeof ent === 'string' ? ent : ent.nome)
+      .join(', ');
+    
     const details = [
       `Candidato: ${e.candidatoNome}`,
       `Vaga: ${e.vagaTitulo}`,
-      `Etapa: ${e.etapa}`,
+      e.etapa ? `Etapa: ${e.etapa}` : '',
       `Tipo: ${e.tipo}`,
-      e.entrevistadores.length > 0 ? `Entrevistadores: ${e.entrevistadores.join(', ')}` : '',
-      e.observacoes ? `Observações: ${e.observacoes}` : '',
+      entrevistadoresText ? `Entrevistadores: ${entrevistadoresText}` : '',
+      e.notas ? `Observações: ${e.notas}` : '',
     ].filter(Boolean).join('\n');
 
     const location = e.tipo === 'presencial' ? e.local : e.linkOnline;
@@ -62,13 +72,17 @@ export function GoogleCalendarExport({ entrevista, entrevistas }: GoogleCalendar
       
       const location = e.tipo === 'presencial' ? e.local : e.linkOnline;
       
+      const entrevistadoresText = e.entrevistadores
+        .map(ent => typeof ent === 'string' ? ent : ent.nome)
+        .join(', ');
+      
       const description = [
         `Candidato: ${e.candidatoNome}`,
         `Vaga: ${e.vagaTitulo}`,
-        `Etapa: ${e.etapa}`,
+        e.etapa ? `Etapa: ${e.etapa}` : '',
         `Tipo: ${e.tipo}`,
-        e.entrevistadores.length > 0 ? `Entrevistadores: ${e.entrevistadores.join(', ')}` : '',
-        e.observacoes ? `Observações: ${e.observacoes}` : '',
+        entrevistadoresText ? `Entrevistadores: ${entrevistadoresText}` : '',
+        e.notas ? `Observações: ${e.notas}` : '',
       ].filter(Boolean).join('\\n');
 
       return `BEGIN:VEVENT

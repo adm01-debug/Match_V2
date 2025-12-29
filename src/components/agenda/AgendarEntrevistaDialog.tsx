@@ -36,7 +36,13 @@ import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { useCandidatosDisponiveis } from '@/hooks/useEntrevistas';
 import { useVagasSelect } from '@/hooks/useVagas';
-import { Entrevista } from '@/data/agendaData';
+import { 
+  Entrevista, 
+  Entrevistador,
+  TipoEntrevista,
+  entrevistadoresDisponiveis, 
+  locaisDisponiveis 
+} from '@/data/agendaData';
 
 interface AgendarEntrevistaDialogProps {
   open: boolean;
@@ -53,23 +59,6 @@ const etapas = [
   'Entrevista Final',
 ];
 
-const entrevistadoresDisponiveis = [
-  'Maria Santos (RH)',
-  'Carlos Supervisor',
-  'João Diretor',
-  'Gerente Comercial',
-  'Diretor de Arte',
-  'CFO',
-  'CTO',
-];
-
-const locaisDisponiveis = [
-  'Sala de Reuniões 1',
-  'Sala de Reuniões 2',
-  'Sala da Diretoria',
-  'Auditório',
-];
-
 const AgendarEntrevistaDialog = ({
   open,
   onOpenChange,
@@ -80,13 +69,13 @@ const AgendarEntrevistaDialog = ({
   const [candidatoId, setCandidatoId] = useState('');
   const [candidatoNome, setCandidatoNome] = useState('');
   const [vagaId, setVagaId] = useState('');
-  const [tipo, setTipo] = useState<'presencial' | 'online' | 'telefone'>('presencial');
+  const [tipo, setTipo] = useState<TipoEntrevista>('presencial');
   const [horaInicio, setHoraInicio] = useState('09:00');
   const [horaFim, setHoraFim] = useState('10:00');
   const [local, setLocal] = useState('');
   const [linkOnline, setLinkOnline] = useState('');
   const [etapa, setEtapa] = useState('');
-  const [entrevistadores, setEntrevistadores] = useState<string[]>([]);
+  const [entrevistadores, setEntrevistadores] = useState<Entrevistador[]>([]);
   const [observacoes, setObservacoes] = useState('');
 
   const { data: candidatosDB = [] } = useCandidatosDisponiveis();
@@ -98,14 +87,15 @@ const AgendarEntrevistaDialog = ({
     }
   }, [selectedDate]);
 
-  const handleAddEntrevistador = (entrevistador: string) => {
-    if (!entrevistadores.includes(entrevistador)) {
+  const handleAddEntrevistador = (entrevistadorId: string) => {
+    const entrevistador = entrevistadoresDisponiveis.find(e => e.id === entrevistadorId);
+    if (entrevistador && !entrevistadores.some(e => e.id === entrevistadorId)) {
       setEntrevistadores([...entrevistadores, entrevistador]);
     }
   };
 
-  const handleRemoveEntrevistador = (entrevistador: string) => {
-    setEntrevistadores(entrevistadores.filter((e) => e !== entrevistador));
+  const handleRemoveEntrevistador = (entrevistadorId: string) => {
+    setEntrevistadores(entrevistadores.filter((e) => e.id !== entrevistadorId));
   };
 
   const handleCandidatoChange = (id: string) => {
@@ -130,9 +120,9 @@ const AgendarEntrevistaDialog = ({
     }
 
     const novaEntrevista: Omit<Entrevista, 'id'> = {
-      candidatoId: candidatoId || undefined,
+      candidato_id: candidatoId || undefined,
       candidatoNome,
-      vagaId,
+      vaga_id: vagaId,
       vagaTitulo: vaga.titulo,
       tipo,
       data,
@@ -143,7 +133,7 @@ const AgendarEntrevistaDialog = ({
       entrevistadores,
       etapa,
       status: 'agendada',
-      observacoes: observacoes || undefined,
+      notas: observacoes || undefined,
     };
 
     onSave(novaEntrevista);
@@ -263,7 +253,7 @@ const AgendarEntrevistaDialog = ({
           <div className="grid grid-cols-3 gap-4">
             <div className="space-y-2">
               <Label>Tipo *</Label>
-              <Select value={tipo} onValueChange={(v) => setTipo(v as typeof tipo)}>
+              <Select value={tipo} onValueChange={(v) => setTipo(v as TipoEntrevista)}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -302,9 +292,9 @@ const AgendarEntrevistaDialog = ({
                   <SelectValue placeholder="Selecione o local" />
                 </SelectTrigger>
                 <SelectContent>
-                  {locaisDisponiveis.map((l) => (
-                    <SelectItem key={l} value={l}>
-                      {l}
+                  {locaisDisponiveis.filter(l => l.tipo === 'presencial').map((l) => (
+                    <SelectItem key={l.id} value={l.nome}>
+                      {l.nome}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -331,10 +321,10 @@ const AgendarEntrevistaDialog = ({
               </SelectTrigger>
               <SelectContent>
                 {entrevistadoresDisponiveis
-                  .filter((e) => !entrevistadores.includes(e))
+                  .filter((e) => !entrevistadores.some(ent => ent.id === e.id))
                   .map((e) => (
-                    <SelectItem key={e} value={e}>
-                      {e}
+                    <SelectItem key={e.id} value={e.id}>
+                      {e.nome}
                     </SelectItem>
                   ))}
               </SelectContent>
@@ -342,11 +332,11 @@ const AgendarEntrevistaDialog = ({
             {entrevistadores.length > 0 && (
               <div className="flex flex-wrap gap-2 mt-2">
                 {entrevistadores.map((e) => (
-                  <Badge key={e} variant="secondary" className="gap-1">
-                    {e}
+                  <Badge key={e.id} variant="secondary" className="gap-1">
+                    {e.nome}
                     <X
                       className="h-3 w-3 cursor-pointer"
-                      onClick={() => handleRemoveEntrevistador(e)}
+                      onClick={() => handleRemoveEntrevistador(e.id)}
                     />
                   </Badge>
                 ))}

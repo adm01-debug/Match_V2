@@ -7,7 +7,7 @@ import { memo } from 'react';
 import { format, isSameDay } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
-import { Entrevista, TipoEntrevista, StatusEntrevista } from '@/data/agendaData';
+import { Entrevista } from '@/data/agendaData';
 import { Clock, Video, MapPin, Phone, Users, Briefcase, HelpCircle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import type { LucideIcon } from 'lucide-react';
