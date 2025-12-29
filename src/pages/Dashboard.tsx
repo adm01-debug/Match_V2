@@ -15,7 +15,10 @@ import { TopCandidatos } from "@/components/dashboard/TopCandidatos";
 import { EntrevistasStats } from "@/components/dashboard/EntrevistasStats";
 import { EntrevistasChart } from "@/components/dashboard/EntrevistasChart";
 import { useDashboardData } from "@/hooks/useDashboardData";
-import { Briefcase, Users, Target, UserCheck, Clock, Loader2, AlertCircle } from "lucide-react";
+import { ErrorBoundary } from 'react-error-boundary';
+import { Briefcase, Users, Target, UserCheck, Clock, Loader2, AlertCircle, RefreshCw } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Select,
   SelectContent,
@@ -24,7 +27,39 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-export default function Dashboard() {
+function DashboardErrorFallback({ error, resetErrorBoundary }: { error: Error; resetErrorBoundary: () => void }) {
+  return (
+    <Layout title="Dashboard">
+      <div className="min-h-[400px] flex items-center justify-center p-4">
+        <Card className="max-w-md w-full">
+          <CardHeader className="text-center">
+            <AlertCircle className="h-12 w-12 text-destructive mx-auto mb-4" />
+            <CardTitle className="text-xl">Erro ao carregar Dashboard</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-sm text-muted-foreground text-center">
+              Ocorreu um erro ao carregar os dados do dashboard. Tente recarregar.
+            </p>
+            <details className="text-xs bg-muted p-2 rounded">
+              <summary className="cursor-pointer font-medium">Detalhes</summary>
+              <pre className="mt-2 whitespace-pre-wrap overflow-auto max-h-32">
+                {error.message}
+              </pre>
+            </details>
+            <div className="flex gap-2 justify-center">
+              <Button variant="outline" onClick={resetErrorBoundary}>
+                <RefreshCw className="h-4 w-4 mr-2" />
+                Tentar novamente
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </Layout>
+  );
+}
+
+function DashboardContent() {
   usePageTitle('Dashboard');
 
   const { 
@@ -171,5 +206,13 @@ export default function Dashboard() {
         </div>
       </Layout>
     </Suspense>
+  );
+}
+
+export default function Dashboard() {
+  return (
+    <ErrorBoundary FallbackComponent={DashboardErrorFallback}>
+      <DashboardContent />
+    </ErrorBoundary>
   );
 }
