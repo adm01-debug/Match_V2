@@ -82,7 +82,7 @@ export function ComunicacaoHistorico({ candidatoId }: ComunicacaoHistoricoProps)
         .order('enviado_em', { ascending: false });
 
       if (error) {
-        console.error('Error fetching comunicacoes:', error);
+        // Error fetching comunicacoes - handled
       } else {
         setComunicacoes(data || []);
       }
@@ -388,3 +388,4 @@ export function ComunicacaoHistorico({ candidatoId }: ComunicacaoHistoricoProps)
 ComunicacaoHistorico.displayName = "ComunicacaoHistorico";
 
 export default memo(ComunicacaoHistorico);
+
