@@ -88,7 +88,7 @@ export function useRealtimeNotifications(options: UseRealtimeNotificationsOption
         .limit(50);
 
       if (error) {
-        console.error('Error fetching notifications:', error);
+        // Error fetching notifications - silent
         return;
       }
 
@@ -126,7 +126,7 @@ export function useRealtimeNotifications(options: UseRealtimeNotificationsOption
       });
 
       if (error) {
-        console.error('Error persisting notification:', error);
+        // Error persisting notification - silent
       }
     }
   }, [user?.id]);
@@ -144,7 +144,7 @@ export function useRealtimeNotifications(options: UseRealtimeNotificationsOption
       .eq('id', id);
 
     if (error) {
-      console.error('Error marking notification as read:', error);
+      // Error marking notification as read - silent
     }
   }, []);
 
@@ -160,7 +160,7 @@ export function useRealtimeNotifications(options: UseRealtimeNotificationsOption
         .eq('read', false);
 
       if (error) {
-        console.error('Error marking all notifications as read:', error);
+        // Error marking all as read - silent
       }
     }
   }, [user?.id]);
@@ -176,7 +176,7 @@ export function useRealtimeNotifications(options: UseRealtimeNotificationsOption
         .eq('user_id', user.id);
 
       if (error) {
-        console.error('Error clearing notifications:', error);
+        // Error clearing notifications - silent
       }
     }
   }, [user?.id]);
@@ -354,3 +354,4 @@ export function useRealtimeNotifications(options: UseRealtimeNotificationsOption
 }
 
 export default useRealtimeNotifications;
+
