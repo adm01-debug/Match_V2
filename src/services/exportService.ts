@@ -79,7 +79,7 @@ class ExportService {
       XLSX.utils.book_append_sheet(workbook, worksheet, 'Dados');
       XLSX.writeFile(workbook, `${filename}.xlsx`);
     } catch (error) {
-      console.error('Excel export error:', error);
+      // Excel export error - handled
       this.download(this.toExcelCSV(data, columns), `${filename}.csv`, 'text/csv;charset=utf-8');
     }
   }
@@ -103,7 +103,7 @@ class ExportService {
       });
       doc.save(`${filename}.pdf`);
     } catch (error) {
-      console.error('PDF export error:', error);
+      // PDF export error - handled
       this.download(this.toExcelCSV(data, columns), `${filename}.csv`, 'text/csv;charset=utf-8');
     }
   }
@@ -121,3 +121,4 @@ class ExportService {
 
 export const exportService = new ExportService();
 export default exportService;
+
