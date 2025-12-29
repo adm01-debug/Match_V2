@@ -3,7 +3,7 @@
  * @module NavLink
  */
 
-import { memo, forwardRef } from 'react';
+import { forwardRef } from 'react';
 import { NavLink as RouterNavLink, NavLinkProps } from "react-router-dom";
 import { cn } from "@/lib/utils";
 
@@ -31,3 +31,4 @@ const NavLink = forwardRef<HTMLAnchorElement, NavLinkCompatProps>(
 NavLink.displayName = "NavLink";
 
 export { NavLink };
+
