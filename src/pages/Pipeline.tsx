@@ -1,31 +1,25 @@
 import { useDocumentTitle } from '@/hooks/useDocumentTitle';
-import { Suspense , useMemo, useCallback, memo} from 'react';
+import { Suspense, useCallback } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { usePageTitle } from '@/hooks/usePageTitle';
-import { useState, useCallback, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { useProcessosSeletivos } from "@/hooks/useProcessosSeletivos";
 import { useVagas } from "@/hooks/useVagas";
-import { etapasConfig, etapasPipeline, getEtapaConfig } from "@/config/pipelineConfig";
+import { etapasPipeline, getEtapaConfig } from "@/config/pipelineConfig";
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Input } from "@/components/ui/input";
+import { MatchScoreBadge } from "@/components/ui/match-score-badge";
 import { 
   Search, 
-  Filter, 
-  Star, 
-  Calendar, 
-  Mail, 
   MoreHorizontal,
-  ChevronRight,
   Users,
   RefreshCw
 } from "lucide-react";
@@ -249,17 +243,14 @@ export default function Pipeline() {
                                         </DropdownMenu>
                                       </div>
 
-                                      {/* Match Score */}
-                                      {processo.match_score && (
-                                        <div className="flex items-center gap-1 mt-2">
-                                          <Star className="h-3 w-3 text-amber-500" />
-                                          <span className={cn(
-                                            "text-xs font-medium",
-                                            processo.match_score >= 80 ? "text-green-600" :
-                                            processo.match_score >= 60 ? "text-amber-600" : "text-red-600"
-                                          )}>
-                                            {processo.match_score}% match
-                                          </span>
+                                      {/* Match Score - Using new component */}
+                                      {processo.match_score && processo.match_score > 0 && (
+                                        <div className="mt-2">
+                                          <MatchScoreBadge 
+                                            score={processo.match_score} 
+                                            variant="minimal" 
+                                            size="sm"
+                                          />
                                         </div>
                                       )}
 

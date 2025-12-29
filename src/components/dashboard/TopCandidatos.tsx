@@ -3,13 +3,14 @@
  * @module TopCandidatos
  */
 
-import { memo , useMemo} from 'react';
+import { memo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Progress } from '@/components/ui/progress';
-import { Trophy, Star, TrendingUp, ChevronRight, Sparkles } from 'lucide-react';
+import { MatchScoreBadge } from '@/components/ui/match-score-badge';
+import { StatusBadge } from '@/components/ui/status-badge';
+import { Trophy, Star, ChevronRight, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface TopCandidato {
@@ -35,31 +36,6 @@ interface TopCandidatosProps {
   }[];
 }
 
-const etapaLabels: Record<string, string> = {
-  'novos': 'Novo',
-  'triagem': 'Triagem',
-  'pre_selecao': 'Pré-seleção',
-  'entrevista_rh': 'Entrevista RH',
-  'teste_tecnico': 'Teste Técnico',
-  'entrevista_gestor': 'Entrevista Gestor',
-  'entrevista_final': 'Entrevista Final',
-  'proposta': 'Proposta',
-};
-
-const getScoreColor = (score: number) => {
-  if (score >= 90) return 'text-emerald-600 dark:text-emerald-400';
-  if (score >= 80) return 'text-blue-600 dark:text-blue-400';
-  if (score >= 70) return 'text-amber-600 dark:text-amber-400';
-  return 'text-muted-foreground';
-};
-
-const getScoreProgressColor = (score: number) => {
-  if (score >= 90) return 'bg-emerald-500';
-  if (score >= 80) return 'bg-blue-500';
-  if (score >= 70) return 'bg-amber-500';
-  return 'bg-muted-foreground';
-};
-
 const getInitials = (name: string) => {
   return name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
 };
@@ -76,7 +52,7 @@ export function TopCandidatos({ processos }: TopCandidatosProps) {
   const topCandidatos: TopCandidato[] = processos
     .sort((a, b) => b.matchScore - a.matchScore)
     .slice(0, 5)
-    .map((p, index) => ({
+    .map((p) => ({
       id: p.candidatoId,
       nome: p.candidatoNome,
       vaga: p.vagaTitulo,
@@ -160,24 +136,17 @@ export function TopCandidatos({ processos }: TopCandidatosProps) {
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
                 <span className="truncate">{candidato.vaga}</span>
                 <span>•</span>
-                <span>{etapaLabels[candidato.etapa] || candidato.etapa}</span>
+                <StatusBadge status={candidato.etapa} size="sm" showIcon={false} />
               </div>
             </div>
 
-            {/* Score */}
-            <div className="flex flex-col items-end gap-1 shrink-0">
-              <div className="flex items-center gap-1">
-                <TrendingUp className={cn("h-3 w-3", getScoreColor(candidato.matchScore))} />
-                <span className={cn("text-sm font-bold", getScoreColor(candidato.matchScore))}>
-                  {candidato.matchScore}%
-                </span>
-              </div>
-              <div className="w-16 h-1.5 rounded-full bg-muted overflow-hidden">
-                <div 
-                  className={cn("h-full rounded-full transition-all", getScoreProgressColor(candidato.matchScore))}
-                  style={{ width: `${candidato.matchScore}%` }}
-                />
-              </div>
+            {/* Score - Using new MatchScoreBadge */}
+            <div className="shrink-0">
+              <MatchScoreBadge 
+                score={candidato.matchScore} 
+                variant="pill" 
+                size="sm"
+              />
             </div>
 
             <ChevronRight className="h-4 w-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
@@ -187,6 +156,5 @@ export function TopCandidatos({ processos }: TopCandidatosProps) {
     </Card>
   );
 }
-
 
 TopCandidatos.displayName = "TopCandidatos";
