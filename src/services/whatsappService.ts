@@ -86,7 +86,7 @@ export async function sendWhatsAppMessage(
 
     return { success: true };
   } catch (error) {
-    console.error('Erro ao enviar WhatsApp:', error);
+    // Erro ao enviar WhatsApp - handled silently
     return { success: false, error: String(error) };
   }
 }
@@ -104,3 +104,4 @@ export function useWhatsApp() {
 
   return { sendMessage, openWhatsApp, generateWhatsAppLink };
 }
+
