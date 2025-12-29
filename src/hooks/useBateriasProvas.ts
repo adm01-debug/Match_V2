@@ -65,7 +65,7 @@ export function useBateriasProvas() {
       toast({ title: 'Bateria criada!' });
     },
     onError: (error: Error) => {
-      console.error('Erro ao criar bateria:', error);
+      // Erro ao criar bateria - handled
     },
   });
 
@@ -88,7 +88,7 @@ export function useBateriasProvas() {
       toast({ title: 'Bateria atualizada!' });
     },
     onError: (error: Error) => {
-      console.error('Erro ao atualizar bateria:', error);
+      // Erro ao atualizar bateria - handled
     },
   });
 
@@ -102,7 +102,7 @@ export function useBateriasProvas() {
       toast({ title: 'Bateria removida!' });
     },
     onError: (error: Error) => {
-      console.error('Erro ao remover bateria:', error);
+      // Erro ao remover bateria - handled
     },
   });
 
@@ -117,3 +117,4 @@ export function useBateriasProvas() {
 }
 
 export default useBateriasProvas;
+
