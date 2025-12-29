@@ -2,8 +2,22 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
-interface TalentPool { id: string; name: string; description: string; count: number; created_at: string; }
-interface PoolCandidate { id: string; nome: string; email: string; cargo?: string; tags?: string[]; pool_ids?: string[]; }
+interface TalentPool { 
+  id: string; 
+  name: string; 
+  description: string; 
+  count: number; 
+  created_at: string; 
+}
+
+interface PoolCandidate { 
+  id: string; 
+  nome: string; 
+  email: string; 
+  cargo?: string; 
+  tags?: string[]; 
+  pool_ids?: string[]; 
+}
 
 export function useTalentPool() {
   const { toast } = useToast();
@@ -12,16 +26,48 @@ export function useTalentPool() {
   const { data: pools = [], isLoading: loadingPools } = useQuery({
     queryKey: ['talent-pools'],
     queryFn: async () => {
-      const { data } = await supabase.from('talent_pools').select('*, talent_pool_members(count)').order('created_at', { ascending: false });
-      return (data || []).map((p: any) => ({ ...p, count: p.talent_pool_members?.[0]?.count || 0 })) as TalentPool[];
+      try {
+        const { data, error } = await supabase
+          .from('talent_pools')
+          .select('*')
+          .order('created_at', { ascending: false });
+        
+        if (error) {
+          console.warn('talent_pools table may not exist:', error.message);
+          return [];
+        }
+        return (data || []) as TalentPool[];
+      } catch (e) {
+        console.warn('Error loading talent pools:', e);
+        return [];
+      }
     },
   });
 
   const { data: candidates = [], isLoading: loadingCandidates } = useQuery({
     queryKey: ['talent-pool-candidates'],
     queryFn: async () => {
-      const { data } = await supabase.from('candidatos').select('id, nome, email, cargo_atual, tags').eq('in_talent_pool', true);
-      return (data || []).map((c: any) => ({ id: c.id, nome: c.nome, email: c.email, cargo: c.cargo_atual, tags: c.tags })) as PoolCandidate[];
+      try {
+        const { data, error } = await supabase
+          .from('candidatos')
+          .select('id, nome, email, cargo_atual, tags')
+          .limit(100);
+        
+        if (error) {
+          console.warn('Error loading candidates:', error.message);
+          return [];
+        }
+        return (data || []).map((c: any) => ({ 
+          id: c.id, 
+          nome: c.nome, 
+          email: c.email, 
+          cargo: c.cargo_atual, 
+          tags: c.tags || [] 
+        })) as PoolCandidate[];
+      } catch (e) {
+        console.warn('Error loading candidates:', e);
+        return [];
+      }
     },
   });
 
@@ -29,7 +75,11 @@ export function useTalentPool() {
 
   const createPool = useMutation({
     mutationFn: async (pool: { name: string; description: string }) => {
-      const { data, error } = await supabase.from('talent_pools').insert(pool).select().single();
+      const { data, error } = await supabase
+        .from('talent_pools')
+        .insert(pool)
+        .select()
+        .single();
       if (error) throw error;
       return data;
     },
@@ -37,11 +87,16 @@ export function useTalentPool() {
       queryClient.invalidateQueries({ queryKey: ['talent-pools'] });
       toast({ title: 'Pool criado', description: 'Novo pool de talentos criado com sucesso.' });
     },
+    onError: (error: any) => {
+      toast({ title: 'Erro', description: error.message || 'Erro ao criar pool', variant: 'destructive' });
+    },
   });
 
   const addToPool = useMutation({
     mutationFn: async ({ poolId, candidatoId }: { poolId: string; candidatoId: string }) => {
-      const { error } = await supabase.from('talent_pool_members').insert({ pool_id: poolId, candidato_id: candidatoId });
+      const { error } = await supabase
+        .from('talent_pool_members')
+        .insert({ pool_id: poolId, candidato_id: candidatoId });
       if (error) throw error;
     },
     onSuccess: () => {
@@ -53,7 +108,11 @@ export function useTalentPool() {
 
   const removeFromPool = useMutation({
     mutationFn: async ({ poolId, candidatoId }: { poolId: string; candidatoId: string }) => {
-      const { error } = await supabase.from('talent_pool_members').delete().eq('pool_id', poolId).eq('candidato_id', candidatoId);
+      const { error } = await supabase
+        .from('talent_pool_members')
+        .delete()
+        .eq('pool_id', poolId)
+        .eq('candidato_id', candidatoId);
       if (error) throw error;
     },
     onSuccess: () => {
