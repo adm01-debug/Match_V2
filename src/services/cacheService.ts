@@ -51,7 +51,7 @@ class CacheService {
     }
   }
 
-  async set(key: string, value: any, options?: CacheOptions): Promise<boolean> {
+  async set(key: string, value: unknown, options?: CacheOptions): Promise<boolean> {
     const ttl = options?.ttl || DEFAULT_TTL;
     const serialized = typeof value === 'string' ? value : JSON.stringify(value);
     const result = await this.execute(['SET', key, serialized, 'EX', ttl.toString()]);
@@ -116,4 +116,5 @@ export const CacheKeys = {
 };
 
 export default cacheService;
+
 
