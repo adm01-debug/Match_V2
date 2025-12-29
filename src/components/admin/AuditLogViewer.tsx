@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { Download, Search, Filter, RefreshCw } from 'lucide-react';
+import { Download, Search, RefreshCw } from 'lucide-react';
 import { useAuditLogs } from '@/hooks/useAuditLogs';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
@@ -93,3 +93,4 @@ export function AuditLogViewer() {
 }
 
 export default AuditLogViewer;
+
