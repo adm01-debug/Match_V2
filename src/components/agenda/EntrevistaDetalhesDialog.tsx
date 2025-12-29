@@ -17,12 +17,7 @@ import {
   Edit,
   X,
   Check,
-  AlertTriangle,
-  CheckCircle,
-  XCircle,
-  AlertCircle,
-  Plus,
-  Trash2
+  AlertTriangle
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -57,12 +52,12 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Slider } from '@/components/ui/slider';
+
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
+
 import { toast } from 'sonner';
 import {
   Entrevista,
@@ -410,3 +405,4 @@ const EntrevistaDetalhesDialog = ({
 EntrevistaDetalhesDialog.displayName = "EntrevistaDetalhesDialog";
 
 export default EntrevistaDetalhesDialog;
+
