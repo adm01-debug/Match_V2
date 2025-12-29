@@ -7,9 +7,10 @@ import { memo } from 'react';
 import { format, isSameDay } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
-import { Entrevista } from '@/data/agendaData';
-import { Clock, Video, MapPin, Phone, Users, Briefcase } from 'lucide-react';
+import { Entrevista, TipoEntrevista, StatusEntrevista } from '@/data/agendaData';
+import { Clock, Video, MapPin, Phone, Users, Briefcase, HelpCircle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import type { LucideIcon } from 'lucide-react';
 
 interface DayViewProps {
   currentDate: Date;
@@ -17,34 +18,100 @@ interface DayViewProps {
   onSelectEntrevista: (entrevista: Entrevista) => void;
 }
 
-const tipoConfig = {
+interface TipoConfigItem {
+  icon: LucideIcon;
+  label: string;
+  color: string;
+}
+
+const tipoConfig: Record<string, TipoConfigItem> = {
   presencial: { icon: MapPin, label: 'Presencial', color: 'bg-blue-500/10 text-blue-600' },
   online: { icon: Video, label: 'Online', color: 'bg-purple-500/10 text-purple-600' },
   telefone: { icon: Phone, label: 'Telefone', color: 'bg-green-500/10 text-green-600' },
+  tecnica: { icon: Users, label: 'Técnica', color: 'bg-indigo-500/10 text-indigo-600' },
+  rh: { icon: Users, label: 'RH', color: 'bg-green-500/10 text-green-600' },
+  cultural: { icon: Users, label: 'Cultural', color: 'bg-pink-500/10 text-pink-600' },
+  final: { icon: Users, label: 'Final', color: 'bg-orange-500/10 text-orange-600' },
+  triagem: { icon: Phone, label: 'Triagem', color: 'bg-gray-500/10 text-gray-600' },
 };
 
-const statusColors = {
+const defaultTipoConfig: TipoConfigItem = {
+  icon: HelpCircle,
+  label: 'Outro',
+  color: 'bg-gray-500/10 text-gray-600',
+};
+
+const statusColors: Record<string, string> = {
   agendada: 'border-l-yellow-500 bg-yellow-500/5',
   confirmada: 'border-l-green-500 bg-green-500/5',
   realizada: 'border-l-muted-foreground bg-muted/20',
   cancelada: 'border-l-red-500 bg-red-500/5',
   reagendada: 'border-l-orange-500 bg-orange-500/5',
+  remarcada: 'border-l-orange-500 bg-orange-500/5',
+  no_show: 'border-l-red-500 bg-red-500/5',
 };
+
+const defaultStatusColor = 'border-l-gray-500 bg-gray-500/5';
 
 const hours = Array.from({ length: 12 }, (_, i) => i + 8); // 8:00 - 19:00
 
+/**
+ * Parse time string safely, returning 0 for invalid values
+ */
+function parseTimeComponent(value: string | undefined): number {
+  if (!value) return 0;
+  const num = parseInt(value, 10);
+  return isNaN(num) ? 0 : num;
+}
+
+/**
+ * Parse hora string "HH:MM" to { hours, minutes }
+ */
+function parseHora(hora: string): { hours: number; minutes: number } {
+  const parts = hora?.split(':') ?? [];
+  return {
+    hours: parseTimeComponent(parts[0]),
+    minutes: parseTimeComponent(parts[1]),
+  };
+}
+
 export function DayView({ currentDate, entrevistas, onSelectEntrevista }: DayViewProps): JSX.Element {
   const dayEntrevistas = entrevistas
-    .filter((e) => isSameDay(new Date(e.data), currentDate))
-    .sort((a, b) => a.horaInicio.localeCompare(b.horaInicio));
+    .filter((e) => {
+      try {
+        return isSameDay(new Date(e.data), currentDate);
+      } catch {
+        return false;
+      }
+    })
+    .sort((a, b) => (a.horaInicio ?? '').localeCompare(b.horaInicio ?? ''));
 
-  const getEntrevistaDuration = (horaInicio: string, horaFim: string) => {
-    const [h1, m1] = horaInicio.split(':').map(Number);
-    const [h2, m2] = horaFim.split(':').map(Number);
-    return ((h2 * 60 + m2) - (h1 * 60 + m1)) / 60;
+  const getEntrevistaDuration = (horaInicio: string, horaFim: string): number => {
+    const start = parseHora(horaInicio);
+    const end = parseHora(horaFim);
+    const startMinutes = start.hours * 60 + start.minutes;
+    const endMinutes = end.hours * 60 + end.minutes;
+    return Math.max((endMinutes - startMinutes) / 60, 0.5);
   };
 
   const isToday = isSameDay(currentDate, new Date());
+
+  const getTipoConfig = (tipo: string): TipoConfigItem => {
+    return tipoConfig[tipo] ?? defaultTipoConfig;
+  };
+
+  const getStatusColor = (status: string): string => {
+    return statusColors[status] ?? defaultStatusColor;
+  };
+
+  const getEntrevistadoresText = (entrevista: Entrevista): string => {
+    if (!entrevista.entrevistadores || entrevista.entrevistadores.length === 0) {
+      return 'Sem entrevistadores';
+    }
+    return entrevista.entrevistadores
+      .map((e) => (typeof e === 'string' ? e : e.nome))
+      .join(', ');
+  };
 
   return (
     <div data-testid="day-view" role="region" aria-label="Visualização dia" className="space-y-4">
@@ -71,7 +138,7 @@ export function DayView({ currentDate, entrevistas, onSelectEntrevista }: DayVie
       <div className="relative">
         {hours.map((hour) => {
           const hourEntrevistas = dayEntrevistas.filter((e) => {
-            const [h] = e.horaInicio.split(':').map(Number);
+            const { hours: h } = parseHora(e.horaInicio ?? '');
             return h === hour;
           });
 
@@ -82,16 +149,18 @@ export function DayView({ currentDate, entrevistas, onSelectEntrevista }: DayVie
               </div>
               <div className="flex-1 relative">
                 {hourEntrevistas.map((entrevista) => {
-                  const TipoIcon = tipoConfig[entrevista.tipo].icon;
+                  const tipoInfo = getTipoConfig(entrevista.tipo);
+                  const TipoIcon = tipoInfo.icon;
                   const duration = getEntrevistaDuration(entrevista.horaInicio, entrevista.horaFim);
                   const height = Math.max(duration * 80, 60);
 
                   return (
-                    <div
+                    <button
+                      type="button"
                       key={entrevista.id}
                       className={cn(
-                        "absolute left-0 right-2 rounded-lg border-l-4 p-3 cursor-pointer hover:shadow-md transition-shadow",
-                        statusColors[entrevista.status]
+                        "absolute left-0 right-2 rounded-lg border-l-4 p-3 cursor-pointer hover:shadow-md transition-shadow text-left w-full",
+                        getStatusColor(entrevista.status)
                       )}
                       style={{ height: `${height}px` }}
                       onClick={() => onSelectEntrevista(entrevista)}
@@ -112,18 +181,18 @@ export function DayView({ currentDate, entrevistas, onSelectEntrevista }: DayVie
                             <span>{entrevista.vagaTitulo}</span>
                           </div>
                         </div>
-                        <Badge variant="secondary" className={cn("text-xs", tipoConfig[entrevista.tipo].color)}>
+                        <Badge variant="secondary" className={cn("text-xs", tipoInfo.color)}>
                           <TipoIcon className="h-3 w-3 mr-1" />
-                          {tipoConfig[entrevista.tipo].label}
+                          {tipoInfo.label}
                         </Badge>
                       </div>
                       {height > 70 && (
                         <div className="flex items-center gap-1 text-xs text-muted-foreground mt-2">
                           <Users className="h-3 w-3" />
-                          <span>{entrevista.entrevistadores.join(', ')}</span>
+                          <span>{getEntrevistadoresText(entrevista)}</span>
                         </div>
                       )}
-                    </div>
+                    </button>
                   );
                 })}
               </div>
