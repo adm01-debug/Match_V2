@@ -71,7 +71,7 @@ export function TenantProvider({ children }: { children: ReactNode }) {
           if (currentTenant) localStorage.setItem('current_tenant_id', currentTenant.id);
         }
       } catch (error) { 
-        console.error('Error loading tenants:', error); 
+        // Error loading tenants - handled silently 
       } finally { 
         setIsLoading(false); 
       }
@@ -99,3 +99,4 @@ export function useTenantContext() {
 }
 
 export default TenantContext;
+
