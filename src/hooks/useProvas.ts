@@ -7,7 +7,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import type { Prova, BateriaProvas, CategoriaProva, Departamento, NivelCargo } from '@/types/tests';
 
-function dbToProva(row: any): Prova {
+function dbToProva(row: Record<string, unknown>): Prova {
   return {
     id: row.id,
     titulo: row.titulo,
@@ -29,7 +29,7 @@ function dbToProva(row: any): Prova {
   };
 }
 
-function dbToBateria(row: any, provasIds: string[]): BateriaProvas {
+function dbToBateria(row: Record<string, unknown>, provasIds: string[]): BateriaProvas {
   return {
     id: row.id,
     nome: row.nome,
@@ -293,3 +293,4 @@ export function useProvasStats() {
     retry: 3,
   });
 }
+
