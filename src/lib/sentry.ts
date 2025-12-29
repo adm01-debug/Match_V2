@@ -3,45 +3,76 @@
  * @module sentry
  */
 
-// Configuração do Sentry para monitoramento de erros
+import type { ReactNode, ComponentType } from 'react';
+
 // Sentry é opcional - funciona mesmo sem estar configurado
-
 const SENTRY_DSN = import.meta.env.VITE_SENTRY_DSN;
+const IS_DEV = import.meta.env.DEV;
 
-export function initSentry() {
+let initialized = false;
+
+export function initSentry(): void {
+  if (initialized) return;
+  initialized = true;
+  
   if (!SENTRY_DSN) {
-    console.log('[Sentry] DSN não configurado, monitoramento desabilitado');
+    if (IS_DEV) {
+      // Apenas em dev, log silencioso
+    }
     return;
   }
-  console.log('[Sentry] Inicializado com sucesso');
+  
+  // TODO: Implementar integração real com Sentry quando necessário
+  // import * as Sentry from '@sentry/react';
+  // Sentry.init({ dsn: SENTRY_DSN, ... });
 }
 
-// Funções stub para quando Sentry não está configurado
-export function captureError(error: Error, context?: Record<string, unknown>) {
-  console.error('[Error]', error, context);
+export function captureError(error: Error, context?: Record<string, unknown>): void {
+  if (IS_DEV) {
+    console.error('[Sentry Error]', error.message, context);
+  }
+  // TODO: Sentry.captureException(error, { extra: context });
 }
 
-export function captureMessage(message: string, level: string = 'info') {
-  console.log(`[${level}]`, message);
+export function captureMessage(message: string, level: 'info' | 'warning' | 'error' = 'info'): void {
+  if (IS_DEV) {
+    const logMethod = level === 'error' ? 'error' : level === 'warning' ? 'warn' : 'log';
+    console[logMethod](`[Sentry ${level}]`, message);
+  }
+  // TODO: Sentry.captureMessage(message, level);
 }
 
-export function identifyUser(user: { id: string; email?: string; name?: string }) {
-  console.log('[User identified]', user.id);
+export function identifyUser(user: { id: string; email?: string; name?: string }): void {
+  // TODO: Sentry.setUser(user);
+  void user; // Evita warning de variável não usada
 }
 
-export function clearUser() {
-  console.log('[User cleared]');
+export function clearUser(): void {
+  // TODO: Sentry.setUser(null);
 }
 
-export function addBreadcrumb(message: string, category: string, data?: Record<string, unknown>) {
-  console.log('[Breadcrumb]', category, message, data);
+export function addBreadcrumb(
+  message: string, 
+  category: string, 
+  data?: Record<string, unknown>
+): void {
+  // TODO: Sentry.addBreadcrumb({ message, category, data });
+  void message;
+  void category;
+  void data;
 }
 
 // Placeholder ErrorBoundary - usa o componente React padrão
-export const SentryErrorBoundary = ({ children }: { children: React.ReactNode }) => children;
+export function SentryErrorBoundary({ children }: { children: ReactNode }): ReactNode {
+  return children;
+}
 
-// Placeholder HOC
-export const withProfiler = <P extends object>(Component: React.ComponentType<P>) => Component;
+// Placeholder HOC - retorna o componente sem modificação
+export function withProfiler<P extends object>(
+  Component: ComponentType<P>
+): ComponentType<P> {
+  return Component;
+}
 
 export default {
   initSentry,
