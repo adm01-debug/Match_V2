@@ -1,6 +1,6 @@
-import { within, userEvent, expect } from '@storybook/test';
+import { within, expect } from '@storybook/test';
 import type { Meta, StoryObj } from '@storybook/react';
-import { EntrevistaCard } from './EntrevistaCard';
+import EntrevistaCard from './EntrevistaCard';
 
 const meta: Meta<typeof EntrevistaCard> = {
   title: 'Components/agenda/EntrevistaCard',
@@ -36,3 +36,4 @@ export const Empty: Story = {
   args: {},
   parameters: { mockData: { data: [] } },
 };
+
