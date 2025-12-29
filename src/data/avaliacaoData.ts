@@ -15,4 +15,12 @@ export const competencias: Competencia[] = [
   { id: '3', nome: 'Resolução de Problemas', descricao: 'Análise crítica', tipo: 'tecnica' },
 ];
 
-export default { competencias };
+export const notasDescricao: Record<number, { label: string }> = {
+  1: { label: 'Insuficiente' },
+  2: { label: 'Regular' },
+  3: { label: 'Bom' },
+  4: { label: 'Muito Bom' },
+  5: { label: 'Excelente' },
+};
+
+export default { competencias, notasDescricao };

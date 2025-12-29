@@ -15,8 +15,6 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    // Verify component renders
     await expect(canvasElement).toBeInTheDocument();
   },
 };

@@ -1,4 +1,4 @@
-import { within, userEvent, expect } from '@storybook/test';
+import { expect } from '@storybook/test';
 import type { Meta, StoryObj } from '@storybook/react';
 import { GoogleCalendarExport } from './GoogleCalendarExport';
 
@@ -15,7 +15,6 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
     await expect(canvasElement).toBeInTheDocument();
   },
 };

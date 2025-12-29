@@ -1,4 +1,4 @@
-import { within, userEvent, expect } from '@storybook/test';
+import { expect } from '@storybook/test';
 import type { Meta, StoryObj } from '@storybook/react';
 import { WeekView } from './WeekView';
 const meta: Meta<typeof WeekView> = { title: 'Components/agenda/WeekView', component: WeekView,
@@ -17,7 +17,6 @@ export const WithError: Story = {
   parameters: { mockData: { error: 'Erro ao carregar' } },
 
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
     await expect(canvasElement).toBeInTheDocument();
   },
 
