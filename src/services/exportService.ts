@@ -108,12 +108,12 @@ class ExportService {
     }
   }
 
-  async exportCandidatos(candidatos: any[], format: ExportFormat): Promise<void> {
+  async exportCandidatos(candidatos: Record<string, unknown>[], format: ExportFormat): Promise<void> {
     const columns = ['nome', 'email', 'telefone', 'origem', 'status', 'created_at'];
     await this.export(candidatos, { filename: 'candidatos', format, columns, title: 'Lista de Candidatos' });
   }
 
-  async exportVagas(vagas: any[], format: ExportFormat): Promise<void> {
+  async exportVagas(vagas: Record<string, unknown>[], format: ExportFormat): Promise<void> {
     const columns = ['titulo', 'departamento', 'status', 'prioridade', 'created_at'];
     await this.export(vagas, { filename: 'vagas', format, columns, title: 'Lista de Vagas' });
   }
@@ -121,4 +121,5 @@ class ExportService {
 
 export const exportService = new ExportService();
 export default exportService;
+
 
