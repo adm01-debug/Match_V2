@@ -6,7 +6,7 @@
 // Validadores de formulário
 
 export const validators = {
-  required: (value: any) => {
+  required: (value: unknown) => {
     if (value === null || value === undefined || value === '') {
       return 'Campo obrigatório';
     }
@@ -135,7 +135,7 @@ export const validators = {
 // Função para validar múltiplos campos
 export function validate(
   values: Record<string, any>,
-  rules: Record<string, Array<(value: any) => string | null>>
+  rules: Record<string, Array<(value: unknown) => string | null>>
 ): Record<string, string> {
   const errors: Record<string, string> = {};
   
@@ -170,3 +170,4 @@ export const candidatoValidations = {
 };
 
 export default validators;
+
