@@ -1,15 +1,15 @@
 /**
- * @fileoverview Layout component
+ * @fileoverview Layout component with Command Menu
  * @module Layout
  */
 
 import { memo } from 'react';
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "./AppSidebar";
-import { Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
 import { NotificationPanel } from "@/components/notifications/NotificationPanel";
 import { useNotifications } from "@/contexts/NotificationContext";
+import { CommandMenu } from "@/components/common/CommandMenu";
+import { CommandMenuTrigger } from "@/components/common/CommandMenuTrigger";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -21,6 +21,9 @@ export function Layout({ children, title }: LayoutProps) {
 
   return (
     <SidebarProvider defaultOpen={true}>
+      {/* Global Command Menu */}
+      <CommandMenu />
+      
       <div role="region" aria-label="Layout principal" className="min-h-screen flex w-full bg-background">
         <AppSidebar />
         <SidebarInset className="flex flex-col flex-1">
@@ -34,12 +37,14 @@ export function Layout({ children, title }: LayoutProps) {
             <div data-testid="layout" className="flex-1" />
 
             <div className="flex items-center gap-4">
-              <div className="relative hidden md:block">
-                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                <Input
-                  placeholder="Buscar candidatos, vagas..."
-                  className="w-64 pl-9 bg-background"
-                />
+              {/* Command Menu Trigger - replaces old search input */}
+              <div className="hidden md:block">
+                <CommandMenuTrigger />
+              </div>
+              
+              {/* Mobile compact trigger */}
+              <div className="md:hidden">
+                <CommandMenuTrigger variant="compact" />
               </div>
 
               <NotificationPanel
