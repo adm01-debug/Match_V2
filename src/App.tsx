@@ -47,21 +47,32 @@ const PageLoader = () => (
   </div>
 );
 
-const queryClient = new QueryClient();
+// QueryClient criado FORA do componente para evitar recriação
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5, // 5 minutos
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+    mutations: {
+      retry: 1,
+    },
+  },
+});
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <AnalyticsProvider>
-          <AuthProvider>
-            <CandidatoAuthProvider>
-              <NotificationProvider>
-                <ErrorBoundary>
-                  <Suspense fallback={<PageLoader />}>
-                    <Routes>
+function App() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <BrowserRouter>
+          <AnalyticsProvider>
+            <AuthProvider>
+              <CandidatoAuthProvider>
+                <NotificationProvider>
+                  <ErrorBoundary>
+                    <Suspense fallback={<PageLoader />}>
+                      <Routes>
                         {/* Portal do Candidato - Rotas Públicas */}
                         <Route path="/portal" element={<PortalAuthPage />} />
                         <Route 
@@ -118,16 +129,19 @@ const App = () => (
 
                         {/* 404 */}
                         <Route path="*" element={<NotFound />} />
-                    </Routes>
-                  </Suspense>
-                </ErrorBoundary>
-              </NotificationProvider>
-            </CandidatoAuthProvider>
-          </AuthProvider>
-        </AnalyticsProvider>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+                      </Routes>
+                    </Suspense>
+                  </ErrorBoundary>
+                  <Toaster />
+                  <Sonner />
+                </NotificationProvider>
+              </CandidatoAuthProvider>
+            </AuthProvider>
+          </AnalyticsProvider>
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
+}
 
 export default App;
