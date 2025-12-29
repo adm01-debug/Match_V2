@@ -77,7 +77,7 @@ function downloadFile(content: string, filename: string, type: string): void {
 /**
  * Exporta candidatos para CSV
  */
-export function exportCandidatosCSV(candidatos: any[]): void {
+export function exportCandidatosCSV(candidatos: Record<string, unknown>[]): void {
   const data = candidatos.map(c => ({
     nome: c.nome,
     email: c.email,
@@ -100,7 +100,7 @@ export function exportCandidatosCSV(candidatos: any[]): void {
 /**
  * Exporta vagas para CSV
  */
-export function exportVagasCSV(vagas: any[]): void {
+export function exportVagasCSV(vagas: Record<string, unknown>[]): void {
   const data = vagas.map(v => ({
     titulo: v.titulo,
     departamento: v.departamento,
@@ -121,3 +121,4 @@ export function exportVagasCSV(vagas: any[]): void {
     data_criacao: 'Data Criação',
   });
 }
+
