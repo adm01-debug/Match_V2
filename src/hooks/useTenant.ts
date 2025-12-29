@@ -3,12 +3,22 @@ import { supabase } from '@/integrations/supabase/client';
 import { useTenantContext } from '@/contexts/TenantContext';
 import { useToast } from '@/hooks/use-toast';
 
-interface TenantSettings { theme?: string; logo_url?: string; custom_domain?: string; features?: string[]; }
+interface TenantSettings { 
+  theme?: string; 
+  logo_url?: string; 
+  custom_domain?: string; 
+  features?: string[]; 
+}
 
 export function useTenant() {
-  const { tenant, tenants, switchTenant, isMultiTenant } = useTenantContext();
+  const context = useTenantContext();
   const { toast } = useToast();
   const queryClient = useQueryClient();
+
+  const tenant = context?.tenant || null;
+  const tenants = context?.tenants || [];
+  const switchTenant = context?.switchTenant || (async () => {});
+  const isMultiTenant = context?.isMultiTenant || false;
 
   const { data: settings } = useQuery({
     queryKey: ['tenant-settings', tenant?.id],
@@ -53,7 +63,16 @@ export function useTenant() {
     },
   });
 
-  return { tenant, tenants, settings, members, isMultiTenant, switchTenant, updateSettings: updateSettings.mutate, inviteMember: inviteMember.mutate };
+  return { 
+    tenant, 
+    tenants, 
+    settings, 
+    members, 
+    isMultiTenant, 
+    switchTenant, 
+    updateSettings: updateSettings.mutate, 
+    inviteMember: inviteMember.mutate 
+  };
 }
 
 export default useTenant;
