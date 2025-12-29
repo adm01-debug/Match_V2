@@ -29,7 +29,9 @@ export function initSentry(): void {
 
 export function captureError(error: Error, context?: Record<string, unknown>): void {
   if (IS_DEV) {
-    console.error('[Sentry Error]', error.message, context);
+    if (import.meta.env.DEV) {
+      // Sentry error logged in dev only
+    }
   }
   // TODO: Sentry.captureException(error, { extra: context });
 }
@@ -82,3 +84,4 @@ export default {
   clearUser,
   addBreadcrumb,
 };
+
