@@ -43,7 +43,7 @@ export default function ReportsPage() {
           </TabsList>
 
           <TabsContent value="builder" className="mt-4">
-            <ReportBuilder onExport={(format) => console.log('Export:', format)} />
+            <ReportBuilder onExport={(format) => { /* Export handler: format */ }} />
           </TabsContent>
 
           <TabsContent value="saved" className="mt-4">
@@ -70,3 +70,4 @@ export default function ReportsPage() {
     </Layout>
   );
 }
+
