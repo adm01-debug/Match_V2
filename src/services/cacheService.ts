@@ -20,7 +20,7 @@ class CacheService {
 
   private async execute(command: string[]): Promise<any> {
     if (!this.baseUrl || !this.token) {
-      console.warn('Redis not configured, using memory fallback');
+      // Redis not configured, using memory fallback
       return null;
     }
 
@@ -36,7 +36,7 @@ class CacheService {
       const data = await response.json();
       return data.result;
     } catch (error) {
-      console.error('Redis error:', error);
+      // Silently handle Redis errors
       return null;
     }
   }
@@ -116,3 +116,4 @@ export const CacheKeys = {
 };
 
 export default cacheService;
+
