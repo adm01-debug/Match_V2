@@ -4,10 +4,11 @@
  */
 
 import { toast } from 'sonner';
+import { logger } from '@/services/logger';
 
 export const handleError = (error: unknown, context?: string) => {
   const message = error instanceof Error ? error.message : 'Erro desconhecido';
-  console.error(`[${context || 'Error'}]:`, error);
+  logger.error(`[${context || 'Error'}]:`, error);
   toast.error(message);
   return message;
 };
