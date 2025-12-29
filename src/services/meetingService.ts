@@ -95,7 +95,7 @@ class MeetingService {
 
   async deleteMeeting(meetingId: string, provider: MeetingProvider): Promise<void> {
     // Implementation would call respective API
-    console.log(`Deleting ${provider} meeting: ${meetingId}`);
+    // Deleting meeting silently
   }
 
   async updateMeeting(meetingId: string, provider: MeetingProvider, updates: Partial<CreateMeetingParams>): Promise<MeetingDetails> {
@@ -128,3 +128,4 @@ class MeetingService {
 
 export const meetingService = new MeetingService();
 export default meetingService;
+
