@@ -23,7 +23,27 @@ import {
   Sparkles,
   Mail,
   Shield,
+  HelpCircle,
 } from "lucide-react";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  useSidebar,
+} from "@/components/ui/sidebar";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { cn } from "@/lib/utils";
+import { useAuth, AppRole } from "@/contexts/AuthContext";
+import { Badge } from "@/components/ui/badge";
+import { useOnboarding } from "@/hooks/useOnboarding";
 import {
   Sidebar,
   SidebarContent,
@@ -96,6 +116,7 @@ export function AppSidebar() {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, roles, signOut, hasRole } = useAuth();
+  const { resetTour } = useOnboarding();
   const collapsed = state === "collapsed";
 
   const isActive = (path: string) => {
@@ -251,6 +272,27 @@ export function AppSidebar() {
             <LogOut className="h-4 w-4" />
           </Button>
         )}
+
+        {/* Help / Reset Tour Button */}
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={resetTour}
+          className={cn(
+            "w-full mt-2 text-sidebar-muted hover:text-primary hover:bg-sidebar-accent",
+            collapsed && "px-2"
+          )}
+          title="Refazer tour de introdução"
+        >
+          {collapsed ? (
+            <HelpCircle className="h-4 w-4" />
+          ) : (
+            <>
+              <HelpCircle className="h-4 w-4 mr-2" />
+              Refazer Tour
+            </>
+          )}
+        </Button>
 
         <Button
           variant="ghost"
