@@ -1,6 +1,6 @@
-import { within, userEvent, expect } from '@storybook/test';
+import { within, expect } from '@storybook/test';
 import type { Meta, StoryObj } from '@storybook/react';
-import { EntrevistaDetalhesDialog } from './EntrevistaDetalhesDialog';
+import EntrevistaDetalhesDialog from './EntrevistaDetalhesDialog';
 
 const meta: Meta<typeof EntrevistaDetalhesDialog> = {
   title: 'Components/EntrevistaDetalhesDialog',
@@ -19,3 +19,4 @@ export const Default: Story = {
     await expect(canvasElement).toBeInTheDocument();
   },
 };
+
