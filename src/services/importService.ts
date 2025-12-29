@@ -80,7 +80,7 @@ class ImportService {
       const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
       return XLSX.utils.sheet_to_json(firstSheet);
     } catch (error) {
-      console.error('Excel read error:', error);
+      // Excel read error - handled
       return [];
     }
   }
@@ -196,3 +196,4 @@ class ImportService {
 
 export const importService = new ImportService();
 export default importService;
+
