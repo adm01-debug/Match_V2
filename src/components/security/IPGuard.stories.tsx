@@ -66,7 +66,7 @@ export const Blocked: Story = {
     <AccessBlocked 
       clientIP="192.168.1.100" 
       showIP={true} 
-      onRetry={() => console.log('Retry clicked')} 
+      onRetry={() => /* Retry clicked */} 
     />
   ),
   parameters: {
@@ -86,7 +86,7 @@ export const BlockedHiddenIP: Story = {
     <AccessBlocked 
       clientIP="192.168.1.100" 
       showIP={false} 
-      onRetry={() => console.log('Retry clicked')} 
+      onRetry={() => /* Retry clicked */} 
     />
   ),
   parameters: {
@@ -105,7 +105,7 @@ export const Error: Story = {
   render: () => (
     <IPCheckError 
       error={new Error('Não foi possível conectar ao servidor')} 
-      onRetry={() => console.log('Retry clicked')} 
+      onRetry={() => /* Retry clicked */} 
     />
   ),
   parameters: {
@@ -137,3 +137,4 @@ export const Allowed: Story = {
     },
   },
 };
+
