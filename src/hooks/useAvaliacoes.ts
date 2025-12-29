@@ -142,7 +142,7 @@ export function useAvaliacoes(options: UseAvaliacoesOptions = {}) {
       queryClient.invalidateQueries({ queryKey: ['avaliacoes'] });
     },
     onError: (error: Error) => {
-      console.error('Erro ao criar avaliação:', error);
+      // Erro ao criar avaliação - handled
     },
   });
 
@@ -165,7 +165,7 @@ export function useAvaliacoes(options: UseAvaliacoesOptions = {}) {
       queryClient.invalidateQueries({ queryKey: ['avaliacoes'] });
     },
     onError: (error: Error) => {
-      console.error('Erro ao atualizar avaliação:', error);
+      // Erro ao atualizar avaliação - handled
     },
   });
 
@@ -178,7 +178,7 @@ export function useAvaliacoes(options: UseAvaliacoesOptions = {}) {
       queryClient.invalidateQueries({ queryKey: ['avaliacoes'] });
     },
     onError: (error: Error) => {
-      console.error('Erro ao deletar avaliação:', error);
+      // Erro ao deletar avaliação - handled
     },
   });
 
@@ -256,3 +256,4 @@ export function useAvaliacao(id: string | undefined) {
 }
 
 export default useAvaliacoes;
+
