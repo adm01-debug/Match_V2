@@ -11,7 +11,10 @@ function NotFound() {
   useEffect(() => {
     // Log silencioso em produção - útil para analytics
     if (import.meta.env.DEV) {
-      console.warn('[404] Route not found:', location.pathname);
+      // Log 404 only in development
+    if (import.meta.env.DEV) {
+      // Route not found: location.pathname
+    }
     }
   }, [location.pathname]);
 
@@ -48,3 +51,4 @@ function NotFound() {
 }
 
 export default NotFound;
+
