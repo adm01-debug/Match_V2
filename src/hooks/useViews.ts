@@ -77,7 +77,7 @@ export function usePipelineView(vagaId?: string) {
       const { data, error } = await query;
       if (error) throw error;
       
-      const transformed: PipelineView[] = (data || []).map((p: any) => ({
+      const transformed: PipelineView[] = (data || []).map((p: Record<string, unknown>) => ({
         id: p.id,
         etapa_atual: p.etapa_atual,
         status: p.status,
@@ -131,7 +131,7 @@ export function useAgendaEntrevistasView(filtros?: {
       const { data, error } = await query;
       if (error) throw error;
       
-      const transformed: AgendaEntrevistasView[] = (data || []).map((e: any) => ({
+      const transformed: AgendaEntrevistasView[] = (data || []).map((e: Record<string, unknown>) => ({
         id: e.id,
         tipo: e.tipo,
         etapa: e.etapa,
@@ -173,7 +173,7 @@ export function useVagasKpisView(status?: string) {
       const { data, error } = await query;
       if (error) throw error;
       
-      const transformed: VagasKpisView[] = (data || []).map((v: any) => ({
+      const transformed: VagasKpisView[] = (data || []).map((v: Record<string, unknown>) => ({
         id: v.id,
         titulo: v.titulo,
         departamento: v.departamento,
@@ -221,3 +221,4 @@ export function useDashboardKPIs() {
     isLoading: loadingVagas || loadingPipeline,
   };
 }
+
