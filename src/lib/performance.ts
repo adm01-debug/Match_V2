@@ -53,7 +53,8 @@ export const performance = {
     if (typeof window !== 'undefined') {
       // LCP, FID, CLS would be measured here
       // This is a placeholder for web-vitals library integration
-      console.log('Web Vitals reporting initialized');
+      // Web Vitals reporting initialized
     }
   },
 };
+
