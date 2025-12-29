@@ -2,6 +2,15 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
+interface CandidatoDBRow {
+  id: string;
+  nome: string;
+  email: string;
+  cargo_atual: string | null;
+  tags: string[] | null;
+}
+
+
 interface TalentPool { 
   id: string; 
   name: string; 
@@ -57,7 +66,7 @@ export function useTalentPool() {
           // console.warn('Error loading candidates:', error.message);
           return [];
         }
-        return (data || []).map((c: any) => ({ 
+        return (data || []).map((c: CandidatoDBRow) => ({ 
           id: c.id, 
           nome: c.nome, 
           email: c.email, 
@@ -87,7 +96,7 @@ export function useTalentPool() {
       queryClient.invalidateQueries({ queryKey: ['talent-pools'] });
       toast({ title: 'Pool criado', description: 'Novo pool de talentos criado com sucesso.' });
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast({ title: 'Erro', description: error.message || 'Erro ao criar pool', variant: 'destructive' });
     },
   });
@@ -133,4 +142,5 @@ export function useTalentPool() {
 }
 
 export default useTalentPool;
+
 
