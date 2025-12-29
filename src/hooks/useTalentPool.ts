@@ -33,12 +33,12 @@ export function useTalentPool() {
           .order('created_at', { ascending: false });
         
         if (error) {
-          console.warn('talent_pools table may not exist:', error.message);
+          // console.warn('talent_pools table may not exist:', error.message);
           return [];
         }
         return (data || []) as TalentPool[];
       } catch (e) {
-        console.warn('Error loading talent pools:', e);
+        // console.warn('Error loading talent pools:', e);
         return [];
       }
     },
@@ -54,7 +54,7 @@ export function useTalentPool() {
           .limit(100);
         
         if (error) {
-          console.warn('Error loading candidates:', error.message);
+          // console.warn('Error loading candidates:', error.message);
           return [];
         }
         return (data || []).map((c: any) => ({ 
@@ -65,7 +65,7 @@ export function useTalentPool() {
           tags: c.tags || [] 
         })) as PoolCandidate[];
       } catch (e) {
-        console.warn('Error loading candidates:', e);
+        // console.warn('Error loading candidates:', e);
         return [];
       }
     },
@@ -133,3 +133,4 @@ export function useTalentPool() {
 }
 
 export default useTalentPool;
+
