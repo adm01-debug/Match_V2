@@ -31,7 +31,7 @@ class GoogleCalendarServiceImpl implements GoogleCalendarService {
 
   async init(): Promise<void> {
     if (!GOOGLE_CLIENT_ID || !GOOGLE_API_KEY) {
-      console.warn('Google Calendar not configured');
+      // Google Calendar not configured - silent
       return;
     }
 
@@ -172,3 +172,4 @@ declare global {
     google: any;
   }
 }
+
