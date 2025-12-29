@@ -38,7 +38,7 @@ export const getClientIP = async (): Promise<string> => {
     const data = await response.json();
     return data.ip;
   } catch (error) {
-    console.warn('Não foi possível obter IP externo, usando fallback');
+    // console.warn('Não foi possível obter IP externo, usando fallback');
     // Fallback para desenvolvimento
     return '127.0.0.1';
   }
@@ -55,7 +55,7 @@ export const getAllowedIPsFromDB = async (): Promise<AllowedIP[]> => {
       .eq('is_active', true);
 
     if (error) {
-      console.error('Erro ao buscar IPs do banco:', error);
+      // console.error('Erro ao buscar IPs do banco:', error);
       return [];
     }
 
@@ -67,7 +67,7 @@ export const getAllowedIPsFromDB = async (): Promise<AllowedIP[]> => {
       isActive: row.is_active,
     }));
   } catch (error) {
-    console.error('Erro ao buscar IPs:', error);
+    // console.error('Erro ao buscar IPs:', error);
     return [];
   }
 };
@@ -172,7 +172,7 @@ export const logBlockedAttempt = async (
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error('Erro ao registrar tentativa bloqueada:', error);
+    // console.error('Erro ao registrar tentativa bloqueada:', error);
   }
 };
 
@@ -193,7 +193,7 @@ export const addIPToWhitelist = async (
     });
 
     if (error) {
-      console.error('Erro ao adicionar IP:', error);
+      // console.error('Erro ao adicionar IP:', error);
       return false;
     }
 
@@ -201,7 +201,7 @@ export const addIPToWhitelist = async (
     ipCache.delete(ip);
     return true;
   } catch (error) {
-    console.error('Erro ao adicionar IP:', error);
+    // console.error('Erro ao adicionar IP:', error);
     return false;
   }
 };
@@ -217,7 +217,7 @@ export const removeIPFromWhitelist = async (ip: string): Promise<boolean> => {
       .eq('ip', ip);
 
     if (error) {
-      console.error('Erro ao remover IP:', error);
+      // console.error('Erro ao remover IP:', error);
       return false;
     }
 
@@ -225,7 +225,7 @@ export const removeIPFromWhitelist = async (ip: string): Promise<boolean> => {
     ipCache.delete(ip);
     return true;
   } catch (error) {
-    console.error('Erro ao remover IP:', error);
+    // console.error('Erro ao remover IP:', error);
     return false;
   }
 };
@@ -238,3 +238,4 @@ export const clearIPCache = (): void => {
 };
 
 export type { IPCheckResult, AllowedIP };
+
