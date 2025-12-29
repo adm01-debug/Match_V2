@@ -1,9 +1,9 @@
 /**
- * @fileoverview AppSidebar component
+ * @fileoverview AppSidebar component with tour integration
  * @module AppSidebar
  */
 
-import { memo , memo, useMemo} from 'react';
+import { memo, useMemo } from 'react';
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
@@ -47,9 +47,9 @@ const menuItems = [
   {
     group: "Principal",
     items: [
-      { title: "Dashboard", url: "/", icon: LayoutDashboard },
-      { title: "Vagas", url: "/vagas", icon: Briefcase },
-      { title: "Banco de Talentos", url: "/talentos", icon: Users },
+      { title: "Dashboard", url: "/", icon: LayoutDashboard, tourId: "dashboard" },
+      { title: "Vagas", url: "/vagas", icon: Briefcase, tourId: "vagas" },
+      { title: "Banco de Talentos", url: "/talentos", icon: Users, tourId: "candidatos" },
       { title: "Pipeline", url: "/pipeline", icon: Kanban },
       { title: "Parser Currículo", url: "/parser-curriculo", icon: Sparkles },
     ],
@@ -57,7 +57,7 @@ const menuItems = [
   {
     group: "Processo",
     items: [
-      { title: "Agenda", url: "/agenda", icon: Calendar },
+      { title: "Agenda", url: "/agenda", icon: Calendar, tourId: "agenda" },
       { title: "Avaliações", url: "/avaliacoes", icon: ClipboardCheck },
       { title: "Testes", url: "/testes", icon: FileText },
     ],
@@ -165,7 +165,7 @@ export function AppSidebar() {
             <SidebarGroupContent>
               <SidebarMenu>
                 {group.items.map((item) => {
-                  const itemWithRoles = item as typeof item & { roles?: AppRole[] };
+                  const itemWithRoles = item as typeof item & { roles?: AppRole[]; tourId?: string };
                   if (!canAccessItem(itemWithRoles.roles)) return null;
                   
                   return (
@@ -177,6 +177,7 @@ export function AppSidebar() {
                       >
                         <NavLink
                           to={item.url}
+                          data-tour={itemWithRoles.tourId}
                           className={cn(
                             "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all",
                             "text-sidebar-foreground/80 hover:text-sidebar-foreground hover:bg-sidebar-accent",

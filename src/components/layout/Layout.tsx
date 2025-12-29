@@ -1,5 +1,5 @@
 /**
- * @fileoverview Layout component with Command Menu
+ * @fileoverview Layout component with Command Menu and Onboarding
  * @module Layout
  */
 
@@ -10,6 +10,7 @@ import { NotificationPanel } from "@/components/notifications/NotificationPanel"
 import { useNotifications } from "@/contexts/NotificationContext";
 import { CommandMenu } from "@/components/common/CommandMenu";
 import { CommandMenuTrigger } from "@/components/common/CommandMenuTrigger";
+import { OnboardingTour } from "@/components/onboarding/OnboardingTour";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -23,6 +24,9 @@ export function Layout({ children, title }: LayoutProps) {
     <SidebarProvider defaultOpen={true}>
       {/* Global Command Menu */}
       <CommandMenu />
+      
+      {/* Onboarding Tour for new users */}
+      <OnboardingTour />
       
       <div role="region" aria-label="Layout principal" className="min-h-screen flex w-full bg-background">
         <AppSidebar />
