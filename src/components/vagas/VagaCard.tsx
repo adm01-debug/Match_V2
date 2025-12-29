@@ -4,7 +4,6 @@
  */
 
 import { memo, useState } from 'react';
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -17,7 +16,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Vaga, StatusVaga, Prioridade } from "@/types/recruitment";
+import { StatusBadge } from "@/components/ui/status-badge";
+import { PriorityBadge } from "@/components/ui/priority-badge";
+import { Vaga } from "@/types/recruitment";
 import { useDeleteVaga } from "@/hooks/useVagas";
 import { 
   Eye, 
@@ -31,8 +32,6 @@ import {
   Target,
   Clock,
   MoreHorizontal,
-  Flame,
-  AlertTriangle,
   Trash2,
   Loader2
 } from "lucide-react";
@@ -51,31 +50,9 @@ interface VagaCardProps {
   vaga: Vaga;
 }
 
-const statusConfig: Record<StatusVaga, { label: string; className: string }> = {
-  rascunho: { label: "Rascunho", className: "bg-muted text-muted-foreground" },
-  aguardando_aprovacao: { label: "Em Aprovação", className: "bg-warning/10 text-warning border-warning/20" },
-  aprovada: { label: "Aprovada", className: "bg-info/10 text-info border-info/20" },
-  publicada: { label: "Aberta", className: "bg-success/10 text-success border-success/20" },
-  em_selecao: { label: "Em Seleção", className: "bg-primary/10 text-primary border-primary/20" },
-  pausada: { label: "Pausada", className: "bg-muted text-muted-foreground" },
-  encerrada: { label: "Encerrada", className: "bg-muted text-muted-foreground" },
-  cancelada: { label: "Cancelada", className: "bg-destructive/10 text-destructive border-destructive/20" },
-};
-
-const prioridadeConfig: Record<Prioridade, { label: string; icon: any; className: string }> = {
-  urgente: { label: "Urgente", icon: Flame, className: "bg-destructive/10 text-destructive" },
-  alta: { label: "Alta", icon: AlertTriangle, className: "bg-warning/10 text-warning" },
-  media: { label: "Média", icon: null, className: "bg-info/10 text-info" },
-  baixa: { label: "Baixa", icon: null, className: "bg-muted text-muted-foreground" },
-};
-
 export const VagaCard = memo(function VagaCard({ vaga }: VagaCardProps) {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const deleteVaga = useDeleteVaga();
-  
-  const status = statusConfig[vaga.status];
-  const prioridade = prioridadeConfig[vaga.prioridade];
-  const PrioridadeIcon = prioridade.icon;
   
   const diasAberta = vaga.dataPublicacao 
     ? Math.floor((new Date().getTime() - new Date(vaga.dataPublicacao).getTime()) / (1000 * 60 * 60 * 24))
@@ -98,6 +75,16 @@ export const VagaCard = memo(function VagaCard({ vaga }: VagaCardProps) {
     }
   };
 
+  const handleDelete = async () => {
+    try {
+      await deleteVaga.mutateAsync(vaga.id);
+      toast.success("Vaga excluída com sucesso!");
+      setShowDeleteDialog(false);
+    } catch (error) {
+      toast.error("Erro ao excluir vaga. Tente novamente.");
+    }
+  };
+
   return (
     <>
       <Card className="card-hover border-l-4 border-l-primary">
@@ -105,14 +92,13 @@ export const VagaCard = memo(function VagaCard({ vaga }: VagaCardProps) {
           <div data-testid="vaga-card" className="flex items-start justify-between gap-3 mb-4">
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-1">
-                <Badge variant="outline" className={cn("text-xs", status.className)}>
-                  {status.label}
-                </Badge>
-                {vaga.prioridade !== "baixa" && vaga.prioridade !== "media" && (
-                  <Badge variant="outline" className={cn("text-xs", prioridade.className)}>
-                    {PrioridadeIcon && <PrioridadeIcon className="h-3 w-3 mr-1" />}
-                    {prioridade.label}
-                  </Badge>
+                <StatusBadge status={vaga.status} size="sm" />
+                {(vaga.prioridade === "urgente" || vaga.prioridade === "alta") && (
+                  <PriorityBadge 
+                    priority={vaga.prioridade} 
+                    size="sm" 
+                    pulse={vaga.prioridade === "urgente"}
+                  />
                 )}
               </div>
               <h3 className="font-semibold text-lg text-foreground truncate">
