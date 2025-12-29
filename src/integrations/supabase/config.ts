@@ -1,0 +1,14 @@
+// Supabase configuration with fallback values
+// These values are public (anon key) and safe to include in the codebase
+
+export const SUPABASE_URL = 
+  import.meta.env.VITE_SUPABASE_URL || 
+  'https://gwopzfulndgjtujbmxzj.supabase.co';
+
+export const SUPABASE_ANON_KEY = 
+  import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || 
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd3b3B6ZnVsbmRnanR1amJteHpqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU4OTY3ODUsImV4cCI6MjA4MTQ3Mjc4NX0.kPr8MyvdSJVXTib-2qyYv7wMhUV_lKcxlknEgZQbYn0';
+
+export const SUPABASE_PROJECT_ID = 
+  import.meta.env.VITE_SUPABASE_PROJECT_ID || 
+  'gwopzfulndgjtujbmxzj';
