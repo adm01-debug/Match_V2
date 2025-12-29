@@ -54,7 +54,7 @@ export const gdprService = {
       });
       return true;
     } catch (error) {
-      console.error('Error requesting data deletion:', error);
+      // Error requesting data deletion - handled
       return false;
     }
   },
@@ -75,7 +75,7 @@ export const gdprService = {
       await supabase.auth.admin.deleteUser(userId);
       return true;
     } catch (error) {
-      console.error('Error deleting user account:', error);
+      // Error deleting user account - handled
       return false;
     }
   },
@@ -92,7 +92,7 @@ export const gdprService = {
       });
       return true;
     } catch (error) {
-      console.error('Error updating consent:', error);
+      // Error updating consent - handled
       return false;
     }
   },
@@ -123,3 +123,4 @@ export const gdprService = {
 };
 
 export default gdprService;
+
