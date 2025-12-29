@@ -10,8 +10,8 @@ export interface ImportResult {
 export interface ImportConfig {
   table: string;
   mapping: Record<string, string>; // CSV column -> DB column
-  validators?: Record<string, (value: any) => boolean>;
-  transformers?: Record<string, (value: any) => any>;
+  validators?: Record<string, (value: unknown) => boolean>;
+  transformers?: Record<string, (value: unknown) => unknown>;
 }
 
 class ImportService {
@@ -144,7 +144,7 @@ class ImportService {
         } else {
           result.success++;
         }
-      } catch (error: any) {
+      } catch (error) {
         result.failed++;
         result.errors.push({ row: rowNum, error: error.message });
       }
@@ -196,4 +196,5 @@ class ImportService {
 
 export const importService = new ImportService();
 export default importService;
+
 
