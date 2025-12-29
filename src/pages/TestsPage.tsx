@@ -115,7 +115,6 @@ export default function TestsPage() {
     const IconeCategoria = categoria ? iconeMap[categoria.icone] || FileText : FileText;
 
     return (
-      <Suspense fallback={<div className="p-6"><Skeleton className="h-8 w-64 mb-4" /><Skeleton className="h-64" /></div>}>
       <Card className="hover:shadow-md transition-shadow">
         <CardHeader className="pb-2">
           <div className="flex items-start justify-between">

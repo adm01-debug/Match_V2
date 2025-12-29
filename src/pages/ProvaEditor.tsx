@@ -143,8 +143,7 @@ export default function ProvaEditor() {
   if (loadingProva) return <Layout title="Editor"><div className="p-6"><Skeleton className="h-96" /></div></Layout>;
 
   return (
-    <Suspense fallback={<div className="p-6"><Skeleton className="h-8 w-64 mb-4" /><Skeleton className="h-64" /></div>}>
-      <Layout title={isEditing ? "Editar Prova" : "Nova Prova"}>
+    <Layout title={isEditing ? "Editar Prova" : "Nova Prova"}>
       <div className="p-6 space-y-6 animate-fade-in">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">

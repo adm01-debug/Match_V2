@@ -305,8 +305,7 @@ export default function CandidatosPage() {
   }, [candidatos]);
 
   return (
-    <Suspense fallback={<div className="p-6"><Skeleton className="h-8 w-64 mb-4" /><Skeleton className="h-64" /></div>}>
-      <Layout>
+    <Layout>
       <div className="space-y-6">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">

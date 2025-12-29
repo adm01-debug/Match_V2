@@ -69,8 +69,7 @@ export default function VagasList() {
   };
 
   return (
-    <Suspense fallback={<div className="p-6"><Skeleton className="h-8 w-64 mb-4" /><Skeleton className="h-64" /></div>}>
-      <Layout title="Vagas">
+    <Layout title="Vagas">
       <div className="p-6 space-y-6 animate-fade-in">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">

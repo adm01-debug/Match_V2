@@ -115,8 +115,7 @@ export default function Pipeline() {
   const vagasAtivas = vagas.filter(v => ['publicada', 'em_selecao'].includes(v.status));
 
   return (
-    <Suspense fallback={<div className="p-6"><Skeleton className="h-8 w-64 mb-4" /><Skeleton className="h-64" /></div>}>
-      <Layout title="Pipeline de Recrutamento">
+    <Layout title="Pipeline de Recrutamento">
       <div className="p-6 space-y-4 animate-fade-in">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">

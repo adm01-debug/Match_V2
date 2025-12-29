@@ -17,8 +17,7 @@ export interface ImportConfig {
 class ImportService {
   // Parse CSV string
   parseCSV(content: string): Record<string, string>[] {
-    const lines = content.split(/?
-/).filter(line => line.trim());
+    const lines = content.split(/\r?\n/).filter(line => line.trim());
     if (lines.length < 2) return [];
 
     const headers = this.parseCSVLine(lines[0]);

@@ -51,9 +51,9 @@ interface FeatureGateProps {
  */
 export const FeatureGate: React.FC<FeatureGateProps> = ({ flag, children, fallback = null }) => {
   if (FeatureFlags[flag]) {
-    return <>{children}</>;
+    return React.createElement(React.Fragment, null, children);
   }
-  return <>{fallback}</>;
+  return React.createElement(React.Fragment, null, fallback);
 };
 
 export default FeatureFlags;
