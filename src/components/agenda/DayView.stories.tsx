@@ -21,7 +21,6 @@ export const WithError: Story = {
   },
 
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
     await expect(canvasElement).toBeInTheDocument();
   },
 
