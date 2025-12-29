@@ -15,7 +15,7 @@ export const storage = {
 
   set<T>(key: string, value: T): void {
     try { localStorage.setItem(PREFIX + key, JSON.stringify(value)); }
-    catch { console.error('Storage error'); }
+    catch { /* Storage error - handled silently */ }
   },
 
   remove(key: string): void {
@@ -28,3 +28,4 @@ export const storage = {
       .forEach(k => localStorage.removeItem(k));
   },
 };
+
