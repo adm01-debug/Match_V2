@@ -1,110 +1,71 @@
 /**
- * @fileoverview Contexto de notificações em tempo real
+ * @fileoverview Contexto de notificações em tempo real com persistência
  * @module NotificationContext
  */
 
-import React, { createContext, useContext, ReactNode, useCallback, useMemo, useState } from 'react';
-import { useRealtimeNotifications, Notification } from '@/hooks/useRealtimeNotifications';
+import React, { createContext, useContext, ReactNode, useMemo } from 'react';
+import { useRealtimeNotifications, Notification, NotificationType } from '@/hooks/useRealtimeNotifications';
 
-// Tipos exportados
-export type NotificationType = 'info' | 'success' | 'warning' | 'error';
-
-export interface Notification {
-  id: string;
-  type: NotificationType;
-  title: string;
-  message: string;
-  read: boolean;
-  createdAt: Date;
-}
+export type { Notification, NotificationType };
 
 export interface NotificationContextValue {
   notifications: Notification[];
   unreadCount: number;
-  addNotification: (notification: Omit<Notification, 'id' | 'read' | 'createdAt'>) => void;
-  markAsRead: (id: string) => void;
-  markAllAsRead: () => void;
-  removeNotification: (id: string) => void;
-  clearAll: () => void;
-}
-
-
-
-interface NotificationContextType {
-  notifications: Notification[];
-  unreadCount: number;
-  addNotification: (notification: Omit<Notification, 'id' | 'timestamp' | 'read'>) => void;
+  isConnected: boolean;
+  isLoading: boolean;
+  addNotification: (notification: Omit<Notification, 'id' | 'timestamp' | 'read'>, persist?: boolean) => void;
   markAsRead: (id: string) => void;
   markAllAsRead: () => void;
   clearAll: () => void;
+  reconnect: () => void;
   notifyStageChange: (candidatoNome: string, fromEtapa: string, toEtapa: string) => void;
 }
 
-const NotificationContext = createContext<NotificationContextType | undefined>(undefined);
+const NotificationContext = createContext<NotificationContextValue | undefined>(undefined);
 
 export function NotificationProvider({ children }: { children: ReactNode }) {
-  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const {
+    notifications,
+    unreadCount,
+    isConnected,
+    isLoading,
+    addNotification,
+    markAsRead,
+    markAllAsRead,
+    clearAll,
+    reconnect,
+  } = useRealtimeNotifications();
 
-  const addNotification = useCallback(
-    (notification: Omit<Notification, 'id' | 'timestamp' | 'read'>) => {
-      setNotifications((prev) => [
-        {
-          ...notification,
-          id: crypto.randomUUID(),
-          timestamp: new Date(),
-          read: false,
-        },
-        ...prev,
-      ].slice(0, 50));
-    },
-    []
-  );
+  const notifyStageChange = (candidatoNome: string, fromEtapa: string, toEtapa: string) => {
+    addNotification({
+      type: 'stage_change',
+      title: 'Pipeline atualizado',
+      message: `${candidatoNome}: ${fromEtapa} → ${toEtapa}`,
+      link: '/pipeline',
+    }, true);
+  };
 
-  const markAsRead = useCallback((id: string) => {
-    setNotifications((prev) => prev.map((n) => (n.id === id ? { ...n, read: true } : n)));
-  }, []);
-
-  const markAllAsRead = useCallback(() => {
-    setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
-  }, []);
-
-  const clearAll = useCallback(() => {
-    setNotifications([]);
-  }, []);
-
-  const notifyStageChange = useCallback(
-    (candidatoNome: string, fromEtapa: string, toEtapa: string) => {
-      addNotification({
-        type: 'stage_change',
-        title: 'Pipeline atualizado',
-        message: `${candidatoNome}: ${fromEtapa} → ${toEtapa}`,
-        link: '/pipeline',
-      });
-    },
-    [addNotification]
-  );
-
-  const unreadCount = useMemo(() => notifications.filter((n) => !n.read).length, [notifications]);
-
-  // Assina realtime e injeta notificações no store local (sem dependência circular)
-  useRealtimeNotifications({
-    onNotification: addNotification,
-  });
-
-  const value = useMemo<NotificationContextType>(
+  const value = useMemo<NotificationContextValue>(
     () => ({
       notifications,
       unreadCount,
+      isConnected,
+      isLoading,
       addNotification,
       markAsRead,
       markAllAsRead,
       clearAll,
+      reconnect,
       notifyStageChange,
     }),
-    [notifications, unreadCount, addNotification, markAsRead, markAllAsRead, clearAll, notifyStageChange]
+    [notifications, unreadCount, isConnected, isLoading, addNotification, markAsRead, markAllAsRead, clearAll, reconnect]
   );
 
-  return <NotificationContext.Provider value={value}>{children}</NotificationContext.Provider>;
+  return (
+    <NotificationContext.Provider value={value}>
+      {children}
+    </NotificationContext.Provider>
+  );
 }
 
 export function useNotifications() {
@@ -113,6 +74,6 @@ export function useNotifications() {
     throw new Error('useNotifications must be used within a NotificationProvider');
   }
   return context;
-};
+}
 
 NotificationContext.displayName = 'NotificationContext';

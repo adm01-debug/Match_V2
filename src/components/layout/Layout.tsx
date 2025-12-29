@@ -18,7 +18,7 @@ interface LayoutProps {
 }
 
 export function Layout({ children, title }: LayoutProps) {
-  const { notifications, unreadCount, markAsRead, markAllAsRead, clearAll } = useNotifications();
+  const { notifications, unreadCount, isConnected, isLoading, markAsRead, markAllAsRead, clearAll, reconnect } = useNotifications();
 
   return (
     <SidebarProvider defaultOpen={true}>
@@ -54,9 +54,12 @@ export function Layout({ children, title }: LayoutProps) {
               <NotificationPanel
                 notifications={notifications}
                 unreadCount={unreadCount}
+                isConnected={isConnected}
+                isLoading={isLoading}
                 onMarkAsRead={markAsRead}
                 onMarkAllAsRead={markAllAsRead}
                 onClearAll={clearAll}
+                onReconnect={reconnect}
               />
             </div>
           </header>
