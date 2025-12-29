@@ -2,6 +2,12 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
+export interface AutoAction {
+  type: 'send_email' | 'create_task' | 'notify' | 'update_status';
+  config: Record<string, unknown>;
+}
+
+
 export interface Workflow {
   id: string;
   name: string;
@@ -19,7 +25,7 @@ export interface WorkflowStage {
   stage_order: number;
   color: string;
   is_final: boolean;
-  auto_actions: any[];
+  auto_actions: AutoAction[];
   required_fields: string[];
   sla_hours: number | null;
 }
@@ -202,3 +208,4 @@ export function useDefaultWorkflow() {
 
   return { defaultWorkflow: data };
 }
+
