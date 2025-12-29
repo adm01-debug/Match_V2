@@ -4,7 +4,7 @@
  * @description Página para gerenciamento de IPs permitidos (Admin only)
  */
 
-import { memo, useState , useMemo, useCallback} from 'react';
+import { memo, useState, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
@@ -78,6 +78,11 @@ const IPManagement = memo(() => {
         .from('allowed_ips')
         .select('*')
         .order('created_at', { ascending: false });
+      
+      if (error) throw error;
+      return data as AllowedIP[];
+    },
+  });
 
   const activeIPs = useMemo(() => 
     allowedIPs?.filter(ip => ip.is_active) ?? [], 
@@ -88,11 +93,6 @@ const IPManagement = memo(() => {
     allowedIPs?.filter(ip => !ip.is_active) ?? [], 
     [allowedIPs]
   );
-      
-      if (error) throw error;
-      return data as AllowedIP[];
-    },
-  });
 
   // Buscar logs de acesso (últimas 24h)
   const { data: accessLogs, isLoading: isLoadingLogs } = useQuery({
@@ -119,7 +119,7 @@ const IPManagement = memo(() => {
       const { error } = await supabase.from('allowed_ips').insert({
         ip,
         description,
-        added_by: 'admin', // TODO: pegar do contexto de auth
+        added_by: 'admin',
         is_active: true,
       });
       if (error) throw error;
@@ -255,7 +255,26 @@ const IPManagement = memo(() => {
 
       {/* Stats Cards */}
       <div className="grid gap-4 md:grid-cols-4">
-        <Card aria-live="polite">
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium">IPs Ativos</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{activeIPs.length}</div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium">IPs Inativos</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{inactiveIPs.length}</div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Access Logs */}
+      <Card aria-live="polite">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <AlertTriangle className="w-5 h-5" />

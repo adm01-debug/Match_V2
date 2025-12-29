@@ -191,7 +191,6 @@ export default function IndicacoesPage() {
 
   if (isLoading) {
     return (
-      <Suspense fallback={<div className="p-6"><Skeleton className="h-8 w-64 mb-4" /><Skeleton className="h-64" /></div>}>
       <Layout>
         <div className="space-y-6">
           <Skeleton className="h-10 w-64" />
