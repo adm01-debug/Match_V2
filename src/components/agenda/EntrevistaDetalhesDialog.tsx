@@ -51,7 +51,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -61,7 +60,6 @@ import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import {
   Entrevista,
-  EntrevistaFeedback,
   entrevistadoresDisponiveis,
   locaisDisponiveis,
 } from '@/data/agendaData';
@@ -73,13 +71,17 @@ interface EntrevistaDetalhesDialogProps {
   onUpdate: (entrevista: Entrevista) => void;
   onCancel: (id: string) => void;
   onConfirm: (id: string) => void;
-  onMarcarRealizada?: (id: string, feedback: EntrevistaFeedback) => void;
 }
 
 const tipoConfig = {
   presencial: { icon: MapPin, label: 'Presencial', color: 'bg-blue-500/10 text-blue-600' },
   online: { icon: Video, label: 'Online', color: 'bg-purple-500/10 text-purple-600' },
   telefone: { icon: Phone, label: 'Telefone', color: 'bg-green-500/10 text-green-600' },
+  tecnica: { icon: Briefcase, label: 'Técnica', color: 'bg-blue-500/10 text-blue-600' },
+  rh: { icon: Users, label: 'RH', color: 'bg-green-500/10 text-green-600' },
+  cultural: { icon: Users, label: 'Cultural', color: 'bg-purple-500/10 text-purple-600' },
+  final: { icon: Briefcase, label: 'Final', color: 'bg-orange-500/10 text-orange-600' },
+  triagem: { icon: Phone, label: 'Triagem', color: 'bg-gray-500/10 text-gray-600' },
 };
 
 const statusConfig = {
@@ -88,6 +90,8 @@ const statusConfig = {
   realizada: { label: 'Realizada', color: 'bg-muted text-muted-foreground border-muted' },
   cancelada: { label: 'Cancelada', color: 'bg-red-500/10 text-red-600 border-red-500/20' },
   reagendada: { label: 'Reagendada', color: 'bg-orange-500/10 text-orange-600 border-orange-500/20' },
+  remarcada: { label: 'Remarcada', color: 'bg-yellow-500/10 text-yellow-600 border-yellow-500/20' },
+  no_show: { label: 'No Show', color: 'bg-red-500/10 text-red-600 border-red-500/20' },
 };
 
 const etapas = [
@@ -98,6 +102,11 @@ const etapas = [
   'Entrevista Final',
 ];
 
+// Extended interface for editing
+interface EditableEntrevista extends Entrevista {
+  observacoes?: string;
+}
+
 const EntrevistaDetalhesDialog = ({
   entrevista,
   open,
@@ -105,22 +114,14 @@ const EntrevistaDetalhesDialog = ({
   onUpdate,
   onCancel,
   onConfirm,
-  onMarcarRealizada,
 }: EntrevistaDetalhesDialogProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [showCancelDialog, setShowCancelDialog] = useState(false);
-  const [activeTab, setActiveTab] = useState('detalhes');
-  const [editData, setEditData] = useState<Entrevista | null>(null);
-  const [resultado, setResultado] = useState<'aprovado' | 'reprovado' | 'pendente'>('pendente');
-  const [notaGeral, setNotaGeral] = useState([7]);
-  const [pontosFortes, setPontosFortes] = useState<string[]>(['']);
-  const [pontosAMelhorar, setPontosAMelhorar] = useState<string[]>(['']);
-  const [comentarios, setComentarios] = useState('');
-  const [recomendacao, setRecomendacao] = useState('');
+  const [editData, setEditData] = useState<EditableEntrevista | null>(null);
 
   const handleStartEdit = () => {
     if (entrevista) {
-      setEditData({ ...entrevista });
+      setEditData({ ...entrevista, observacoes: entrevista.notas || '' });
       setIsEditing(true);
     }
   };
@@ -132,7 +133,11 @@ const EntrevistaDetalhesDialog = ({
 
   const handleSaveEdit = () => {
     if (editData) {
-      onUpdate(editData);
+      const updatedEntrevista: Entrevista = {
+        ...editData,
+        notas: editData.observacoes,
+      };
+      onUpdate(updatedEntrevista);
       toast.success('Entrevista atualizada com sucesso!');
       setIsEditing(false);
       setEditData(null);
@@ -155,8 +160,10 @@ const EntrevistaDetalhesDialog = ({
     }
   };
 
-  const handleAddEntrevistador = (entrevistador: string) => {
-    if (editData && !editData.entrevistadores.includes(entrevistador)) {
+  const handleAddEntrevistador = (entrevistadorId: string) => {
+    if (!editData) return;
+    const entrevistador = entrevistadoresDisponiveis.find(e => e.id === entrevistadorId);
+    if (entrevistador && !editData.entrevistadores.some(e => e.id === entrevistadorId)) {
       setEditData({
         ...editData,
         entrevistadores: [...editData.entrevistadores, entrevistador],
@@ -164,53 +171,26 @@ const EntrevistaDetalhesDialog = ({
     }
   };
 
-  const handleRemoveEntrevistador = (entrevistador: string) => {
+  const handleRemoveEntrevistador = (entrevistadorId: string) => {
     if (editData) {
       setEditData({
         ...editData,
-        entrevistadores: editData.entrevistadores.filter((e) => e !== entrevistador),
+        entrevistadores: editData.entrevistadores.filter((e) => e.id !== entrevistadorId),
       });
     }
   };
 
-  const addPontoForte = () => setPontosFortes([...pontosFortes, '']);
-  const addPontoAMelhorar = () => setPontosAMelhorar([...pontosAMelhorar, '']);
-  const updatePontoForte = (index: number, value: string) => {
-    const updated = [...pontosFortes];
-    updated[index] = value;
-    setPontosFortes(updated);
-  };
-  const updatePontoAMelhorar = (index: number, value: string) => {
-    const updated = [...pontosAMelhorar];
-    updated[index] = value;
-    setPontosAMelhorar(updated);
-  };
-  const removePontoForte = (index: number) => setPontosFortes(pontosFortes.filter((_, i) => i !== index));
-  const removePontoAMelhorar = (index: number) => setPontosAMelhorar(pontosAMelhorar.filter((_, i) => i !== index));
-
-  const handleSubmitFeedback = () => {
-    if (!entrevista || !onMarcarRealizada) return;
-    const feedback: EntrevistaFeedback = {
-      resultado,
-      notaGeral: notaGeral[0],
-      pontosFortes: pontosFortes.filter(p => p.trim() !== ''),
-      pontosAMelhorar: pontosAMelhorar.filter(p => p.trim() !== ''),
-      comentarios,
-      recomendacao,
-      avaliadoPor: 'Usuário Atual',
-      avaliadoEm: new Date().toISOString()
-    };
-    onMarcarRealizada(entrevista.id, feedback);
-    onOpenChange(false);
-    toast.success('Entrevista marcada como realizada!');
-  };
-
   if (!entrevista) return null;
 
-  const TipoIcon = tipoConfig[entrevista.tipo].icon;
+  const tipoData = tipoConfig[entrevista.tipo as keyof typeof tipoConfig] || tipoConfig.presencial;
+  const TipoIcon = tipoData.icon;
+  const statusData = statusConfig[entrevista.status as keyof typeof statusConfig] || statusConfig.agendada;
   const canEdit = entrevista.status !== 'realizada' && entrevista.status !== 'cancelada';
   const canConfirm = entrevista.status === 'agendada';
-  const canMarkAsRealized = entrevista.status === 'confirmada' || entrevista.status === 'agendada';
+
+  const parseDate = (date: string | Date): Date => {
+    return typeof date === 'string' ? new Date(date) : date;
+  };
 
   return (
     <>
@@ -226,8 +206,8 @@ const EntrevistaDetalhesDialog = ({
             <div className="flex items-center justify-between">
               <DialogTitle>{isEditing ? 'Editar Entrevista' : 'Detalhes da Entrevista'}</DialogTitle>
               {!isEditing && (
-                <Badge variant="outline" className={cn("ml-2", statusConfig[entrevista.status].color)}>
-                  {statusConfig[entrevista.status].label}
+                <Badge variant="outline" className={cn("ml-2", statusData.color)}>
+                  {statusData.label}
                 </Badge>
               )}
             </div>
@@ -242,17 +222,22 @@ const EntrevistaDetalhesDialog = ({
                     <PopoverTrigger asChild>
                       <Button type="button" variant="outline" className="w-full justify-start text-left font-normal">
                         <CalendarIcon className="mr-2 h-4 w-4" />
-                        {format(editData.data, "PPP", { locale: ptBR })}
+                        {format(parseDate(editData.data), "PPP", { locale: ptBR })}
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar mode="single" selected={editData.data} onSelect={(date) => date && setEditData({ ...editData, data: date })} locale={ptBR} />
+                      <Calendar 
+                        mode="single" 
+                        selected={parseDate(editData.data)} 
+                        onSelect={(date) => date && setEditData({ ...editData, data: date })} 
+                        locale={ptBR} 
+                      />
                     </PopoverContent>
                   </Popover>
                 </div>
                 <div className="space-y-2">
                   <Label>Etapa</Label>
-                  <Select value={editData.etapa} onValueChange={(v) => setEditData({ ...editData, etapa: v })}>
+                  <Select value={editData.etapa || ''} onValueChange={(v) => setEditData({ ...editData, etapa: v })}>
                     <SelectTrigger><SelectValue /></SelectTrigger>
                     <SelectContent>{etapas.map((e) => <SelectItem key={e} value={e}>{e}</SelectItem>)}</SelectContent>
                   </Select>
@@ -284,7 +269,11 @@ const EntrevistaDetalhesDialog = ({
                   <Label>Local</Label>
                   <Select value={editData.local || ''} onValueChange={(v) => setEditData({ ...editData, local: v })}>
                     <SelectTrigger><SelectValue placeholder="Selecione o local" /></SelectTrigger>
-                    <SelectContent>{locaisDisponiveis.map((l) => <SelectItem key={l} value={l}>{l}</SelectItem>)}</SelectContent>
+                    <SelectContent>
+                      {locaisDisponiveis.filter(l => l.tipo === 'presencial').map((l) => (
+                        <SelectItem key={l.id} value={l.nome}>{l.nome}</SelectItem>
+                      ))}
+                    </SelectContent>
                   </Select>
                 </div>
               )}
@@ -298,12 +287,20 @@ const EntrevistaDetalhesDialog = ({
                 <Label>Entrevistadores</Label>
                 <Select onValueChange={handleAddEntrevistador}>
                   <SelectTrigger><SelectValue placeholder="Adicionar" /></SelectTrigger>
-                  <SelectContent>{entrevistadoresDisponiveis.filter((e) => !editData.entrevistadores.includes(e)).map((e) => <SelectItem key={e} value={e}>{e}</SelectItem>)}</SelectContent>
+                  <SelectContent>
+                    {entrevistadoresDisponiveis
+                      .filter((e) => !editData.entrevistadores.some(ent => ent.id === e.id))
+                      .map((e) => <SelectItem key={e.id} value={e.id}>{e.nome}</SelectItem>)
+                    }
+                  </SelectContent>
                 </Select>
                 {editData.entrevistadores.length > 0 && (
                   <div className="flex flex-wrap gap-2 mt-2">
                     {editData.entrevistadores.map((e) => (
-                      <Badge key={e} variant="secondary" className="gap-1">{e}<X className="h-3 w-3 cursor-pointer" onClick={() => handleRemoveEntrevistador(e)} /></Badge>
+                      <Badge key={e.id} variant="secondary" className="gap-1">
+                        {e.nome}
+                        <X className="h-3 w-3 cursor-pointer" onClick={() => handleRemoveEntrevistador(e.id)} />
+                      </Badge>
                     ))}
                   </div>
                 )}
@@ -327,7 +324,7 @@ const EntrevistaDetalhesDialog = ({
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
                   <Label className="text-muted-foreground text-xs">Data</Label>
-                  <div className="flex items-center gap-2"><CalendarIcon className="h-4 w-4 text-muted-foreground" /><span>{format(entrevista.data, "dd/MM/yyyy", { locale: ptBR })}</span></div>
+                  <div className="flex items-center gap-2"><CalendarIcon className="h-4 w-4 text-muted-foreground" /><span>{format(parseDate(entrevista.data), "dd/MM/yyyy", { locale: ptBR })}</span></div>
                 </div>
                 <div className="space-y-1">
                   <Label className="text-muted-foreground text-xs">Horário</Label>
@@ -337,29 +334,36 @@ const EntrevistaDetalhesDialog = ({
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
                   <Label className="text-muted-foreground text-xs">Tipo</Label>
-                  <Badge variant="secondary" className={cn(tipoConfig[entrevista.tipo].color)}><TipoIcon className="h-3 w-3 mr-1" />{tipoConfig[entrevista.tipo].label}</Badge>
+                  <Badge variant="secondary" className={cn(tipoData.color)}><TipoIcon className="h-3 w-3 mr-1" />{tipoData.label}</Badge>
                 </div>
                 <div className="space-y-1">
                   <Label className="text-muted-foreground text-xs">Etapa</Label>
-                  <Badge variant="outline">{entrevista.etapa}</Badge>
+                  <Badge variant="outline">{entrevista.etapa || 'N/A'}</Badge>
                 </div>
               </div>
               {(entrevista.local || entrevista.linkOnline) && (
                 <div className="space-y-1">
                   <Label className="text-muted-foreground text-xs">{entrevista.tipo === 'presencial' ? 'Local' : 'Link'}</Label>
                   <div className="flex items-center gap-2 text-sm">
-                    {entrevista.tipo === 'presencial' ? (<><MapPin className="h-4 w-4 text-muted-foreground" /><span>{entrevista.local}</span></>) : (<><Video className="h-4 w-4 text-muted-foreground" /><a href={entrevista.linkOnline} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline truncate">{entrevista.linkOnline}</a></>)}
+                    {entrevista.tipo === 'presencial' ? (
+                      <><MapPin className="h-4 w-4 text-muted-foreground" /><span>{entrevista.local}</span></>
+                    ) : (
+                      <><Video className="h-4 w-4 text-muted-foreground" /><a href={entrevista.linkOnline} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline truncate">{entrevista.linkOnline}</a></>
+                    )}
                   </div>
                 </div>
               )}
               <div className="space-y-1">
                 <Label className="text-muted-foreground text-xs">Entrevistadores</Label>
-                <div className="flex items-center gap-2"><Users className="h-4 w-4 text-muted-foreground" /><span className="text-sm">{entrevista.entrevistadores.join(', ')}</span></div>
+                <div className="flex items-center gap-2">
+                  <Users className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-sm">{entrevista.entrevistadores.map(e => e.nome).join(', ') || 'Nenhum'}</span>
+                </div>
               </div>
-              {entrevista.observacoes && (
+              {entrevista.notas && (
                 <div className="space-y-1">
                   <Label className="text-muted-foreground text-xs">Observações</Label>
-                  <p className="text-sm text-muted-foreground bg-muted p-2 rounded">{entrevista.observacoes}</p>
+                  <p className="text-sm text-muted-foreground bg-muted p-2 rounded">{entrevista.notas}</p>
                 </div>
               )}
             </div>
@@ -405,4 +409,3 @@ const EntrevistaDetalhesDialog = ({
 EntrevistaDetalhesDialog.displayName = "EntrevistaDetalhesDialog";
 
 export default EntrevistaDetalhesDialog;
-

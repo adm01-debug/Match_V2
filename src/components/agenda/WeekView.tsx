@@ -17,18 +17,25 @@ interface WeekViewProps {
   onSelectDate: (date: Date) => void;
 }
 
-const tipoIcon = {
+const tipoIcon: Record<string, typeof MapPin> = {
   presencial: MapPin,
   online: Video,
   telefone: Phone,
+  tecnica: Video,
+  rh: Video,
+  cultural: Video,
+  final: Video,
+  triagem: Phone,
 };
 
-const statusColors = {
+const statusColors: Record<string, string> = {
   agendada: 'bg-yellow-500/20 border-yellow-500 text-yellow-700',
   confirmada: 'bg-green-500/20 border-green-500 text-green-700',
   realizada: 'bg-muted border-muted-foreground/20 text-muted-foreground',
   cancelada: 'bg-red-500/20 border-red-500 text-red-700',
   reagendada: 'bg-orange-500/20 border-orange-500 text-orange-700',
+  remarcada: 'bg-yellow-500/20 border-yellow-500 text-yellow-700',
+  no_show: 'bg-red-500/20 border-red-500 text-red-700',
 };
 
 const hours = Array.from({ length: 12 }, (_, i) => i + 8); // 8:00 - 19:00
@@ -38,13 +45,19 @@ export function WeekView({ currentDate, entrevistas, onSelectEntrevista, onSelec
   const weekDays = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));
 
   const getEntrevistaPosition = (hora: string) => {
-    const [h, m] = hora.split(':').map(Number);
+    const parts = hora.split(':').map(Number);
+    const h = parts[0] ?? 0;
+    const m = parts[1] ?? 0;
     return ((h - 8) * 60 + m) / 60;
   };
 
   const getEntrevistaDuration = (horaInicio: string, horaFim: string) => {
-    const [h1, m1] = horaInicio.split(':').map(Number);
-    const [h2, m2] = horaFim.split(':').map(Number);
+    const startParts = horaInicio.split(':').map(Number);
+    const endParts = horaFim.split(':').map(Number);
+    const h1 = startParts[0] ?? 0;
+    const m1 = startParts[1] ?? 0;
+    const h2 = endParts[0] ?? 0;
+    const m2 = endParts[1] ?? 0;
     return ((h2 * 60 + m2) - (h1 * 60 + m1)) / 60;
   };
 
@@ -104,14 +117,14 @@ export function WeekView({ currentDate, entrevistas, onSelectEntrevista, onSelec
                       .map((entrevista) => {
                         const top = (getEntrevistaPosition(entrevista.horaInicio) - (hour - 8)) * 64;
                         const height = getEntrevistaDuration(entrevista.horaInicio, entrevista.horaFim) * 64;
-                        const Icon = tipoIcon[entrevista.tipo];
+                        const Icon = tipoIcon[entrevista.tipo] ?? MapPin;
 
                         return (
                           <div
                             key={entrevista.id}
                             className={cn(
                               "absolute left-0.5 right-0.5 rounded-md border-l-2 p-1 cursor-pointer hover:opacity-80 transition-opacity overflow-hidden",
-                              statusColors[entrevista.status]
+                              statusColors[entrevista.status] ?? 'bg-yellow-500/20 border-yellow-500 text-yellow-700'
                             )}
                             style={{
                               top: `${top}px`,
