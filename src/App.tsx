@@ -32,6 +32,7 @@ const AdminPage = lazy(() => import("./pages/AdminPage"));
 const CandidatoPerfilPage = lazy(() => import("./pages/CandidatoPerfilPage"));
 const AgendaPage = lazy(() => import("./pages/AgendaPage"));
 const IndicacoesPage = lazy(() => import("./pages/IndicacoesPage"));
+const DiagnosticoPage = lazy(() => import("./pages/DiagnosticoPage"));
 const PortalAuthPage = lazy(() => import("./pages/portal/PortalAuthPage"));
 const PortalDashboard = lazy(() => import("./pages/portal/PortalDashboard"));
 const PortalVagas = lazy(() => import("./pages/portal/PortalVagas"));
@@ -89,6 +90,9 @@ const App = () => (
 
                       {/* Autenticação */}
                       <Route path="/auth" element={<AuthPage />} />
+
+                      {/* Diagnóstico - Rota Pública */}
+                      <Route path="/diagnostico" element={<DiagnosticoPage />} />
 
                       {/* Rotas Protegidas - Sistema Interno */}
                       <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
