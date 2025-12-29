@@ -35,6 +35,27 @@ import { format, isSameDay, startOfMonth, endOfMonth, eachDayOfInterval, isToday
 import { ptBR } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
+interface EntrevistaCardData {
+  id: string;
+  status: string;
+  tipo: string;
+  data_hora: string;
+  local?: string;
+  entrevistador?: {
+    full_name: string;
+  };
+  processo?: {
+    candidato?: {
+      nome: string;
+      foto_url?: string;
+    };
+    vaga?: {
+      titulo: string;
+    };
+  };
+}
+
+
 
 const statusConfig = {
   agendada: { label: "Agendada", color: "bg-blue-100 text-blue-700", icon: CalendarIcon },
@@ -146,7 +167,7 @@ export default function AgendaPage() {
     }
   };
 
-  const EntrevistaCard = ({ entrevista }: { entrevista: any }) => {
+  const EntrevistaCard = ({ entrevista }: { entrevista: EntrevistaCardData }) => {
     const status = statusConfig[entrevista.status as keyof typeof statusConfig];
     const tipo = tipoConfig[entrevista.tipo as keyof typeof tipoConfig];
     const TipoIcon = tipo?.icon || CalendarIcon;
@@ -422,4 +443,5 @@ export default function AgendaPage() {
     </Suspense>
   );
 }
+
 
