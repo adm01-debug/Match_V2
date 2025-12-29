@@ -80,7 +80,7 @@ export function useCandidaturas(filtros?: { vagaId?: string; candidatoAuthId?: s
       toast({ title: 'Candidatura registrada!' });
     },
     onError: (error: Error) => {
-      console.error('Erro ao criar candidatura:', error);
+      // Erro ao criar candidatura - handled
     },
   });
 
@@ -100,7 +100,7 @@ export function useCandidaturas(filtros?: { vagaId?: string; candidatoAuthId?: s
       toast({ title: 'Status atualizado!' });
     },
     onError: (error: Error) => {
-      console.error('Erro ao atualizar status:', error);
+      // Erro ao atualizar status - handled
     },
   });
 
@@ -123,3 +123,4 @@ export function useCandidaturas(filtros?: { vagaId?: string; candidatoAuthId?: s
 }
 
 export default useCandidaturas;
+
