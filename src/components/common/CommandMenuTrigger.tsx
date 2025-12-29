@@ -39,6 +39,7 @@ export function CommandMenuTrigger({
     <Button
       variant="outline"
       onClick={handleClick}
+      data-tour="search"
       className={cn(
         "relative h-10 w-full justify-start text-sm text-muted-foreground sm:w-64 sm:pr-12",
         className
