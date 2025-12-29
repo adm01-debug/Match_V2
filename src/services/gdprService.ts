@@ -1,11 +1,11 @@
 import { supabase } from '@/integrations/supabase/client';
 
 export interface UserDataExport {
-  profile: any;
-  candidaturas: any[];
-  entrevistas: any[];
-  avaliacoes: any[];
-  comunicacoes: any[];
+  profile: Record<string, unknown> | null;
+  candidaturas: Record<string, unknown>[];
+  entrevistas: Record<string, unknown>[];
+  avaliacoes: Record<string, unknown>[];
+  comunicacoes: Record<string, unknown>[];
   exportedAt: string;
 }
 
@@ -123,4 +123,5 @@ export const gdprService = {
 };
 
 export default gdprService;
+
 
