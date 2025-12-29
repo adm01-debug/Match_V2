@@ -21,7 +21,6 @@ export interface Entrevista {
   nota_geral?: number;
   created_at: string;
   updated_at?: string;
-  // Relacionamentos
   candidato?: {
     id: string;
     nome: string;
@@ -39,6 +38,42 @@ export interface Entrevista {
     nome: string;
     email: string;
   };
+}
+
+// Interface de Feedback
+export interface EntrevistaFeedback {
+  id: string;
+  entrevista_id: string;
+  avaliador_id: string;
+  nota_tecnica?: number;
+  nota_comunicacao?: number;
+  nota_cultural?: number;
+  nota_geral: number;
+  pontos_fortes?: string;
+  pontos_melhoria?: string;
+  recomendacao: 'contratar' | 'nao_contratar' | 'proxima_etapa' | 'indeciso';
+  comentarios?: string;
+  created_at: string;
+}
+
+// Interface de Entrevistador
+export interface Entrevistador {
+  id: string;
+  nome: string;
+  email: string;
+  cargo?: string;
+  departamento?: string;
+  avatar_url?: string;
+}
+
+// Interface de Local
+export interface Local {
+  id: string;
+  nome: string;
+  tipo: 'presencial' | 'remoto';
+  endereco?: string;
+  link?: string;
+  capacidade?: number;
 }
 
 // Configurações de tipo de entrevista
@@ -59,6 +94,26 @@ export const statusConfig: Record<StatusEntrevista, { label: string; color: stri
   remarcada: { label: 'Remarcada', color: 'text-yellow-700', bgColor: 'bg-yellow-100' },
   no_show: { label: 'No Show', color: 'text-red-700', bgColor: 'bg-red-100' },
 };
+
+// Alias para compatibilidade
+export const statusStyles = statusConfig;
+
+// Entrevistadores disponíveis (mock)
+export const entrevistadoresDisponiveis: Entrevistador[] = [
+  { id: '1', nome: 'Ana Silva', email: 'ana@empresa.com', cargo: 'Tech Lead', departamento: 'Engenharia' },
+  { id: '2', nome: 'Carlos Santos', email: 'carlos@empresa.com', cargo: 'RH Manager', departamento: 'RH' },
+  { id: '3', nome: 'Maria Oliveira', email: 'maria@empresa.com', cargo: 'Senior Dev', departamento: 'Engenharia' },
+  { id: '4', nome: 'João Pereira', email: 'joao@empresa.com', cargo: 'CTO', departamento: 'Diretoria' },
+];
+
+// Locais disponíveis (mock)
+export const locaisDisponiveis: Local[] = [
+  { id: '1', nome: 'Sala de Reunião A', tipo: 'presencial', endereco: 'Escritório Principal - 3º andar', capacidade: 6 },
+  { id: '2', nome: 'Sala de Reunião B', tipo: 'presencial', endereco: 'Escritório Principal - 2º andar', capacidade: 4 },
+  { id: '3', nome: 'Google Meet', tipo: 'remoto', link: 'https://meet.google.com' },
+  { id: '4', nome: 'Zoom', tipo: 'remoto', link: 'https://zoom.us' },
+  { id: '5', nome: 'Microsoft Teams', tipo: 'remoto', link: 'https://teams.microsoft.com' },
+];
 
 // Dados mock para desenvolvimento
 export const mockEntrevistas: Entrevista[] = [
@@ -107,9 +162,9 @@ export function formatDuration(minutes: number): string {
 
 export function parseTimeString(timeStr: string): { hours: number; minutes: number } | null {
   const match = timeStr.match(/^(\d{1,2}):(\d{2})$/);
-  if (!match) return null;
-  const hours = parseInt(match[1] || '0', 10);
-  const minutes = parseInt(match[2] || '0', 10);
+  if (!match || !match[1] || !match[2]) return null;
+  const hours = parseInt(match[1], 10);
+  const minutes = parseInt(match[2], 10);
   if (hours < 0 || hours > 23 || minutes < 0 || minutes > 59) return null;
   return { hours, minutes };
 }
@@ -117,6 +172,9 @@ export function parseTimeString(timeStr: string): { hours: number; minutes: numb
 export default {
   tipoConfig,
   statusConfig,
+  statusStyles,
+  entrevistadoresDisponiveis,
+  locaisDisponiveis,
   mockEntrevistas,
   getStatusStyle,
   getTipoStyle,
