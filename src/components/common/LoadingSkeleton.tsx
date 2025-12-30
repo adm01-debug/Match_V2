@@ -1,3 +1,4 @@
+import { CSSProperties, memo } from 'react';
 import { cn } from '@/lib/utils';
 
 interface LoadingSkeletonProps {
@@ -7,9 +8,20 @@ interface LoadingSkeletonProps {
   width?: string | number;
   height?: string | number;
   animate?: boolean;
+  'aria-label'?: string;
 }
 
-function SkeletonBase({ className, animate = true }: { className?: string; animate?: boolean }) {
+interface SkeletonBaseProps {
+  className?: string;
+  animate?: boolean;
+  style?: CSSProperties;
+}
+
+const SkeletonBase = memo(function SkeletonBase({ 
+  className, 
+  animate = true, 
+  style 
+}: SkeletonBaseProps) {
   return (
     <div
       className={cn(
@@ -17,45 +29,68 @@ function SkeletonBase({ className, animate = true }: { className?: string; anima
         animate && 'animate-pulse',
         className
       )}
+      style={style}
+      aria-hidden="true"
     />
   );
-}
+});
 
-export function LoadingSkeleton({
+SkeletonBase.displayName = 'SkeletonBase';
+
+function LoadingSkeletonComponent({
   className,
   variant = 'text',
   lines = 1,
   width,
   height,
   animate = true,
+  'aria-label': ariaLabel,
 }: LoadingSkeletonProps) {
-  const style = {
+  const style: CSSProperties = {
     width: typeof width === 'number' ? `${width}px` : width,
     height: typeof height === 'number' ? `${height}px` : height,
+  };
+
+  const containerProps = {
+    role: 'status' as const,
+    'aria-label': ariaLabel || 'Carregando...',
+    'aria-busy': true as const,
   };
 
   switch (variant) {
     case 'circular':
       return (
-        <SkeletonBase
-          className={cn('rounded-full', className)}
-          animate={animate}
-          style={{ ...style, width: width || '40px', height: height || '40px' }}
-        />
+        <div {...containerProps}>
+          <SkeletonBase
+            className={cn('rounded-full', className)}
+            animate={animate}
+            style={{ 
+              ...style, 
+              width: width ?? '40px', 
+              height: height ?? '40px' 
+            }}
+          />
+        </div>
       );
 
     case 'rectangular':
       return (
-        <SkeletonBase
-          className={cn('rounded-lg', className)}
-          animate={animate}
-          style={{ ...style, width: width || '100%', height: height || '120px' }}
-        />
+        <div {...containerProps}>
+          <SkeletonBase
+            className={cn('rounded-lg', className)}
+            animate={animate}
+            style={{ 
+              ...style, 
+              width: width ?? '100%', 
+              height: height ?? '120px' 
+            }}
+          />
+        </div>
       );
 
     case 'card':
       return (
-        <div className={cn('space-y-3 p-4 border rounded-lg', className)}>
+        <div {...containerProps} className={cn('space-y-3 p-4 border rounded-lg', className)}>
           <SkeletonBase className="h-4 w-3/4" animate={animate} />
           <SkeletonBase className="h-3 w-full" animate={animate} />
           <SkeletonBase className="h-3 w-5/6" animate={animate} />
@@ -68,19 +103,21 @@ export function LoadingSkeleton({
 
     case 'table':
       return (
-        <div className={cn('space-y-2', className)}>
+        <div {...containerProps} className={cn('space-y-2', className)}>
           <div className="flex gap-4 p-3 bg-muted/50 rounded-t-lg">
-            <SkeletonBase className="h-4 w-1/4" animate={animate} />
-            <SkeletonBase className="h-4 w-1/4" animate={animate} />
-            <SkeletonBase className="h-4 w-1/4" animate={animate} />
-            <SkeletonBase className="h-4 w-1/4" animate={animate} />
+            {Array.from({ length: 4 }).map((_, i) => (
+              <SkeletonBase key={`header-${i}`} className="h-4 w-1/4" animate={animate} />
+            ))}
           </div>
-          {Array.from({ length: 5 }).map((_, i) => (
-            <div key={i} className="flex gap-4 p-3 border-b">
-              <SkeletonBase className="h-4 w-1/4" animate={animate} />
-              <SkeletonBase className="h-4 w-1/4" animate={animate} />
-              <SkeletonBase className="h-4 w-1/4" animate={animate} />
-              <SkeletonBase className="h-4 w-1/4" animate={animate} />
+          {Array.from({ length: 5 }).map((_, rowIndex) => (
+            <div key={`row-${rowIndex}`} className="flex gap-4 p-3 border-b">
+              {Array.from({ length: 4 }).map((_, colIndex) => (
+                <SkeletonBase 
+                  key={`cell-${rowIndex}-${colIndex}`} 
+                  className="h-4 w-1/4" 
+                  animate={animate} 
+                />
+              ))}
             </div>
           ))}
         </div>
@@ -88,11 +125,11 @@ export function LoadingSkeleton({
 
     case 'list':
       return (
-        <div className={cn('space-y-3', className)}>
+        <div {...containerProps} className={cn('space-y-3', className)}>
           {Array.from({ length: lines }).map((_, i) => (
-            <div key={i} className="flex items-center gap-3">
-              <SkeletonBase className="h-10 w-10 rounded-full" animate={animate} />
-              <div className="flex-1 space-y-2">
+            <div key={`list-item-${i}`} className="flex items-center gap-3">
+              <SkeletonBase className="h-10 w-10 rounded-full flex-shrink-0" animate={animate} />
+              <div className="flex-1 space-y-2 min-w-0">
                 <SkeletonBase className="h-4 w-3/4" animate={animate} />
                 <SkeletonBase className="h-3 w-1/2" animate={animate} />
               </div>
@@ -104,10 +141,10 @@ export function LoadingSkeleton({
     case 'text':
     default:
       return (
-        <div className={cn('space-y-2', className)} style={style}>
+        <div {...containerProps} className={cn('space-y-2', className)} style={style}>
           {Array.from({ length: lines }).map((_, i) => (
             <SkeletonBase
-              key={i}
+              key={`text-line-${i}`}
               className={cn('h-4', i === lines - 1 && lines > 1 ? 'w-3/4' : 'w-full')}
               animate={animate}
             />
@@ -117,19 +154,53 @@ export function LoadingSkeleton({
   }
 }
 
-// Componentes de conveniência
-export function SkeletonText({ lines = 3, className }: { lines?: number; className?: string }) {
-  return <LoadingSkeleton variant="text" lines={lines} className={className} />;
-}
+LoadingSkeletonComponent.displayName = 'LoadingSkeleton';
 
-export function SkeletonCard({ className }: { className?: string }) {
-  return <LoadingSkeleton variant="card" className={className} />;
-}
+export const LoadingSkeleton = memo(LoadingSkeletonComponent);
 
-export function SkeletonTable({ className }: { className?: string }) {
-  return <LoadingSkeleton variant="table" className={className} />;
-}
+// Componentes de conveniência com displayName
+export const SkeletonText = memo(function SkeletonText({ 
+  lines = 3, 
+  className,
+  'aria-label': ariaLabel,
+}: { 
+  lines?: number; 
+  className?: string;
+  'aria-label'?: string;
+}) {
+  return <LoadingSkeleton variant="text" lines={lines} className={className} aria-label={ariaLabel} />;
+});
+SkeletonText.displayName = 'SkeletonText';
 
-export function SkeletonAvatar({ className }: { className?: string }) {
-  return <LoadingSkeleton variant="circular" className={className} />;
-}
+export const SkeletonCard = memo(function SkeletonCard({ 
+  className,
+  'aria-label': ariaLabel,
+}: { 
+  className?: string;
+  'aria-label'?: string;
+}) {
+  return <LoadingSkeleton variant="card" className={className} aria-label={ariaLabel} />;
+});
+SkeletonCard.displayName = 'SkeletonCard';
+
+export const SkeletonTable = memo(function SkeletonTable({ 
+  className,
+  'aria-label': ariaLabel,
+}: { 
+  className?: string;
+  'aria-label'?: string;
+}) {
+  return <LoadingSkeleton variant="table" className={className} aria-label={ariaLabel} />;
+});
+SkeletonTable.displayName = 'SkeletonTable';
+
+export const SkeletonAvatar = memo(function SkeletonAvatar({ 
+  className,
+  'aria-label': ariaLabel,
+}: { 
+  className?: string;
+  'aria-label'?: string;
+}) {
+  return <LoadingSkeleton variant="circular" className={className} aria-label={ariaLabel} />;
+});
+SkeletonAvatar.displayName = 'SkeletonAvatar';
