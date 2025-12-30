@@ -13,6 +13,7 @@ import ProtectedRoute from "./components/auth/ProtectedRoute";
 import PortalProtectedRoute from "./components/portal/PortalProtectedRoute";
 import { Loader2 } from "lucide-react";
 import { ErrorBoundary } from "./components/ErrorBoundary";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
 // Lazy loaded pages - Code splitting para melhor performance
 const Dashboard = lazy(() => import("./pages/Dashboard"));
@@ -139,6 +140,7 @@ function App() {
             </AuthProvider>
           </AnalyticsProvider>
         </BrowserRouter>
+      <SpeedInsights />
       </TooltipProvider>
     </QueryClientProvider>
   );
