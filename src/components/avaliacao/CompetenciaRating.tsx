@@ -74,7 +74,7 @@ export function CompetenciaRating({
           </div>
           {nota > 0 && (
             <span className="text-xs text-muted-foreground">
-              {notasDescricao[nota].label}
+              {notasDescricao[nota]?.label ?? ''}
             </span>
           )}
         </div>

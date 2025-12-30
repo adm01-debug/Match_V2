@@ -49,6 +49,7 @@ export function TwoFactorSetup({ onComplete }: TwoFactorSetupProps) {
       
       const { data: { user } } = await supabase.auth.getUser();
       const email = user?.email || 'user';
+      void email;
       
       // const otpAuthUrl = `otpauth://totp/MatchATS:${email}?secret=${newSecret}&issuer=MatchATS&algorithm=SHA1&digits=6&period=30`;
       // const qrDataUrl = await QRCode.toDataURL(otpAuthUrl);
