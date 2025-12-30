@@ -1,234 +1,276 @@
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
-import { Shield, Smartphone, Key, Copy, Check } from 'lucide-react';
-// import QRCode from 'qrcode'; // Disabled - requires qrcode package
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/hooks/use-toast";
+import { use2FA } from "@/hooks/use2FA";
+import { Shield, Copy, Download, CheckCircle2, AlertTriangle, Loader2 } from "lucide-react";
 
 interface TwoFactorSetupProps {
   onComplete?: () => void;
+  onCancel?: () => void;
 }
 
-export function TwoFactorSetup({ onComplete }: TwoFactorSetupProps) {
-  const [step, setStep] = useState<'intro' | 'qr' | 'verify' | 'backup'>('intro');
-  const [qrCodeUrl, setQrCodeUrl] = useState('');
-  const [secret, setSecret] = useState('');
-  const [verificationCode, setVerificationCode] = useState('');
-  const [backupCodes, setBackupCodes] = useState<string[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
+export function TwoFactorSetup({ onComplete, onCancel }: TwoFactorSetupProps) {
   const { toast } = useToast();
+  const { 
+    isEnabled, 
+    isLoading, 
+    qrCodeUrl, 
+    secret, 
+    recoveryCodes,
+    generateSecret, 
+    enable2FA, 
+    generateRecoveryCodes 
+  } = use2FA();
 
-  const generateSecret = () => {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
-    let result = '';
-    for (let i = 0; i < 32; i++) {
-      result += chars.charAt(Math.floor(Math.random() * chars.length));
+  const [step, setStep] = useState<'generate' | 'verify' | 'recovery' | 'complete'>('generate');
+  const [verificationCode, setVerificationCode] = useState("");
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [copiedSecret, setCopiedSecret] = useState(false);
+  const [downloadedCodes, setDownloadedCodes] = useState(false);
+
+  useEffect(() => {
+    if (!qrCodeUrl && !isEnabled) {
+      generateSecret();
     }
-    return result;
-  };
-
-  const generateBackupCodes = () => {
-    const codes: string[] = [];
-    for (let i = 0; i < 10; i++) {
-      const code = Math.random().toString(36).substring(2, 6).toUpperCase() + 
-                   '-' + 
-                   Math.random().toString(36).substring(2, 6).toUpperCase();
-      codes.push(code);
-    }
-    return codes;
-  };
-
-  const handleStartSetup = async () => {
-    setIsLoading(true);
-    try {
-      const newSecret = generateSecret();
-      setSecret(newSecret);
-      
-      const { data: { user } } = await supabase.auth.getUser();
-      const email = user?.email || 'user';
-      void email;
-      
-      // const otpAuthUrl = `otpauth://totp/MatchATS:${email}?secret=${newSecret}&issuer=MatchATS&algorithm=SHA1&digits=6&period=30`;
-      // const qrDataUrl = await QRCode.toDataURL(otpAuthUrl);
-      setQrCodeUrl('data:image/png;base64,placeholder'); // Placeholder - QRCode library disabled
-      
-      setStep('qr');
-    } catch (error) {
-      toast({
-        title: 'Erro',
-        description: 'Não foi possível iniciar a configuração do 2FA.',
-        variant: 'destructive',
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const verifyCode = (code: string, _userSecret: string): boolean => {
-    // Simplified TOTP verification - in production use a proper library
-    // This is a simplified check - real implementation would use crypto
-    return code.length === 6 && /^\d+$/.test(code);
-  };
+  }, []);
 
   const handleVerify = async () => {
-    setIsLoading(true);
+    if (verificationCode.length !== 6) {
+      setError("O código deve ter 6 dígitos");
+      return;
+    }
+
+    setIsVerifying(true);
+    setError(null);
+
     try {
-      if (!verifyCode(verificationCode, secret)) {
+      const success = await enable2FA(verificationCode);
+      if (success) {
+        await generateRecoveryCodes();
+        setStep('recovery');
         toast({
-          title: 'Código inválido',
-          description: 'Por favor, verifique o código e tente novamente.',
-          variant: 'destructive',
+          title: "2FA Ativado!",
+          description: "Autenticação de dois fatores configurada com sucesso.",
         });
-        return;
+      } else {
+        setError("Código inválido. Verifique e tente novamente.");
       }
-
-      const codes = generateBackupCodes();
-      setBackupCodes(codes);
-
-      // Disabled - user_2fa table doesn't exist
-      // const { data: { user } } = await supabase.auth.getUser();
-      // if (user) {
-      //   await supabase.from('user_2fa').upsert({
-      //     user_id: user.id,
-      //     secret: secret,
-      //     backup_codes: codes,
-      //     enabled: true,
-      //     created_at: new Date().toISOString(),
-      //   });
-      // }
-      console.log('2FA setup disabled - missing user_2fa table');
-
-      setStep('backup');
-      toast({
-        title: '2FA Ativado!',
-        description: 'Autenticação de dois fatores configurada com sucesso.',
-      });
-    } catch (error) {
-      toast({
-        title: 'Erro',
-        description: 'Não foi possível verificar o código.',
-        variant: 'destructive',
-      });
+    } catch (err) {
+      setError("Erro ao verificar código. Tente novamente.");
     } finally {
-      setIsLoading(false);
+      setIsVerifying(false);
     }
   };
 
-  const copyBackupCode = (code: string, index: number) => {
-    navigator.clipboard.writeText(code);
-    setCopiedIndex(index);
-    setTimeout(() => setCopiedIndex(null), 2000);
+  const copySecret = async () => {
+    if (secret) {
+      await navigator.clipboard.writeText(secret);
+      setCopiedSecret(true);
+      setTimeout(() => setCopiedSecret(false), 2000);
+      toast({ title: "Copiado!", description: "Chave secreta copiada." });
+    }
+  };
+
+  const downloadRecoveryCodes = () => {
+    if (!recoveryCodes?.length) return;
+    
+    const content = `MATCH ATS - Códigos de Recuperação 2FA
+========================================
+Data: ${new Date().toLocaleDateString('pt-BR')}
+
+IMPORTANTE: Guarde estes códigos em local seguro!
+Cada código só pode ser usado uma vez.
+
+${recoveryCodes.map((code, i) => `${i + 1}. ${code}`).join('\n')}
+
+========================================
+Se você perder acesso ao seu autenticador,
+use um destes códigos para fazer login.
+`;
+
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'match-ats-recovery-codes.txt';
+    a.click();
+    URL.revokeObjectURL(url);
+    setDownloadedCodes(true);
+    toast({ title: "Download iniciado!", description: "Guarde os códigos em local seguro." });
   };
 
   const handleComplete = () => {
+    if (!downloadedCodes) {
+      toast({
+        title: "Atenção!",
+        description: "Recomendamos fazer download dos códigos de recuperação.",
+        variant: "destructive",
+      });
+      return;
+    }
+    setStep('complete');
     onComplete?.();
   };
+
+  if (isLoading) {
+    return (
+      <Card className="w-full max-w-md mx-auto">
+        <CardContent className="flex items-center justify-center py-8">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Shield className="h-5 w-5 text-primary" />
-          Autenticação de Dois Fatores
-        </CardTitle>
+        <div className="flex items-center gap-2">
+          <Shield className="h-6 w-6 text-primary" />
+          <CardTitle>Configurar 2FA</CardTitle>
+        </div>
         <CardDescription>
-          Adicione uma camada extra de segurança à sua conta
+          {step === 'generate' && "Configure a autenticação de dois fatores para maior segurança"}
+          {step === 'verify' && "Verifique o código do seu autenticador"}
+          {step === 'recovery' && "Salve seus códigos de recuperação"}
+          {step === 'complete' && "Configuração concluída!"}
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        {step === 'intro' && (
-          <div className="space-y-4">
-            <div className="flex items-start gap-3 p-3 bg-muted rounded-lg">
-              <Smartphone className="h-5 w-5 mt-0.5 text-muted-foreground" />
-              <div>
-                <p className="font-medium">Você vai precisar de:</p>
-                <p className="text-sm text-muted-foreground">
-                  Um aplicativo autenticador como Google Authenticator, Authy ou 1Password
-                </p>
-              </div>
+
+      <CardContent className="space-y-4">
+        {step === 'generate' && (
+          <>
+            <div className="flex justify-center">
+              {qrCodeUrl ? (
+                <img src={qrCodeUrl} alt="QR Code 2FA" className="w-48 h-48 border rounded-lg" />
+              ) : (
+                <div className="w-48 h-48 bg-muted animate-pulse rounded-lg" />
+              )}
             </div>
-            <Button onClick={handleStartSetup} disabled={isLoading} className="w-full">
-              {isLoading ? 'Configurando...' : 'Começar Configuração'}
+
+            <Alert>
+              <AlertDescription>
+                Escaneie o QR Code com seu app autenticador (Google Authenticator, Authy, etc.)
+              </AlertDescription>
+            </Alert>
+
+            {secret && (
+              <div className="space-y-2">
+                <p className="text-sm text-muted-foreground">Ou insira manualmente:</p>
+                <div className="flex gap-2">
+                  <Input value={secret} readOnly className="font-mono text-xs" />
+                  <Button variant="outline" size="icon" onClick={copySecret}>
+                    {copiedSecret ? <CheckCircle2 className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            <Button className="w-full" onClick={() => setStep('verify')}>
+              Próximo: Verificar Código
             </Button>
-          </div>
+          </>
         )}
 
-        {step === 'qr' && (
-          <div className="space-y-4">
-            <div className="flex justify-center">
-              <img src={qrCodeUrl} alt="QR Code" className="w-48 h-48" />
-            </div>
-            <div className="text-center">
-              <p className="text-sm text-muted-foreground mb-2">
-                Ou digite este código manualmente:
-              </p>
-              <code className="px-2 py-1 bg-muted rounded text-xs break-all">
-                {secret}
-              </code>
-            </div>
+        {step === 'verify' && (
+          <>
             <div className="space-y-2">
-              <label className="text-sm font-medium">
-                Digite o código de 6 dígitos do seu app:
-              </label>
+              <label className="text-sm font-medium">Código de verificação</label>
               <Input
                 type="text"
+                inputMode="numeric"
                 maxLength={6}
                 placeholder="000000"
                 value={verificationCode}
                 onChange={(e) => setVerificationCode(e.target.value.replace(/\D/g, ''))}
-                className="text-center text-2xl tracking-widest"
+                className="text-center text-2xl tracking-widest font-mono"
               />
+              <p className="text-xs text-muted-foreground">
+                Digite o código de 6 dígitos do seu autenticador
+              </p>
             </div>
+
+            {error && (
+              <Alert variant="destructive">
+                <AlertTriangle className="h-4 w-4" />
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
+
+            <div className="flex gap-2">
+              <Button variant="outline" onClick={() => setStep('generate')} className="flex-1">
+                Voltar
+              </Button>
+              <Button 
+                onClick={handleVerify} 
+                disabled={isVerifying || verificationCode.length !== 6}
+                className="flex-1"
+              >
+                {isVerifying ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
+                Verificar
+              </Button>
+            </div>
+          </>
+        )}
+
+        {step === 'recovery' && (
+          <>
+            <Alert>
+              <AlertTriangle className="h-4 w-4" />
+              <AlertDescription>
+                <strong>Importante!</strong> Salve estes códigos em local seguro. 
+                Você precisará deles se perder acesso ao seu autenticador.
+              </AlertDescription>
+            </Alert>
+
+            <div className="grid grid-cols-2 gap-2 p-4 bg-muted rounded-lg">
+              {recoveryCodes?.map((code, index) => (
+                <Badge key={index} variant="secondary" className="font-mono justify-center py-2">
+                  {code}
+                </Badge>
+              ))}
+            </div>
+
             <Button 
-              onClick={handleVerify} 
-              disabled={verificationCode.length !== 6 || isLoading}
-              className="w-full"
+              variant="outline" 
+              className="w-full" 
+              onClick={downloadRecoveryCodes}
             >
-              {isLoading ? 'Verificando...' : 'Verificar e Ativar'}
+              <Download className="h-4 w-4 mr-2" />
+              {downloadedCodes ? "✓ Códigos Baixados" : "Baixar Códigos"}
             </Button>
+
+            <Button 
+              className="w-full" 
+              onClick={handleComplete}
+              variant={downloadedCodes ? "default" : "secondary"}
+            >
+              {downloadedCodes ? "Concluir Configuração" : "Pular (não recomendado)"}
+            </Button>
+          </>
+        )}
+
+        {step === 'complete' && (
+          <div className="text-center py-4">
+            <CheckCircle2 className="h-16 w-16 text-green-500 mx-auto mb-4" />
+            <p className="text-lg font-medium">2FA Configurado com Sucesso!</p>
+            <p className="text-sm text-muted-foreground mt-2">
+              Sua conta agora está protegida com autenticação de dois fatores.
+            </p>
           </div>
         )}
 
-        {step === 'backup' && (
-          <div className="space-y-4">
-            <div className="flex items-start gap-3 p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-800">
-              <Key className="h-5 w-5 mt-0.5 text-yellow-600" />
-              <div>
-                <p className="font-medium text-yellow-800 dark:text-yellow-200">
-                  Guarde seus códigos de backup!
-                </p>
-                <p className="text-sm text-yellow-700 dark:text-yellow-300">
-                  Use estes códigos se perder acesso ao seu autenticador
-                </p>
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-2">
-              {backupCodes.map((code, index) => (
-                <button
-                  key={index}
-                  onClick={() => copyBackupCode(code, index)}
-                  className="flex items-center justify-between px-3 py-2 bg-muted rounded text-sm font-mono hover:bg-muted/80 transition-colors"
-                >
-                  <span>{code}</span>
-                  {copiedIndex === index ? (
-                    <Check className="h-4 w-4 text-green-500" />
-                  ) : (
-                    <Copy className="h-4 w-4 text-muted-foreground" />
-                  )}
-                </button>
-              ))}
-            </div>
-            <Button onClick={handleComplete} className="w-full">
-              Concluir Configuração
-            </Button>
-          </div>
+        {onCancel && step !== 'complete' && (
+          <Button variant="ghost" onClick={onCancel} className="w-full">
+            Cancelar
+          </Button>
         )}
       </CardContent>
     </Card>
   );
 }
-
-export default TwoFactorSetup;
