@@ -1,30 +1,17 @@
-// Hooks exports
-export * from './useAnalytics';
-export * from './useAvaliacoes';
-export * from './useBateriasProvas';
-export * from './useCandidatoPerfil';
-export * from './useCandidatos';
-export * from './useCandidaturas';
-export * from './useComunicacoes';
-export * from './useDashboard';
-export * from './useDashboardData';
-export * from './useEntrevistas';
-export * from './useHistoricoEtapas';
-export * from './useIndicacoes';
-export * from './useMatchScores';
-export * from './usePageTitle';
-export * from './useProcessos';
-export * from './useProcessosSeletivos';
-export * from './useProfiles';
-export * from './useProvas';
-export * from './useQuestoes';
-export * from './useRealtimeNotifications';
-export * from './useResultadosProvas';
-export * from './useVagas';
-export * from './useViews';
-export * from './useFocusTrap';
-export * from './useReducedMotion';
-export * from './useAnnounce';
-export * from './useSessionTimeout';
-export * from './use-mobile';
-export * from './use-toast';
+// Authentication
+export { useAuth } from './useAuth';
+
+// Data Hooks
+export { useCandidates } from './useCandidates';
+export type { Candidate } from './useCandidates';
+
+export { useJobs } from './useJobs';
+export type { Job } from './useJobs';
+
+export { useInterviews } from './useInterviews';
+export type { Interview, Interviewer, InterviewFeedback } from './useInterviews';
+
+export { useWorkflow } from './useWorkflow';
+
+// UI Hooks (re-exports from shadcn)
+export { useToast } from './use-toast';
