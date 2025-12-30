@@ -1,4 +1,4 @@
-import { within, expect } from '@storybook/test';
+import { expect } from '@storybook/test';
 import type { Meta, StoryObj } from '@storybook/react';
 import { LoadingOverlay } from './LoadingOverlay';
 
@@ -34,12 +34,9 @@ export const CustomMessage: Story = {
     isLoading: true,
     message: 'Salvando alterações...',
   },
-
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
     await expect(canvasElement).toBeInTheDocument();
   },
-
 };
 
 export const Hidden: Story = {

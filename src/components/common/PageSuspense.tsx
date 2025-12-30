@@ -3,7 +3,7 @@
  * @module PageSuspense
  */
 
-import { Suspense, ReactNode , memo} from 'react';
+import { Suspense, ReactNode } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 
 interface PageSuspenseProps {

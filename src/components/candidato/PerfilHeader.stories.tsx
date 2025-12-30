@@ -1,6 +1,7 @@
-import { within, expect } from '@storybook/test';
+import { expect } from '@storybook/test';
 import type { Meta, StoryObj } from '@storybook/react';
 import { PerfilHeader } from './PerfilHeader';
+import { mockCandidatoPerfil } from '@/data/candidatoPerfilData';
 
 const meta: Meta<typeof PerfilHeader> = {
   title: 'Components/candidato/PerfilHeader',
@@ -13,26 +14,23 @@ export default meta;
 type Story = StoryObj<typeof PerfilHeader>;
 
 export const Default: Story = {
-  args: {},
+  args: { candidato: mockCandidatoPerfil },
 };
 
 export const Loading: Story = {
-  args: {},
+  args: { candidato: mockCandidatoPerfil },
   parameters: { mockData: { loading: true } },
 };
 
 export const WithError: Story = {
-  args: {},
+  args: { candidato: mockCandidatoPerfil },
   parameters: { mockData: { error: 'Erro ao carregar' } },
-
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
     await expect(canvasElement).toBeInTheDocument();
   },
-
 };
 
 export const Empty: Story = {
-  args: {},
+  args: { candidato: mockCandidatoPerfil },
   parameters: { mockData: { data: [] } },
 };

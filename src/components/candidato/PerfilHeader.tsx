@@ -30,8 +30,8 @@ export const PerfilHeader = memo(function PerfilHeader({ candidato, onEmail, onL
         {/* Avatar */}
         <div className="flex-shrink-0">
           <div className="h-24 w-24 rounded-full bg-primary/10 flex items-center justify-center">
-            {candidato.foto ? (
-              <img loading="lazy" src={candidato.foto} 
+            {(candidato as any).foto || candidato.foto_url ? (
+              <img loading="lazy" src={(candidato as any).foto || candidato.foto_url} 
                 alt={candidato.nome} 
                 className="h-24 w-24 rounded-full object-cover" 
               />
@@ -47,25 +47,29 @@ export const PerfilHeader = memo(function PerfilHeader({ candidato, onEmail, onL
             <div>
               <h1 className="text-2xl font-bold text-foreground">{candidato.nome}</h1>
               <p className="text-muted-foreground">
-                {candidato.cargoAtual}
-                {candidato.empresaAtual && ` • ${candidato.empresaAtual}`}
+                {(candidato as any).cargoAtual || candidato.vagaAtual}
+                {(candidato as any).empresaAtual && ` • ${(candidato as any).empresaAtual}`}
               </p>
             </div>
-            <Badge 
-              variant="outline" 
-              className={cn("text-lg px-4 py-1", getMatchScoreColor(candidato.matchScore))}
-            >
-              <Star className="h-4 w-4 mr-1" />
-              Match: {candidato.matchScore}%
-            </Badge>
+            {(candidato as any).matchScore !== undefined && (
+              <Badge 
+                variant="outline" 
+                className={cn("text-lg px-4 py-1", getMatchScoreColor((candidato as any).matchScore))}
+              >
+                <Star className="h-4 w-4 mr-1" />
+                Match: {(candidato as any).matchScore}%
+              </Badge>
+            )}
           </div>
 
           {/* Contatos */}
           <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-            <div className="flex items-center gap-2 text-sm">
-              <MapPin className="h-4 w-4 text-muted-foreground" />
-              <span>{candidato.cidade}, {candidato.estado}</span>
-            </div>
+            {((candidato as any).cidade || (candidato as any).estado) && (
+              <div className="flex items-center gap-2 text-sm">
+                <MapPin className="h-4 w-4 text-muted-foreground" />
+                <span>{(candidato as any).cidade}, {(candidato as any).estado}</span>
+              </div>
+            )}
             <div className="flex items-center gap-2 text-sm">
               <Mail className="h-4 w-4 text-muted-foreground" />
               <span className="truncate">{candidato.email}</span>
@@ -74,11 +78,11 @@ export const PerfilHeader = memo(function PerfilHeader({ candidato, onEmail, onL
               <Phone className="h-4 w-4 text-muted-foreground" />
               <span>{candidato.telefone}</span>
             </div>
-            {candidato.linkedin && (
+            {(candidato as any).linkedin && (
               <div className="flex items-center gap-2 text-sm">
                 <Linkedin className="h-4 w-4 text-muted-foreground" />
-                <a href={`https://${candidato.linkedin}`} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline truncate">
-                  {candidato.linkedin}
+                <a href={`https://${(candidato as any).linkedin}`} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline truncate">
+                  {(candidato as any).linkedin}
                 </a>
               </div>
             )}
@@ -86,18 +90,22 @@ export const PerfilHeader = memo(function PerfilHeader({ candidato, onEmail, onL
 
           {/* Status Cards */}
           <div className="mt-4 flex flex-wrap gap-3">
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-success/10 text-success rounded-full text-sm">
-              <Clock className="h-4 w-4" />
-              {candidato.disponibilidadeLabel}
-            </div>
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-primary/10 text-primary rounded-full text-sm">
-              <DollarSign className="h-4 w-4" />
-              Pretensão: R$ {candidato.pretensaoSalarial.toLocaleString('pt-BR')}
-            </div>
+            {(candidato as any).disponibilidadeLabel && (
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-success/10 text-success rounded-full text-sm">
+                <Clock className="h-4 w-4" />
+                {(candidato as any).disponibilidadeLabel}
+              </div>
+            )}
+            {(candidato as any).pretensaoSalarial && (
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-primary/10 text-primary rounded-full text-sm">
+                <DollarSign className="h-4 w-4" />
+                Pretensão: R$ {(candidato as any).pretensaoSalarial.toLocaleString('pt-BR')}
+              </div>
+            )}
             {candidato.vagaAtual && (
               <div className="flex items-center gap-2 px-3 py-1.5 bg-secondary text-secondary-foreground rounded-full text-sm">
                 <Briefcase className="h-4 w-4" />
-                {candidato.vagaAtual} - {candidato.etapaAtualLabel}
+                {candidato.vagaAtual}{(candidato as any).etapaAtualLabel ? ` - ${(candidato as any).etapaAtualLabel}` : ''}
               </div>
             )}
           </div>

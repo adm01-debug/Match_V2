@@ -1,7 +1,6 @@
-import { within, expect } from '@storybook/test';
+import { expect } from '@storybook/test';
 import type { Meta, StoryObj } from '@storybook/react';
 import { PageSuspense } from './PageSuspense';
-import { Suspense, lazy } from 'react';
 
 const meta: Meta<typeof PageSuspense> = {
   title: 'Common/PageSuspense',
@@ -22,7 +21,6 @@ export const Default: Story = {
       </div>
     </PageSuspense>
   ),
-
   play: async ({ canvasElement }) => {
     await expect(canvasElement).toBeInTheDocument();
   },

@@ -6,7 +6,7 @@
 import { memo, useState, useEffect, useMemo } from 'react';
 import { format, isAfter, isBefore, startOfDay, endOfDay, formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { Mail, Clock, FileText, CalendarIcon, Filter, Search, ChevronRight, Send, BarChart3, X } from 'lucide-react';
+import { Mail, Clock, CalendarIcon, Filter, Search, ChevronRight, Send, BarChart3, X } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';

@@ -3,11 +3,11 @@
  * @module SmartInsights
  */
 
-import { useMemo, useCallback, useState, useEffect, memo } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Sparkles, TrendingUp, TrendingDown, AlertTriangle, CheckCircle2, RefreshCw, Lightbulb } from 'lucide-react';
+import { Sparkles, TrendingUp, AlertTriangle, CheckCircle2, RefreshCw, Lightbulb } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface Insight {
