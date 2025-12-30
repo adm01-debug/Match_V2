@@ -1,4 +1,4 @@
-import { within, expect } from '@storybook/test';
+import { expect } from '@storybook/test';
 import type { Meta, StoryObj } from '@storybook/react';
 import { NotaResumo } from './NotaResumo';
 const meta: Meta<typeof NotaResumo> = { title: 'Components/NotaResumo', component: NotaResumo,

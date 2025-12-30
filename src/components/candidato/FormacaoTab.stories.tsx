@@ -1,4 +1,4 @@
-import { within, expect } from '@storybook/test';
+import { expect } from '@storybook/test';
 import type { Meta, StoryObj } from '@storybook/react';
 import { FormacaoTab } from './FormacaoTab';
 const meta: Meta<typeof FormacaoTab> = { title: 'Components/FormacaoTab', component: FormacaoTab,

@@ -56,8 +56,9 @@ export function DocumentosTab({ candidato }: DocumentosTabProps) {
   };
 
   const documentosPorTipo = candidato.arquivos.reduce((acc, arq) => {
-    if (!acc[arq.tipo]) acc[arq.tipo] = [];
-    acc[arq.tipo].push(arq);
+    const tipo = arq.tipo || 'outro';
+    acc[tipo] = acc[tipo] ?? [];
+    acc[tipo].push(arq);
     return acc;
   }, {} as Record<string, ArquivoAnexo[]>);
 

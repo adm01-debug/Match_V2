@@ -1,4 +1,4 @@
-import { within, expect } from '@storybook/test';
+import { expect } from '@storybook/test';
 import type { Meta, StoryObj } from '@storybook/react';
 import { DayView } from './DayView';
 const meta: Meta<typeof DayView> = { title: 'Components/agenda/DayView', component: DayView,

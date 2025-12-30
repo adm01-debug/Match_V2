@@ -13,28 +13,51 @@ interface HistoricoTabProps {
   candidato: CandidatoPerfil;
 }
 
+type HistoricoEvento = {
+  id: string;
+  data: string;
+  hora: string;
+  tipo: string;
+  tipoIcon: string;
+  descricao: string;
+  detalhes?: string | null;
+  usuario?: string | null;
+};
+
 export function HistoricoTab({ candidato }: HistoricoTabProps) {
   const getTipoColor = (tipo: string) => {
     switch (tipo) {
-      case 'candidatura': return 'bg-primary text-primary-foreground';
-      case 'triagem': return 'bg-blue-500 text-white';
-      case 'entrevista': return 'bg-purple-500 text-white';
-      case 'teste': return 'bg-pink-500 text-white';
-      case 'avaliacao': return 'bg-success text-success-foreground';
-      case 'mudanca_etapa': return 'bg-warning text-warning-foreground';
-      case 'comunicacao': return 'bg-cyan-500 text-white';
-      default: return 'bg-muted text-muted-foreground';
+      case 'candidatura':
+        return 'bg-primary text-primary-foreground';
+      case 'triagem':
+        return 'bg-blue-500 text-white';
+      case 'entrevista':
+        return 'bg-purple-500 text-white';
+      case 'teste':
+        return 'bg-pink-500 text-white';
+      case 'avaliacao':
+        return 'bg-success text-success-foreground';
+      case 'mudanca_etapa':
+        return 'bg-warning text-warning-foreground';
+      case 'comunicacao':
+        return 'bg-cyan-500 text-white';
+      default:
+        return 'bg-muted text-muted-foreground';
     }
   };
 
+  const historico = (Array.isArray((candidato as any).historico)
+    ? (candidato as any).historico
+    : []) as HistoricoEvento[];
+
   // Agrupar eventos por data
-  const eventosPorData = candidato.historico.reduce((acc, evento) => {
-    if (!acc[evento.data]) {
-      acc[evento.data] = [];
-    }
+  const eventosPorData = historico.reduce((acc, evento) => {
+    if (!acc[evento.data]) acc[evento.data] = [];
     acc[evento.data].push(evento);
     return acc;
-  }, {} as Record<string, typeof candidato.historico>);
+  }, {} as Record<string, HistoricoEvento[]>);
+
+  const eventosEntries = Object.entries(eventosPorData) as [string, HistoricoEvento[]][];
 
   return (
     <div data-testid="component" className="space-y-6">
@@ -51,14 +74,12 @@ export function HistoricoTab({ candidato }: HistoricoTabProps) {
             <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-border" />
 
             <div className="space-y-8">
-              {Object.entries(eventosPorData).map(([data, eventos]) => (
+              {eventosEntries.map(([data, eventos]) => (
                 <div key={data} className="relative">
                   {/* Data badge */}
                   <div className="sticky top-0 z-10 flex items-center gap-3 mb-4">
                     <div className="w-8 h-8 rounded-full bg-background border-2 border-primary flex items-center justify-center">
-                      <span className="text-xs font-bold text-primary">
-                        {data.split('/')[0]}
-                      </span>
+                      <span className="text-xs font-bold text-primary">{data.split('/')[0]}</span>
                     </div>
                     <span className="text-sm font-medium text-foreground bg-background px-2">
                       {data}
@@ -68,15 +89,17 @@ export function HistoricoTab({ candidato }: HistoricoTabProps) {
                   {/* Eventos do dia */}
                   <div className="ml-12 space-y-4">
                     {eventos.map((evento) => (
-                      <div 
+                      <div
                         key={evento.id}
                         className="relative p-4 bg-secondary/30 rounded-lg border border-border/50 hover:bg-secondary/50 transition-colors"
                       >
                         {/* Timeline dot */}
-                        <div className={cn(
-                          "absolute -left-[2.85rem] top-4 w-6 h-6 rounded-full flex items-center justify-center text-xs",
-                          getTipoColor(evento.tipo)
-                        )}>
+                        <div
+                          className={cn(
+                            'absolute -left-[2.85rem] top-4 w-6 h-6 rounded-full flex items-center justify-center text-xs',
+                            getTipoColor(evento.tipo)
+                          )}
+                        >
                           {evento.tipoIcon}
                         </div>
 
@@ -88,9 +111,7 @@ export function HistoricoTab({ candidato }: HistoricoTabProps) {
                               <span className="font-medium text-foreground">{evento.descricao}</span>
                             </div>
                             {evento.detalhes && (
-                              <p className="text-sm text-muted-foreground mt-1">
-                                {evento.detalhes}
-                              </p>
+                              <p className="text-sm text-muted-foreground mt-1">{evento.detalhes}</p>
                             )}
                           </div>
                           {evento.usuario && (
@@ -118,26 +139,24 @@ export function HistoricoTab({ candidato }: HistoricoTabProps) {
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="text-center p-4 bg-primary/5 rounded-lg">
-              <p className="text-3xl font-bold text-primary">
-                {candidato.historico.length}
-              </p>
+              <p className="text-3xl font-bold text-primary">{historico.length}</p>
               <p className="text-sm text-muted-foreground">Total de Eventos</p>
             </div>
             <div className="text-center p-4 bg-purple-500/5 rounded-lg">
               <p className="text-3xl font-bold text-purple-500">
-                {candidato.historico.filter(e => e.tipo === 'entrevista').length}
+                {historico.filter((e) => e.tipo === 'entrevista').length}
               </p>
               <p className="text-sm text-muted-foreground">Entrevistas</p>
             </div>
             <div className="text-center p-4 bg-success/5 rounded-lg">
               <p className="text-3xl font-bold text-success">
-                {candidato.historico.filter(e => e.tipo === 'avaliacao').length}
+                {historico.filter((e) => e.tipo === 'avaliacao').length}
               </p>
               <p className="text-sm text-muted-foreground">Avaliações</p>
             </div>
             <div className="text-center p-4 bg-cyan-500/5 rounded-lg">
               <p className="text-3xl font-bold text-cyan-500">
-                {candidato.historico.filter(e => e.tipo === 'comunicacao').length}
+                {historico.filter((e) => e.tipo === 'comunicacao').length}
               </p>
               <p className="text-sm text-muted-foreground">Comunicações</p>
             </div>

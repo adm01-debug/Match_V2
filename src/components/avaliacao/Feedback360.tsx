@@ -14,6 +14,7 @@ export function Feedback360({ candidatoId, evaluators, onSubmit, currentUserId }
   const [selectedScore, setSelectedScore] = useState(0);
   const [feedback, setFeedback] = useState('');
   const [hoveredScore, setHoveredScore] = useState(0);
+  void candidatoId;
 
   const completedCount = evaluators.filter(e => e.status === 'completed').length;
   const progress = (completedCount / evaluators.length) * 100;

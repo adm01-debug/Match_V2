@@ -1,4 +1,4 @@
-import { within, expect } from '@storybook/test';
+import { expect } from '@storybook/test';
 import type { Meta, StoryObj } from '@storybook/react';
 import { HistoricoTab } from './HistoricoTab';
 const meta: Meta<typeof HistoricoTab> = { title: 'Components/HistoricoTab', component: HistoricoTab,

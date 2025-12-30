@@ -18,24 +18,49 @@ interface FormacaoTabProps {
   candidato: CandidatoPerfil;
 }
 
+type Formacao = {
+  id: string;
+  curso: string;
+  instituicao: string;
+  nivel: string;
+  anoConclusao: string | number;
+  status: string;
+};
+
+type Certificacao = {
+  id: string;
+  nome: string;
+  instituicao: string;
+  dataEmissao: string;
+  dataValidade?: string | null;
+};
+
 export function FormacaoTab({ candidato }: FormacaoTabProps) {
+  const formacao = (Array.isArray((candidato as any).formacao)
+    ? (candidato as any).formacao
+    : []) as Formacao[];
+
+  const certificacoes = (Array.isArray((candidato as any).certificacoes)
+    ? (candidato as any).certificacoes
+    : []) as Certificacao[];
+
   const getNivelLabel = (nivel: string) => {
     const labels: Record<string, string> = {
-      'medio': 'Ensino Médio',
-      'tecnico': 'Técnico',
-      'graduacao': 'Graduação',
-      'pos_graduacao': 'Pós-Graduação',
-      'mestrado': 'Mestrado',
-      'doutorado': 'Doutorado',
+      medio: 'Ensino Médio',
+      tecnico: 'Técnico',
+      graduacao: 'Graduação',
+      pos_graduacao: 'Pós-Graduação',
+      mestrado: 'Mestrado',
+      doutorado: 'Doutorado',
     };
     return labels[nivel] || nivel;
   };
 
   const getStatusLabel = (status: string) => {
     const labels: Record<string, { label: string; color: string }> = {
-      'concluido': { label: 'Concluído', color: 'bg-success/10 text-success border-success/20' },
-      'cursando': { label: 'Cursando', color: 'bg-primary/10 text-primary border-primary/20' },
-      'trancado': { label: 'Trancado', color: 'bg-muted text-muted-foreground' },
+      concluido: { label: 'Concluído', color: 'bg-success/10 text-success border-success/20' },
+      cursando: { label: 'Cursando', color: 'bg-primary/10 text-primary border-primary/20' },
+      trancado: { label: 'Trancado', color: 'bg-muted text-muted-foreground' },
     };
     return labels[status] || { label: status, color: 'bg-muted' };
   };
@@ -52,10 +77,10 @@ export function FormacaoTab({ candidato }: FormacaoTabProps) {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {candidato.formacao.map((form) => {
+            {formacao.map((form) => {
               const statusInfo = getStatusLabel(form.status);
               return (
-                <div 
+                <div
                   key={form.id}
                   className="flex items-start justify-between p-4 border rounded-lg hover:bg-secondary/20 transition-colors"
                 >
@@ -70,9 +95,7 @@ export function FormacaoTab({ candidato }: FormacaoTabProps) {
                         <Badge variant="outline" className="text-xs">
                           {getNivelLabel(form.nivel)}
                         </Badge>
-                        <span className="text-sm text-muted-foreground">
-                          {form.anoConclusao}
-                        </span>
+                        <span className="text-sm text-muted-foreground">{form.anoConclusao}</span>
                       </div>
                     </div>
                   </div>
@@ -96,8 +119,8 @@ export function FormacaoTab({ candidato }: FormacaoTabProps) {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {candidato.certificacoes.map((cert) => (
-              <div 
+            {certificacoes.map((cert) => (
+              <div
                 key={cert.id}
                 className="p-4 border rounded-lg hover:bg-secondary/20 transition-colors"
               >
@@ -133,20 +156,16 @@ export function FormacaoTab({ candidato }: FormacaoTabProps) {
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="text-center p-4 bg-primary/5 rounded-lg">
-              <p className="text-3xl font-bold text-primary">
-                {candidato.formacao.length}
-              </p>
+              <p className="text-3xl font-bold text-primary">{formacao.length}</p>
               <p className="text-sm text-muted-foreground">Formações</p>
             </div>
             <div className="text-center p-4 bg-warning/5 rounded-lg">
-              <p className="text-3xl font-bold text-warning">
-                {candidato.certificacoes.length}
-              </p>
+              <p className="text-3xl font-bold text-warning">{certificacoes.length}</p>
               <p className="text-sm text-muted-foreground">Certificações</p>
             </div>
             <div className="text-center p-4 bg-success/5 rounded-lg">
               <p className="text-3xl font-bold text-success">
-                {candidato.formacao.filter(f => f.status === 'concluido').length}
+                {formacao.filter((f) => f.status === 'concluido').length}
               </p>
               <p className="text-sm text-muted-foreground">Concluídas</p>
             </div>

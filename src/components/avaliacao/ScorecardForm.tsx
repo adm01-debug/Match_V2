@@ -39,6 +39,8 @@ export function ScorecardForm({ candidatoId, entrevistaId, competencies = DEFAUL
   const [scores, setScores] = useState<Record<string, number>>({});
   const [notes, setNotes] = useState('');
   const [recommendation, setRecommendation] = useState<'aprovar' | 'reprovar' | 'talvez' | null>(null);
+  void candidatoId;
+  void entrevistaId;
 
   const categories = [...new Set(competencies.map(c => c.category))];
   const averageScore = Object.values(scores).length > 0 ? (Object.values(scores).reduce((a, b) => a + b, 0) / Object.values(scores).length).toFixed(1) : '0.0';
