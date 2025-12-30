@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,20 +11,39 @@ import { Shield, AlertTriangle, Loader2, KeyRound } from "lucide-react";
 interface TwoFactorVerifyProps {
   onSuccess: () => void;
   onCancel?: () => void;
+  maxAttempts?: number;
 }
 
-export function TwoFactorVerify({ onSuccess, onCancel }: TwoFactorVerifyProps) {
+export function TwoFactorVerify({ onSuccess, onCancel, maxAttempts = 5 }: TwoFactorVerifyProps) {
   const { toast } = useToast();
   const { verify2FA, verifyRecoveryCode } = use2FA();
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const [code, setCode] = useState("");
   const [isVerifying, setIsVerifying] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [rememberDevice, setRememberDevice] = useState(false);
   const [useRecoveryCode, setUseRecoveryCode] = useState(false);
+  const [attempts, setAttempts] = useState(0);
+
+  // Focus input on mount and mode change
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      inputRef.current?.focus();
+    }, 100);
+    return () => clearTimeout(timer);
+  }, [useRecoveryCode]);
+
+  const isLocked = attempts >= maxAttempts;
+  const codeLength = useRecoveryCode ? 8 : 6;
+  const remainingAttempts = maxAttempts - attempts;
 
   const handleVerify = async () => {
-    const codeLength = useRecoveryCode ? 8 : 6;
+    if (isLocked) {
+      setError("Muitas tentativas. Aguarde alguns minutos.");
+      return;
+    }
+
     if (code.length !== codeLength) {
       setError(`O código deve ter ${codeLength} ${useRecoveryCode ? 'caracteres' : 'dígitos'}`);
       return;
@@ -51,13 +70,25 @@ export function TwoFactorVerify({ onSuccess, onCancel }: TwoFactorVerifyProps) {
         });
         onSuccess();
       } else {
-        setError(useRecoveryCode 
-          ? "Código de recuperação inválido ou já utilizado." 
-          : "Código inválido. Verifique e tente novamente."
-        );
+        const newAttempts = attempts + 1;
+        setAttempts(newAttempts);
+        
+        if (newAttempts >= maxAttempts) {
+          setError("Muitas tentativas incorretas. Aguarde alguns minutos.");
+        } else {
+          setError(
+            useRecoveryCode 
+              ? `Código de recuperação inválido ou já utilizado. (${remainingAttempts - 1} tentativas restantes)` 
+              : `Código inválido. Verifique e tente novamente. (${remainingAttempts - 1} tentativas restantes)`
+          );
+        }
+        setCode("");
+        inputRef.current?.focus();
       }
-    } catch (err) {
-      setError("Erro ao verificar código. Tente novamente.");
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Erro ao verificar código. Tente novamente.";
+      setError(message);
+      console.error('[TwoFactorVerify] Verification error:', err);
     } finally {
       setIsVerifying(false);
     }
@@ -69,14 +100,20 @@ export function TwoFactorVerify({ onSuccess, onCancel }: TwoFactorVerifyProps) {
     setError(null);
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && code.length === codeLength && !isVerifying && !isLocked) {
+      handleVerify();
+    }
+  };
+
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardHeader>
         <div className="flex items-center gap-2">
           {useRecoveryCode ? (
-            <KeyRound className="h-6 w-6 text-primary" />
+            <KeyRound className="h-6 w-6 text-primary" aria-hidden="true" />
           ) : (
-            <Shield className="h-6 w-6 text-primary" />
+            <Shield className="h-6 w-6 text-primary" aria-hidden="true" />
           )}
           <CardTitle>
             {useRecoveryCode ? "Código de Recuperação" : "Verificação 2FA"}
@@ -92,22 +129,33 @@ export function TwoFactorVerify({ onSuccess, onCancel }: TwoFactorVerifyProps) {
 
       <CardContent className="space-y-4">
         <div className="space-y-2">
+          <label htmlFor="2fa-code" className="sr-only">
+            {useRecoveryCode ? "Código de recuperação" : "Código de verificação"}
+          </label>
           <Input
+            ref={inputRef}
+            id="2fa-code"
             type="text"
             inputMode={useRecoveryCode ? "text" : "numeric"}
-            maxLength={useRecoveryCode ? 8 : 6}
+            pattern={useRecoveryCode ? "[A-Za-z0-9]*" : "[0-9]*"}
+            maxLength={codeLength}
             placeholder={useRecoveryCode ? "XXXXXXXX" : "000000"}
             value={code}
             onChange={(e) => {
               const value = useRecoveryCode 
-                ? e.target.value.toUpperCase()
+                ? e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '')
                 : e.target.value.replace(/\D/g, '');
               setCode(value);
+              setError(null);
             }}
+            onKeyDown={handleKeyDown}
             className="text-center text-2xl tracking-widest font-mono"
-            autoFocus
+            autoComplete="one-time-code"
+            disabled={isLocked}
+            aria-describedby={error ? "error-message" : "code-hint"}
+            aria-invalid={!!error}
           />
-          <p className="text-xs text-muted-foreground text-center">
+          <p id="code-hint" className="text-xs text-muted-foreground text-center">
             {useRecoveryCode 
               ? "Código de 8 caracteres"
               : "Código de 6 dígitos do seu autenticador"
@@ -118,13 +166,14 @@ export function TwoFactorVerify({ onSuccess, onCancel }: TwoFactorVerifyProps) {
         {!useRecoveryCode && (
           <div className="flex items-center space-x-2">
             <Checkbox 
-              id="remember" 
+              id="remember-device" 
               checked={rememberDevice}
               onCheckedChange={(checked) => setRememberDevice(checked === true)}
+              disabled={isLocked}
             />
             <label 
-              htmlFor="remember" 
-              className="text-sm text-muted-foreground cursor-pointer"
+              htmlFor="remember-device" 
+              className="text-sm text-muted-foreground cursor-pointer select-none"
             >
               Lembrar este dispositivo por 30 dias
             </label>
@@ -132,19 +181,19 @@ export function TwoFactorVerify({ onSuccess, onCancel }: TwoFactorVerifyProps) {
         )}
 
         {error && (
-          <Alert variant="destructive">
-            <AlertTriangle className="h-4 w-4" />
+          <Alert variant="destructive" id="error-message" role="alert">
+            <AlertTriangle className="h-4 w-4" aria-hidden="true" />
             <AlertDescription>{error}</AlertDescription>
           </Alert>
         )}
 
         <Button 
           onClick={handleVerify} 
-          disabled={isVerifying || code.length < (useRecoveryCode ? 8 : 6)}
+          disabled={isVerifying || code.length < codeLength || isLocked}
           className="w-full"
         >
-          {isVerifying && <Loader2 className="h-4 w-4 animate-spin mr-2" />}
-          Verificar
+          {isVerifying && <Loader2 className="h-4 w-4 animate-spin mr-2" aria-hidden="true" />}
+          {isLocked ? "Bloqueado" : "Verificar"}
         </Button>
 
         <div className="text-center">
@@ -152,6 +201,7 @@ export function TwoFactorVerify({ onSuccess, onCancel }: TwoFactorVerifyProps) {
             variant="link" 
             onClick={toggleRecoveryMode}
             className="text-sm"
+            disabled={isLocked}
           >
             {useRecoveryCode 
               ? "← Voltar para código do autenticador"
