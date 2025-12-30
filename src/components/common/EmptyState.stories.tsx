@@ -1,4 +1,4 @@
-import { within, expect } from '@storybook/test';
+import { expect } from '@storybook/test';
 import type { Meta, StoryObj } from '@storybook/react';
 import { EmptyState } from './EmptyState';
 import { Button } from '@/components/ui/button';
@@ -45,10 +45,7 @@ export const SearchEmpty: Story = {
     description: 'Tente ajustar os filtros ou termos de busca.',
     action: <Button variant="outline">Limpar Filtros</Button>,
   },
-
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
     await expect(canvasElement).toBeInTheDocument();
   },
-
 };

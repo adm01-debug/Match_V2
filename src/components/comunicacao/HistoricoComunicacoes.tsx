@@ -3,7 +3,7 @@
  * @module HistoricoComunicacoes
  */
 
-import { memo , useMemo} from 'react';
+import { memo } from 'react';
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -116,7 +116,7 @@ export function HistoricoComunicacoes({ candidatoId, className }: HistoricoComun
                 >
                   <div className="flex items-start justify-between gap-2 mb-2">
                     <h4 className="font-medium line-clamp-1">{com.assunto}</h4>
-                    <Badge className={etapaColors[com.template_etapa] || etapaColors.comunicacao}>
+                    <Badge className={etapaColors[com.template_etapa] || etapaColors['comunicacao']}>
                       {com.template_nome}
                     </Badge>
                   </div>

@@ -37,7 +37,8 @@ const tipoLabels: Record<string, string> = {
   comportamental: "Comportamental",
 };
 
-export function NotasTab({ candidatoId }: NotasTabProps) {
+export function NotasTab({ candidatoId: _candidatoId }: NotasTabProps) {
+  void _candidatoId; // Will be used for API calls
   const [notas, setNotas] = useState<Nota[]>([
     {
       id: "1",

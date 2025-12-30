@@ -17,6 +17,7 @@ export interface CandidatoPerfil {
   email: string;
   telefone?: string;
   foto_url?: string;
+  foto?: string;
   resumo?: string;
   habilidades?: string[];
   experiencias?: unknown[];
@@ -37,6 +38,27 @@ export interface CandidatoPerfil {
     observacoes: string;
     notas: Array<{ criterio: string; nota: number }>;
   }>;
+  // Additional fields used by PerfilHeader and other components
+  cargoAtual?: string;
+  empresaAtual?: string;
+  matchScore?: number;
+  cidade?: string;
+  estado?: string;
+  linkedin?: string;
+  disponibilidadeLabel?: string;
+  pretensaoSalarial?: number;
+  etapaAtualLabel?: string;
+  dataCadastro?: string;
+  historico?: Array<{
+    id: string;
+    data: string;
+    hora: string;
+    tipo: string;
+    tipoIcon: string;
+    descricao: string;
+    detalhes?: string | null;
+    usuario?: string | null;
+  }>;
 }
 
 export const mockCandidatoPerfil: CandidatoPerfil = {
@@ -51,6 +73,17 @@ export const mockCandidatoPerfil: CandidatoPerfil = {
   skills: [],
   certificacoes: [],
   avaliacoes: [],
+  cargoAtual: 'Desenvolvedor Frontend',
+  empresaAtual: 'Tech Company',
+  matchScore: 85,
+  cidade: 'São Paulo',
+  estado: 'SP',
+  linkedin: 'linkedin.com/in/candidato',
+  disponibilidadeLabel: 'Imediata',
+  pretensaoSalarial: 8000,
+  etapaAtualLabel: 'Entrevista Técnica',
+  dataCadastro: '10/12/2025',
+  historico: [],
 };
 
 export default { mockCandidatoPerfil };

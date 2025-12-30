@@ -53,7 +53,7 @@ export function HistoricoTab({ candidato }: HistoricoTabProps) {
   // Agrupar eventos por data
   const eventosPorData = historico.reduce((acc, evento) => {
     if (!acc[evento.data]) acc[evento.data] = [];
-    acc[evento.data].push(evento);
+    acc[evento.data]!.push(evento);
     return acc;
   }, {} as Record<string, HistoricoEvento[]>);
 
@@ -170,7 +170,7 @@ export function HistoricoTab({ candidato }: HistoricoTabProps) {
             </div>
             <div className="text-right">
               <p className="text-sm text-muted-foreground">Data de entrada</p>
-              <p className="text-lg font-semibold text-foreground">{candidato.dataCadastro}</p>
+              <p className="text-lg font-semibold text-foreground">{candidato.dataCadastro || '-'}</p>
             </div>
           </div>
         </CardContent>

@@ -19,15 +19,11 @@ import {
   FileText,
   Gift,
   BarChart3,
-  Settings,
-  Search,
   Plus,
   Sparkles,
   Mail,
   Shield,
   Globe,
-  User,
-  FileSearch,
   Clock,
 } from "lucide-react";
 import { useAuth, AppRole } from "@/contexts/AuthContext";

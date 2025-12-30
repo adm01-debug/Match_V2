@@ -44,7 +44,7 @@ export function CandidateTimeline({ events, maxHeight = '400px' }: CandidateTime
           <div className="relative">
             <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-border" />
             <div className="space-y-6">
-              {sortedEvents.map((event, index) => {
+              {sortedEvents.map((event) => {
                 const Icon = EVENT_ICONS[event.type] || FileText;
                 const color = EVENT_COLORS[event.type] || 'bg-gray-500';
                 return (
@@ -57,7 +57,7 @@ export function CandidateTimeline({ events, maxHeight = '400px' }: CandidateTime
                       </div>
                       {event.description && <p className="text-sm text-muted-foreground">{event.description}</p>}
                       {event.user && <p className="text-xs text-muted-foreground mt-1">por {event.user}</p>}
-                      {event.metadata?.stage && <Badge variant="outline" className="mt-2">{event.metadata.stage}</Badge>}
+                      {event.metadata?.['stage'] && <Badge variant="outline" className="mt-2">{event.metadata['stage']}</Badge>}
                     </div>
                   </div>
                 );

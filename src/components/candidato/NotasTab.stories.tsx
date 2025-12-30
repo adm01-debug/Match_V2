@@ -1,4 +1,4 @@
-import { within, expect } from '@storybook/test';
+import { expect } from '@storybook/test';
 import type { Meta, StoryObj } from '@storybook/react';
 import { NotasTab } from './NotasTab';
 const meta: Meta<typeof NotasTab> = { title: 'Components/NotasTab', component: NotasTab,
@@ -6,6 +6,7 @@ const meta: Meta<typeof NotasTab> = { title: 'Components/NotasTab', component: N
 export default meta;
 type Story = StoryObj<typeof meta>;
 export const Default: Story = {
+  args: { candidatoId: '1' },
   play: async ({ canvasElement }) => {
     await expect(canvasElement).toBeInTheDocument();
   },

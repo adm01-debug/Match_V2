@@ -1,4 +1,4 @@
-import { useMemo,  useCallback,  memo   } from 'react';
+import { memo } from 'react';
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useVagas } from "@/hooks/useVagas";

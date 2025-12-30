@@ -3,7 +3,7 @@
  * @module ResumeParser
  */
 
-import { memo,  useState, useCallback  , useMemo} from 'react';
+import { memo, useState, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -146,6 +146,7 @@ toast({
     const files = e.dataTransfer.files;
     if (files.length > 0) {
       const file = files[0];
+      if (!file) return;
       const validTypes = ['text/plain', 'application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
       
       if (validTypes.includes(file.type) || file.name.endsWith('.txt')) {
@@ -162,7 +163,7 @@ toast({
 
   const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
-    if (files && files.length > 0) {
+    if (files && files.length > 0 && files[0]) {
       parseResume(files[0]);
     }
   };
