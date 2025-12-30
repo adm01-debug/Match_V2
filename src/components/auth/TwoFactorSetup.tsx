@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -33,11 +33,27 @@ export function TwoFactorSetup({ onComplete, onCancel }: TwoFactorSetupProps) {
   const [copiedSecret, setCopiedSecret] = useState(false);
   const [downloadedCodes, setDownloadedCodes] = useState(false);
 
-  useEffect(() => {
+  // Memoize generateSecret call to prevent infinite loops
+  const initializeSecret = useCallback(() => {
     if (!qrCodeUrl && !isEnabled) {
       generateSecret();
     }
-  }, []);
+  }, [qrCodeUrl, isEnabled, generateSecret]);
+
+  useEffect(() => {
+    initializeSecret();
+  }, [initializeSecret]);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+    if (copiedSecret) {
+      timeoutId = setTimeout(() => setCopiedSecret(false), 2000);
+    }
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+  }, [copiedSecret]);
 
   const handleVerify = async () => {
     if (verificationCode.length !== 6) {
@@ -60,8 +76,10 @@ export function TwoFactorSetup({ onComplete, onCancel }: TwoFactorSetupProps) {
       } else {
         setError("Código inválido. Verifique e tente novamente.");
       }
-    } catch (err) {
-      setError("Erro ao verificar código. Tente novamente.");
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Erro ao verificar código. Tente novamente.";
+      setError(message);
+      console.error('[TwoFactorSetup] Verification error:', err);
     } finally {
       setIsVerifying(false);
     }
@@ -69,10 +87,18 @@ export function TwoFactorSetup({ onComplete, onCancel }: TwoFactorSetupProps) {
 
   const copySecret = async () => {
     if (secret) {
-      await navigator.clipboard.writeText(secret);
-      setCopiedSecret(true);
-      setTimeout(() => setCopiedSecret(false), 2000);
-      toast({ title: "Copiado!", description: "Chave secreta copiada." });
+      try {
+        await navigator.clipboard.writeText(secret);
+        setCopiedSecret(true);
+        toast({ title: "Copiado!", description: "Chave secreta copiada." });
+      } catch (err) {
+        console.error('[TwoFactorSetup] Clipboard error:', err);
+        toast({ 
+          title: "Erro", 
+          description: "Não foi possível copiar. Selecione e copie manualmente.", 
+          variant: "destructive" 
+        });
+      }
     }
   };
 
@@ -98,8 +124,11 @@ use um destes códigos para fazer login.
     const a = document.createElement('a');
     a.href = url;
     a.download = 'match-ats-recovery-codes.txt';
+    document.body.appendChild(a);
     a.click();
-    URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+    // Delay revokeObjectURL to ensure download starts
+    setTimeout(() => URL.revokeObjectURL(url), 100);
     setDownloadedCodes(true);
     toast({ title: "Download iniciado!", description: "Guarde os códigos em local seguro." });
   };
@@ -147,9 +176,14 @@ use um destes códigos para fazer login.
           <>
             <div className="flex justify-center">
               {qrCodeUrl ? (
-                <img src={qrCodeUrl} alt="QR Code 2FA" className="w-48 h-48 border rounded-lg" />
+                <img 
+                  src={qrCodeUrl} 
+                  alt="QR Code 2FA" 
+                  className="w-48 h-48 border rounded-lg"
+                  loading="eager"
+                />
               ) : (
-                <div className="w-48 h-48 bg-muted animate-pulse rounded-lg" />
+                <div className="w-48 h-48 bg-muted animate-pulse rounded-lg" aria-label="Carregando QR Code" />
               )}
             </div>
 
@@ -163,8 +197,18 @@ use um destes códigos para fazer login.
               <div className="space-y-2">
                 <p className="text-sm text-muted-foreground">Ou insira manualmente:</p>
                 <div className="flex gap-2">
-                  <Input value={secret} readOnly className="font-mono text-xs" />
-                  <Button variant="outline" size="icon" onClick={copySecret}>
+                  <Input 
+                    value={secret} 
+                    readOnly 
+                    className="font-mono text-xs" 
+                    aria-label="Chave secreta 2FA"
+                  />
+                  <Button 
+                    variant="outline" 
+                    size="icon" 
+                    onClick={copySecret}
+                    aria-label={copiedSecret ? "Copiado" : "Copiar chave secreta"}
+                  >
                     {copiedSecret ? <CheckCircle2 className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
                   </Button>
                 </div>
@@ -180,17 +224,23 @@ use um destes códigos para fazer login.
         {step === 'verify' && (
           <>
             <div className="space-y-2">
-              <label className="text-sm font-medium">Código de verificação</label>
+              <label htmlFor="verification-code" className="text-sm font-medium">
+                Código de verificação
+              </label>
               <Input
+                id="verification-code"
                 type="text"
                 inputMode="numeric"
+                pattern="[0-9]*"
                 maxLength={6}
                 placeholder="000000"
                 value={verificationCode}
                 onChange={(e) => setVerificationCode(e.target.value.replace(/\D/g, ''))}
                 className="text-center text-2xl tracking-widest font-mono"
+                autoComplete="one-time-code"
+                aria-describedby="code-hint"
               />
-              <p className="text-xs text-muted-foreground">
+              <p id="code-hint" className="text-xs text-muted-foreground">
                 Digite o código de 6 dígitos do seu autenticador
               </p>
             </div>
@@ -211,7 +261,7 @@ use um destes códigos para fazer login.
                 disabled={isVerifying || verificationCode.length !== 6}
                 className="flex-1"
               >
-                {isVerifying ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
+                {isVerifying && <Loader2 className="h-4 w-4 animate-spin mr-2" />}
                 Verificar
               </Button>
             </div>
@@ -228,9 +278,9 @@ use um destes códigos para fazer login.
               </AlertDescription>
             </Alert>
 
-            <div className="grid grid-cols-2 gap-2 p-4 bg-muted rounded-lg">
+            <div className="grid grid-cols-2 gap-2 p-4 bg-muted rounded-lg" role="list" aria-label="Códigos de recuperação">
               {recoveryCodes?.map((code, index) => (
-                <Badge key={index} variant="secondary" className="font-mono justify-center py-2">
+                <Badge key={`recovery-${index}`} variant="secondary" className="font-mono justify-center py-2" role="listitem">
                   {code}
                 </Badge>
               ))}
@@ -257,7 +307,7 @@ use um destes códigos para fazer login.
 
         {step === 'complete' && (
           <div className="text-center py-4">
-            <CheckCircle2 className="h-16 w-16 text-green-500 mx-auto mb-4" />
+            <CheckCircle2 className="h-16 w-16 text-green-500 mx-auto mb-4" aria-hidden="true" />
             <p className="text-lg font-medium">2FA Configurado com Sucesso!</p>
             <p className="text-sm text-muted-foreground mt-2">
               Sua conta agora está protegida com autenticação de dois fatores.
