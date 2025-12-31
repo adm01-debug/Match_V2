@@ -3,7 +3,7 @@
  * @module VagaCard
  */
 
-import { memo, useState } from 'react';
+import { memo, useState, useCallback, useMemo } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -21,19 +21,8 @@ import { PriorityBadge } from "@/components/ui/priority-badge";
 import { Vaga } from "@/types/recruitment";
 import { useDeleteVaga } from "@/hooks/useVagas";
 import { 
-  Eye, 
-  Edit, 
-  Kanban, 
-  Share2, 
-  MapPin, 
-  Briefcase, 
-  DollarSign,
-  Users,
-  Target,
-  Clock,
-  MoreHorizontal,
-  Trash2,
-  Loader2
+  Eye, Edit, Kanban, Share2, MapPin, Briefcase, DollarSign,
+  Users, Target, Clock, MoreHorizontal, Trash2, Loader2
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
@@ -48,52 +37,78 @@ import { toast } from "sonner";
 
 interface VagaCardProps {
   vaga: Vaga;
+  onDeleted?: () => void;
 }
 
-export const VagaCard = memo(function VagaCard({ vaga }: VagaCardProps) {
+function formatSalario(min?: number, max?: number, aCombinar?: boolean): string {
+  if (aCombinar) return "A combinar";
+  if (min && max) return `R$ ${min.toLocaleString('pt-BR')} - ${max.toLocaleString('pt-BR')}`;
+  if (min) return `A partir de R$ ${min.toLocaleString('pt-BR')}`;
+  return "Não informado";
+}
+
+function calculateDaysOpen(dateStr?: string): number {
+  if (!dateStr) return 0;
+  try {
+    const diff = new Date().getTime() - new Date(dateStr).getTime();
+    return Math.max(0, Math.floor(diff / (1000 * 60 * 60 * 24)));
+  } catch {
+    return 0;
+  }
+}
+
+function VagaCardComponent({ vaga, onDeleted }: VagaCardProps) {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const deleteVaga = useDeleteVaga();
   
-  const diasAberta = vaga.dataPublicacao 
-    ? Math.floor((new Date().getTime() - new Date(vaga.dataPublicacao).getTime()) / (1000 * 60 * 60 * 24))
-    : 0;
+  const diasAberta = useMemo(
+    () => calculateDaysOpen(vaga.dataPublicacao),
+    [vaga.dataPublicacao]
+  );
 
-  const formatSalario = (min?: number, max?: number, aCombinar?: boolean) => {
-    if (aCombinar) return "A combinar";
-    if (min && max) return `R$ ${min.toLocaleString()} - ${max.toLocaleString()}`;
-    if (min) return `A partir de R$ ${min.toLocaleString()}`;
-    return "Não informado";
-  };
+  const salarioFormatado = useMemo(
+    () => formatSalario(vaga.salarioMin, vaga.salarioMax, vaga.salarioACombinar),
+    [vaga.salarioMin, vaga.salarioMax, vaga.salarioACombinar]
+  );
 
-  const handleDelete = async () => {
+  const showPriority = vaga.prioridade === "urgente" || vaga.prioridade === "alta";
+
+  const handleOpenDeleteDialog = useCallback(() => {
+    setShowDeleteDialog(true);
+  }, []);
+
+  const handleCloseDeleteDialog = useCallback(() => {
+    setShowDeleteDialog(false);
+  }, []);
+
+  const handleDelete = useCallback(async () => {
     try {
       await deleteVaga.mutateAsync(vaga.id);
       toast.success("Vaga excluída com sucesso!");
       setShowDeleteDialog(false);
+      onDeleted?.();
     } catch (error) {
+      console.error('[VagaCard] Delete error:', error);
       toast.error("Erro ao excluir vaga. Tente novamente.");
     }
-  };
-
-  const handleDelete = async () => {
-    try {
-      await deleteVaga.mutateAsync(vaga.id);
-      toast.success("Vaga excluída com sucesso!");
-      setShowDeleteDialog(false);
-    } catch (error) {
-      toast.error("Erro ao excluir vaga. Tente novamente.");
-    }
-  };
+  }, [deleteVaga, vaga.id, onDeleted]);
 
   return (
     <>
-      <Card className="card-hover border-l-4 border-l-primary">
+      <Card 
+        className="card-hover border-l-4 border-l-primary"
+        role="article"
+        aria-label={`Vaga: ${vaga.titulo}`}
+      >
         <CardContent className="p-5">
-          <div data-testid="vaga-card" className="flex items-start justify-between gap-3 mb-4">
+          <div 
+            data-testid="vaga-card" 
+            className="flex items-start justify-between gap-3 mb-4"
+          >
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-1">
                 <StatusBadge status={vaga.status} size="sm" />
-                {(vaga.prioridade === "urgente" || vaga.prioridade === "alta") && (
+                {showPriority && (
                   <PriorityBadge 
                     priority={vaga.prioridade} 
                     size="sm" 
@@ -104,83 +119,97 @@ export const VagaCard = memo(function VagaCard({ vaga }: VagaCardProps) {
               <h3 className="font-semibold text-lg text-foreground truncate">
                 {vaga.titulo}
               </h3>
-              <div className="flex items-center gap-3 text-sm text-muted-foreground mt-1">
+              <div className="flex items-center gap-3 text-sm text-muted-foreground mt-1 flex-wrap">
                 <span className="flex items-center gap-1">
-                  <MapPin className="h-3.5 w-3.5" />
-                  {vaga.departamento}
+                  <MapPin className="h-3.5 w-3.5" aria-hidden="true" />
+                  <span>{vaga.departamento}</span>
                 </span>
                 <span className="flex items-center gap-1">
-                  <Briefcase className="h-3.5 w-3.5" />
-                  {vaga.tipoContrato.toUpperCase()}
+                  <Briefcase className="h-3.5 w-3.5" aria-hidden="true" />
+                  <span>{vaga.tipoContrato.toUpperCase()}</span>
                 </span>
                 <span className="flex items-center gap-1">
-                  <DollarSign className="h-3.5 w-3.5" />
-                  {formatSalario(vaga.salarioMin, vaga.salarioMax, vaga.salarioACombinar)}
+                  <DollarSign className="h-3.5 w-3.5" aria-hidden="true" />
+                  <span>{salarioFormatado}</span>
                 </span>
               </div>
             </div>
             
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button type="button" variant="ghost" size="icon" className="h-8 w-8">
-                  <MoreHorizontal className="h-4 w-4" />
+                <Button 
+                  type="button" 
+                  variant="ghost" 
+                  size="icon" 
+                  className="h-8 w-8"
+                  aria-label="Mais opções"
+                >
+                  <MoreHorizontal className="h-4 w-4" aria-hidden="true" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-48 bg-popover">
                 <DropdownMenuItem asChild>
                   <Link to={`/vagas/${vaga.id}`} className="flex items-center gap-2">
-                    <Eye className="h-4 w-4" />
+                    <Eye className="h-4 w-4" aria-hidden="true" />
                     Ver detalhes
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link to={`/vagas/${vaga.id}/editar`} className="flex items-center gap-2">
-                    <Edit className="h-4 w-4" />
+                    <Edit className="h-4 w-4" aria-hidden="true" />
                     Editar vaga
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link to={`/pipeline?vaga=${vaga.id}`} className="flex items-center gap-2">
-                    <Kanban className="h-4 w-4" />
+                    <Kanban className="h-4 w-4" aria-hidden="true" />
                     Ver pipeline
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem className="flex items-center gap-2">
-                  <Share2 className="h-4 w-4" />
+                  <Share2 className="h-4 w-4" aria-hidden="true" />
                   Divulgar vaga
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem 
                   className="flex items-center gap-2 text-destructive focus:text-destructive"
-                  onClick={() => setShowDeleteDialog(true)}
-                  aria-label="VagaCard action"
+                  onClick={handleOpenDeleteDialog}
+                  aria-label="Excluir vaga"
                 >
-                  <Trash2 className="h-4 w-4" />
+                  <Trash2 className="h-4 w-4" aria-hidden="true" />
                   Excluir vaga
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
 
-          <div className="grid grid-cols-4 gap-3 mb-4">
+          <div 
+            className="grid grid-cols-4 gap-3 mb-4"
+            role="group"
+            aria-label="Estatísticas da vaga"
+          >
             <div className="text-center p-2.5 rounded-lg bg-muted/50">
               <div className="flex items-center justify-center gap-1.5 mb-1">
-                <Users className="h-4 w-4 text-muted-foreground" />
-                <span className="text-lg font-bold text-foreground">{vaga.totalCandidatos}</span>
+                <Users className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+                <span className="text-lg font-bold text-foreground">
+                  {vaga.totalCandidatos}
+                </span>
               </div>
               <p className="text-xs text-muted-foreground">candidatos</p>
             </div>
             <div className="text-center p-2.5 rounded-lg bg-muted/50">
               <div className="flex items-center justify-center gap-1.5 mb-1">
-                <Target className="h-4 w-4 text-muted-foreground" />
-                <span className="text-lg font-bold text-foreground">{vaga.emProcesso}</span>
+                <Target className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+                <span className="text-lg font-bold text-foreground">
+                  {vaga.emProcesso}
+                </span>
               </div>
               <p className="text-xs text-muted-foreground">em processo</p>
             </div>
             <div className="text-center p-2.5 rounded-lg bg-muted/50">
               <div className="flex items-center justify-center gap-1.5 mb-1">
-                <Clock className="h-4 w-4 text-muted-foreground" />
+                <Clock className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
                 <span className={cn(
                   "text-lg font-bold",
                   diasAberta > 30 ? "text-warning" : "text-foreground"
@@ -192,35 +221,44 @@ export const VagaCard = memo(function VagaCard({ vaga }: VagaCardProps) {
             </div>
             <div className="text-center p-2.5 rounded-lg bg-muted/50">
               <div className="flex items-center justify-center gap-1.5 mb-1">
-                <Briefcase className="h-4 w-4 text-muted-foreground" />
-                <span className="text-lg font-bold text-foreground">{vaga.quantidade}</span>
+                <Briefcase className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+                <span className="text-lg font-bold text-foreground">
+                  {vaga.quantidade}
+                </span>
               </div>
-              <p className="text-xs text-muted-foreground">vaga{vaga.quantidade > 1 ? "s" : ""}</p>
+              <p className="text-xs text-muted-foreground">
+                vaga{vaga.quantidade > 1 ? "s" : ""}
+              </p>
             </div>
           </div>
 
           <div className="flex gap-2">
             <Button type="button" variant="outline" size="sm" className="flex-1" asChild>
               <Link to={`/vagas/${vaga.id}`}>
-                <Eye className="h-3.5 w-3.5 mr-1.5" />
+                <Eye className="h-3.5 w-3.5 mr-1.5" aria-hidden="true" />
                 Ver
               </Link>
             </Button>
             <Button type="button" variant="outline" size="sm" className="flex-1" asChild>
               <Link to={`/vagas/${vaga.id}/editar`}>
-                <Edit className="h-3.5 w-3.5 mr-1.5" />
+                <Edit className="h-3.5 w-3.5 mr-1.5" aria-hidden="true" />
                 Editar
               </Link>
             </Button>
             <Button type="button" variant="outline" size="sm" className="flex-1" asChild>
               <Link to={`/pipeline?vaga=${vaga.id}`}>
-                <Kanban className="h-3.5 w-3.5 mr-1.5" />
+                <Kanban className="h-3.5 w-3.5 mr-1.5" aria-hidden="true" />
                 Pipeline
               </Link>
             </Button>
             {vaga.status === "publicada" && (
-              <Button type="button" variant="outline" size="sm">
-                <Share2 className="h-3.5 w-3.5" />
+              <Button 
+                type="button" 
+                variant="outline" 
+                size="sm"
+                aria-label="Compartilhar vaga"
+              >
+                <Share2 className="h-3.5 w-3.5" aria-hidden="true" />
               </Button>
             )}
           </div>
@@ -237,7 +275,12 @@ export const VagaCard = memo(function VagaCard({ vaga }: VagaCardProps) {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={deleteVaga.isPending}>Cancelar</AlertDialogCancel>
+            <AlertDialogCancel 
+              disabled={deleteVaga.isPending}
+              onClick={handleCloseDeleteDialog}
+            >
+              Cancelar
+            </AlertDialogCancel>
             <AlertDialogAction 
               onClick={handleDelete}
               disabled={deleteVaga.isPending}
@@ -245,12 +288,12 @@ export const VagaCard = memo(function VagaCard({ vaga }: VagaCardProps) {
             >
               {deleteVaga.isPending ? (
                 <>
-                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" aria-hidden="true" />
                   Excluindo...
                 </>
               ) : (
                 <>
-                  <Trash2 className="h-4 w-4 mr-2" />
+                  <Trash2 className="h-4 w-4 mr-2" aria-hidden="true" />
                   Excluir
                 </>
               )}
@@ -260,6 +303,9 @@ export const VagaCard = memo(function VagaCard({ vaga }: VagaCardProps) {
       </AlertDialog>
     </>
   );
-});
+}
 
-VagaCard.displayName = "VagaCard";
+VagaCardComponent.displayName = "VagaCard";
+
+export const VagaCard = memo(VagaCardComponent);
+export default VagaCard;
