@@ -1284,9 +1284,21 @@ export type Database = {
     }
     Functions: {
       cleanup_old_logs: { Args: never; Returns: undefined }
+      get_user_permissions: {
+        Args: { _user_id: string }
+        Returns: {
+          action: string
+          module: string
+          name: string
+        }[]
+      }
       get_user_roles: {
         Args: { _user_id: string }
         Returns: Database["public"]["Enums"]["app_role"][]
+      }
+      has_permission: {
+        Args: { _action: string; _module: string; _user_id: string }
+        Returns: boolean
       }
       has_role: {
         Args: {
