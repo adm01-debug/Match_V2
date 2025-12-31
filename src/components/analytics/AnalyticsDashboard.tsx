@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ReportFilters, type ReportFiltersState } from "./reports/ReportFilters";
-import { ReportChart } from "./reports/ReportChart";
+import { ReportFilters, type ReportFiltersState } from "@/components/reports/ReportFilters";
+import { ReportChart } from "@/components/reports/ReportChart";
 import { Badge } from "@/components/ui/badge";
-import { TrendingUp, TrendingDown, Users, Briefcase, Clock, Target, BarChart3 } from "lucide-react";
+import { TrendingUp, TrendingDown, Users, Briefcase, Clock, Target } from "lucide-react";
 import { subDays } from "date-fns";
 
 interface KPICardProps {
