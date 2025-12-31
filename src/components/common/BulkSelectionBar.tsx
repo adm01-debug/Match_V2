@@ -64,7 +64,7 @@ export function BulkSelectionBar({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-48">
-            {actions.map((action, index) => (
+            {actions.map((action) => (
               <div key={action.id}>
                 {action.destructive && <DropdownMenuSeparator />}
                 <DropdownMenuItem

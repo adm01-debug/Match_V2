@@ -61,7 +61,7 @@ function VirtualizedListComponent<T>({
   }, []);
 
   // Memoized calculations
-  const { totalHeight, startIndex, endIndex, offsetY, visibleItems } = useMemo(() => {
+  const { totalHeight, startIndex, offsetY, visibleItems } = useMemo(() => {
     const total = items.length * itemHeight;
     const start = Math.max(0, Math.floor(scrollTop / itemHeight) - overscan);
     const end = Math.min(
