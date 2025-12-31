@@ -9,7 +9,7 @@ interface PermissionGateProps {
 }
 
 export function PermissionGate({ children, roles, fallback = null }: PermissionGateProps) {
-  const { hasRole, roles: userRoles } = useAuth();
+  const { hasRole } = useAuth();
 
   // If no roles specified, allow access
   if (!roles || roles.length === 0) {

@@ -29,14 +29,14 @@ export class ErrorBoundary extends Component<Props, State> {
     return { hasError: true, error };
   }
 
-  componentDidUpdate(prevProps: Props): void {
+  override componentDidUpdate(prevProps: Props): void {
     // Reset error state when resetKey changes
     if (this.props.resetKey !== prevProps.resetKey && this.state.hasError) {
       this.handleRetry();
     }
   }
 
-  componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
+  override componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     this.setState({ errorInfo });
     this.props.onError?.(error, errorInfo);
     
@@ -68,13 +68,13 @@ export class ErrorBoundary extends Component<Props, State> {
     }
   };
 
-  render(): ReactNode {
+  override render(): ReactNode {
     if (this.state.hasError) {
       if (this.props.fallback) {
         return this.props.fallback;
       }
 
-      const isDev = process.env.NODE_ENV === 'development';
+      const isDev = import.meta.env['DEV'];
 
       return (
         <div 
