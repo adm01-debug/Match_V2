@@ -31,6 +31,8 @@ export function PushNotificationPrompt({ onAllow, onDeny, onDismiss }: PushNotif
         return () => clearTimeout(timer);
       }
     }
+    
+    return undefined;
   }, []);
 
   const handleAllow = async () => {
