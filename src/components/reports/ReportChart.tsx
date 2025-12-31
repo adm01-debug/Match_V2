@@ -14,10 +14,11 @@ import { AlertCircle } from "lucide-react";
 
 export type ChartType = 'bar' | 'line' | 'pie' | 'area' | 'funnel';
 
-interface ChartData {
-  name: string;
-  value: number;
-  [key: string]: string | number;
+export interface ChartData {
+  name?: string;
+  value?: number;
+  label?: string;
+  [key: string]: string | number | undefined;
 }
 
 interface ReportChartProps {
