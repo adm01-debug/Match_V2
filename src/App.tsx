@@ -41,6 +41,18 @@ const PortalVagas = lazy(() => import("./pages/portal/PortalVagas"));
 const PortalPerfil = lazy(() => import("./pages/portal/PortalPerfil"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
+// Auth pages
+const LoginPage = lazy(() => import("./pages/auth/LoginPage"));
+const RegisterPage = lazy(() => import("./pages/auth/RegisterPage"));
+const ForgotPasswordPage = lazy(() => import("./pages/auth/ForgotPasswordPage"));
+const ResetPasswordPage = lazy(() => import("./pages/auth/ResetPasswordPage"));
+const TwoFactorAuthPage = lazy(() => import("./pages/auth/TwoFactorAuthPage"));
+
+// Security pages
+const RolesPage = lazy(() => import("./pages/security/RolesPage"));
+const PermissionsPage = lazy(() => import("./pages/security/PermissionsPage"));
+const RateLimitDashboard = lazy(() => import("./pages/security/RateLimitDashboard"));
+
 // Loading fallback component
 const PageLoader = () => (
   <div className="min-h-screen flex items-center justify-center">
@@ -103,6 +115,16 @@ function App() {
 
                         {/* Autenticação */}
                         <Route path="/auth" element={<AuthPage />} />
+                        <Route path="/auth/login" element={<LoginPage />} />
+                        <Route path="/auth/register" element={<RegisterPage />} />
+                        <Route path="/auth/forgot-password" element={<ForgotPasswordPage />} />
+                        <Route path="/auth/reset-password" element={<ResetPasswordPage />} />
+                        <Route path="/auth/2fa" element={<ProtectedRoute><TwoFactorAuthPage /></ProtectedRoute>} />
+
+                        {/* Segurança - Admin Only */}
+                        <Route path="/security/roles" element={<ProtectedRoute requiredRoles={['admin']}><RolesPage /></ProtectedRoute>} />
+                        <Route path="/security/permissions" element={<ProtectedRoute requiredRoles={['admin']}><PermissionsPage /></ProtectedRoute>} />
+                        <Route path="/security/rate-limit" element={<ProtectedRoute requiredRoles={['admin']}><RateLimitDashboard /></ProtectedRoute>} />
 
                         {/* Diagnóstico - Rota Pública */}
                         <Route path="/diagnostico" element={<DiagnosticoPage />} />
