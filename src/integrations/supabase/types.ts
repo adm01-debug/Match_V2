@@ -14,6 +14,36 @@ export type Database = {
   }
   public: {
     Tables: {
+      allowed_countries: {
+        Row: {
+          added_by: string | null
+          country_code: string
+          country_name: string
+          created_at: string
+          id: string
+          is_active: boolean
+          updated_at: string
+        }
+        Insert: {
+          added_by?: string | null
+          country_code: string
+          country_name: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          updated_at?: string
+        }
+        Update: {
+          added_by?: string | null
+          country_code?: string
+          country_name?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          updated_at?: string
+        }
+        Relationships: []
+      }
       allowed_ips: {
         Row: {
           added_by: string | null
@@ -449,6 +479,39 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      geo_access_logs: {
+        Row: {
+          allowed: boolean
+          country_code: string | null
+          country_name: string | null
+          created_at: string
+          id: string
+          ip_address: string
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          allowed: boolean
+          country_code?: string | null
+          country_name?: string | null
+          created_at?: string
+          id?: string
+          ip_address: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          allowed?: boolean
+          country_code?: string | null
+          country_name?: string | null
+          created_at?: string
+          id?: string
+          ip_address?: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
       }
       indicacoes: {
         Row: {
