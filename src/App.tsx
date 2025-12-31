@@ -53,6 +53,7 @@ const TwoFactorAuthPage = lazy(() => import("./pages/auth/TwoFactorAuthPage"));
 const RolesPage = lazy(() => import("./pages/security/RolesPage"));
 const PermissionsPage = lazy(() => import("./pages/security/PermissionsPage"));
 const RateLimitDashboard = lazy(() => import("./pages/security/RateLimitDashboard"));
+const SecuritySettingsPage = lazy(() => import("./pages/settings/SecuritySettingsPage"));
 
 // Loading fallback component
 const PageLoader = () => (
@@ -126,6 +127,9 @@ function App() {
                         {/* Segurança - Admin Only */}
                         <Route path="/security/roles" element={<ProtectedRoute requiredRoles={['admin']}><RolesPage /></ProtectedRoute>} />
                         <Route path="/security/permissions" element={<ProtectedRoute requiredRoles={['admin']}><PermissionsPage /></ProtectedRoute>} />
+                        
+                        {/* Configurações do Usuário */}
+                        <Route path="/configuracoes/seguranca" element={<ProtectedRoute><SecuritySettingsPage /></ProtectedRoute>} />
                         <Route path="/security/rate-limit" element={<ProtectedRoute requiredRoles={['admin']}><RateLimitDashboard /></ProtectedRoute>} />
 
                         {/* Diagnóstico - Rota Pública */}
