@@ -9,6 +9,7 @@ import {
   Smartphone, 
   Monitor, 
   Lock,
+  Bell,
   ChevronRight,
   AlertTriangle,
   CheckCircle2
@@ -22,6 +23,7 @@ import { TrustedDevicesManager } from '@/components/auth/TrustedDevicesManager';
 import { MFAMethodSelector } from '@/components/auth/MFAMethodSelector';
 import { ActiveSessionsPanel } from '@/components/security/ActiveSessionsPanel';
 import { SecurityActivityLog } from '@/components/security/SecurityActivityLog';
+import { PushNotificationSettings } from '@/components/security/PushNotificationSettings';
 import { ReauthDialog } from '@/components/auth/ReauthDialog';
 import { use2FA } from '@/hooks/use2FA';
 import { useReauth } from '@/hooks/useReauth';
@@ -131,7 +133,7 @@ export default function SecuritySettingsPage() {
 
       {/* Main Content */}
       <Tabs defaultValue="security" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="security" className="flex items-center gap-2">
             <Shield className="h-4 w-4" />
             <span className="hidden sm:inline">Segurança</span>
@@ -143,6 +145,10 @@ export default function SecuritySettingsPage() {
           <TabsTrigger value="sessions" className="flex items-center gap-2">
             <Monitor className="h-4 w-4" />
             <span className="hidden sm:inline">Sessões</span>
+          </TabsTrigger>
+          <TabsTrigger value="notifications" className="flex items-center gap-2">
+            <Bell className="h-4 w-4" />
+            <span className="hidden sm:inline">Alertas</span>
           </TabsTrigger>
           <TabsTrigger value="activity" className="flex items-center gap-2">
             <Lock className="h-4 w-4" />
@@ -238,6 +244,11 @@ export default function SecuritySettingsPage() {
         {/* Sessions Tab */}
         <TabsContent value="sessions">
           <ActiveSessionsPanel />
+        </TabsContent>
+
+        {/* Notifications Tab */}
+        <TabsContent value="notifications">
+          <PushNotificationSettings />
         </TabsContent>
 
         {/* Activity Tab */}
