@@ -14,6 +14,7 @@ import PortalProtectedRoute from "./components/portal/PortalProtectedRoute";
 import { Loader2 } from "lucide-react";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { SpeedInsights } from "@vercel/speed-insights/react";
+import { NewDeviceDetector } from "./components/auth/NewDeviceDetector";
 
 // Lazy loaded pages - Code splitting para melhor performance
 const Dashboard = lazy(() => import("./pages/Dashboard"));
@@ -84,6 +85,7 @@ function App() {
               <CandidatoAuthProvider>
                 <NotificationProvider>
                   <ErrorBoundary>
+                    <NewDeviceDetector />
                     <Suspense fallback={<PageLoader />}>
                       <Routes>
                         {/* Portal do Candidato - Rotas Públicas */}
