@@ -14,3 +14,6 @@ verify_jwt = false
 
 [functions.geo-check]
 verify_jwt = false
+
+[functions.password-reset-approval]
+verify_jwt = false
