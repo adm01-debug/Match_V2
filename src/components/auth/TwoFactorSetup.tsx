@@ -13,17 +13,34 @@ interface TwoFactorSetupProps {
   onCancel?: () => void;
 }
 
+// Generate a random base32 secret
+function generateSecret(): string {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+  let secret = '';
+  for (let i = 0; i < 16; i++) {
+    secret += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return secret;
+}
+
+// Generate recovery codes
+function generateRecoveryCodes(): string[] {
+  const codes: string[] = [];
+  for (let i = 0; i < 10; i++) {
+    const code = Math.random().toString(36).substring(2, 6).toUpperCase() + 
+                 '-' + 
+                 Math.random().toString(36).substring(2, 6).toUpperCase();
+    codes.push(code);
+  }
+  return codes;
+}
+
 export function TwoFactorSetup({ onComplete, onCancel }: TwoFactorSetupProps) {
   const { toast } = useToast();
   const { 
     isEnabled, 
-    isLoading, 
-    qrCodeUrl, 
-    secret, 
-    recoveryCodes,
-    generateSecret, 
-    enable2FA, 
-    generateRecoveryCodes 
+    isLoadingStatus,
+    enable2FA,
   } = use2FA();
 
   const [step, setStep] = useState<'generate' | 'verify' | 'recovery' | 'complete'>('generate');
@@ -32,13 +49,20 @@ export function TwoFactorSetup({ onComplete, onCancel }: TwoFactorSetupProps) {
   const [error, setError] = useState<string | null>(null);
   const [copiedSecret, setCopiedSecret] = useState(false);
   const [downloadedCodes, setDownloadedCodes] = useState(false);
+  const [secret, setSecret] = useState<string>("");
+  const [recoveryCodes, setRecoveryCodes] = useState<string[]>([]);
+  const [qrCodeUrl, setQrCodeUrl] = useState<string>("");
 
-  // Memoize generateSecret call to prevent infinite loops
+  // Initialize secret on mount
   const initializeSecret = useCallback(() => {
-    if (!qrCodeUrl && !isEnabled) {
-      generateSecret();
+    if (!secret && !isEnabled) {
+      const newSecret = generateSecret();
+      setSecret(newSecret);
+      // Generate QR code URL (using Google Charts API for simplicity)
+      const otpauthUrl = `otpauth://totp/MatchATS:user@example.com?secret=${newSecret}&issuer=MatchATS`;
+      setQrCodeUrl(`https://chart.googleapis.com/chart?chs=200x200&chld=M|0&cht=qr&chl=${encodeURIComponent(otpauthUrl)}`);
     }
-  }, [qrCodeUrl, isEnabled, generateSecret]);
+  }, [secret, isEnabled]);
 
   useEffect(() => {
     initializeSecret();
@@ -65,17 +89,16 @@ export function TwoFactorSetup({ onComplete, onCancel }: TwoFactorSetupProps) {
     setError(null);
 
     try {
-      const success = await enable2FA(verificationCode);
-      if (success) {
-        await generateRecoveryCodes();
-        setStep('recovery');
-        toast({
-          title: "2FA Ativado!",
-          description: "Autenticação de dois fatores configurada com sucesso.",
-        });
-      } else {
-        setError("Código inválido. Verifique e tente novamente.");
-      }
+      const codes = generateRecoveryCodes();
+      setRecoveryCodes(codes);
+      
+      await enable2FA.mutateAsync({ secret, backup_codes: codes });
+      
+      setStep('recovery');
+      toast({
+        title: "2FA Ativado!",
+        description: "Autenticação de dois fatores configurada com sucesso.",
+      });
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Erro ao verificar código. Tente novamente.";
       setError(message);
@@ -112,7 +135,7 @@ Data: ${new Date().toLocaleDateString('pt-BR')}
 IMPORTANTE: Guarde estes códigos em local seguro!
 Cada código só pode ser usado uma vez.
 
-${recoveryCodes.map((code, i) => `${i + 1}. ${code}`).join('\n')}
+${recoveryCodes.map((code: string, i: number) => `${i + 1}. ${code}`).join('\n')}
 
 ========================================
 Se você perder acesso ao seu autenticador,
@@ -146,7 +169,7 @@ use um destes códigos para fazer login.
     onComplete?.();
   };
 
-  if (isLoading) {
+  if (isLoadingStatus) {
     return (
       <Card className="w-full max-w-md mx-auto">
         <CardContent className="flex items-center justify-center py-8">
@@ -279,7 +302,7 @@ use um destes códigos para fazer login.
             </Alert>
 
             <div className="grid grid-cols-2 gap-2 p-4 bg-muted rounded-lg" role="list" aria-label="Códigos de recuperação">
-              {recoveryCodes?.map((code, index) => (
+              {recoveryCodes?.map((code: string, index: number) => (
                 <Badge key={`recovery-${index}`} variant="secondary" className="font-mono justify-center py-2" role="listitem">
                   {code}
                 </Badge>

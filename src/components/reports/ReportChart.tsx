@@ -15,9 +15,6 @@ import { AlertCircle } from "lucide-react";
 export type ChartType = 'bar' | 'line' | 'pie' | 'area' | 'funnel';
 
 export interface ChartData {
-  name?: string;
-  value?: number;
-  label?: string;
   [key: string]: string | number | undefined;
 }
 
@@ -171,7 +168,7 @@ function ReportChartComponent({
               >
                 {data.map((entry, index) => (
                   <Cell 
-                    key={`pie-cell-${entry.name || index}-${index}`} 
+                    key={`pie-cell-${String(entry[nameKey] || index)}-${index}`} 
                     fill={colors[index % colors.length]} 
                   />
                 ))}
@@ -196,7 +193,7 @@ function ReportChartComponent({
                 />
                 {data.map((entry, index) => (
                   <Cell 
-                    key={`funnel-cell-${entry.name || index}-${index}`} 
+                    key={`funnel-cell-${String(entry[nameKey] || index)}-${index}`} 
                     fill={colors[index % colors.length]} 
                   />
                 ))}

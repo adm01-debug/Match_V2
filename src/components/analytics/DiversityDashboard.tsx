@@ -1,7 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { ReportChart } from '@/components/reports/ReportChart';
+import { ReportChart, type ChartData } from '@/components/reports/ReportChart';
 import { Users, Target, TrendingUp, Shield } from 'lucide-react';
 
 interface DiversityMetric { label: string; current: number; target: number; benchmark?: number; }
@@ -17,6 +17,12 @@ interface DiversityDashboardProps {
 export function DiversityDashboard({ genderDistribution, metrics, diversityIndex, industryBenchmark }: DiversityDashboardProps) {
   const indexDiff = diversityIndex - industryBenchmark;
   const isAboveBenchmark = indexDiff >= 0;
+
+  // Convert GenderData to ChartData format
+  const chartData: ChartData[] = genderDistribution.map(item => ({
+    label: item.label,
+    value: item.value,
+  }));
 
   return (
     <div className="space-y-6">
@@ -83,7 +89,7 @@ export function DiversityDashboard({ genderDistribution, metrics, diversityIndex
             <CardDescription>Autodeclaração dos candidatos</CardDescription>
           </CardHeader>
           <CardContent>
-            <ReportChart type="pie" data={genderDistribution} dataKey="value" nameKey="label" height={250} />
+            <ReportChart type="pie" data={chartData} dataKey="value" nameKey="label" height={250} />
           </CardContent>
         </Card>
 

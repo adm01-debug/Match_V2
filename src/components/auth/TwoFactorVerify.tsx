@@ -8,7 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { use2FA } from "@/hooks/use2FA";
 import { Shield, AlertTriangle, Loader2, KeyRound } from "lucide-react";
 
-interface TwoFactorVerifyProps {
+export interface TwoFactorVerifyProps {
   onSuccess: () => void;
   onCancel?: () => void;
   maxAttempts?: number;
@@ -16,7 +16,7 @@ interface TwoFactorVerifyProps {
 
 export function TwoFactorVerify({ onSuccess, onCancel, maxAttempts = 5 }: TwoFactorVerifyProps) {
   const { toast } = useToast();
-  const { verify2FA, verifyRecoveryCode } = use2FA();
+  const { verify2FA } = use2FA();
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [code, setCode] = useState("");
@@ -35,7 +35,7 @@ export function TwoFactorVerify({ onSuccess, onCancel, maxAttempts = 5 }: TwoFac
   }, [useRecoveryCode]);
 
   const isLocked = attempts >= maxAttempts;
-  const codeLength = useRecoveryCode ? 8 : 6;
+  const codeLength = useRecoveryCode ? 9 : 6; // Recovery codes are like XXXX-XXXX (9 chars with dash)
   const remainingAttempts = maxAttempts - attempts;
 
   const handleVerify = async () => {
@@ -44,8 +44,10 @@ export function TwoFactorVerify({ onSuccess, onCancel, maxAttempts = 5 }: TwoFac
       return;
     }
 
-    if (code.length !== codeLength) {
-      setError(`O código deve ter ${codeLength} ${useRecoveryCode ? 'caracteres' : 'dígitos'}`);
+    const cleanCode = useRecoveryCode ? code : code.replace(/\D/g, '');
+    
+    if (cleanCode.length < (useRecoveryCode ? 8 : 6)) {
+      setError(`O código deve ter ${useRecoveryCode ? '8 caracteres' : '6 dígitos'}`);
       return;
     }
 
@@ -53,15 +55,9 @@ export function TwoFactorVerify({ onSuccess, onCancel, maxAttempts = 5 }: TwoFac
     setError(null);
 
     try {
-      let success: boolean;
+      const result = await verify2FA.mutateAsync(cleanCode);
       
-      if (useRecoveryCode) {
-        success = await verifyRecoveryCode(code);
-      } else {
-        success = await verify2FA(code, rememberDevice);
-      }
-
-      if (success) {
+      if (result) {
         toast({
           title: "Verificação concluída!",
           description: rememberDevice 
@@ -101,7 +97,7 @@ export function TwoFactorVerify({ onSuccess, onCancel, maxAttempts = 5 }: TwoFac
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && code.length === codeLength && !isVerifying && !isLocked) {
+    if (e.key === 'Enter' && code.length >= (useRecoveryCode ? 8 : 6) && !isVerifying && !isLocked) {
       handleVerify();
     }
   };
@@ -137,13 +133,13 @@ export function TwoFactorVerify({ onSuccess, onCancel, maxAttempts = 5 }: TwoFac
             id="2fa-code"
             type="text"
             inputMode={useRecoveryCode ? "text" : "numeric"}
-            pattern={useRecoveryCode ? "[A-Za-z0-9]*" : "[0-9]*"}
+            pattern={useRecoveryCode ? "[A-Za-z0-9-]*" : "[0-9]*"}
             maxLength={codeLength}
-            placeholder={useRecoveryCode ? "XXXXXXXX" : "000000"}
+            placeholder={useRecoveryCode ? "XXXX-XXXX" : "000000"}
             value={code}
             onChange={(e) => {
               const value = useRecoveryCode 
-                ? e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '')
+                ? e.target.value.toUpperCase()
                 : e.target.value.replace(/\D/g, '');
               setCode(value);
               setError(null);
@@ -189,7 +185,7 @@ export function TwoFactorVerify({ onSuccess, onCancel, maxAttempts = 5 }: TwoFac
 
         <Button 
           onClick={handleVerify} 
-          disabled={isVerifying || code.length < codeLength || isLocked}
+          disabled={isVerifying || code.length < (useRecoveryCode ? 8 : 6) || isLocked}
           className="w-full"
         >
           {isVerifying && <Loader2 className="h-4 w-4 animate-spin mr-2" aria-hidden="true" />}
