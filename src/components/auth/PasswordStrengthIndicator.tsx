@@ -4,12 +4,14 @@
  */
 
 import { memo, useMemo } from 'react';
-import { Check, X, AlertTriangle } from 'lucide-react';
+import { Check, X, AlertTriangle, Shield, ShieldAlert, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { usePasswordBreachCheck } from '@/hooks/usePasswordBreachCheck';
 
 interface PasswordStrengthProps {
   readonly password: string;
   readonly showRequirements?: boolean;
+  readonly checkBreach?: boolean;
   readonly className?: string;
 }
 
@@ -25,6 +27,8 @@ interface Requirement {
   id: string;
   label: string;
   met: boolean;
+  loading?: boolean;
+  critical?: boolean;
 }
 
 /**
@@ -157,13 +161,26 @@ const RequirementsList = memo(({ requirements }: { requirements: Requirement[] }
         key={req.id}
         className={cn(
           'flex items-center gap-2 text-xs transition-colors',
-          req.met ? 'text-green-600 dark:text-green-500' : 'text-muted-foreground'
+          req.loading && 'text-muted-foreground',
+          !req.loading && req.met && !req.critical && 'text-green-600 dark:text-green-500',
+          !req.loading && !req.met && !req.critical && 'text-muted-foreground',
+          !req.loading && req.critical && !req.met && 'text-destructive font-medium'
         )}
       >
-        {req.met ? (
-          <Check className="h-3.5 w-3.5" />
+        {req.loading ? (
+          <Loader2 className="h-3.5 w-3.5 animate-spin" />
+        ) : req.met ? (
+          req.critical ? (
+            <ShieldAlert className="h-3.5 w-3.5 text-destructive" />
+          ) : (
+            <Check className="h-3.5 w-3.5" />
+          )
         ) : (
-          <X className="h-3.5 w-3.5" />
+          req.critical ? (
+            <Shield className="h-3.5 w-3.5" />
+          ) : (
+            <X className="h-3.5 w-3.5" />
+          )
         )}
         {req.label}
       </li>
@@ -178,10 +195,31 @@ RequirementsList.displayName = 'RequirementsList';
 export const PasswordStrengthIndicator = memo(({ 
   password, 
   showRequirements = true,
+  checkBreach = true,
   className 
 }: PasswordStrengthProps) => {
   const strength = useMemo(() => calculateStrength(password), [password]);
-  const requirements = useMemo(() => getRequirements(password), [password]);
+  const baseRequirements = useMemo(() => getRequirements(password), [password]);
+  const breachCheck = usePasswordBreachCheck(password, { debounceMs: 600, minLength: 6 });
+
+  const requirements = useMemo(() => {
+    if (!checkBreach) return baseRequirements;
+    
+    return [
+      ...baseRequirements,
+      {
+        id: 'breach',
+        label: breachCheck.isLoading 
+          ? 'Verificando vazamentos...' 
+          : breachCheck.isBreached 
+            ? `Senha vazada (${breachCheck.count.toLocaleString()}x)` 
+            : 'Não encontrada em vazamentos',
+        met: breachCheck.isBreached,
+        loading: breachCheck.isLoading,
+        critical: true
+      }
+    ];
+  }, [baseRequirements, checkBreach, breachCheck]);
 
   if (!password) return null;
 
@@ -201,9 +239,10 @@ PasswordStrengthIndicator.displayName = 'PasswordStrengthIndicator';
 export const usePasswordStrength = (password: string, minLevel: 'weak' | 'fair' | 'good' | 'strong' = 'fair') => {
   const strength = useMemo(() => calculateStrength(password), [password]);
   const requirements = useMemo(() => getRequirements(password), [password]);
+  const breachCheck = usePasswordBreachCheck(password, { debounceMs: 600, minLength: 6 });
   
   const levelOrder = { weak: 0, fair: 1, good: 2, strong: 3 };
-  const isValid = levelOrder[strength.level] >= levelOrder[minLevel];
+  const isValid = levelOrder[strength.level] >= levelOrder[minLevel] && !breachCheck.isBreached;
   const allRequirementsMet = requirements.every(r => r.met);
 
   return {
@@ -211,6 +250,7 @@ export const usePasswordStrength = (password: string, minLevel: 'weak' | 'fair' 
     requirements,
     isValid,
     allRequirementsMet,
+    breachCheck,
   };
 };
 
