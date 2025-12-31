@@ -1,75 +1,292 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useToast } from '@/hooks/use-toast';
 
-interface PushSubscription { endpoint: string; keys: { p256dh: string; auth: string }; }
+export interface PushSubscriptionData { 
+  endpoint: string; 
+  keys: { p256dh: string; auth: string }; 
+  expirationTime?: number | null;
+}
 
-export function usePushNotifications() {
+interface UsePushNotificationsReturn {
+  isSupported: boolean;
+  isSubscribed: boolean;
+  subscription: PushSubscriptionData | null;
+  permission: NotificationPermission;
+  isLoading: boolean;
+  error: string | null;
+  requestPermission: () => Promise<boolean>;
+  subscribe: () => Promise<PushSubscriptionData | null>;
+  unsubscribe: () => Promise<void>;
+  showNotification: (title: string, options?: NotificationOptions) => void;
+  checkSubscription: () => Promise<void>;
+}
+
+export function usePushNotifications(): UsePushNotificationsReturn {
   const [isSupported, setIsSupported] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
-  const [subscription, setSubscription] = useState<PushSubscription | null>(null);
+  const [subscription, setSubscription] = useState<PushSubscriptionData | null>(null);
   const [permission, setPermission] = useState<NotificationPermission>('default');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
+  const isMountedRef = useRef(true);
 
+  // Verificar suporte e subscription existente ao montar
   useEffect(() => {
-    setIsSupported('serviceWorker' in navigator && 'PushManager' in window);
-    if ('Notification' in window) setPermission(Notification.permission);
+    isMountedRef.current = true;
+    
+    const checkSupport = async () => {
+      const supported = 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
+      setIsSupported(supported);
+      
+      if ('Notification' in window) {
+        setPermission(Notification.permission);
+      }
+      
+      if (supported && Notification.permission === 'granted') {
+        // Verificar se já existe subscription
+        try {
+          const registration = await navigator.serviceWorker.ready;
+          const existingSub = await registration.pushManager.getSubscription();
+          
+          if (existingSub && isMountedRef.current) {
+            const subJson = existingSub.toJSON();
+            if (subJson.endpoint && subJson.keys?.p256dh && subJson.keys?.auth) {
+              setSubscription({
+                endpoint: subJson.endpoint,
+                keys: { 
+                  p256dh: subJson.keys.p256dh, 
+                  auth: subJson.keys.auth 
+                },
+                expirationTime: existingSub.expirationTime,
+              });
+              setIsSubscribed(true);
+            }
+          }
+        } catch (e) {
+          console.warn('[usePushNotifications] Error checking existing subscription:', e);
+        }
+      }
+    };
+    
+    checkSupport();
+    
+    return () => {
+      isMountedRef.current = false;
+    };
   }, []);
 
-  const requestPermission = useCallback(async () => {
-    if (!isSupported) return false;
+  const checkSubscription = useCallback(async () => {
+    if (!isSupported) return;
+    
+    try {
+      const registration = await navigator.serviceWorker.ready;
+      const existingSub = await registration.pushManager.getSubscription();
+      
+      if (!isMountedRef.current) return;
+      
+      if (existingSub) {
+        const subJson = existingSub.toJSON();
+        if (subJson.endpoint && subJson.keys?.p256dh && subJson.keys?.auth) {
+          setSubscription({
+            endpoint: subJson.endpoint,
+            keys: { p256dh: subJson.keys.p256dh, auth: subJson.keys.auth },
+            expirationTime: existingSub.expirationTime,
+          });
+          setIsSubscribed(true);
+        }
+      } else {
+        setSubscription(null);
+        setIsSubscribed(false);
+      }
+    } catch (e) {
+      console.warn('[usePushNotifications] Error checking subscription:', e);
+    }
+  }, [isSupported]);
+
+  const requestPermission = useCallback(async (): Promise<boolean> => {
+    if (!isSupported) {
+      setError('Notificações push não são suportadas neste navegador');
+      return false;
+    }
+    
+    setError(null);
+    setIsLoading(true);
+    
     try {
       const result = await Notification.requestPermission();
-      setPermission(result);
+      
+      if (isMountedRef.current) {
+        setPermission(result);
+      }
+      
+      if (result === 'denied') {
+        toast({ 
+          title: 'Permissão negada', 
+          description: 'Você negou as notificações. Altere nas configurações do navegador.', 
+          variant: 'destructive' 
+        });
+      }
+      
       return result === 'granted';
-    } catch (error) {
-      toast({ title: 'Erro', description: 'Não foi possível solicitar permissão.', variant: 'destructive' });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Erro desconhecido';
+      setError(message);
+      toast({ 
+        title: 'Erro', 
+        description: 'Não foi possível solicitar permissão.', 
+        variant: 'destructive' 
+      });
       return false;
+    } finally {
+      if (isMountedRef.current) {
+        setIsLoading(false);
+      }
     }
   }, [isSupported, toast]);
 
-  const subscribe = useCallback(async () => {
-    if (!isSupported || permission !== 'granted') return null;
+  const subscribe = useCallback(async (): Promise<PushSubscriptionData | null> => {
+    if (!isSupported) {
+      setError('Push notifications não suportadas');
+      return null;
+    }
+    
+    if (permission !== 'granted') {
+      setError('Permissão não concedida');
+      return null;
+    }
+    
+    const vapidKey = import.meta.env.VITE_VAPID_PUBLIC_KEY;
+    if (!vapidKey) {
+      setError('VAPID key não configurada');
+      console.error('[usePushNotifications] VITE_VAPID_PUBLIC_KEY not set');
+      toast({ 
+        title: 'Erro de configuração', 
+        description: 'Chave VAPID não configurada.', 
+        variant: 'destructive' 
+      });
+      return null;
+    }
+    
+    setError(null);
+    setIsLoading(true);
+    
     try {
       const registration = await navigator.serviceWorker.ready;
+      
+      // Cancelar subscription anterior se existir
+      const existingSub = await registration.pushManager.getSubscription();
+      if (existingSub) {
+        await existingSub.unsubscribe();
+      }
+      
       const sub = await registration.pushManager.subscribe({
         userVisibleOnly: true,
-        applicationServerKey: import.meta.env.VITE_VAPID_PUBLIC_KEY,
+        applicationServerKey: vapidKey,
       });
+      
       const subJson = sub.toJSON();
-      const pushSub: PushSubscription = {
-        endpoint: subJson.endpoint!,
-        keys: { p256dh: subJson.keys!.p256dh!, auth: subJson.keys!.auth! },
+      
+      if (!subJson.endpoint || !subJson.keys?.p256dh || !subJson.keys?.auth) {
+        throw new Error('Subscription inválida');
+      }
+      
+      const pushSub: PushSubscriptionData = {
+        endpoint: subJson.endpoint,
+        keys: { p256dh: subJson.keys.p256dh, auth: subJson.keys.auth },
+        expirationTime: sub.expirationTime,
       };
-      setSubscription(pushSub);
-      setIsSubscribed(true);
+      
+      if (isMountedRef.current) {
+        setSubscription(pushSub);
+        setIsSubscribed(true);
+      }
+      
       toast({ title: 'Inscrito!', description: 'Você receberá notificações push.' });
       return pushSub;
-    } catch (error) {
-      toast({ title: 'Erro', description: 'Falha ao inscrever para notificações.', variant: 'destructive' });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Erro desconhecido';
+      setError(message);
+      console.error('[usePushNotifications] Subscribe error:', err);
+      toast({ 
+        title: 'Erro', 
+        description: 'Falha ao inscrever para notificações.', 
+        variant: 'destructive' 
+      });
       return null;
+    } finally {
+      if (isMountedRef.current) {
+        setIsLoading(false);
+      }
     }
   }, [isSupported, permission, toast]);
 
-  const unsubscribe = useCallback(async () => {
+  const unsubscribe = useCallback(async (): Promise<void> => {
+    setError(null);
+    setIsLoading(true);
+    
     try {
       const registration = await navigator.serviceWorker.ready;
       const sub = await registration.pushManager.getSubscription();
-      if (sub) await sub.unsubscribe();
-      setSubscription(null);
-      setIsSubscribed(false);
+      
+      if (sub) {
+        await sub.unsubscribe();
+      }
+      
+      if (isMountedRef.current) {
+        setSubscription(null);
+        setIsSubscribed(false);
+      }
+      
       toast({ title: 'Cancelado', description: 'Notificações push desativadas.' });
-    } catch (error) {
-      toast({ title: 'Erro', description: 'Falha ao cancelar inscrição.', variant: 'destructive' });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Erro desconhecido';
+      setError(message);
+      toast({ 
+        title: 'Erro', 
+        description: 'Falha ao cancelar inscrição.', 
+        variant: 'destructive' 
+      });
+    } finally {
+      if (isMountedRef.current) {
+        setIsLoading(false);
+      }
     }
   }, [toast]);
 
-  const showNotification = useCallback((title: string, options?: NotificationOptions) => {
-    if (permission === 'granted') {
-      new Notification(title, { icon: '/favicon.ico', badge: '/favicon.ico', ...options });
+  const showNotification = useCallback((title: string, options?: NotificationOptions): void => {
+    if (permission !== 'granted') {
+      console.warn('[usePushNotifications] Permission not granted');
+      return;
+    }
+    
+    try {
+      const defaultOptions: NotificationOptions = {
+        icon: '/favicon.ico',
+        badge: '/favicon.ico',
+        tag: `match-${Date.now()}`,
+        ...options,
+      };
+      
+      new Notification(title, defaultOptions);
+    } catch (err) {
+      console.error('[usePushNotifications] Error showing notification:', err);
     }
   }, [permission]);
 
-  return { isSupported, isSubscribed, subscription, permission, requestPermission, subscribe, unsubscribe, showNotification };
+  return { 
+    isSupported, 
+    isSubscribed, 
+    subscription, 
+    permission, 
+    isLoading,
+    error,
+    requestPermission, 
+    subscribe, 
+    unsubscribe, 
+    showNotification,
+    checkSubscription,
+  };
 }
 
 export default usePushNotifications;
