@@ -20,42 +20,21 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    onVerify: async (code) => {
-      console.log('Verificando:', code);
-      return code === '123456';
-    },
-    onUseRecoveryCode: () => console.log('Usar código de recuperação'),
+    onSuccess: () => console.log('Verificação bem sucedida!'),
+    onCancel: () => console.log('Verificação cancelada'),
   },
 };
 
-export const WithError: Story = {
+export const WithCancel: Story = {
   args: {
-    ...Default.args,
-    onVerify: async () => false,
+    onSuccess: () => console.log('Verificação bem sucedida!'),
+    onCancel: () => alert('Cancelado!'),
   },
 };
 
-export const Loading: Story = {
+export const LimitedAttempts: Story = {
   args: {
-    ...Default.args,
-    onVerify: async () => {
-      await new Promise((r) => setTimeout(r, 2000));
-      return true;
-    },
-  },
-};
-
-export const WithRecoveryOption: Story = {
-  args: {
-    ...Default.args,
-    showRecoveryOption: true,
-  },
-};
-
-export const Locked: Story = {
-  args: {
-    ...Default.args,
-    remainingAttempts: 0,
-    lockoutTime: 300,
+    onSuccess: () => console.log('Verificação bem sucedida!'),
+    maxAttempts: 3,
   },
 };

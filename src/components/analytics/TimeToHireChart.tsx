@@ -2,8 +2,9 @@ import { useMemo, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { ReportChart } from '@/components/reports/ReportChart';
-import { Clock, TrendingDown, TrendingUp, Target, Minus } from 'lucide-react';
+import { ReportChart, type ChartData } from '@/components/reports/ReportChart';
+import { TrendingDown, TrendingUp, Target, Minus } from 'lucide-react';
+import { Clock } from 'lucide-react';
 
 interface TimeToHireData {
   period: string;
@@ -58,14 +59,23 @@ export function TimeToHireChart({
 
   const bestDepartment = sortedDepartments[0];
 
-  // Memoize chart data transformation
-  const departmentChartData = useMemo(() => {
+  // Memoize chart data transformation - convert to ChartData format
+  const departmentChartData: ChartData[] = useMemo(() => {
     return sortedDepartments.map(d => ({ 
       label: d.department, 
       value: d.avgDays,
       hires: d.hires 
     }));
   }, [sortedDepartments]);
+
+  // Convert TimeToHireData to ChartData format
+  const trendChartData: ChartData[] = useMemo(() => {
+    return data.map(d => ({
+      period: d.period,
+      days: d.days,
+      target: d.target,
+    }));
+  }, [data]);
 
   const renderTrendIcon = () => {
     if (previousAvg === 0) {
@@ -171,10 +181,10 @@ export function TimeToHireChart({
         {/* Chart */}
         <div role="img" aria-label={`Gráfico de tempo de contratação - ${view === 'trend' ? 'tendência' : 'por área'}`}>
           {view === 'trend' ? (
-            data?.length > 0 ? (
+            trendChartData.length > 0 ? (
               <ReportChart
                 type="line"
-                data={data}
+                data={trendChartData}
                 dataKey="days"
                 nameKey="period"
                 height={300}

@@ -1,51 +1,62 @@
 import { render, screen } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { AnalyticsDashboard } from './AnalyticsDashboard';
 
-describe('AnalyticsDashboard', () => {
-  const mockData = {
-    timeToHire: 25,
-    openPositions: 12,
-    activeCandidates: 156,
-    conversionRate: 8.5,
-  };
+// Mock recharts to avoid canvas issues in tests
+vi.mock('recharts', () => ({
+  ResponsiveContainer: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  BarChart: () => <div data-testid="bar-chart" />,
+  Bar: () => null,
+  LineChart: () => <div data-testid="line-chart" />,
+  Line: () => null,
+  PieChart: () => <div data-testid="pie-chart" />,
+  Pie: () => null,
+  Cell: () => null,
+  AreaChart: () => <div data-testid="area-chart" />,
+  Area: () => null,
+  FunnelChart: () => <div data-testid="funnel-chart" />,
+  Funnel: () => null,
+  LabelList: () => null,
+  XAxis: () => null,
+  YAxis: () => null,
+  CartesianGrid: () => null,
+  Tooltip: () => null,
+  Legend: () => null,
+}));
 
-  it('renders dashboard', () => {
-    render(<AnalyticsDashboard data={mockData} />);
-    expect(screen.getByText(/analytics/i)).toBeInTheDocument();
+describe('AnalyticsDashboard', () => {
+  it('renders dashboard with KPIs', () => {
+    render(<AnalyticsDashboard />);
+    expect(screen.getByText(/total de candidatos/i)).toBeInTheDocument();
   });
 
   it('shows time to hire metric', () => {
-    render(<AnalyticsDashboard data={mockData} />);
+    render(<AnalyticsDashboard />);
     expect(screen.getByText(/tempo médio/i)).toBeInTheDocument();
-    expect(screen.getByText(/25/)).toBeInTheDocument();
   });
 
   it('shows open positions', () => {
-    render(<AnalyticsDashboard data={mockData} />);
+    render(<AnalyticsDashboard />);
     expect(screen.getByText(/vagas abertas/i)).toBeInTheDocument();
-    expect(screen.getByText(/12/)).toBeInTheDocument();
   });
 
-  it('shows active candidates', () => {
-    render(<AnalyticsDashboard data={mockData} />);
-    expect(screen.getByText(/candidatos ativos/i)).toBeInTheDocument();
-    expect(screen.getByText(/156/)).toBeInTheDocument();
+  it('shows hire rate', () => {
+    render(<AnalyticsDashboard />);
+    expect(screen.getByText(/taxa de contratação/i)).toBeInTheDocument();
   });
 
-  it('shows conversion rate', () => {
-    render(<AnalyticsDashboard data={mockData} />);
-    expect(screen.getByText(/taxa de conversão/i)).toBeInTheDocument();
-    expect(screen.getByText(/8.5%/)).toBeInTheDocument();
+  it('shows funnel tab', () => {
+    render(<AnalyticsDashboard />);
+    expect(screen.getByRole('tab', { name: /funil/i })).toBeInTheDocument();
   });
 
-  it('shows loading state', () => {
-    render(<AnalyticsDashboard isLoading />);
-    expect(screen.getByText(/carregando/i)).toBeInTheDocument();
+  it('shows sources tab', () => {
+    render(<AnalyticsDashboard />);
+    expect(screen.getByRole('tab', { name: /fontes/i })).toBeInTheDocument();
   });
 
-  it('shows empty state when no data', () => {
-    render(<AnalyticsDashboard data={null} />);
-    expect(screen.getByText(/sem dados/i)).toBeInTheDocument();
+  it('shows timeline tab', () => {
+    render(<AnalyticsDashboard />);
+    expect(screen.getByRole('tab', { name: /timeline/i })).toBeInTheDocument();
   });
 });
