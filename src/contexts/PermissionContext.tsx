@@ -1,115 +1,107 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode, useCallback, useMemo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
 
-type Permission = 'read' | 'write' | 'delete' | 'admin';
-type Resource = 'candidatos' | 'vagas' | 'entrevistas' | 'avaliacoes' | 'relatorios' | 'configuracoes' | 'usuarios';
-
-interface PermissionMap {
-  [resource: string]: Permission[];
+export interface Permission {
+  module: string;
+  action: string;
+  name: string;
 }
 
 interface PermissionContextType {
-  permissions: PermissionMap;
-  role: string | null;
-  hasPermission: (resource: Resource, permission: Permission) => boolean;
-  canRead: (resource: Resource) => boolean;
-  canWrite: (resource: Resource) => boolean;
-  canDelete: (resource: Resource) => boolean;
+  permissions: Permission[];
+  loading: boolean;
+  hasPermission: (module: string, action: string) => boolean;
+  hasAnyPermission: (checks: Array<{ module: string; action: string }>) => boolean;
+  hasAllPermissions: (checks: Array<{ module: string; action: string }>) => boolean;
+  canAccess: (module: string) => boolean;
+  refreshPermissions: () => Promise<void>;
   isAdmin: boolean;
-  isLoading: boolean;
 }
 
-const DEFAULT_PERMISSIONS: Record<string, PermissionMap> = {
-  admin: {
-    candidatos: ['read', 'write', 'delete', 'admin'],
-    vagas: ['read', 'write', 'delete', 'admin'],
-    entrevistas: ['read', 'write', 'delete', 'admin'],
-    avaliacoes: ['read', 'write', 'delete', 'admin'],
-    relatorios: ['read', 'write', 'delete', 'admin'],
-    configuracoes: ['read', 'write', 'delete', 'admin'],
-    usuarios: ['read', 'write', 'delete', 'admin'],
-  },
-  recrutador: {
-    candidatos: ['read', 'write'],
-    vagas: ['read', 'write'],
-    entrevistas: ['read', 'write'],
-    avaliacoes: ['read', 'write'],
-    relatorios: ['read'],
-    configuracoes: ['read'],
-    usuarios: [],
-  },
-  visualizador: {
-    candidatos: ['read'],
-    vagas: ['read'],
-    entrevistas: ['read'],
-    avaliacoes: ['read'],
-    relatorios: ['read'],
-    configuracoes: [],
-    usuarios: [],
-  },
-};
-
 const defaultContext: PermissionContextType = {
-  permissions: DEFAULT_PERMISSIONS.visualizador,
-  role: null,
-  hasPermission: () => true,
-  canRead: () => true,
-  canWrite: () => true,
-  canDelete: () => false,
+  permissions: [],
+  loading: true,
+  hasPermission: () => false,
+  hasAnyPermission: () => false,
+  hasAllPermissions: () => false,
+  canAccess: () => false,
+  refreshPermissions: async () => {},
   isAdmin: false,
-  isLoading: false,
 };
 
 const PermissionContext = createContext<PermissionContextType>(defaultContext);
 
 export function PermissionProvider({ children }: { children: ReactNode }) {
-  const [permissions, setPermissions] = useState<PermissionMap>(DEFAULT_PERMISSIONS.visualizador);
-  const [role, setRole] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [userId, setUserId] = useState<string | null>(null);
+  const { user, roles } = useAuth();
+  const [permissions, setPermissions] = useState<Permission[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => {
-      setUserId(data.user?.id || null);
-    });
-  }, []);
-
-  useEffect(() => {
-    async function loadPermissions() {
-      if (!userId) {
-        setPermissions(DEFAULT_PERMISSIONS.visualizador);
-        setRole(null);
-        setIsLoading(false);
-        return;
-      }
-
-      try {
-        const { data } = await supabase.from('profiles').select('role').eq('id', userId).single();
-        const userRole = data?.role || 'visualizador';
-        setRole(userRole);
-        setPermissions(DEFAULT_PERMISSIONS[userRole] || DEFAULT_PERMISSIONS.visualizador);
-      } catch (error) {
-        setPermissions(DEFAULT_PERMISSIONS.visualizador);
-        setRole('visualizador');
-      } finally {
-        setIsLoading(false);
-      }
+  const fetchPermissions = useCallback(async () => {
+    if (!user) {
+      setPermissions([]);
+      setLoading(false);
+      return;
     }
 
-    loadPermissions();
-  }, [userId]);
+    try {
+      const { data, error } = await supabase.rpc('get_user_permissions', {
+        _user_id: user.id
+      });
 
-  const hasPermission = (resource: Resource, permission: Permission): boolean => {
-    return permissions[resource]?.includes(permission) || false;
-  };
+      if (error) {
+        console.error('Error fetching permissions:', error);
+        setPermissions([]);
+      } else {
+        setPermissions(data || []);
+      }
+    } catch (error) {
+      console.error('Error fetching permissions:', error);
+      setPermissions([]);
+    } finally {
+      setLoading(false);
+    }
+  }, [user]);
 
-  const canRead = (resource: Resource) => hasPermission(resource, 'read');
-  const canWrite = (resource: Resource) => hasPermission(resource, 'write');
-  const canDelete = (resource: Resource) => hasPermission(resource, 'delete');
-  const isAdmin = role === 'admin';
+  useEffect(() => {
+    fetchPermissions();
+  }, [fetchPermissions]);
+
+  // Check if user has a specific permission
+  const hasPermission = useCallback((module: string, action: string): boolean => {
+    return permissions.some(p => p.module === module && p.action === action);
+  }, [permissions]);
+
+  // Check if user has any of the specified permissions
+  const hasAnyPermission = useCallback((checks: Array<{ module: string; action: string }>): boolean => {
+    return checks.some(check => hasPermission(check.module, check.action));
+  }, [hasPermission]);
+
+  // Check if user has all specified permissions
+  const hasAllPermissions = useCallback((checks: Array<{ module: string; action: string }>): boolean => {
+    return checks.every(check => hasPermission(check.module, check.action));
+  }, [hasPermission]);
+
+  // Check if user can access a module (has any permission for that module)
+  const canAccess = useCallback((module: string): boolean => {
+    return permissions.some(p => p.module === module);
+  }, [permissions]);
+
+  const isAdmin = useMemo(() => roles.includes('admin'), [roles]);
+
+  const value = useMemo(() => ({
+    permissions,
+    loading,
+    hasPermission,
+    hasAnyPermission,
+    hasAllPermissions,
+    canAccess,
+    refreshPermissions: fetchPermissions,
+    isAdmin,
+  }), [permissions, loading, hasPermission, hasAnyPermission, hasAllPermissions, canAccess, fetchPermissions, isAdmin]);
 
   return (
-    <PermissionContext.Provider value={{ permissions, role, hasPermission, canRead, canWrite, canDelete, isAdmin, isLoading }}>
+    <PermissionContext.Provider value={value}>
       {children}
     </PermissionContext.Provider>
   );
