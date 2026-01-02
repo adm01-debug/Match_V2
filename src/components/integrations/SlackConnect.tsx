@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from 'react';
+import { memo, useState, useCallback, useMemo } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -41,7 +41,7 @@ const DEFAULT_NOTIFICATIONS: NotificationSetting[] = [
   { event: 'job_published', label: 'Vaga publicada', enabled: false },
 ];
 
-export function SlackConnect({
+function SlackConnectComponent({
   isConnected,
   workspace,
   channels = [],
@@ -240,3 +240,8 @@ export function SlackConnect({
     </Card>
   );
 }
+
+SlackConnectComponent.displayName = 'SlackConnect';
+
+export const SlackConnect = memo(SlackConnectComponent);
+export default SlackConnect;
