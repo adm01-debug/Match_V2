@@ -1,12 +1,25 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
-import { ReportFilters } from './ReportFilters';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { ReportFilters, ReportFiltersState } from './ReportFilters';
+import { subDays } from 'date-fns';
 
 describe('ReportFilters', () => {
+  const createDefaultFilters = (): ReportFiltersState => ({
+    dateRange: { from: subDays(new Date(), 30), to: new Date() },
+    vagas: [],
+    recrutadores: [],
+    fontes: [],
+    etapas: [],
+  });
+
   const defaultProps = {
-    filters: { dateRange: { from: new Date(), to: new Date() }, status: 'all' },
+    filters: createDefaultFilters(),
     onFiltersChange: vi.fn(),
   };
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
 
   it('renders filter controls', () => {
     render(<ReportFilters {...defaultProps} />);
@@ -18,27 +31,42 @@ describe('ReportFilters', () => {
     expect(screen.getByText(/período/i)).toBeInTheDocument();
   });
 
-  it('calls onFiltersChange when date changes', () => {
+  it('renders vaga selector', () => {
     render(<ReportFilters {...defaultProps} />);
-    const select = screen.getByRole('combobox');
-    fireEvent.change(select, { target: { value: 'last_30_days' } });
-    expect(defaultProps.onFiltersChange).toHaveBeenCalled();
+    expect(screen.getByText(/todas as vagas/i)).toBeInTheDocument();
   });
 
-  it('shows status filter', () => {
+  it('renders recrutador selector', () => {
     render(<ReportFilters {...defaultProps} />);
-    expect(screen.getByText(/status/i)).toBeInTheDocument();
+    expect(screen.getByText(/todos os recrutadores/i)).toBeInTheDocument();
   });
 
-  it('allows clearing filters', () => {
-    render(<ReportFilters {...defaultProps} />);
+  it('shows active filter count when filters are applied', () => {
+    const filtersWithActive: ReportFiltersState = {
+      ...createDefaultFilters(),
+      fontes: ['linkedin'],
+      etapas: ['triagem'],
+    };
+    render(<ReportFilters {...defaultProps} filters={filtersWithActive} />);
+    expect(screen.getByText(/2 ativos/i)).toBeInTheDocument();
+  });
+
+  it('shows clear button when filters are active', () => {
+    const filtersWithActive: ReportFiltersState = {
+      ...createDefaultFilters(),
+      fontes: ['linkedin'],
+    };
+    render(<ReportFilters {...defaultProps} filters={filtersWithActive} />);
+    expect(screen.getByRole('button', { name: /limpar/i })).toBeInTheDocument();
+  });
+
+  it('calls onFiltersChange when clearing filters', () => {
+    const filtersWithActive: ReportFiltersState = {
+      ...createDefaultFilters(),
+      fontes: ['linkedin'],
+    };
+    render(<ReportFilters {...defaultProps} filters={filtersWithActive} />);
     fireEvent.click(screen.getByRole('button', { name: /limpar/i }));
     expect(defaultProps.onFiltersChange).toHaveBeenCalled();
-  });
-
-  it('shows active filter count', () => {
-    const filters = { ...defaultProps.filters, status: 'active', source: 'linkedin' };
-    render(<ReportFilters {...defaultProps} filters={filters} />);
-    expect(screen.getByText(/2 filtros/i)).toBeInTheDocument();
   });
 });

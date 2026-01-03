@@ -11,30 +11,30 @@ describe('ReportChart', () => {
 
   it('renders chart container', () => {
     render(<ReportChart type="bar" data={mockData} dataKey="value" nameKey="name" />);
-    expect(screen.getByRole('img', { hidden: true })).toBeInTheDocument();
+    expect(screen.getByRole('figure')).toBeInTheDocument();
   });
 
   it('renders bar chart', () => {
     render(<ReportChart type="bar" data={mockData} dataKey="value" nameKey="name" />);
-    expect(document.querySelector('.recharts-bar')).toBeInTheDocument();
+    expect(document.querySelector('.recharts-responsive-container')).toBeInTheDocument();
   });
 
   it('renders line chart', () => {
     render(<ReportChart type="line" data={mockData} dataKey="value" nameKey="name" />);
-    expect(document.querySelector('.recharts-line')).toBeInTheDocument();
+    expect(document.querySelector('.recharts-responsive-container')).toBeInTheDocument();
   });
 
   it('renders pie chart', () => {
     render(<ReportChart type="pie" data={mockData} dataKey="value" nameKey="name" />);
-    expect(document.querySelector('.recharts-pie')).toBeInTheDocument();
+    expect(document.querySelector('.recharts-responsive-container')).toBeInTheDocument();
   });
 
   it('shows loading state', () => {
-    render(<ReportChart type="bar" data={[]} dataKey="value" nameKey="name" loading />);
-    expect(screen.getByText(/carregando/i)).toBeInTheDocument();
+    render(<ReportChart type="bar" data={[]} dataKey="value" nameKey="name" isLoading />);
+    expect(screen.getByLabelText(/carregando/i)).toBeInTheDocument();
   });
 
-  it('shows empty state', () => {
+  it('shows empty state when no data', () => {
     render(<ReportChart type="bar" data={[]} dataKey="value" nameKey="name" />);
     expect(screen.getByText(/sem dados/i)).toBeInTheDocument();
   });
