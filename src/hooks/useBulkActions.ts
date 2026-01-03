@@ -1,6 +1,22 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import type { LucideIcon } from 'lucide-react';
+
+/**
+ * Type for bulk action configuration
+ */
+export interface BulkAction<T = unknown> {
+  id: string;
+  label: string;
+  icon?: LucideIcon;
+  variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link';
+  confirm?: {
+    title: string;
+    description: string;
+  };
+  execute?: (items: T[]) => Promise<void>;
+}
 
 interface BulkActionResult {
   success: number;
@@ -70,8 +86,7 @@ export function useBulkActions(options: BulkActionOptions = {}) {
           const { error } = await supabase
             .from('candidatos')
             .update({ 
-              status: 'arquivado', 
-              archived_at: new Date().toISOString() 
+              status: 'arquivado'
             })
             .eq('id', id);
           
@@ -171,8 +186,8 @@ export function useBulkActions(options: BulkActionOptions = {}) {
         async (id) => {
           const { error } = await supabase
             .from('candidaturas')
-            .update({ etapa_id: stageId })
-            .eq('candidato_id', id);
+            .update({ etapa_atual: stageId })
+            .eq('candidato_auth_id', id);
           
           return { 
             success: !error, 
@@ -229,7 +244,7 @@ export function useBulkActions(options: BulkActionOptions = {}) {
         async (id) => {
           const { data: current, error: fetchError } = await supabase
             .from('candidatos')
-            .select('tags')
+            .select('habilidades')
             .eq('id', id)
             .single();
           
@@ -237,12 +252,12 @@ export function useBulkActions(options: BulkActionOptions = {}) {
             return { success: false, error: `ID ${id.slice(0, 8)}: ${fetchError.message}` };
           }
 
-          const currentTags = Array.isArray(current?.tags) ? current.tags : [];
+          const currentTags = Array.isArray(current?.habilidades) ? current.habilidades : [];
           const newTags = [...new Set([...currentTags, ...sanitizedTags])];
           
           const { error: updateError } = await supabase
             .from('candidatos')
-            .update({ tags: newTags })
+            .update({ habilidades: newTags })
             .eq('id', id);
           
           return { 
@@ -295,7 +310,7 @@ export function useBulkActions(options: BulkActionOptions = {}) {
         async (id) => {
           const { data: current, error: fetchError } = await supabase
             .from('candidatos')
-            .select('tags')
+            .select('habilidades')
             .eq('id', id)
             .single();
           
@@ -303,12 +318,12 @@ export function useBulkActions(options: BulkActionOptions = {}) {
             return { success: false, error: `ID ${id.slice(0, 8)}: ${fetchError.message}` };
           }
 
-          const currentTags = Array.isArray(current?.tags) ? current.tags : [];
-          const newTags = currentTags.filter(t => !tagsToRemove.has(t.toLowerCase()));
+          const currentTags = Array.isArray(current?.habilidades) ? current.habilidades : [];
+          const newTags = currentTags.filter((t: string) => !tagsToRemove.has(t.toLowerCase()));
           
           const { error: updateError } = await supabase
             .from('candidatos')
-            .update({ tags: newTags })
+            .update({ habilidades: newTags })
             .eq('id', id);
           
           return { 

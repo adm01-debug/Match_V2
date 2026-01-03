@@ -51,9 +51,9 @@ const TwoFactorAuthPage = lazy(() => import("./pages/auth/TwoFactorAuthPage"));
 
 // Security pages
 const RolesPage = lazy(() => import("./pages/security/RolesPage"));
-const PermissionsPage = lazy(() => import("./pages/security/PermissionsPage"));
 const RateLimitDashboard = lazy(() => import("./pages/security/RateLimitDashboard"));
 const SecuritySettingsPage = lazy(() => import("./pages/settings/SecuritySettingsPage"));
+// Note: PermissionsPage is accessed via admin routes
 
 // Loading fallback component
 const PageLoader = () => (
@@ -126,7 +126,6 @@ function App() {
 
                         {/* Segurança - Admin Only */}
                         <Route path="/security/roles" element={<ProtectedRoute requiredRoles={['admin']}><RolesPage /></ProtectedRoute>} />
-                        <Route path="/security/permissions" element={<ProtectedRoute requiredRoles={['admin']}><PermissionsPage /></ProtectedRoute>} />
                         
                         {/* Configurações do Usuário */}
                         <Route path="/configuracoes/seguranca" element={<ProtectedRoute><SecuritySettingsPage /></ProtectedRoute>} />
