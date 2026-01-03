@@ -81,8 +81,6 @@ function CandidatoKanbanCardComponent({ processo, onClick }: CandidatoKanbanCard
       )}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
-      role="button"
-      tabIndex={0}
       aria-label={`Candidato ${processo.candidatoNome}, score ${processo.matchScore}%, há ${processo.diasNaEtapa} ${daysLabel} na etapa`}
       aria-grabbed={isDragging}
       data-testid="candidato-kanban-card"

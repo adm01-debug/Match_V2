@@ -143,12 +143,12 @@ function CandidateTimelineComponent({
                 aria-hidden="true"
               />
               <div className="space-y-6">
-                {sortedEvents.map((event, index) => {
+                {sortedEvents.map((event) => {
                   const Icon = EVENT_ICONS[event.type] ?? FileText;
                   const color = EVENT_COLORS[event.type] ?? 'bg-gray-500';
                   const label = EVENT_LABELS[event.type] ?? event.type;
                   const formattedDate = formatEventDate(event.date);
-                  const stageValue = event.metadata?.stage;
+                  const stageValue = event.metadata?.['stage'];
 
                   return (
                     <article 
@@ -190,7 +190,7 @@ function CandidateTimelineComponent({
                           </p>
                         )}
                         
-                        {stageValue && typeof stageValue === 'string' && (
+                        {typeof stageValue === 'string' && stageValue && (
                           <Badge variant="outline" className="mt-2">
                             {stageValue}
                           </Badge>

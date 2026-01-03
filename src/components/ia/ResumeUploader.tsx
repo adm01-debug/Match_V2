@@ -64,9 +64,9 @@ export function ResumeUploader({
       const rejection = rejectedFiles[0];
       let errorMessage = 'Arquivo não aceito';
       
-      if (rejection.errors[0]?.code === 'file-too-large') {
+      if (rejection?.errors?.[0]?.code === 'file-too-large') {
         errorMessage = `Arquivo muito grande. Máximo: ${Math.round(maxSize / 1024 / 1024)}MB`;
-      } else if (rejection.errors[0]?.code === 'file-invalid-type') {
+      } else if (rejection?.errors?.[0]?.code === 'file-invalid-type') {
         errorMessage = `Formato não aceito. Use: ${acceptedFormats.join(', ')}`;
       }
       

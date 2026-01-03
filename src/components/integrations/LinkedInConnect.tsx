@@ -17,8 +17,8 @@ export function LinkedInConnect({ onProfileImported }: LinkedInConnectProps) {
   const handleConnect = async () => {
     setIsLoading(true);
     try {
-      const code = await linkedinService.openAuthPopup();
-      const token = await linkedinService.exchangeCodeForToken(code);
+      const authResult = await linkedinService.openAuthPopup();
+      const token = await linkedinService.exchangeCodeForToken(typeof authResult === 'string' ? authResult : authResult.code);
       const linkedInProfile = await linkedinService.getProfile(token);
       setProfile(linkedInProfile);
       setIsConnected(true);

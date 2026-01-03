@@ -20,11 +20,11 @@ export function ReportExport({ reportName, data, onExport }: ReportExportProps) 
   const [email, setEmail] = useState("");
 
   const exportToCSV = () => {
-    if (!data.length) return;
-    const headers = Object.keys(data[0]);
+    if (!data.length || !data[0]) return;
+    const headers = Object.keys(data[0] as object);
     const csvContent = [
       headers.join(","),
-      ...data.map(row => headers.map(h => `"${String(row[h] ?? "").replace(/"/g, '""')}"`).join(","))
+      ...data.map(row => headers.map(h => `"${String((row as Record<string, unknown>)[h] ?? "").replace(/"/g, '""')}"`).join(","))
     ].join("\n");
     downloadFile(csvContent, `${reportName}.csv`, "text/csv");
   };

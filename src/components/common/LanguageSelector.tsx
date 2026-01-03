@@ -24,14 +24,14 @@ export function LanguageSelector({ onChange }: LanguageSelectorProps) {
     onChange?.(currentLocale);
   }, [currentLocale, onChange]);
 
-  const currentLang = languages.find(l => l.code === currentLocale) || languages[0];
+  const currentLang = languages.find(l => l.code === currentLocale) ?? languages[0];
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="sm" className="gap-2">
           <Globe className="h-4 w-4" />
-          <span className="hidden sm:inline">{currentLang.flag}</span>
+          <span className="hidden sm:inline">{currentLang?.flag ?? '🌐'}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">

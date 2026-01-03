@@ -103,10 +103,12 @@ export function OnboardingTour({ steps = DEFAULT_STEPS, onComplete, forceShow }:
       const timer = setTimeout(() => setIsVisible(true), 500);
       return () => clearTimeout(timer);
     }
+    return undefined;
   }, [forceShow]);
 
   const updateSpotlight = useCallback(() => {
     const step = steps[currentStep];
+    if (!step) return;
     
     if (!step.target || step.position === 'center') {
       setSpotlight(null);
@@ -178,6 +180,7 @@ export function OnboardingTour({ steps = DEFAULT_STEPS, onComplete, forceShow }:
         window.removeEventListener('scroll', updateSpotlight);
       };
     }
+    return undefined;
   }, [isVisible, updateSpotlight]);
 
   const handleNext = () => {
@@ -212,6 +215,8 @@ export function OnboardingTour({ steps = DEFAULT_STEPS, onComplete, forceShow }:
   if (!isVisible) return null;
 
   const step = steps[currentStep];
+  if (!step) return null;
+  
   const progress = ((currentStep + 1) / steps.length) * 100;
   const Icon = step.icon || Sparkles;
   const isCenter = step.position === 'center' || !step.target;
