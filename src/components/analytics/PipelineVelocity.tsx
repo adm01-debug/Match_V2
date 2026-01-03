@@ -7,7 +7,7 @@ import { memo, useMemo } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { Zap, Clock, AlertTriangle, TrendingUp, ArrowRight } from 'lucide-react';
+import { Zap, AlertTriangle, TrendingUp, ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface StageVelocity {

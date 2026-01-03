@@ -28,7 +28,7 @@ export function ResumeEditForm({ data: initialData, onSave, onCancel }: ResumeEd
   const addExperience = () => {
     setData((prev) => ({
       ...prev,
-      experience: [...prev.experience, { title: '', company: '', startDate: '', description: '' }],
+      experience: [...prev.experience, { title: '', company: '', startDate: '', endDate: '', description: '', current: false, skills: [], location: '' }],
     }));
   };
 
@@ -46,7 +46,7 @@ export function ResumeEditForm({ data: initialData, onSave, onCancel }: ResumeEd
   const addEducation = () => {
     setData((prev) => ({
       ...prev,
-      education: [...prev.education, { degree: '', institution: '', year: '' }],
+      education: [...prev.education, { degree: '', institution: '', year: '', field: '', startDate: '', endDate: '' }],
     }));
   };
 
@@ -61,15 +61,23 @@ export function ResumeEditForm({ data: initialData, onSave, onCancel }: ResumeEd
     setData((prev) => ({ ...prev, education: prev.education.filter((_, i) => i !== index) }));
   };
 
+  const getSkillName = (skill: string | { name: string; level?: string }): string => {
+    return typeof skill === 'string' ? skill : skill.name;
+  };
+
   const addSkill = () => {
-    if (newSkill.trim() && !data.skills.includes(newSkill.trim())) {
-      setData((prev) => ({ ...prev, skills: [...prev.skills, newSkill.trim()] }));
-      setNewSkill('');
+    if (newSkill.trim()) {
+      const exists = data.skills.some(s => getSkillName(s) === newSkill.trim());
+      if (!exists) {
+        setData((prev) => ({ ...prev, skills: [...prev.skills, newSkill.trim()] }));
+        setNewSkill('');
+      }
     }
   };
 
-  const removeSkill = (skill: string) => {
-    setData((prev) => ({ ...prev, skills: prev.skills.filter((s) => s !== skill) }));
+  const removeSkill = (skillToRemove: string | { name: string; level?: string }) => {
+    const nameToRemove = getSkillName(skillToRemove);
+    setData((prev) => ({ ...prev, skills: prev.skills.filter((s) => getSkillName(s) !== nameToRemove) }));
   };
 
   return (
@@ -178,11 +186,14 @@ export function ResumeEditForm({ data: initialData, onSave, onCancel }: ResumeEd
             <Button variant="outline" onClick={addSkill}><Plus className="h-4 w-4" /></Button>
           </div>
           <div className="flex flex-wrap gap-2">
-            {data.skills.map((skill) => (
-              <Badge key={skill} variant="secondary" className="cursor-pointer" onClick={() => removeSkill(skill)}>
-                {skill} <Trash2 className="h-3 w-3 ml-1" />
-              </Badge>
-            ))}
+            {data.skills.map((skill, idx) => {
+              const skillName = getSkillName(skill);
+              return (
+                <Badge key={`${skillName}-${idx}`} variant="secondary" className="cursor-pointer" onClick={() => removeSkill(skill)}>
+                  {skillName} <Trash2 className="h-3 w-3 ml-1" />
+                </Badge>
+              );
+            })}
           </div>
         </CardContent>
       </Card>

@@ -1,4 +1,4 @@
-import { lazy, Suspense, ComponentType } from "react";
+import { lazy, Suspense } from "react";
 import { Loader2 } from "lucide-react";
 
 // Loading fallback component
@@ -7,22 +7,6 @@ const LoadingFallback = () => (
     <Loader2 className="h-8 w-8 animate-spin text-primary" />
   </div>
 );
-
-// Higher-order component for lazy loading with suspense
-export function withLazyLoading<P extends object>(
-  importFn: () => Promise<{ default: ComponentType<P> }>,
-  fallback: React.ReactNode = <LoadingFallback />
-) {
-  const LazyComponent = lazy(importFn);
-  
-  return function LazyWrapper(props: P) {
-    return (
-      <Suspense fallback={fallback}>
-        <LazyComponent {...props} />
-      </Suspense>
-    );
-  };
-}
 
 // Pre-configured lazy pages
 export const LazyDashboard = lazy(() => import("@/pages/Dashboard"));

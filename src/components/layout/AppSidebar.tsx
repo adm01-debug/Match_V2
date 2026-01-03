@@ -3,7 +3,6 @@
  * @module AppSidebar
  */
 
-import { memo, useMemo } from 'react';
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
@@ -16,7 +15,6 @@ import {
   Gift,
   BarChart3,
   Globe,
-  Settings,
   ChevronLeft,
   ChevronRight,
   LogOut,
@@ -44,24 +42,6 @@ import { cn } from "@/lib/utils";
 import { useAuth, AppRole } from "@/contexts/AuthContext";
 import { Badge } from "@/components/ui/badge";
 import { useOnboarding } from "@/hooks/useOnboarding";
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  useSidebar,
-} from "@/components/ui/sidebar";
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { cn } from "@/lib/utils";
-import { useAuth, AppRole } from "@/contexts/AuthContext";
-import { Badge } from "@/components/ui/badge";
 
 const menuItems = [
   {
@@ -135,8 +115,9 @@ export function AppSidebar() {
   };
 
   const getUserInitials = () => {
-    if (user?.user_metadata?.nome) {
-      return user.user_metadata.nome
+    const nome = user?.user_metadata?.['nome'] as string | undefined;
+    if (nome) {
+      return nome
         .split(' ')
         .slice(0, 2)
         .map((n: string) => n[0])
@@ -147,7 +128,8 @@ export function AppSidebar() {
   };
 
   const getUserName = () => {
-    return user?.user_metadata?.nome || user?.email?.split('@')[0] || 'Usuário';
+    const nome = user?.user_metadata?.['nome'] as string | undefined;
+    return nome || user?.email?.split('@')[0] || 'Usuário';
   };
 
   return (

@@ -24,10 +24,6 @@ function getConfidenceLabel(score: number): string {
   return 'Baixa';
 }
 
-function generateKey(prefix: string, item: Record<string, unknown>, index: number): string {
-  const identifier = item.id || item.name || item.title || item.degree || '';
-  return `${prefix}-${String(identifier).slice(0, 20)}-${index}`;
-}
 
 function ParsedResumePreviewComponent({ data, className, isLoading }: ParsedResumePreviewProps) {
   const confidencePercent = useMemo(() => Math.round(data.confidence * 100), [data.confidence]);
@@ -118,7 +114,7 @@ function ParsedResumePreviewComponent({ data, className, isLoading }: ParsedResu
           <CardContent>
             <div className="space-y-4" role="list" aria-label="Lista de experiências">
               {data.experience.map((exp, i) => (
-                <div key={generateKey('exp', exp, i)} role="listitem">
+                <div key={`exp-${exp.title}-${exp.company}-${i}`} role="listitem">
                   {i > 0 && <Separator className="mb-4" />}
                   <div className="font-medium">{exp.title}</div>
                   <div className="text-sm text-primary">{exp.company}</div>
@@ -148,7 +144,7 @@ function ParsedResumePreviewComponent({ data, className, isLoading }: ParsedResu
           <CardContent>
             <div className="space-y-4" role="list" aria-label="Lista de formação">
               {data.education.map((edu, i) => (
-                <div key={generateKey('edu', edu, i)} role="listitem">
+                <div key={`edu-${edu.degree}-${edu.institution}-${i}`} role="listitem">
                   {i > 0 && <Separator className="mb-4" />}
                   <div className="font-medium">{edu.degree}</div>
                   <div className="text-sm text-primary">{edu.institution}</div>
@@ -198,7 +194,7 @@ function ParsedResumePreviewComponent({ data, className, isLoading }: ParsedResu
           <CardContent>
             <div className="flex flex-wrap gap-2" role="list" aria-label="Lista de idiomas">
               {data.languages.map((lang, i) => (
-                <Badge key={generateKey('lang', lang, i)} variant="outline" role="listitem">
+                <Badge key={`lang-${lang.name}-${i}`} variant="outline" role="listitem">
                   {lang.name} {lang.level && `(${lang.level})`}
                 </Badge>
               ))}
@@ -219,7 +215,7 @@ function ParsedResumePreviewComponent({ data, className, isLoading }: ParsedResu
           <CardContent>
             <div className="space-y-2" role="list" aria-label="Lista de certificações">
               {data.certifications.map((cert, i) => (
-                <div key={generateKey('cert', cert, i)} className="text-sm" role="listitem">
+                <div key={`cert-${cert.name}-${i}`} className="text-sm" role="listitem">
                   <span className="font-medium">{cert.name}</span>
                   {cert.issuer && <span className="text-muted-foreground"> • {cert.issuer}</span>}
                   {cert.year && <span className="text-muted-foreground"> ({cert.year})</span>}

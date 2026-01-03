@@ -5,7 +5,6 @@ import {
   Briefcase, 
   BarChart3, 
   Zap, 
-  CheckCircle2, 
   ArrowRight,
   Target,
   Clock,

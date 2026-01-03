@@ -22,7 +22,7 @@ export function QRCodeGenerator({ secret, accountName, issuer = 'Match ATS', onV
   const otpauthUrl = `otpauth://totp/${encodeURIComponent(issuer)}:${encodeURIComponent(accountName)}?secret=${secret}&issuer=${encodeURIComponent(issuer)}&algorithm=SHA1&digits=6&period=30`;
 
   // Gerar QR Code como SVG usando biblioteca nativa
-  const generateQRCodeSVG = (text: string, size: number = 200) => {
+  const generateQRCodeSVG = (_url: string, size: number = 200) => {
     // Placeholder - em produção usar qrcode.react
     return `data:image/svg+xml,${encodeURIComponent(`
       <svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
