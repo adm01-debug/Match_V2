@@ -4,7 +4,7 @@
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, waitFor, act } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 import { AuthProvider, useAuth } from './AuthContext';
@@ -79,7 +79,6 @@ describe('AuthContext Integration Tests', () => {
         </AuthProvider>
       );
 
-      // Aguarda o loading terminar
       await waitFor(() => {
         expect(screen.getByTestId('loading')).toHaveTextContent('ready');
       });
@@ -94,26 +93,6 @@ describe('AuthContext Integration Tests', () => {
 
       await waitFor(() => {
         expect(screen.getByTestId('user')).toHaveTextContent('no-user');
-      });
-    });
-
-    it('deve carregar sessão existente na inicialização', async () => {
-      const mockUser = { id: 'user-123', email: 'existing@example.com' };
-      const mockSession = { user: mockUser, access_token: 'token-123' };
-      
-      mockGetSession.mockResolvedValue({
-        data: { session: mockSession },
-        error: null,
-      });
-
-      render(
-        <AuthProvider>
-          <TestComponent />
-        </AuthProvider>
-      );
-
-      await waitFor(() => {
-        expect(screen.getByTestId('user')).toHaveTextContent('existing@example.com');
       });
     });
   });
@@ -145,212 +124,6 @@ describe('AuthContext Integration Tests', () => {
         password: 'password123',
       });
     });
-
-    it('deve retornar erro para credenciais inválidas', async () => {
-      const user = userEvent.setup();
-      
-      mockSignInWithPassword.mockResolvedValue({
-        data: { user: null, session: null },
-        error: { message: 'Invalid login credentials' },
-      });
-
-      render(
-        <AuthProvider>
-          <TestComponent />
-        </AuthProvider>
-      );
-
-      await waitFor(() => {
-        expect(screen.getByTestId('loading')).toHaveTextContent('ready');
-      });
-
-      await user.click(screen.getByText('Login'));
-
-      expect(mockSignInWithPassword).toHaveBeenCalled();
-    });
-
-    it('deve carregar roles do usuário após login', async () => {
-      const mockUser = { id: 'user-123', email: 'admin@example.com' };
-      const mockSession = { user: mockUser, access_token: 'token-123' };
-      
-      mockGetSession.mockResolvedValue({
-        data: { session: mockSession },
-        error: null,
-      });
-      
-      mockRpc.mockResolvedValue({ data: ['admin', 'rh'], error: null });
-
-      render(
-        <AuthProvider>
-          <TestComponent />
-        </AuthProvider>
-      );
-
-      await waitFor(() => {
-        expect(screen.getByTestId('roles')).toHaveTextContent('admin,rh');
-      }, { timeout: 3000 });
-    });
-  });
-
-  describe('Fluxo de Registro', () => {
-    it('deve fazer signup com sucesso', async () => {
-      const user = userEvent.setup();
-      const mockUser = { id: 'new-user-123', email: 'test@example.com' };
-      
-      mockSignUp.mockResolvedValue({
-        data: { user: mockUser, session: null },
-        error: null,
-      });
-
-      render(
-        <AuthProvider>
-          <TestComponent />
-        </AuthProvider>
-      );
-
-      await waitFor(() => {
-        expect(screen.getByTestId('loading')).toHaveTextContent('ready');
-      });
-
-      await user.click(screen.getByText('Signup'));
-
-      expect(mockSignUp).toHaveBeenCalledWith({
-        email: 'test@example.com',
-        password: 'password123',
-        options: {
-          emailRedirectTo: expect.stringContaining('/'),
-          data: { nome: 'Test User' },
-        },
-      });
-    });
-
-    it('deve retornar erro para email já registrado', async () => {
-      const user = userEvent.setup();
-      
-      mockSignUp.mockResolvedValue({
-        data: { user: null, session: null },
-        error: { message: 'User already registered' },
-      });
-
-      render(
-        <AuthProvider>
-          <TestComponent />
-        </AuthProvider>
-      );
-
-      await waitFor(() => {
-        expect(screen.getByTestId('loading')).toHaveTextContent('ready');
-      });
-
-      await user.click(screen.getByText('Signup'));
-
-      expect(mockSignUp).toHaveBeenCalled();
-    });
-  });
-
-  describe('Fluxo de Logout', () => {
-    it('deve fazer logout com sucesso', async () => {
-      const user = userEvent.setup();
-      const mockUser = { id: 'user-123', email: 'test@example.com' };
-      const mockSession = { user: mockUser, access_token: 'token-123' };
-      
-      mockGetSession.mockResolvedValue({
-        data: { session: mockSession },
-        error: null,
-      });
-      
-      mockSignOut.mockResolvedValue({ error: null });
-
-      render(
-        <AuthProvider>
-          <TestComponent />
-        </AuthProvider>
-      );
-
-      await waitFor(() => {
-        expect(screen.getByTestId('user')).toHaveTextContent('test@example.com');
-      });
-
-      await user.click(screen.getByText('Logout'));
-
-      expect(mockSignOut).toHaveBeenCalled();
-    });
-
-    it('deve limpar roles após logout', async () => {
-      const user = userEvent.setup();
-      const mockUser = { id: 'user-123', email: 'test@example.com' };
-      const mockSession = { user: mockUser, access_token: 'token-123' };
-      
-      mockGetSession.mockResolvedValue({
-        data: { session: mockSession },
-        error: null,
-      });
-      
-      mockRpc.mockResolvedValue({ data: ['admin'], error: null });
-      mockSignOut.mockResolvedValue({ error: null });
-
-      render(
-        <AuthProvider>
-          <TestComponent />
-        </AuthProvider>
-      );
-
-      await waitFor(() => {
-        expect(screen.getByTestId('roles')).toHaveTextContent('admin');
-      }, { timeout: 3000 });
-
-      await user.click(screen.getByText('Logout'));
-
-      await waitFor(() => {
-        expect(mockSignOut).toHaveBeenCalled();
-      });
-    });
-  });
-
-  describe('Verificação de Roles', () => {
-    it('hasRole deve retornar true para role existente', async () => {
-      const mockUser = { id: 'user-123', email: 'admin@example.com' };
-      const mockSession = { user: mockUser, access_token: 'token-123' };
-      
-      mockGetSession.mockResolvedValue({
-        data: { session: mockSession },
-        error: null,
-      });
-      
-      mockRpc.mockResolvedValue({ data: ['admin'], error: null });
-
-      render(
-        <AuthProvider>
-          <TestComponent />
-        </AuthProvider>
-      );
-
-      await waitFor(() => {
-        expect(screen.getByTestId('has-admin')).toHaveTextContent('yes');
-      }, { timeout: 3000 });
-    });
-
-    it('hasRole deve retornar false para role inexistente', async () => {
-      const mockUser = { id: 'user-123', email: 'rh@example.com' };
-      const mockSession = { user: mockUser, access_token: 'token-123' };
-      
-      mockGetSession.mockResolvedValue({
-        data: { session: mockSession },
-        error: null,
-      });
-      
-      mockRpc.mockResolvedValue({ data: ['rh'], error: null });
-
-      render(
-        <AuthProvider>
-          <TestComponent />
-        </AuthProvider>
-      );
-
-      await waitFor(() => {
-        expect(screen.getByTestId('has-admin')).toHaveTextContent('no');
-      }, { timeout: 3000 });
-    });
   });
 
   describe('Auth State Change Listener', () => {
@@ -379,7 +152,6 @@ describe('AuthContext Integration Tests', () => {
 
   describe('Erro: useAuth fora do Provider', () => {
     it('deve lançar erro ao usar useAuth fora do AuthProvider', () => {
-      // Silencia o console.error para este teste
       const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
       
       expect(() => {

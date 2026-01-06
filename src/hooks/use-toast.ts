@@ -1,4 +1,3 @@
-import { useCallback } from 'react';
 /**
  * @module useToast
  * @description Hook para exibir notificações toast

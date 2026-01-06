@@ -3,17 +3,6 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 
-interface User2FA {
-  id: string;
-  user_id: string;
-  secret: string;
-  backup_codes: string[];
-  enabled: boolean;
-  verified_at: string | null;
-  created_at: string;
-  updated_at: string;
-}
-
 interface Setup2FAData {
   secret: string;
   backup_codes: string[];

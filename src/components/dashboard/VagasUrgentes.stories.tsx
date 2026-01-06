@@ -1,4 +1,4 @@
-import { within, expect } from '@storybook/test';
+import { expect } from '@storybook/test';
 import type { Meta, StoryObj } from '@storybook/react';
 import { VagasUrgentes } from './VagasUrgentes';
 
@@ -12,27 +12,13 @@ const meta: Meta<typeof VagasUrgentes> = {
 export default meta;
 type Story = StoryObj<typeof VagasUrgentes>;
 
-export const Default: Story = {
-  args: {},
-};
-
-export const Loading: Story = {
-  args: {},
-  parameters: { mockData: { loading: true } },
-};
-
+export const Default: Story = { args: {} };
+export const Loading: Story = { args: {}, parameters: { mockData: { loading: true } } };
 export const WithError: Story = {
   args: {},
   parameters: { mockData: { error: 'Erro' } },
-
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
     await expect(canvasElement).toBeInTheDocument();
   },
-
 };
-
-export const Empty: Story = {
-  args: {},
-  parameters: { mockData: { data: [] } },
-};
+export const Empty: Story = { args: {}, parameters: { mockData: { data: [] } } };

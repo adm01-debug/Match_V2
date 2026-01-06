@@ -11,7 +11,7 @@ export type { Job } from './useJobs';
 export { useInterviews } from './useInterviews';
 export type { Interview, Interviewer, InterviewFeedback } from './useInterviews';
 
-export { useWorkflow } from './useWorkflow';
+export { useWorkflows } from './useATSData';
 
 // UI Hooks (re-exports from shadcn)
 export { useToast } from './use-toast';
