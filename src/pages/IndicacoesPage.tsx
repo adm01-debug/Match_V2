@@ -3,7 +3,7 @@ import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Layout } from "@/components/layout/Layout";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -107,7 +107,7 @@ export default function IndicacoesPage() {
       
       const { error } = await supabase.from('indicacoes').insert({
         indicador_user_id: user?.id || null,
-        indicador_nome: user?.user_metadata?.nome || user?.email || 'Usuário',
+        indicador_nome: (user?.user_metadata as Record<string, unknown>)?.['nome'] as string || user?.email || 'Usuário',
         indicador_email: user?.email || '',
         candidato_nome: indicacao.candidatoNome,
         candidato_email: indicacao.candidatoEmail,
