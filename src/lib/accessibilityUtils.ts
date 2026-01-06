@@ -29,10 +29,10 @@ export const a11y = {
       if (e.key !== 'Tab') return;
       if (e.shiftKey && document.activeElement === first) {
         e.preventDefault();
-        last.focus();
+        last?.focus();
       } else if (!e.shiftKey && document.activeElement === last) {
         e.preventDefault();
-        first.focus();
+        first?.focus();
       }
     };
     
@@ -40,3 +40,25 @@ export const a11y = {
     return () => container.removeEventListener('keydown', handler);
   },
 };
+
+// Named exports for backward compatibility
+export const announceToScreenReader = a11y.announceToScreenReader;
+export const trapFocus = a11y.trapFocus;
+
+const ariaLabels: Record<string, string> = {
+  button: 'Botão',
+  link: 'Link',
+  input: 'Campo de entrada',
+  checkbox: 'Caixa de seleção',
+  radio: 'Opção',
+  select: 'Lista de seleção',
+  textarea: 'Área de texto',
+  dialog: 'Diálogo',
+  menu: 'Menu',
+  tab: 'Aba',
+  alert: 'Alerta',
+};
+
+export function getAriaLabel(elementType: string): string {
+  return ariaLabels[elementType] || '';
+}

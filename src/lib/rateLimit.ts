@@ -39,3 +39,25 @@ export const getRemainingRequests = (
   }
   return Math.max(0, maxRequests - entry.count);
 };
+
+export class RateLimiter {
+  private options: RateLimitOptions;
+  private key: string;
+
+  constructor(key: string, options: RateLimitOptions = { maxRequests: 100, windowMs: 60000 }) {
+    this.key = key;
+    this.options = options;
+  }
+
+  check(): boolean {
+    return checkRateLimit(this.key, this.options);
+  }
+
+  remaining(): number {
+    return getRemainingRequests(this.key, this.options.maxRequests);
+  }
+}
+
+export function createRateLimiter(key: string, options?: RateLimitOptions): RateLimiter {
+  return new RateLimiter(key, options);
+}

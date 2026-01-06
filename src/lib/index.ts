@@ -5,12 +5,12 @@
 
 export * from './utils';
 export * from './constants';
-export * from './formatters';
+export { formatCurrency, formatPercent, formatNumber, formatPhone, formatCPF } from './formatters';
 export * from './validators';
 export * from './schemas';
 export * from './queryConfig';
-export * from './apiClient';
-export * from './errorHandler';
-export * from './dateUtils';
+export { apiClient, handleApiError, createApiUrl } from './apiClient';
+export { handleError } from './errorHandler';
+export { formatDate, formatDateTime, formatRelative, isToday } from './dateUtils';
 export * from './storageUtils';
-export * from './accessibilityUtils';
+export { a11y, announceToScreenReader, trapFocus, getAriaLabel } from './accessibilityUtils';

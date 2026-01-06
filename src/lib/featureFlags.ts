@@ -11,22 +11,22 @@ import React from 'react';
 
 export const FeatureFlags = {
   /** Nova interface do dashboard */
-  NEW_DASHBOARD: import.meta.env.VITE_FF_NEW_DASHBOARD === 'true',
+  NEW_DASHBOARD: import.meta.env['VITE_FF_NEW_DASHBOARD'] === 'true',
   
   /** Funcionalidades beta */
-  BETA_FEATURES: import.meta.env.VITE_FF_BETA === 'true',
+  BETA_FEATURES: import.meta.env['VITE_FF_BETA'] === 'true',
   
   /** Novo sistema de match com IA */
-  AI_MATCHING: import.meta.env.VITE_FF_AI_MATCHING === 'true',
+  AI_MATCHING: import.meta.env['VITE_FF_AI_MATCHING'] === 'true',
   
   /** Portal do candidato V2 */
-  PORTAL_V2: import.meta.env.VITE_FF_PORTAL_V2 === 'true',
+  PORTAL_V2: import.meta.env['VITE_FF_PORTAL_V2'] === 'true',
   
   /** Analytics avançado */
-  ADVANCED_ANALYTICS: import.meta.env.VITE_FF_ADVANCED_ANALYTICS === 'true',
+  ADVANCED_ANALYTICS: import.meta.env['VITE_FF_ADVANCED_ANALYTICS'] === 'true',
   
   /** Debug mode */
-  DEBUG_MODE: import.meta.env.DEV || import.meta.env.VITE_FF_DEBUG === 'true',
+  DEBUG_MODE: import.meta.env.DEV || import.meta.env['VITE_FF_DEBUG'] === 'true',
 } as const;
 
 export type FeatureFlagKey = keyof typeof FeatureFlags;

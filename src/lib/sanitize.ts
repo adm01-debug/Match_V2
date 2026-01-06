@@ -15,7 +15,7 @@ export const sanitize = {
       "'": '&#x27;',
       '/': '&#x2F;',
     };
-    return input.replace(/[&<>"'/]/g, char => map[char]);
+    return input.replace(/[&<>"'/]/g, char => map[char] ?? char);
   },
 
   /**
@@ -45,4 +45,13 @@ export const sanitize = {
   fileName: (input: string): string => {
     return input.replace(/[^a-zA-Z0-9._-]/g, '_');
   },
+};
+
+// Named exports for compatibility
+export const sanitizeHtml = sanitize.html;
+export const sanitizeInput = (input: string): string => {
+  return input.trim().replace(/[<>]/g, '');
+};
+export const escapeRegex = (str: string): string => {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 };

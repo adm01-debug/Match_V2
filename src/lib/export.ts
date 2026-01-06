@@ -11,7 +11,7 @@ export function exportToCSV<T extends Record<string, unknown>>(
 ): void {
   if (!data.length) return;
 
-  const keys = Object.keys(data[0]) as (keyof T)[];
+  const keys = Object.keys(data[0] ?? {}) as (keyof T)[];
   const headerRow = headers 
     ? keys.map(k => headers[k] || String(k)).join(',')
     : keys.join(',');
@@ -79,12 +79,12 @@ function downloadFile(content: string, filename: string, type: string): void {
  */
 export function exportCandidatosCSV(candidatos: Record<string, unknown>[]): void {
   const data = candidatos.map(c => ({
-    nome: c.nome,
-    email: c.email,
-    telefone: c.telefone || '',
-    status: c.status,
-    data_cadastro: formatDateForExport(c.created_at),
-    pretensao_salarial: formatCurrencyForExport(c.pretensao_salarial),
+    nome: c['nome'] as string ?? '',
+    email: c['email'] as string ?? '',
+    telefone: (c['telefone'] as string) || '',
+    status: c['status'] as string ?? '',
+    data_cadastro: formatDateForExport((c['created_at'] as string) ?? null),
+    pretensao_salarial: formatCurrencyForExport((c['pretensao_salarial'] as number) ?? null),
   }));
 
   exportToCSV(data, `candidatos_${new Date().toISOString().split('T')[0]}`, {
@@ -102,13 +102,13 @@ export function exportCandidatosCSV(candidatos: Record<string, unknown>[]): void
  */
 export function exportVagasCSV(vagas: Record<string, unknown>[]): void {
   const data = vagas.map(v => ({
-    titulo: v.titulo,
-    departamento: v.departamento,
-    status: v.status,
-    prioridade: v.prioridade,
-    modalidade: v.modalidade,
-    quantidade_vagas: v.quantidade_vagas,
-    data_criacao: formatDateForExport(v.created_at),
+    titulo: v['titulo'] as string ?? '',
+    departamento: v['departamento'] as string ?? '',
+    status: v['status'] as string ?? '',
+    prioridade: v['prioridade'] as string ?? '',
+    modalidade: v['modalidade'] as string ?? '',
+    quantidade_vagas: v['quantidade_vagas'] as number ?? 0,
+    data_criacao: formatDateForExport((v['created_at'] as string) ?? null),
   }));
 
   exportToCSV(data, `vagas_${new Date().toISOString().split('T')[0]}`, {
@@ -121,4 +121,3 @@ export function exportVagasCSV(vagas: Record<string, unknown>[]): void {
     data_criacao: 'Data Criação',
   });
 }
-

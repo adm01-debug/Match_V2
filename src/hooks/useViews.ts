@@ -77,24 +77,28 @@ export function usePipelineView(vagaId?: string) {
       const { data, error } = await query;
       if (error) throw error;
       
-      const transformed: PipelineView[] = (data || []).map((p: Record<string, unknown>) => ({
-        id: p.id,
-        etapa_atual: p.etapa_atual,
-        status: p.status,
-        match_score: p.match_score,
-        data_inscricao: p.data_inscricao,
-        data_ultima_movimentacao: p.data_ultima_movimentacao,
-        dias_na_etapa: p.dias_na_etapa || 0,
-        candidato_id: p.candidato_id,
-        candidato_nome: p.candidatos?.nome || p.candidato_nome || '',
-        candidato_email: p.candidatos?.email || '',
-        candidato_foto: p.candidato_foto,
-        cargo_atual: null,
-        vaga_id: p.vaga_id,
-        vaga_titulo: p.vagas?.titulo || p.vaga_titulo || '',
-        vaga_departamento: p.vagas?.departamento || '',
-        vaga_prioridade: p.vagas?.prioridade || 'media',
-      }));
+      const transformed: PipelineView[] = (data || []).map((p) => {
+        const candidatos = p['candidatos'] as { nome?: string; email?: string } | null;
+        const vagas = p['vagas'] as { titulo?: string; departamento?: string; prioridade?: string } | null;
+        return {
+          id: p.id,
+          etapa_atual: p.etapa_atual,
+          status: p.status,
+          match_score: p.match_score,
+          data_inscricao: p.data_inscricao,
+          data_ultima_movimentacao: p.data_ultima_movimentacao,
+          dias_na_etapa: p.dias_na_etapa ?? 0,
+          candidato_id: p.candidato_id,
+          candidato_nome: candidatos?.nome || p.candidato_nome || '',
+          candidato_email: candidatos?.email || '',
+          candidato_foto: p.candidato_foto,
+          cargo_atual: null,
+          vaga_id: p.vaga_id,
+          vaga_titulo: vagas?.titulo || p.vaga_titulo || '',
+          vaga_departamento: vagas?.departamento || '',
+          vaga_prioridade: vagas?.prioridade || 'media',
+        };
+      });
       
       return transformed;
     },
@@ -131,14 +135,14 @@ export function useAgendaEntrevistasView(filtros?: {
       const { data, error } = await query;
       if (error) throw error;
       
-      const transformed: AgendaEntrevistasView[] = (data || []).map((e: Record<string, unknown>) => ({
+      const transformed: AgendaEntrevistasView[] = (data || []).map((e) => ({
         id: e.id,
         tipo: e.tipo,
         etapa: e.etapa,
         data_hora: `${e.data}T${e.hora_inicio}`,
         duracao_minutos: 60,
-        local: e.local,
-        link_video: e.link_online,
+        local: e.local ?? null,
+        link_video: e.link_online ?? null,
         status: e.status,
         entrevistadores_nomes: e.entrevistadores || [],
         candidato_nome: e.candidato_nome,
@@ -173,7 +177,7 @@ export function useVagasKpisView(status?: string) {
       const { data, error } = await query;
       if (error) throw error;
       
-      const transformed: VagasKpisView[] = (data || []).map((v: Record<string, unknown>) => ({
+      const transformed: VagasKpisView[] = (data || []).map((v) => ({
         id: v.id,
         titulo: v.titulo,
         departamento: v.departamento,
@@ -182,9 +186,9 @@ export function useVagasKpisView(status?: string) {
         quantidade: v.quantidade,
         created_at: v.created_at,
         dias_aberta: Math.floor((Date.now() - new Date(v.created_at).getTime()) / (1000 * 60 * 60 * 24)),
-        total_candidatos: v.total_candidatos || 0,
-        em_processo: v.em_processo || 0,
-        contratados: v.contratados || 0,
+        total_candidatos: v.total_candidatos ?? 0,
+        em_processo: v.em_processo ?? 0,
+        contratados: v.contratados ?? 0,
       }));
       
       return transformed;
