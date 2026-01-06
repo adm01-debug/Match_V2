@@ -53,8 +53,10 @@ const dashboardKeys = {
 };
 
 async function fetchDashboardStats(): Promise<DashboardStats> {
-  const today = new Date().toISOString().split('T')[0] ?? '';
-  const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] ?? '';
+  const todayParts = new Date().toISOString().split('T');
+  const today = todayParts[0] ?? '';
+  const weekAgoParts = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T');
+  const weekAgo = weekAgoParts[0] ?? '';
 
   const [vagasResult, candidatosResult, entrevistasHojeResult, entrevistasSemanaResult] = await Promise.all([
     supabase.from('vagas').select('status', { count: 'exact' }),
@@ -152,8 +154,9 @@ async function fetchFunil() {
   
   etapas.forEach(e => counts[e] = 0);
   (data || []).forEach(p => {
-    if (p.etapa_atual && counts[p.etapa_atual] !== undefined) {
-      counts[p.etapa_atual]++;
+    const etapa = p.etapa_atual;
+    if (etapa && typeof counts[etapa] === 'number') {
+      counts[etapa] = (counts[etapa] ?? 0) + 1;
     }
   });
 

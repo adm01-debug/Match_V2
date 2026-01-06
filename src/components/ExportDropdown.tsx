@@ -1,6 +1,5 @@
 /**
  * Componente de Dropdown para Exportação
- * 
  * @module components/ExportDropdown
  */
 
@@ -26,11 +25,11 @@ interface ExportDropdownProps {
 export function ExportDropdown({
   onExport,
   isExporting = false,
-  formats = ['csv', 'xlsx', 'pdf'],
+  formats = ['csv', 'xlsx'],
   disabled = false,
   itemCount,
 }: ExportDropdownProps) {
-  const formatConfig = {
+  const formatConfig: Record<ExportFormat, { label: string; icon: typeof FileText; description: string }> = {
     csv: {
       label: 'CSV',
       icon: FileText,
@@ -40,11 +39,6 @@ export function ExportDropdown({
       label: 'Excel',
       icon: FileSpreadsheet,
       description: 'Microsoft Excel',
-    },
-    pdf: {
-      label: 'PDF',
-      icon: FileText,
-      description: 'Documento PDF',
     },
   };
 

@@ -1,39 +1,15 @@
 /**
  * @module useProcessos
- * @description Hook para gerenciar processos
- * @returns {Object} Hook result with data, isLoading, error, and mutations
- * @example
- * const { data, isLoading } = useProcessos();
+ * @description Hook para gerenciar processos seletivos
  */
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import type { Tables } from '@/integrations/supabase/types';
 
-// Tipos
-export interface ProcessoSeletivo {
-  id: string;
-  candidato_id: string;
-  vaga_id: string;
-  etapa_atual: string;
-  status: string;
-  match_score: number | null;
-  data_inicio: string;
-  data_fim: string | null;
-  observacoes: string | null;
-  created_at: string;
-  updated_at: string;
-  candidato?: {
-    id: string;
-    nome: string;
-    email: string;
-  };
-  vaga?: {
-    id: string;
-    titulo: string;
-    departamento: string;
-  };
-}
+// Use o tipo real do banco
+type ProcessoDB = Tables<'processos_seletivos'>;
 
 export interface ProcessoFilters {
   vagaId?: string;
@@ -42,7 +18,6 @@ export interface ProcessoFilters {
   status?: string;
 }
 
-// Query Keys
 const processosKeys = {
   all: ['processos'] as const,
   lists: () => [...processosKeys.all, 'list'] as const,
@@ -53,15 +28,10 @@ const processosKeys = {
   byVaga: (vagaId: string) => [...processosKeys.all, 'vaga', vagaId] as const,
 };
 
-// Fetch Processos
-async function fetchProcessos(filters: ProcessoFilters = {}): Promise<ProcessoSeletivo[]> {
+async function fetchProcessos(filters: ProcessoFilters = {}): Promise<ProcessoDB[]> {
   let query = supabase
     .from('processos_seletivos')
-    .select(`
-      *,
-      candidato:candidatos(id, nome, email),
-      vaga:vagas(id, titulo, departamento)
-    `)
+    .select('*')
     .order('created_at', { ascending: false });
 
   if (filters.vagaId) {
@@ -82,15 +52,10 @@ async function fetchProcessos(filters: ProcessoFilters = {}): Promise<ProcessoSe
   return data || [];
 }
 
-// Fetch Processo by ID
-async function fetchProcesso(id: string): Promise<ProcessoSeletivo | null> {
+async function fetchProcesso(id: string): Promise<ProcessoDB | null> {
   const { data, error } = await supabase
     .from('processos_seletivos')
-    .select(`
-      *,
-      candidato:candidatos(id, nome, email),
-      vaga:vagas(id, titulo, departamento)
-    `)
+    .select('*')
     .eq('id', id)
     .single();
 
@@ -98,14 +63,10 @@ async function fetchProcesso(id: string): Promise<ProcessoSeletivo | null> {
   return data;
 }
 
-// Fetch Processos by Candidato
-async function fetchProcessosByCandidato(candidatoId: string): Promise<ProcessoSeletivo[]> {
+async function fetchProcessosByCandidato(candidatoId: string): Promise<ProcessoDB[]> {
   const { data, error } = await supabase
     .from('processos_seletivos')
-    .select(`
-      *,
-      vaga:vagas(id, titulo, departamento, status)
-    `)
+    .select('*')
     .eq('candidato_id', candidatoId)
     .order('created_at', { ascending: false });
 
@@ -113,60 +74,26 @@ async function fetchProcessosByCandidato(candidatoId: string): Promise<ProcessoS
   return data || [];
 }
 
-// Create Processo
-async function createProcesso(processo: Omit<ProcessoSeletivo, 'id' | 'created_at' | 'updated_at'>) {
-  const { data, error } = await supabase
-    .from('processos_seletivos')
-    .insert(processo)
-    .select()
-    .single();
-
-  if (error) throw error;
-  return data;
-}
-
-// Update Processo
-async function updateProcesso({ id, ...updates }: Partial<ProcessoSeletivo> & { id: string }) {
-  const { data, error } = await supabase
-    .from('processos_seletivos')
-    .update({ ...updates, updated_at: new Date().toISOString() })
-    .eq('id', id)
-    .select()
-    .single();
-
-  if (error) throw error;
-  return data;
-}
-
-// Update Etapa
-async function updateEtapa(id: string, etapa: string) {
-  const { data, error } = await supabase
-    .from('processos_seletivos')
-    .update({ etapa_atual: etapa, updated_at: new Date().toISOString() })
-    .eq('id', id)
-    .select()
-    .single();
-
-  if (error) throw error;
-  return data;
-}
-
-// Hooks
 export function useProcessos(filters: ProcessoFilters = {}) {
   return useQuery({
     queryKey: processosKeys.list(filters),
+    queryFn: () => fetchProcessos(filters),
     placeholderData: [],
-    select: (data) => data, staleTime: 5 * 60 * 1000,
-    refetchOnWindowFocus: false, gcTime: 10 * 60 * 1000, retry: 3, queryFn: () => fetchProcessos(filters),
+    staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    gcTime: 10 * 60 * 1000,
+    retry: 3,
   });
 }
 
 export function useProcesso(id: string) {
   return useQuery({
     queryKey: processosKeys.detail(id),
-    placeholderData: [],
-    select: (data) => data, staleTime: 5 * 60 * 1000,
-    refetchOnWindowFocus: false, gcTime: 10 * 60 * 1000, retry: 3, queryFn: () => fetchProcesso(id),
+    queryFn: () => fetchProcesso(id),
+    staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    gcTime: 10 * 60 * 1000,
+    retry: 3,
     enabled: !!id,
   });
 }
@@ -174,9 +101,12 @@ export function useProcesso(id: string) {
 export function useProcessosCandidato(candidatoId: string) {
   return useQuery({
     queryKey: processosKeys.byCandidato(candidatoId),
+    queryFn: () => fetchProcessosByCandidato(candidatoId),
     placeholderData: [],
-    select: (data) => data, staleTime: 5 * 60 * 1000,
-    refetchOnWindowFocus: false, gcTime: 10 * 60 * 1000, retry: 3, queryFn: () => fetchProcessosByCandidato(candidatoId),
+    staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    gcTime: 10 * 60 * 1000,
+    retry: 3,
     enabled: !!candidatoId,
   });
 }
@@ -185,7 +115,32 @@ export function useCreateProcesso() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: createProcesso,
+    mutationFn: async (processo: {
+      vaga_id?: string;
+      vaga_titulo: string;
+      candidato_id?: string;
+      candidato_nome: string;
+      match_score?: number;
+      origem?: string;
+    }) => {
+      const { data, error } = await supabase
+        .from('processos_seletivos')
+        .insert({
+          vaga_id: processo.vaga_id,
+          vaga_titulo: processo.vaga_titulo,
+          candidato_id: processo.candidato_id,
+          candidato_nome: processo.candidato_nome,
+          match_score: processo.match_score || 0,
+          origem: processo.origem || 'portal',
+          etapa_atual: 'novo',
+          status: 'em_andamento',
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data;
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: processosKeys.all });
       toast.success('Processo seletivo iniciado com sucesso!');
@@ -200,10 +155,22 @@ export function useUpdateProcesso() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: updateProcesso,
+    mutationFn: async ({ id, ...updates }: Partial<ProcessoDB> & { id: string }) => {
+      const { data, error } = await supabase
+        .from('processos_seletivos')
+        .update({ ...updates, updated_at: new Date().toISOString() })
+        .eq('id', id)
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data;
+    },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: processosKeys.all });
-      queryClient.setQueryData(processosKeys.detail(data.id), data);
+      if (data) {
+        queryClient.setQueryData(processosKeys.detail(data.id), data);
+      }
       toast.success('Processo atualizado com sucesso!');
     },
     onError: (error: Error) => {
@@ -216,7 +183,22 @@ export function useUpdateEtapa() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, etapa }: { id: string; etapa: string }) => updateEtapa(id, etapa),
+    mutationFn: async ({ id, etapa }: { id: string; etapa: string }) => {
+      const { data, error } = await supabase
+        .from('processos_seletivos')
+        .update({
+          etapa_atual: etapa,
+          dias_na_etapa: 0,
+          data_ultima_movimentacao: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', id)
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data;
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: processosKeys.all });
       toast.success('Etapa atualizada com sucesso!');
@@ -226,3 +208,6 @@ export function useUpdateEtapa() {
     },
   });
 }
+
+// Re-export for backward compatibility
+export type ProcessoSeletivo = ProcessoDB;
