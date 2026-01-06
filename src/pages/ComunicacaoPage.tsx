@@ -1,8 +1,4 @@
 import { useDocumentTitle } from '@/hooks/useDocumentTitle';
-import { Suspense } from 'react';
-import { Skeleton } from '@/components/ui/skeleton';
-import { ErrorBoundary } from '@/components/ErrorBoundary';
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
@@ -17,16 +13,14 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Mail, MessageSquare, Phone, Send, Search, Plus, Clock, CheckCircle2, XCircle, RefreshCw } from "lucide-react";
-import { format, formatDistanceToNow } from "date-fns";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Mail, MessageSquare, Send, Search, Clock, CheckCircle2, XCircle, RefreshCw } from "lucide-react";
+import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 
-// Templates de email como constantes (podem ser migrados para banco depois)
 const EMAIL_TEMPLATES = [
   { id: 'agendamento', nome: 'Agendamento de Entrevista', assunto: 'Agendamento de Entrevista - {{vaga}}', corpo: 'Olá {{nome}},\n\nGostaríamos de agendar uma entrevista para a vaga de {{vaga}}.\n\nData: {{data}}\nHorário: {{horario}}\nLocal: {{local}}\n\nPor favor, confirme sua disponibilidade.\n\nAtenciosamente,\nEquipe de RH' },
   { id: 'confirmacao', nome: 'Confirmação de Candidatura', assunto: 'Candidatura Recebida - {{vaga}}', corpo: 'Olá {{nome}},\n\nRecebemos sua candidatura para a vaga de {{vaga}}.\n\nAnalisaremos seu perfil e entraremos em contato em breve.\n\nAtenciosamente,\nEquipe de RH' },
@@ -35,7 +29,7 @@ const EMAIL_TEMPLATES = [
   { id: 'proposta', nome: 'Proposta de Emprego', assunto: 'Proposta de Emprego - {{vaga}}', corpo: 'Olá {{nome}},\n\nTemos o prazer de informar que você foi selecionado para a vaga de {{vaga}}!\n\nSegue nossa proposta:\n- Salário: {{salario}}\n- Benefícios: {{beneficios}}\n- Início: {{data_inicio}}\n\nAguardamos seu retorno.\n\nAtenciosamente,\nEquipe de RH' },
 ];
 
-interface Comunicacao {
+interface ComunicacaoLocal {
   id: string;
   candidato_id: string;
   candidato?: { nome: string; email: string; foto_url?: string };
@@ -47,6 +41,9 @@ interface Comunicacao {
 }
 
 export default function ComunicacaoPage() {
+  usePageTitle('Comunicação');
+  useDocumentTitle('Comunicação');
+  
   const [searchParams] = useSearchParams();
   const candidatoIdParam = searchParams.get('candidato');
   const { toast } = useToast();
@@ -54,57 +51,53 @@ export default function ComunicacaoPage() {
 
   const [activeTab, setActiveTab] = useState("enviar");
   const [loading, setLoading] = useState(true);
-  const [comunicacoes, setComunicacoes] = useState<Comunicacao[]>([]);
-  const [candidatos, setCandidatos] = useState<any[]>([]);
+  const [comunicacoes, setComunicacoes] = useState<ComunicacaoLocal[]>([]);
+  const [candidatos, setCandidatos] = useState<{ id: string; nome: string; email: string; foto_url?: string }[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Form state
   const [candidatoSelecionado, setCandidatoSelecionado] = useState<string>(candidatoIdParam || "");
   const [templateSelecionado, setTemplateSelecionado] = useState<string>("");
-  const [tipo, setTipo] = useState<string>("email");
   const [assunto, setAssunto] = useState("");
   const [conteudo, setConteudo] = useState("");
   const [enviando, setEnviando] = useState(false);
-  const [dialogOpen, setDialogOpen] = useState(false);
 
-  // Carregar dados
   useEffect(() => {
-  usePageTitle('Comunicação');
-
     loadData();
   }, []);
 
   const loadData = async () => {
     setLoading(true);
     try {
-      // Carregar candidatos
       const { data: candidatosData } = await supabase
         .from('candidatos')
-        .select('id, nome, email, foto_url')
+        .select('id, nome, email')
         .order('nome');
-      setCandidatos(candidatosData || []);
+      setCandidatos((candidatosData || []) as { id: string; nome: string; email: string }[]);
 
-      // Carregar histórico de comunicações
       const { data: comunicacoesData } = await supabase
         .from('comunicacoes')
-        .select(`
-          *,
-          candidato:candidatos (nome, email, foto_url)
-        `)
+        .select('*')
         .order('created_at', { ascending: false })
         .limit(50);
-      setComunicacoes(comunicacoesData || []);
-    } catch (error) {
+      
+      const mapped: ComunicacaoLocal[] = (comunicacoesData || []).map(c => ({
+        id: c.id,
+        candidato_id: c.candidato_id,
+        tipo: 'email',
+        assunto: c.assunto,
+        conteudo: c.conteudo,
+        status: 'enviado',
+        created_at: c.created_at,
+      }));
+      setComunicacoes(mapped);
+    } catch {
       toast({ title: "Erro", description: "Erro ao carregar dados", variant: "destructive" });
     } finally {
       setLoading(false);
     }
   };
 
-  // Aplicar template
   const handleTemplateChange = (templateId: string) => {
-  useDocumentTitle('Comunicação');
-
     setTemplateSelecionado(templateId);
     const template = EMAIL_TEMPLATES.find(t => t.id === templateId);
     if (template) {
@@ -113,7 +106,6 @@ export default function ComunicacaoPage() {
     }
   };
 
-  // Enviar comunicação
   const handleEnviar = async () => {
     if (!candidatoSelecionado || !assunto || !conteudo) {
       toast({ title: "Erro", description: "Preencha todos os campos", variant: "destructive" });
@@ -124,20 +116,15 @@ export default function ComunicacaoPage() {
     try {
       await registrarComunicacao({
         candidato_id: candidatoSelecionado,
-        tipo,
         assunto,
         conteudo,
       });
 
       toast({ title: "Sucesso", description: "Comunicação enviada" });
-      
-      // Limpar form
       setCandidatoSelecionado("");
       setTemplateSelecionado("");
       setAssunto("");
       setConteudo("");
-      
-      // Recarregar histórico
       loadData();
       setActiveTab("historico");
     } catch {
@@ -147,14 +134,12 @@ export default function ComunicacaoPage() {
     }
   };
 
-  // Filtrar comunicações
   const comunicacoesFiltradas = comunicacoes.filter(c => 
     searchQuery === "" ||
-    c.candidato?.nome.toLowerCase().includes(searchQuery.toLowerCase()) ||
     c.assunto.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const statusStyles: Record<string, { icon: any; color: string }> = {
+  const statusStyles: Record<string, { icon: React.ComponentType<{ className?: string }>; color: string }> = {
     enviado: { icon: CheckCircle2, color: "text-green-500" },
     pendente: { icon: Clock, color: "text-amber-500" },
     erro: { icon: XCircle, color: "text-red-500" },
@@ -200,7 +185,6 @@ export default function ComunicacaoPage() {
             </TabsTrigger>
           </TabsList>
 
-          {/* Tab Enviar */}
           <TabsContent value="enviar" className="mt-4">
             <Card>
               <CardHeader>
@@ -208,43 +192,25 @@ export default function ComunicacaoPage() {
                 <CardDescription>Envie um e-mail ou mensagem para um candidato</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label>Candidato *</Label>
-                    <Select value={candidatoSelecionado} onValueChange={setCandidatoSelecionado}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Selecione o candidato" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {candidatos.map(c => (
-                          <SelectItem key={c.id} value={c.id}>
-                            <div className="flex items-center gap-2">
-                              <Avatar className="h-6 w-6">
-                                <AvatarImage src={c.foto_url} />
-                                <AvatarFallback>{c.nome.charAt(0)}</AvatarFallback>
-                              </Avatar>
-                              {c.nome}
-                            </div>
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label>Tipo</Label>
-                    <Select value={tipo} onValueChange={setTipo}>
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="email">E-mail</SelectItem>
-                        <SelectItem value="whatsapp">WhatsApp</SelectItem>
-                        <SelectItem value="sms">SMS</SelectItem>
-                        <SelectItem value="telefone">Telefone</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
+                <div className="space-y-2">
+                  <Label>Candidato *</Label>
+                  <Select value={candidatoSelecionado} onValueChange={setCandidatoSelecionado}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecione o candidato" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {candidatos.map(c => (
+                        <SelectItem key={c.id} value={c.id}>
+                          <div className="flex items-center gap-2">
+                            <Avatar className="h-6 w-6">
+                              <AvatarFallback>{c.nome.charAt(0)}</AvatarFallback>
+                            </Avatar>
+                            {c.nome}
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
 
                 <div className="space-y-2">
@@ -269,7 +235,7 @@ export default function ComunicacaoPage() {
                 <div className="space-y-2">
                   <Label>Conteúdo *</Label>
                   <Textarea value={conteudo} onChange={(e) => setConteudo(e.target.value)} placeholder="Digite o conteúdo..." rows={8} />
-                  <p className="text-xs text-muted-foreground">Use variáveis: {"{{nome}}"}, {"{{vaga}}"}, {"{{data}}"}, {"{{horario}}"}</p>
+                  <p className="text-xs text-muted-foreground">Use variáveis: {"{{nome}}"}, {"{{vaga}}"}</p>
                 </div>
 
                 <Button onClick={handleEnviar} disabled={enviando} className="w-full">
@@ -280,12 +246,11 @@ export default function ComunicacaoPage() {
             </Card>
           </TabsContent>
 
-          {/* Tab Histórico */}
           <TabsContent value="historico" className="mt-4 space-y-4">
             <div className="flex items-center gap-4">
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input placeholder="Buscar por candidato ou assunto..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="pl-10" />
+                <Input placeholder="Buscar por assunto..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="pl-10" />
               </div>
             </div>
 
@@ -294,25 +259,23 @@ export default function ComunicacaoPage() {
                 <Card><CardContent className="py-8 text-center text-muted-foreground">Nenhuma comunicação encontrada</CardContent></Card>
               ) : (
                 comunicacoesFiltradas.map(c => {
-                  const status = statusStyles[c.status] || statusStyles.enviado;
-                  const StatusIcon = status.icon;
+                  const status = statusStyles[c.status] ?? statusStyles['enviado'];
+                  const StatusIcon = status?.icon ?? CheckCircle2;
                   return (
-                    <Card key={c.id} className="hover:shadow-md transition-shadow cursor-pointer" onClick={() => { setDialogOpen(true); }}>
+                    <Card key={c.id} className="hover:shadow-md transition-shadow">
                       <CardContent className="p-4">
                         <div className="flex items-start gap-4">
                           <Avatar>
-                            <AvatarImage src={c.candidato?.foto_url} />
-                            <AvatarFallback>{c.candidato?.nome?.charAt(0) || '?'}</AvatarFallback>
+                            <AvatarFallback>?</AvatarFallback>
                           </Avatar>
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center justify-between mb-1">
-                              <p className="font-medium">{c.candidato?.nome}</p>
+                              <p className="font-medium">{c.assunto}</p>
                               <div className="flex items-center gap-2">
                                 <Badge variant="outline">{c.tipo}</Badge>
-                                <StatusIcon className={cn("h-4 w-4", status.color)} />
+                                <StatusIcon className={cn("h-4 w-4", status?.color ?? "text-green-500")} />
                               </div>
                             </div>
-                            <p className="text-sm font-medium truncate">{c.assunto}</p>
                             <p className="text-sm text-muted-foreground line-clamp-1">{c.conteudo}</p>
                             <p className="text-xs text-muted-foreground mt-1">
                               {formatDistanceToNow(new Date(c.created_at), { addSuffix: true, locale: ptBR })}
@@ -327,7 +290,6 @@ export default function ComunicacaoPage() {
             </div>
           </TabsContent>
 
-          {/* Tab Templates */}
           <TabsContent value="templates" className="mt-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {EMAIL_TEMPLATES.map(template => (
