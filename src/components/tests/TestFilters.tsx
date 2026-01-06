@@ -3,12 +3,11 @@
  * @module TestFilters
  */
 
-import { memo,  useState  , memo} from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { categoriasInfo, departamentosInfo, niveisInfo } from '@/config/testsConfig';
+import { categoriasInfo, departamentosInfo, niveisInfo, getCategoriaById, getDepartamentoById, getNivelById } from '@/config/testsConfig';
 import { CategoriaProva, Departamento, NivelCargo } from '@/types/tests';
 import { Search, X, Filter } from 'lucide-react';
 
@@ -56,8 +55,8 @@ export function TestFilters({
           </SelectTrigger>
           <SelectContent className="bg-popover">
             <SelectItem value="todas">Todas as Categorias</SelectItem>
-            {Object.entries(categoriasInfo).map(([key, info]) => (
-              <SelectItem key={key} value={key}>{info.nome}</SelectItem>
+            {categoriasInfo.map((cat) => (
+              <SelectItem key={cat.id} value={cat.id}>{cat.nome}</SelectItem>
             ))}
           </SelectContent>
         </Select>
@@ -68,8 +67,8 @@ export function TestFilters({
           </SelectTrigger>
           <SelectContent className="bg-popover">
             <SelectItem value="todos">Todos os Departamentos</SelectItem>
-            {Object.entries(departamentosInfo).map(([key, info]) => (
-              <SelectItem key={key} value={key}>{info.nome}</SelectItem>
+            {departamentosInfo.map((dep) => (
+              <SelectItem key={dep.id} value={dep.id}>{dep.nome}</SelectItem>
             ))}
           </SelectContent>
         </Select>
@@ -80,11 +79,9 @@ export function TestFilters({
           </SelectTrigger>
           <SelectContent className="bg-popover">
             <SelectItem value="todos">Todos os Níveis</SelectItem>
-            {Object.entries(niveisInfo)
-              .sort((a, b) => a[1].ordem - b[1].ordem)
-              .map(([key, info]) => (
-                <SelectItem key={key} value={key}>{info.nome}</SelectItem>
-              ))}
+            {niveisInfo.map((nivel) => (
+              <SelectItem key={nivel.id} value={nivel.id}>{nivel.nome}</SelectItem>
+            ))}
           </SelectContent>
         </Select>
 
@@ -106,17 +103,17 @@ export function TestFilters({
           )}
           {selectedCategoria !== 'todas' && (
             <Badge variant="secondary" className="text-xs">
-              {categoriasInfo[selectedCategoria].nome}
+              {getCategoriaById(selectedCategoria)?.nome || selectedCategoria}
             </Badge>
           )}
           {selectedDepartamento !== 'todos' && (
             <Badge variant="secondary" className="text-xs">
-              {departamentosInfo[selectedDepartamento].nome}
+              {getDepartamentoById(selectedDepartamento)?.nome || selectedDepartamento}
             </Badge>
           )}
           {selectedNivel !== 'todos' && (
             <Badge variant="secondary" className="text-xs">
-              {niveisInfo[selectedNivel].nome}
+              {getNivelById(selectedNivel)?.nome || selectedNivel}
             </Badge>
           )}
         </div>
@@ -124,7 +121,5 @@ export function TestFilters({
     </div>
   );
 }
-
-
 
 TestFilters.displayName = "TestFilters";

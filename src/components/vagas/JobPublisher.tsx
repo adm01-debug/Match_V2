@@ -5,15 +5,14 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2, ExternalLink, Check, X, Globe } from "lucide-react";
-import { JOB_BOARDS, type JobBoardIntegration, type PublishResult } from "@/types/jobBoard";
+import { JOB_BOARDS, type PublishResult } from "@/types/jobBoard";
 
 interface JobPublisherProps {
-  vagaId: string;
   vagaTitle: string;
   onPublish?: (results: Record<string, PublishResult>) => void;
 }
 
-export function JobPublisher({ vagaId, vagaTitle, onPublish }: JobPublisherProps) {
+export function JobPublisher({ vagaTitle, onPublish }: JobPublisherProps) {
   const { toast } = useToast();
   const [selectedBoards, setSelectedBoards] = useState<string[]>([]);
   const [isPublishing, setIsPublishing] = useState(false);
@@ -107,7 +106,7 @@ export function JobPublisher({ vagaId, vagaTitle, onPublish }: JobPublisherProps
                 <div className="flex items-center gap-2">
                   {getStatusIcon(board.id)}
                   {results[board.id]?.url && (
-                    <a href={results[board.id].url} target="_blank" rel="noopener noreferrer">
+                    <a href={results[board.id]?.url} target="_blank" rel="noopener noreferrer">
                       <ExternalLink className="h-4 w-4 text-blue-500" />
                     </a>
                   )}
