@@ -1,15 +1,11 @@
 /**
  * @module useDashboard
  * @description Hook para dados do dashboard principal
- * @returns {Object} Hook result with data, isLoading, error, and mutations
- * @example
- * const { data, isLoading } = useDashboard();
  */
 
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 
-// Tipos
 export interface DashboardStats {
   totalVagas: number;
   vagasAbertas: number;
@@ -47,7 +43,6 @@ export interface TopCandidato {
   status: string;
 }
 
-// Query Keys
 const dashboardKeys = {
   all: ['dashboard'] as const,
   stats: () => [...dashboardKeys.all, 'stats'] as const,
@@ -57,10 +52,9 @@ const dashboardKeys = {
   funil: () => [...dashboardKeys.all, 'funil'] as const,
 };
 
-// Fetch Stats
 async function fetchDashboardStats(): Promise<DashboardStats> {
-  const today = new Date().toISOString().split('T')[0];
-  const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+  const today = new Date().toISOString().split('T')[0] ?? '';
+  const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] ?? '';
 
   const [vagasResult, candidatosResult, entrevistasHojeResult, entrevistasSemanaResult] = await Promise.all([
     supabase.from('vagas').select('status', { count: 'exact' }),
@@ -85,7 +79,6 @@ async function fetchDashboardStats(): Promise<DashboardStats> {
   };
 }
 
-// Fetch Vagas Urgentes
 async function fetchVagasUrgentes(): Promise<VagaUrgente[]> {
   const { data, error } = await supabase
     .from('vagas')
@@ -107,21 +100,12 @@ async function fetchVagasUrgentes(): Promise<VagaUrgente[]> {
   }));
 }
 
-// Fetch Entrevistas Hoje
 async function fetchEntrevistasHoje(): Promise<EntrevistaHoje[]> {
-  const today = new Date().toISOString().split('T')[0];
+  const today = new Date().toISOString().split('T')[0] ?? '';
 
   const { data, error } = await supabase
     .from('entrevistas')
-    .select(`
-      id,
-      data,
-      hora_inicio,
-      tipo,
-      candidato_nome,
-      vaga_titulo,
-      entrevistadores
-    `)
+    .select(`id, data, hora_inicio, tipo, candidato_nome, vaga_titulo, entrevistadores`)
     .eq('data', today)
     .order('hora_inicio', { ascending: true })
     .limit(5);
@@ -138,7 +122,6 @@ async function fetchEntrevistasHoje(): Promise<EntrevistaHoje[]> {
   }));
 }
 
-// Fetch Top Candidatos
 async function fetchTopCandidatos(): Promise<TopCandidato[]> {
   const { data, error } = await supabase
     .from('processos_seletivos')
@@ -157,7 +140,6 @@ async function fetchTopCandidatos(): Promise<TopCandidato[]> {
   }));
 }
 
-// Fetch Funil
 async function fetchFunil() {
   const { data, error } = await supabase
     .from('processos_seletivos')
@@ -177,11 +159,10 @@ async function fetchFunil() {
 
   return etapas.map(etapa => ({
     etapa,
-    count: counts[etapa],
+    count: counts[etapa] ?? 0,
   }));
 }
 
-// Hooks
 export function useDashboardStats() {
   return useQuery({
     queryKey: dashboardKeys.stats(),
@@ -242,7 +223,6 @@ export function useFunilRecrutamento() {
   });
 }
 
-// Hook combinado (mantém compatibilidade)
 export function useDashboard() {
   const stats = useDashboardStats();
   const vagasUrgentes = useVagasUrgentes();
@@ -252,10 +232,10 @@ export function useDashboard() {
 
   return {
     stats: stats.data,
-    vagasUrgentes: vagasUrgentes.data || [],
-    entrevistasHoje: entrevistasHoje.data || [],
-    topCandidatos: topCandidatos.data || [],
-    funil: funil.data || [],
+    vagasUrgentes: vagasUrgentes.data ?? [],
+    entrevistasHoje: entrevistasHoje.data ?? [],
+    topCandidatos: topCandidatos.data ?? [],
+    funil: funil.data ?? [],
     isLoading: stats.isLoading || vagasUrgentes.isLoading || entrevistasHoje.isLoading,
     isError: stats.isError || vagasUrgentes.isError,
     error: stats.error || vagasUrgentes.error,
