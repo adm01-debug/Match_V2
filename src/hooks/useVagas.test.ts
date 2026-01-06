@@ -3,7 +3,6 @@ import { renderHook, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import React, { ReactNode } from 'react';
 
-// Mock Supabase
 vi.mock('@/integrations/supabase/client', () => ({
   supabase: {
     from: vi.fn(() => ({
@@ -49,7 +48,6 @@ vi.mock('@/integrations/supabase/client', () => ({
   },
 }));
 
-// Wrapper para React Query
 const createWrapper = () => {
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -67,7 +65,6 @@ describe('useVagas Hook', () => {
   });
 
   it('deve buscar lista de vagas', async () => {
-    // Import dinâmico para evitar problemas com mock
     const { useVagas } = await import('@/hooks/useVagas');
     
     const { result } = renderHook(() => useVagas(), {
@@ -78,8 +75,9 @@ describe('useVagas Hook', () => {
       expect(result.current.isSuccess).toBe(true);
     });
 
-    expect(result.current.data).toHaveLength(2);
-    expect(result.current.data?.[0].titulo).toBe('Dev Frontend');
+    const data = result.current.data ?? [];
+    expect(data).toHaveLength(2);
+    expect(data[0]?.titulo).toBe('Dev Frontend');
   });
 
   it('deve buscar vaga por ID', async () => {

@@ -31,7 +31,6 @@ export function usePushNotifications(): UsePushNotificationsReturn {
   const { toast } = useToast();
   const isMountedRef = useRef(true);
 
-  // Verificar suporte e subscription existente ao montar
   useEffect(() => {
     isMountedRef.current = true;
     
@@ -44,19 +43,19 @@ export function usePushNotifications(): UsePushNotificationsReturn {
       }
       
       if (supported && Notification.permission === 'granted') {
-        // Verificar se já existe subscription
         try {
           const registration = await navigator.serviceWorker.ready;
           const existingSub = await registration.pushManager.getSubscription();
           
           if (existingSub && isMountedRef.current) {
             const subJson = existingSub.toJSON();
-            if (subJson.endpoint && subJson.keys?.p256dh && subJson.keys?.auth) {
+            const keys = subJson.keys as Record<string, string> | undefined;
+            if (subJson.endpoint && keys?.['p256dh'] && keys?.['auth']) {
               setSubscription({
                 endpoint: subJson.endpoint,
                 keys: { 
-                  p256dh: subJson.keys.p256dh, 
-                  auth: subJson.keys.auth 
+                  p256dh: keys['p256dh'], 
+                  auth: keys['auth'] 
                 },
                 expirationTime: existingSub.expirationTime,
               });
@@ -87,10 +86,11 @@ export function usePushNotifications(): UsePushNotificationsReturn {
       
       if (existingSub) {
         const subJson = existingSub.toJSON();
-        if (subJson.endpoint && subJson.keys?.p256dh && subJson.keys?.auth) {
+        const keys = subJson.keys as Record<string, string> | undefined;
+        if (subJson.endpoint && keys?.['p256dh'] && keys?.['auth']) {
           setSubscription({
             endpoint: subJson.endpoint,
-            keys: { p256dh: subJson.keys.p256dh, auth: subJson.keys.auth },
+            keys: { p256dh: keys['p256dh'], auth: keys['auth'] },
             expirationTime: existingSub.expirationTime,
           });
           setIsSubscribed(true);
@@ -156,7 +156,7 @@ export function usePushNotifications(): UsePushNotificationsReturn {
       return null;
     }
     
-    const vapidKey = import.meta.env.VITE_VAPID_PUBLIC_KEY;
+    const vapidKey = import.meta.env['VITE_VAPID_PUBLIC_KEY'] as string | undefined;
     if (!vapidKey) {
       setError('VAPID key não configurada');
       console.error('[usePushNotifications] VITE_VAPID_PUBLIC_KEY not set');
@@ -174,7 +174,6 @@ export function usePushNotifications(): UsePushNotificationsReturn {
     try {
       const registration = await navigator.serviceWorker.ready;
       
-      // Cancelar subscription anterior se existir
       const existingSub = await registration.pushManager.getSubscription();
       if (existingSub) {
         await existingSub.unsubscribe();
@@ -186,14 +185,15 @@ export function usePushNotifications(): UsePushNotificationsReturn {
       });
       
       const subJson = sub.toJSON();
+      const keys = subJson.keys as Record<string, string> | undefined;
       
-      if (!subJson.endpoint || !subJson.keys?.p256dh || !subJson.keys?.auth) {
+      if (!subJson.endpoint || !keys?.['p256dh'] || !keys?.['auth']) {
         throw new Error('Subscription inválida');
       }
       
       const pushSub: PushSubscriptionData = {
         endpoint: subJson.endpoint,
-        keys: { p256dh: subJson.keys.p256dh, auth: subJson.keys.auth },
+        keys: { p256dh: keys['p256dh'], auth: keys['auth'] },
         expirationTime: sub.expirationTime,
       };
       

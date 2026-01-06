@@ -3,16 +3,6 @@
  * 
  * @module hooks/useSearch
  * @description Busca em múltiplas colunas com debounce e validação
- * 
- * @example
- * ```tsx
- * const { results, isLoading, searchTerm, setSearchTerm } = useSearch<Produto>({
- *   table: 'produtos',
- *   columns: ['nome', 'descricao', 'codigo'],
- *   minChars: 2,
- *   debounceMs: 300
- * });
- * ```
  */
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
@@ -24,58 +14,38 @@ import { supabase } from '@/integrations/supabase/client';
 // ============================================
 
 export interface SearchOptions {
-  /** Tabela para buscar */
   table: string;
-  /** Colunas para buscar */
   columns: string[];
-  /** Mínimo de caracteres para iniciar busca */
   minChars?: number;
-  /** Tempo de debounce em ms */
   debounceMs?: number;
-  /** Limite de resultados */
   limit?: number;
-  /** Ordenação */
   orderBy?: {
     column: string;
     ascending?: boolean;
   };
-  /** Filtros adicionais */
-  filters?: Record<string, any>;
-  /** Select customizado */
+  filters?: Record<string, unknown>;
   select?: string;
 }
 
 interface UseSearchResult<T> {
-  /** Resultados da busca */
   results: T[];
-  /** Estado de carregamento */
   isLoading: boolean;
-  /** Erro se houver */
   error: Error | null;
-  /** Termo de busca atual */
   searchTerm: string;
-  /** Atualizar termo de busca */
   setSearchTerm: (term: string) => void;
-  /** Limpar busca */
   clearSearch: () => void;
-  /** Se há resultados */
   hasResults: boolean;
-  /** Total de resultados (se disponível) */
   totalCount?: number;
 }
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const db = supabase as any;
 
 // ============================================
 // HOOK
 // ============================================
 
-/**
- * Hook para busca fulltext com debounce
- * 
- * @template T Tipo dos resultados
- * @param options Opções de configuração da busca
- * @returns Objeto com resultados e controles da busca
- */
-export function useSearch<T = any>(
+export function useSearch<T = unknown>(
   options: SearchOptions
 ): UseSearchResult<T> {
   const {
@@ -89,16 +59,8 @@ export function useSearch<T = any>(
     select = '*'
   } = options;
 
-  // ============================================
-  // ESTADO
-  // ============================================
-
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedTerm, setDebouncedTerm] = useState('');
-
-  // ============================================
-  // DEBOUNCE
-  // ============================================
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -108,10 +70,6 @@ export function useSearch<T = any>(
     return () => clearTimeout(timer);
   }, [searchTerm, debounceMs]);
 
-  // ============================================
-  // QUERY
-  // ============================================
-
   const shouldSearch = useMemo(() => {
     return debouncedTerm.length >= minChars;
   }, [debouncedTerm, minChars]);
@@ -119,12 +77,10 @@ export function useSearch<T = any>(
   const { data, isLoading, error } = useQuery({
     queryKey: ['search', table, debouncedTerm, columns, filters],
     queryFn: async () => {
-      // Construir query base
-      let query = supabase
+      let query = db
         .from(table)
         .select(select, { count: 'exact' });
 
-      // Adicionar busca fulltext em múltiplas colunas
       if (debouncedTerm) {
         const searchConditions = columns
           .map(col => `${col}.ilike.%${debouncedTerm}%`)
@@ -133,7 +89,6 @@ export function useSearch<T = any>(
         query = query.or(searchConditions);
       }
 
-      // Aplicar filtros adicionais
       if (filters) {
         Object.entries(filters).forEach(([key, value]) => {
           if (value !== null && value !== undefined) {
@@ -142,14 +97,12 @@ export function useSearch<T = any>(
         });
       }
 
-      // Aplicar ordenação
       if (orderBy) {
         query = query.order(orderBy.column, { 
           ascending: orderBy.ascending ?? true 
         });
       }
 
-      // Aplicar limite
       if (limit) {
         query = query.limit(limit);
       }
@@ -164,22 +117,14 @@ export function useSearch<T = any>(
       };
     },
     enabled: shouldSearch,
-    staleTime: 30000, // 30 segundos
-    gcTime: 300000, // 5 minutos
+    staleTime: 30000,
+    gcTime: 300000,
   });
-
-  // ============================================
-  // CALLBACKS
-  // ============================================
 
   const clearSearch = useCallback(() => {
     setSearchTerm('');
     setDebouncedTerm('');
   }, []);
-
-  // ============================================
-  // COMPUTED
-  // ============================================
 
   const results = useMemo(() => {
     return data?.results ?? [];
@@ -188,10 +133,6 @@ export function useSearch<T = any>(
   const hasResults = useMemo(() => {
     return results.length > 0;
   }, [results]);
-
-  // ============================================
-  // RETURN
-  // ============================================
 
   return {
     results,
@@ -209,10 +150,7 @@ export function useSearch<T = any>(
 // HELPER FUNCTIONS
 // ============================================
 
-/**
- * Hook simplificado para busca rápida
- */
-export function useQuickSearch<T = any>(
+export function useQuickSearch<T = unknown>(
   table: string,
   searchColumns: string[]
 ): UseSearchResult<T> {
@@ -225,13 +163,10 @@ export function useQuickSearch<T = any>(
   });
 }
 
-/**
- * Hook para busca avançada com filtros
- */
-export function useAdvancedSearch<T = any>(
+export function useAdvancedSearch<T = unknown>(
   table: string,
   columns: string[],
-  filters?: Record<string, any>
+  filters?: Record<string, unknown>
 ): UseSearchResult<T> {
   return useSearch<T>({
     table,

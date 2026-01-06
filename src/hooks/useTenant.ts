@@ -1,7 +1,16 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
-import { useTenantContext } from '@/contexts/TenantContext';
+/**
+ * Hook para Multi-Tenancy (localStorage-based)
+ */
+
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useToast } from '@/hooks/use-toast';
+
+interface Tenant {
+  id: string;
+  name: string;
+  slug: string;
+  created_at: string;
+}
 
 interface TenantSettings { 
   theme?: string; 
@@ -10,58 +19,97 @@ interface TenantSettings {
   features?: string[]; 
 }
 
+interface TenantMember {
+  id: string;
+  tenant_id: string;
+  user_id: string;
+  role: string;
+  name: string;
+}
+
+function getStorageKey(): string {
+  return 'current_tenant';
+}
+
+function generateId(): string {
+  return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+}
+
 export function useTenant() {
-  const context = useTenantContext();
   const { toast } = useToast();
-  const queryClient = useQueryClient();
+  
+  const [tenant, setTenant] = useState<Tenant | null>(null);
+  const [tenants, setTenants] = useState<Tenant[]>([]);
+  const [settings, setSettings] = useState<TenantSettings>({});
+  const [members, setMembers] = useState<TenantMember[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const tenant = context?.tenant || null;
-  const tenants = context?.tenants || [];
-  const switchTenant = context?.switchTenant || (async () => {});
-  const isMultiTenant = context?.isMultiTenant || false;
+  // Load from localStorage
+  useEffect(() => {
+    try {
+      const storedTenant = localStorage.getItem(getStorageKey());
+      const storedTenants = localStorage.getItem('tenants');
+      const storedSettings = localStorage.getItem('tenant_settings');
+      
+      if (storedTenant) setTenant(JSON.parse(storedTenant));
+      if (storedTenants) setTenants(JSON.parse(storedTenants));
+      if (storedSettings) setSettings(JSON.parse(storedSettings));
+      
+      // Default tenant if none exists
+      if (!storedTenants) {
+        const defaultTenant: Tenant = {
+          id: generateId(),
+          name: 'Default Organization',
+          slug: 'default',
+          created_at: new Date().toISOString(),
+        };
+        setTenants([defaultTenant]);
+        setTenant(defaultTenant);
+        localStorage.setItem('tenants', JSON.stringify([defaultTenant]));
+        localStorage.setItem(getStorageKey(), JSON.stringify(defaultTenant));
+      }
+    } catch (e) {
+      console.error('Error loading tenant:', e);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
 
-  const { data: settings } = useQuery({
-    queryKey: ['tenant-settings', tenant?.id],
-    queryFn: async () => {
-      if (!tenant?.id) return null;
-      const { data } = await supabase.from('tenants').select('settings').eq('id', tenant.id).single();
-      return data?.settings as TenantSettings || {};
-    },
-    enabled: !!tenant?.id,
-  });
+  const isMultiTenant = useMemo(() => tenants.length > 1, [tenants]);
 
-  const { data: members = [] } = useQuery({
-    queryKey: ['tenant-members', tenant?.id],
-    queryFn: async () => {
-      if (!tenant?.id) return [];
-      const { data } = await supabase.from('tenant_members').select('*, profiles(*)').eq('tenant_id', tenant.id);
-      return data || [];
-    },
-    enabled: !!tenant?.id,
-  });
+  const switchTenant = useCallback(async (tenantId: string) => {
+    const newTenant = tenants.find(t => t.id === tenantId);
+    if (newTenant) {
+      setTenant(newTenant);
+      localStorage.setItem(getStorageKey(), JSON.stringify(newTenant));
+      toast({ title: 'Organização alterada', description: `Mudou para ${newTenant.name}` });
+    }
+  }, [tenants, toast]);
 
-  const updateSettings = useMutation({
-    mutationFn: async (newSettings: Partial<TenantSettings>) => {
-      if (!tenant?.id) throw new Error('No tenant');
-      const { error } = await supabase.from('tenants').update({ settings: { ...settings, ...newSettings } }).eq('id', tenant.id);
-      if (error) throw error;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['tenant-settings'] });
-      toast({ title: 'Configurações salvas' });
-    },
-  });
+  const updateSettings = useCallback((newSettings: Partial<TenantSettings>) => {
+    const updated = { ...settings, ...newSettings };
+    setSettings(updated);
+    localStorage.setItem('tenant_settings', JSON.stringify(updated));
+    toast({ title: 'Configurações salvas' });
+  }, [settings, toast]);
 
-  const inviteMember = useMutation({
-    mutationFn: async ({ email, role }: { email: string; role: string }) => {
-      if (!tenant?.id) throw new Error('No tenant');
-      const { error } = await supabase.from('tenant_invites').insert({ tenant_id: tenant.id, email, role });
-      if (error) throw error;
-    },
-    onSuccess: () => {
-      toast({ title: 'Convite enviado' });
-    },
-  });
+  const inviteMember = useCallback(async ({ email, role }: { email: string; role: string }) => {
+    if (!tenant) return;
+    
+    const newMember: TenantMember = {
+      id: generateId(),
+      tenant_id: tenant.id,
+      user_id: generateId(),
+      role,
+      name: email.split('@')[0] || email,
+    };
+    
+    const updatedMembers = [...members, newMember];
+    setMembers(updatedMembers);
+    localStorage.setItem('tenant_members', JSON.stringify(updatedMembers));
+    
+    toast({ title: 'Convite enviado', description: `Convite enviado para ${email}` });
+  }, [tenant, members, toast]);
 
   return { 
     tenant, 
@@ -69,9 +117,10 @@ export function useTenant() {
     settings, 
     members, 
     isMultiTenant, 
+    isLoading,
     switchTenant, 
-    updateSettings: updateSettings.mutate, 
-    inviteMember: inviteMember.mutate 
+    updateSettings, 
+    inviteMember,
   };
 }
 
