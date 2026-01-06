@@ -15,7 +15,7 @@ export function exportToExcel<T extends Record<string, unknown>>(
   data: T[],
   columns: ExportColumn<T>[],
   filename: string,
-  sheetName: string = 'Dados'
+  _sheetName: string = 'Dados'
 ): void {
   if (!data || data.length === 0) {
     console.warn('[exportToExcel] No data to export');
@@ -58,7 +58,10 @@ export function parseCSV(content: string): Record<string, string>[] {
   const lines = content.split('\n').filter(line => line.trim());
   if (lines.length < 2) return [];
 
-  const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
+  const headerLine = lines[0];
+  if (!headerLine) return [];
+  
+  const headers = headerLine.split(',').map(h => h.trim().replace(/^"|"$/g, ''));
   
   return lines.slice(1).map(line => {
     const values = line.split(',').map(v => v.trim().replace(/^"|"$/g, ''));

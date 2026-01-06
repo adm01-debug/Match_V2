@@ -8,6 +8,54 @@
 export const APP_NAME = 'Match ATS';
 export const APP_VERSION = '1.0.0';
 
+// API Endpoints
+export const API_ENDPOINTS = {
+  CANDIDATOS: '/candidatos',
+  VAGAS: '/vagas',
+  ENTREVISTAS: '/entrevistas',
+  PROCESSOS: '/processos',
+  PROVAS: '/provas',
+  USUARIOS: '/usuarios',
+} as const;
+
+// Status Colors
+export const STATUS_COLORS = {
+  novo: 'gray',
+  em_triagem: 'blue',
+  aprovado: 'green',
+  reprovado: 'red',
+  contratado: 'emerald',
+  publicada: 'green',
+  pausada: 'yellow',
+  fechada: 'blue',
+  cancelada: 'red',
+} as const;
+
+// Pagination
+export const PAGINATION = {
+  DEFAULT_PAGE_SIZE: 10,
+  MAX_PAGE_SIZE: 100,
+  PAGE_SIZES: [10, 25, 50, 100],
+} as const;
+
+// Date Formats
+export const DATE_FORMATS = {
+  SHORT: 'dd/MM/yyyy',
+  LONG: "dd 'de' MMMM 'de' yyyy",
+  ISO: 'yyyy-MM-dd',
+  DATETIME: 'dd/MM/yyyy HH:mm',
+} as const;
+
+// Validation
+export const VALIDATION = {
+  EMAIL_REGEX: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+  PHONE_REGEX: /^\+?[\d\s()-]{10,}$/,
+  CPF_REGEX: /^\d{3}\.\d{3}\.\d{3}-\d{2}$/,
+  CNPJ_REGEX: /^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/,
+  MIN_PASSWORD_LENGTH: 8,
+  MAX_NAME_LENGTH: 100,
+} as const;
+
 // Etapas do processo seletivo
 export const ETAPAS_PROCESSO = [
   { id: 'novo', nome: 'Novo', cor: 'gray', ordem: 1 },

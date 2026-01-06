@@ -120,7 +120,7 @@ export function useWebAuthn() {
         user: {
           id: new TextEncoder().encode(user.id),
           name: user.email || '',
-          displayName: user.user_metadata?.nome || user.email || 'Usuário',
+          displayName: (user.user_metadata as Record<string, unknown>)?.['nome'] as string || user.email || 'Usuário',
         },
         pubKeyCredParams: [
           { alg: -7, type: 'public-key' },   // ES256

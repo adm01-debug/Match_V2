@@ -1,7 +1,21 @@
-import { useState, useEffect, useCallback } from "react";
+import { useEffect, useCallback } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
 import { WhiteLabelConfig, DEFAULT_WHITE_LABEL } from "@/types/whiteLabel";
+
+const STORAGE_KEY = 'white_label_config';
+
+function getStoredConfig(): WhiteLabelConfig | null {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    return stored ? JSON.parse(stored) : null;
+  } catch {
+    return null;
+  }
+}
+
+function setStoredConfig(config: WhiteLabelConfig): void {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(config));
+}
 
 export function useWhiteLabel() {
   const queryClient = useQueryClient();
@@ -9,29 +23,18 @@ export function useWhiteLabel() {
   const { data: config, isLoading } = useQuery({
     queryKey: ["whitelabel"],
     queryFn: async () => {
-      const { data: tenant } = await supabase.auth.getSession();
-      if (!tenant.session?.user) return DEFAULT_WHITE_LABEL;
-
-      const { data } = await supabase
-        .from("tenant_settings")
-        .select("white_label_config")
-        .single();
-
-      return (data?.white_label_config as WhiteLabelConfig) || DEFAULT_WHITE_LABEL;
+      const stored = getStoredConfig();
+      return stored || DEFAULT_WHITE_LABEL;
     },
-    staleTime: 1000 * 60 * 5, // 5 minutes
+    staleTime: 1000 * 60 * 5,
   });
 
   const updateMutation = useMutation({
     mutationFn: async (newConfig: Partial<WhiteLabelConfig>) => {
-      const { data, error } = await supabase
-        .from("tenant_settings")
-        .upsert({ white_label_config: { ...config, ...newConfig } })
-        .select()
-        .single();
-
-      if (error) throw error;
-      return data;
+      const currentConfig = config || DEFAULT_WHITE_LABEL;
+      const updatedConfig = { ...currentConfig, ...newConfig };
+      setStoredConfig(updatedConfig);
+      return updatedConfig;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["whitelabel"] });

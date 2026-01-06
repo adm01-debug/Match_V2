@@ -84,7 +84,7 @@ describe('dateUtils', () => {
     });
 
     it('returns true for today as string', () => {
-      const todayStr = new Date().toISOString().split('T')[0];
+      const todayStr = new Date().toISOString().split('T')[0] ?? '';
       expect(isToday(todayStr)).toBe(true);
     });
   });

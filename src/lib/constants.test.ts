@@ -26,7 +26,7 @@ describe('constants', () => {
     });
 
     it('endpoints are strings', () => {
-      Object.values(API_ENDPOINTS || {}).forEach(endpoint => {
+      Object.values(API_ENDPOINTS).forEach(endpoint => {
         expect(typeof endpoint).toBe('string');
       });
     });
@@ -38,7 +38,7 @@ describe('constants', () => {
     });
 
     it('contains valid color values', () => {
-      Object.values(STATUS_COLORS || {}).forEach(color => {
+      Object.values(STATUS_COLORS).forEach(color => {
         expect(typeof color).toBe('string');
       });
     });
@@ -46,11 +46,11 @@ describe('constants', () => {
 
   describe('PAGINATION', () => {
     it('has default page size', () => {
-      expect(PAGINATION?.DEFAULT_PAGE_SIZE).toBeGreaterThan(0);
+      expect(PAGINATION.DEFAULT_PAGE_SIZE).toBeGreaterThan(0);
     });
 
     it('has max page size', () => {
-      expect(PAGINATION?.MAX_PAGE_SIZE).toBeGreaterThan(PAGINATION?.DEFAULT_PAGE_SIZE || 0);
+      expect(PAGINATION.MAX_PAGE_SIZE).toBeGreaterThan(PAGINATION.DEFAULT_PAGE_SIZE);
     });
   });
 

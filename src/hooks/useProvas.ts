@@ -248,7 +248,7 @@ export function useBaterias() {
         if (!provasPorBateria[rel.bateria_id]) {
           provasPorBateria[rel.bateria_id] = [];
         }
-        provasPorBateria[rel.bateria_id].push(rel.prova_id);
+        provasPorBateria[rel.bateria_id]?.push(rel.prova_id);
       });
 
       return (baterias || []).map(b => 

@@ -49,7 +49,7 @@ export const performance = {
   /**
    * Report Web Vitals
    */
-  reportWebVitals: (callback: (metric: { name: string; value: number }) => void) => {
+  reportWebVitals: (_callback: (metric: { name: string; value: number }) => void) => {
     if (typeof window !== 'undefined') {
       // LCP, FID, CLS would be measured here
       // This is a placeholder for web-vitals library integration
@@ -58,3 +58,60 @@ export const performance = {
   },
 };
 
+/**
+ * Measure performance of a function
+ */
+export function measurePerformance<T>(name: string, fn: () => T): T {
+  performance.mark(`${name}-start`);
+  const result = fn();
+  performance.mark(`${name}-end`);
+  performance.measure(name, `${name}-start`, `${name}-end`);
+  return result;
+}
+
+/**
+ * Debounce function
+ */
+export function debounce<T extends (...args: unknown[]) => unknown>(
+  fn: T,
+  delay: number
+): (...args: Parameters<T>) => void {
+  let timeoutId: ReturnType<typeof setTimeout>;
+  return (...args: Parameters<T>) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => fn(...args), delay);
+  };
+}
+
+/**
+ * Throttle function
+ */
+export function throttle<T extends (...args: unknown[]) => unknown>(
+  fn: T,
+  limit: number
+): (...args: Parameters<T>) => void {
+  let inThrottle = false;
+  return (...args: Parameters<T>) => {
+    if (!inThrottle) {
+      fn(...args);
+      inThrottle = true;
+      setTimeout(() => (inThrottle = false), limit);
+    }
+  };
+}
+
+/**
+ * Memoize function
+ */
+export function memoize<T extends (...args: unknown[]) => unknown>(fn: T): T {
+  const cache = new Map<string, ReturnType<T>>();
+  return ((...args: Parameters<T>) => {
+    const key = JSON.stringify(args);
+    if (cache.has(key)) {
+      return cache.get(key);
+    }
+    const result = fn(...args) as ReturnType<T>;
+    cache.set(key, result);
+    return result;
+  }) as T;
+}

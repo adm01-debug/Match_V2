@@ -1,12 +1,10 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
 export interface AutoAction {
   type: 'send_email' | 'create_task' | 'notify' | 'update_status';
   config: Record<string, unknown>;
 }
-
 
 export interface Workflow {
   id: string;
@@ -39,6 +37,35 @@ export interface WorkflowTransition {
   approval_role: string | null;
 }
 
+const WORKFLOWS_KEY = 'workflows';
+const STAGES_KEY = 'workflow_stages';
+
+function getStoredWorkflows(): Workflow[] {
+  try {
+    const stored = localStorage.getItem(WORKFLOWS_KEY);
+    return stored ? JSON.parse(stored) : [];
+  } catch {
+    return [];
+  }
+}
+
+function setStoredWorkflows(workflows: Workflow[]): void {
+  localStorage.setItem(WORKFLOWS_KEY, JSON.stringify(workflows));
+}
+
+function getStoredStages(): WorkflowStage[] {
+  try {
+    const stored = localStorage.getItem(STAGES_KEY);
+    return stored ? JSON.parse(stored) : [];
+  } catch {
+    return [];
+  }
+}
+
+function setStoredStages(stages: WorkflowStage[]): void {
+  localStorage.setItem(STAGES_KEY, JSON.stringify(stages));
+}
+
 export function useWorkflows() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -46,24 +73,23 @@ export function useWorkflows() {
   const { data: workflows, isLoading } = useQuery({
     queryKey: ['workflows'],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('workflows')
-        .select('*')
-        .order('created_at', { ascending: false });
-      if (error) throw error;
-      return data as Workflow[];
+      return getStoredWorkflows();
     },
   });
 
   const createWorkflow = useMutation({
     mutationFn: async (workflow: Partial<Workflow>) => {
-      const { data, error } = await supabase
-        .from('workflows')
-        .insert(workflow)
-        .select()
-        .single();
-      if (error) throw error;
-      return data;
+      const allWorkflows = getStoredWorkflows();
+      const newWorkflow: Workflow = {
+        id: crypto.randomUUID(),
+        name: workflow.name || 'Novo Workflow',
+        description: workflow.description || null,
+        is_default: workflow.is_default ?? false,
+        is_active: workflow.is_active ?? true,
+        created_at: new Date().toISOString(),
+      };
+      setStoredWorkflows([...allWorkflows, newWorkflow]);
+      return newWorkflow;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['workflows'] });
@@ -73,14 +99,12 @@ export function useWorkflows() {
 
   const updateWorkflow = useMutation({
     mutationFn: async ({ id, ...updates }: Partial<Workflow> & { id: string }) => {
-      const { data, error } = await supabase
-        .from('workflows')
-        .update(updates)
-        .eq('id', id)
-        .select()
-        .single();
-      if (error) throw error;
-      return data;
+      const allWorkflows = getStoredWorkflows();
+      const updated = allWorkflows.map(w => 
+        w.id === id ? { ...w, ...updates } : w
+      );
+      setStoredWorkflows(updated);
+      return updated.find(w => w.id === id);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['workflows'] });
@@ -90,8 +114,8 @@ export function useWorkflows() {
 
   const deleteWorkflow = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('workflows').delete().eq('id', id);
-      if (error) throw error;
+      const allWorkflows = getStoredWorkflows();
+      setStoredWorkflows(allWorkflows.filter(w => w.id !== id));
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['workflows'] });
@@ -115,26 +139,31 @@ export function useWorkflowStages(workflowId: string | undefined) {
     queryKey: ['workflow-stages', workflowId],
     queryFn: async () => {
       if (!workflowId) return [];
-      const { data, error } = await supabase
-        .from('workflow_stages')
-        .select('*')
-        .eq('workflow_id', workflowId)
-        .order('stage_order');
-      if (error) throw error;
-      return data as WorkflowStage[];
+      const allStages = getStoredStages();
+      return allStages
+        .filter(s => s.workflow_id === workflowId)
+        .sort((a, b) => a.stage_order - b.stage_order);
     },
     enabled: !!workflowId,
   });
 
   const createStage = useMutation({
     mutationFn: async (stage: Partial<WorkflowStage>) => {
-      const { data, error } = await supabase
-        .from('workflow_stages')
-        .insert(stage)
-        .select()
-        .single();
-      if (error) throw error;
-      return data;
+      const allStages = getStoredStages();
+      const newStage: WorkflowStage = {
+        id: crypto.randomUUID(),
+        workflow_id: stage.workflow_id || workflowId || '',
+        name: stage.name || 'Nova Etapa',
+        description: stage.description || null,
+        stage_order: stage.stage_order ?? allStages.length + 1,
+        color: stage.color || '#6366f1',
+        is_final: stage.is_final ?? false,
+        auto_actions: stage.auto_actions || [],
+        required_fields: stage.required_fields || [],
+        sla_hours: stage.sla_hours ?? null,
+      };
+      setStoredStages([...allStages, newStage]);
+      return newStage;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['workflow-stages', workflowId] });
@@ -143,14 +172,12 @@ export function useWorkflowStages(workflowId: string | undefined) {
 
   const updateStage = useMutation({
     mutationFn: async ({ id, ...updates }: Partial<WorkflowStage> & { id: string }) => {
-      const { data, error } = await supabase
-        .from('workflow_stages')
-        .update(updates)
-        .eq('id', id)
-        .select()
-        .single();
-      if (error) throw error;
-      return data;
+      const allStages = getStoredStages();
+      const updated = allStages.map(s => 
+        s.id === id ? { ...s, ...updates } : s
+      );
+      setStoredStages(updated);
+      return updated.find(s => s.id === id);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['workflow-stages', workflowId] });
@@ -159,8 +186,8 @@ export function useWorkflowStages(workflowId: string | undefined) {
 
   const deleteStage = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('workflow_stages').delete().eq('id', id);
-      if (error) throw error;
+      const allStages = getStoredStages();
+      setStoredStages(allStages.filter(s => s.id !== id));
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['workflow-stages', workflowId] });
@@ -169,10 +196,12 @@ export function useWorkflowStages(workflowId: string | undefined) {
 
   const reorderStages = useMutation({
     mutationFn: async (stageIds: string[]) => {
-      const updates = stageIds.map((id, index) => 
-        supabase.from('workflow_stages').update({ stage_order: index + 1 }).eq('id', id)
-      );
-      await Promise.all(updates);
+      const allStages = getStoredStages();
+      const updated = allStages.map(s => {
+        const newOrder = stageIds.indexOf(s.id);
+        return newOrder >= 0 ? { ...s, stage_order: newOrder + 1 } : s;
+      });
+      setStoredStages(updated);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['workflow-stages', workflowId] });
@@ -193,19 +222,14 @@ export function useDefaultWorkflow() {
   const { data } = useQuery({
     queryKey: ['default-workflow'],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('workflows')
-        .select(`
-          *,
-          workflow_stages(*)
-        `)
-        .eq('is_default', true)
-        .single();
-      if (error) throw error;
-      return data;
+      const workflows = getStoredWorkflows();
+      const defaultWorkflow = workflows.find(w => w.is_default);
+      if (!defaultWorkflow) return null;
+      
+      const stages = getStoredStages().filter(s => s.workflow_id === defaultWorkflow.id);
+      return { ...defaultWorkflow, workflow_stages: stages };
     },
   });
 
   return { defaultWorkflow: data };
 }
-
