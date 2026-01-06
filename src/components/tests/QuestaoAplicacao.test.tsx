@@ -1,1 +1,2 @@
-import{describe,it,expect,vi}from'vitest';describe('QuestaoAplicacao',()=>{it('ok',async()=>{expect(await import('./QuestaoAplicacao')).toBeDefined();});});
+import { describe, it, expect } from 'vitest';
+describe('QuestaoAplicacao', () => { it('ok', async () => { expect(await import('./QuestaoAplicacao')).toBeDefined(); }); });
