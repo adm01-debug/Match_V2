@@ -1,14 +1,10 @@
 import { useDocumentTitle } from '@/hooks/useDocumentTitle';
-import { Suspense } from 'react';
-import { Skeleton } from '@/components/ui/skeleton';
-import { ErrorBoundary } from '@/components/ErrorBoundary';
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { useProvas } from "@/hooks/useProvas";
-import { categoriasInfo, niveisInfo, departamentosInfo, getCategoriaById, getNivelById } from "@/config/testsConfig";
+import { categoriasInfo, niveisInfo, getCategoriaById, getNivelById } from "@/config/testsConfig";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -20,7 +16,6 @@ import {
   Search,
   Plus,
   FileText,
-  Clock,
   Users,
   CheckCircle2,
   BarChart3,
@@ -39,6 +34,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
+import { TestsEmptyState } from "@/components/empty-states";
 
 // Mapa de ícones
 const iconeMap: Record<string, any> = {
@@ -311,16 +307,15 @@ export default function TestsPage() {
           {/* Tab Provas */}
           <TabsContent value="provas" className="mt-4">
             {provasFiltradas.length === 0 ? (
-              <Card>
-                <CardContent className="py-12 text-center text-muted-foreground">
-                  <FileText className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                  <p>Nenhuma prova encontrada</p>
-                  <Button onClick={() => navigate("/provas/nova")} className="mt-4">
-                    <Plus className="h-4 w-4 mr-2" />
-                    Criar Primeira Prova
-                  </Button>
-                </CardContent>
-              </Card>
+              <TestsEmptyState 
+                hasFilters={searchQuery !== '' || filtroCategoria !== 'todas' || filtroNivel !== 'todos'}
+                onClearFilters={() => {
+                  setSearchQuery('');
+                  setFiltroCategoria('todas');
+                  setFiltroNivel('todos');
+                }}
+                context="provas"
+              />
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {provasFiltradas.map(prova => (

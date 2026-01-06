@@ -14,7 +14,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Calendar } from "@/components/ui/calendar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import {
@@ -35,6 +34,7 @@ import { format, isSameDay, startOfMonth, endOfMonth, eachDayOfInterval, isToday
 import { ptBR } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
+import { AgendaEmptyState } from "@/components/empty-states";
 interface EntrevistaCardData {
   id: string;
   status: string;
@@ -349,12 +349,7 @@ export default function AgendaPage() {
                   </h2>
 
                   {entrevistasDoDia.length === 0 ? (
-                    <Card>
-                      <CardContent className="py-8 text-center text-muted-foreground">
-                        <CalendarIcon className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                        Nenhuma entrevista neste dia
-                      </CardContent>
-                    </Card>
+                    <AgendaEmptyState dateSelected={true} />
                   ) : (
                     <div className="space-y-3">
                       {entrevistasDoDia.map(entrevista => (
@@ -369,11 +364,7 @@ export default function AgendaPage() {
             <TabsContent value="proximas" className="mt-4">
               <div className="space-y-3">
                 {proximasEntrevistas.length === 0 ? (
-                  <Card>
-                    <CardContent className="py-8 text-center text-muted-foreground">
-                      Nenhuma entrevista agendada
-                    </CardContent>
-                  </Card>
+                  <AgendaEmptyState />
                 ) : (
                   proximasEntrevistas.map(entrevista => (
                     <div key={entrevista.id}>

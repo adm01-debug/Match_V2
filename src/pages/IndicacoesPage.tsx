@@ -1,13 +1,9 @@
 import { useDocumentTitle } from '@/hooks/useDocumentTitle';
-import { Suspense } from 'react';
-import { Skeleton } from '@/components/ui/skeleton';
-import { ErrorBoundary } from '@/components/ErrorBoundary';
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Layout } from "@/components/layout/Layout";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -39,6 +35,7 @@ import {
 } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { IndicacoesEmptyState } from "@/components/empty-states";
 
 interface Indicacao {
   id: string;
@@ -393,12 +390,7 @@ export default function IndicacoesPage() {
             return (
               <TabsContent key={tab} value={tab} className="space-y-4">
                 {filtered.length === 0 ? (
-                  <Card>
-                    <CardContent className="py-12 text-center">
-                      <Users className="h-12 w-12 mx-auto mb-4 text-muted-foreground/20" />
-                      <p className="text-muted-foreground">Nenhuma indicação nesta categoria</p>
-                    </CardContent>
-                  </Card>
+                  <IndicacoesEmptyState />
                 ) : (
                   <div className="space-y-3">
                     {filtered.map(indicacao => {

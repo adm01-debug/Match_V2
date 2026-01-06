@@ -1,9 +1,4 @@
 import { useDocumentTitle } from '@/hooks/useDocumentTitle';
-import { Suspense } from 'react';
-import { Skeleton } from '@/components/ui/skeleton';
-import { ErrorBoundary } from '@/components/ErrorBoundary';
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
-import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { VagaCard } from "@/components/vagas/VagaCard";
@@ -19,10 +14,11 @@ import {
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useVagas } from "@/hooks/useVagas";
-import { StatusVaga, Prioridade } from "@/types/recruitment";
-import { Plus, Search, Filter, LayoutGrid, List, X , AlertCircle } from "lucide-react";
+import { Plus, Search, LayoutGrid, List, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
+import { usePageTitle } from '@/hooks/usePageTitle';
+import { VagasEmptyState } from "@/components/empty-states";
 
 export default function VagasList() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -204,21 +200,10 @@ export default function VagasList() {
             ))}
           </div>
         ) : filteredVagas.length === 0 ? (
-          <div className="text-center py-12">
-            <div className="mx-auto w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
-              <Search className="h-8 w-8 text-muted-foreground" />
-            </div>
-            <h3 className="text-lg font-medium text-foreground mb-2">Nenhuma vaga encontrada</h3>
-            <p className="text-muted-foreground mb-4">
-              Tente ajustar os filtros ou criar uma nova vaga
-            </p>
-            <Button asChild>
-              <Link to="/vagas/nova">
-                <Plus className="h-4 w-4 mr-2" />
-                Criar Nova Vaga
-              </Link>
-            </Button>
-          </div>
+          <VagasEmptyState 
+            hasFilters={hasActiveFilters} 
+            onClearFilters={clearFilters} 
+          />
         ) : (
           <div className={cn(
             "gap-4",

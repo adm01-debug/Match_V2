@@ -62,7 +62,7 @@ function VagaCardComponent({ vaga, onDeleted }: VagaCardProps) {
   const deleteVaga = useDeleteVaga();
   
   const diasAberta = useMemo(
-    () => calculateDaysOpen(vaga.dataPublicacao),
+    () => calculateDaysOpen(vaga.dataPublicacao instanceof Date ? vaga.dataPublicacao.toISOString() : vaga.dataPublicacao),
     [vaga.dataPublicacao]
   );
 
