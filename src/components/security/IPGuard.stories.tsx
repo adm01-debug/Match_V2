@@ -5,7 +5,7 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { IPGuard, IPCheckLoading, AccessBlocked, IPCheckError } from './IPGuard';
+import { IPCheckLoading, AccessBlocked, IPCheckError } from './IPGuard';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -13,16 +13,15 @@ const queryClient = new QueryClient({
   },
 });
 
-const meta: Meta<typeof IPGuard> = {
+const withQueryClient = (Story: React.FC) => (
+  <QueryClientProvider client={queryClient}>
+    <Story />
+  </QueryClientProvider>
+);
+
+const meta: Meta = {
   title: 'Security/IPGuard',
-  component: IPGuard,
-  decorators: [
-    (Story) => (
-      <QueryClientProvider client={queryClient}>
-        <Story />
-      </QueryClientProvider>
-    ),
-  ],
+  decorators: [withQueryClient],
   parameters: {
     layout: 'fullscreen',
     docs: {
@@ -32,30 +31,16 @@ const meta: Meta<typeof IPGuard> = {
     },
   },
   tags: ['autodocs'],
-  argTypes: {
-    showIPOnBlock: {
-      control: 'boolean',
-      description: 'Mostrar IP do usuário quando bloqueado',
-      defaultValue: true,
-    },
-  },
 };
 
 export default meta;
-type Story = StoryObj<typeof IPGuard>;
+type Story = StoryObj;
 
 /**
  * Estado de loading durante verificação de IP
  */
 export const Loading: Story = {
   render: () => <IPCheckLoading />,
-  parameters: {
-    docs: {
-      description: {
-        story: 'Exibido enquanto o sistema verifica se o IP está autorizado.',
-      },
-    },
-  },
 };
 
 /**
@@ -69,13 +54,6 @@ export const Blocked: Story = {
       onRetry={() => undefined} 
     />
   ),
-  parameters: {
-    docs: {
-      description: {
-        story: 'Exibido quando o IP do usuário não está na whitelist.',
-      },
-    },
-  },
 };
 
 /**
@@ -89,13 +67,6 @@ export const BlockedHiddenIP: Story = {
       onRetry={() => undefined} 
     />
   ),
-  parameters: {
-    docs: {
-      description: {
-        story: 'Versão que não exibe o IP do usuário por segurança.',
-      },
-    },
-  },
 };
 
 /**
@@ -108,13 +79,6 @@ export const Error: Story = {
       onRetry={() => undefined} 
     />
   ),
-  parameters: {
-    docs: {
-      description: {
-        story: 'Exibido quando ocorre um erro durante a verificação.',
-      },
-    },
-  },
 };
 
 /**
@@ -129,12 +93,4 @@ export const Allowed: Story = {
       </p>
     </div>
   ),
-  parameters: {
-    docs: {
-      description: {
-        story: 'Exemplo de conteúdo exibido quando o IP está autorizado.',
-      },
-    },
-  },
 };
-

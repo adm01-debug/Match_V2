@@ -1,14 +1,26 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Zap, Play, GitBranch, Clock, Square, Mail, MessageSquare, Bell, Tag, UserPlus, Calendar } from "lucide-react";
-import { TRIGGER_LABELS, ACTION_LABELS, WorkflowTrigger, WorkflowAction } from "@/types/workflow";
+import { Zap, Play, GitBranch, Clock, Mail, MessageSquare, Bell, Tag, UserPlus, Calendar } from "lucide-react";
+import { TRIGGER_LABELS, WorkflowTrigger } from "@/types/workflow";
 
 interface NodePaletteProps {
   onDragStart: (nodeType: string, data: Record<string, unknown>) => void;
 }
 
-const NODE_CATEGORIES = [
+interface NodeItem {
+  type: string;
+  label: string;
+  icon: typeof Zap;
+  trigger?: WorkflowTrigger;
+  action?: string;
+}
+
+const NODE_CATEGORIES: Array<{
+  title: string;
+  icon: typeof Zap;
+  color: string;
+  nodes: NodeItem[];
+}> = [
   {
     title: "Gatilhos",
     icon: Zap,
@@ -46,10 +58,10 @@ const NODE_CATEGORIES = [
 ];
 
 export function NodePalette({ onDragStart }: NodePaletteProps) {
-  const handleDragStart = (e: React.DragEvent, node: typeof NODE_CATEGORIES[0]["nodes"][0]) => {
+  const handleDragStart = (e: React.DragEvent, node: NodeItem) => {
     e.dataTransfer.setData("application/reactflow", JSON.stringify({
       type: node.type,
-      data: { label: node.label, trigger: (node as any).trigger, action: (node as any).action },
+      data: { label: node.label, trigger: node.trigger, action: node.action },
     }));
     e.dataTransfer.effectAllowed = "move";
     onDragStart(node.type, { label: node.label });
@@ -58,7 +70,7 @@ export function NodePalette({ onDragStart }: NodePaletteProps) {
   return (
     <Card className="w-64 h-full">
       <CardHeader className="pb-2">
-        <CardTitle className="text-sm">Componentes</CardTitle>
+        <CardTitle className="text-sm">Nós</CardTitle>
       </CardHeader>
       <CardContent className="p-2">
         <ScrollArea className="h-[calc(100vh-200px)]">
