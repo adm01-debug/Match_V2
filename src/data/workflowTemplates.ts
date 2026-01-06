@@ -1,6 +1,23 @@
-import type { Workflow } from "@/types/workflow";
+import type { Workflow, WorkflowNode } from "@/types/workflow";
 
-export const workflowTemplates: Omit<Workflow, "id" | "createdAt" | "updatedAt">[] = [
+// Extended node data type that supports condition
+interface WorkflowNodeData {
+  label: string;
+  trigger?: string;
+  action?: string;
+  condition?: string;
+  config?: Record<string, unknown>;
+}
+
+interface ExtendedWorkflowNode extends Omit<WorkflowNode, 'data'> {
+  data: WorkflowNodeData;
+}
+
+interface ExtendedWorkflow extends Omit<Workflow, 'nodes'> {
+  nodes: ExtendedWorkflowNode[];
+}
+
+export const workflowTemplates: Omit<ExtendedWorkflow, "id" | "createdAt" | "updatedAt">[] = [
   {
     name: "Triagem Automática",
     description: "Move candidatos automaticamente após avaliação inicial",

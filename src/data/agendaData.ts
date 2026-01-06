@@ -150,7 +150,7 @@ export const mockEntrevistas: Entrevista[] = [
     tipo: 'tecnica',
     status: 'agendada',
     etapa: 'Entrevista Técnica',
-    entrevistadores: [entrevistadoresDisponiveis[0]],
+    entrevistadores: [entrevistadoresDisponiveis[0]!],
     linkOnline: 'https://meet.google.com/abc-defg-hij',
   },
   {
@@ -163,18 +163,18 @@ export const mockEntrevistas: Entrevista[] = [
     tipo: 'rh',
     status: 'confirmada',
     etapa: 'Entrevista RH',
-    entrevistadores: [entrevistadoresDisponiveis[1]],
+    entrevistadores: [entrevistadoresDisponiveis[1]!],
     local: 'Sala de Reunião A',
   },
 ];
 
 // Helper functions
 export function getStatusStyle(status: string) {
-  return statusConfig[status] || statusConfig.agendada;
+  return statusConfig[status] ?? statusConfig['agendada'];
 }
 
 export function getTipoStyle(tipo: string) {
-  return tipoConfig[tipo] || tipoConfig.triagem;
+  return tipoConfig[tipo] ?? tipoConfig['triagem'];
 }
 
 export function formatDuration(minutes: number): string {
