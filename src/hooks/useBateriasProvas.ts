@@ -1,9 +1,6 @@
 /**
  * @module useBateriasProvas
  * @description Hook para gerenciar baterias de provas
- * @returns {Object} Hook result with data, isLoading, error, and mutations
- * @example
- * const { data, isLoading } = useBateriasProvas();
  */
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -29,11 +26,11 @@ export function useBateriasProvas() {
   const { data: baterias = [], isLoading, error } = useQuery({
     queryKey: ['baterias-provas'],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data, error: queryError } = await supabase
         .from('baterias_provas')
         .select('*')
         .order('created_at', { ascending: false });
-      if (error) throw error;
+      if (queryError) throw queryError;
       return data as BateriaProvaDB[];
     },
     placeholderData: [],
@@ -45,7 +42,7 @@ export function useBateriasProvas() {
 
   const createBateria = useMutation({
     mutationFn: async (dados: BateriaProvaInsert) => {
-      const { data, error } = await supabase
+      const { data, error: insertError } = await supabase
         .from('baterias_provas')
         .insert({
           nome: dados.nome,
@@ -57,21 +54,18 @@ export function useBateriasProvas() {
         })
         .select()
         .single();
-      if (error) throw error;
+      if (insertError) throw insertError;
       return data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['baterias-provas'] });
       toast({ title: 'Bateria criada!' });
     },
-    onError: (error: Error) => {
-      // Erro ao criar bateria - handled
-    },
   });
 
   const updateBateria = useMutation({
     mutationFn: async ({ id, ...dados }: Partial<BateriaProvaInsert> & { id: string }) => {
-      const { data, error } = await supabase
+      const { data, error: updateError } = await supabase
         .from('baterias_provas')
         .update({
           ...dados,
@@ -80,29 +74,23 @@ export function useBateriasProvas() {
         .eq('id', id)
         .select()
         .single();
-      if (error) throw error;
+      if (updateError) throw updateError;
       return data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['baterias-provas'] });
       toast({ title: 'Bateria atualizada!' });
     },
-    onError: (error: Error) => {
-      // Erro ao atualizar bateria - handled
-    },
   });
 
   const deleteBateria = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('baterias_provas').delete().eq('id', id);
-      if (error) throw error;
+      const { error: deleteError } = await supabase.from('baterias_provas').delete().eq('id', id);
+      if (deleteError) throw deleteError;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['baterias-provas'] });
       toast({ title: 'Bateria removida!' });
-    },
-    onError: (error: Error) => {
-      // Erro ao remover bateria - handled
     },
   });
 
@@ -117,4 +105,3 @@ export function useBateriasProvas() {
 }
 
 export default useBateriasProvas;
-

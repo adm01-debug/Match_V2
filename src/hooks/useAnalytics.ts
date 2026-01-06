@@ -1,13 +1,7 @@
 /**
  * @module useAnalytics
  * @description Hook para gerenciar analytics e métricas
- * @returns {Object} Hook result with data, isLoading, error, and mutations
- * @example
- * const { data, isLoading } = useAnalytics();
  */
-
-// Hook de Analytics
-// Pode ser integrado com Google Analytics, PostHog, Mixpanel, etc.
 
 import { useCallback } from 'react';
 
@@ -29,55 +23,12 @@ interface AnalyticsEvent {
   metadata?: Record<string, unknown>;
 }
 
-// Provider type (pode ser expandido)
-type AnalyticsProvider = 'console' | 'gtag' | 'posthog';
-
-const PROVIDER: AnalyticsProvider = 'console'; // Mudar para 'gtag' em produção
-
-/**
- * Envia evento para o provider de analytics
- */
-function sendEvent(event: AnalyticsEvent): void {
-  const { category, action, label, value, metadata } = event;
-
-  switch (PROVIDER) {
-    case 'gtag':
-      // Google Analytics 4
-      if (typeof window !== 'undefined' && (window as any).gtag) {
-        (window as any).gtag('event', action, {
-          event_category: category,
-          event_label: label,
-          value,
-          ...metadata,
-        });
-      }
-      break;
-
-    case 'posthog':
-      // PostHog
-      if (typeof window !== 'undefined' && (window as any).posthog) {
-        (window as any).posthog.capture(action, {
-          category,
-          label,
-          value,
-          ...metadata,
-        });
-      }
-      break;
-
-    case 'console':
-    default:
-      // Development - log no console
-      if (process.env.NODE_ENV === 'development') {
-        }
-  }
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function sendEvent(_event: AnalyticsEvent): void {
+  // Analytics tracking disabled - implement gtag/posthog when needed
 }
 
-/**
- * Hook para tracking de analytics
- */
 export function useAnalytics() {
-  // Track de página vista
   const trackPageView = useCallback((pageName: string, path?: string) => {
     sendEvent({
       category: 'navigation',
@@ -87,12 +38,10 @@ export function useAnalytics() {
     });
   }, []);
 
-  // Track de eventos genéricos
   const trackEvent = useCallback((event: AnalyticsEvent) => {
     sendEvent(event);
   }, []);
 
-  // Track de vaga
   const trackVaga = useCallback((action: string, vagaId: string, vagaTitulo?: string) => {
     sendEvent({
       category: 'vagas',
@@ -102,7 +51,6 @@ export function useAnalytics() {
     });
   }, []);
 
-  // Track de candidato
   const trackCandidato = useCallback((action: string, candidatoId: string) => {
     sendEvent({
       category: 'candidatos',
@@ -111,7 +59,6 @@ export function useAnalytics() {
     });
   }, []);
 
-  // Track de pipeline
   const trackPipeline = useCallback((action: string, etapaOrigem?: string, etapaDestino?: string) => {
     sendEvent({
       category: 'pipeline',
@@ -120,7 +67,6 @@ export function useAnalytics() {
     });
   }, []);
 
-  // Track de busca
   const trackSearch = useCallback((termo: string, resultados: number) => {
     sendEvent({
       category: 'navigation',
@@ -130,7 +76,6 @@ export function useAnalytics() {
     });
   }, []);
 
-  // Track de erro
   const trackError = useCallback((error: Error, context?: string) => {
     sendEvent({
       category: 'user',

@@ -6,7 +6,6 @@
  * const { data, isLoading } = useDashboard();
  */
 
-import { toast } from 'sonner';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -189,10 +188,7 @@ export function useDashboardStats() {
     queryFn: fetchDashboardStats,
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,
-    enabled: true,
     placeholderData: (previousData) => previousData,
-    select: (data) => data,
-    onError: () => toast.error('Erro ao carregar dados'),
     gcTime: 1000 * 60 * 30,
     retry: 3,
   });
@@ -204,10 +200,7 @@ export function useVagasUrgentes() {
     queryFn: fetchVagasUrgentes,
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,
-    enabled: true,
     placeholderData: (previousData) => previousData,
-    select: (data) => data,
-    onError: () => toast.error('Erro ao carregar dados'),
     gcTime: 1000 * 60 * 30,
     retry: 3,
   });
@@ -219,10 +212,7 @@ export function useEntrevistasHoje() {
     queryFn: fetchEntrevistasHoje,
     staleTime: 1000 * 60 * 2,
     refetchOnWindowFocus: false,
-    enabled: true,
     placeholderData: (previousData) => previousData,
-    select: (data) => data,
-    onError: () => toast.error('Erro ao carregar dados'),
     gcTime: 1000 * 60 * 30,
     retry: 3,
   });
@@ -234,10 +224,7 @@ export function useTopCandidatos() {
     queryFn: fetchTopCandidatos,
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,
-    enabled: true,
     placeholderData: (previousData) => previousData,
-    select: (data) => data,
-    onError: () => toast.error('Erro ao carregar dados'),
     gcTime: 1000 * 60 * 30,
     retry: 3,
   });
@@ -249,10 +236,7 @@ export function useFunilRecrutamento() {
     queryFn: fetchFunil,
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,
-    enabled: true,
     placeholderData: (previousData) => previousData,
-    select: (data) => data,
-    onError: () => toast.error('Erro ao carregar dados'),
     gcTime: 1000 * 60 * 30,
     retry: 3,
   });

@@ -1,4 +1,4 @@
-import { within, expect } from '@storybook/test';
+import { expect } from '@storybook/test';
 import type { Meta, StoryObj } from '@storybook/react';
 import { QuestaoCard } from './QuestaoCard';
 
@@ -22,12 +22,9 @@ export const Loading: Story = {
 export const WithError: Story = {
   args: {},
   parameters: { mockData: { error: 'Erro' } },
-
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
     await expect(canvasElement).toBeInTheDocument();
   },
-
 };
 
 export const Empty: Story = {
