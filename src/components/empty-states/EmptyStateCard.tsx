@@ -1,9 +1,10 @@
 /**
  * @fileoverview EmptyStateCard - Componente reutilizável para estados vazios
- * Com ilustrações SVG e CTAs claros
+ * Com ilustrações SVG animadas e CTAs claros
  */
 
 import { ReactNode } from 'react';
+import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
@@ -26,6 +27,69 @@ interface EmptyStateCardProps {
   variant?: 'default' | 'minimal' | 'card';
 }
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: "easeOut" as const,
+    },
+  },
+};
+
+const illustrationVariants = {
+  hidden: { opacity: 0, scale: 0.8 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: {
+      duration: 0.6,
+      ease: "easeOut" as const,
+    },
+  },
+  hover: {
+    scale: 1.05,
+    transition: {
+      duration: 0.3,
+      ease: "easeInOut" as const,
+    },
+  },
+};
+
+const buttonVariants = {
+  hidden: { opacity: 0, y: 10 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.4,
+      ease: "easeOut" as const,
+    },
+  },
+  hover: {
+    scale: 1.02,
+    transition: {
+      duration: 0.2,
+    },
+  },
+  tap: {
+    scale: 0.98,
+  },
+};
+
 export function EmptyStateCard({
   illustration,
   title,
@@ -36,49 +100,79 @@ export function EmptyStateCard({
   variant = 'default',
 }: EmptyStateCardProps) {
   const content = (
-    <div className={cn(
-      "flex flex-col items-center justify-center text-center",
-      variant === 'minimal' ? 'py-8' : 'py-12 px-6',
-      className
-    )}>
-      {/* Ilustração com animação suave */}
-      <div className="mb-6 animate-fade-in">
+    <motion.div
+      className={cn(
+        "flex flex-col items-center justify-center text-center",
+        variant === 'minimal' ? 'py-8' : 'py-12 px-6',
+        className
+      )}
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+    >
+      {/* Ilustração com animação */}
+      <motion.div
+        className="mb-6 cursor-pointer"
+        variants={illustrationVariants}
+        whileHover="hover"
+      >
         {illustration}
-      </div>
+      </motion.div>
 
       {/* Título */}
-      <h3 className={cn(
-        "font-semibold text-foreground mb-2",
-        variant === 'minimal' ? 'text-base' : 'text-lg'
-      )}>
+      <motion.h3
+        className={cn(
+          "font-semibold text-foreground mb-2",
+          variant === 'minimal' ? 'text-base' : 'text-lg'
+        )}
+        variants={itemVariants}
+      >
         {title}
-      </h3>
+      </motion.h3>
 
       {/* Descrição */}
-      <p className={cn(
-        "text-muted-foreground max-w-md mb-6",
-        variant === 'minimal' ? 'text-xs' : 'text-sm'
-      )}>
+      <motion.p
+        className={cn(
+          "text-muted-foreground max-w-md mb-6",
+          variant === 'minimal' ? 'text-xs' : 'text-sm'
+        )}
+        variants={itemVariants}
+      >
         {description}
-      </p>
+      </motion.p>
 
       {/* Ações */}
       {(primaryAction || secondaryAction) && (
-        <div className="flex flex-col sm:flex-row items-center gap-3">
+        <motion.div
+          className="flex flex-col sm:flex-row items-center gap-3"
+          variants={itemVariants}
+        >
           {primaryAction && (
-            <Button onClick={primaryAction.onClick} className="gap-2">
-              {primaryAction.icon && <primaryAction.icon className="h-4 w-4" />}
-              {primaryAction.label}
-            </Button>
+            <motion.div
+              variants={buttonVariants}
+              whileHover="hover"
+              whileTap="tap"
+            >
+              <Button onClick={primaryAction.onClick} className="gap-2">
+                {primaryAction.icon && <primaryAction.icon className="h-4 w-4" />}
+                {primaryAction.label}
+              </Button>
+            </motion.div>
           )}
           {secondaryAction && (
-            <Button variant="outline" onClick={secondaryAction.onClick}>
-              {secondaryAction.label}
-            </Button>
+            <motion.div
+              variants={buttonVariants}
+              whileHover="hover"
+              whileTap="tap"
+            >
+              <Button variant="outline" onClick={secondaryAction.onClick}>
+                {secondaryAction.label}
+              </Button>
+            </motion.div>
           )}
-        </div>
+        </motion.div>
       )}
-    </div>
+    </motion.div>
   );
 
   if (variant === 'card') {
