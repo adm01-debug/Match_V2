@@ -1,16 +1,11 @@
-import { EmptyState } from '@/components/common/EmptyState';
 import { useDocumentTitle } from '@/hooks/useDocumentTitle';
-import { Suspense } from 'react';
-import { Skeleton } from '@/components/ui/skeleton';
-import { ErrorBoundary } from '@/components/ErrorBoundary';
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState, useEffect } from "react";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
-import { useAvaliacoes, useAvaliacao, COMPETENCIAS_TECNICAS, COMPETENCIAS_COMPORTAMENTAIS, PARECERES } from "@/hooks/useAvaliacoes";
+import { useAvaliacoes, useAvaliacao, COMPETENCIAS_TECNICAS, COMPETENCIAS_COMPORTAMENTAIS } from "@/hooks/useAvaliacoes";
 import { useProcessosSeletivos } from "@/hooks/useProcessosSeletivos";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -18,7 +13,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Slider } from "@/components/ui/slider";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Progress } from "@/components/ui/progress";
@@ -28,8 +22,6 @@ import {
   Save,
   Send,
   Star,
-  CheckCircle2,
-  XCircle,
   AlertCircle,
   Briefcase,
   Brain,
@@ -39,21 +31,6 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-
-// Schema de validação para avaliação
-const avaliacaoSchema = z.object({
-  tipo: z.string().min(1, 'Tipo de avaliação é obrigatório'),
-  competencias: z.record(z.number().min(1).max(5)).optional(),
-  nota_geral: z.number().min(1).max(10).optional(),
-  parecer: z.string().min(1, 'Parecer é obrigatório'),
-  observacoes: z.string().optional(),
-});
-
-type AvaliacaoFormData = z.infer<typeof avaliacaoSchema>;
-
-
 
 interface NotaCompetencia {
   id: string;
@@ -64,6 +41,7 @@ interface NotaCompetencia {
 
 export default function AvaliacaoForm() {
   usePageTitle('Avaliação');
+  useDocumentTitle('Avaliação');
 
   const { id } = useParams();
   const [searchParams] = useSearchParams();
@@ -75,7 +53,7 @@ export default function AvaliacaoForm() {
 
   // Hooks de dados
   const { data: avaliacaoExistente, isLoading: loadingAvaliacao } = useAvaliacao(id);
-  const { createAvaliacao, updateAvaliacao, salvarRascunho, finalizarAvaliacao, isCreating, isUpdating } = useAvaliacoes();
+  const { createAvaliacao, salvarRascunho, finalizarAvaliacao, isCreating, isUpdating } = useAvaliacoes();
   const { data: processos = [], isLoading: loadingProcessos } = useProcessosSeletivos();
 
   // State do formulário
@@ -98,10 +76,10 @@ export default function AvaliacaoForm() {
     if (avaliacaoExistente) {
       setProcessoId(avaliacaoExistente.processo_id);
       if (avaliacaoExistente.notas_tecnicas) {
-        setNotasTecnicas(avaliacaoExistente.notas_tecnicas as NotaCompetencia[]);
+        setNotasTecnicas(avaliacaoExistente.notas_tecnicas as unknown as NotaCompetencia[]);
       }
       if (avaliacaoExistente.notas_comportamentais) {
-        setNotasComportamentais(avaliacaoExistente.notas_comportamentais as NotaCompetencia[]);
+        setNotasComportamentais(avaliacaoExistente.notas_comportamentais as unknown as NotaCompetencia[]);
       }
       setPontosFortes(avaliacaoExistente.pontos_fortes || "");
       setPontosDesenvolvimento(avaliacaoExistente.pontos_desenvolvimento || "");
@@ -117,13 +95,11 @@ export default function AvaliacaoForm() {
   const mediaGeral = (mediaTecnica + mediaComportamental) / 2;
 
   // Atualizar nota de competência
-  const handleNotaChange = (tipo: 'tecnica' | 'comportamental', id: string, nota: number) => {
-  useDocumentTitle('Avaliação');
-
+  const handleNotaChange = (tipo: 'tecnica' | 'comportamental', compId: string, nota: number) => {
     if (tipo === 'tecnica') {
-      setNotasTecnicas(prev => prev.map(n => n.id === id ? { ...n, nota } : n));
+      setNotasTecnicas(prev => prev.map(n => n.id === compId ? { ...n, nota } : n));
     } else {
-      setNotasComportamentais(prev => prev.map(n => n.id === id ? { ...n, nota } : n));
+      setNotasComportamentais(prev => prev.map(n => n.id === compId ? { ...n, nota } : n));
     }
   };
 
@@ -138,9 +114,9 @@ export default function AvaliacaoForm() {
       await salvarRascunho({
         processo_id: processoId,
         etapa: 'avaliacao',
-        notas_tecnicas: notasTecnicas,
-        notas_comportamentais: notasComportamentais,
-        nota_geral: mediaGeral * 10, // Converter para percentual
+        notas_tecnicas: notasTecnicas as unknown as { competenciaId: string; nota: 1 | 2 | 3 | 4 | 5; observacao?: string }[],
+        notas_comportamentais: notasComportamentais as unknown as { competenciaId: string; nota: 1 | 2 | 3 | 4 | 5; observacao?: string }[],
+        nota_geral: mediaGeral * 10,
         pontos_fortes: pontosFortes,
         pontos_desenvolvimento: pontosDesenvolvimento,
         observacoes_gerais: observacoesGerais,
@@ -171,8 +147,8 @@ export default function AvaliacaoForm() {
           processo_id: processoId,
           etapa: 'avaliacao',
           parecer,
-          notas_tecnicas: notasTecnicas,
-          notas_comportamentais: notasComportamentais,
+          notas_tecnicas: notasTecnicas as unknown as { competenciaId: string; nota: 1 | 2 | 3 | 4 | 5; observacao?: string }[],
+          notas_comportamentais: notasComportamentais as unknown as { competenciaId: string; nota: 1 | 2 | 3 | 4 | 5; observacao?: string }[],
           nota_geral: mediaGeral * 10,
           pontos_fortes: pontosFortes,
           pontos_desenvolvimento: pontosDesenvolvimento,
@@ -241,11 +217,11 @@ export default function AvaliacaoForm() {
                         <SelectItem key={p.id} value={p.id}>
                           <div className="flex items-center gap-2">
                             <Avatar className="h-6 w-6">
-                              <AvatarImage src={p.candidato?.foto_url} />
-                              <AvatarFallback>{p.candidato?.nome?.charAt(0)}</AvatarFallback>
+                              <AvatarImage src={p.candidatoFoto} />
+                              <AvatarFallback>{p.candidatoNome?.charAt(0)}</AvatarFallback>
                             </Avatar>
-                            <span>{p.candidato?.nome}</span>
-                            <span className="text-muted-foreground">- {p.vaga?.titulo}</span>
+                            <span>{p.candidatoNome}</span>
+                            <span className="text-muted-foreground">- {p.vagaTitulo}</span>
                           </div>
                         </SelectItem>
                       ))}
@@ -261,16 +237,16 @@ export default function AvaliacaoForm() {
                 <CardContent className="p-4">
                   <div className="flex items-center gap-4">
                     <Avatar className="h-16 w-16">
-                      <AvatarImage src={processoSelecionado.candidato?.foto_url} />
+                      <AvatarImage src={processoSelecionado.candidatoFoto} />
                       <AvatarFallback className="text-xl">
-                        {processoSelecionado.candidato?.nome?.charAt(0)}
+                        {processoSelecionado.candidatoNome?.charAt(0)}
                       </AvatarFallback>
                     </Avatar>
                     <div>
-                      <p className="text-lg font-semibold">{processoSelecionado.candidato?.nome}</p>
-                      <p className="text-muted-foreground">{processoSelecionado.vaga?.titulo}</p>
+                      <p className="text-lg font-semibold">{processoSelecionado.candidatoNome}</p>
+                      <p className="text-muted-foreground">{processoSelecionado.vagaTitulo}</p>
                       <Badge variant="outline" className="mt-1">
-                        {processoSelecionado.etapa_atual.replace(/_/g, ' ')}
+                        {processoSelecionado.etapaAtual.replace(/_/g, ' ')}
                       </Badge>
                     </div>
                   </div>
@@ -315,7 +291,7 @@ export default function AvaliacaoForm() {
                         </div>
                         <Slider
                           value={[comp.nota]}
-                          onValueChange={([value]) => handleNotaChange('tecnica', comp.id, value)}
+                          onValueChange={([value]) => handleNotaChange('tecnica', comp.id, value ?? 5)}
                           min={1}
                           max={10}
                           step={1}
@@ -352,7 +328,7 @@ export default function AvaliacaoForm() {
                         </div>
                         <Slider
                           value={[comp.nota]}
-                          onValueChange={([value]) => handleNotaChange('comportamental', comp.id, value)}
+                          onValueChange={([value]) => handleNotaChange('comportamental', comp.id, value ?? 5)}
                           min={1}
                           max={10}
                           step={1}
@@ -431,19 +407,17 @@ export default function AvaliacaoForm() {
                   )}>
                     {(mediaGeral * 10).toFixed(0)}%
                   </p>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    {mediaGeral.toFixed(1)}/10
+                  <p className="text-sm mt-2 text-muted-foreground">
+                    Média das competências
                   </p>
                 </div>
-
-                <div className="space-y-3 mt-4">
-                  <div className="flex items-center justify-between text-sm">
+                <div className="mt-4 space-y-2">
+                  <div className="flex justify-between text-sm">
                     <span>Técnica</span>
                     <span className="font-medium">{mediaTecnica.toFixed(1)}</span>
                   </div>
                   <Progress value={mediaTecnica * 10} className="h-2" />
-
-                  <div className="flex items-center justify-between text-sm">
+                  <div className="flex justify-between text-sm">
                     <span>Comportamental</span>
                     <span className="font-medium">{mediaComportamental.toFixed(1)}</span>
                   </div>
@@ -452,39 +426,53 @@ export default function AvaliacaoForm() {
               </CardContent>
             </Card>
 
-            {/* Parecer Final */}
+            {/* Parecer */}
             <Card>
               <CardHeader>
                 <CardTitle>Parecer Final</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <RadioGroup value={parecer} onValueChange={setParecer}>
-                  {PARECERES.map(p => (
-                    <div key={p.value} className={cn(
-                      "flex items-center space-x-3 p-3 rounded-lg border cursor-pointer",
-                      parecer === p.value && (
-                        p.value === 'aprovar' ? "border-green-500 bg-green-50" :
-                        p.value === 'reprovar' ? "border-red-500 bg-red-50" :
-                        "border-amber-500 bg-amber-50"
-                      )
-                    )}>
-                      <RadioGroupItem value={p.value} id={p.value} />
-                      <Label htmlFor={p.value} className="flex items-center gap-2 cursor-pointer">
-                        {p.value === 'aprovar' && <ThumbsUp className="h-4 w-4 text-green-600" />}
-                        {p.value === 'reprovar' && <ThumbsDown className="h-4 w-4 text-red-600" />}
-                        {p.value === 'em_duvida' && <AlertCircle className="h-4 w-4 text-amber-600" />}
-                        {p.label}
-                      </Label>
-                    </div>
-                  ))}
-                </RadioGroup>
-
+                <div className="grid grid-cols-2 gap-2">
+                  <Button
+                    type="button"
+                    variant={parecer === 'aprovar' ? 'default' : 'outline'}
+                    className={cn(
+                      "w-full",
+                      parecer === 'aprovar' && "bg-green-600 hover:bg-green-700"
+                    )}
+                    onClick={() => setParecer('aprovar')}
+                  >
+                    <ThumbsUp className="h-4 w-4 mr-2" />
+                    Aprovar
+                  </Button>
+                  <Button
+                    type="button"
+                    variant={parecer === 'reprovar' ? 'default' : 'outline'}
+                    className={cn(
+                      "w-full",
+                      parecer === 'reprovar' && "bg-red-600 hover:bg-red-700"
+                    )}
+                    onClick={() => setParecer('reprovar')}
+                  >
+                    <ThumbsDown className="h-4 w-4 mr-2" />
+                    Reprovar
+                  </Button>
+                </div>
+                <Button
+                  type="button"
+                  variant={parecer === 'em_duvida' ? 'default' : 'outline'}
+                  className="w-full"
+                  onClick={() => setParecer('em_duvida')}
+                >
+                  <AlertCircle className="h-4 w-4 mr-2" />
+                  Em Dúvida
+                </Button>
                 <div className="space-y-2">
                   <Label>Recomendação</Label>
                   <Textarea
                     value={recomendacao}
                     onChange={(e) => setRecomendacao(e.target.value)}
-                    placeholder="Justifique seu parecer..."
+                    placeholder="Próximos passos recomendados..."
                     rows={3}
                   />
                 </div>
@@ -492,12 +480,21 @@ export default function AvaliacaoForm() {
             </Card>
 
             {/* Ações */}
-            <div className="flex flex-col gap-2">
-              <Button onClick={handleFinalizar} disabled={saving || !processoId}>
+            <div className="space-y-2">
+              <Button
+                className="w-full"
+                onClick={handleFinalizar}
+                disabled={saving || !processoId}
+              >
                 <Send className="h-4 w-4 mr-2" />
-                {saving ? "Salvando..." : "Finalizar Avaliação"}
+                Finalizar Avaliação
               </Button>
-              <Button variant="outline" onClick={handleSalvarRascunho} disabled={saving || !processoId}>
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={handleSalvarRascunho}
+                disabled={saving || !processoId}
+              >
                 <Save className="h-4 w-4 mr-2" />
                 Salvar Rascunho
               </Button>
