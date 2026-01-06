@@ -1,19 +1,13 @@
 /**
- * FINANCE HUB - Hook para Importação de Dados
- * 
+ * Hook para Importação de Dados
  * @module hooks/useImportData
  * @description Importação de CSV e Excel com validação Zod
  */
 
 import { useState, useCallback } from 'react';
 import { z } from 'zod';
-import Papa from 'papaparse';
 import * as XLSX from 'xlsx';
 import { toast } from 'sonner';
-
-// ============================================
-// TIPOS
-// ============================================
 
 export interface ImportResult<T> {
   success: T[];
@@ -38,10 +32,6 @@ interface UseImportDataOptions<T> {
   skipFirstRow?: boolean;
 }
 
-// ============================================
-// HOOK
-// ============================================
-
 export function useImportData<T>(options: UseImportDataOptions<T>) {
   const { schema, onImport, maxRows = 10000, skipFirstRow = false } = options;
 
@@ -49,25 +39,40 @@ export function useImportData<T>(options: UseImportDataOptions<T>) {
   const [progress, setProgress] = useState(0);
   const [result, setResult] = useState<ImportResult<T> | null>(null);
 
-  // Parsear CSV
   const parseCSV = useCallback(async (file: File): Promise<unknown[]> => {
     return new Promise((resolve, reject) => {
-      Papa.parse(file, {
-        header: true,
-        skipEmptyLines: true,
-        transformHeader: (header) => header.trim().toLowerCase().replace(/\s+/g, '_'),
-        complete: (results) => {
-          if (skipFirstRow && results.data.length > 0) {
-            results.data.shift();
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const text = e.target?.result as string;
+          const lines = text.split('\n').filter(line => line.trim());
+          if (lines.length === 0) {
+            resolve([]);
+            return;
           }
-          resolve(results.data);
-        },
-        error: (error) => reject(error),
-      });
+          
+          const headers = lines[0].split(',').map(h => h.trim().toLowerCase().replace(/\s+/g, '_'));
+          const dataLines = skipFirstRow ? lines.slice(2) : lines.slice(1);
+          
+          const data = dataLines.map(line => {
+            const values = line.split(',');
+            const row: Record<string, string> = {};
+            headers.forEach((header, i) => {
+              row[header] = values[i]?.trim() || '';
+            });
+            return row;
+          });
+          
+          resolve(data);
+        } catch (err) {
+          reject(err);
+        }
+      };
+      reader.onerror = () => reject(new Error('Erro ao ler arquivo'));
+      reader.readAsText(file);
     });
   }, [skipFirstRow]);
 
-  // Parsear Excel
   const parseExcel = useCallback(async (file: File): Promise<unknown[]> => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -76,14 +81,22 @@ export function useImportData<T>(options: UseImportDataOptions<T>) {
         try {
           const data = new Uint8Array(e.target?.result as ArrayBuffer);
           const workbook = XLSX.read(data, { type: 'array' });
-          const sheet = workbook.Sheets[workbook.SheetNames[0]];
+          const sheetName = workbook.SheetNames[0];
+          if (!sheetName) {
+            resolve([]);
+            return;
+          }
+          const sheet = workbook.Sheets[sheetName];
+          if (!sheet) {
+            resolve([]);
+            return;
+          }
           const jsonData = XLSX.utils.sheet_to_json(sheet, {
             defval: '',
             raw: false,
-          });
+          }) as Record<string, unknown>[];
           
-          // Normalizar headers
-          const normalized = jsonData.map((row: Record<string, unknown>) => {
+          const normalized = jsonData.map((row) => {
             const newRow: Record<string, unknown> = {};
             Object.keys(row).forEach(key => {
               const normalizedKey = key.trim().toLowerCase().replace(/\s+/g, '_');
@@ -107,7 +120,6 @@ export function useImportData<T>(options: UseImportDataOptions<T>) {
     });
   }, [skipFirstRow]);
 
-  // Validar dados com Zod
   const validateData = useCallback((data: unknown[]): ImportResult<T> => {
     const success: T[] = [];
     const errors: ImportError[] = [];
@@ -119,11 +131,14 @@ export function useImportData<T>(options: UseImportDataOptions<T>) {
       } catch (error) {
         if (error instanceof z.ZodError) {
           error.errors.forEach((err) => {
+            const fieldKey = err.path[0];
             errors.push({
-              row: index + 2, // +2 porque linha 1 é header
+              row: index + 2,
               field: err.path.join('.'),
               message: err.message,
-              value: (row as Record<string, unknown>)[err.path[0] as string],
+              value: typeof row === 'object' && row !== null && typeof fieldKey === 'string' 
+                ? (row as Record<string, unknown>)[fieldKey] 
+                : undefined,
             });
           });
         }
@@ -138,7 +153,6 @@ export function useImportData<T>(options: UseImportDataOptions<T>) {
     };
   }, [schema, maxRows]);
 
-  // Processar arquivo
   const processFile = useCallback(async (file: File) => {
     setStatus('parsing');
     setProgress(10);
@@ -169,7 +183,6 @@ export function useImportData<T>(options: UseImportDataOptions<T>) {
     }
   }, [parseCSV, parseExcel, validateData]);
 
-  // Confirmar importação
   const confirmImport = useCallback(async () => {
     if (!result || result.success.length === 0) {
       toast.error('Nenhum dado válido para importar');
@@ -184,7 +197,6 @@ export function useImportData<T>(options: UseImportDataOptions<T>) {
       setProgress(100);
       toast.success(`${result.success.length} registros importados com sucesso!`);
       
-      // Reset após 2 segundos
       setTimeout(() => {
         setStatus('idle');
         setResult(null);
@@ -196,7 +208,6 @@ export function useImportData<T>(options: UseImportDataOptions<T>) {
     }
   }, [result, onImport]);
 
-  // Reset
   const reset = useCallback(() => {
     setStatus('idle');
     setProgress(0);

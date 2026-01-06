@@ -1,16 +1,12 @@
 /**
  * @module useCandidatos
  * @description Hook para operações CRUD de candidatos
- * @returns {Object} Hook result with data, isLoading, error, and mutations
- * @example
- * const { data, isLoading } = useCandidatos();
  */
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import type { Tables, TablesInsert, TablesUpdate } from '@/integrations/supabase/types';
+import type { TablesInsert, TablesUpdate } from '@/integrations/supabase/types';
 
-type Candidato = Tables<'candidatos'>;
 type CandidatoInsert = TablesInsert<'candidatos'>;
 type CandidatoUpdate = TablesUpdate<'candidatos'>;
 
@@ -34,7 +30,6 @@ export const ORIGENS_CANDIDATO = {
   OUTRO: 'outro',
 } as const;
 
-// Buscar todos os candidatos
 export function useCandidatos(filters?: {
   status?: string;
   origem?: string;
@@ -73,7 +68,6 @@ export function useCandidatos(filters?: {
   });
 }
 
-// Buscar candidato por ID
 export function useCandidato(id: string | undefined) {
   return useQuery({
     queryKey: ['candidato', id],
@@ -96,7 +90,6 @@ export function useCandidato(id: string | undefined) {
   });
 }
 
-// Estatísticas dos candidatos
 export function useCandidatosStats() {
   return useQuery({
     queryKey: ['candidatos-stats'],
@@ -121,7 +114,6 @@ export function useCandidatosStats() {
   });
 }
 
-// Criar candidato
 export function useCreateCandidato() {
   const queryClient = useQueryClient();
 
@@ -139,13 +131,9 @@ export function useCreateCandidato() {
       queryClient.invalidateQueries({ queryKey: ['candidatos'] });
       queryClient.invalidateQueries({ queryKey: ['candidatos-stats'] });
     },
-    onError: (error: Error) => {
-      // Erro ao criar candidato - handled silently
-    },
   });
 }
 
-// Atualizar candidato
 export function useUpdateCandidato() {
   const queryClient = useQueryClient();
 
@@ -165,13 +153,9 @@ export function useUpdateCandidato() {
       queryClient.invalidateQueries({ queryKey: ['candidato', data.id] });
       queryClient.invalidateQueries({ queryKey: ['candidatos-stats'] });
     },
-    onError: (error: Error) => {
-      // Erro ao atualizar candidato - handled silently
-    },
   });
 }
 
-// Deletar candidato
 export function useDeleteCandidato() {
   const queryClient = useQueryClient();
 
@@ -188,13 +172,9 @@ export function useDeleteCandidato() {
       queryClient.invalidateQueries({ queryKey: ['candidatos'] });
       queryClient.invalidateQueries({ queryKey: ['candidatos-stats'] });
     },
-    onError: (error: Error) => {
-      // Erro ao deletar candidato - handled silently
-    },
   });
 }
 
-// Buscar candidatos para select
 export function useCandidatosSelect() {
   return useQuery({
     queryKey: ['candidatos-select'],
@@ -208,4 +188,3 @@ export function useCandidatosSelect() {
     },
   });
 }
-

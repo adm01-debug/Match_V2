@@ -62,8 +62,8 @@ const generateMockCandidates = (count: number): Candidate[] => {
     name: `Candidato ${i + 1}`,
     email: `candidato${i + 1}@email.com`,
     phone: `(11) 9${String(Math.random()).slice(2, 10)}`,
-    source: sources[Math.floor(Math.random() * sources.length)],
-    stage: stages[Math.floor(Math.random() * stages.length)],
+    source: sources[Math.floor(Math.random() * sources.length)] || 'LinkedIn',
+    stage: stages[Math.floor(Math.random() * stages.length)] || 'Novo',
     jobId: `job-${Math.floor(Math.random() * 5) + 1}`,
     jobTitle: `Vaga ${Math.floor(Math.random() * 5) + 1}`,
     score: Math.floor(Math.random() * 40) + 60,
@@ -81,7 +81,6 @@ export function useCandidates(filters?: CandidateFilters) {
   const queryClient = useQueryClient();
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
-  // Fetch candidates
   const {
     data: candidates = [],
     isLoading,
@@ -90,7 +89,6 @@ export function useCandidates(filters?: CandidateFilters) {
   } = useQuery({
     queryKey: ['candidates', filters],
     queryFn: async () => {
-      // In production, call API with filters
       await new Promise((resolve) => setTimeout(resolve, 500));
       
       let filtered = [...mockCandidates];
@@ -118,7 +116,6 @@ export function useCandidates(filters?: CandidateFilters) {
     },
   });
 
-  // Create candidate
   const createMutation = useMutation({
     mutationFn: async (data: CreateCandidateData) => {
       await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -142,7 +139,6 @@ export function useCandidates(filters?: CandidateFilters) {
     },
   });
 
-  // Update stage
   const updateStageMutation = useMutation({
     mutationFn: async ({ id, stage }: { id: string; stage: string }) => {
       await new Promise((resolve) => setTimeout(resolve, 500));
@@ -158,7 +154,6 @@ export function useCandidates(filters?: CandidateFilters) {
     },
   });
 
-  // Bulk update
   const bulkUpdateMutation = useMutation({
     mutationFn: async ({ ids, updates }: { ids: string[]; updates: Partial<Candidate> }) => {
       await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -176,7 +171,6 @@ export function useCandidates(filters?: CandidateFilters) {
     },
   });
 
-  // Selection helpers
   const toggleSelection = useCallback((id: string) => {
     setSelectedIds((prev) =>
       prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]

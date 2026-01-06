@@ -1,9 +1,6 @@
 /**
  * @module useCandidaturas
  * @description Hook para gerenciar candidaturas
- * @returns {Object} Hook result with data, isLoading, error, and mutations
- * @example
- * const { data, isLoading } = useCandidaturas();
  */
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -45,8 +42,8 @@ export function useCandidaturas(filtros?: { vagaId?: string; candidatoAuthId?: s
       if (filtros?.candidatoAuthId) query = query.eq('candidato_auth_id', filtros.candidatoAuthId);
       if (filtros?.status) query = query.eq('status', filtros.status);
       
-      const { data, error } = await query;
-      if (error) throw error;
+      const { data, error: queryError } = await query;
+      if (queryError) throw queryError;
       
       return (data || []) as Candidatura[];
     },
@@ -59,7 +56,7 @@ export function useCandidaturas(filtros?: { vagaId?: string; candidatoAuthId?: s
 
   const createCandidatura = useMutation({
     mutationFn: async (dados: CandidaturaInsert) => {
-      const { data, error } = await supabase
+      const { data, error: insertError } = await supabase
         .from('candidaturas')
         .insert({
           candidato_auth_id: dados.candidato_auth_id,
@@ -72,35 +69,29 @@ export function useCandidaturas(filtros?: { vagaId?: string; candidatoAuthId?: s
         })
         .select()
         .single();
-      if (error) throw error;
+      if (insertError) throw insertError;
       return data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['candidaturas'] });
       toast({ title: 'Candidatura registrada!' });
     },
-    onError: (error: Error) => {
-      // Erro ao criar candidatura - handled
-    },
   });
 
   const updateStatus = useMutation({
     mutationFn: async ({ id, status }: { id: string; status: string }) => {
-      const { data, error } = await supabase
+      const { data, error: updateError } = await supabase
         .from('candidaturas')
         .update({ status })
         .eq('id', id)
         .select()
         .single();
-      if (error) throw error;
+      if (updateError) throw updateError;
       return data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['candidaturas'] });
       toast({ title: 'Status atualizado!' });
-    },
-    onError: (error: Error) => {
-      // Erro ao atualizar status - handled
     },
   });
 
@@ -123,4 +114,3 @@ export function useCandidaturas(filtros?: { vagaId?: string; candidatoAuthId?: s
 }
 
 export default useCandidaturas;
-

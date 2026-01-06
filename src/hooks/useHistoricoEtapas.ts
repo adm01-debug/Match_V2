@@ -1,16 +1,12 @@
 /**
  * @module useHistoricoEtapas
  * @description Hook para histórico de etapas
- * @returns {Object} Hook result with data, isLoading, error, and mutations
- * @example
- * const { data, isLoading } = useHistoricoEtapas();
  */
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
-// Tipos
 export interface HistoricoEtapa {
   id: string;
   processo_id: string;
@@ -34,37 +30,37 @@ export interface CreateHistoricoInput {
   observacao?: string;
 }
 
-// Query Keys
 const historicoKeys = {
   all: ['historico-etapas'] as const,
   byProcesso: (processoId: string) => [...historicoKeys.all, 'processo', processoId] as const,
 };
 
-// Fetch Historico by Processo
-async function fetchHistoricoByProcesso(processoId: string): Promise<HistoricoEtapa[]> {
-  const { data, error } = await supabase
-    .from('historico_etapas')
-    .select(`
-      *,
-      responsavel:profiles(id, full_name)
-    `)
-    .eq('processo_id', processoId)
-    .order('data_mudanca', { ascending: false });
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const db = supabase as any;
 
-  if (error) {
-    // Se a tabela não existir, retornar array vazio
-    if (error.code === '42P01') {
-      return [];
+async function fetchHistoricoByProcesso(processoId: string): Promise<HistoricoEtapa[]> {
+  try {
+    const { data, error } = await db
+      .from('historico_etapas')
+      .select('*')
+      .eq('processo_id', processoId)
+      .order('data_mudanca', { ascending: false });
+
+    if (error) {
+      if (error.code === '42P01') {
+        return [];
+      }
+      throw error;
     }
-    throw error;
+    
+    return (data || []) as HistoricoEtapa[];
+  } catch {
+    return [];
   }
-  
-  return data || [];
 }
 
-// Create Historico
 async function createHistorico(input: CreateHistoricoInput): Promise<HistoricoEtapa> {
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from('historico_etapas')
     .insert({
       ...input,
@@ -74,16 +70,18 @@ async function createHistorico(input: CreateHistoricoInput): Promise<HistoricoEt
     .single();
 
   if (error) throw error;
-  return data;
+  return data as HistoricoEtapa;
 }
 
-// Hooks
 export function useHistoricoEtapas(processoId: string) {
   return useQuery({
     queryKey: historicoKeys.byProcesso(processoId),
     placeholderData: [],
-    select: (data) => data, staleTime: 5 * 60 * 1000,
-    refetchOnWindowFocus: false, gcTime: 10 * 60 * 1000, retry: 3, queryFn: () => fetchHistoricoByProcesso(processoId),
+    staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false, 
+    gcTime: 10 * 60 * 1000, 
+    retry: 3, 
+    queryFn: () => fetchHistoricoByProcesso(processoId),
     enabled: !!processoId,
   });
 }
@@ -96,9 +94,7 @@ export function useCreateHistoricoEtapa() {
     onSuccess: (data) => {
       queryClient.invalidateQueries({ 
         queryKey: historicoKeys.byProcesso(data.processo_id) 
-      },
-    // Optimistic update ready - implement setQueryData for instant feedback
-);
+      });
       toast.success('Histórico registrado com sucesso!');
     },
     onError: (error: Error) => {
@@ -107,7 +103,6 @@ export function useCreateHistoricoEtapa() {
   });
 }
 
-// Constantes de etapas
 export const ETAPAS_PROCESSO = [
   { value: 'triagem', label: 'Triagem', ordem: 1 },
   { value: 'entrevista_rh', label: 'Entrevista RH', ordem: 2 },

@@ -1,9 +1,6 @@
 /**
  * @module useEntrevistas
  * @description Hook para gerenciar entrevistas
- * @returns {Object} Hook result with data, isLoading, error, and mutations
- * @example
- * const { data, isLoading } = useEntrevistas();
  */
 
 import { toast } from 'sonner';
@@ -59,7 +56,6 @@ export interface EvolucaoMensal {
   total: number;
 }
 
-// Converter de DB para formato usado na UI
 export function dbToEntrevista(db: EntrevistaDB) {
   return {
     id: db.id,
@@ -173,7 +169,6 @@ export function useEntrevistasEvolucao() {
       
       const entrevistas = data as EntrevistaDB[];
       
-      // Agrupar por mês
       const mesesMap = new Map<string, { aprovados: number; reprovados: number; total: number }>();
       const mesesNomes = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
       
@@ -191,14 +186,14 @@ export function useEntrevistasEvolucao() {
         if (e.feedback_resultado === 'reprovado') stats.reprovados++;
       });
       
-      // Converter para array ordenado
       const resultado: EvolucaoMensal[] = Array.from(mesesMap.entries())
         .sort((a, b) => a[0].localeCompare(b[0]))
-        .slice(-6) // Últimos 6 meses
+        .slice(-6)
         .map(([key, stats]) => {
-          const [year, month] = key.split('-');
+          const parts = key.split('-');
+          const monthIndex = parseInt(parts[1] || '1', 10) - 1;
           return {
-            mes: mesesNomes[parseInt(month) - 1],
+            mes: mesesNomes[monthIndex] || 'Jan',
             ...stats
           };
         });
@@ -280,8 +275,7 @@ export function useCreateEntrevista() {
       queryClient.invalidateQueries({ queryKey: ['entrevistas-evolucao'] });
       queryClient.invalidateQueries({ queryKey: ['entrevistas-pizza'] });
     },
-    onError: (error: Error) => {
-      // Erro em entrevistas - handled silently
+    onError: () => {
       toast.error('Erro ao processar entrevista');
     },
   });
@@ -326,9 +320,6 @@ export function useUpdateEntrevista() {
       queryClient.invalidateQueries({ queryKey: ['entrevistas-evolucao'] });
       queryClient.invalidateQueries({ queryKey: ['entrevistas-pizza'] });
     },
-    onError: (error: Error) => {
-      // Erro ao atualizar entrevista - handled silently
-    },
   });
 }
 
@@ -351,4 +342,3 @@ export function useCandidatosDisponiveis() {
     retry: 3,
   });
 }
-

@@ -1,9 +1,6 @@
 /**
  * @module useFocusTrap
  * @description Hook para capturar foco em modais/dialogs para acessibilidade
- * @example
- * const containerRef = useFocusTrap(isOpen);
- * return <div ref={containerRef}>...</div>;
  */
 import { useEffect, useRef, useCallback } from 'react';
 
@@ -17,11 +14,8 @@ const FOCUSABLE_SELECTOR = [
 ].join(', ');
 
 interface UseFocusTrapOptions {
-  /** Foco inicial no primeiro elemento (padrão: true) */
   autoFocus?: boolean;
-  /** Restaurar foco no elemento anterior quando desativar (padrão: true) */
   restoreFocus?: boolean;
-  /** Elemento específico para focar inicialmente */
   initialFocus?: React.RefObject<HTMLElement>;
 }
 
@@ -38,13 +32,11 @@ export const useFocusTrap = (
   const containerRef = useRef<HTMLDivElement>(null);
   const previousActiveElement = useRef<HTMLElement | null>(null);
 
-  // Obter elementos focáveis
   const getFocusableElements = useCallback((): HTMLElement[] => {
     if (!containerRef.current) return [];
     
     const elements = containerRef.current.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR);
     return Array.from(elements).filter(el => {
-      // Verificar se elemento está visível
       const style = getComputedStyle(el);
       return style.display !== 'none' && 
              style.visibility !== 'hidden' && 
@@ -52,7 +44,6 @@ export const useFocusTrap = (
     });
   }, []);
 
-  // Handler de teclado
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (e.key !== 'Tab') return;
 
@@ -64,13 +55,11 @@ export const useFocusTrap = (
     const activeElement = document.activeElement;
 
     if (e.shiftKey) {
-      // Shift+Tab: ir para trás
       if (activeElement === firstElement || !containerRef.current?.contains(activeElement)) {
         e.preventDefault();
         lastElement?.focus();
       }
     } else {
-      // Tab: ir para frente
       if (activeElement === lastElement || !containerRef.current?.contains(activeElement)) {
         e.preventDefault();
         firstElement?.focus();
@@ -78,18 +67,16 @@ export const useFocusTrap = (
     }
   }, [getFocusableElements]);
 
-  // Handler para cliques fora
   const handleFocusOut = useCallback((e: FocusEvent) => {
     if (!containerRef.current) return;
     
     const relatedTarget = e.relatedTarget as HTMLElement | null;
     
-    // Se o foco está saindo do container, trazer de volta
     if (relatedTarget && !containerRef.current.contains(relatedTarget)) {
       const focusableElements = getFocusableElements();
       if (focusableElements.length > 0) {
         e.preventDefault();
-        focusableElements[0].focus();
+        focusableElements[0]?.focus();
       }
     }
   }, [getFocusableElements]);
@@ -99,27 +86,22 @@ export const useFocusTrap = (
 
     const container = containerRef.current;
     
-    // Salvar elemento ativo anterior
     if (restoreFocus) {
       previousActiveElement.current = document.activeElement as HTMLElement;
     }
 
-    // Adicionar handlers
     container.addEventListener('keydown', handleKeyDown);
     container.addEventListener('focusout', handleFocusOut);
 
-    // Focar elemento inicial
     if (autoFocus) {
-      // Aguardar um frame para elementos serem renderizados
       requestAnimationFrame(() => {
         if (initialFocus?.current) {
           initialFocus.current.focus();
         } else {
           const focusableElements = getFocusableElements();
           if (focusableElements.length > 0) {
-            focusableElements[0].focus();
+            focusableElements[0]?.focus();
           } else {
-            // Se não há elementos focáveis, focar o container
             container.setAttribute('tabindex', '-1');
             container.focus();
           }
@@ -131,9 +113,7 @@ export const useFocusTrap = (
       container.removeEventListener('keydown', handleKeyDown);
       container.removeEventListener('focusout', handleFocusOut);
       
-      // Restaurar foco anterior
       if (restoreFocus && previousActiveElement.current) {
-        // Verificar se elemento ainda existe e está no DOM
         if (document.body.contains(previousActiveElement.current)) {
           previousActiveElement.current.focus();
         }
@@ -141,23 +121,22 @@ export const useFocusTrap = (
     };
   }, [isActive, autoFocus, restoreFocus, initialFocus, handleKeyDown, handleFocusOut, getFocusableElements]);
 
-  // Observer para detectar mudanças no conteúdo
   useEffect(() => {
     if (!isActive || !containerRef.current) return;
 
+    const container = containerRef.current;
+
     const observer = new MutationObserver(() => {
-      // Recalcular elementos quando DOM muda
       const focusableElements = getFocusableElements();
       
-      // Se elemento ativo foi removido, focar primeiro disponível
-      if (!containerRef.current?.contains(document.activeElement)) {
+      if (!container.contains(document.activeElement)) {
         if (focusableElements.length > 0) {
-          focusableElements[0].focus();
+          focusableElements[0]?.focus();
         }
       }
     });
 
-    observer.observe(containerRef.current, {
+    observer.observe(container, {
       childList: true,
       subtree: true,
       attributes: true,

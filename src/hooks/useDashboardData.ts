@@ -1,18 +1,13 @@
 /**
  * @module useDashboardData
  * @description Hook para métricas e dados do dashboard
- * @returns {Object} Hook result with data, isLoading, error, and mutations
- * @example
- * const { data, isLoading } = useDashboardData();
  */
 
-import { toast } from 'sonner';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { format, startOfMonth, differenceInDays } from 'date-fns';
 import type { KPIData, FunilEtapa, VagaUrgente, AcaoPendente, AgendaDia, ProcessoSeletivo, Prioridade, FonteCandidato } from '@/types/recruitment';
 
-// Mapeamento de etapas do BD para o funil
 const etapasFunil = [
   { key: 'novo', label: 'Novos', cor: 'hsl(217, 91%, 60%)' },
   { key: 'em_triagem', label: 'Triagem', cor: 'hsl(263, 70%, 50%)' },
@@ -26,7 +21,6 @@ const etapasFunil = [
 ];
 
 export function useDashboardData() {
-  // KPIs
   const kpisQuery = useQuery({
     queryKey: ['dashboard-kpis'],
     staleTime: 30000,
@@ -36,36 +30,30 @@ export function useDashboardData() {
     queryFn: async (): Promise<KPIData> => {
       const inicioMes = startOfMonth(new Date()).toISOString();
       
-      // Vagas abertas (publicadas)
       const { count: vagasAbertas } = await supabase
         .from('vagas')
         .select('*', { count: 'exact', head: true })
         .eq('status', 'publicada');
 
-      // Vagas criadas este mês
       const { count: vagasNovas } = await supabase
         .from('vagas')
         .select('*', { count: 'exact', head: true })
         .gte('created_at', inicioMes);
 
-      // Total de candidatos
       const { count: candidatosTotal } = await supabase
         .from('candidatos')
         .select('*', { count: 'exact', head: true });
 
-      // Candidatos novos este mês
       const { count: candidatosNovos } = await supabase
         .from('candidatos')
         .select('*', { count: 'exact', head: true })
         .gte('created_at', inicioMes);
 
-      // Processos em andamento
       const { count: emProcesso } = await supabase
         .from('processos_seletivos')
         .select('*', { count: 'exact', head: true })
         .eq('status', 'em_andamento');
 
-      // Vagas com processos em andamento
       const { data: vagasEmProcessoData } = await supabase
         .from('processos_seletivos')
         .select('vaga_id')
@@ -73,14 +61,12 @@ export function useDashboardData() {
       
       const vagasUnicas = new Set(vagasEmProcessoData?.map(p => p.vaga_id).filter(Boolean));
 
-      // Contratados este mês
       const { count: contratadosMes } = await supabase
         .from('processos_seletivos')
         .select('*', { count: 'exact', head: true })
         .eq('status', 'contratado')
         .gte('updated_at', inicioMes);
 
-      // Tempo médio de contratação (dias desde inscrição até contratação)
       const { data: contratados } = await supabase
         .from('processos_seletivos')
         .select('data_inscricao, updated_at')
@@ -111,7 +97,6 @@ export function useDashboardData() {
     },
   });
 
-  // Funil de recrutamento
   const funilQuery = useQuery({
     queryKey: ['dashboard-funil'],
     staleTime: 30000,
@@ -128,13 +113,11 @@ export function useDashboardData() {
         return etapasFunil.map(e => ({ etapa: e.label, quantidade: 0, percentual: 0, cor: e.cor }));
       }
 
-      // Contar por etapa
       const contagem: Record<string, number> = {};
       processos.forEach(p => {
         contagem[p.etapa_atual] = (contagem[p.etapa_atual] || 0) + 1;
       });
 
-      // Total para calcular percentual
       const total = processos.length;
 
       return etapasFunil.map(e => ({
@@ -146,7 +129,6 @@ export function useDashboardData() {
     },
   });
 
-  // Vagas urgentes
   const vagasUrgentesQuery = useQuery({
     queryKey: ['dashboard-vagas-urgentes'],
     staleTime: 30000,
@@ -178,7 +160,6 @@ export function useDashboardData() {
     },
   });
 
-  // Ações pendentes
   const acoesPendentesQuery = useQuery({
     queryKey: ['dashboard-acoes-pendentes'],
     staleTime: 30000,
@@ -188,7 +169,6 @@ export function useDashboardData() {
     queryFn: async (): Promise<AcaoPendente[]> => {
       const acoes: AcaoPendente[] = [];
 
-      // Feedback pendente (entrevistas realizadas sem feedback)
       const { count: feedbackPendente } = await supabase
         .from('entrevistas')
         .select('*', { count: 'exact', head: true })
@@ -204,7 +184,6 @@ export function useDashboardData() {
         });
       }
 
-      // Entrevistas para agendar (processos em etapa de entrevista sem entrevista agendada)
       const { count: agendarPendente } = await supabase
         .from('processos_seletivos')
         .select('*', { count: 'exact', head: true })
@@ -220,7 +199,6 @@ export function useDashboardData() {
         });
       }
 
-      // Processos em triagem (avaliar)
       const { count: avaliarPendente } = await supabase
         .from('processos_seletivos')
         .select('*', { count: 'exact', head: true })
@@ -236,7 +214,6 @@ export function useDashboardData() {
         });
       }
 
-      // Propostas pendentes (aprovados sem proposta)
       const { count: propostaPendente } = await supabase
         .from('processos_seletivos')
         .select('*', { count: 'exact', head: true })
@@ -256,7 +233,6 @@ export function useDashboardData() {
     },
   });
 
-  // Agenda do dia
   const agendaHojeQuery = useQuery({
     queryKey: ['dashboard-agenda-hoje'],
     staleTime: 60000,
@@ -293,7 +269,6 @@ export function useDashboardData() {
     },
   });
 
-  // Top candidatos (processos)
   const processosQuery = useQuery({
     queryKey: ['dashboard-processos'],
     staleTime: 30000,
