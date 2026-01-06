@@ -2,7 +2,7 @@
  * Client-side rate limiting utility
  */
 
-interface RateLimitOptions {
+export interface RateLimitOptions {
   maxRequests: number;
   windowMs: number;
 }
@@ -43,21 +43,58 @@ export const getRemainingRequests = (
 export class RateLimiter {
   private options: RateLimitOptions;
   private key: string;
+  private counts = new Map<string, { count: number; resetTime: number }>();
 
-  constructor(key: string, options: RateLimitOptions = { maxRequests: 100, windowMs: 60000 }) {
-    this.key = key;
-    this.options = options;
+  constructor(key: string, options?: RateLimitOptions);
+  constructor(options: RateLimitOptions);
+  constructor(keyOrOptions: string | RateLimitOptions, options?: RateLimitOptions) {
+    if (typeof keyOrOptions === 'string') {
+      this.key = keyOrOptions;
+      this.options = options ?? { maxRequests: 100, windowMs: 60000 };
+    } else {
+      this.key = 'default';
+      this.options = keyOrOptions;
+    }
   }
 
-  check(): boolean {
-    return checkRateLimit(this.key, this.options);
+  check(userKey?: string): boolean {
+    const key = userKey ?? this.key;
+    const now = Date.now();
+    const entry = this.counts.get(key);
+
+    if (!entry || now > entry.resetTime) {
+      this.counts.set(key, { count: 1, resetTime: now + this.options.windowMs });
+      return true;
+    }
+
+    if (entry.count >= this.options.maxRequests) {
+      return false;
+    }
+
+    entry.count++;
+    return true;
   }
 
-  remaining(): number {
-    return getRemainingRequests(this.key, this.options.maxRequests);
+  // Alias for backwards compatibility
+  checkLimit(userKey?: string): boolean {
+    return this.check(userKey);
+  }
+
+  remaining(userKey?: string): number {
+    const key = userKey ?? this.key;
+    const entry = this.counts.get(key);
+    if (!entry || Date.now() > entry.resetTime) {
+      return this.options.maxRequests;
+    }
+    return Math.max(0, this.options.maxRequests - entry.count);
   }
 }
 
-export function createRateLimiter(key: string, options?: RateLimitOptions): RateLimiter {
-  return new RateLimiter(key, options);
+export function createRateLimiter(key: string, options?: RateLimitOptions): RateLimiter;
+export function createRateLimiter(options: RateLimitOptions): RateLimiter;
+export function createRateLimiter(keyOrOptions: string | RateLimitOptions, options?: RateLimitOptions): RateLimiter {
+  if (typeof keyOrOptions === 'string') {
+    return new RateLimiter(keyOrOptions, options);
+  }
+  return new RateLimiter(keyOrOptions);
 }

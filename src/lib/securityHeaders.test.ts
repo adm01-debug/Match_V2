@@ -22,8 +22,8 @@ describe('securityHeaders', () => {
 
   describe('applySecurityHeaders', () => {
     it('applies headers to response', () => {
-      const mockResponse = { setHeader: (k: string, v: string) => {} };
-      expect(() => applySecurityHeaders(mockResponse as any)).not.toThrow();
+      const mockResponse = { setHeader: () => {} };
+      expect(() => applySecurityHeaders(mockResponse)).not.toThrow();
     });
   });
 

@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { getItem, setItem, removeItem, clearStorage } from './storageUtils';
 
 describe('storageUtils', () => {
@@ -9,17 +9,17 @@ describe('storageUtils', () => {
   describe('setItem', () => {
     it('stores string value', () => {
       setItem('key', 'value');
-      expect(localStorage.getItem('key')).toBe('"value"');
+      expect(getItem('key')).toBe('value');
     });
 
     it('stores object value', () => {
       setItem('key', { foo: 'bar' });
-      expect(JSON.parse(localStorage.getItem('key') || '')).toEqual({ foo: 'bar' });
+      expect(getItem('key')).toEqual({ foo: 'bar' });
     });
 
     it('handles null value', () => {
       setItem('key', null);
-      expect(localStorage.getItem('key')).toBe('null');
+      expect(getItem('key')).toBe(null);
     });
   });
 

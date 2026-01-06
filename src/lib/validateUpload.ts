@@ -13,24 +13,24 @@ export interface ValidationResult {
   error?: string;
 }
 
-const DEFAULT_MAX_SIZE = 5 * 1024 * 1024; // 5MB
-const DEFAULT_ALLOWED_TYPES = [
+export const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+export const ALLOWED_FILE_TYPES = [
   'application/pdf',
   'application/msword',
   'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
   'image/jpeg',
   'image/png',
 ];
-const DEFAULT_ALLOWED_EXTENSIONS = ['.pdf', '.doc', '.docx', '.jpg', '.jpeg', '.png'];
+export const ALLOWED_FILE_EXTENSIONS = ['.pdf', '.doc', '.docx', '.jpg', '.jpeg', '.png'];
 
 export const validateUpload = (
   file: File,
   options: UploadValidationOptions = {}
 ): ValidationResult => {
   const {
-    maxSize = DEFAULT_MAX_SIZE,
-    allowedTypes = DEFAULT_ALLOWED_TYPES,
-    allowedExtensions = DEFAULT_ALLOWED_EXTENSIONS,
+    maxSize = MAX_FILE_SIZE,
+    allowedTypes = ALLOWED_FILE_TYPES,
+    allowedExtensions = ALLOWED_FILE_EXTENSIONS,
   } = options;
 
   // Check file size
@@ -50,7 +50,7 @@ export const validateUpload = (
   }
 
   // Check extension
-  const ext = '.' + file.name.split('.').pop()?.toLowerCase();
+  const ext = '.' + (file.name.split('.').pop()?.toLowerCase() ?? '');
   if (!allowedExtensions.includes(ext)) {
     return {
       valid: false,

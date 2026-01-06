@@ -6,19 +6,23 @@
 import type { ReactNode, ComponentType } from 'react';
 
 // Sentry é opcional - funciona mesmo sem estar configurado
-const SENTRY_DSN = import.meta.env.VITE_SENTRY_DSN;
+const SENTRY_DSN = import.meta.env['VITE_SENTRY_DSN'] as string | undefined;
 const IS_DEV = import.meta.env.DEV;
 
 let initialized = false;
 
-export function initSentry(): void {
+export interface SentryConfig {
+  dsn?: string;
+  environment?: string;
+  release?: string;
+}
+
+export function initSentry(_config?: SentryConfig): void {
   if (initialized) return;
   initialized = true;
   
   if (!SENTRY_DSN) {
-    if (IS_DEV) {
-      // Apenas em dev, log silencioso
-    }
+    // Sentry not configured
     return;
   }
   
@@ -27,11 +31,10 @@ export function initSentry(): void {
   // Sentry.init({ dsn: SENTRY_DSN, ... });
 }
 
-export function captureError(error: Error, context?: Record<string, unknown>): void {
-  if (IS_DEV) {
-    if (import.meta.env.DEV) {
-      // Sentry error logged in dev only
-    }
+export function captureError(error: Error | string | null | undefined, context?: Record<string, unknown>): void {
+  void context;
+  if (IS_DEV && error) {
+    // Dev logging only
   }
   // TODO: Sentry.captureException(error, { extra: context });
 }
@@ -44,9 +47,14 @@ export function captureMessage(message: string, level: 'info' | 'warning' | 'err
   // TODO: Sentry.captureMessage(message, level);
 }
 
-export function identifyUser(user: { id: string; email?: string; name?: string }): void {
+export function setUser(user: { id: string; email?: string; name?: string }): void {
   // TODO: Sentry.setUser(user);
-  void user; // Evita warning de variável não usada
+  void user;
+}
+
+export function identifyUser(user: { id: string; email?: string; name?: string }): void {
+  // Alias for setUser
+  setUser(user);
 }
 
 export function clearUser(): void {
@@ -81,7 +89,7 @@ export default {
   captureError,
   captureMessage,
   identifyUser,
+  setUser,
   clearUser,
   addBreadcrumb,
 };
-

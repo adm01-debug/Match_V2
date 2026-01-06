@@ -3,9 +3,9 @@ import { Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState, useMemo } from "react";
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
-import { useEntrevistas } from "@/hooks/useEntrevistas";
+import { useEntrevistas, useUpdateEntrevista } from "@/hooks/useEntrevistas";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -30,44 +30,37 @@ import {
   RefreshCw,
   Filter,
 } from "lucide-react";
-import { format, isSameDay, startOfMonth, endOfMonth, eachDayOfInterval, isToday, parseISO } from "date-fns";
+import { format, isSameDay, startOfMonth, endOfMonth, eachDayOfInterval, isToday } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { AgendaEmptyState } from "@/components/empty-states";
+
 interface EntrevistaCardData {
   id: string;
   status: string;
   tipo: string;
-  data_hora: string;
+  data: Date;
+  horaInicio: string;
+  horaFim: string;
   local?: string;
-  entrevistador?: {
-    full_name: string;
-  };
-  processo?: {
-    candidato?: {
-      nome: string;
-      foto_url?: string;
-    };
-    vaga?: {
-      titulo: string;
-    };
-  };
+  candidatoNome: string;
+  vagaTitulo: string;
+  entrevistadores: string[];
+  candidatoId?: string;
 }
-
-
 
 const statusConfig = {
   agendada: { label: "Agendada", color: "bg-blue-100 text-blue-700", icon: CalendarIcon },
   confirmada: { label: "Confirmada", color: "bg-green-100 text-green-700", icon: CheckCircle2 },
   realizada: { label: "Realizada", color: "bg-purple-100 text-purple-700", icon: CheckCircle2 },
   cancelada: { label: "Cancelada", color: "bg-red-100 text-red-700", icon: XCircle },
-  no_show: { label: "No-Show", color: "bg-amber-100 text-amber-700", icon: AlertCircle },
+  reagendada: { label: "Reagendada", color: "bg-amber-100 text-amber-700", icon: AlertCircle },
 };
 
 const tipoConfig = {
   telefone: { label: "Telefone", icon: Phone },
-  video: { label: "Videoconferência", icon: Video },
+  online: { label: "Videoconferência", icon: Video },
   presencial: { label: "Presencial", icon: MapPin },
 };
 
@@ -75,26 +68,18 @@ export default function AgendaPage() {
   usePageTitle('Agenda');
   useDocumentTitle('Agenda');
 
-  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { toast } = useToast();
 
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [activeTab, setActiveTab] = useState("calendario");
   const [filtroStatus, setFiltroStatus] = useState<string>("todos");
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [_dialogOpen, setDialogOpen] = useState(false);
   const [feedbackDialog, setFeedbackDialog] = useState(false);
-  const [entrevistaSelecionada, setEntrevistaSelecionada] = useState<any>(null);
+  const [entrevistaSelecionada, setEntrevistaSelecionada] = useState<EntrevistaCardData | null>(null);
 
-  const {
-    data: entrevistas = [],
-    isLoading,
-    confirmarEntrevista,
-    cancelarEntrevista,
-    registrarNoShow,
-    registrarFeedback,
-    refetch,
-  } = useEntrevistas();
+  const { data: entrevistas = [], isLoading, refetch } = useEntrevistas();
+  const updateEntrevista = useUpdateEntrevista();
 
   const entrevistasFiltradas = useMemo(() => {
     return entrevistas.filter(e => {
@@ -105,8 +90,8 @@ export default function AgendaPage() {
 
   const entrevistasDoDia = useMemo(() => {
     return entrevistasFiltradas.filter(e => 
-      isSameDay(parseISO(e.data_hora), selectedDate)
-    ).sort((a, b) => new Date(a.data_hora).getTime() - new Date(b.data_hora).getTime());
+      isSameDay(e.data, selectedDate)
+    ).sort((a, b) => new Date(a.data).getTime() - new Date(b.data).getTime());
   }, [entrevistasFiltradas, selectedDate]);
 
   const diasComEntrevistas = useMemo(() => {
@@ -115,21 +100,21 @@ export default function AgendaPage() {
     const dias = eachDayOfInterval({ start: inicio, end: fim });
     
     return dias.filter(dia => 
-      entrevistas.some(e => isSameDay(parseISO(e.data_hora), dia))
+      entrevistas.some(e => isSameDay(e.data, dia))
     );
   }, [entrevistas, selectedDate]);
 
   const proximasEntrevistas = useMemo(() => {
     const agora = new Date();
     return entrevistasFiltradas
-      .filter(e => new Date(e.data_hora) >= agora && ['agendada', 'confirmada'].includes(e.status))
-      .sort((a, b) => new Date(a.data_hora).getTime() - new Date(b.data_hora).getTime())
+      .filter(e => new Date(e.data) >= agora && ['agendada', 'confirmada'].includes(e.status))
+      .sort((a, b) => new Date(a.data).getTime() - new Date(b.data).getTime())
       .slice(0, 10);
   }, [entrevistasFiltradas]);
 
   const handleConfirmar = async (id: string) => {
     try {
-      await confirmarEntrevista(id);
+      await updateEntrevista.mutateAsync({ id, status: 'confirmada' });
       toast({ title: "Entrevista confirmada" });
     } catch {
       toast({ title: "Erro", variant: "destructive" });
@@ -139,7 +124,7 @@ export default function AgendaPage() {
   const handleCancelar = async (id: string) => {
     if (!confirm("Deseja cancelar esta entrevista?")) return;
     try {
-      await cancelarEntrevista(id);
+      await updateEntrevista.mutateAsync({ id, status: 'cancelada' });
       toast({ title: "Entrevista cancelada" });
     } catch {
       toast({ title: "Erro", variant: "destructive" });
@@ -148,7 +133,7 @@ export default function AgendaPage() {
 
   const handleNoShow = async (id: string) => {
     try {
-      await registrarNoShow(id);
+      await updateEntrevista.mutateAsync({ id, status: 'realizada', feedback_resultado: 'pendente' });
       toast({ title: "No-show registrado", variant: "destructive" });
     } catch {
       toast({ title: "Erro", variant: "destructive" });
@@ -158,7 +143,14 @@ export default function AgendaPage() {
   const handleRegistrarFeedback = async (feedback: string, avaliacao: number) => {
     if (!entrevistaSelecionada) return;
     try {
-      await registrarFeedback(entrevistaSelecionada.id, { feedback, avaliacao });
+      await updateEntrevista.mutateAsync({
+        id: entrevistaSelecionada.id,
+        status: 'realizada',
+        feedback_comentarios: feedback,
+        feedback_nota: avaliacao,
+        feedback_resultado: avaliacao >= 3 ? 'aprovado' : 'reprovado',
+        feedback_avaliado_em: new Date().toISOString(),
+      });
       toast({ title: "Feedback registrado" });
       setFeedbackDialog(false);
       setEntrevistaSelecionada(null);
@@ -177,16 +169,16 @@ export default function AgendaPage() {
         <CardContent className="p-4">
           <div className="flex items-start gap-4">
             <Avatar className="h-12 w-12">
-              <AvatarImage src={entrevista.processo?.candidato?.foto_url} />
+              <AvatarImage src={undefined} />
               <AvatarFallback>
-                {entrevista.processo?.candidato?.nome?.charAt(0) || '?'}
+                {entrevista.candidatoNome?.charAt(0) || '?'}
               </AvatarFallback>
             </Avatar>
 
             <div className="flex-1 min-w-0">
               <div className="flex items-center justify-between mb-1">
                 <p className="font-medium truncate">
-                  {entrevista.processo?.candidato?.nome}
+                  {entrevista.candidatoNome}
                 </p>
                 <Badge className={cn("border-0", status?.color)}>
                   {status?.label}
@@ -194,22 +186,22 @@ export default function AgendaPage() {
               </div>
 
               <p className="text-sm text-muted-foreground truncate">
-                {entrevista.processo?.vaga?.titulo}
+                {entrevista.vagaTitulo}
               </p>
 
               <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
                 <span className="flex items-center gap-1">
                   <Clock className="h-4 w-4" />
-                  {format(parseISO(entrevista.data_hora), "HH:mm")}
+                  {entrevista.horaInicio}
                 </span>
                 <span className="flex items-center gap-1">
                   <TipoIcon className="h-4 w-4" />
                   {tipo?.label}
                 </span>
-                {entrevista.entrevistador && (
+                {entrevista.entrevistadores.length > 0 && (
                   <span className="flex items-center gap-1">
                     <User className="h-4 w-4" />
-                    {entrevista.entrevistador.full_name}
+                    {entrevista.entrevistadores[0]}
                   </span>
                 )}
               </div>
@@ -245,13 +237,15 @@ export default function AgendaPage() {
                     </Button>
                   </>
                 )}
-                <Button 
-                  size="sm" 
-                  variant="ghost"
-                  onClick={() => navigate(`/candidatos/${entrevista.processo?.candidato_id}`)}
-                >
-                  Ver Perfil
-                </Button>
+                {entrevista.candidatoId && (
+                  <Button 
+                    size="sm" 
+                    variant="ghost"
+                    onClick={() => navigate(`/candidatos/${entrevista.candidatoId}`)}
+                  >
+                    Ver Perfil
+                  </Button>
+                )}
               </div>
             </div>
           </div>
@@ -273,6 +267,21 @@ export default function AgendaPage() {
       </Layout>
     );
   }
+
+  // Map entrevistas to EntrevistaCardData
+  const mapToCardData = (e: typeof entrevistas[0]): EntrevistaCardData => ({
+    id: e.id,
+    status: e.status,
+    tipo: e.tipo,
+    data: e.data,
+    horaInicio: e.horaInicio,
+    horaFim: e.horaFim,
+    local: e.local,
+    candidatoNome: e.candidatoNome,
+    vagaTitulo: e.vagaTitulo,
+    entrevistadores: e.entrevistadores,
+    candidatoId: e.candidatoId,
+  });
 
   return (
     <Suspense fallback={<div className="p-6"><Skeleton className="h-8 w-64 mb-4" /><Skeleton className="h-64" /></div>}>
@@ -353,7 +362,7 @@ export default function AgendaPage() {
                   ) : (
                     <div className="space-y-3">
                       {entrevistasDoDia.map(entrevista => (
-                        <EntrevistaCard key={entrevista.id} entrevista={entrevista} />
+                        <EntrevistaCard key={entrevista.id} entrevista={mapToCardData(entrevista)} />
                       ))}
                     </div>
                   )}
@@ -369,9 +378,9 @@ export default function AgendaPage() {
                   proximasEntrevistas.map(entrevista => (
                     <div key={entrevista.id}>
                       <p className="text-sm text-muted-foreground mb-2">
-                        {format(parseISO(entrevista.data_hora), "EEEE, d 'de' MMMM", { locale: ptBR })}
+                        {format(entrevista.data, "EEEE, d 'de' MMMM", { locale: ptBR })}
                       </p>
-                      <EntrevistaCard entrevista={entrevista} />
+                      <EntrevistaCard entrevista={mapToCardData(entrevista)} />
                     </div>
                   ))
                 )}
@@ -381,7 +390,7 @@ export default function AgendaPage() {
             <TabsContent value="todas" className="mt-4">
               <div className="space-y-3">
                 {entrevistasFiltradas.map(entrevista => (
-                  <EntrevistaCard key={entrevista.id} entrevista={entrevista} />
+                  <EntrevistaCard key={entrevista.id} entrevista={mapToCardData(entrevista)} />
                 ))}
               </div>
             </TabsContent>
@@ -434,5 +443,3 @@ export default function AgendaPage() {
     </Suspense>
   );
 }
-
-

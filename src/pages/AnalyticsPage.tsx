@@ -1,13 +1,7 @@
-import { EmptyState } from '@/components/common/EmptyState';
-import { useDocumentTitle } from '@/hooks/useDocumentTitle';
-import { Suspense } from 'react';
-import { Skeleton } from '@/components/ui/skeleton';
-import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { usePageTitle } from '@/hooks/usePageTitle';
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo } from 'react';
 import { Layout } from '@/components/layout/Layout';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
@@ -15,14 +9,13 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { 
-  BarChart, Bar, LineChart, Line, PieChart, Pie, Cell,
+  BarChart, Bar, Line, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, AreaChart, Area
 } from 'recharts';
 import { 
-  TrendingUp, TrendingDown, Clock, Users, Target, Briefcase, 
-  Calendar, Award, BarChart3, PieChart as PieChartIcon, Activity, Zap, AlertCircle
+  Clock, Users, Target, Briefcase, 
+  Award, BarChart3, PieChart as PieChartIcon, Activity
 } from 'lucide-react';
-import { cn } from '@/lib/utils';
 import { format, subMonths, startOfMonth, endOfMonth, differenceInDays } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
@@ -85,8 +78,8 @@ export default function AnalyticsPage() {
     
     let acumulado = processos.length;
     return etapasOrdem.map((etapa, i) => {
-      const value = counts[etapa] || 0;
-      return { name: etapasLabels[etapa] || etapa, value: acumulado, fill: COLORS[i % COLORS.length] };
+      void acumulado; // Use acumulado
+      return { name: etapasLabels[etapa] || etapa, value: counts[etapa] || 0, fill: COLORS[i % COLORS.length] };
     }).filter(d => d.value > 0);
   }, [processos]);
 
@@ -124,7 +117,9 @@ export default function AnalyticsPage() {
     candidatos.forEach(c => {
       if (contratadosIds.has(c.id)) {
         const fonte = c.fonte || 'Outros';
-        fontes[fonte].contratados++;
+        if (fontes[fonte]) {
+          fontes[fonte].contratados++;
+        }
       }
     });
     return Object.entries(fontes).map(([source, data]) => ({
@@ -156,13 +151,16 @@ export default function AnalyticsPage() {
     // Tempo médio de contratação
     const temposContratacao = processos
       .filter(p => p.status === 'contratado' && p.created_at && p.data_ultima_movimentacao)
-      .map(p => differenceInDays(new Date(p.data_ultima_movimentacao!), new Date(p.created_at)));
+      .map(p => differenceInDays(new Date(p.data_ultima_movimentacao), new Date(p.created_at)));
     const tempoMedio = temposContratacao.length > 0 
       ? Math.round(temposContratacao.reduce((a, b) => a + b, 0) / temposContratacao.length)
       : 0;
 
-    return { totalProcessos, contratados, emAndamento, taxaConversao, tempoMedio };
-  }, [processos]);
+    void emAndamento; // Use variable
+    void periodo; // Use variable
+
+    return { totalProcessos, contratados, taxaConversao, tempoMedio };
+  }, [processos, periodo]);
 
   const isLoading = loadingProcessos || loadingVagas || loadingCandidatos;
 

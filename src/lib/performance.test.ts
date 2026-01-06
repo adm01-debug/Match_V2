@@ -12,10 +12,10 @@ describe('performance', () => {
   });
 
   describe('measurePerformance', () => {
-    it('measures execution time', async () => {
-      const fn = () => new Promise(r => setTimeout(r, 100));
-      const result = await measurePerformance('test', fn);
-      expect(result).toBeDefined();
+    it('measures execution time', () => {
+      const fn = () => 'result';
+      const result = measurePerformance('test', fn);
+      expect(result).toBe('result');
     });
 
     it('handles sync functions', () => {
@@ -81,23 +81,25 @@ describe('performance', () => {
 
   describe('memoize', () => {
     it('caches function results', () => {
-      const fn = vi.fn((x: number) => x * 2);
+      let callCount = 0;
+      const fn = (x: number) => { callCount++; return x * 2; };
       const memoized = memoize(fn);
       
       memoized(5);
       memoized(5);
       
-      expect(fn).toHaveBeenCalledTimes(1);
+      expect(callCount).toBe(1);
     });
 
     it('handles different arguments', () => {
-      const fn = vi.fn((x: number) => x * 2);
+      let callCount = 0;
+      const fn = (x: number) => { callCount++; return x * 2; };
       const memoized = memoize(fn);
       
       memoized(5);
       memoized(10);
       
-      expect(fn).toHaveBeenCalledTimes(2);
+      expect(callCount).toBe(2);
     });
   });
 });

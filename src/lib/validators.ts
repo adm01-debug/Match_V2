@@ -72,19 +72,19 @@ export const validators = {
     // Validação de dígitos verificadores
     let sum = 0;
     for (let i = 0; i < 9; i++) {
-      sum += parseInt(cleaned[i]) * (10 - i);
+      sum += parseInt(cleaned[i] ?? '0') * (10 - i);
     }
     let digit = 11 - (sum % 11);
     if (digit > 9) digit = 0;
-    if (parseInt(cleaned[9]) !== digit) return 'CPF inválido';
+    if (parseInt(cleaned[9] ?? '0') !== digit) return 'CPF inválido';
     
     sum = 0;
     for (let i = 0; i < 10; i++) {
-      sum += parseInt(cleaned[i]) * (11 - i);
+      sum += parseInt(cleaned[i] ?? '0') * (11 - i);
     }
     digit = 11 - (sum % 11);
     if (digit > 9) digit = 0;
-    if (parseInt(cleaned[10]) !== digit) return 'CPF inválido';
+    if (parseInt(cleaned[10] ?? '0') !== digit) return 'CPF inválido';
     
     return null;
   },
@@ -134,7 +134,7 @@ export const validators = {
 
 // Função para validar múltiplos campos
 export function validate(
-  values: Record<string, any>,
+  values: Record<string, unknown>,
   rules: Record<string, Array<(value: unknown) => string | null>>
 ): Record<string, string> {
   const errors: Record<string, string> = {};
@@ -170,4 +170,3 @@ export const candidatoValidations = {
 };
 
 export default validators;
-
