@@ -3,16 +3,14 @@
  * @module QuestaoAplicacao
  */
 
-import { memo , memo} from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Questao } from '@/types/tests';
 import { cn } from '@/lib/utils';
-import { FileText, ToggleLeft, MessageSquare, CheckCircle } from 'lucide-react';
+import { CheckCircle } from 'lucide-react';
 
 interface QuestaoAplicacaoProps {
   questao: Questao;

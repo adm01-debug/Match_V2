@@ -3,12 +3,10 @@
  * @module ResultadoProvaView
  */
 
-import { memo , memo} from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { Separator } from '@/components/ui/separator';
 import { Questao, ResultadoProva, Prova } from '@/types/tests';
 import { 
   CheckCircle, 
@@ -16,7 +14,6 @@ import {
   Clock, 
   Target, 
   Award, 
-  TrendingUp,
   FileText,
   Download,
   Share2,
@@ -38,7 +35,6 @@ export function ResultadoProvaView({ prova, resultado, questoes, onVoltar }: Res
   // Stats
   const questoesCorretas = resultado.respostas.filter(r => r.correta).length;
   const questoesIncorretas = resultado.respostas.filter(r => !r.correta && r.resposta !== null).length;
-  const questoesPendentes = resultado.respostas.filter(r => r.resposta === null).length;
   
   // Por dificuldade
   const statsPorDificuldade = {
@@ -220,8 +216,8 @@ export function ResultadoProvaView({ prova, resultado, questoes, onVoltar }: Res
                         <p className="text-muted-foreground">
                           Sua resposta: {' '}
                           <span className={cn(isCorreta ? "text-green-600" : "text-red-600", "font-medium")}>
-                            {resposta?.resposta !== null 
-                              ? questao.alternativas[resposta.resposta as number]
+                            {resposta?.resposta !== null && resposta !== undefined
+                              ? String(questao.alternativas?.[resposta.resposta as number] || resposta.resposta)
                               : 'Não respondida'
                             }
                           </span>

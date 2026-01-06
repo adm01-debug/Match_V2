@@ -3,10 +3,9 @@
  * @module CategoriaCard
  */
 
-import { memo , memo} from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { categoriasInfo } from '@/config/testsConfig';
+import { getCategoriaById } from '@/config/testsConfig';
 import { CategoriaProva } from '@/types/tests';
 import { Brain, Heart, Code, Globe, Target, Users, LucideIcon } from 'lucide-react';
 
@@ -27,7 +26,8 @@ interface CategoriaCardProps {
 }
 
 export function CategoriaCard({ categoria, count, onClick, isSelected }: CategoriaCardProps) {
-  const info = categoriasInfo[categoria];
+  const info = getCategoriaById(categoria);
+  if (!info) return null;
   const Icon = iconMap[info.icone] || Brain;
 
   return (

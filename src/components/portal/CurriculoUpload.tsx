@@ -3,7 +3,8 @@
  * @module CurriculoUpload
  */
 
-import React, { useState, useRef, memo } from 'react';
+import React, { useState, useRef } from 'react';
+import { memo } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useCandidatoAuth } from '@/contexts/CandidatoAuthContext';
@@ -11,7 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { toast } from 'sonner';
-import { Upload, FileText, X, Download, Trash2, CheckCircle2 } from 'lucide-react';
+import { Upload, FileText, Download, Trash2, CheckCircle2 } from 'lucide-react';
 
 interface CurriculoUploadProps {
   curriculoUrl?: string | null;

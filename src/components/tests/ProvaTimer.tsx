@@ -3,7 +3,7 @@
  * @module ProvaTimer
  */
 
-import { memo,  useState, useEffect, useCallback  , memo} from 'react';
+import { useState, useEffect } from 'react';
 import { Clock, AlertTriangle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 

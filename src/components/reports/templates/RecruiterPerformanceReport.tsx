@@ -20,14 +20,13 @@ interface RecruiterPerformanceReportProps {
   period: string;
 }
 
-export function RecruiterPerformanceReport({ data, period }: RecruiterPerformanceReportProps) {
+export function RecruiterPerformanceReport({ data }: RecruiterPerformanceReportProps) {
   const sortedByHires = [...data].sort((a, b) => b.totalHires - a.totalHires);
   const topPerformer = sortedByHires[0];
 
   const chartData = data.map(r => ({
     name: r.name.split(" ")[0],
-    contratações: r.totalHires,
-    candidatos: r.totalCandidates,
+    value: r.totalHires,
   }));
 
   const getRankIcon = (index: number) => {
@@ -61,11 +60,8 @@ export function RecruiterPerformanceReport({ data, period }: RecruiterPerformanc
 
       {/* Chart */}
       <ReportChart
-        title="Comparativo de Performance"
-        description="Candidatos processados vs contratações"
         type="bar"
         data={chartData}
-        dataKeys={["candidatos", "contratações"]}
         height={300}
       />
 

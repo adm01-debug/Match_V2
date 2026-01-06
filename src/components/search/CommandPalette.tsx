@@ -1,10 +1,10 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Command, CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator } from '@/components/ui/command';
+import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator } from '@/components/ui/command';
 import { DialogTitle } from '@/components/ui/dialog';
-import { Users, Briefcase, Calendar, BarChart3, Settings, Search, FileText, Home, Plus, History } from 'lucide-react';
+import { Users, Briefcase, Calendar, BarChart3, Settings, Search, FileText, Home, Plus } from 'lucide-react';
 
-interface CommandItem {
+interface CommandItemType {
   id: string;
   label: string;
   icon: React.ReactNode;
@@ -35,7 +35,7 @@ export function CommandPalette() {
     command();
   }, []);
 
-  const commands: CommandItem[] = useMemo(() => [
+  const commands: CommandItemType[] = useMemo(() => [
     // Navigation
     { id: 'home', label: 'Dashboard', icon: <Home className="mr-2 h-4 w-4" />, action: () => navigate('/'), keywords: ['inicio', 'home'], group: 'Navegação' },
     { id: 'candidatos', label: 'Candidatos', icon: <Users className="mr-2 h-4 w-4" />, action: () => navigate('/candidatos'), keywords: ['pessoas', 'candidates'], group: 'Navegação' },
@@ -62,10 +62,10 @@ export function CommandPalette() {
   }, [commands, search]);
 
   const groupedCommands = useMemo(() => {
-    const groups: Record<string, CommandItem[]> = {};
+    const groups: Record<string, CommandItemType[]> = {};
     filteredCommands.forEach(cmd => {
       if (!groups[cmd.group]) groups[cmd.group] = [];
-      groups[cmd.group].push(cmd);
+      groups[cmd.group]!.push(cmd);
     });
     return groups;
   }, [filteredCommands]);

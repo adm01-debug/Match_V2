@@ -7,7 +7,7 @@ import { memo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { departamentosInfo, niveisInfo } from '@/config/testsConfig';
+import { getDepartamentoById, getNivelById } from '@/config/testsConfig';
 import { Clock, FileText, Play } from 'lucide-react';
 
 interface BateriaProvas {
@@ -26,8 +26,8 @@ interface BateriaCardProps {
 }
 
 export const BateriaCard = memo(function BateriaCard({ bateria, onSelect }: BateriaCardProps) {
-  const departamento = departamentosInfo[bateria.departamento] || { nome: bateria.departamento };
-  const nivel = niveisInfo[bateria.nivel] || { nome: bateria.nivel };
+  const departamento = getDepartamentoById(bateria.departamento);
+  const nivel = getNivelById(bateria.nivel);
 
   return (
     <Card role="article" aria-label="Bateria de testes" className="hover:shadow-lg transition-shadow">
@@ -38,8 +38,8 @@ export const BateriaCard = memo(function BateriaCard({ bateria, onSelect }: Bate
             <p className="text-sm text-muted-foreground mt-1">{bateria.descricao}</p>
           </div>
           <div className="flex flex-col gap-1">
-            <Badge variant="default">{departamento.nome}</Badge>
-            <Badge variant="secondary">{nivel.nome}</Badge>
+            <Badge variant="default">{departamento?.nome || bateria.departamento}</Badge>
+            <Badge variant="secondary">{nivel?.nome || bateria.nivel}</Badge>
           </div>
         </div>
       </CardHeader>
