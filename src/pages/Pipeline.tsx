@@ -1,27 +1,20 @@
-import { useDocumentTitle } from '@/hooks/useDocumentTitle';
-import { Suspense, useCallback } from 'react';
-import { Skeleton } from '@/components/ui/skeleton';
 import { usePageTitle } from '@/hooks/usePageTitle';
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
-import { useProcessosSeletivos } from "@/hooks/useProcessosSeletivos";
+import { useProcessosSeletivos, useUpdateProcessoEtapa } from "@/hooks/useProcessosSeletivos";
 import { useVagas } from "@/hooks/useVagas";
 import { etapasPipeline, getEtapaConfig } from "@/config/pipelineConfig";
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
 import { MatchScoreBadge } from "@/components/ui/match-score-badge";
-import { 
-  Search, 
-  MoreHorizontal,
-  Users,
-  RefreshCw
-} from "lucide-react";
+import { Search, MoreHorizontal, RefreshCw } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -34,6 +27,8 @@ import { EtapaProcesso } from "@/types/recruitment";
 import { PipelineEmptyState } from "@/components/empty-states";
 
 export default function Pipeline() {
+  usePageTitle('Pipeline');
+  
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -44,40 +39,35 @@ export default function Pipeline() {
 
   // Hooks de dados
   const { data: vagas = [], isLoading: loadingVagas } = useVagas();
-  const { 
-    data: processos = [], 
-    isLoading: loadingProcessos,
-    moverEtapa,
-    refetch 
-  } = useProcessosSeletivos({ 
-    vagaId: vagaSelecionada !== "todas" ? vagaSelecionada : undefined 
-  });
+  const { data: processos = [], isLoading: loadingProcessos, refetch } = useProcessosSeletivos();
+  const updateEtapaMutation = useUpdateProcessoEtapa();
 
   // Atualizar URL quando vaga mudar
   useEffect(() => {
-  usePageTitle('Pipeline');
-
     if (vagaSelecionada && vagaSelecionada !== "todas") {
       setSearchParams({ vaga: vagaSelecionada });
     } else {
       setSearchParams({});
     }
-  }, [vagaSelecionada]);
+  }, [vagaSelecionada, setSearchParams]);
 
-  // Filtrar processos por busca
+  // Filtrar processos
   const processosFiltrados = processos.filter(p => {
+    // Filtrar por vaga se selecionada
+    if (vagaSelecionada !== "todas" && p.vagaId !== vagaSelecionada) return false;
+    
+    // Filtrar por busca
     if (!searchQuery) return true;
     const query = searchQuery.toLowerCase();
     return (
-      p.candidato?.nome?.toLowerCase().includes(query) ||
-      p.candidato?.email?.toLowerCase().includes(query) ||
-      p.vaga?.titulo?.toLowerCase().includes(query)
+      p.candidatoNome?.toLowerCase().includes(query) ||
+      p.vagaTitulo?.toLowerCase().includes(query)
     );
   });
 
   // Agrupar processos por etapa
   const processosPorEtapa = etapasPipeline.reduce((acc, etapa) => {
-    acc[etapa] = processosFiltrados.filter(p => p.etapa_atual === etapa);
+    acc[etapa] = processosFiltrados.filter(p => p.etapaAtual === etapa);
     return acc;
   }, {} as Record<EtapaProcesso, typeof processos>);
 
@@ -89,24 +79,38 @@ export default function Pipeline() {
     const novaEtapa = destination.droppableId as EtapaProcesso;
 
     try {
-      await moverEtapa(draggableId, novaEtapa);
+      await updateEtapaMutation.mutateAsync({ id: draggableId, etapaAtual: novaEtapa });
       toast({
         title: "Pipeline atualizado",
         description: `Candidato movido para ${getEtapaConfig(novaEtapa)?.nome}`,
       });
-    } catch (error) {
+    } catch {
       toast({
         title: "Erro",
         description: "Não foi possível mover o candidato",
         variant: "destructive",
       });
     }
-  }, [moverEtapa, toast]);
+  }, [updateEtapaMutation, toast]);
 
   const loading = loadingVagas || loadingProcessos;
 
   // Vagas ativas para filtro
   const vagasAtivas = vagas.filter(v => ['publicada', 'em_selecao'].includes(v.status));
+
+  if (loading) {
+    return (
+      <Layout title="Pipeline de Recrutamento">
+        <div className="p-6">
+          <div className="flex gap-4 overflow-x-auto pb-4">
+            {[1, 2, 3, 4].map(i => (
+              <Skeleton key={i} className="h-96 w-72 flex-shrink-0" />
+            ))}
+          </div>
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <Layout title="Pipeline de Recrutamento">
@@ -152,136 +156,113 @@ export default function Pipeline() {
         </div>
 
         {/* Pipeline Board */}
-        {loading ? (
+        <DragDropContext onDragEnd={handleDragEnd}>
           <div className="flex gap-4 overflow-x-auto pb-4">
-            {etapasPipeline.slice(0, 5).map((_, i) => (
-              <Skeleton key={i} className="h-[600px] w-72 flex-shrink-0" />
-            ))}
-          </div>
-        ) : (
-          <DragDropContext onDragEnd={handleDragEnd}>
-            <div className="flex gap-4 overflow-x-auto pb-4">
-              {etapasPipeline.map(etapa => {
-                const config = getEtapaConfig(etapa);
-                const candidatos = processosPorEtapa[etapa] || [];
+            {etapasPipeline.map(etapa => {
+              const config = getEtapaConfig(etapa);
+              const candidatos = processosPorEtapa[etapa] || [];
 
-                return (
-                  <div role="main" key={etapa} className="flex-shrink-0 w-72">
-                    <Card className="h-full">
-                      <CardHeader className="pb-2">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <div className={cn("w-3 h-3 rounded-full", config?.cor)} />
-                            <CardTitle className="text-sm font-medium">
-                              {config?.nome}
-                            </CardTitle>
-                          </div>
-                          <Badge variant="secondary" className="text-xs">
-                            {candidatos.length}
-                          </Badge>
-                        </div>
-                      </CardHeader>
-                      <CardContent className="p-2">
-                        <Droppable droppableId={etapa}>
-                          {(provided, snapshot) => (
-                            <div
-                              ref={provided.innerRef}
-                              {...provided.droppableProps}
-                              className={cn(
-                                "min-h-[500px] rounded-lg p-2 transition-colors",
-                                snapshot.isDraggingOver ? "bg-muted" : ""
-                              )}
-                            >
-                              {candidatos.map((processo, index) => (
-                                <Draggable
-                                  key={processo.id}
-                                  draggableId={processo.id}
-                                  index={index}
-                                >
-                                  {(provided, snapshot) => (
-                                    <div
-                                      ref={provided.innerRef}
-                                      {...provided.draggableProps}
-                                      {...provided.dragHandleProps}
-                                      className={cn(
-                                        "bg-background rounded-lg p-3 mb-2 border shadow-sm cursor-grab active:cursor-grabbing",
-                                        snapshot.isDragging && "shadow-lg ring-2 ring-primary"
-                                      )}
-                                    >
-                                      <div className="flex items-start gap-3">
-                                        <Avatar className="h-10 w-10">
-                                          <AvatarImage src={processo.candidato?.foto_url} />
-                                          <AvatarFallback>
-                                            {processo.candidato?.nome?.charAt(0) || '?'}
-                                          </AvatarFallback>
-                                        </Avatar>
-                                        <div className="flex-1 min-w-0">
-                                          <p className="font-medium text-sm truncate">
-                                            {processo.candidato?.nome}
-                                          </p>
-                                          <p className="text-xs text-muted-foreground truncate">
-                                            {processo.vaga?.titulo}
-                                          </p>
-                                        </div>
-                                        <DropdownMenu>
-                                          <DropdownMenuTrigger asChild>
-                                            <Button variant="ghost" size="icon" className="h-8 w-8">
-                                              <MoreHorizontal className="h-4 w-4" />
-                                            </Button>
-                                          </DropdownMenuTrigger>
-                                          <DropdownMenuContent align="end">
-                                            <DropdownMenuItem onClick={() => navigate(`/candidatos/${processo.candidato_id}`)}>
-                                              Ver perfil
-                                            </DropdownMenuItem>
-                                            <DropdownMenuItem onClick={() => navigate(`/agenda?processo=${processo.id}`)}>
-                                              Agendar entrevista
-                                            </DropdownMenuItem>
-                                            <DropdownMenuItem onClick={() => navigate(`/avaliacoes/novo?processo=${processo.id}`)}>
-                                              Avaliar
-                                            </DropdownMenuItem>
-                                          </DropdownMenuContent>
-                                        </DropdownMenu>
+              return (
+                <div key={etapa} className="flex-shrink-0 w-72">
+                  <Card className="h-full">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="flex items-center justify-between text-sm">
+                        <span className="flex items-center gap-2">
+                          <div className={cn("w-2 h-2 rounded-full", config?.cor || "bg-gray-500")} />
+                          {config?.nome || etapa}
+                        </span>
+                        <Badge variant="secondary" className="text-xs">
+                          {candidatos.length}
+                        </Badge>
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="min-h-[400px]">
+                      <Droppable droppableId={etapa}>
+                        {(provided) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.droppableProps}
+                            className="space-y-2 min-h-[300px]"
+                          >
+                            {candidatos.map((processo, index) => (
+                              <Draggable
+                                key={processo.id}
+                                draggableId={processo.id}
+                                index={index}
+                              >
+                                {(provided, snapshot) => (
+                                  <div
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}
+                                    className={cn(
+                                      "bg-background rounded-lg p-3 mb-2 border shadow-sm cursor-grab active:cursor-grabbing",
+                                      snapshot.isDragging && "shadow-lg ring-2 ring-primary"
+                                    )}
+                                  >
+                                    <div className="flex items-start gap-3">
+                                      <Avatar className="h-10 w-10">
+                                        <AvatarFallback>
+                                          {processo.candidatoNome?.charAt(0) || '?'}
+                                        </AvatarFallback>
+                                      </Avatar>
+                                      <div className="flex-1 min-w-0">
+                                        <p className="font-medium text-sm truncate">
+                                          {processo.candidatoNome}
+                                        </p>
+                                        <p className="text-xs text-muted-foreground truncate">
+                                          {processo.vagaTitulo}
+                                        </p>
                                       </div>
-
-                                      {/* Match Score - Using new component */}
-                                      {processo.match_score && processo.match_score > 0 && (
-                                        <div className="mt-2">
-                                          <MatchScoreBadge 
-                                            score={processo.match_score} 
-                                            variant="minimal" 
-                                            size="sm"
-                                          />
-                                        </div>
-                                      )}
-
-                                      {/* Tags */}
-                                      <div className="flex flex-wrap gap-1 mt-2">
-                                        {processo.candidato?.habilidades?.slice(0, 2).map((h, i) => (
-                                          <Badge key={i} variant="outline" className="text-xs px-1">
-                                            {h}
-                                          </Badge>
-                                        ))}
-                                      </div>
+                                      <DropdownMenu>
+                                        <DropdownMenuTrigger asChild>
+                                          <Button variant="ghost" size="icon" className="h-8 w-8">
+                                            <MoreHorizontal className="h-4 w-4" />
+                                          </Button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent align="end">
+                                          <DropdownMenuItem onClick={() => navigate(`/candidatos/${processo.candidatoId}`)}>
+                                            Ver perfil
+                                          </DropdownMenuItem>
+                                          <DropdownMenuItem onClick={() => navigate(`/agenda?processo=${processo.id}`)}>
+                                            Agendar entrevista
+                                          </DropdownMenuItem>
+                                          <DropdownMenuItem onClick={() => navigate(`/avaliacoes/novo?processo=${processo.id}`)}>
+                                            Avaliar
+                                          </DropdownMenuItem>
+                                        </DropdownMenuContent>
+                                      </DropdownMenu>
                                     </div>
-                                  )}
-                                </Draggable>
-                              ))}
-                              {provided.placeholder}
 
-                              {candidatos.length === 0 && (
-                                <PipelineEmptyState hasVagas={vagasAtivas.length > 0} />
-                              )}
-                            </div>
-                          )}
-                        </Droppable>
-                      </CardContent>
-                    </Card>
-                  </div>
-                );
-              })}
-            </div>
-          </DragDropContext>
-        )}
+                                    {/* Match Score */}
+                                    {processo.matchScore > 0 && (
+                                      <div className="mt-2">
+                                        <MatchScoreBadge 
+                                          score={processo.matchScore} 
+                                          variant="minimal" 
+                                          size="sm"
+                                        />
+                                      </div>
+                                    )}
+                                  </div>
+                                )}
+                              </Draggable>
+                            ))}
+                            {provided.placeholder}
+
+                            {candidatos.length === 0 && (
+                              <PipelineEmptyState hasVagas={vagasAtivas.length > 0} />
+                            )}
+                          </div>
+                        )}
+                      </Droppable>
+                    </CardContent>
+                  </Card>
+                </div>
+              );
+            })}
+          </div>
+        </DragDropContext>
       </div>
     </Layout>
   );

@@ -33,12 +33,13 @@ interface Candidato {
   telefone: string | null;
   resumo: string | null;
   habilidades: string[] | null;
-  experiencias: any;
-  formacao: any;
+  experiencias: unknown;
+  formacao: unknown;
   fonte: string | null;
   status: string | null;
   arquivo_curriculo: string | null;
-  created_at: string;
+  created_at: string | null;
+  updated_at?: string | null;
 }
 
 interface MatchScore {
@@ -47,8 +48,8 @@ interface MatchScore {
   vaga_id: string;
   vaga_titulo: string;
   score_total: number;
-  recomendacao: string;
-  created_at: string;
+  recomendacao: string | null;
+  created_at: string | null;
 }
 
 const statusOptions = [
@@ -61,8 +62,7 @@ const statusOptions = [
   { value: 'banco_talentos', label: 'Banco de Talentos' },
 ];
 
-const getStatusConfig = (status: string) => {
-  useDocumentTitle('Candidatos');
+const getStatusConfig = (status: string | null) => {
 
   switch (status) {
     case 'novo': return { label: 'Novo', color: 'bg-blue-500', chartColor: '#3b82f6' };
@@ -98,10 +98,11 @@ export default function CandidatosPage() {
   const [minExperiences, setMinExperiences] = useState<number>(0);
 
   const allSkills = [...new Set(candidatos.flatMap(c => c.habilidades || []))].sort();
-
-  useEffect(() => {
+  
+  useDocumentTitle('Candidatos');
   usePageTitle('Talentos');
 
+  useEffect(() => {
     fetchCandidatos();
   }, []);
 
@@ -115,7 +116,7 @@ export default function CandidatosPage() {
 
       if (candidatosError) throw candidatosError;
 
-      setCandidatos(candidatosData || []);
+      setCandidatos((candidatosData || []) as Candidato[]);
 
       // Fetch match scores
       if (candidatosData && candidatosData.length > 0) {
@@ -131,7 +132,7 @@ export default function CandidatosPage() {
           if (!scoresMap[score.candidato_id]) {
             scoresMap[score.candidato_id] = [];
           }
-          scoresMap[score.candidato_id].push(score);
+          scoresMap[score.candidato_id]?.push(score as MatchScore);
         });
         setMatchScores(scoresMap);
       }
@@ -599,7 +600,7 @@ export default function CandidatosPage() {
                   <Briefcase className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                   <Slider
                     value={[minExperiences]}
-                    onValueChange={(value) => setMinExperiences(value[0])}
+                    onValueChange={(value) => setMinExperiences(value[0] ?? 0)}
                     max={10}
                     step={1}
                     className="flex-1"
@@ -647,7 +648,7 @@ export default function CandidatosPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredCandidatos.map((candidato) => {
               const bestScore = getBestMatchScore(candidato.id);
-              const statusConfig = getStatusConfig(candidato.status);
+              const statusConfig = getStatusConfig(candidato.status ?? 'novo');
 
               return (
                 <Sheet key={candidato.id}>
@@ -698,8 +699,8 @@ export default function CandidatosPage() {
 
                         <div className="flex items-center justify-between mt-4 pt-3 border-t">
                           <span className="text-xs text-muted-foreground">
-                            <Calendar className="h-3 w-3 inline mr-1" />
-                            {new Date(candidato.created_at).toLocaleDateString('pt-BR')}
+                            <CalendarIcon className="h-3 w-3 inline mr-1" />
+                            {candidato.created_at ? new Date(candidato.created_at).toLocaleDateString('pt-BR') : '-'}
                           </span>
                           <ChevronRight className="h-4 w-4 text-muted-foreground" />
                         </div>
@@ -754,14 +755,14 @@ export default function CandidatosPage() {
                       </div>
 
                       {/* Match Scores */}
-                      {matchScores[candidato.id] && matchScores[candidato.id].length > 0 && (
+                      {matchScores[candidato.id] && (matchScores[candidato.id]?.length ?? 0) > 0 && (
                         <div>
                           <h4 className="text-sm font-medium mb-2 flex items-center gap-2">
                             <Target className="h-4 w-4" />
                             Match Scores
                           </h4>
                           <div className="space-y-2">
-                            {matchScores[candidato.id].map((score) => (
+                            {(matchScores[candidato.id] ?? []).map((score) => (
                               <div key={score.id} className={cn("p-3 rounded-lg", getScoreColor(score.score_total))}>
                                 <div className="flex justify-between items-center">
                                   <span className="text-sm font-medium">{score.vaga_titulo}</span>
