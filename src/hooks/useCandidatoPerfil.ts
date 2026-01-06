@@ -1,12 +1,3 @@
-import { useCallback } from 'react';
-/**
- * @module useCandidatoPerfil
- * @description Hook para gerenciar perfil do candidato
- * @returns Hook state and methods
- * @example
- * const result = useCandidatoPerfil();
- */
-import { toast } from 'sonner';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -15,87 +6,29 @@ export interface CandidatoPerfil {
   nome: string;
   email: string;
   telefone?: string;
-  linkedin?: string;
-  github?: string;
-  portfolio?: string;
-  curriculo_url?: string;
-  foto_url?: string;
-  cidade?: string;
-  estado?: string;
-  pretensao_salarial?: number;
-  disponibilidade?: string;
-  experiencias: Experiencia[];
-  formacoes: Formacao[];
+  experiencias: unknown[];
+  formacoes: unknown[];
   habilidades: string[];
-  idiomas: Idioma[];
-  candidaturas: CandidaturaResumo[];
-  avaliacoes: AvaliacaoResumo[];
-  entrevistas: EntrevistaResumo[];
+  idiomas: unknown[];
+  candidaturas: { id: string; vaga_id: string; vaga_titulo: string; etapa: string; status: string; created_at: string }[];
+  avaliacoes: { id: string; nota_media: number; recomendacao: string; avaliador: string; created_at: string }[];
+  entrevistas: { id: string; data: string; tipo: string; status: string; entrevistador: string }[];
   created_at: string;
   updated_at: string;
 }
 
-interface Experiencia {
+interface CandidaturaWithVaga {
   id: string;
-  empresa: string;
-  cargo: string;
-  inicio: string;
-  fim?: string;
-  atual: boolean;
-  descricao?: string;
-}
-
-interface Formacao {
-  id: string;
-  instituicao: string;
-  curso: string;
-  nivel: string;
-  inicio: string;
-  fim?: string;
-}
-
-interface Idioma {
-  idioma: string;
-  nivel: 'basico' | 'intermediario' | 'avancado' | 'fluente' | 'nativo';
-}
-
-interface CandidaturaResumo {
-  id: string;
-  vaga_id: string;
-  vaga_titulo: string;
-  etapa: string;
+  etapa_atual: string;
   status: string;
   created_at: string;
+  vagas: { id: string; titulo: string } | null;
 }
 
-interface AvaliacaoResumo {
-  id: string;
-  nota_media: number;
-  recomendacao: string;
-  avaliador: string;
-  created_at: string;
-}
-
-interface EntrevistaResumo {
-  id: string;
-  data: string;
-  tipo: string;
-  status: string;
-  entrevistador: string;
-}
-
-/**
- * Hook para gerenciar perfil do candidato
- * @description Hook para gerenciar perfil do candidato
- * @returns {Object} Query result with data, isLoading, error, and mutations
- * @example
- * const { data, isLoading } = useCandidatoPerfil();
- */
 export const useCandidatoPerfil = (candidatoId: string) => {
   return useQuery({
     queryKey: ['candidato-perfil', candidatoId],
     queryFn: async () => {
-      // Buscar candidato principal
       const { data: candidato, error } = await supabase
         .from('candidatos')
         .select('*')
@@ -104,47 +37,59 @@ export const useCandidatoPerfil = (candidatoId: string) => {
 
       if (error) throw error;
 
-      // Buscar candidaturas com vaga
       const { data: candidaturas } = await supabase
         .from('candidaturas')
-        .select(`
-          id,
-          etapa_atual,
-          status,
-          created_at,
-          vagas (id, titulo)
-        `)
-        .eq('candidato_id', candidatoId);
+        .select(`id, etapa_atual, status, created_at, vagas (id, titulo)`)
+        .eq('candidato_auth_id', candidatoId);
 
-      // Buscar entrevistas
       const { data: entrevistas } = await supabase
         .from('entrevistas')
         .select('*')
         .eq('candidato_id', candidatoId)
         .order('data', { ascending: false });
 
-      // Buscar avaliações
-      const { data: avaliacoes } = await supabase
-        .from('avaliacoes')
-        .select('*')
+      const { data: processos } = await supabase
+        .from('processos_seletivos')
+        .select('id, match_score, etapa_atual, created_at')
         .eq('candidato_id', candidatoId);
 
+      const candidatoRecord = candidato as Record<string, unknown>;
+      const experienciasRaw = candidatoRecord['experiencias'];
+      const formacaoRaw = candidatoRecord['formacao'];
+
       return {
-        ...candidato,
-        experiencias: candidato.experiencias || [],
-        formacoes: candidato.formacao || [],
-        habilidades: candidato.habilidades || [],
+        id: candidato.id,
+        nome: candidato.nome,
+        email: candidato.email,
+        telefone: candidato.telefone ?? undefined,
+        created_at: candidato.created_at ?? '',
+        updated_at: candidato.updated_at ?? '',
+        experiencias: Array.isArray(experienciasRaw) ? experienciasRaw : [],
+        formacoes: Array.isArray(formacaoRaw) ? formacaoRaw : [],
+        habilidades: Array.isArray(candidato.habilidades) ? candidato.habilidades : [],
         idiomas: [],
-        candidaturas: candidaturas?.map((c: Record<string, unknown>) => ({
+        candidaturas: (candidaturas as CandidaturaWithVaga[] | null)?.map((c) => ({
           id: c.id,
-          vaga_id: c.vagas?.id,
-          vaga_titulo: c.vagas?.titulo,
+          vaga_id: c.vagas?.id ?? '',
+          vaga_titulo: c.vagas?.titulo ?? '',
           etapa: c.etapa_atual,
           status: c.status,
           created_at: c.created_at,
         })) || [],
-        avaliacoes: avaliacoes || [],
-        entrevistas: entrevistas || [],
+        avaliacoes: (processos || []).map((p) => ({
+          id: p.id,
+          nota_media: p.match_score || 0,
+          recomendacao: p.etapa_atual,
+          avaliador: 'Sistema',
+          created_at: p.created_at,
+        })),
+        entrevistas: (entrevistas || []).map((e) => ({
+          id: e.id,
+          data: e.data,
+          tipo: e.tipo,
+          status: e.status,
+          entrevistador: e.entrevistadores?.[0] || 'N/A',
+        })),
       } as CandidatoPerfil;
     },
     enabled: !!candidatoId,
@@ -156,4 +101,3 @@ export const useCandidatoPerfil = (candidatoId: string) => {
 };
 
 export default useCandidatoPerfil;
-

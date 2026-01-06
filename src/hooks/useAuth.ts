@@ -81,7 +81,7 @@ export function useAuth() {
   });
   const navigate = useNavigate();
   const isMountedRef = useRef(true);
-  const refreshTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const refreshTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Safe state update
   const safeSetState = useCallback((update: Partial<AuthState> | ((prev: AuthState) => AuthState)) => {
@@ -187,10 +187,11 @@ export function useAuth() {
         return { requires2FA: true };
       }
 
+      const emailPrefix = credentials.email.split('@')[0] || 'user';
       const mockUser: User = {
         id: crypto.randomUUID?.() || `user-${Date.now()}`,
         email: credentials.email,
-        name: credentials.email.split('@')[0],
+        name: emailPrefix,
         role: 'recruiter',
         permissions: ['read:candidates', 'write:candidates', 'read:jobs'],
       };
