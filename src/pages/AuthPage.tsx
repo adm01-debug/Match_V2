@@ -1,5 +1,4 @@
 import { useDocumentTitle } from '@/hooks/useDocumentTitle';
-import { Skeleton } from '@/components/ui/skeleton';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -167,7 +166,7 @@ const AuthPage = () => {
                         onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
                       />
                     </div>
-                    {errors.email && <p className="text-sm text-destructive">{errors.email}</p>}
+                    {errors['email'] && <p className="text-sm text-destructive">{errors['email']}</p>}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="login-password">Senha</Label>
@@ -182,7 +181,7 @@ const AuthPage = () => {
                         onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
                       />
                     </div>
-                    {errors.password && <p className="text-sm text-destructive">{errors.password}</p>}
+                    {errors['password'] && <p className="text-sm text-destructive">{errors['password']}</p>}
                   </div>
                 </CardContent>
                 <CardFooter>
@@ -222,7 +221,7 @@ const AuthPage = () => {
                         onChange={(e) => setSignupData({ ...signupData, nome: e.target.value })}
                       />
                     </div>
-                    {errors.nome && <p className="text-sm text-destructive">{errors.nome}</p>}
+                    {errors['nome'] && <p className="text-sm text-destructive">{errors['nome']}</p>}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="signup-email">Email</Label>
@@ -237,7 +236,7 @@ const AuthPage = () => {
                         onChange={(e) => setSignupData({ ...signupData, email: e.target.value })}
                       />
                     </div>
-                    {errors.email && <p className="text-sm text-destructive">{errors.email}</p>}
+                    {errors['email'] && <p className="text-sm text-destructive">{errors['email']}</p>}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="signup-password">Senha</Label>
@@ -252,7 +251,7 @@ const AuthPage = () => {
                         onChange={(e) => setSignupData({ ...signupData, password: e.target.value })}
                       />
                     </div>
-                    {errors.password && <p className="text-sm text-destructive">{errors.password}</p>}
+                    {errors['password'] && <p className="text-sm text-destructive">{errors['password']}</p>}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="signup-confirm">Confirmar senha</Label>
@@ -267,7 +266,7 @@ const AuthPage = () => {
                         onChange={(e) => setSignupData({ ...signupData, confirmPassword: e.target.value })}
                       />
                     </div>
-                    {errors.confirmPassword && <p className="text-sm text-destructive">{errors.confirmPassword}</p>}
+                    {errors['confirmPassword'] && <p className="text-sm text-destructive">{errors['confirmPassword']}</p>}
                   </div>
                 </CardContent>
                 <CardFooter>
