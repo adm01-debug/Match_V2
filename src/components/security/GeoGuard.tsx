@@ -4,8 +4,8 @@
  * @description Componente wrapper para proteger rotas com verificação geográfica
  */
 
-import React, { memo, type ReactNode } from 'react';
-import { Shield, AlertTriangle, Globe, RefreshCw } from 'lucide-react';
+import { memo, type ReactNode } from 'react';
+import { AlertTriangle, Globe, RefreshCw } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { useGeoVerification } from '@/hooks/useGeoVerification';

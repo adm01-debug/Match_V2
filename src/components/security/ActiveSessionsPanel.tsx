@@ -37,7 +37,6 @@ interface Session {
 export function ActiveSessionsPanel() {
   const [sessions, setSessions] = useState<Session[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [terminatingId, setTerminatingId] = useState<string | null>(null);
 
   const parseUserAgent = (ua: string) => {
     const browser = ua.match(/(Chrome|Firefox|Safari|Edge|Opera)/i)?.[0] || 'Navegador';

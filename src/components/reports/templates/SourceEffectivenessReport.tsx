@@ -17,7 +17,7 @@ interface SourceEffectivenessReportProps {
   period: string;
 }
 
-export function SourceEffectivenessReport({ data, period }: SourceEffectivenessReportProps) {
+export function SourceEffectivenessReport({ data }: SourceEffectivenessReportProps) {
   const sortedByHires = [...data].sort((a, b) => b.hires - a.hires);
   const sortedByConversion = [...data].sort((a, b) => b.conversionRate - a.conversionRate);
   const totalCandidates = data.reduce((acc, s) => acc + s.candidates, 0);
@@ -59,13 +59,11 @@ export function SourceEffectivenessReport({ data, period }: SourceEffectivenessR
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <ReportChart
-          title="Candidatos por Fonte"
           type="pie"
           data={chartData}
           height={300}
         />
         <ReportChart
-          title="Contratações por Fonte"
           type="bar"
           data={hiresChartData}
           height={300}

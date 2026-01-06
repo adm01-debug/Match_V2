@@ -9,7 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Prova } from '@/types/tests';
-import { categoriasInfo, niveisInfo } from '@/config/testsConfig';
+import { getCategoriaById, getNivelById } from '@/config/testsConfig';
 import { Clock, Users, BarChart3, FileText, Play, Edit, Copy, Trash2, MoreVertical } from 'lucide-react';
 import {
   DropdownMenu,
@@ -28,8 +28,8 @@ interface ProvaCardProps {
 }
 
 export function ProvaCard({ prova, onSelect, onEdit, onDuplicate, onDelete, compact = false }: ProvaCardProps) {
-  const categoriaInfo = categoriasInfo[prova.categoria];
-  
+  const categoriaInfo = getCategoriaById(prova.categoria);
+  if (!categoriaInfo) return null;
   if (compact) {
     return (
       <Card role="article" aria-label="Card prova" 
@@ -134,11 +134,14 @@ export function ProvaCard({ prova, onSelect, onEdit, onDuplicate, onDelete, comp
         </div>
 
         <div className="flex flex-wrap gap-1">
-          {prova.niveisAplicaveis.slice(0, 4).map((nivel) => (
-            <Badge key={nivel} variant="outline" className="text-xs">
-              {niveisInfo[nivel].nome}
-            </Badge>
-          ))}
+          {prova.niveisAplicaveis.slice(0, 4).map((nivel) => {
+            const nivelInfo = getNivelById(nivel);
+            return (
+              <Badge key={nivel} variant="outline" className="text-xs">
+                {nivelInfo?.nome || nivel}
+              </Badge>
+            );
+          })}
           {prova.niveisAplicaveis.length > 4 && (
             <Badge variant="outline" className="text-xs">
               +{prova.niveisAplicaveis.length - 4}

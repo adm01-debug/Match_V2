@@ -54,7 +54,7 @@ export function ReportTable<T extends Record<string, unknown>>({
   // Generate unique key for each row
   const getUniqueKey = useCallback((row: T, index: number): string => {
     if (getRowKey) return getRowKey(row, index);
-    if ('id' in row) return String(row.id);
+    if ('id' in row) return String(row['id']);
     return `row-${tableId}-${index}`;
   }, [getRowKey, tableId]);
 
@@ -212,10 +212,7 @@ export function ReportTable<T extends Record<string, unknown>>({
               {selectable && (
                 <TableHead className="w-12">
                   <Checkbox
-                    checked={allSelected}
-                    ref={(el) => {
-                      if (el) (el as HTMLButtonElement).indeterminate = someSelected;
-                    }}
+                    checked={allSelected || (someSelected ? 'indeterminate' : false)}
                     onCheckedChange={handleSelectAll}
                     aria-label="Selecionar todas as linhas"
                   />

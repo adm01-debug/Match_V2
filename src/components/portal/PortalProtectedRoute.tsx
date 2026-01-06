@@ -3,7 +3,6 @@
  * @module PortalProtectedRoute
  */
 
-import { memo } from 'react';
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useCandidatoAuth } from '@/contexts/CandidatoAuthContext';

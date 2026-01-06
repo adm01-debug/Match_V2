@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ReportChart } from "./ReportChart";
 import { Badge } from "@/components/ui/badge";
-import { TrendingUp, TrendingDown, Users } from "lucide-react";
+import { Users } from "lucide-react";
 
 interface FunnelStage {
   name: string;
@@ -16,7 +16,7 @@ interface HiringFunnelReportProps {
   comparison?: FunnelStage[];
 }
 
-export function HiringFunnelReport({ data, period, comparison }: HiringFunnelReportProps) {
+export function HiringFunnelReport({ data, period }: HiringFunnelReportProps) {
   const totalCandidates = data[0]?.count || 0;
   const totalHired = data[data.length - 1]?.count || 0;
   const overallConversion = totalCandidates > 0 ? ((totalHired / totalCandidates) * 100).toFixed(1) : 0;
@@ -25,12 +25,6 @@ export function HiringFunnelReport({ data, period, comparison }: HiringFunnelRep
     name: stage.name,
     value: stage.count,
   })), [data]);
-
-  const getConversionTrend = (current: number, previous?: number) => {
-    if (!previous) return null;
-    const diff = current - previous;
-    return { diff, isPositive: diff >= 0 };
-  };
 
   return (
     <div className="space-y-6">
@@ -72,9 +66,7 @@ export function HiringFunnelReport({ data, period, comparison }: HiringFunnelRep
 
       {/* Funnel Chart */}
       <ReportChart
-        title="Funil de Contratação"
-        description="Candidatos por etapa do processo"
-        type="funnel"
+        type="bar"
         data={chartData}
         height={400}
       />

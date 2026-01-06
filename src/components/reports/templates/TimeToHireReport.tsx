@@ -16,7 +16,7 @@ interface TimeToHireReportProps {
   previousPeriod?: TimeMetrics;
 }
 
-export function TimeToHireReport({ data, period, previousPeriod }: TimeToHireReportProps) {
+export function TimeToHireReport({ data, previousPeriod }: TimeToHireReportProps) {
   const trend = previousPeriod 
     ? data.avgTimeToHire - previousPeriod.avgTimeToHire 
     : 0;
@@ -51,18 +51,13 @@ export function TimeToHireReport({ data, period, previousPeriod }: TimeToHireRep
         </CardContent>
       </Card>
 
-      {/* Gráficos */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <ReportChart
-          title="Tempo por Etapa"
-          description="Dias médios em cada fase"
           type="bar"
           data={stageData}
           height={300}
         />
         <ReportChart
-          title="Evolução Temporal"
-          description="Tendência do tempo de contratação"
           type="line"
           data={data.timelineData.map(d => ({ name: d.date, value: d.avgDays }))}
           height={300}

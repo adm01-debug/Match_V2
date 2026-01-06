@@ -3,12 +3,12 @@
  * @module QuestaoCard
  */
 
-import { memo , memo} from 'react';
+
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Questao } from '@/types/tests';
-import { Edit, Trash2, GripVertical, Check, X, FileText, ToggleLeft, MessageSquare } from 'lucide-react';
+import { Edit, Trash2, GripVertical, Check, FileText, ToggleLeft, MessageSquare } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface QuestaoCardProps {

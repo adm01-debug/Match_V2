@@ -4,11 +4,10 @@
  * @description Painel para gerenciamento de países permitidos
  */
 
-import React, { useState, memo } from 'react';
+import { useState, memo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Globe, Plus, Trash2, ToggleLeft, ToggleRight, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
   Card,
