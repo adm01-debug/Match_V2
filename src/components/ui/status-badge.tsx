@@ -12,7 +12,6 @@ import {
   FileSearch,
   Calendar,
   Star,
-  Briefcase,
   Send,
   Pause,
   Play,
@@ -242,8 +241,9 @@ export function StatusBadge({
   const Icon = loading ? Loader2 : statusIcons[normalizedStatus];
   const label = customLabel || statusLabels[status] || statusLabels[normalizedStatus] || status;
   
-  // Determina a variante correta
-  const variant = statusBadgeVariants.variants?.variant?.[normalizedStatus as keyof typeof statusBadgeVariants.variants.variant]
+  // Determina a variante correta usando lista de variantes conhecidas
+  const knownVariants = ['novo', 'triagem', 'em-triagem', 'entrevista', 'entrevista-rh', 'entrevista-gestor', 'entrevista-final', 'teste', 'teste-tecnico', 'aprovado', 'contratado', 'reprovado', 'ativo', 'inativo', 'pendente', 'concluido', 'cancelado', 'arquivado', 'rascunho', 'publicada', 'aguardando-aprovacao', 'encerrada', 'pausada', 'agendada', 'confirmada', 'realizada', 'nao-compareceu', 'reagendada', 'banco-talentos', 'urgente', 'alta', 'media', 'baixa', 'enviado', 'lido', 'respondido'];
+  const variant = knownVariants.includes(normalizedStatus)
     ? (normalizedStatus as VariantProps<typeof statusBadgeVariants>["variant"])
     : "default";
 
