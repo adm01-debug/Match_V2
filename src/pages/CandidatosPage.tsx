@@ -1,14 +1,9 @@
 import { useDocumentTitle } from '@/hooks/useDocumentTitle';
-import { Suspense } from 'react';
-import { Skeleton } from '@/components/ui/skeleton';
-import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { usePageTitle } from '@/hooks/usePageTitle';
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { format, subDays, startOfDay, endOfDay } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { Layout } from '@/components/layout/Layout';
-import { Skeleton } from '@/components/ui/breadcrumb';
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/skeleton';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -19,11 +14,9 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Calendar } from '@/components/ui/calendar';
 import { Slider } from '@/components/ui/slider';
 import { useToast } from '@/hooks/use-toast';
-// TODO: Migrar queries diretas para hooks - Issue #refactor-001
 import { supabase } from '@/integrations/supabase/client';
-import { useCandidatos, deleteCandidato as hookDeleteCandidato, updateCandidato as hookUpdateCandidato } from '@/hooks/useCandidatos';
 import { 
-  Users, Search, Filter, Target, Mail, Phone, Briefcase, 
+  Users, Search, Target, Mail, Phone, Briefcase, 
   GraduationCap, Sparkles, Calendar as CalendarIcon, Loader2, UserPlus,
   TrendingUp, ChevronRight, Trash2, MessageSquare, X, UserCheck, UserX, Clock
 } from 'lucide-react';
@@ -31,6 +24,7 @@ import { useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { ComunicacaoHistorico } from '@/components/candidatos/ComunicacaoHistorico';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend, LineChart, Line, XAxis, YAxis, CartesianGrid } from 'recharts';
+import { CandidatosEmptyState } from '@/components/empty-states';
 
 interface Candidato {
   id: string;
@@ -638,23 +632,17 @@ export default function CandidatosPage() {
             <Loader2 className="h-8 w-8 animate-spin text-primary" />
           </div>
         ) : filteredCandidatos.length === 0 ? (
-          <Card>
-            <CardContent className="py-12 text-center">
-              <Users className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-              <h3 className="text-lg font-medium">Nenhum candidato encontrado</h3>
-              <p className="text-muted-foreground mt-1">
-                {candidatos.length === 0 
-                  ? "Use o Parser de Currículo para adicionar candidatos."
-                  : "Tente ajustar os filtros de busca."}
-              </p>
-              {candidatos.length === 0 && (
-                <Button className="mt-4" onClick={() => navigate('/parser-curriculo')}>
-                  <UserPlus className="h-4 w-4 mr-2" />
-                  Adicionar Candidato
-                </Button>
-              )}
-            </CardContent>
-          </Card>
+          <CandidatosEmptyState 
+            hasFilters={searchTerm !== '' || statusFilter !== 'todos' || skillFilter !== 'todas' || dateFrom !== undefined || dateTo !== undefined || minExperiences > 0}
+            onClearFilters={() => {
+              setSearchTerm('');
+              setStatusFilter('todos');
+              setSkillFilter('todas');
+              setDateFrom(undefined);
+              setDateTo(undefined);
+              setMinExperiences(0);
+            }}
+          />
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredCandidatos.map((candidato) => {

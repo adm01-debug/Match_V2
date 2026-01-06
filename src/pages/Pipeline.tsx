@@ -1,7 +1,6 @@
 import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { Suspense, useCallback } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
-import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
@@ -32,6 +31,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { EtapaProcesso } from "@/types/recruitment";
+import { PipelineEmptyState } from "@/components/empty-states";
 
 export default function Pipeline() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -269,10 +269,7 @@ export default function Pipeline() {
                               {provided.placeholder}
 
                               {candidatos.length === 0 && (
-                                <div className="text-center py-8 text-muted-foreground text-sm">
-                                  <Users className="h-8 w-8 mx-auto mb-2 opacity-50" />
-                                  Nenhum candidato
-                                </div>
+                                <PipelineEmptyState hasVagas={vagasAtivas.length > 0} />
                               )}
                             </div>
                           )}
