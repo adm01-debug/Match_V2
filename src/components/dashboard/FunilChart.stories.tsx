@@ -1,11 +1,10 @@
-import { within, expect } from '@storybook/test';
+import { expect } from '@storybook/test';
 import type { Meta, StoryObj } from '@storybook/react';
 import { FunilChart } from './FunilChart';
 
 const meta: Meta<typeof FunilChart> = {
   title: 'Components/FunilChart',
   component: FunilChart,
-  argTypes: {},
   tags: ['autodocs'],
 };
 

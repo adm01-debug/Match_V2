@@ -3,7 +3,7 @@
  * @module NotificationContext
  */
 
-import React, { createContext, useContext, ReactNode, useMemo } from 'react';
+import { createContext, useContext, ReactNode, useMemo } from 'react';
 import { useRealtimeNotifications, Notification, NotificationType } from '@/hooks/useRealtimeNotifications';
 
 export type { Notification, NotificationType };
