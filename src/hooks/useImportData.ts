@@ -51,7 +51,8 @@ export function useImportData<T>(options: UseImportDataOptions<T>) {
             return;
           }
           
-          const headers = lines[0].split(',').map(h => h.trim().toLowerCase().replace(/\s+/g, '_'));
+          const firstLine = lines[0] ?? '';
+          const headers = firstLine.split(',').map(h => h.trim().toLowerCase().replace(/\s+/g, '_'));
           const dataLines = skipFirstRow ? lines.slice(2) : lines.slice(1);
           
           const data = dataLines.map(line => {

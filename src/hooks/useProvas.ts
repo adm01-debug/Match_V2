@@ -6,8 +6,12 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import type { Prova, BateriaProvas, CategoriaProva, Departamento, NivelCargo } from '@/types/tests';
+import type { Tables } from '@/integrations/supabase/types';
 
-function dbToProva(row: Record<string, unknown>): Prova {
+type ProvaDB = Tables<'provas'>;
+type BateriaDB = Tables<'baterias_provas'>;
+
+function dbToProva(row: ProvaDB): Prova {
   return {
     id: row.id,
     titulo: row.titulo,
@@ -29,7 +33,7 @@ function dbToProva(row: Record<string, unknown>): Prova {
   };
 }
 
-function dbToBateria(row: Record<string, unknown>, provasIds: string[]): BateriaProvas {
+function dbToBateria(row: BateriaDB, provasIds: string[]): BateriaProvas {
   return {
     id: row.id,
     nome: row.nome,
@@ -113,17 +117,17 @@ export function useCreateProva() {
       const { data, error } = await supabase
         .from('provas')
         .insert({
-          titulo: prova.titulo,
+          titulo: prova.titulo || '',
           descricao: prova.descricao,
-          categoria: prova.categoria,
-          departamentos: prova.departamentos,
-          niveis_aplicaveis: prova.niveisAplicaveis,
-          duracao: prova.duracao,
-          total_questoes: prova.totalQuestoes,
-          pontuacao_maxima: prova.pontuacaoMaxima,
-          nota_minima: prova.notaMinima,
+          categoria: prova.categoria || 'tecnico',
+          departamentos: prova.departamentos || ['geral'],
+          niveis_aplicaveis: prova.niveisAplicaveis || [],
+          duracao: prova.duracao || 30,
+          total_questoes: prova.totalQuestoes || 0,
+          pontuacao_maxima: prova.pontuacaoMaxima || 100,
+          nota_minima: prova.notaMinima || 60,
           ativo: prova.ativo ?? true,
-          tags: prova.tags,
+          tags: prova.tags || [],
         })
         .select()
         .single();
@@ -274,10 +278,11 @@ export function useProvasStats() {
         .select('*', { count: 'exact', head: true })
         .eq('ativo', true);
 
-      const totalProvas = provas?.length || 0;
-      const totalAplicacoes = provas?.reduce((sum, p) => sum + (p.aplicacoes || 0), 0) || 0;
+      const provasList = provas ?? [];
+      const totalProvas = provasList.length;
+      const totalAplicacoes = provasList.reduce((sum, p) => sum + (p.aplicacoes || 0), 0);
       const mediaDuracao = totalProvas > 0
-        ? Math.round(provas.reduce((sum, p) => sum + (p.duracao || 0), 0) / totalProvas)
+        ? Math.round(provasList.reduce((sum, p) => sum + (p.duracao || 0), 0) / totalProvas)
         : 0;
 
       return {
@@ -293,4 +298,3 @@ export function useProvasStats() {
     retry: 3,
   });
 }
-

@@ -122,8 +122,11 @@ export const useNewDeviceDetection = (): UseNewDeviceDetectionReturn => {
     if (user?.id && !hasChecked) {
       // Small delay to ensure auth is fully established
       const timer = setTimeout(checkDevice, 1000);
-      return () => clearTimeout(timer);
+      return () => {
+        clearTimeout(timer);
+      };
     }
+    return undefined;
   }, [user?.id, hasChecked, checkDevice]);
 
   // Reset when user logs out

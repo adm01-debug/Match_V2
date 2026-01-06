@@ -6,24 +6,9 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { ProcessoSeletivo, EtapaProcesso, StatusProcesso, FonteCandidato } from '@/types/recruitment';
+import type { Tables } from '@/integrations/supabase/types';
 
-interface ProcessoDB {
-  id: string;
-  vaga_id: string | null;
-  vaga_titulo: string;
-  candidato_id: string | null;
-  candidato_nome: string;
-  candidato_foto: string | null;
-  etapa_atual: string;
-  status: string;
-  match_score: number | null;
-  origem: string | null;
-  data_inscricao: string;
-  data_ultima_movimentacao: string;
-  dias_na_etapa: number | null;
-  created_at: string;
-  updated_at: string;
-}
+type ProcessoDB = Tables<'processos_seletivos'>;
 
 function dbToProcesso(row: ProcessoDB): ProcessoSeletivo {
   return {
@@ -53,7 +38,7 @@ export function useProcessosSeletivos() {
         .order('data_inscricao', { ascending: false });
 
       if (error) throw error;
-      return (data as unknown as ProcessoDB[]).map(dbToProcesso);
+      return (data || []).map(dbToProcesso);
     },
     placeholderData: [],
     staleTime: 5 * 60 * 1000,
@@ -74,7 +59,7 @@ export function useProcessosByVaga(vagaId: string) {
         .order('match_score', { ascending: false });
 
       if (error) throw error;
-      return (data as unknown as ProcessoDB[]).map(dbToProcesso);
+      return (data || []).map(dbToProcesso);
     },
     enabled: !!vagaId && vagaId !== 'todas',
     placeholderData: [],
@@ -102,7 +87,7 @@ export function useUpdateProcessoEtapa() {
         .single();
 
       if (error) throw error;
-      return dbToProcesso(data as unknown as ProcessoDB);
+      return dbToProcesso(data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['processos-seletivos'] });
@@ -120,8 +105,8 @@ export function useUpdateProcessoStatus() {
         data_ultima_movimentacao: new Date().toISOString(),
       };
       if (etapaAtual) {
-        updateData.etapa_atual = etapaAtual;
-        updateData.dias_na_etapa = 0;
+        updateData['etapa_atual'] = etapaAtual;
+        updateData['dias_na_etapa'] = 0;
       }
 
       const { data, error } = await supabase
@@ -132,7 +117,7 @@ export function useUpdateProcessoStatus() {
         .single();
 
       if (error) throw error;
-      return dbToProcesso(data as unknown as ProcessoDB);
+      return dbToProcesso(data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['processos-seletivos'] });
@@ -168,7 +153,7 @@ export function useCreateProcesso() {
         .single();
 
       if (error) throw error;
-      return dbToProcesso(data as unknown as ProcessoDB);
+      return dbToProcesso(data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['processos-seletivos'] });
