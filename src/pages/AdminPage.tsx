@@ -42,7 +42,7 @@ interface UserProfile {
   user_id: string;
   nome: string;
   email: string;
-  created_at: string;
+  created_at: string | null;
   roles: AppRole[];
 }
 
@@ -120,7 +120,11 @@ const AdminPage = () => {
 
     // Combine profiles with roles
     const usersWithRoles: UserProfile[] = (profiles || []).map((profile) => ({
-      ...profile,
+      id: profile.id,
+      user_id: profile.user_id,
+      nome: profile.nome,
+      email: profile.email,
+      created_at: profile.created_at,
       roles: (rolesData || [])
         .filter((r) => r.user_id === profile.user_id)
         .map((r) => r.role as AppRole),
@@ -358,7 +362,9 @@ const AdminPage = () => {
                           </div>
                         </TableCell>
                         <TableCell className="text-muted-foreground">
-                          {new Date(userProfile.created_at).toLocaleDateString('pt-BR')}
+                          {userProfile.created_at 
+                            ? new Date(userProfile.created_at).toLocaleDateString('pt-BR')
+                            : '-'}
                         </TableCell>
                         <TableCell className="text-right">
                           <Button
@@ -444,5 +450,3 @@ const AdminPage = () => {
 };
 
 export default AdminPage;
-
-

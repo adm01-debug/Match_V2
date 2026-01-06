@@ -1,11 +1,7 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { initSentry, captureError, setUser, clearUser } from './sentry';
 
 describe('sentry', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   describe('initSentry', () => {
     it('initializes without error', () => {
       expect(() => initSentry()).not.toThrow();
@@ -27,7 +23,7 @@ describe('sentry', () => {
     });
 
     it('handles null/undefined', () => {
-      expect(() => captureError(null as any)).not.toThrow();
+      expect(() => captureError(null)).not.toThrow();
     });
   });
 

@@ -72,7 +72,7 @@ export function measurePerformance<T>(name: string, fn: () => T): T {
 /**
  * Debounce function
  */
-export function debounce<T extends (...args: unknown[]) => unknown>(
+export function debounce<T extends (...args: never[]) => unknown>(
   fn: T,
   delay: number
 ): (...args: Parameters<T>) => void {
@@ -86,7 +86,7 @@ export function debounce<T extends (...args: unknown[]) => unknown>(
 /**
  * Throttle function
  */
-export function throttle<T extends (...args: unknown[]) => unknown>(
+export function throttle<T extends (...args: never[]) => unknown>(
   fn: T,
   limit: number
 ): (...args: Parameters<T>) => void {
@@ -103,7 +103,7 @@ export function throttle<T extends (...args: unknown[]) => unknown>(
 /**
  * Memoize function
  */
-export function memoize<T extends (...args: unknown[]) => unknown>(fn: T): T {
+export function memoize<T extends (...args: never[]) => unknown>(fn: T): T {
   const cache = new Map<string, ReturnType<T>>();
   return ((...args: Parameters<T>) => {
     const key = JSON.stringify(args);
