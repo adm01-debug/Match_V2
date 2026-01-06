@@ -261,35 +261,35 @@ export function useUpdateVaga() {
     mutationFn: async ({ id, ...vaga }: Partial<CreateVagaInput> & { id: string }) => {
       const dbData: Record<string, unknown> = {};
       
-      if (vaga.titulo !== undefined) dbData.titulo = vaga.titulo;
-      if (vaga.departamento !== undefined) dbData.departamento = vaga.departamento;
-      if (vaga.gestorNome !== undefined) dbData.gestor_nome = vaga.gestorNome;
-      if (vaga.recrutadorNome !== undefined) dbData.recrutador_nome = vaga.recrutadorNome;
-      if (vaga.quantidade !== undefined) dbData.quantidade = vaga.quantidade;
-      if (vaga.tipoContrato !== undefined) dbData.tipo_contrato = vaga.tipoContrato;
-      if (vaga.modalidade !== undefined) dbData.modalidade = vaga.modalidade;
-      if (vaga.cidade !== undefined) dbData.cidade = vaga.cidade;
-      if (vaga.estado !== undefined) dbData.estado = vaga.estado;
-      if (vaga.salarioMin !== undefined) dbData.salario_min = vaga.salarioMin;
-      if (vaga.salarioMax !== undefined) dbData.salario_max = vaga.salarioMax;
-      if (vaga.salarioACombinar !== undefined) dbData.salario_a_combinar = vaga.salarioACombinar;
-      if (vaga.beneficios !== undefined) dbData.beneficios = vaga.beneficios;
-      if (vaga.descricaoEmpresa !== undefined) dbData.descricao_empresa = vaga.descricaoEmpresa;
-      if (vaga.responsabilidades !== undefined) dbData.responsabilidades = vaga.responsabilidades;
-      if (vaga.requisitosObrigatorios !== undefined) dbData.requisitos_obrigatorios = vaga.requisitosObrigatorios;
-      if (vaga.requisitosDesejaveis !== undefined) dbData.requisitos_desejaveis = vaga.requisitosDesejaveis;
-      if (vaga.perguntasTriagem !== undefined) dbData.perguntas_triagem = vaga.perguntasTriagem as unknown as Json;
-      if (vaga.skillsAvaliacao !== undefined) dbData.skills_avaliacao = vaga.skillsAvaliacao;
-      if (vaga.status !== undefined) dbData.status = vaga.status;
-      if (vaga.prioridade !== undefined) dbData.prioridade = vaga.prioridade;
-      if (vaga.dataPublicacao !== undefined) dbData.data_publicacao = vaga.dataPublicacao?.toISOString();
-      if (vaga.totalCandidatos !== undefined) dbData.total_candidatos = vaga.totalCandidatos;
-      if (vaga.emProcesso !== undefined) dbData.em_processo = vaga.emProcesso;
-      if (vaga.contratados !== undefined) dbData.contratados = vaga.contratados;
+      if (vaga.titulo !== undefined) dbData['titulo'] = vaga.titulo;
+      if (vaga.departamento !== undefined) dbData['departamento'] = vaga.departamento;
+      if (vaga.gestorNome !== undefined) dbData['gestor_nome'] = vaga.gestorNome;
+      if (vaga.recrutadorNome !== undefined) dbData['recrutador_nome'] = vaga.recrutadorNome;
+      if (vaga.quantidade !== undefined) dbData['quantidade'] = vaga.quantidade;
+      if (vaga.tipoContrato !== undefined) dbData['tipo_contrato'] = vaga.tipoContrato;
+      if (vaga.modalidade !== undefined) dbData['modalidade'] = vaga.modalidade;
+      if (vaga.cidade !== undefined) dbData['cidade'] = vaga.cidade;
+      if (vaga.estado !== undefined) dbData['estado'] = vaga.estado;
+      if (vaga.salarioMin !== undefined) dbData['salario_min'] = vaga.salarioMin;
+      if (vaga.salarioMax !== undefined) dbData['salario_max'] = vaga.salarioMax;
+      if (vaga.salarioACombinar !== undefined) dbData['salario_a_combinar'] = vaga.salarioACombinar;
+      if (vaga.beneficios !== undefined) dbData['beneficios'] = vaga.beneficios;
+      if (vaga.descricaoEmpresa !== undefined) dbData['descricao_empresa'] = vaga.descricaoEmpresa;
+      if (vaga.responsabilidades !== undefined) dbData['responsabilidades'] = vaga.responsabilidades;
+      if (vaga.requisitosObrigatorios !== undefined) dbData['requisitos_obrigatorios'] = vaga.requisitosObrigatorios;
+      if (vaga.requisitosDesejaveis !== undefined) dbData['requisitos_desejaveis'] = vaga.requisitosDesejaveis;
+      if (vaga.perguntasTriagem !== undefined) dbData['perguntas_triagem'] = vaga.perguntasTriagem as unknown as Json;
+      if (vaga.skillsAvaliacao !== undefined) dbData['skills_avaliacao'] = vaga.skillsAvaliacao;
+      if (vaga.status !== undefined) dbData['status'] = vaga.status;
+      if (vaga.prioridade !== undefined) dbData['prioridade'] = vaga.prioridade;
+      if (vaga.dataPublicacao !== undefined) dbData['data_publicacao'] = vaga.dataPublicacao?.toISOString();
+      if (vaga.totalCandidatos !== undefined) dbData['total_candidatos'] = vaga.totalCandidatos;
+      if (vaga.emProcesso !== undefined) dbData['em_processo'] = vaga.emProcesso;
+      if (vaga.contratados !== undefined) dbData['contratados'] = vaga.contratados;
       
       const { data, error } = await supabase
         .from('vagas')
-        .update(dbData as any)
+        .update(dbData as Record<string, unknown>)
         .eq('id', id)
         .select()
         .single();

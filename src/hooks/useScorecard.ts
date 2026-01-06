@@ -1,60 +1,125 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
+/**
+ * @module useScorecard
+ * @description Hook para gerenciar scorecards de avaliação (localStorage-based)
+ */
+
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useToast } from '@/hooks/use-toast';
 
-interface ScorecardScore { competency_id: string; score: number; }
-interface Scorecard { id: string; candidato_id: string; entrevista_id: string; avaliador_id: string; scores: ScorecardScore[]; notes: string; recommendation: string; created_at: string; }
+interface ScorecardScore { 
+  competency_id: string; 
+  score: number; 
+}
+
+interface Scorecard { 
+  id: string; 
+  candidato_id: string; 
+  entrevista_id: string; 
+  avaliador_id: string; 
+  scores: ScorecardScore[]; 
+  notes: string; 
+  recommendation: string; 
+  created_at: string;
+  avaliador_nome?: string;
+}
+
+type CreateScorecardInput = Omit<Scorecard, 'id' | 'created_at'>;
+type UpdateScorecardInput = Partial<Scorecard> & { id: string };
+
+function getStorageKey(entrevistaId: string): string {
+  return `scorecards_${entrevistaId}`;
+}
+
+function generateId(): string {
+  return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+}
 
 export function useScorecard(entrevistaId?: string) {
   const { toast } = useToast();
-  const queryClient = useQueryClient();
+  const [scorecards, setScorecards] = useState<Scorecard[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const { data: scorecards = [], isLoading } = useQuery({
-    queryKey: ['scorecards', entrevistaId],
-    queryFn: async () => {
-      const query = supabase.from('scorecards').select('*, profiles(nome)');
-      if (entrevistaId) query.eq('entrevista_id', entrevistaId);
-      const { data, error } = await query.order('created_at', { ascending: false });
-      if (error) throw error;
-      return data as Scorecard[];
-    },
-    enabled: !!entrevistaId,
-  });
+  // Load scorecards from localStorage
+  useEffect(() => {
+    if (!entrevistaId) {
+      setIsLoading(false);
+      return;
+    }
 
-  const createScorecard = useMutation({
-    mutationFn: async (scorecard: Omit<Scorecard, 'id' | 'created_at'>) => {
-      const { data, error } = await supabase.from('scorecards').insert(scorecard).select().single();
-      if (error) throw error;
-      return data;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['scorecards'] });
-      toast({ title: 'Avaliação salva', description: 'Scorecard registrado com sucesso.' });
-    },
-  });
+    try {
+      const stored = localStorage.getItem(getStorageKey(entrevistaId));
+      if (stored) {
+        setScorecards(JSON.parse(stored));
+      }
+    } catch (e) {
+      console.error('Error loading scorecards:', e);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [entrevistaId]);
 
-  const updateScorecard = useMutation({
-    mutationFn: async ({ id, ...updates }: Partial<Scorecard> & { id: string }) => {
-      const { error } = await supabase.from('scorecards').update(updates).eq('id', id);
-      if (error) throw error;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['scorecards'] });
-      toast({ title: 'Atualizado', description: 'Scorecard atualizado.' });
-    },
-  });
+  // Persist to localStorage
+  const persistScorecards = useCallback((newScorecards: Scorecard[]) => {
+    if (!entrevistaId) return;
+    localStorage.setItem(getStorageKey(entrevistaId), JSON.stringify(newScorecards));
+    setScorecards(newScorecards);
+  }, [entrevistaId]);
 
-  const averageScore = scorecards.length > 0
-    ? scorecards.reduce((acc, sc) => acc + sc.scores.reduce((a, s) => a + s.score, 0) / sc.scores.length, 0) / scorecards.length
-    : 0;
+  // Create scorecard
+  const createScorecard = useCallback((input: CreateScorecardInput) => {
+    const newScorecard: Scorecard = {
+      ...input,
+      id: generateId(),
+      created_at: new Date().toISOString(),
+    };
 
-  const consolidatedScores = scorecards.length > 0 ? scorecards[0].scores.map((_, i) => ({
-    competency_id: scorecards[0].scores[i].competency_id,
-    avgScore: scorecards.reduce((acc, sc) => acc + (sc.scores[i]?.score || 0), 0) / scorecards.length,
-    scores: scorecards.map(sc => sc.scores[i]?.score || 0),
-  })) : [];
+    const newScorecards = [newScorecard, ...scorecards];
+    persistScorecards(newScorecards);
+    toast({ title: 'Avaliação salva', description: 'Scorecard registrado com sucesso.' });
+  }, [scorecards, persistScorecards, toast]);
 
-  return { scorecards, isLoading, createScorecard: createScorecard.mutate, updateScorecard: updateScorecard.mutate, averageScore, consolidatedScores };
+  // Update scorecard
+  const updateScorecard = useCallback((input: UpdateScorecardInput) => {
+    const { id, ...updates } = input;
+    const newScorecards = scorecards.map(sc => 
+      sc.id === id ? { ...sc, ...updates } : sc
+    );
+    persistScorecards(newScorecards);
+    toast({ title: 'Atualizado', description: 'Scorecard atualizado.' });
+  }, [scorecards, persistScorecards, toast]);
+
+  // Calculate average score
+  const averageScore = useMemo(() => {
+    if (scorecards.length === 0) return 0;
+    return scorecards.reduce((acc, sc) => {
+      const scAvg = sc.scores.length > 0 
+        ? sc.scores.reduce((a, s) => a + s.score, 0) / sc.scores.length 
+        : 0;
+      return acc + scAvg;
+    }, 0) / scorecards.length;
+  }, [scorecards]);
+
+  // Calculate consolidated scores
+  const consolidatedScores = useMemo(() => {
+    if (scorecards.length === 0) return [];
+    const firstScorecard = scorecards[0];
+    if (!firstScorecard?.scores) return [];
+    
+    return firstScorecard.scores.map((_, i) => ({
+      competency_id: firstScorecard.scores[i]?.competency_id ?? '',
+      avgScore: scorecards.reduce((acc, sc) => acc + (sc.scores[i]?.score || 0), 0) / scorecards.length,
+      scores: scorecards.map(sc => sc.scores[i]?.score || 0),
+    }));
+  }, [scorecards]);
+
+  return { 
+    scorecards, 
+    isLoading, 
+    createScorecard, 
+    updateScorecard, 
+    averageScore, 
+    consolidatedScores 
+  };
 }
 
 export default useScorecard;
