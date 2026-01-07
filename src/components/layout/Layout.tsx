@@ -11,6 +11,7 @@ import { useNotifications } from "@/contexts/NotificationContext";
 import { CommandMenu } from "@/components/common/CommandMenu";
 import { CommandMenuTrigger } from "@/components/common/CommandMenuTrigger";
 import { OnboardingTour } from "@/components/onboarding/OnboardingTour";
+import { BottomNavigation } from "@/components/navigation/BottomNavigation";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -64,9 +65,12 @@ export function Layout({ children, title }: LayoutProps) {
             </div>
           </header>
 
-          <main className="flex-1 overflow-auto">
+          <main className="flex-1 overflow-auto pb-20 md:pb-0">
             {children}
           </main>
+          
+          {/* Bottom Navigation for Mobile */}
+          <BottomNavigation />
         </SidebarInset>
       </div>
     </SidebarProvider>

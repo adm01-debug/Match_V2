@@ -1,9 +1,10 @@
 /**
- * @fileoverview KPICard component
+ * @fileoverview KPICard component with motion interactions
  * @module KPICard
  */
 
 import { memo, useMemo } from 'react';
+import { motion } from 'framer-motion';
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { LucideIcon, TrendingUp, TrendingDown } from "lucide-react";
@@ -21,6 +22,7 @@ interface KPICardProps {
   };
   variant?: KPIVariant;
   isLoading?: boolean;
+  index?: number;
 }
 
 const variantStyles: Record<KPIVariant, { icon: string; card: string }> = {
@@ -54,6 +56,7 @@ function KPICardComponent({
   trend,
   variant = "default",
   isLoading = false,
+  index = 0,
 }: KPICardProps) {
   const styles = useMemo(() => variantStyles[variant], [variant]);
 
@@ -87,47 +90,72 @@ function KPICardComponent({
   }
 
   return (
-    <Card
-      data-testid="kpi-card"
-      role="article"
-      aria-label={`${title}: ${formattedValue}${subtitle ? `, ${subtitle}` : ''}`}
-      className={cn("card-hover", styles.card)}
+    <motion.div
+      initial={{ opacity: 0, y: 20, scale: 0.95 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ 
+        delay: index * 0.08,
+        type: 'spring' as const, 
+        stiffness: 300, 
+        damping: 25 
+      }}
+      whileHover={{ 
+        y: -4,
+        boxShadow: '0 20px 40px -15px hsl(var(--primary) / 0.12)',
+      }}
     >
-      <CardContent className="p-6">
-        <div className="flex items-start justify-between">
-          <div className="space-y-2">
-            <p className="text-sm font-medium text-muted-foreground">
-              {title}
-            </p>
-            <div className="flex items-baseline gap-2">
-              <p className="text-3xl font-bold text-foreground">
-                {formattedValue}
+      <Card
+        data-testid="kpi-card"
+        role="article"
+        aria-label={`${title}: ${formattedValue}${subtitle ? `, ${subtitle}` : ''}`}
+        className={cn("card-hover overflow-hidden", styles.card)}
+      >
+        <CardContent className="p-6">
+          <div className="flex items-start justify-between">
+            <div className="space-y-2">
+              <p className="text-sm font-medium text-muted-foreground">
+                {title}
               </p>
-              {trend && (
-                <span
-                  className={cn("text-xs font-medium flex items-center gap-0.5", trendColor)}
-                  aria-label={`Tendência: ${trend.value}`}
+              <div className="flex items-baseline gap-2">
+                <motion.p 
+                  className="text-3xl font-bold text-foreground"
+                  initial={{ opacity: 0, scale: 0.5 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: index * 0.08 + 0.2, type: 'spring' as const, stiffness: 400 }}
                 >
-                  <TrendIcon className="h-3 w-3" aria-hidden="true" />
-                  {trend.value}
-                </span>
+                  {formattedValue}
+                </motion.p>
+                {trend && (
+                  <motion.span
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.08 + 0.3 }}
+                    className={cn("text-xs font-medium flex items-center gap-0.5", trendColor)}
+                    aria-label={`Tendência: ${trend.value}`}
+                  >
+                    <TrendIcon className="h-3 w-3" aria-hidden="true" />
+                    {trend.value}
+                  </motion.span>
+                )}
+              </div>
+              {subtitle && (
+                <p className="text-xs text-muted-foreground">
+                  {subtitle}
+                </p>
               )}
             </div>
-            {subtitle && (
-              <p className="text-xs text-muted-foreground">
-                {subtitle}
-              </p>
-            )}
+            <motion.div 
+              className={cn("rounded-xl p-3", styles.icon)}
+              aria-hidden="true"
+              whileHover={{ scale: 1.1, rotate: 5 }}
+              transition={{ type: 'spring' as const, stiffness: 400 }}
+            >
+              <Icon className="h-6 w-6" />
+            </motion.div>
           </div>
-          <div 
-            className={cn("rounded-xl p-3", styles.icon)}
-            aria-hidden="true"
-          >
-            <Icon className="h-6 w-6" />
-          </div>
-        </div>
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+    </motion.div>
   );
 }
 
