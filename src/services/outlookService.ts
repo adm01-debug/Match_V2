@@ -34,7 +34,6 @@ interface OutlookCalendar {
 
 class OutlookService {
   private config: OutlookConfig = {};
-  private baseUrl = 'https://graph.microsoft.com/v1.0';
 
   configure(config: OutlookConfig): void {
     this.config = config;

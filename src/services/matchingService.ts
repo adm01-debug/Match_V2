@@ -89,7 +89,7 @@ class MatchingService {
   calculateMatchFull(resume: ParsedResume, job: JobRequirements): MatchResult {
     const normalizedJob = this.normalizeJob(job);
     
-    const skillsMatch = this.calculateSkillsMatchFromParsed(resume.skills, normalizedJob);
+    const skillsMatch = this.calculateSkillsMatchFromParsed(resume.skills as Skill[], normalizedJob);
     const experienceMatch = this.calculateExperienceMatchFromParsed(
       resume.experience,
       normalizedJob.minExperience
@@ -208,8 +208,9 @@ class MatchingService {
     // Verificar se é ParsedResume
     if ('personalInfo' in candidate) {
       const parsed = candidate as ParsedResume;
+      const skills = parsed.skills as Skill[];
       return {
-        skills: parsed.skills.map(s => s.name),
+        skills: skills.map(s => typeof s === 'string' ? s : s.name),
         experience: this.calculateTotalYears(parsed.experience),
         education: parsed.education[0]?.degree ?? '',
         location: parsed.location,
@@ -334,9 +335,9 @@ class MatchingService {
     education: ParsedResume["education"],
     requiredEdu?: string
   ): number {
-    const degrees = education.map(e => e.degree).filter(Boolean);
+    const degrees = education.map(e => e.degree).filter((d): d is string => Boolean(d));
     if (degrees.length === 0) return requiredEdu ? 0 : 100;
-    return this.calculateEducationMatch(degrees[0], requiredEdu);
+    return this.calculateEducationMatch(degrees[0] ?? '', requiredEdu);
   }
 
   private calculateLocationMatch(candidateLoc?: string, jobLoc?: string): number {
@@ -356,7 +357,8 @@ class MatchingService {
 
   private getHighlights(resume: ParsedResume, job: ReturnType<typeof this.normalizeJob>): string[] {
     const highlights: string[] = [];
-    const candidateSkills = resume.skills.map(s => s.name.toLowerCase());
+    const skills = resume.skills as Skill[];
+    const candidateSkills = skills.map(s => (typeof s === 'string' ? s : s.name).toLowerCase());
 
     job.requiredSkillNames.forEach(skill => {
       if (candidateSkills.some(cs => cs.includes(skill.toLowerCase()))) {
@@ -364,9 +366,9 @@ class MatchingService {
       }
     });
 
-    const seniorSkills = resume.skills.filter(s => s.level === "expert" || s.level === "advanced");
+    const seniorSkills = skills.filter(s => typeof s !== 'string' && (s.level === "expert" || s.level === "advanced"));
     if (seniorSkills.length > 0) {
-      highlights.push(`✓ Especialista em ${seniorSkills.slice(0, 3).map(s => s.name).join(", ")}`);
+      highlights.push(`✓ Especialista em ${seniorSkills.slice(0, 3).map(s => typeof s === 'string' ? s : s.name).join(", ")}`);
     }
 
     return highlights.slice(0, 5);
@@ -374,7 +376,8 @@ class MatchingService {
 
   private getGaps(resume: ParsedResume, job: ReturnType<typeof this.normalizeJob>): string[] {
     const gaps: string[] = [];
-    const candidateSkills = resume.skills.map(s => s.name.toLowerCase());
+    const skills = resume.skills as Skill[];
+    const candidateSkills = skills.map(s => (typeof s === 'string' ? s : s.name).toLowerCase());
 
     job.requiredSkillNames.forEach(skill => {
       if (!candidateSkills.some(cs => cs.includes(skill.toLowerCase()))) {

@@ -110,7 +110,7 @@ export const getPasswordResetRequests = async (
       userId: row.user_id,
       userEmail: row.user_email,
       userName: row.user_name,
-      status: row.status,
+      status: row.status as PasswordResetRequest['status'],
       reason: row.reason,
       requestedAt: row.requested_at,
       reviewedAt: row.reviewed_at,
@@ -173,7 +173,7 @@ export const validateResetToken = async (
     }
 
     // Check if token is expired
-    if (new Date(data.token_expires_at) < new Date()) {
+    if (data.token_expires_at && new Date(data.token_expires_at) < new Date()) {
       return { valid: false };
     }
 
@@ -189,7 +189,7 @@ export const validateResetToken = async (
  */
 export const completePasswordReset = async (
   token: string,
-  newPassword: string
+  _newPassword: string
 ): Promise<{ success: boolean; message: string }> => {
   try {
     const validation = await validateResetToken(token);
@@ -207,7 +207,7 @@ export const completePasswordReset = async (
         status: 'completed',
         completed_at: new Date().toISOString(),
       })
-      .eq('id', validation.requestId);
+      .eq('id', validation.requestId ?? '');
 
     if (error) {
       console.error('Error completing reset:', error);

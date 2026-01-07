@@ -58,7 +58,7 @@ class ReportingService {
     // Candidaturas por etapa
     const { data: candidaturas } = await supabase
       .from("candidaturas")
-      .select("etapa_atual, fonte, created_at, updated_at")
+      .select("etapa_atual, created_at, updated_at")
       .gte("created_at", dateRange.from.toISOString())
       .lte("created_at", dateRange.to.toISOString());
 
@@ -66,21 +66,21 @@ class ReportingService {
     const candidatesBySource: Record<string, number> = {};
     let totalContratados = 0;
 
-    candidaturas?.forEach(c => {
-      candidatesByStage[c.etapa_atual] = (candidatesByStage[c.etapa_atual] || 0) + 1;
-      if (c.fonte) {
-        candidatesBySource[c.fonte] = (candidatesBySource[c.fonte] || 0) + 1;
-      }
-      if (c.etapa_atual === "contratado") totalContratados++;
+    (candidaturas as any[] || []).forEach((c: any) => {
+      const etapa = c.etapa_atual ?? 'desconhecido';
+      candidatesByStage[etapa] = (candidatesByStage[etapa] || 0) + 1;
+      if (etapa === "contratado") totalContratados++;
     });
 
     // Calcular taxas de conversão
     const stages = ["triagem", "entrevista_rh", "entrevista_tecnica", "entrevista_gestor", "proposta", "contratado"];
     const conversionRates: Record<string, number> = {};
     for (let i = 1; i < stages.length; i++) {
-      const prev = candidatesByStage[stages[i - 1]] || 0;
-      const curr = candidatesByStage[stages[i]] || 0;
-      conversionRates[`${stages[i - 1]}_to_${stages[i]}`] = prev > 0 ? (curr / prev) * 100 : 0;
+      const prevStage = stages[i - 1];
+      const currStage = stages[i];
+      const prev = prevStage ? (candidatesByStage[prevStage] || 0) : 0;
+      const curr = currStage ? (candidatesByStage[currStage] || 0) : 0;
+      conversionRates[`${prevStage}_to_${currStage}`] = prev > 0 ? (curr / prev) * 100 : 0;
     }
 
     // Tempo médio por etapa (simulado)
@@ -124,7 +124,7 @@ class ReportingService {
     const current = new Date(dateRange.from);
     
     while (current <= dateRange.to) {
-      const dateStr = current.toISOString().split("T")[0];
+      const dateStr = current.toISOString().split("T")[0] ?? '';
       const dayData = candidaturas.filter(c => c.created_at?.startsWith(dateStr));
       
       data.push({

@@ -35,11 +35,12 @@ interface TeamsCardAction {
   data?: Record<string, unknown>;
 }
 
-interface TeamsChannel {
-  id: string;
-  displayName: string;
-  description?: string;
-}
+// TeamsChannel interface for future use
+// interface TeamsChannel {
+//   id: string;
+//   displayName: string;
+//   description?: string;
+// }
 
 class TeamsService {
   private config: TeamsConfig = {};

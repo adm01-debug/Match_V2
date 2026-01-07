@@ -9,6 +9,7 @@ interface VagaData {
   regime_contratacao?: string;
   local?: string;
   departamento?: string;
+  tipo_contrato?: string;
 }
 
 
@@ -40,14 +41,13 @@ export const jobBoardService = {
   },
 
   async publishToBoard(board: JobBoard, vaga: VagaData): Promise<string> {
-    const payload = this.formatJobData(board.type, vaga);
     // Simulated API call - in production, use actual board APIs
-    // console.log(`Publishing to ${board.name}:`, payload);
+    console.log(`Publishing to ${board.name}:`, vaga.titulo);
     return `ext-${board.id}-${Date.now()}`;
   },
 
   formatJobData(boardType: string, vaga: VagaData) {
-    const base = { title: vaga.titulo, description: vaga.descricao, location: vaga.local, salary: vaga.salario, company: vaga.empresa };
+    const base = { title: vaga.titulo, description: vaga.descricao, location: vaga.local, salary: vaga.salario_min };
     switch (boardType) {
       case 'indeed': return { ...base, sponsoredType: 'organic' };
       case 'linkedin': return { ...base, employmentType: vaga.tipo_contrato };
@@ -65,12 +65,12 @@ export const jobBoardService = {
     return urls[board.type] || '';
   },
 
-  async unpublishJob(posting: JobPosting): Promise<boolean> {
+  async unpublishJob(_posting: JobPosting): Promise<boolean> {
     // console.log(`Unpublishing job ${posting.externalId} from ${posting.boardId}`);
     return true;
   },
 
-  async syncStats(vagaId: string): Promise<Record<string, { views: number; applications: number }>> {
+  async syncStats(_vagaId: string): Promise<Record<string, { views: number; applications: number }>> {
     // Simulated stats - in production, fetch from board APIs
     return { indeed: { views: 150, applications: 12 }, linkedin: { views: 230, applications: 18 } };
   },

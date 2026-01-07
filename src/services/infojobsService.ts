@@ -81,7 +81,6 @@ class InfoJobsServiceError extends Error {
 
 class InfoJobsService {
   private config: InfoJobsConfig | null = null;
-  private baseUrl = 'https://api.infojobs.com.br/api/1';
   private accessToken: string | null = null;
   private tokenExpiresAt: Date | null = null;
   private readonly MAX_RETRIES = 3;

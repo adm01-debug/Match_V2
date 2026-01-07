@@ -84,7 +84,7 @@ function validateState(returnedState: string): boolean {
 
 export const linkedinService = {
   config: {
-    clientId: import.meta.env.VITE_LINKEDIN_CLIENT_ID ?? '',
+    clientId: import.meta.env['VITE_LINKEDIN_CLIENT_ID'] ?? '',
     redirectUri: typeof window !== 'undefined' 
       ? `${window.location.origin}/auth/linkedin/callback`
       : '',
