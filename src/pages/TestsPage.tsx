@@ -1,9 +1,8 @@
-import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
-import { useProvas } from "@/hooks/useProvas";
+import { useProvas, useDeleteProva, useDuplicateProva } from "@/hooks/useProvas";
 import { categoriasInfo, niveisInfo, getCategoriaById, getNivelById } from "@/config/testsConfig";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -35,9 +34,10 @@ import {
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { TestsEmptyState } from "@/components/empty-states";
+import type { Prova } from "@/types/tests";
 
 // Mapa de ícones
-const iconeMap: Record<string, any> = {
+const iconeMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Brain,
   Code,
   BookOpen,
@@ -48,10 +48,13 @@ const iconeMap: Record<string, any> = {
 };
 
 export default function TestsPage() {
+  usePageTitle('Testes');
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  const { data: provas = [], isLoading, isError, deleteProva, duplicarProva, refetch } = useProvas();
+  const { data: provas = [], isLoading, refetch } = useProvas();
+  const deleteProvaMutation = useDeleteProva();
+  const duplicarProvaMutation = useDuplicateProva();
 
   const [searchQuery, setSearchQuery] = useState("");
   const [filtroCategoria, setFiltroCategoria] = useState<string>("todas");
@@ -60,12 +63,11 @@ export default function TestsPage() {
 
   // Filtrar provas
   const provasFiltradas = useMemo(() => {
-  usePageTitle('Testes');
-
     return provas.filter(p => {
       if (searchQuery && !p.titulo.toLowerCase().includes(searchQuery.toLowerCase())) return false;
       if (filtroCategoria !== "todas" && p.categoria !== filtroCategoria) return false;
-      if (filtroNivel !== "todos" && p.nivel !== filtroNivel) return false;
+      // Filter by niveisAplicaveis array
+      if (filtroNivel !== "todos" && !p.niveisAplicaveis?.includes(filtroNivel as any)) return false;
       return true;
     });
   }, [provas, searchQuery, filtroCategoria, filtroNivel]);
@@ -74,10 +76,10 @@ export default function TestsPage() {
   const stats = useMemo(() => {
     return {
       totalProvas: provas.length,
-      totalQuestoes: provas.reduce((acc, p) => acc + (p.total_questoes || 0), 0),
-      totalAplicacoes: provas.reduce((acc, p) => acc + (p.total_aplicacoes || 0), 0),
+      totalQuestoes: provas.reduce((acc, p) => acc + (p.totalQuestoes || 0), 0),
+      totalAplicacoes: provas.reduce((acc, p) => acc + (p.aplicacoes || 0), 0),
       mediaAprovacao: provas.length > 0
-        ? provas.reduce((acc, p) => acc + (p.taxa_aprovacao || 0), 0) / provas.length
+        ? provas.reduce((acc, p) => acc + (p.mediaNotas || 0), 0) / provas.length
         : 0,
     };
   }, [provas]);
@@ -85,7 +87,7 @@ export default function TestsPage() {
   // Handlers
   const handleDuplicar = async (id: string) => {
     try {
-      await duplicarProva(id);
+      await duplicarProvaMutation.mutateAsync(id);
       toast({ title: "Prova duplicada com sucesso" });
     } catch {
       toast({ title: "Erro ao duplicar", variant: "destructive" });
@@ -95,7 +97,7 @@ export default function TestsPage() {
   const handleExcluir = async (id: string) => {
     if (!confirm("Deseja excluir esta prova?")) return;
     try {
-      await deleteProva(id);
+      await deleteProvaMutation.mutateAsync(id);
       toast({ title: "Prova excluída" });
     } catch {
       toast({ title: "Erro ao excluir", variant: "destructive" });
@@ -103,11 +105,9 @@ export default function TestsPage() {
   };
 
   // Render Card de Prova
-  const ProvaCard = ({ prova }: { prova: any }) => {
-  useDocumentTitle('Provas');
-
+  const ProvaCard = ({ prova }: { prova: Prova }) => {
     const categoria = getCategoriaById(prova.categoria);
-    const nivel = getNivelById(prova.nivel);
+    const nivel = prova.niveisAplicaveis?.[0] ? getNivelById(prova.niveisAplicaveis[0]) : null;
     const IconeCategoria = categoria ? iconeMap[categoria.icone] || FileText : FileText;
 
     return (
@@ -117,7 +117,7 @@ export default function TestsPage() {
             <div className={cn("p-2 rounded-lg", categoria?.cor || "bg-gray-500")}>
               <IconeCategoria className="h-5 w-5 text-white" />
             </div>
-            <Badge variant="outline">{nivel?.nome || prova.nivel}</Badge>
+            <Badge variant="outline">{nivel?.nome || 'Geral'}</Badge>
           </div>
           <CardTitle className="text-lg mt-2">{prova.titulo}</CardTitle>
           <CardDescription className="line-clamp-2">{prova.descricao}</CardDescription>
@@ -125,32 +125,32 @@ export default function TestsPage() {
         <CardContent>
           <div className="grid grid-cols-3 gap-4 text-sm">
             <div className="text-center">
-              <p className="text-2xl font-bold">{prova.total_questoes}</p>
+              <p className="text-2xl font-bold">{prova.totalQuestoes}</p>
               <p className="text-xs text-muted-foreground">Questões</p>
             </div>
             <div className="text-center">
-              <p className="text-2xl font-bold">{prova.duracao_minutos}</p>
+              <p className="text-2xl font-bold">{prova.duracao}</p>
               <p className="text-xs text-muted-foreground">Minutos</p>
             </div>
             <div className="text-center">
-              <p className="text-2xl font-bold">{prova.nota_minima}%</p>
+              <p className="text-2xl font-bold">{prova.notaMinima}%</p>
               <p className="text-xs text-muted-foreground">Mínimo</p>
             </div>
           </div>
 
-          {prova.total_aplicacoes > 0 && (
+          {(prova.aplicacoes || 0) > 0 && (
             <div className="mt-4 p-3 bg-muted rounded-lg">
               <div className="flex items-center justify-between text-sm">
                 <span className="text-muted-foreground">Aplicações</span>
-                <span className="font-medium">{prova.total_aplicacoes}</span>
+                <span className="font-medium">{prova.aplicacoes}</span>
               </div>
               <div className="flex items-center justify-between text-sm mt-1">
-                <span className="text-muted-foreground">Taxa de aprovação</span>
+                <span className="text-muted-foreground">Média de notas</span>
                 <span className={cn(
                   "font-medium",
-                  (prova.taxa_aprovacao || 0) >= 70 ? "text-green-600" : "text-amber-600"
+                  (prova.mediaNotas || 0) >= 70 ? "text-green-600" : "text-amber-600"
                 )}>
-                  {prova.taxa_aprovacao?.toFixed(0) || 0}%
+                  {prova.mediaNotas?.toFixed(0) || 0}%
                 </span>
               </div>
             </div>
@@ -254,7 +254,7 @@ export default function TestsPage() {
                 <BarChart3 className="h-5 w-5 text-amber-500" />
                 <div>
                   <p className="text-2xl font-bold">{stats.mediaAprovacao.toFixed(0)}%</p>
-                  <p className="text-xs text-muted-foreground">Aprovação Média</p>
+                  <p className="text-xs text-muted-foreground">Média Geral</p>
                 </div>
               </div>
             </CardContent>

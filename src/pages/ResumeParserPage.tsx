@@ -16,7 +16,8 @@ export default function ResumeParserPage() {
           </div>
 
           <ResumeParser 
-            onParsed={(data) => {
+            onParsed={() => {
+              // Handle parsed data
             }}
           />
         </div>

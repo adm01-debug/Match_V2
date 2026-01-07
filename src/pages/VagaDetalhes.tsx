@@ -1,17 +1,13 @@
-import { useDocumentTitle } from '@/hooks/useDocumentTitle';
-import { Suspense } from 'react';
-import { Skeleton } from '@/components/ui/skeleton';
-import { ErrorBoundary } from '@/components/ErrorBoundary';
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
-import { useVagas, useVaga } from "@/hooks/useVagas";
+import { useVaga } from "@/hooks/useVagas";
+import { useUpdateVaga } from "@/hooks/useVagas";
 import { useProcessosSeletivos } from "@/hooks/useProcessosSeletivos";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -35,8 +31,6 @@ import {
   Building,
   ExternalLink,
 } from "lucide-react";
-import { format, formatDistanceToNow } from "date-fns";
-import { ptBR } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 
 const statusStyles: Record<string, { bg: string; text: string }> = {
@@ -55,12 +49,13 @@ const prioridadeStyles: Record<string, string> = {
 };
 
 export default function VagaDetalhes() {
+  usePageTitle('Detalhes da Vaga');
   const { id } = useParams();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("detalhes");
 
-  const { data: vaga, isLoading: loadingVaga } = useVaga(id);
-  const { publicarVaga, pausarVaga, encerrarVaga } = useVagas();
+  const { data: vaga, isLoading: loadingVaga } = useVaga(id || '');
+  const updateVagaMutation = useUpdateVaga();
   const { data: processos = [], isLoading: loadingProcessos } = useProcessosSeletivos({ vagaId: id });
 
   const loading = loadingVaga || loadingProcessos;
@@ -68,24 +63,24 @@ export default function VagaDetalhes() {
   // Estatísticas dos candidatos
   const stats = {
     total: processos.length,
-    emTriagem: processos.filter(p => p.etapa_atual === 'em_triagem').length,
-    emEntrevista: processos.filter(p => ['entrevista_rh', 'entrevista_gestor', 'entrevista_final'].includes(p.etapa_atual)).length,
+    emTriagem: processos.filter(p => p.etapaAtual === 'em_triagem').length,
+    emEntrevista: processos.filter(p => ['entrevista_rh', 'entrevista_gestor', 'entrevista_final'].includes(p.etapaAtual)).length,
     aprovados: processos.filter(p => p.status === 'aprovado' || p.status === 'contratado').length,
     reprovados: processos.filter(p => p.status === 'reprovado').length,
   };
 
   const handlePublicar = async () => {
-  usePageTitle('Detalhes da Vaga');
-
-    if (id) await publicarVaga(id);
+    if (id) await updateVagaMutation.mutateAsync({ id, status: 'publicada' });
   };
 
   const handlePausar = async () => {
-    if (id) await pausarVaga(id);
+    if (id) await updateVagaMutation.mutateAsync({ id, status: 'pausada' });
   };
 
   const handleEncerrar = async () => {
-    if (id && confirm('Deseja encerrar esta vaga?')) await encerrarVaga(id);
+    if (id && confirm('Deseja encerrar esta vaga?')) {
+      await updateVagaMutation.mutateAsync({ id, status: 'encerrada' });
+    }
   };
 
   if (loading) {
@@ -114,7 +109,7 @@ export default function VagaDetalhes() {
     );
   }
 
-  const status = statusStyles[vaga.status] || statusStyles.rascunho;
+  const status = statusStyles[vaga.status] || statusStyles['rascunho'];
 
   return (
     <Layout title={vaga.titulo}>
@@ -127,15 +122,12 @@ export default function VagaDetalhes() {
             </Button>
             <div>
               <div className="flex items-center gap-2 mb-2">
-                <Badge className={cn(status.bg, status.text, "border-0")}>
+                <Badge className={cn(status?.bg, status?.text, "border-0")}>
                   {vaga.status.replace('_', ' ')}
                 </Badge>
                 <Badge className={cn(prioridadeStyles[vaga.prioridade], "text-white")}>
                   {vaga.prioridade}
                 </Badge>
-                {vaga.codigo && (
-                  <span className="text-sm text-muted-foreground">#{vaga.codigo}</span>
-                )}
               </div>
               <h1 className="text-2xl font-bold">{vaga.titulo}</h1>
               <div className="flex items-center gap-4 mt-2 text-muted-foreground">
@@ -273,11 +265,7 @@ export default function VagaDetalhes() {
                     </div>
                     <div>
                       <p className="text-sm text-muted-foreground">Tipo de Contrato</p>
-                      <p className="font-medium uppercase">{vaga.tipo_contrato}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">Nível</p>
-                      <p className="font-medium capitalize">{vaga.nivel || 'Não especificado'}</p>
+                      <p className="font-medium uppercase">{vaga.tipoContrato}</p>
                     </div>
                     <div>
                       <p className="text-sm text-muted-foreground">Quantidade</p>
@@ -291,10 +279,10 @@ export default function VagaDetalhes() {
                       Remuneração
                     </p>
                     <p className="font-medium">
-                      {vaga.salario_a_combinar
+                      {vaga.salarioACombinar
                         ? 'A combinar'
-                        : vaga.salario_min && vaga.salario_max
-                          ? `R$ ${vaga.salario_min.toLocaleString()} - R$ ${vaga.salario_max.toLocaleString()}`
+                        : vaga.salarioMin && vaga.salarioMax
+                          ? `R$ ${vaga.salarioMin.toLocaleString()} - R$ ${vaga.salarioMax.toLocaleString()}`
                           : 'Não informado'}
                     </p>
                   </div>
@@ -319,10 +307,10 @@ export default function VagaDetalhes() {
                   <CardTitle>Descrição</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  {vaga.descricao_empresa && (
+                  {vaga.descricaoEmpresa && (
                     <div>
                       <p className="text-sm text-muted-foreground mb-1">Sobre a Empresa</p>
-                      <p className="text-sm whitespace-pre-line">{vaga.descricao_empresa}</p>
+                      <p className="text-sm whitespace-pre-line">{vaga.descricaoEmpresa}</p>
                     </div>
                   )}
                   {vaga.responsabilidades && (
@@ -353,35 +341,32 @@ export default function VagaDetalhes() {
                   </div>
                 ) : (
                   <div className="space-y-3">
-                    {processos.slice(0, 10).map((processo: any) => (
+                    {processos.slice(0, 10).map((processo) => (
                       <div
                         key={processo.id}
                         className="flex items-center justify-between p-3 bg-muted/50 rounded-lg hover:bg-muted cursor-pointer"
-                        onClick={() => navigate(`/candidatos/${processo.candidato_id}`)}
+                        onClick={() => navigate(`/candidatos/${processo.candidatoId}`)}
                       >
                         <div className="flex items-center gap-3">
                           <Avatar>
-                            <AvatarImage src={processo.candidato?.foto_url} />
+                            <AvatarImage src={processo.candidatoFoto} />
                             <AvatarFallback>
-                              {processo.candidato?.nome?.charAt(0) || '?'}
+                              {processo.candidatoNome?.charAt(0) || '?'}
                             </AvatarFallback>
                           </Avatar>
                           <div>
-                            <p className="font-medium">{processo.candidato?.nome}</p>
-                            <p className="text-sm text-muted-foreground">
-                              {processo.candidato?.cargo_atual || processo.candidato?.email}
-                            </p>
+                            <p className="font-medium">{processo.candidatoNome}</p>
                           </div>
                         </div>
                         <div className="flex items-center gap-4">
-                          {processo.match_score && (
+                          {processo.matchScore && (
                             <div className="flex items-center gap-1">
                               <Star className="h-4 w-4 text-amber-500" />
-                              <span className="font-medium">{processo.match_score}%</span>
+                              <span className="font-medium">{processo.matchScore}%</span>
                             </div>
                           )}
                           <Badge variant="outline">
-                            {processo.etapa_atual.replace(/_/g, ' ')}
+                            {processo.etapaAtual.replace(/_/g, ' ')}
                           </Badge>
                         </div>
                       </div>
@@ -404,20 +389,10 @@ export default function VagaDetalhes() {
                   <CardTitle>Requisitos Obrigatórios</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  {vaga.requisitos_obrigatorios ? (
-                    <p className="text-sm whitespace-pre-line">{vaga.requisitos_obrigatorios}</p>
+                  {vaga.requisitosObrigatorios ? (
+                    <p className="text-sm whitespace-pre-line">{vaga.requisitosObrigatorios}</p>
                   ) : (
                     <p className="text-sm text-muted-foreground">Não especificados</p>
-                  )}
-                  {vaga.habilidades_obrigatorias && vaga.habilidades_obrigatorias.length > 0 && (
-                    <div className="mt-4">
-                      <p className="text-sm text-muted-foreground mb-2">Skills Obrigatórias</p>
-                      <div className="flex flex-wrap gap-1">
-                        {vaga.habilidades_obrigatorias.map((h, i) => (
-                          <Badge key={i} variant="default">{h}</Badge>
-                        ))}
-                      </div>
-                    </div>
                   )}
                 </CardContent>
               </Card>
@@ -427,20 +402,10 @@ export default function VagaDetalhes() {
                   <CardTitle>Requisitos Desejáveis</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  {vaga.requisitos_desejaveis ? (
-                    <p className="text-sm whitespace-pre-line">{vaga.requisitos_desejaveis}</p>
+                  {vaga.requisitosDesejaveis ? (
+                    <p className="text-sm whitespace-pre-line">{vaga.requisitosDesejaveis}</p>
                   ) : (
                     <p className="text-sm text-muted-foreground">Não especificados</p>
-                  )}
-                  {vaga.habilidades_desejaveis && vaga.habilidades_desejaveis.length > 0 && (
-                    <div className="mt-4">
-                      <p className="text-sm text-muted-foreground mb-2">Skills Desejáveis</p>
-                      <div className="flex flex-wrap gap-1">
-                        {vaga.habilidades_desejaveis.map((h, i) => (
-                          <Badge key={i} variant="secondary">{h}</Badge>
-                        ))}
-                      </div>
-                    </div>
                   )}
                 </CardContent>
               </Card>
