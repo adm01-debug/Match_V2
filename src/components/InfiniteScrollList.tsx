@@ -1,5 +1,6 @@
 import { Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { ShimmerCard } from '@/components/ui/shimmer-skeleton';
 
 interface InfiniteScrollListProps<T> {
   items: T[];
@@ -10,20 +11,42 @@ interface InfiniteScrollListProps<T> {
   setLoadMoreRef: (node: HTMLDivElement | null) => void;
   emptyMessage?: string;
   className?: string;
+  skeletonCount?: number;
 }
 
 export function InfiniteScrollList<T>({
-  items, renderItem, isLoading, isFetchingNextPage, hasNextPage, setLoadMoreRef, emptyMessage = 'Nenhum item encontrado', className
+  items, 
+  renderItem, 
+  isLoading, 
+  isFetchingNextPage, 
+  hasNextPage, 
+  setLoadMoreRef, 
+  emptyMessage = 'Nenhum item encontrado', 
+  className,
+  skeletonCount = 3,
 }: InfiniteScrollListProps<T>) {
-  if (isLoading) return <div className="flex justify-center p-8"><Loader2 className="h-6 w-6 animate-spin" /></div>;
-  if (items.length === 0) return <div className="p-8 text-center text-muted-foreground">{emptyMessage}</div>;
+  if (isLoading) {
+    return (
+      <div className={cn('space-y-3', className)}>
+        {Array.from({ length: skeletonCount }).map((_, i) => (
+          <ShimmerCard key={i} />
+        ))}
+      </div>
+    );
+  }
+  
+  if (items.length === 0) {
+    return <div className="p-8 text-center text-muted-foreground">{emptyMessage}</div>;
+  }
 
   return (
     <div className={cn('space-y-2', className)}>
       {items.map((item, i) => renderItem(item, i))}
       <div ref={setLoadMoreRef} className="h-10 flex items-center justify-center">
         {isFetchingNextPage && <Loader2 className="h-4 w-4 animate-spin" />}
-        {!hasNextPage && items.length > 0 && <span className="text-xs text-muted-foreground">Todos os itens carregados</span>}
+        {!hasNextPage && items.length > 0 && (
+          <span className="text-xs text-muted-foreground">Todos os itens carregados</span>
+        )}
       </div>
     </div>
   );

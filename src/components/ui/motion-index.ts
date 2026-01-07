@@ -42,3 +42,16 @@ export {
   MotionPulse, 
   MotionCheck 
 } from './motion-icon';
+
+// Shimmer Skeletons
+export {
+  ShimmerSkeleton,
+  ShimmerKPI,
+  ShimmerCard,
+  ShimmerAvatar,
+  ShimmerTableRow,
+  ShimmerText,
+  ShimmerKPIGrid,
+  ShimmerCardList,
+  ShimmerTable,
+} from './shimmer-skeleton';
