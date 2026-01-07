@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Layout from '@/components/layout/Layout';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -11,7 +11,7 @@ import { useTalentPool } from '@/hooks/useTalentPool';
 export default function TalentPoolPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const { pools, candidates, tags, isLoading, addToPool, removeFromPool, createPool } = useTalentPool();
+  const { pools, candidates, tags, createPool } = useTalentPool();
 
   const filteredCandidates = candidates.filter(c => 
     c.nome.toLowerCase().includes(searchTerm.toLowerCase()) &&

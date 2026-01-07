@@ -15,7 +15,7 @@ import { EntrevistasStats } from "@/components/dashboard/EntrevistasStats";
 import { EntrevistasChart } from "@/components/dashboard/EntrevistasChart";
 import { useDashboardData } from "@/hooks/useDashboardData";
 import { ErrorBoundary } from 'react-error-boundary';
-import { Briefcase, Users, Target, UserCheck, Clock, Loader2, AlertCircle, RefreshCw } from "lucide-react";
+import { Briefcase, Users, Target, UserCheck, AlertCircle, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -60,16 +60,33 @@ function DashboardErrorFallback({ error, resetErrorBoundary }: { error: Error; r
 
 function DashboardContent() {
   usePageTitle('Dashboard');
-
   const { 
     kpiData, 
     funilData, 
     vagasUrgentes, 
     acoesPendentes, 
-    agendaDia, 
+    agendaDia,
     processos,
     isLoading 
   } = useDashboardData();
+
+  if (isLoading) {
+    return (
+      <Layout title="Dashboard">
+        <div className="p-6 space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {[1, 2, 3, 4].map(i => (
+              <Skeleton key={i} className="h-32" />
+            ))}
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Skeleton className="h-80" />
+            <Skeleton className="h-80" />
+          </div>
+        </div>
+      </Layout>
+    );
+  }
 
   const kpis = kpiData || {
     vagasAbertas: 0,
@@ -85,126 +102,116 @@ function DashboardContent() {
   };
 
   return (
-    <Suspense fallback={<div className="p-6"><Skeleton className="h-8 w-64 mb-4" /><Skeleton className="h-64" /></div>}>
-      <Layout title="Dashboard">
-        <div className="p-6 space-y-6 animate-fade-in">
-          {/* Header */}
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div>
-              <h2 className="text-2xl font-bold text-foreground">Visão Geral</h2>
-              <p className="text-muted-foreground">
-                Acompanhe o processo de recrutamento em tempo real
-              </p>
-            </div>
-            <Select defaultValue="dez">
-              <SelectTrigger className="w-[160px]">
-                <SelectValue placeholder="Período" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="dez">Dezembro 2025</SelectItem>
-                <SelectItem value="nov">Novembro 2025</SelectItem>
-                <SelectItem value="out">Outubro 2025</SelectItem>
-              </SelectContent>
-            </Select>
+    <Layout title="Dashboard">
+      <div className="p-6 space-y-6 animate-fade-in">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold">Dashboard</h1>
+            <p className="text-muted-foreground">Visão geral do recrutamento</p>
           </div>
+          <Select defaultValue="30">
+            <SelectTrigger className="w-40">
+              <SelectValue placeholder="Período" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="7">Últimos 7 dias</SelectItem>
+              <SelectItem value="30">Últimos 30 dias</SelectItem>
+              <SelectItem value="90">Últimos 90 dias</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
 
-          {/* KPI Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-            {isLoading ? (
-              Array.from({ length: 5 }).map((_, i) => (
-                <Skeleton key={i} className="h-28 rounded-lg" />
-              ))
-            ) : (
-              <>
-                <KPICard
-                  title="Vagas Abertas"
-                  value={kpis.vagasAbertas}
-                  subtitle={`+${kpis.vagasNovas} novas`}
-                  icon={Briefcase}
-                  variant="primary"
-                />
-                <KPICard
-                  title="Candidatos Total"
-                  value={kpis.candidatosTotal}
-                  subtitle={`+${kpis.candidatosNovos} este mês`}
-                  icon={Users}
-                  trend={{ value: `+${kpis.candidatosNovos}`, positive: true }}
-                  variant="default"
-                />
-                <KPICard
-                  title="Em Processo"
-                  value={kpis.emProcesso}
-                  subtitle={`em ${kpis.vagasEmProcesso} vagas`}
-                  icon={Target}
-                  variant="warning"
-                />
-                <KPICard
-                  title="Contratados no Mês"
-                  value={kpis.contratadosMes}
-                  subtitle={`meta: ${kpis.metaContratacao}`}
-                  icon={UserCheck}
-                  variant="success"
-                />
-                <KPICard
-                  title="Tempo Médio"
-                  value={kpis.tempoMedio > 0 ? `${kpis.tempoMedio} dias` : '-'}
-                  subtitle={`meta: ${kpis.metaTempo}`}
-                  icon={Clock}
-                  variant={kpis.tempoMedio > kpis.metaTempo ? "danger" : "success"}
-                />
-              </>
-            )}
-          </div>
+        {/* KPIs */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <Suspense fallback={<Skeleton className="h-32" />}>
+            <KPICard
+              title="Vagas Abertas"
+              value={kpis.vagasAbertas}
+              subtitle={`${kpis.vagasNovas} novas este mês`}
+              icon={Briefcase}
+              variant="primary"
+            />
+          </Suspense>
+          <Suspense fallback={<Skeleton className="h-32" />}>
+            <KPICard
+              title="Candidatos"
+              value={kpis.candidatosTotal}
+              subtitle={`${kpis.candidatosNovos} novos este mês`}
+              icon={Users}
+              variant="success"
+            />
+          </Suspense>
+          <Suspense fallback={<Skeleton className="h-32" />}>
+            <KPICard
+              title="Em Processo"
+              value={kpis.emProcesso}
+              subtitle={`${kpis.vagasEmProcesso} vagas em seleção`}
+              icon={Target}
+              variant="warning"
+            />
+          </Suspense>
+          <Suspense fallback={<Skeleton className="h-32" />}>
+            <KPICard
+              title="Contratados"
+              value={kpis.contratadosMes}
+              subtitle={`${Math.round((kpis.contratadosMes / Math.max(kpis.metaContratacao, 1)) * 100)}% da meta`}
+              icon={UserCheck}
+              variant="success"
+            />
+          </Suspense>
+        </div>
 
-          {/* Insights e Alertas Inteligentes */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <SmartInsights kpiData={kpis} funilData={funilData} />
-            <AlertasInteligentes acoesPendentes={acoesPendentes} vagasUrgentes={vagasUrgentes} />
-          </div>
-
-          {/* Main Content */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2">
+        {/* Main Content */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Left Column */}
+          <div className="lg:col-span-2 space-y-6">
+            <Suspense fallback={<Skeleton className="h-80" />}>
               <FunilChart data={funilData} />
-            </div>
-            <div>
-              <TopCandidatos processos={processos} />
-            </div>
-          </div>
-
-          {/* Entrevistas Row */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2">
+            </Suspense>
+            <Suspense fallback={<Skeleton className="h-64" />}>
               <EntrevistasChart />
-            </div>
-            <div>
-              <EntrevistasStats />
-            </div>
+            </Suspense>
           </div>
 
-          {/* Second Row */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2">
+          {/* Right Column */}
+          <div className="space-y-6">
+            <Suspense fallback={<Skeleton className="h-48" />}>
+              <AcoesRapidas />
+            </Suspense>
+            <Suspense fallback={<Skeleton className="h-64" />}>
               <VagasUrgentes vagas={vagasUrgentes} />
-            </div>
-            <div>
-              <AgendaHoje agenda={agendaDia} />
-            </div>
-          </div>
-
-          {/* Ações Pendentes Row */}
-          <div className="grid grid-cols-1 gap-6">
-            <AcoesPendentes acoes={acoesPendentes} />
-          </div>
-
-          {/* Ações Rápidas */}
-          <div className="pt-4 border-t">
-            <h3 className="text-sm font-medium text-muted-foreground mb-4">Ações Rápidas</h3>
-            <AcoesRapidas />
+            </Suspense>
+            <Suspense fallback={<Skeleton className="h-48" />}>
+              <AcoesPendentes acoes={acoesPendentes} />
+            </Suspense>
           </div>
         </div>
-      </Layout>
-    </Suspense>
+
+        {/* Bottom Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <Suspense fallback={<Skeleton className="h-64" />}>
+            <AgendaHoje agenda={agendaDia} />
+          </Suspense>
+          <Suspense fallback={<Skeleton className="h-64" />}>
+            <SmartInsights kpiData={kpis} funilData={funilData} />
+          </Suspense>
+          <Suspense fallback={<Skeleton className="h-64" />}>
+            <AlertasInteligentes acoesPendentes={acoesPendentes} vagasUrgentes={vagasUrgentes} />
+          </Suspense>
+        </div>
+
+        {/* More Stats */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <Suspense fallback={<Skeleton className="h-80" />}>
+            <TopCandidatos processos={processos} />
+          </Suspense>
+          <Suspense fallback={<Skeleton className="h-80" />}>
+            <EntrevistasStats />
+          </Suspense>
+        </div>
+      </div>
+    </Layout>
   );
 }
 
@@ -215,4 +222,3 @@ export default function Dashboard() {
     </ErrorBoundary>
   );
 }
-
