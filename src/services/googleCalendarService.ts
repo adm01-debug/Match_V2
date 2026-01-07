@@ -3,8 +3,8 @@
  * @module services/googleCalendarService
  */
 
-const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-const GOOGLE_API_KEY = import.meta.env.VITE_GOOGLE_API_KEY;
+const GOOGLE_CLIENT_ID = import.meta.env['VITE_GOOGLE_CLIENT_ID'] as string | undefined;
+const GOOGLE_API_KEY = import.meta.env['VITE_GOOGLE_API_KEY'] as string | undefined;
 
 interface CalendarEvent {
   id?: string;

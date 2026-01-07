@@ -27,7 +27,7 @@ import { PushNotificationSettings } from '@/components/security/PushNotification
 import { PasskeyManager } from '@/components/security/PasskeyManager';
 import { ReauthDialog } from '@/components/auth/ReauthDialog';
 import { use2FA } from '@/hooks/use2FA';
-import { useReauth } from '@/hooks/useReauth';
+import { useReauth, SensitiveAction } from '@/hooks/useReauth';
 import { useWebAuthn } from '@/hooks/useWebAuthn';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
@@ -35,16 +35,20 @@ import { toast } from 'sonner';
 
 export default function SecuritySettingsPage() {
   const navigate = useNavigate();
-  const { isEnabled: is2FAEnabled, isLoading: loading2FA } = use2FA();
-  const { requireReauth, isReauthDialogOpen, closeReauthDialog } = useReauth();
+  const { isEnabled: is2FAEnabled, isLoadingStatus: loading2FA } = use2FA();
+  const { cancelReauth } = useReauth();
   const { credentials: passkeys, isSupported: passkeysSupported } = useWebAuthn();
   const [showMFASetup, setShowMFASetup] = useState(false);
   const [isChangingPassword, setIsChangingPassword] = useState(false);
+  const [pendingAction, setPendingAction] = useState<SensitiveAction | null>(null);
+  const [isReauthOpen, setIsReauthOpen] = useState(false);
 
   const handleChangePassword = async () => {
-    const proceed = await requireReauth('password_change');
-    if (!proceed) return;
+    setPendingAction('change_password');
+    setIsReauthOpen(true);
+  };
 
+  const handlePasswordChangeConfirmed = async () => {
     setIsChangingPassword(true);
     try {
       const { data: { user } } = await supabase.auth.getUser();
@@ -68,13 +72,33 @@ export default function SecuritySettingsPage() {
   };
 
   const handleSetup2FA = async () => {
-    const proceed = await requireReauth('mfa_setup');
-    if (!proceed) return;
+    setPendingAction('configure_mfa');
+    setIsReauthOpen(true);
+  };
+
+  const handle2FAConfirmed = () => {
     setShowMFASetup(true);
   };
 
+  const handleReauthSuccess = () => {
+    if (pendingAction === 'change_password') {
+      handlePasswordChangeConfirmed();
+    } else if (pendingAction === 'configure_mfa') {
+      handle2FAConfirmed();
+    }
+    setPendingAction(null);
+  };
+
+  const handleReauthClose = (open: boolean) => {
+    if (!open) {
+      setPendingAction(null);
+      cancelReauth();
+    }
+    setIsReauthOpen(open);
+  };
+
   const securityScore = () => {
-    let score = 30; // Base score for having an account
+    let score = 30;
     if (is2FAEnabled) score += 40;
     if (passkeys.length > 0) score += 30;
     return Math.min(score, 100);
@@ -279,11 +303,14 @@ export default function SecuritySettingsPage() {
       </Tabs>
 
       {/* Reauth Dialog */}
-      <ReauthDialog 
-        isOpen={isReauthDialogOpen}
-        onClose={closeReauthDialog}
-        onSuccess={() => {}}
-      />
+      {pendingAction && (
+        <ReauthDialog 
+          open={isReauthOpen}
+          onOpenChange={handleReauthClose}
+          action={pendingAction}
+          onSuccess={handleReauthSuccess}
+        />
+      )}
     </div>
   );
 }

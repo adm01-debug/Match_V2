@@ -1,6 +1,6 @@
 // AI Service for intelligent matching and analysis
-const ANTHROPIC_API_KEY = import.meta.env.VITE_ANTHROPIC_API_KEY;
-const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
+const ANTHROPIC_API_KEY = import.meta.env['VITE_ANTHROPIC_API_KEY'] as string | undefined;
+const OPENAI_API_KEY = import.meta.env['VITE_OPENAI_API_KEY'] as string | undefined;
 
 export interface MatchAnalysis {
   score: number;
