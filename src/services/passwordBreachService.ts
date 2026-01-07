@@ -50,11 +50,13 @@ export const checkPasswordBreach = async (password: string): Promise<BreachCheck
     const lines = text.split('\n');
     
     for (const line of lines) {
-      const [hashSuffix, count] = line.split(':');
-      if (hashSuffix.trim() === suffix) {
+      const parts = line.split(':');
+      const hashSuffix = parts[0];
+      const count = parts[1];
+      if (hashSuffix?.trim() === suffix) {
         return { 
           isBreached: true, 
-          count: parseInt(count.trim(), 10), 
+          count: parseInt(count?.trim() ?? '0', 10), 
           isLoading: false, 
           error: null 
         };

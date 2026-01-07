@@ -60,10 +60,10 @@ export const getAllowedIPsFromDB = async (): Promise<AllowedIP[]> => {
     }
 
     return (data || []).map(row => ({
-      ip: row.ip,
-      description: row.description,
+      ip: row.ip_address,
+      description: row.description ?? '',
       addedAt: row.created_at,
-      addedBy: row.added_by,
+      addedBy: row.added_by ?? '',
       isActive: row.is_active,
     }));
   } catch (error) {
@@ -161,15 +161,14 @@ export const isIPAllowed = async (ip: string): Promise<IPCheckResult> => {
  */
 export const logBlockedAttempt = async (
   ip: string, 
-  reason: string
+  _reason: string
 ): Promise<void> => {
   try {
     await supabase.from('ip_access_logs').insert({
-      ip,
+      ip_address: ip,
       action: 'BLOCKED',
-      reason,
+      allowed: false,
       user_agent: navigator.userAgent,
-      timestamp: new Date().toISOString(),
     });
   } catch (error) {
     // console.error('Erro ao registrar tentativa bloqueada:', error);
@@ -186,7 +185,7 @@ export const addIPToWhitelist = async (
 ): Promise<boolean> => {
   try {
     const { error } = await supabase.from('allowed_ips').insert({
-      ip,
+      ip_address: ip,
       description,
       added_by: addedBy,
       is_active: true,
@@ -214,7 +213,7 @@ export const removeIPFromWhitelist = async (ip: string): Promise<boolean> => {
     const { error } = await supabase
       .from('allowed_ips')
       .update({ is_active: false })
-      .eq('ip', ip);
+      .eq('ip_address', ip);
 
     if (error) {
       // console.error('Erro ao remover IP:', error);

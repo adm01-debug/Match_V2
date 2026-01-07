@@ -59,7 +59,6 @@ class VagasServiceError extends Error {
 
 class VagasService {
   private config: VagasConfig | null = null;
-  private baseUrl = 'https://api.vagas.com.br/v1';
   private readonly MAX_RETRIES = 3;
   private readonly RETRY_DELAY = 1000;
 
@@ -130,15 +129,6 @@ class VagasService {
     }
     
     throw lastError;
-  }
-
-  private getHeaders(): HeadersInit {
-    this.ensureConfigured();
-    return {
-      'Authorization': `ApiKey ${this.config!.apiKey}`,
-      'Content-Type': 'application/json',
-      'X-Empresa-Id': this.config!.empresaId,
-    };
   }
 
   async publishJob(job: VagasJobPosting): Promise<{ vagaId: string; url: string }> {

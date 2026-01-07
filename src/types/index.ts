@@ -4,6 +4,14 @@
  */
 
 export * from './recruitment';
-export * from './tests';
+// Exclude Prova from tests to avoid duplicate export
+export { 
+  type NivelCargo,
+  type CategoriaProva,
+  type Departamento,
+  type Questao,
+  type ResultadoProva,
+  type BateriaProvas
+} from './tests';
 export * from './api';
 export * from './forms';

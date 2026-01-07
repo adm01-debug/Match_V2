@@ -63,7 +63,6 @@ class IndeedServiceError extends Error {
 
 class IndeedService {
   private config: IndeedConfig | null = null;
-  private baseUrl = 'https://api.indeed.com/v2';
   private readonly MAX_RETRIES = 3;
   private readonly RETRY_DELAY = 1000;
 
@@ -75,7 +74,6 @@ class IndeedService {
       throw new IndeedServiceError('Employer ID é obrigatório', 'INVALID_CONFIG');
     }
     this.config = config;
-    if (config.baseUrl) this.baseUrl = config.baseUrl;
   }
 
   isConfigured(): boolean {
@@ -86,15 +84,6 @@ class IndeedService {
     if (!this.config) {
       throw new IndeedServiceError('Indeed service não configurado', 'NOT_CONFIGURED');
     }
-  }
-
-  private getHeaders(): HeadersInit {
-    this.ensureConfigured();
-    return {
-      'Authorization': `Bearer ${this.config!.apiKey}`,
-      'Content-Type': 'application/json',
-      'X-Employer-Id': this.config!.employerId,
-    };
   }
 
   private validateJobPosting(job: IndeedJobPosting): void {

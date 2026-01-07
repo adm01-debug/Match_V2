@@ -48,7 +48,7 @@ class Logger {
   private flushInterval: NodeJS.Timeout | null = null;
 
   constructor() {
-    const isDev = import.meta.env.DEV || process.env.NODE_ENV === 'development';
+    const isDev = import.meta.env.DEV || import.meta.env['MODE'] === 'development';
     
     this.config = {
       enabled: true,

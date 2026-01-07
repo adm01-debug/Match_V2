@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter } from 'react-router-dom';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { Toaster } from '@/components/ui/sonner';
+import { vi } from 'vitest';
 
 // Create a new QueryClient for each test
 const createTestQueryClient = () =>
@@ -50,14 +51,14 @@ export { customRender as render };
 
 // Test utilities
 export const createMockSupabaseClient = () => ({
-  from: jest.fn().mockReturnThis(),
-  select: jest.fn().mockReturnThis(),
-  insert: jest.fn().mockReturnThis(),
-  update: jest.fn().mockReturnThis(),
-  delete: jest.fn().mockReturnThis(),
-  eq: jest.fn().mockReturnThis(),
-  single: jest.fn().mockResolvedValue({ data: null, error: null }),
-  maybeSingle: jest.fn().mockResolvedValue({ data: null, error: null }),
+  from: vi.fn().mockReturnThis(),
+  select: vi.fn().mockReturnThis(),
+  insert: vi.fn().mockReturnThis(),
+  update: vi.fn().mockReturnThis(),
+  delete: vi.fn().mockReturnThis(),
+  eq: vi.fn().mockReturnThis(),
+  single: vi.fn().mockResolvedValue({ data: null, error: null }),
+  maybeSingle: vi.fn().mockResolvedValue({ data: null, error: null }),
 });
 
 export const waitForLoadingToFinish = () =>

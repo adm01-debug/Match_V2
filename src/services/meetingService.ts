@@ -20,8 +20,8 @@ export interface CreateMeetingParams {
   provider?: MeetingProvider;
 }
 
-const ZOOM_API_KEY = import.meta.env.VITE_ZOOM_API_KEY;
-const ZOOM_API_SECRET = import.meta.env.VITE_ZOOM_API_SECRET;
+const ZOOM_API_KEY = import.meta.env['VITE_ZOOM_API_KEY'];
+const ZOOM_API_SECRET = import.meta.env['VITE_ZOOM_API_SECRET'];
 
 class MeetingService {
   private defaultProvider: MeetingProvider = 'google_meet';
@@ -93,7 +93,7 @@ class MeetingService {
     };
   }
 
-  async deleteMeeting(meetingId: string, provider: MeetingProvider): Promise<void> {
+  async deleteMeeting(_meetingId: string, _provider: MeetingProvider): Promise<void> {
     // Implementation would call respective API
     // Deleting meeting silently
   }

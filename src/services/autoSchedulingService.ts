@@ -62,6 +62,7 @@ export const autoSchedulingService = {
       const horaFim = new Date(slot.start.getTime() + request.duration * 60000);
       
       const { data, error } = await supabase.from('entrevistas').insert({
+        candidato_id: request.candidatoId,
         candidato_nome: 'Candidato',
         vaga_id: request.vagaId,
         vaga_titulo: 'Vaga',
@@ -71,8 +72,7 @@ export const autoSchedulingService = {
         status: 'agendada',
         tipo: 'remota',
         etapa: 'tecnica',
-        entrevistadores: [request.entrevistadorId],
-      }).select().single();
+      } as any).select().single();
 
       if (error) throw error;
       return { success: true, entrevistaId: data.id };
