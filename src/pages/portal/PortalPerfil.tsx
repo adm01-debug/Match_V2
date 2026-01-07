@@ -1,11 +1,6 @@
-import { EmptyState } from '@/components/common/EmptyState';
 import { useDocumentTitle } from '@/hooks/useDocumentTitle';
-import { Suspense } from 'react';
-import { Skeleton } from '@/components/ui/skeleton';
-import { ErrorBoundary } from '@/components/ErrorBoundary';
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { usePageTitle } from '@/hooks/usePageTitle';
-import React, { useState, useCallback } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -26,7 +21,7 @@ const PortalPerfil = () => {
 
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { profile, user } = useCandidatoAuth();
+  const { profile } = useCandidatoAuth();
   
   const [nome, setNome] = useState(profile?.nome || '');
   const [telefone, setTelefone] = useState(profile?.telefone || '');
