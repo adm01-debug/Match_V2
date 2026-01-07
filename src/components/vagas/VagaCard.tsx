@@ -1,11 +1,12 @@
 /**
- * @fileoverview VagaCard component
+ * @fileoverview VagaCard component with motion interactions
  * @module VagaCard
  */
 
 import { memo, useState, useCallback, useMemo } from 'react';
+import { motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { CardContent } from "@/components/ui/card";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -38,6 +39,7 @@ import { toast } from "sonner";
 interface VagaCardProps {
   vaga: Vaga;
   onDeleted?: () => void;
+  index?: number;
 }
 
 function formatSalario(min?: number, max?: number, aCombinar?: boolean): string {
@@ -56,6 +58,8 @@ function calculateDaysOpen(dateStr?: string): number {
     return 0;
   }
 }
+
+// Motion transition config
 
 function VagaCardComponent({ vaga, onDeleted }: VagaCardProps) {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
@@ -95,8 +99,15 @@ function VagaCardComponent({ vaga, onDeleted }: VagaCardProps) {
 
   return (
     <>
-      <Card 
-        className="card-hover border-l-4 border-l-primary"
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        whileHover={{ 
+          y: -4,
+          boxShadow: '0 20px 40px -15px hsl(var(--primary) / 0.15)',
+        }}
+        transition={{ type: 'spring' as const, stiffness: 400, damping: 25 }}
+        className="rounded-lg border bg-card text-card-foreground shadow-sm border-l-4 border-l-primary"
         role="article"
         aria-label={`Vaga: ${vaga.titulo}`}
       >
@@ -106,7 +117,12 @@ function VagaCardComponent({ vaga, onDeleted }: VagaCardProps) {
             className="flex items-start justify-between gap-3 mb-4"
           >
             <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 mb-1">
+              <motion.div 
+                className="flex items-center gap-2 mb-1"
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.1 }}
+              >
                 <StatusBadge status={vaga.status} size="sm" />
                 {showPriority && (
                   <PriorityBadge 
@@ -115,7 +131,7 @@ function VagaCardComponent({ vaga, onDeleted }: VagaCardProps) {
                     pulse={vaga.prioridade === "urgente"}
                   />
                 )}
-              </div>
+              </motion.div>
               <h3 className="font-semibold text-lg text-foreground truncate">
                 {vaga.titulo}
               </h3>
@@ -137,15 +153,17 @@ function VagaCardComponent({ vaga, onDeleted }: VagaCardProps) {
             
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button 
-                  type="button" 
-                  variant="ghost" 
-                  size="icon" 
-                  className="h-8 w-8"
-                  aria-label="Mais opções"
-                >
-                  <MoreHorizontal className="h-4 w-4" aria-hidden="true" />
-                </Button>
+                <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                  <Button 
+                    type="button" 
+                    variant="ghost" 
+                    size="icon" 
+                    className="h-8 w-8"
+                    aria-label="Mais opções"
+                  >
+                    <MoreHorizontal className="h-4 w-4" aria-hidden="true" />
+                  </Button>
+                </motion.div>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-48 bg-popover">
                 <DropdownMenuItem asChild>
@@ -189,81 +207,74 @@ function VagaCardComponent({ vaga, onDeleted }: VagaCardProps) {
             role="group"
             aria-label="Estatísticas da vaga"
           >
-            <div className="text-center p-2.5 rounded-lg bg-muted/50">
-              <div className="flex items-center justify-center gap-1.5 mb-1">
-                <Users className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
-                <span className="text-lg font-bold text-foreground">
-                  {vaga.totalCandidatos}
-                </span>
-              </div>
-              <p className="text-xs text-muted-foreground">candidatos</p>
-            </div>
-            <div className="text-center p-2.5 rounded-lg bg-muted/50">
-              <div className="flex items-center justify-center gap-1.5 mb-1">
-                <Target className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
-                <span className="text-lg font-bold text-foreground">
-                  {vaga.emProcesso}
-                </span>
-              </div>
-              <p className="text-xs text-muted-foreground">em processo</p>
-            </div>
-            <div className="text-center p-2.5 rounded-lg bg-muted/50">
-              <div className="flex items-center justify-center gap-1.5 mb-1">
-                <Clock className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
-                <span className={cn(
-                  "text-lg font-bold",
-                  diasAberta > 30 ? "text-warning" : "text-foreground"
-                )}>
-                  {diasAberta}d
-                </span>
-              </div>
-              <p className="text-xs text-muted-foreground">aberta</p>
-            </div>
-            <div className="text-center p-2.5 rounded-lg bg-muted/50">
-              <div className="flex items-center justify-center gap-1.5 mb-1">
-                <Briefcase className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
-                <span className="text-lg font-bold text-foreground">
-                  {vaga.quantidade}
-                </span>
-              </div>
-              <p className="text-xs text-muted-foreground">
-                vaga{vaga.quantidade > 1 ? "s" : ""}
-              </p>
-            </div>
+            {[
+              { icon: Users, value: vaga.totalCandidatos, label: 'candidatos' },
+              { icon: Target, value: vaga.emProcesso, label: 'em processo' },
+              { icon: Clock, value: `${diasAberta}d`, label: 'aberta', warning: diasAberta > 30 },
+              { icon: Briefcase, value: vaga.quantidade, label: vaga.quantidade > 1 ? 'vagas' : 'vaga' },
+            ].map((stat, i) => (
+              <motion.div
+                key={stat.label}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: i * 0.05, type: 'spring' as const, stiffness: 300, damping: 20 }}
+                whileHover={{ scale: 1.05, backgroundColor: 'hsl(var(--muted))' }}
+                className="text-center p-2.5 rounded-lg bg-muted/50 transition-colors"
+              >
+                <div className="flex items-center justify-center gap-1.5 mb-1">
+                  <stat.icon className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+                  <span className={cn(
+                    "text-lg font-bold",
+                    stat.warning ? "text-warning" : "text-foreground"
+                  )}>
+                    {stat.value}
+                  </span>
+                </div>
+                <p className="text-xs text-muted-foreground">{stat.label}</p>
+              </motion.div>
+            ))}
           </div>
 
-          <div className="flex gap-2">
-            <Button type="button" variant="outline" size="sm" className="flex-1" asChild>
-              <Link to={`/vagas/${vaga.id}`}>
-                <Eye className="h-3.5 w-3.5 mr-1.5" aria-hidden="true" />
-                Ver
-              </Link>
-            </Button>
-            <Button type="button" variant="outline" size="sm" className="flex-1" asChild>
-              <Link to={`/vagas/${vaga.id}/editar`}>
-                <Edit className="h-3.5 w-3.5 mr-1.5" aria-hidden="true" />
-                Editar
-              </Link>
-            </Button>
-            <Button type="button" variant="outline" size="sm" className="flex-1" asChild>
-              <Link to={`/pipeline?vaga=${vaga.id}`}>
-                <Kanban className="h-3.5 w-3.5 mr-1.5" aria-hidden="true" />
-                Pipeline
-              </Link>
-            </Button>
-            {vaga.status === "publicada" && (
-              <Button 
-                type="button" 
-                variant="outline" 
-                size="sm"
-                aria-label="Compartilhar vaga"
+          <motion.div 
+            className="flex gap-2"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            {[
+              { to: `/vagas/${vaga.id}`, icon: Eye, label: 'Ver' },
+              { to: `/vagas/${vaga.id}/editar`, icon: Edit, label: 'Editar' },
+              { to: `/pipeline?vaga=${vaga.id}`, icon: Kanban, label: 'Pipeline' },
+            ].map((btn) => (
+              <motion.div
+                key={btn.label}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="flex-1"
               >
-                <Share2 className="h-3.5 w-3.5" aria-hidden="true" />
-              </Button>
+                <Button type="button" variant="outline" size="sm" className="w-full" asChild>
+                  <Link to={btn.to}>
+                    <btn.icon className="h-3.5 w-3.5 mr-1.5" aria-hidden="true" />
+                    {btn.label}
+                  </Link>
+                </Button>
+              </motion.div>
+            ))}
+            {vaga.status === "publicada" && (
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  size="sm"
+                  aria-label="Compartilhar vaga"
+                >
+                  <Share2 className="h-3.5 w-3.5" aria-hidden="true" />
+                </Button>
+              </motion.div>
             )}
-          </div>
+          </motion.div>
         </CardContent>
-      </Card>
+      </motion.div>
 
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
         <AlertDialogContent>
