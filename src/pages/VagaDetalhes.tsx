@@ -56,7 +56,7 @@ export default function VagaDetalhes() {
 
   const { data: vaga, isLoading: loadingVaga } = useVaga(id || '');
   const updateVagaMutation = useUpdateVaga();
-  const { data: processos = [], isLoading: loadingProcessos } = useProcessosSeletivos({ vagaId: id });
+  const { data: processos = [], isLoading: loadingProcessos } = useProcessosSeletivos();
 
   const loading = loadingVaga || loadingProcessos;
 

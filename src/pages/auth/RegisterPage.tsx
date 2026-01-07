@@ -141,7 +141,7 @@ export default function RegisterPage() {
                     autoComplete="name"
                   />
                 </div>
-                {errors.nome && <p className="text-sm text-destructive">{errors.nome}</p>}
+                {errors['nome'] && <p className="text-sm text-destructive">{errors['nome']}</p>}
               </div>
 
               <div className="space-y-2">
@@ -158,7 +158,7 @@ export default function RegisterPage() {
                     autoComplete="email"
                   />
                 </div>
-                {errors.email && <p className="text-sm text-destructive">{errors.email}</p>}
+                {errors['email'] && <p className="text-sm text-destructive">{errors['email']}</p>}
               </div>
               
               <div className="space-y-2">
@@ -187,7 +187,7 @@ export default function RegisterPage() {
                     </div>
                   ))}
                 </div>
-                {errors.password && <p className="text-sm text-destructive">{errors.password}</p>}
+                {errors['password'] && <p className="text-sm text-destructive">{errors['password']}</p>}
               </div>
 
               <div className="space-y-2">
@@ -204,7 +204,7 @@ export default function RegisterPage() {
                     autoComplete="new-password"
                   />
                 </div>
-                {errors.confirmPassword && <p className="text-sm text-destructive">{errors.confirmPassword}</p>}
+                {errors['confirmPassword'] && <p className="text-sm text-destructive">{errors['confirmPassword']}</p>}
               </div>
 
               <div className="flex items-start space-x-2">
@@ -220,7 +220,7 @@ export default function RegisterPage() {
                   <Link to="/privacidade" className="text-primary hover:underline">Política de Privacidade</Link>
                 </label>
               </div>
-              {errors.acceptTerms && <p className="text-sm text-destructive">{errors.acceptTerms}</p>}
+              {errors['acceptTerms'] && <p className="text-sm text-destructive">{errors['acceptTerms']}</p>}
             </CardContent>
             <CardFooter className="flex flex-col gap-4">
               <Button type="submit" className="w-full" disabled={isLoading}>

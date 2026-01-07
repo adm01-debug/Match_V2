@@ -115,7 +115,7 @@ export default function LoginPage() {
                     autoComplete="email"
                   />
                 </div>
-                {errors.email && <p className="text-sm text-destructive">{errors.email}</p>}
+                {errors['email'] && <p className="text-sm text-destructive">{errors['email']}</p>}
               </div>
               
               <div className="space-y-2">
@@ -137,7 +137,7 @@ export default function LoginPage() {
                     autoComplete="current-password"
                   />
                 </div>
-                {errors.password && <p className="text-sm text-destructive">{errors.password}</p>}
+                {errors['password'] && <p className="text-sm text-destructive">{errors['password']}</p>}
               </div>
             </CardContent>
             <CardFooter className="flex flex-col gap-4">

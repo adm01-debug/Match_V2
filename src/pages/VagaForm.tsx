@@ -1,8 +1,4 @@
 import { useDocumentTitle } from '@/hooks/useDocumentTitle';
-import { Suspense } from 'react';
-import { Skeleton } from '@/components/ui/skeleton';
-import { ErrorBoundary } from '@/components/ErrorBoundary';
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -33,33 +29,12 @@ import {
   Trash2,
   Building2,
   MapPin,
+  Loader2,
   FileText,
   Target,
-  Share2,
-  Loader2
+  Share2
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-
-// Schema de validação
-const vagaSchema = z.object({
-  titulo: z.string().min(3, 'Título deve ter no mínimo 3 caracteres'),
-  departamento: z.string().min(1, 'Departamento é obrigatório'),
-  localizacao: z.string().optional(),
-  tipo_contrato: z.string().min(1, 'Tipo de contrato é obrigatório'),
-  nivel_experiencia: z.string().min(1, 'Nível de experiência é obrigatório'),
-  faixa_salarial: z.string().optional(),
-  descricao: z.string().min(10, 'Descrição deve ter no mínimo 10 caracteres'),
-  requisitos: z.string().optional(),
-  beneficios: z.string().optional(),
-  prioridade: z.string().default('normal'),
-  status: z.string().default('aberta'),
-});
-
-type VagaFormData = z.infer<typeof vagaSchema>;
-
-
 
 const departamentos = [
   "Produção",
@@ -70,19 +45,6 @@ const departamentos = [
   "Logística",
   "TI",
   "RH",
-];
-
-const gestores = [
-  { id: "g1", nome: "Carlos Mendes", departamento: "Produção" },
-  { id: "g2", nome: "Fernanda Lima", departamento: "Marketing/Arte" },
-  { id: "g3", nome: "Paulo Roberto", departamento: "Comercial" },
-  { id: "g4", nome: "Ricardo Almeida", departamento: "Financeiro" },
-  { id: "g5", nome: "Lucia Ferreira", departamento: "Administrativo" },
-];
-
-const recrutadores = [
-  { id: "r1", nome: "Maria Santos" },
-  { id: "r2", nome: "João Silva" },
 ];
 
 const beneficiosOpcoes = [

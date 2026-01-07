@@ -11,12 +11,10 @@ import { toast } from 'sonner';
 import { 
   Shield, 
   Plus, 
-  Trash2, 
   RefreshCw, 
   AlertTriangle,
   CheckCircle,
-  XCircle,
-  Clock
+  XCircle
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -46,22 +44,22 @@ import { ptBR } from 'date-fns/locale';
 
 interface AllowedIP {
   id: string;
-  ip: string;
-  description: string;
-  added_by: string;
+  ip_address: string;
+  description: string | null;
+  added_by: string | null;
   is_active: boolean;
   created_at: string;
   updated_at: string;
-  expires_at: string | null;
 }
 
 interface AccessLog {
   id: string;
-  ip: string;
-  action: 'ALLOWED' | 'BLOCKED' | 'EXPIRED';
-  reason: string;
-  user_agent: string;
-  timestamp: string;
+  ip_address: string;
+  action: string;
+  allowed: boolean;
+  endpoint: string | null;
+  user_agent: string | null;
+  created_at: string;
 }
 
 const IPManagement = memo(() => {
@@ -71,7 +69,7 @@ const IPManagement = memo(() => {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
 
   // Buscar IPs permitidos
-  const { data: allowedIPs, isLoading: isLoadingIPs } = useQuery({
+  const { data: allowedIPs } = useQuery({
     queryKey: ['allowed-ips'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -80,7 +78,7 @@ const IPManagement = memo(() => {
         .order('created_at', { ascending: false });
       
       if (error) throw error;
-      return data as AllowedIP[];
+      return (data ?? []) as AllowedIP[];
     },
   });
 
@@ -104,12 +102,12 @@ const IPManagement = memo(() => {
       const { data, error } = await supabase
         .from('ip_access_logs')
         .select('*')
-        .gte('timestamp', yesterday.toISOString())
-        .order('timestamp', { ascending: false })
+        .gte('created_at', yesterday.toISOString())
+        .order('created_at', { ascending: false })
         .limit(100);
       
       if (error) throw error;
-      return data as AccessLog[];
+      return (data ?? []) as AccessLog[];
     },
   });
 
@@ -117,7 +115,7 @@ const IPManagement = memo(() => {
   const addIPMutation = useMutation({
     mutationFn: async ({ ip, description }: { ip: string; description: string }) => {
       const { error } = await supabase.from('allowed_ips').insert({
-        ip,
+        ip_address: ip,
         description,
         added_by: 'admin',
         is_active: true,
@@ -136,53 +134,11 @@ const IPManagement = memo(() => {
     },
   });
 
-  // Remover IP (desativar)
-  const removeIPMutation = useMutation({
-    mutationFn: async (id: string) => {
-      const { error } = await supabase
-        .from('allowed_ips')
-        .update({ is_active: false })
-        .eq('id', id);
-      if (error) throw error;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['allowed-ips'] });
-      toast.success('IP removido com sucesso!');
-    },
-    onError: (error: Error) => {
-      toast.error(`Erro ao remover IP: ${error.message}`);
-    },
-  });
-
-  // Reativar IP
-  const reactivateIPMutation = useMutation({
-    mutationFn: async (id: string) => {
-      const { error } = await supabase
-        .from('allowed_ips')
-        .update({ is_active: true })
-        .eq('id', id);
-      if (error) throw error;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['allowed-ips'] });
-      toast.success('IP reativado com sucesso!');
-    },
-    onError: (error: Error) => {
-      toast.error(`Erro ao reativar IP: ${error.message}`);
-    },
-  });
-
-  const getActionBadge = (action: string) => {
-    switch (action) {
-      case 'ALLOWED':
-        return <Badge variant="default" className="bg-green-500"><CheckCircle className="w-3 h-3 mr-1" /> Permitido</Badge>;
-      case 'BLOCKED':
-        return <Badge variant="destructive"><XCircle className="w-3 h-3 mr-1" /> Bloqueado</Badge>;
-      case 'EXPIRED':
-        return <Badge variant="secondary"><Clock className="w-3 h-3 mr-1" /> Expirado</Badge>;
-      default:
-        return <Badge variant="outline">{action}</Badge>;
+  const getActionBadge = (allowed: boolean) => {
+    if (allowed) {
+      return <Badge variant="default" className="bg-green-500"><CheckCircle className="w-3 h-3 mr-1" /> Permitido</Badge>;
     }
+    return <Badge variant="destructive"><XCircle className="w-3 h-3 mr-1" /> Bloqueado</Badge>;
   };
 
   return (
@@ -303,11 +259,11 @@ const IPManagement = memo(() => {
                 {accessLogs?.slice(0, 20).map((log) => (
                   <TableRow key={log.id}>
                     <TableCell>
-                      {format(new Date(log.timestamp), "dd/MM HH:mm:ss", { locale: ptBR })}
+                      {format(new Date(log.created_at), "dd/MM HH:mm:ss", { locale: ptBR })}
                     </TableCell>
-                    <TableCell className="font-mono">{log.ip}</TableCell>
-                    <TableCell>{getActionBadge(log.action)}</TableCell>
-                    <TableCell className="max-w-xs truncate">{log.reason}</TableCell>
+                    <TableCell className="font-mono">{log.ip_address}</TableCell>
+                    <TableCell>{getActionBadge(log.allowed)}</TableCell>
+                    <TableCell className="max-w-xs truncate">{log.endpoint || '-'}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
