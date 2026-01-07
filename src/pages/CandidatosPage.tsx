@@ -26,6 +26,17 @@ import { ComunicacaoHistorico } from '@/components/candidatos/ComunicacaoHistori
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend, LineChart, Line, XAxis, YAxis, CartesianGrid } from 'recharts';
 import { CandidatosEmptyState } from '@/components/empty-states';
 
+interface Experiencia {
+  cargo: string;
+  empresa: string;
+  periodo: string;
+}
+
+interface Formacao {
+  curso: string;
+  instituicao: string;
+}
+
 interface Candidato {
   id: string;
   nome: string;
@@ -33,8 +44,8 @@ interface Candidato {
   telefone: string | null;
   resumo: string | null;
   habilidades: string[] | null;
-  experiencias: unknown;
-  formacao: unknown;
+  experiencias: Experiencia[] | null;
+  formacao: Formacao[] | null;
   fonte: string | null;
   status: string | null;
   arquivo_curriculo: string | null;
@@ -211,7 +222,7 @@ export default function CandidatosPage() {
           h.toLowerCase().includes(skillFilter.toLowerCase())
         ));
 
-      const candidatoDate = new Date(c.created_at);
+      const candidatoDate = c.created_at ? new Date(c.created_at) : new Date(0);
       const matchesDateFrom = !dateFrom || candidatoDate >= startOfDay(dateFrom);
       const matchesDateTo = !dateTo || candidatoDate <= endOfDay(dateTo);
       
@@ -229,7 +240,9 @@ export default function CandidatosPage() {
       if (sortBy === 'nome') {
         return a.nome.localeCompare(b.nome);
       }
-      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+      const dateA = a.created_at ? new Date(a.created_at).getTime() : 0;
+      const dateB = b.created_at ? new Date(b.created_at).getTime() : 0;
+      return dateB - dateA;
     });
 
   // Statistics by status
@@ -277,6 +290,7 @@ export default function CandidatosPage() {
     
     // Count candidates per day
     candidatos.forEach(c => {
+      if (!c.created_at) return;
       const candidatoDate = format(new Date(c.created_at), 'yyyy-MM-dd');
       const dayData = last30Days.find(d => d.date === candidatoDate);
       if (dayData) {
@@ -286,6 +300,7 @@ export default function CandidatosPage() {
     
     // Calculate accumulated
     let accumulated = candidatos.filter(c => {
+      if (!c.created_at) return true;
       const candidatoDate = new Date(c.created_at);
       return candidatoDate < subDays(today, 29);
     }).length;

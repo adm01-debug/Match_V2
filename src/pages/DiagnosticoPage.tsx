@@ -158,12 +158,12 @@ export default function DiagnosticoPage() {
 
     // 5. Check Environment Variables
     const envVars = {
-      VITE_SUPABASE_URL: import.meta.env.VITE_SUPABASE_URL,
-      VITE_SUPABASE_PUBLISHABLE_KEY: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+      VITE_SUPABASE_URL: import.meta.env['VITE_SUPABASE_URL'],
+      VITE_SUPABASE_PUBLISHABLE_KEY: import.meta.env['VITE_SUPABASE_PUBLISHABLE_KEY'],
     };
     
     const missingVars = Object.entries(envVars)
-      .filter(([_, v]) => !v)
+      .filter(([, v]) => !v)
       .map(([k]) => k);
 
     if (missingVars.length === 0) {
@@ -186,7 +186,7 @@ export default function DiagnosticoPage() {
     // 6. Check RLS (if authenticated)
     if (user) {
       try {
-        const { data, error } = await supabase.from('profiles').select('id').eq('user_id', user.id).single();
+        const { error } = await supabase.from('profiles').select('id').eq('user_id', user.id).single();
         if (error && error.code !== 'PGRST116') {
           results.push({
             name: 'RLS Policies',

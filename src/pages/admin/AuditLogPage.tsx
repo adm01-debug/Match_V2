@@ -2,12 +2,11 @@ import { useState } from 'react';
 import Layout from '@/components/layout/Layout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { useAuditLogs } from '@/hooks/useAuditLogs';
-import { Download, Search, RefreshCw, Filter } from 'lucide-react';
+import { Download, RefreshCw, Filter } from 'lucide-react';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
@@ -21,8 +20,8 @@ const ACTION_COLORS: Record<string, string> = {
 };
 
 export default function AuditLogPage() {
-  const [filters, setFilters] = useState<{ action?: string; resource?: string }>({});
-  const { logs, isLoading, refetch, actions, resources, exportLogs } = useAuditLogs(filters);
+  const [filters, setFilters] = useState<{ action?: string; resource_type?: string }>({});
+  const { logs, refetch, actionTypes, resourceTypes, exportLogs } = useAuditLogs(filters);
 
   return (
     <Layout>
@@ -45,14 +44,14 @@ export default function AuditLogPage() {
               <SelectTrigger className="w-[180px]"><SelectValue placeholder="Ação" /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="">Todas</SelectItem>
-                {actions.map(a => <SelectItem key={a} value={a}>{a}</SelectItem>)}
+                {actionTypes.map((a: string) => <SelectItem key={a} value={a}>{a}</SelectItem>)}
               </SelectContent>
             </Select>
-            <Select value={filters.resource || ''} onValueChange={(v) => setFilters({ ...filters, resource: v || undefined })}>
+            <Select value={filters.resource_type || ''} onValueChange={(v) => setFilters({ ...filters, resource_type: v || undefined })}>
               <SelectTrigger className="w-[180px]"><SelectValue placeholder="Recurso" /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="">Todos</SelectItem>
-                {resources.map(r => <SelectItem key={r} value={r}>{r}</SelectItem>)}
+                {resourceTypes.map((r: string) => <SelectItem key={r} value={r}>{r}</SelectItem>)}
               </SelectContent>
             </Select>
             <Button variant="ghost" onClick={() => setFilters({})}>Limpar</Button>
@@ -78,7 +77,7 @@ export default function AuditLogPage() {
                     <TableCell className="text-sm">{format(new Date(log.created_at), 'dd/MM/yy HH:mm', { locale: ptBR })}</TableCell>
                     <TableCell>{log.profiles?.nome || log.user_id?.slice(0, 8)}</TableCell>
                     <TableCell><Badge className={ACTION_COLORS[log.action] || 'bg-gray-500'}>{log.action}</Badge></TableCell>
-                    <TableCell>{log.resource}</TableCell>
+                    <TableCell>{log.resource_type}</TableCell>
                     <TableCell className="font-mono text-xs">{log.resource_id?.slice(0, 8)}</TableCell>
                     <TableCell className="text-xs text-muted-foreground">{log.ip_address || '-'}</TableCell>
                   </TableRow>

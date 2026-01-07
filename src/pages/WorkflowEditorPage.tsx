@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { WorkflowCanvas } from '@/components/workflow/WorkflowCanvas';
-import { Save, Play, Copy, Trash2, Plus } from 'lucide-react';
+import { Save, Play, Copy, Trash2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const WORKFLOW_TEMPLATES = [

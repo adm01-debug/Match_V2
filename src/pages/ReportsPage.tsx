@@ -43,7 +43,7 @@ export default function ReportsPage() {
           </TabsList>
 
           <TabsContent value="builder" className="mt-4">
-            <ReportBuilder onExport={(format) => { /* Export handler: format */ }} />
+            <ReportBuilder onExport={() => { /* Export handler */ }} />
           </TabsContent>
 
           <TabsContent value="saved" className="mt-4">

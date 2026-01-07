@@ -179,7 +179,7 @@ export default function ResetPasswordPage() {
                       </div>
                     ))}
                   </div>
-                  {errors.password && <p className="text-sm text-destructive">{errors.password}</p>}
+                  {errors['password'] && <p className="text-sm text-destructive">{errors['password']}</p>}
                 </div>
 
                 <div className="space-y-2">
@@ -196,7 +196,7 @@ export default function ResetPasswordPage() {
                       autoComplete="new-password"
                     />
                   </div>
-                  {errors.confirmPassword && <p className="text-sm text-destructive">{errors.confirmPassword}</p>}
+                  {errors['confirmPassword'] && <p className="text-sm text-destructive">{errors['confirmPassword']}</p>}
                 </div>
               </CardContent>
               <CardFooter>
