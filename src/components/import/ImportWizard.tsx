@@ -140,7 +140,7 @@ export function ImportWizard({ onComplete, onCancel, importType }: ImportWizardP
                 <TableBody>
                   {preview.map((row, i) => (
                     <TableRow key={i}>
-                      {headers.slice(0, 5).map(h => <TableCell key={h}>{row[h]}</TableCell>)}
+                      {headers.slice(0, 5).map(h => <TableCell key={h}>{String(row[h] ?? '')}</TableCell>)}
                       {headers.length > 5 && <TableCell>...</TableCell>}
                     </TableRow>
                   ))}

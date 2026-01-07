@@ -3,7 +3,7 @@
  * @description Página de gestão de permissões granulares
  */
 import { useState, useEffect } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -18,7 +18,6 @@ import {
   Save, 
   Loader2, 
   RefreshCw,
-  CheckCircle2,
   Info
 } from 'lucide-react';
 import { toast } from 'sonner';
@@ -182,7 +181,7 @@ function PermissionsContent() {
   // Group permissions by module
   const permissionsByModule = permissions.reduce((acc, p) => {
     if (!acc[p.module]) acc[p.module] = [];
-    acc[p.module].push(p);
+    acc[p.module]!.push(p);
     return acc;
   }, {} as Record<string, Permission[]>);
 

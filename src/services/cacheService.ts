@@ -1,6 +1,6 @@
 // Redis Cache Service using Upstash
-const UPSTASH_REDIS_URL = import.meta.env.VITE_UPSTASH_REDIS_URL;
-const UPSTASH_REDIS_TOKEN = import.meta.env.VITE_UPSTASH_REDIS_TOKEN;
+const UPSTASH_REDIS_URL = import.meta.env['VITE_UPSTASH_REDIS_URL'] as string | undefined;
+const UPSTASH_REDIS_TOKEN = import.meta.env['VITE_UPSTASH_REDIS_TOKEN'] as string | undefined;
 
 interface CacheOptions {
   ttl?: number; // Time to live in seconds

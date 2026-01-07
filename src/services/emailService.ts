@@ -228,7 +228,7 @@ export async function sendEmail(template: EmailTemplate): Promise<SendEmailResul
     
     // Verificar rate limit
     const recipient = Array.isArray(template.to) ? template.to[0] : template.to;
-    if (!checkRateLimit(recipient)) {
+    if (!recipient || !checkRateLimit(recipient)) {
       return { 
         success: false, 
         error: 'Rate limit excedido. Aguarde um momento antes de enviar novamente.' 
@@ -246,7 +246,7 @@ export async function sendEmail(template: EmailTemplate): Promise<SendEmailResul
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
         throw new EmailServiceError(
-          errorData.message ?? `HTTP ${response.status}: ${response.statusText}`,
+          (errorData as { message?: string }).message ?? `HTTP ${response.status}: ${response.statusText}`,
           'API_ERROR'
         );
       }

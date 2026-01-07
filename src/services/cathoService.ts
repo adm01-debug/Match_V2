@@ -78,7 +78,6 @@ const ESTADOS_BRASIL = [
 
 class CathoService {
   private config: CathoConfig | null = null;
-  private baseUrl = 'https://api.catho.com.br/v1';
   private readonly MAX_RETRIES = 3;
   private readonly RETRY_DELAY = 1000;
 

@@ -9,25 +9,24 @@ export interface ImportResult {
 
 export interface ImportConfig {
   table: string;
-  mapping: Record<string, string>; // CSV column -> DB column
+  mapping: Record<string, string>;
   validators?: Record<string, (value: unknown) => boolean>;
   transformers?: Record<string, (value: unknown) => unknown>;
 }
 
 class ImportService {
-  // Parse CSV string
   parseCSV(content: string): Record<string, string>[] {
     const lines = content.split(/\r?\n/).filter(line => line.trim());
     if (lines.length < 2) return [];
 
-    const headers = this.parseCSVLine(lines[0]);
+    const headers = this.parseCSVLine(lines[0] ?? '');
     const data: Record<string, string>[] = [];
 
     for (let i = 1; i < lines.length; i++) {
-      const values = this.parseCSVLine(lines[i]);
+      const values = this.parseCSVLine(lines[i] ?? '');
       const row: Record<string, string> = {};
       headers.forEach((header, index) => {
-        row[header.trim()] = values[index]?.trim() || '';
+        row[header.trim()] = values[index]?.trim() ?? '';
       });
       data.push(row);
     }
@@ -61,7 +60,6 @@ class ImportService {
     return result;
   }
 
-  // Read file as text
   async readFile(file: File): Promise<string> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -71,27 +69,25 @@ class ImportService {
     });
   }
 
-  // Read Excel file
   async readExcel(file: File): Promise<Record<string, string>[]> {
     try {
       const XLSX = await import('xlsx');
       const buffer = await file.arrayBuffer();
       const workbook = XLSX.read(buffer, { type: 'array' });
-      const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+      const firstSheet = workbook.Sheets[workbook.SheetNames[0] ?? ''];
+      if (!firstSheet) return [];
       return XLSX.utils.sheet_to_json(firstSheet);
-    } catch (error) {
-      // Excel read error - handled
+    } catch {
       return [];
     }
   }
 
-  // Validate row data
-  validateRow(row: Record<string, any>, config: ImportConfig): string | null {
+  validateRow(row: Record<string, unknown>, config: ImportConfig): string | null {
     if (!config.validators) return null;
 
     for (const [field, validator] of Object.entries(config.validators)) {
-      const csvColumn = Object.entries(config.mapping).find(([_, dbCol]) => dbCol === field)?.[0];
-      if (csvColumn && !validator(row[csvColumn])) {
+      const csvColumn = Object.entries(config.mapping).find(([, dbCol]) => dbCol === field)?.[0];
+      if (csvColumn && row[csvColumn] !== undefined && !validator(row[csvColumn])) {
         return `Campo "${field}" inválido`;
       }
     }
@@ -99,9 +95,8 @@ class ImportService {
     return null;
   }
 
-  // Transform row data
-  transformRow(row: Record<string, any>, config: ImportConfig): Record<string, any> {
-    const transformed: Record<string, any> = {};
+  transformRow(row: Record<string, unknown>, config: ImportConfig): Record<string, unknown> {
+    const transformed: Record<string, unknown> = {};
 
     for (const [csvColumn, dbColumn] of Object.entries(config.mapping)) {
       let value = row[csvColumn];
@@ -116,15 +111,15 @@ class ImportService {
     return transformed;
   }
 
-  // Import data to database
-  async import(data: Record<string, any>[], config: ImportConfig): Promise<ImportResult> {
+  async import(data: Record<string, unknown>[], config: ImportConfig): Promise<ImportResult> {
     const result: ImportResult = { success: 0, failed: 0, errors: [] };
 
     for (let i = 0; i < data.length; i++) {
       const row = data[i];
-      const rowNum = i + 2; // +2 because 1-indexed and header row
+      if (!row) continue;
+      
+      const rowNum = i + 2;
 
-      // Validate
       const validationError = this.validateRow(row, config);
       if (validationError) {
         result.failed++;
@@ -132,28 +127,32 @@ class ImportService {
         continue;
       }
 
-      // Transform
       const transformedData = this.transformRow(row, config);
 
-      // Insert
       try {
-        const { error } = await supabase.from(config.table).insert(transformedData);
+        const insertData = {
+          nome: String(transformedData['nome'] ?? ''),
+          email: String(transformedData['email'] ?? ''),
+          telefone: transformedData['telefone'] ? String(transformedData['telefone']) : null,
+          fonte: transformedData['fonte'] ? String(transformedData['fonte']) : null,
+        };
+        
+        const { error } = await supabase.from('candidatos').insert(insertData);
         if (error) {
           result.failed++;
           result.errors.push({ row: rowNum, error: error.message });
         } else {
           result.success++;
         }
-      } catch (error) {
+      } catch (err) {
         result.failed++;
-        result.errors.push({ row: rowNum, error: error.message });
+        result.errors.push({ row: rowNum, error: err instanceof Error ? err.message : 'Unknown error' });
       }
     }
 
     return result;
   }
 
-  // Import candidatos from file
   async importCandidatos(file: File): Promise<ImportResult> {
     const isExcel = file.name.endsWith('.xlsx') || file.name.endsWith('.xls');
     const data = isExcel
@@ -167,34 +166,30 @@ class ImportService {
         'E-mail': 'email',
         'Email': 'email',
         'Telefone': 'telefone',
-        'Origem': 'origem',
-        'LinkedIn': 'linkedin_url',
+        'Origem': 'fonte',
       },
       validators: {
-        email: (v) => !v || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v),
+        email: (v) => !v || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(v)),
       },
       transformers: {
-        email: (v) => v?.toLowerCase().trim(),
-        telefone: (v) => v?.replace(/\D/g, ''),
+        email: (v) => v ? String(v).toLowerCase().trim() : null,
+        telefone: (v) => v ? String(v).replace(/\D/g, '') : null,
       },
     };
 
-    return this.import(data, config);
+    return this.import(data as Record<string, unknown>[], config);
   }
 
-  // Preview import data
-  preview(data: Record<string, any>[], limit = 5): Record<string, any>[] {
+  preview(data: Record<string, unknown>[], limit = 5): Record<string, unknown>[] {
     return data.slice(0, limit);
   }
 
-  // Get column headers from data
-  getHeaders(data: Record<string, any>[]): string[] {
+  getHeaders(data: Record<string, unknown>[]): string[] {
     if (data.length === 0) return [];
-    return Object.keys(data[0]);
+    const firstItem = data[0];
+    return firstItem ? Object.keys(firstItem) : [];
   }
 }
 
 export const importService = new ImportService();
 export default importService;
-
-

@@ -10,10 +10,11 @@ interface ExportOptions {
 }
 
 class ExportService {
-  toCSV<T extends Record<string, any>>(data: T[], columns?: string[]): string {
+  toCSV<T extends Record<string, unknown>>(data: T[], columns?: string[]): string {
     if (data.length === 0) return '';
 
-    const keys = columns || Object.keys(data[0]);
+    const firstItem = data[0];
+    const keys = columns || (firstItem ? Object.keys(firstItem) : []);
     const header = keys.join(',');
     const rows = data.map(item =>
       keys.map(key => {
@@ -33,7 +34,7 @@ class ExportService {
     return JSON.stringify(data, null, 2);
   }
 
-  toExcelCSV<T extends Record<string, any>>(data: T[], columns?: string[]): string {
+  toExcelCSV<T extends Record<string, unknown>>(data: T[], columns?: string[]): string {
     const bom = '\uFEFF';
     return bom + this.toCSV(data, columns);
   }
@@ -50,7 +51,7 @@ class ExportService {
     URL.revokeObjectURL(url);
   }
 
-  async export<T extends Record<string, any>>(data: T[], options: ExportOptions): Promise<void> {
+  async export<T extends Record<string, unknown>>(data: T[], options: ExportOptions): Promise<void> {
     const filename = options.filename || `export-${new Date().toISOString().split('T')[0]}`;
 
     switch (options.format) {
@@ -69,27 +70,28 @@ class ExportService {
     }
   }
 
-  private async exportToExcel<T extends Record<string, any>>(data: T[], filename: string, columns?: string[], title?: string): Promise<void> {
+  private async exportToExcel<T extends Record<string, unknown>>(data: T[], filename: string, columns?: string[], title?: string): Promise<void> {
     try {
       const XLSX = await import('xlsx');
-      const keys = columns || Object.keys(data[0] || {});
+      const firstItem = data[0];
+      const keys = columns || (firstItem ? Object.keys(firstItem) : []);
       const worksheetData = [title ? [title] : [], keys, ...data.map(item => keys.map(key => item[key] ?? ''))].filter(row => row.length > 0);
       const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, 'Dados');
       XLSX.writeFile(workbook, `${filename}.xlsx`);
-    } catch (error) {
-      // Excel export error - handled
+    } catch {
       this.download(this.toExcelCSV(data, columns), `${filename}.csv`, 'text/csv;charset=utf-8');
     }
   }
 
-  private async exportToPDF<T extends Record<string, any>>(data: T[], filename: string, columns?: string[], title?: string): Promise<void> {
+  private async exportToPDF<T extends Record<string, unknown>>(data: T[], filename: string, columns?: string[], title?: string): Promise<void> {
     try {
       const { jsPDF } = await import('jspdf');
       const autoTable = (await import('jspdf-autotable')).default;
       const doc = new jsPDF();
-      const keys = columns || Object.keys(data[0] || {});
+      const firstItem = data[0];
+      const keys = columns || (firstItem ? Object.keys(firstItem) : []);
       if (title) {
         doc.setFontSize(16);
         doc.text(title, 14, 20);
@@ -102,14 +104,13 @@ class ExportService {
         headStyles: { fillColor: [59, 130, 246] },
       });
       doc.save(`${filename}.pdf`);
-    } catch (error) {
-      // PDF export error - handled
+    } catch {
       this.download(this.toExcelCSV(data, columns), `${filename}.csv`, 'text/csv;charset=utf-8');
     }
   }
 
   async exportCandidatos(candidatos: Record<string, unknown>[], format: ExportFormat): Promise<void> {
-    const columns = ['nome', 'email', 'telefone', 'origem', 'status', 'created_at'];
+    const columns = ['nome', 'email', 'telefone', 'fonte', 'status', 'created_at'];
     await this.export(candidatos, { filename: 'candidatos', format, columns, title: 'Lista de Candidatos' });
   }
 
@@ -121,5 +122,3 @@ class ExportService {
 
 export const exportService = new ExportService();
 export default exportService;
-
-

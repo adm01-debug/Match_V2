@@ -11,9 +11,13 @@ export const autoSchedulingService = {
 
   async getAvailableSlots(entrevistadorId: string, startDate: Date, endDate: Date): Promise<TimeSlot[]> {
     const slots: TimeSlot[] = [];
-    const { data: existingEvents } = await supabase.from('entrevistas').select('data_hora, duracao_minutos').eq('entrevistador_id', entrevistadorId).gte('data_hora', startDate.toISOString()).lte('data_hora', endDate.toISOString());
+    const { data: existingEvents } = await supabase.from('entrevistas').select('data, hora_inicio, hora_fim').eq('candidato_id', entrevistadorId).gte('data', startDate.toISOString().split('T')[0]).lte('data', endDate.toISOString().split('T')[0]);
     
-    const busyTimes = (existingEvents || []).map(e => ({ start: new Date(e.data_hora), end: new Date(new Date(e.data_hora).getTime() + e.duracao_minutos * 60000) }));
+    const busyTimes = (existingEvents || []).map(e => {
+      const startDateTime = new Date(`${e.data}T${e.hora_inicio}`);
+      const endDateTime = new Date(`${e.data}T${e.hora_fim}`);
+      return { start: startDateTime, end: endDateTime };
+    });
     let current = new Date(startDate);
 
     while (current < endDate) {
@@ -32,7 +36,7 @@ export const autoSchedulingService = {
     return slots;
   },
 
-  async findBestSlot(entrevistadorIds: string[], duration: number, preferredTimes?: Date[]): Promise<TimeSlot | null> {
+  async findBestSlot(entrevistadorIds: string[], _duration: number, preferredTimes?: Date[]): Promise<TimeSlot | null> {
     const startDate = new Date();
     const endDate = new Date();
     endDate.setDate(endDate.getDate() + 14);
@@ -45,7 +49,7 @@ export const autoSchedulingService = {
         const preferred = available.find(slot => preferredTimes.some(pt => Math.abs(slot.start.getTime() - pt.getTime()) < 3600000));
         if (preferred) return preferred;
       }
-      if (available.length > 0) return available[0];
+      if (available.length > 0) return available[0] ?? null;
     }
     return null;
   },
@@ -55,14 +59,19 @@ export const autoSchedulingService = {
       const slot = await this.findBestSlot([request.entrevistadorId], request.duration, request.preferredSlots);
       if (!slot) return { success: false, error: 'Nenhum horário disponível encontrado.' };
 
+      const horaFim = new Date(slot.start.getTime() + request.duration * 60000);
+      
       const { data, error } = await supabase.from('entrevistas').insert({
-        candidato_id: request.candidatoId,
-        entrevistador_id: request.entrevistadorId,
+        candidato_nome: 'Candidato',
         vaga_id: request.vagaId,
-        data_hora: slot.start.toISOString(),
-        duracao_minutos: request.duration,
+        vaga_titulo: 'Vaga',
+        data: slot.start.toISOString().split('T')[0],
+        hora_inicio: slot.start.toTimeString().slice(0, 5),
+        hora_fim: horaFim.toTimeString().slice(0, 5),
         status: 'agendada',
         tipo: 'remota',
+        etapa: 'tecnica',
+        entrevistadores: [request.entrevistadorId],
       }).select().single();
 
       if (error) throw error;
@@ -86,4 +95,3 @@ export const autoSchedulingService = {
 };
 
 export default autoSchedulingService;
-
