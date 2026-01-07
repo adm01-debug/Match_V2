@@ -72,17 +72,15 @@ function KPICardComponent({
 
   if (isLoading) {
     return (
-      <Card className={cn("card-hover", styles.card)}>
+      <Card className={cn("card-hover overflow-hidden", styles.card)}>
         <CardContent className="p-6">
-          <div className="animate-pulse">
-            <div className="flex items-start justify-between">
-              <div className="space-y-2 flex-1">
-                <div className="h-4 bg-muted rounded w-20" />
-                <div className="h-8 bg-muted rounded w-16" />
-                <div className="h-3 bg-muted rounded w-24" />
-              </div>
-              <div className="h-12 w-12 bg-muted rounded-xl" />
+          <div className="flex items-start justify-between">
+            <div className="space-y-2 flex-1">
+              <div className="h-4 bg-muted rounded w-20 relative overflow-hidden before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_1.5s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent" />
+              <div className="h-8 bg-muted rounded w-16 relative overflow-hidden before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_1.5s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent" />
+              <div className="h-3 bg-muted rounded w-24 relative overflow-hidden before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_1.5s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent" />
             </div>
+            <div className="h-12 w-12 bg-muted rounded-xl relative overflow-hidden before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_1.5s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent" />
           </div>
         </CardContent>
       </Card>
