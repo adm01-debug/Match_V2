@@ -1,6 +1,7 @@
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -142,14 +143,23 @@ const AuthPage = () => {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-muted/30 p-4">
       <div className="w-full max-w-md">
         {/* Auth Required Alert */}
-        {requiresAuth && redirectedFrom && (
-          <Alert className="mb-4 border-amber-500/50 bg-amber-50 dark:bg-amber-950/20">
-            <ShieldAlert className="h-4 w-4 text-amber-600" />
-            <AlertDescription className="text-amber-800 dark:text-amber-200">
-              Você precisa fazer login para acessar essa página.
-            </AlertDescription>
-          </Alert>
-        )}
+        <AnimatePresence>
+          {requiresAuth && redirectedFrom && (
+            <motion.div
+              initial={{ opacity: 0, y: -20, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -10, scale: 0.95 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+            >
+              <Alert className="mb-4 border-amber-500/50 bg-amber-50 dark:bg-amber-950/20">
+                <ShieldAlert className="h-4 w-4 text-amber-600" />
+                <AlertDescription className="text-amber-800 dark:text-amber-200">
+                  Você precisa fazer login para acessar essa página.
+                </AlertDescription>
+              </Alert>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <div className="flex flex-col items-center mb-8">
           <div className="p-3 rounded-xl bg-primary/10 mb-4">
