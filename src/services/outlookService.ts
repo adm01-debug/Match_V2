@@ -3,6 +3,10 @@
  * Permite gerenciar eventos e sincronizar calendários
  */
 
+import { createContextLogger } from './logger';
+
+const log = createContextLogger('OutlookService');
+
 interface OutlookConfig {
   tenantId?: string;
   clientId?: string;
@@ -56,7 +60,7 @@ class OutlookService {
     // if (!response.ok) throw new Error(`Outlook API error: ${response.status}`);
     // return response.json();
 
-    console.log('[OutlookService] Request:', endpoint, options);
+    log.debug('Request:', { endpoint, options });
     return {} as T;
   }
 
@@ -89,8 +93,8 @@ class OutlookService {
   }
 
   async getEvents(calendarId: string, startDate: Date, endDate: Date): Promise<OutlookEvent[]> {
-    // Mock
-    console.log('[OutlookService] getEvents:', { calendarId, startDate, endDate });
+    log.debug('getEvents:', { calendarId, startDate, endDate });
+    return [];
     return [];
   }
 

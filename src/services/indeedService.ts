@@ -3,6 +3,10 @@
  * API para publicação de vagas e sincronização de candidatos
  */
 
+import { createContextLogger } from './logger';
+
+const log = createContextLogger('IndeedService');
+
 export interface IndeedJobPosting {
   title: string;
   description: string;
@@ -156,7 +160,7 @@ class IndeedService {
 
     return this.withRetry(async () => {
       // Simulação - em produção, fazer requisição real
-      console.log('[IndeedService] Publishing job:', payload);
+      log.debug('Publishing job:', payload);
       
       const mockJobId = `indeed-${Date.now()}`;
       return {
@@ -174,7 +178,7 @@ class IndeedService {
     }
 
     return this.withRetry(async () => {
-      console.log('[IndeedService] Updating job:', jobId, updates);
+      log.debug('Updating job:', { jobId, updates });
     });
   }
 
@@ -186,7 +190,7 @@ class IndeedService {
     }
 
     return this.withRetry(async () => {
-      console.log('[IndeedService] Closing job:', jobId);
+      log.debug('Closing job:', jobId);
     });
   }
 
@@ -219,7 +223,7 @@ class IndeedService {
     }
 
     return this.withRetry(async () => {
-      console.log('[IndeedService] Getting candidates for job:', jobId);
+      log.debug('Getting candidates for job:', jobId);
       return [];
     });
   }
@@ -228,7 +232,7 @@ class IndeedService {
     this.ensureConfigured();
     
     return this.withRetry(async () => {
-      console.log('[IndeedService] Syncing candidates since:', since?.toISOString() ?? 'beginning');
+      log.debug('Syncing candidates since:', since?.toISOString() ?? 'beginning');
       return [];
     });
   }
@@ -239,7 +243,7 @@ class IndeedService {
     }
     
     try {
-      console.log('[IndeedService] Testing connection...');
+      log.debug('Testing connection...');
       // Em produção, fazer uma chamada real de teste
       return { success: true, message: 'Conexão estabelecida com sucesso' };
     } catch (error) {

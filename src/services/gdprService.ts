@@ -1,4 +1,7 @@
 import { supabase } from '@/integrations/supabase/client';
+import { createContextLogger } from './logger';
+
+const log = createContextLogger('GDPRService');
 
 export interface UserDataExport {
   profile: Record<string, unknown> | null;
@@ -42,7 +45,7 @@ export const gdprService = {
     try {
       // Log the deletion request in profiles table as a workaround
       // since data_deletion_requests table doesn't exist
-      console.log(`Data deletion requested for user ${userId}`);
+      log.info(`Data deletion requested for user ${userId}`);
       return true;
     } catch {
       return false;
@@ -97,7 +100,7 @@ export const gdprService = {
 
   // Log data access for audit
   async logDataAccess(userId: string, accessType: string, details?: string): Promise<void> {
-    console.log(`Data access logged: ${userId} - ${accessType} - ${details || 'N/A'}`);
+    log.info(`Data access: ${userId} - ${accessType}`, details ?? 'N/A');
   },
 };
 

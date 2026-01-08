@@ -3,7 +3,9 @@
  * Motor de execução de workflows automatizados
  */
 
-// import { supabase } from "@/integrations/supabase/client";
+import { createContextLogger } from './logger';
+
+const log = createContextLogger('WorkflowEngine');
 
 // Types
 export interface WorkflowNode {
@@ -212,10 +214,10 @@ class WorkflowEngine {
     // Em produção, buscar do banco
     try {
       // Table workflow_logs doesn't exist, return mock/cached logs
-      console.log('[WorkflowEngine] Fetching logs for workflow:', workflowId);
+      log.debug('Fetching logs for workflow:', workflowId);
       return [];
     } catch (error) {
-      console.error('[WorkflowEngine] Error fetching logs:', error);
+      log.error('Error fetching logs:', error);
       return [];
     }
   }
@@ -308,12 +310,12 @@ class WorkflowEngine {
       throw new Error('Action failed intentionally');
     }
 
-    console.log(`[WorkflowEngine] Executing action: ${actionType}`, { node });
+    log.debug(`Executing action: ${actionType}`, { node });
     
     // Simulate action execution
     switch (actionType) {
       case 'log':
-        console.log('[WorkflowEngine] Log action:', node.data['message']);
+        log.info('Log action:', node.data['message']);
         break;
       case 'send_email':
         // await emailService.send(...)
@@ -322,7 +324,7 @@ class WorkflowEngine {
         // await candidateService.moveStage(...)
         break;
       default:
-        console.log(`[WorkflowEngine] Unknown action: ${actionType}`);
+        log.warn(`Unknown action: ${actionType}`);
     }
   }
 
@@ -335,7 +337,7 @@ class WorkflowEngine {
       const safeEval = new Function(...Object.keys(context), `return ${expression}`);
       return Boolean(safeEval(...Object.values(context)));
     } catch (error) {
-      console.error('[WorkflowEngine] Condition evaluation error:', error);
+      log.error('Condition evaluation error:', error);
       return false;
     }
   }
@@ -346,7 +348,7 @@ class WorkflowEngine {
   }
 
   private async sendNotification(node: WorkflowNode, context: WorkflowContext): Promise<void> {
-    console.log('[WorkflowEngine] Sending notification:', { node, context });
+    log.debug('Sending notification:', { node, context });
     // Implement notification logic
   }
 
@@ -354,7 +356,7 @@ class WorkflowEngine {
     const url = node.data['url'] as string;
     if (!url) return;
 
-    console.log('[WorkflowEngine] Calling webhook:', url);
+    log.debug('Calling webhook:', url);
     // In production, make actual HTTP request
     // await fetch(url, { method: 'POST', body: JSON.stringify(context) });
   }
