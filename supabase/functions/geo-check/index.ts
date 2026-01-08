@@ -1,5 +1,10 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "https://deno.land/x/supabase@1.3.1/mod.ts";
+/**
+ * @fileoverview Geo Check Edge Function
+ * @description Verifica geolocalização do IP e valida acesso por país
+ */
+
+import { serve } from 'https://deno.land/std@0.208.0/http/server.ts';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -15,7 +20,6 @@ interface GeoResponse {
 }
 
 serve(async (req) => {
-  // Handle CORS preflight
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
@@ -25,7 +29,6 @@ serve(async (req) => {
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // Get IP from request
     const { ip } = await req.json();
     
     if (!ip) {
@@ -35,9 +38,6 @@ serve(async (req) => {
       );
     }
 
-    console.log(`[geo-check] Verificando geolocalização para IP: ${ip}`);
-
-    // Get geolocation using ip-api.com (free, no API key needed)
     let countryCode: string | null = null;
     let countryName: string | null = null;
 
@@ -48,15 +48,11 @@ serve(async (req) => {
       if (geoData.status === 'success') {
         countryCode = geoData.countryCode;
         countryName = geoData.country;
-        console.log(`[geo-check] País detectado: ${countryName} (${countryCode})`);
-      } else {
-        console.log(`[geo-check] Não foi possível detectar país para IP: ${ip}`);
       }
     } catch (geoError) {
-      console.error(`[geo-check] Erro na geolocalização:`, geoError);
+      console.error('[geo-check] Erro na geolocalização:', geoError);
     }
 
-    // Check if country is in whitelist
     let allowed = false;
     let reason = 'País não detectado';
 
@@ -67,7 +63,7 @@ serve(async (req) => {
         .eq('is_active', true);
 
       if (dbError) {
-        console.error(`[geo-check] Erro ao buscar países permitidos:`, dbError);
+        console.error('[geo-check] Erro ao buscar países permitidos:', dbError);
         return new Response(
           JSON.stringify({ error: 'Erro interno ao verificar permissões' }),
           { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -84,7 +80,6 @@ serve(async (req) => {
       }
     }
 
-    // Log the access attempt
     const userAgent = req.headers.get('user-agent') || null;
     
     await supabase.from('geo_access_logs').insert({
@@ -94,8 +89,6 @@ serve(async (req) => {
       allowed,
       user_agent: userAgent,
     });
-
-    console.log(`[geo-check] Resultado: ${allowed ? 'PERMITIDO' : 'BLOQUEADO'} - ${reason}`);
 
     const response: GeoResponse = {
       allowed,

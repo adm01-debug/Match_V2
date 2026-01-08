@@ -1,9 +1,14 @@
-import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import { createClient } from "https://deno.land/x/supabase@1.3.1/mod.ts";
+/**
+ * @fileoverview New Device Alert Edge Function
+ * @description Envia alertas quando um novo dispositivo é detectado
+ */
+
+import { serve } from 'https://deno.land/std@0.208.0/http/server.ts';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
 interface NewDeviceAlertRequest {
@@ -20,18 +25,17 @@ interface NewDeviceAlertRequest {
   loginTime: string;
 }
 
-const handler = async (req: Request): Promise<Response> => {
-  // Handle CORS preflight
-  if (req.method === "OPTIONS") {
+serve(async (req: Request): Promise<Response> => {
+  if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const supabaseUrl = Deno.env.get("SUPABASE_URL");
-    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+    const supabaseUrl = Deno.env.get('SUPABASE_URL');
+    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
     
     if (!supabaseUrl || !supabaseServiceKey) {
-      throw new Error("Missing Supabase configuration");
+      throw new Error('Missing Supabase configuration');
     }
 
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
@@ -39,10 +43,6 @@ const handler = async (req: Request): Promise<Response> => {
     const body: NewDeviceAlertRequest = await req.json();
     const { userId, userEmail, deviceInfo, ipAddress, loginTime } = body;
 
-    console.log(`[new-device-alert] Processing alert for user: ${userId}`);
-    console.log(`[new-device-alert] Device: ${deviceInfo.browser} on ${deviceInfo.os}`);
-
-    // Get user profile for name
     const { data: profile } = await supabase
       .from('profiles')
       .select('nome')
@@ -51,7 +51,6 @@ const handler = async (req: Request): Promise<Response> => {
 
     const userName = profile?.nome || userEmail;
 
-    // Log the new device detection
     await supabase.from('ip_access_logs').insert({
       ip_address: ipAddress || 'unknown',
       user_id: userId,
@@ -61,7 +60,6 @@ const handler = async (req: Request): Promise<Response> => {
       endpoint: '/auth/login',
     });
 
-    // Create internal notification
     await supabase.from('notifications').insert({
       user_id: userId,
       type: 'security',
@@ -70,11 +68,9 @@ const handler = async (req: Request): Promise<Response> => {
       link: '/configuracoes/seguranca',
     });
 
-    // Check if Resend API key is configured for email
-    const resendApiKey = Deno.env.get("RESEND_API_KEY");
+    const resendApiKey = Deno.env.get('RESEND_API_KEY');
     
     if (resendApiKey) {
-      // Send email notification using Resend
       const emailHtml = `
         <!DOCTYPE html>
         <html>
@@ -123,10 +119,10 @@ const handler = async (req: Request): Promise<Response> => {
                 </table>
               </div>
               <p style="color: #374151; font-size: 16px; margin-bottom: 16px;">
-                <strong>Se foi você:</strong> Pode ignorar este email. Recomendamos adicionar este dispositivo como confiável.
+                <strong>Se foi você:</strong> Pode ignorar este email.
               </p>
               <p style="color: #dc2626; font-size: 16px; margin-bottom: 24px;">
-                <strong>Se NÃO foi você:</strong> Altere sua senha imediatamente e ative a autenticação de dois fatores (2FA).
+                <strong>Se NÃO foi você:</strong> Altere sua senha imediatamente.
               </p>
               <div style="text-align: center;">
                 <a href="${Deno.env.get('SITE_URL') || 'https://match-ats.lovable.app'}/configuracoes/seguranca" 
@@ -137,8 +133,7 @@ const handler = async (req: Request): Promise<Response> => {
             </div>
             <div style="background-color: #f9fafb; padding: 20px; text-align: center; border-top: 1px solid #e5e7eb;">
               <p style="color: #6b7280; font-size: 12px; margin: 0;">
-                Este é um email automático de segurança do MATCH ATS.<br>
-                Você recebeu este email porque houve um login de um novo dispositivo.
+                Este é um email automático de segurança do MATCH ATS.
               </p>
             </div>
           </div>
@@ -146,48 +141,42 @@ const handler = async (req: Request): Promise<Response> => {
         </html>
       `;
 
-      const emailResponse = await fetch("https://api.resend.com/emails", {
-        method: "POST",
+      const emailResponse = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${resendApiKey}`,
         },
         body: JSON.stringify({
-          from: "MATCH ATS <security@resend.dev>",
+          from: 'MATCH ATS <security@resend.dev>',
           to: [userEmail],
-          subject: "🔐 Novo dispositivo detectado na sua conta",
+          subject: '🔐 Novo dispositivo detectado na sua conta',
           html: emailHtml,
         }),
       });
 
       if (!emailResponse.ok) {
         const errorText = await emailResponse.text();
-        console.error("[new-device-alert] Email send failed:", errorText);
-      } else {
-        console.log("[new-device-alert] Email sent successfully to:", userEmail);
+        console.error('[new-device-alert] Email send failed:', errorText);
       }
-    } else {
-      console.log("[new-device-alert] RESEND_API_KEY not configured, skipping email");
     }
 
     return new Response(
-      JSON.stringify({ success: true, message: "Alert processed successfully" }),
+      JSON.stringify({ success: true, message: 'Alert processed successfully' }),
       {
         status: 200,
-        headers: { "Content-Type": "application/json", ...corsHeaders },
+        headers: { 'Content-Type': 'application/json', ...corsHeaders },
       }
     );
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    console.error("[new-device-alert] Error:", errorMessage);
+    console.error('[new-device-alert] Error:', errorMessage);
     return new Response(
       JSON.stringify({ error: errorMessage }),
       {
         status: 500,
-        headers: { "Content-Type": "application/json", ...corsHeaders },
+        headers: { 'Content-Type': 'application/json', ...corsHeaders },
       }
     );
   }
-};
-
-serve(handler);
+});

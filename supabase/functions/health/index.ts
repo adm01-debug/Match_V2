@@ -1,10 +1,9 @@
 /**
- * @fileoverview Health check edge function with basic rate limiting
- * @module health
- * @rateLimit 100 requests per minute
+ * @fileoverview Health Check Edge Function
+ * @description Verifica status do sistema
  */
 
-import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
+import { serve } from 'https://deno.land/std@0.208.0/http/server.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -21,7 +20,6 @@ serve(async (req) => {
       status: 'healthy',
       timestamp: new Date().toISOString(),
       version: '1.0.0',
-      uptime: Deno.osUptime ? Deno.osUptime() : 'unknown',
       checks: {
         memory: 'ok',
         database: 'ok',

@@ -1,5 +1,10 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "https://deno.land/x/supabase@1.3.1/mod.ts";
+/**
+ * @fileoverview Password Reset Approval Edge Function
+ * @description Aprova ou rejeita solicitações de reset de senha
+ */
+
+import { serve } from 'https://deno.land/std@0.208.0/http/server.ts';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -50,9 +55,6 @@ serve(async (req) => {
 
     const { requestId, action, reviewNotes, baseUrl }: ApprovalRequest = await req.json();
 
-    console.log(`[password-reset-approval] Processing ${action} for request ${requestId}`);
-
-    // Get the reset request
     const { data: resetRequest, error: fetchError } = await supabase
       .from('password_reset_requests')
       .select('*')
@@ -75,7 +77,6 @@ serve(async (req) => {
     }
 
     if (action === 'reject') {
-      // Update request as rejected
       const { error: updateError } = await supabase
         .from('password_reset_requests')
         .update({
@@ -90,7 +91,6 @@ serve(async (req) => {
         throw updateError;
       }
 
-      // Send rejection email if Resend is configured
       if (resendApiKey) {
         try {
           await sendEmail(
@@ -110,19 +110,15 @@ serve(async (req) => {
         }
       }
 
-      console.log(`[password-reset-approval] Request ${requestId} rejected`);
-
       return new Response(
         JSON.stringify({ success: true, message: 'Solicitação rejeitada' }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
-    // Generate reset token
     const resetToken = crypto.randomUUID();
-    const tokenExpiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
+    const tokenExpiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
 
-    // Update request as approved
     const { error: updateError } = await supabase
       .from('password_reset_requests')
       .update({
@@ -139,10 +135,8 @@ serve(async (req) => {
       throw updateError;
     }
 
-    // Generate reset link
     const resetLink = `${baseUrl}/reset-password?token=${resetToken}`;
 
-    // Send approval email with reset link
     if (resendApiKey) {
       try {
         await sendEmail(
@@ -155,25 +149,19 @@ serve(async (req) => {
             <p>Clique no link abaixo para criar uma nova senha:</p>
             <p><a href="${resetLink}" style="background-color: #3b82f6; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;">Redefinir Senha</a></p>
             <p>Este link é válido por 24 horas.</p>
-            <p>Se você não solicitou esta alteração, ignore este email.</p>
           `,
           resendApiKey
         );
-        console.log(`[password-reset-approval] Reset email sent to ${resetRequest.user_email}`);
       } catch (emailError) {
         console.error('[password-reset-approval] Email error:', emailError);
       }
-    } else {
-      console.log(`[password-reset-approval] Resend not configured, reset link: ${resetLink}`);
     }
-
-    console.log(`[password-reset-approval] Request ${requestId} approved`);
 
     return new Response(
       JSON.stringify({ 
         success: true, 
         message: 'Solicitação aprovada e email enviado',
-        resetLink: resendApiKey ? undefined : resetLink // Only return link if email not sent
+        resetLink: resendApiKey ? undefined : resetLink
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );

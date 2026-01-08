@@ -1,49 +1,9 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+/**
+ * @fileoverview GitHub API Edge Function
+ * @description Proxy para chamadas à API do GitHub
+ */
 
-// Input validation
-interface GitHubApiRequest {
-  owner?: string;
-  repo?: string;
-  action?: string;
-  path?: string;
-}
-
-function isValidRequest(body: GitHubApiRequest): { valid: boolean; error?: string } {
-  if (!body.owner || typeof body.owner !== 'string' || body.owner.length < 1) {
-    return { valid: false, error: 'Invalid owner' };
-  }
-  if (!body.repo || typeof body.repo !== 'string' || body.repo.length < 1) {
-    return { valid: false, error: 'Invalid repo' };
-  }
-  const validActions = ['getTree', 'getFile', 'updateFile', 'createFile'];
-  if (body.action && !validActions.includes(body.action)) {
-    return { valid: false, error: 'Invalid action' };
-  }
-  return { valid: true };
-}
-
-
-// Rate limiting
-const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minute
-const MAX_REQUESTS = 30;
-const requestCounts = new Map<string, { count: number; resetAt: number }>();
-
-const checkRateLimit = (clientId: string): boolean => {
-  const now = Date.now();
-  const record = requestCounts.get(clientId);
-  
-  if (!record || now > record.resetAt) {
-    requestCounts.set(clientId, { count: 1, resetAt: now + RATE_LIMIT_WINDOW });
-    return true;
-  }
-  
-  if (record.count >= MAX_REQUESTS) {
-    return false;
-  }
-  
-  record.count++;
-  return true;
-};
+import { serve } from 'https://deno.land/std@0.208.0/http/server.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -58,22 +18,13 @@ serve(async (req) => {
   try {
     const GITHUB_PAT = Deno.env.get('GITHUB_PAT');
     
-    // Debug: verificar se token existe e seu formato
-    console.log(`Token exists: ${!!GITHUB_PAT}`);
-    console.log(`Token length: ${GITHUB_PAT?.length || 0}`);
-    console.log(`Token starts with: ${GITHUB_PAT?.substring(0, 4) || 'N/A'}`);
-    console.log(`Token trimmed length: ${GITHUB_PAT?.trim().length || 0}`);
-    
     if (!GITHUB_PAT) {
       throw new Error('GITHUB_PAT is not configured');
     }
     
-    // Usar token limpo (sem espaços)
     const cleanToken = GITHUB_PAT.trim();
 
     const { endpoint, method = 'GET', body } = await req.json();
-    
-    console.log(`GitHub API Request: ${method} ${endpoint}`);
 
     const response = await fetch(`https://api.github.com${endpoint}`, {
       method,
@@ -87,8 +38,6 @@ serve(async (req) => {
     });
 
     const data = await response.json();
-    
-    console.log(`GitHub API Response: ${response.status}`);
 
     if (!response.ok) {
       console.error('GitHub API Error:', data);

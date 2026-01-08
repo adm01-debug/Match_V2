@@ -1,46 +1,9 @@
 /**
- * @fileoverview parse-resume Edge Function
- * @description Handles parse-resume operations for the Match ATS system
- * @version 1.0.0
- * @author Match ATS Team
+ * @fileoverview Parse Resume Edge Function
+ * @description Extrai informações de currículos usando IA
  */
 
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-
-import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
-
-
-// Timeout configuration
-const TIMEOUT_MS = 30000;
-const createTimeoutSignal = () => {
-  const controller = new AbortController();
-  setTimeout(() => controller.abort(), TIMEOUT_MS);
-  return controller.signal;
-};
-
-// Input validation schema
-const RequestSchema = z.object({
-  // Add your schema here
-}).passthrough();
-
-
-// Rate limiting helper
-const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
-const RATE_LIMIT = 100;
-const RATE_WINDOW = 60000; // 1 minute
-
-function checkRateLimit(clientId: string): boolean {
-  const now = Date.now();
-  const client = rateLimitMap.get(clientId);
-  if (!client || now > client.resetTime) {
-    rateLimitMap.set(clientId, { count: 1, resetTime: now + RATE_WINDOW });
-    return true;
-  }
-  if (client.count >= RATE_LIMIT) return false;
-  client.count++;
-  return true;
-}
-
+import { serve } from 'https://deno.land/std@0.208.0/http/server.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -74,7 +37,6 @@ interface ParsedResume {
 }
 
 serve(async (req) => {
-  // Handle CORS preflight
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
@@ -120,7 +82,7 @@ O JSON deve ter exatamente esta estrutura:
       "empresa": "Nome da empresa",
       "cargo": "Cargo ocupado",
       "periodo": "Jan/2020 - Dez/2023",
-      "descricao": "Principais responsabilidades e conquistas"
+      "descricao": "Principais responsabilidades"
     }
   ],
   "formacao": [
@@ -128,10 +90,10 @@ O JSON deve ter exatamente esta estrutura:
       "instituicao": "Nome da instituição",
       "curso": "Nome do curso",
       "periodo": "2015 - 2019",
-      "nivel": "Graduação/Pós-graduação/Mestrado/etc"
+      "nivel": "Graduação/Pós-graduação/etc"
     }
   ],
-  "resumo": "Breve resumo profissional do candidato (2-3 frases)"
+  "resumo": "Breve resumo profissional (2-3 frases)"
 }
 
 Retorne APENAS o JSON, sem markdown, sem explicações.
@@ -163,7 +125,6 @@ ${fileContent}`;
     });
 
     if (!response.ok) {
-      const errorText = await response.text();
       return new Response(
         JSON.stringify({ 
           error: 'Erro no serviço de IA',
@@ -186,26 +147,17 @@ ${fileContent}`;
       );
     }
 
-    // Limpar e parsear JSON
     let jsonContent = content.trim();
-    
-    // Remover markdown se presente
-    if (jsonContent.startsWith('```json')) {
-      jsonContent = jsonContent.slice(7);
-    }
-    if (jsonContent.startsWith('```')) {
-      jsonContent = jsonContent.slice(3);
-    }
-    if (jsonContent.endsWith('```')) {
-      jsonContent = jsonContent.slice(0, -3);
-    }
+    if (jsonContent.startsWith('```json')) jsonContent = jsonContent.slice(7);
+    if (jsonContent.startsWith('```')) jsonContent = jsonContent.slice(3);
+    if (jsonContent.endsWith('```')) jsonContent = jsonContent.slice(0, -3);
     jsonContent = jsonContent.trim();
 
     let parsedData: ParsedResume;
     
     try {
       parsedData = JSON.parse(jsonContent);
-    } catch (parseError) {
+    } catch {
       return new Response(
         JSON.stringify({ 
           error: 'Erro ao processar resposta',
@@ -215,7 +167,6 @@ ${fileContent}`;
       );
     }
 
-    // Validar campos obrigatórios
     if (!parsedData.nome || !parsedData.email) {
       return new Response(
         JSON.stringify({ 
@@ -226,7 +177,6 @@ ${fileContent}`;
       );
     }
 
-    // Normalizar dados
     const normalizedData: ParsedResume = {
       nome: parsedData.nome,
       email: parsedData.email.toLowerCase(),
