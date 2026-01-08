@@ -478,6 +478,13 @@ export type Database = {
             referencedRelation: "candidatos"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "entrevistas_vaga_id_fkey"
+            columns: ["vaga_id"]
+            isOneToOne: false
+            referencedRelation: "vagas"
+            referencedColumns: ["id"]
+          },
         ]
       }
       geo_access_logs: {
