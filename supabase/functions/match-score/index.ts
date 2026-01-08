@@ -1,72 +1,15 @@
 /**
- * @fileoverview match-score Edge Function
- * @description Handles match-score operations for the Match ATS system
- * @version 1.0.0
- * @author Match ATS Team
+ * @fileoverview Match Score Edge Function
+ * @description Calcula compatibilidade entre candidatos e vagas usando IA
  */
 
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "https://deno.land/x/supabase@1.3.1/mod.ts";
-
-import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
-
-
-// Timeout configuration
-const TIMEOUT_MS = 30000;
-const createTimeoutSignal = () => {
-  const controller = new AbortController();
-  setTimeout(() => controller.abort(), TIMEOUT_MS);
-  return controller.signal;
-};
-
-// Input validation schema
-const RequestSchema = z.object({
-  // Add your schema here
-}).passthrough();
-
-
-// Rate limiting helper
-const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
-const RATE_LIMIT = 100;
-const RATE_WINDOW = 60000; // 1 minute
-
-function checkRateLimit(clientId: string): boolean {
-  const now = Date.now();
-  const client = rateLimitMap.get(clientId);
-  if (!client || now > client.resetTime) {
-    rateLimitMap.set(clientId, { count: 1, resetTime: now + RATE_WINDOW });
-    return true;
-  }
-  if (client.count >= RATE_LIMIT) return false;
-  client.count++;
-  return true;
-}
-
+import { serve } from 'https://deno.land/std@0.208.0/http/server.ts';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
-
-interface Candidato {
-  id: string;
-  nome: string;
-  email: string;
-  habilidades: string[];
-  experiencia_anos: number;
-  formacao: any[];
-  cargo_atual: string | null;
-}
-
-interface Vaga {
-  id: string;
-  titulo: string;
-  departamento: string;
-  habilidades_obrigatorias: string[];
-  habilidades_desejaveis: string[];
-  nivel: string;
-  requisitos_obrigatorios: string;
-}
 
 interface MatchResult {
   scoreTotal: number;
@@ -108,10 +51,8 @@ serve(async (req) => {
       );
     }
 
-    // Criar cliente Supabase
     const supabase = createClient(SUPABASE_URL!, SUPABASE_ANON_KEY!);
 
-    // Buscar candidato do banco
     const { data: candidato, error: candidatoError } = await supabase
       .from('candidatos')
       .select('*')
@@ -125,7 +66,6 @@ serve(async (req) => {
       );
     }
 
-    // Buscar vaga do banco
     const { data: vaga, error: vagaError } = await supabase
       .from('vagas')
       .select('*')
@@ -139,22 +79,16 @@ serve(async (req) => {
       );
     }
 
-    // Construir prompt para IA
     const prompt = `Analise a compatibilidade entre este candidato e esta vaga e retorne um JSON com a análise.
 
 CANDIDATO:
 - Nome: ${candidato.nome}
-- Cargo Atual: ${candidato.cargo_atual || 'Não informado'}
-- Anos de Experiência: ${candidato.experiencia_anos}
 - Habilidades: ${(candidato.habilidades || []).join(', ') || 'Não informadas'}
 - Formação: ${JSON.stringify(candidato.formacao || [])}
 
 VAGA:
 - Título: ${vaga.titulo}
 - Departamento: ${vaga.departamento}
-- Nível: ${vaga.nivel || 'Não especificado'}
-- Habilidades Obrigatórias: ${(vaga.habilidades_obrigatorias || []).join(', ') || 'Não especificadas'}
-- Habilidades Desejáveis: ${(vaga.habilidades_desejaveis || []).join(', ') || 'Não especificadas'}
 - Requisitos: ${vaga.requisitos_obrigatorios || 'Não especificados'}
 
 Retorne APENAS um JSON válido (sem markdown) com esta estrutura:
@@ -212,7 +146,6 @@ Retorne APENAS um JSON válido (sem markdown) com esta estrutura:
       );
     }
 
-    // Limpar e parsear JSON
     let jsonContent = content.trim();
     if (jsonContent.startsWith('```json')) jsonContent = jsonContent.slice(7);
     if (jsonContent.startsWith('```')) jsonContent = jsonContent.slice(3);
@@ -224,34 +157,24 @@ Retorne APENAS um JSON válido (sem markdown) com esta estrutura:
     try {
       matchResult = JSON.parse(jsonContent);
     } catch {
-      // Fallback: calcular score básico
       const habilidadesCandidato = (candidato.habilidades || []).map((h: string) => h.toLowerCase());
-      const habilidadesVaga = (vaga.habilidades_obrigatorias || []).map((h: string) => h.toLowerCase());
-      
-      const match = habilidadesCandidato.filter((h: string) => 
-        habilidadesVaga.some((v: string) => h.includes(v) || v.includes(h))
-      );
-      
-      const scoreBasico = habilidadesVaga.length > 0 
-        ? Math.round((match.length / habilidadesVaga.length) * 100)
-        : 50;
+      const scoreBasico = 50;
 
       matchResult = {
         scoreTotal: scoreBasico,
         scoreHabilidades: scoreBasico,
-        scoreExperiencia: Math.min(candidato.experiencia_anos * 10, 100),
+        scoreExperiencia: 50,
         scoreFormacao: 50,
-        habilidadesMatch: match,
-        habilidadesFaltantes: habilidadesVaga.filter((h: string) => !match.includes(h)),
-        habilidadesExtras: habilidadesCandidato.filter((h: string) => !habilidadesVaga.includes(h)),
-        analise: 'Análise calculada automaticamente com base nas habilidades.',
-        recomendacao: scoreBasico >= 70 ? 'Recomendado' : scoreBasico >= 50 ? 'Considerar' : 'Não Recomendado',
-        pontosFortes: match.slice(0, 3),
+        habilidadesMatch: [],
+        habilidadesFaltantes: [],
+        habilidadesExtras: habilidadesCandidato,
+        analise: 'Análise calculada automaticamente.',
+        recomendacao: 'Considerar',
+        pontosFortes: [],
         pontosAtencao: [],
       };
     }
 
-    // Garantir que scores estão no range correto
     matchResult.scoreTotal = Math.max(0, Math.min(100, matchResult.scoreTotal));
     matchResult.scoreHabilidades = Math.max(0, Math.min(100, matchResult.scoreHabilidades));
     matchResult.scoreExperiencia = Math.max(0, Math.min(100, matchResult.scoreExperiencia));

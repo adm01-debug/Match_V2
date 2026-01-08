@@ -1,52 +1,12 @@
 /**
- * @fileoverview send-email Edge Function
- * @description Handles send-email operations for the Match ATS system
- * @version 1.0.0
- * @author Match ATS Team
+ * @fileoverview Send Email Edge Function
+ * @description Envio de emails via Resend API
  */
 
-// Edge Function: Envio de emails via Resend
-// Deploy: supabase functions deploy send-email
+import { serve } from 'https://deno.land/std@0.208.0/http/server.ts';
 
-import { serve } from "https://deno.land/std@0.208.0/http/server.ts";
-
-import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
-
-
-// Timeout configuration
-const TIMEOUT_MS = 30000;
-const createTimeoutSignal = () => {
-  const controller = new AbortController();
-  setTimeout(() => controller.abort(), TIMEOUT_MS);
-  return controller.signal;
-};
-
-// Input validation schema
-const RequestSchema = z.object({
-  // Add your schema here
-}).passthrough();
-
-
-// Rate limiting helper
-const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
-const RATE_LIMIT = 100;
-const RATE_WINDOW = 60000; // 1 minute
-
-function checkRateLimit(clientId: string): boolean {
-  const now = Date.now();
-  const client = rateLimitMap.get(clientId);
-  if (!client || now > client.resetTime) {
-    rateLimitMap.set(clientId, { count: 1, resetTime: now + RATE_WINDOW });
-    return true;
-  }
-  if (client.count >= RATE_LIMIT) return false;
-  client.count++;
-  return true;
-}
-
-
-const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
-const FROM_EMAIL = Deno.env.get("FROM_EMAIL") || "noreply@match-ats.com";
+const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY');
+const FROM_EMAIL = Deno.env.get('FROM_EMAIL') || 'noreply@match-ats.com';
 
 interface EmailRequest {
   to: string;
@@ -56,13 +16,12 @@ interface EmailRequest {
 }
 
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
 serve(async (req) => {
-  // Handle CORS preflight
-  if (req.method === "OPTIONS") {
+  if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
@@ -71,24 +30,24 @@ serve(async (req) => {
 
     if (!to || !subject || !html) {
       return new Response(
-        JSON.stringify({ error: "Missing required fields: to, subject, html" }),
-        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        JSON.stringify({ error: 'Missing required fields: to, subject, html' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
     if (!RESEND_API_KEY) {
-      console.error("RESEND_API_KEY not configured");
+      console.error('RESEND_API_KEY not configured');
       return new Response(
-        JSON.stringify({ error: "Email service not configured" }),
-        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        JSON.stringify({ error: 'Email service not configured' }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
-    const response = await fetch("https://api.resend.com/emails", {
-      method: "POST",
+    const response = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
       headers: {
-        "Authorization": `Bearer ${RESEND_API_KEY}`,
-        "Content-Type": "application/json",
+        'Authorization': `Bearer ${RESEND_API_KEY}`,
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         from: FROM_EMAIL,
@@ -102,25 +61,23 @@ serve(async (req) => {
     const data = await response.json();
 
     if (!response.ok) {
-      console.error("Resend API error:", data);
+      console.error('Resend API error:', data);
       return new Response(
-        JSON.stringify({ error: "Failed to send email", details: data }),
-        { status: response.status, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        JSON.stringify({ error: 'Failed to send email', details: data }),
+        { status: response.status, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
-    console.log("Email sent successfully:", data.id);
-
     return new Response(
       JSON.stringify({ success: true, id: data.id }),
-      { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
 
   } catch (error) {
-    console.error("Error sending email:", error);
+    console.error('Error sending email:', error);
     return new Response(
-      JSON.stringify({ error: "Internal server error" }),
-      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      JSON.stringify({ error: 'Internal server error' }),
+      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }
 });

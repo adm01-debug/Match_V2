@@ -3,11 +3,9 @@
  * @description Verifica se o IP do cliente está na whitelist
  */
 
-import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
+import { serve } from 'https://deno.land/std@0.208.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-
-// Rate limiting configuration
 const RATE_LIMIT = 100;
 const WINDOW_MS = 60000;
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
@@ -29,18 +27,6 @@ function checkRateLimit(ip: string): boolean {
   return true;
 }
 
-function isValidIP(ip: string): boolean {
-  const ipv4Pattern = /^(\d{1,3}\.){3}\d{1,3}$/;
-  const ipv6Pattern = /^([0-9a-fA-F]{0,4}:){2,7}[0-9a-fA-F]{0,4}$/;
-  
-  if (ip === 'localhost' || ip === '::1') return true;
-  if (ipv4Pattern.test(ip)) {
-    const parts = ip.split('.').map(Number);
-    return parts.every(p => p >= 0 && p <= 255);
-  }
-  return ipv6Pattern.test(ip);
-}
-
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-forwarded-for, x-real-ip',
@@ -59,18 +45,15 @@ interface IPCheckResponse {
 }
 
 serve(async (req: Request) => {
-  // Handle CORS preflight
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    // Obter IP do cliente
     let clientIP = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() 
       || req.headers.get('x-real-ip') 
       || 'unknown';
 
-    // Check rate limit
     if (!checkRateLimit(clientIP)) {
       return new Response(
         JSON.stringify({ error: 'Rate limit exceeded', retryAfter: 60 }),
@@ -78,8 +61,6 @@ serve(async (req: Request) => {
       );
     }
 
-
-    // Se foi enviado um IP no body, usar esse (para testes)
     if (req.method === 'POST') {
       try {
         const body: IPCheckRequest = await req.json();
@@ -95,51 +76,26 @@ serve(async (req: Request) => {
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // Verificar se IP está na whitelist
     const { data: allowedIP, error } = await supabase
       .from('allowed_ips')
       .select('*')
-      .eq('ip', clientIP)
+      .eq('ip_address', clientIP)
       .eq('is_active', true)
       .single();
 
     const checkedAt = new Date().toISOString();
 
-    // Se encontrou o IP e está ativo
     if (allowedIP && !error) {
-      // Verificar expiração
-      if (allowedIP.expires_at && new Date(allowedIP.expires_at) < new Date()) {
-        // IP expirado
-        await supabase.from('ip_access_logs').insert({
-          ip: clientIP,
-          action: 'EXPIRED',
-          reason: `Acesso expirado em ${allowedIP.expires_at}`,
-        });
-
-        const response: IPCheckResponse = {
-          allowed: false,
-          ip: clientIP,
-          reason: 'Seu acesso expirou. Entre em contato com o administrador.',
-          checkedAt,
-        };
-
-        return new Response(JSON.stringify(response), {
-          status: 403,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        });
-      }
-
-      // IP válido
       await supabase.from('ip_access_logs').insert({
-        ip: clientIP,
+        ip_address: clientIP,
         action: 'ALLOWED',
-        reason: allowedIP.description,
+        allowed: true,
       });
 
       const response: IPCheckResponse = {
         allowed: true,
         ip: clientIP,
-        reason: `Acesso permitido: ${allowedIP.description}`,
+        reason: `Acesso permitido: ${allowedIP.description || 'IP autorizado'}`,
         checkedAt,
       };
 
@@ -149,11 +105,10 @@ serve(async (req: Request) => {
       });
     }
 
-    // IP não encontrado - bloquear
     await supabase.from('ip_access_logs').insert({
-      ip: clientIP,
+      ip_address: clientIP,
       action: 'BLOCKED',
-      reason: 'IP não está na whitelist',
+      allowed: false,
     });
 
     const response: IPCheckResponse = {
