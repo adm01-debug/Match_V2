@@ -1,5 +1,5 @@
-// Authentication
-export { useAuth } from './useAuth';
+// Authentication - re-exported from AuthContext
+export { useAuth } from '@/contexts/AuthContext';
 
 // Page Title
 export { usePageTitle, PAGE_TITLES } from './usePageTitle';
