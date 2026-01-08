@@ -3,6 +3,10 @@
  * API para publicação de vagas e gestão de candidaturas
  */
 
+import { createContextLogger } from './logger';
+
+const log = createContextLogger('VagasService');
+
 export interface VagasJobPosting {
   titulo: string;
   descricao: string;
@@ -120,7 +124,7 @@ class VagasService {
         return await operation();
       } catch (error) {
         lastError = error instanceof Error ? error : new Error(String(error));
-        console.warn(`[VagasService] Attempt ${attempt}/${retries} failed:`, lastError.message);
+        log.warn(`Attempt ${attempt}/${retries} failed:`, lastError.message);
         
         if (attempt < retries) {
           await new Promise(resolve => setTimeout(resolve, this.RETRY_DELAY * attempt));
@@ -136,7 +140,7 @@ class VagasService {
     this.validateJobPosting(job);
     
     return this.withRetry(async () => {
-      console.log('[VagasService] Publishing job:', job.titulo);
+      log.debug('Publishing job:', job.titulo);
       
       const mockId = `vagas-${Date.now()}`;
       return {
@@ -154,7 +158,7 @@ class VagasService {
     }
     
     return this.withRetry(async () => {
-      console.log('[VagasService] Updating job:', vagaId, updates);
+      log.debug('Updating job:', { vagaId, updates });
     });
   }
 
@@ -166,7 +170,7 @@ class VagasService {
     }
     
     return this.withRetry(async () => {
-      console.log('[VagasService] Pausing job:', vagaId);
+      log.debug('Pausing job:', vagaId);
     });
   }
 
@@ -178,7 +182,7 @@ class VagasService {
     }
     
     return this.withRetry(async () => {
-      console.log('[VagasService] Closing job:', vagaId);
+      log.debug('Closing job:', vagaId);
     });
   }
 
@@ -190,7 +194,7 @@ class VagasService {
     }
     
     return this.withRetry(async () => {
-      console.log('[VagasService] Getting applications:', vagaId, status ?? 'all');
+      log.debug('Getting applications:', { vagaId, status: status ?? 'all' });
       return [];
     });
   }
@@ -210,7 +214,7 @@ class VagasService {
     }
     
     return this.withRetry(async () => {
-      console.log('[VagasService] Updating candidate status:', vagaId, candidatoId, status);
+      log.debug('Updating candidate status:', { vagaId, candidatoId, status });
     });
   }
 
@@ -240,7 +244,7 @@ class VagasService {
     }
     
     try {
-      console.log('[VagasService] Testing connection...');
+      log.debug('Testing connection...');
       return { success: true, message: 'Conexão estabelecida com sucesso' };
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Erro desconhecido';

@@ -2,6 +2,9 @@ import { useEffect, useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { generateDeviceFingerprint, DeviceInfo } from '@/lib/deviceFingerprint';
 import { useAuth } from './useAuth';
+import { createContextLogger } from '@/services/logger';
+
+const log = createContextLogger('NewDeviceDetection');
 
 interface UseNewDeviceDetectionReturn {
   isNewDevice: boolean;
@@ -49,7 +52,7 @@ export const useNewDeviceDetection = (): UseNewDeviceDetectionReturn => {
           const ipData = await ipResponse.json();
           ipAddress = ipData.ip;
         } catch {
-          console.log('Could not fetch IP address');
+          log.debug('Could not fetch IP address');
         }
 
         // Send alert via edge function
@@ -69,9 +72,9 @@ export const useNewDeviceDetection = (): UseNewDeviceDetectionReturn => {
               loginTime: new Date().toISOString(),
             },
           });
-          console.log('New device alert sent successfully');
+          log.info('New device alert sent successfully');
         } catch (error) {
-          console.error('Failed to send new device alert:', error);
+          log.error('Failed to send new device alert:', error);
         }
       } else {
         // Update last used time
@@ -83,7 +86,7 @@ export const useNewDeviceDetection = (): UseNewDeviceDetectionReturn => {
 
       setHasChecked(true);
     } catch (error) {
-      console.error('Error checking device:', error);
+      log.error('Error checking device:', error);
     }
   }, [user?.id, user?.email, hasChecked]);
 
@@ -109,7 +112,7 @@ export const useNewDeviceDetection = (): UseNewDeviceDetectionReturn => {
       setIsNewDevice(false);
       setShowAlert(false);
     } catch (error) {
-      console.error('Error trusting device:', error);
+      log.error('Error trusting device:', error);
       throw error;
     }
   }, [user?.id, deviceInfo]);

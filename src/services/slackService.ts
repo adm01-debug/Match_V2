@@ -4,6 +4,9 @@
  */
 
 import * as crypto from 'crypto';
+import { createContextLogger } from './logger';
+
+const log = createContextLogger('SlackService');
 
 export interface SlackConfig {
   webhookUrl?: string;
@@ -95,7 +98,7 @@ class SlackService {
         return await operation();
       } catch (error) {
         lastError = error instanceof Error ? error : new Error(String(error));
-        console.warn(`[SlackService] Attempt ${attempt}/${retries} failed:`, lastError.message);
+        log.warn(`Attempt ${attempt}/${retries} failed:`, lastError.message);
         
         if (attempt < retries) {
           await new Promise(resolve => setTimeout(resolve, this.RETRY_DELAY * attempt));
@@ -129,7 +132,7 @@ class SlackService {
       // }
       // return data;
 
-      console.log('[SlackService] Enviando mensagem:', message);
+      log.debug('Enviando mensagem:', message);
       return { ok: true, ts: Date.now().toString(), channel: message.channel };
     });
   }
@@ -155,7 +158,7 @@ class SlackService {
       // }
       // return true;
 
-      console.log('[SlackService] Enviando webhook:', { text, blocks });
+      log.debug('Enviando webhook:', { text, blocks });
       return true;
     });
   }
@@ -261,7 +264,7 @@ class SlackService {
 
   verifySignature(signature: string, timestamp: string, body: string): boolean {
     if (!this.config.signingSecret) {
-      console.warn('[SlackService] Signing secret não configurado');
+      log.warn('Signing secret não configurado');
       return false;
     }
 
@@ -271,7 +274,7 @@ class SlackService {
       const currentTimestamp = Math.floor(Date.now() / 1000);
       
       if (Math.abs(currentTimestamp - requestTimestamp) > 60 * 5) {
-        console.warn('[SlackService] Timestamp muito antigo');
+        log.warn('Timestamp muito antigo');
         return false;
       }
 
@@ -286,7 +289,7 @@ class SlackService {
         Buffer.from(signature)
       );
     } catch (error) {
-      console.error('[SlackService] Erro na verificação de assinatura:', error);
+      log.error('Erro na verificação de assinatura:', error);
       return false;
     }
   }

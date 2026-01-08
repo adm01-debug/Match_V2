@@ -4,6 +4,9 @@
  */
 
 import * as crypto from 'crypto';
+import { createContextLogger } from './logger';
+
+const log = createContextLogger('InfoJobsService');
 
 export interface InfoJobsPosting {
   titulo: string;
@@ -170,7 +173,7 @@ class InfoJobsService {
     }
     
     return this.withRetry(async () => {
-      console.log('[InfoJobsService] Authenticating...');
+      log.debug('Authenticating...');
       // Em produção, fazer chamada OAuth real
       const mockToken = `ij-token-${Date.now()}`;
       this.accessToken = mockToken;
@@ -185,7 +188,7 @@ class InfoJobsService {
     await this.authenticate();
     
     return this.withRetry(async () => {
-      console.log('[InfoJobsService] Publishing job:', job.titulo);
+      log.debug('Publishing job:', job.titulo);
       
       const mockId = `ij-${Date.now()}`;
       return {
@@ -205,7 +208,7 @@ class InfoJobsService {
     await this.authenticate();
     
     return this.withRetry(async () => {
-      console.log('[InfoJobsService] Updating job:', ofertaId, updates);
+      log.debug('Updating job:', { ofertaId, updates });
     });
   }
 
@@ -219,7 +222,7 @@ class InfoJobsService {
     await this.authenticate();
     
     return this.withRetry(async () => {
-      console.log('[InfoJobsService] Closing job:', ofertaId);
+      log.debug('Closing job:', ofertaId);
     });
   }
 
@@ -236,7 +239,7 @@ class InfoJobsService {
     await this.authenticate();
     
     return this.withRetry(async () => {
-      console.log('[InfoJobsService] Renewing job:', ofertaId, 'for', days, 'days');
+      log.debug('Renewing job:', { ofertaId, days });
     });
   }
 
@@ -250,7 +253,7 @@ class InfoJobsService {
     await this.authenticate();
     
     return this.withRetry(async () => {
-      console.log('[InfoJobsService] Getting applications:', ofertaId);
+      log.debug('Getting applications:', ofertaId);
       return [];
     });
   }
@@ -272,7 +275,7 @@ class InfoJobsService {
     await this.authenticate();
     
     return this.withRetry(async () => {
-      console.log('[InfoJobsService] Updating status:', ofertaId, candidatoId, status);
+      log.debug('Updating status:', { ofertaId, candidatoId, status });
     });
   }
 

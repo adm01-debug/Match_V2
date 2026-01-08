@@ -1,3 +1,7 @@
+import { createContextLogger } from './logger';
+
+const log = createContextLogger('JobBoardService');
+
 interface VagaData {
   id: string;
   titulo: string;
@@ -42,7 +46,7 @@ export const jobBoardService = {
 
   async publishToBoard(board: JobBoard, vaga: VagaData): Promise<string> {
     // Simulated API call - in production, use actual board APIs
-    console.log(`Publishing to ${board.name}:`, vaga.titulo);
+    log.debug(`Publishing to ${board.name}:`, vaga.titulo);
     return `ext-${board.id}-${Date.now()}`;
   },
 

@@ -3,6 +3,10 @@
  * API para publicação de vagas e acesso ao banco de currículos
  */
 
+import { createContextLogger } from './logger';
+
+const log = createContextLogger('CathoService');
+
 export interface CathoJobPosting {
   titulo: string;
   descricao: string;
@@ -144,7 +148,7 @@ class CathoService {
         return await operation();
       } catch (error) {
         lastError = error instanceof Error ? error : new Error(String(error));
-        console.warn(`[CathoService] Attempt ${attempt}/${retries} failed:`, lastError.message);
+        log.warn(`Attempt ${attempt}/${retries} failed:`, lastError.message);
         
         if (attempt < retries) {
           await new Promise(resolve => setTimeout(resolve, this.RETRY_DELAY * attempt));
@@ -168,7 +172,7 @@ class CathoService {
     }
     
     return this.withRetry(async () => {
-      console.log('[CathoService] Getting access token...');
+      log.debug('Getting access token...');
       // Em produção, fazer chamada OAuth real
       const mockToken = `catho-token-${Date.now()}`;
       this.config!.accessToken = mockToken;
@@ -183,7 +187,7 @@ class CathoService {
     await this.getAccessToken();
     
     return this.withRetry(async () => {
-      console.log('[CathoService] Publishing job:', job.titulo);
+      log.debug('Publishing job:', job.titulo);
       
       const mockId = `catho-${Date.now()}`;
       return {
@@ -203,7 +207,7 @@ class CathoService {
     await this.getAccessToken();
     
     return this.withRetry(async () => {
-      console.log('[CathoService] Updating job:', vagaId, updates);
+      log.debug('Updating job:', { vagaId, updates });
     });
   }
 
@@ -217,7 +221,7 @@ class CathoService {
     await this.getAccessToken();
     
     return this.withRetry(async () => {
-      console.log('[CathoService] Closing job:', vagaId);
+      log.debug('Closing job:', vagaId);
     });
   }
 
@@ -235,7 +239,7 @@ class CathoService {
     await this.getAccessToken();
     
     return this.withRetry(async () => {
-      console.log('[CathoService] Searching candidates:', filters);
+      log.debug('Searching candidates:', filters);
       return {
         candidates: [],
         total: 0,
@@ -255,7 +259,7 @@ class CathoService {
     await this.getAccessToken();
     
     return this.withRetry(async () => {
-      console.log('[CathoService] Getting candidate:', candidateId);
+      log.debug('Getting candidate:', candidateId);
       return null;
     });
   }
@@ -270,7 +274,7 @@ class CathoService {
     await this.getAccessToken();
     
     return this.withRetry(async () => {
-      console.log('[CathoService] Getting candidates for job:', vagaId);
+      log.debug('Getting candidates for job:', vagaId);
       return [];
     });
   }
@@ -285,7 +289,7 @@ class CathoService {
       return { success: true, message: 'Conexão estabelecida com sucesso' };
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Erro desconhecido';
-      console.error('[CathoService] Connection test failed:', message);
+      log.error('Connection test failed:', message);
       return { success: false, message };
     }
   }
