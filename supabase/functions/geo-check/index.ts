@@ -25,11 +25,30 @@ serve(async (req) => {
   }
 
   try {
-    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
-    const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+    const supabaseUrl = Deno.env.get('SUPABASE_URL');
+    const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+    
+    if (!supabaseUrl || !supabaseKey) {
+      console.error('[geo-check] Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY');
+      return new Response(
+        JSON.stringify({ error: 'Configuration error' }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    const { ip } = await req.json();
+    let body;
+    try {
+      body = await req.json();
+    } catch {
+      return new Response(
+        JSON.stringify({ error: 'Invalid JSON body' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const { ip } = body;
     
     if (!ip) {
       return new Response(
@@ -38,12 +57,16 @@ serve(async (req) => {
       );
     }
 
+    console.log(`[geo-check] Checking IP: ${ip}`);
+
     let countryCode: string | null = null;
     let countryName: string | null = null;
 
     try {
       const geoResponse = await fetch(`http://ip-api.com/json/${ip}?fields=status,countryCode,country`);
       const geoData = await geoResponse.json();
+      
+      console.log(`[geo-check] Geo API response:`, geoData);
       
       if (geoData.status === 'success') {
         countryCode = geoData.countryCode;
@@ -70,6 +93,8 @@ serve(async (req) => {
         );
       }
 
+      console.log(`[geo-check] Allowed countries from DB:`, allowedCountries);
+
       const matchedCountry = allowedCountries?.find(c => c.country_code === countryCode);
       
       if (matchedCountry) {
@@ -82,13 +107,17 @@ serve(async (req) => {
 
     const userAgent = req.headers.get('user-agent') || null;
     
-    await supabase.from('geo_access_logs').insert({
-      ip_address: ip,
-      country_code: countryCode,
-      country_name: countryName,
-      allowed,
-      user_agent: userAgent,
-    });
+    try {
+      await supabase.from('geo_access_logs').insert({
+        ip_address: ip,
+        country_code: countryCode,
+        country_name: countryName,
+        allowed,
+        user_agent: userAgent,
+      });
+    } catch (logError) {
+      console.error('[geo-check] Erro ao registrar log:', logError);
+    }
 
     const response: GeoResponse = {
       allowed,
@@ -97,6 +126,8 @@ serve(async (req) => {
       ip,
       reason,
     };
+
+    console.log(`[geo-check] Response:`, response);
 
     return new Response(
       JSON.stringify(response),
