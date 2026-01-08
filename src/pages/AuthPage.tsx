@@ -1,14 +1,15 @@
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useToast } from '@/hooks/use-toast';
-import { Briefcase, Loader2, Mail, Lock, User } from 'lucide-react';
+import { Briefcase, Loader2, Mail, Lock, User, ShieldAlert } from 'lucide-react';
 import { z } from 'zod';
 
 const loginSchema = z.object({
@@ -26,10 +27,16 @@ const signupSchema = z.object({
   path: ['confirmPassword'],
 });
 
+interface LocationState {
+  from?: string;
+  requiresAuth?: boolean;
+}
+
 const AuthPage = () => {
   usePageTitle('Login');
 
   const navigate = useNavigate();
+  const location = useLocation();
   const { user, signIn, signUp, loading: authLoading } = useAuth();
   const { toast } = useToast();
   
@@ -38,11 +45,18 @@ const AuthPage = () => {
   const [signupData, setSignupData] = useState({ nome: '', email: '', password: '', confirmPassword: '' });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
+  // Get redirect info from location state
+  const locationState = location.state as LocationState | null;
+  const redirectedFrom = locationState?.from;
+  const requiresAuth = locationState?.requiresAuth;
+
   useEffect(() => {
     if (user && !authLoading) {
-      navigate('/');
+      // Redirect back to the original page or dashboard
+      const destination = redirectedFrom || '/';
+      navigate(destination, { replace: true });
     }
-  }, [user, authLoading, navigate]);
+  }, [user, authLoading, navigate, redirectedFrom]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -127,6 +141,16 @@ const AuthPage = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-muted/30 p-4">
       <div className="w-full max-w-md">
+        {/* Auth Required Alert */}
+        {requiresAuth && redirectedFrom && (
+          <Alert className="mb-4 border-amber-500/50 bg-amber-50 dark:bg-amber-950/20">
+            <ShieldAlert className="h-4 w-4 text-amber-600" />
+            <AlertDescription className="text-amber-800 dark:text-amber-200">
+              Você precisa fazer login para acessar essa página.
+            </AlertDescription>
+          </Alert>
+        )}
+
         <div className="flex flex-col items-center mb-8">
           <div className="p-3 rounded-xl bg-primary/10 mb-4">
             <Briefcase className="h-10 w-10 text-primary" />
