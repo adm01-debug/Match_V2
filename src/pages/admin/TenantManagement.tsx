@@ -21,8 +21,8 @@ export default function TenantManagement() {
     }
   };
 
-  const handleRemoveMember = (userId: string) => {
-    console.log('Remove member:', userId);
+  const handleRemoveMember = (_userId: string) => {
+    // TODO: Implement member removal
   };
 
   return (
