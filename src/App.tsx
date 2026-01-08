@@ -37,6 +37,7 @@ const CandidatoPerfilPage = lazy(() => import("./pages/CandidatoPerfilPage"));
 const AgendaPage = lazy(() => import("./pages/AgendaPage"));
 const IndicacoesPage = lazy(() => import("./pages/IndicacoesPage"));
 const DiagnosticoPage = lazy(() => import("./pages/DiagnosticoPage"));
+const EdgeFunctionTestPage = lazy(() => import("./pages/EdgeFunctionTestPage"));
 const PortalAuthPage = lazy(() => import("./pages/portal/PortalAuthPage"));
 const PortalDashboard = lazy(() => import("./pages/portal/PortalDashboard"));
 const PortalVagas = lazy(() => import("./pages/portal/PortalVagas"));
@@ -135,6 +136,7 @@ function App() {
 
                           {/* Diagnóstico - Rota Pública */}
                           <Route path="/diagnostico" element={<DiagnosticoPage />} />
+                          <Route path="/edge-functions-test" element={<EdgeFunctionTestPage />} />
 
                           {/* Rotas Protegidas - Sistema Interno */}
                           <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
