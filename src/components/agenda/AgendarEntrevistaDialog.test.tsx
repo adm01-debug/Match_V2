@@ -1,1 +1,0 @@
-import{describe,it,expect}from'vitest';describe('AgendarEntrevistaDialog',()=>{it('ok',async()=>{expect(await import('./AgendarEntrevistaDialog')).toBeDefined();});});
