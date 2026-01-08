@@ -3,8 +3,7 @@
  * @module ProtectedRoute
  */
 
-
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth, AppRole } from '@/contexts/AuthContext';
 import { Loader2 } from 'lucide-react';
 
@@ -15,6 +14,7 @@ interface ProtectedRouteProps {
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requiredRoles }) => {
   const { user, loading, roles, hasRole } = useAuth();
+  const location = useLocation();
 
   if (loading) {
     return (
@@ -25,7 +25,8 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requiredRoles
   }
 
   if (!user) {
-    return <Navigate to="/auth" replace />;
+    // Pass redirect info to show feedback message
+    return <Navigate to="/auth" state={{ from: location.pathname, requiresAuth: true }} replace />;
   }
 
   // Check if user has required role(s)

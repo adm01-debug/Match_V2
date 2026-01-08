@@ -1,19 +1,26 @@
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useCandidatoAuth } from '@/contexts/CandidatoAuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { toast } from 'sonner';
-import { Briefcase, User, Mail, Phone, Lock, ArrowRight } from 'lucide-react';
+import { Briefcase, User, Mail, Phone, Lock, ArrowRight, ShieldAlert } from 'lucide-react';
+
+interface LocationState {
+  from?: string;
+  requiresAuth?: boolean;
+}
 
 const PortalAuthPage = () => {
   usePageTitle('Portal - Login');
 
   const navigate = useNavigate();
+  const location = useLocation();
   const { user, isCandidato, signIn, signUp, loading } = useCandidatoAuth();
   
   const [loginEmail, setLoginEmail] = useState('');
@@ -25,11 +32,18 @@ const PortalAuthPage = () => {
   const [registerConfirmPassword, setRegisterConfirmPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Get redirect info from location state
+  const locationState = location.state as LocationState | null;
+  const redirectedFrom = locationState?.from;
+  const requiresAuth = locationState?.requiresAuth;
+
   useEffect(() => {
     if (!loading && user && isCandidato) {
-      navigate('/portal/dashboard');
+      // Redirect back to the original page or dashboard
+      const destination = redirectedFrom || '/portal/dashboard';
+      navigate(destination, { replace: true });
     }
-  }, [user, isCandidato, loading, navigate]);
+  }, [user, isCandidato, loading, navigate, redirectedFrom]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -104,6 +118,16 @@ const PortalAuthPage = () => {
       {/* Main Content */}
       <main className="flex-1 flex items-center justify-center p-6">
         <div className="w-full max-w-md">
+          {/* Auth Required Alert */}
+          {requiresAuth && redirectedFrom && (
+            <Alert className="mb-4 border-amber-500/50 bg-amber-50 dark:bg-amber-950/20">
+              <ShieldAlert className="h-4 w-4 text-amber-600" />
+              <AlertDescription className="text-amber-800 dark:text-amber-200">
+                Você precisa fazer login para acessar essa página.
+              </AlertDescription>
+            </Alert>
+          )}
+          
           <Card className="shadow-xl border-0 bg-card/80 backdrop-blur-sm">
             <CardHeader className="text-center pb-2">
               <CardTitle className="text-2xl">Bem-vindo!</CardTitle>

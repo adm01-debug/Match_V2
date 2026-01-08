@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import { useCandidatoAuth } from '@/contexts/CandidatoAuthContext';
 
 interface PortalProtectedRouteProps {
@@ -13,6 +13,7 @@ interface PortalProtectedRouteProps {
 
 const PortalProtectedRoute: React.FC<PortalProtectedRouteProps> = ({ children }) => {
   const { user, isCandidato, loading } = useCandidatoAuth();
+  const location = useLocation();
 
   if (loading) {
     return (
@@ -23,7 +24,8 @@ const PortalProtectedRoute: React.FC<PortalProtectedRouteProps> = ({ children })
   }
 
   if (!user || !isCandidato) {
-    return <Navigate to="/portal" replace />;
+    // Pass redirect info to show feedback message
+    return <Navigate to="/portal" state={{ from: location.pathname, requiresAuth: true }} replace />;
   }
 
   return <>{children}</>;
