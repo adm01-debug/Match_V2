@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDocumentTitle } from '@/hooks/useDocumentTitle';
+import { usePageTitle } from '@/hooks/usePageTitle';
 import { TwoFactorSetup } from '@/components/auth/TwoFactorSetup';
 import { TwoFactorVerify } from '@/components/auth/TwoFactorVerify';
 import { use2FA } from '@/hooks/use2FA';
@@ -14,7 +14,7 @@ import { Shield, ShieldCheck, ShieldOff, Key, Smartphone, Loader2 } from 'lucide
 type ViewMode = 'status' | 'setup' | 'verify' | 'disable';
 
 export default function TwoFactorAuthPage() {
-  useDocumentTitle('Autenticação de Dois Fatores');
+  usePageTitle('Autenticação de Dois Fatores');
   const navigate = useNavigate();
   const { isEnabled, isLoadingStatus, backupCodesCount, disable2FA, regenerateBackupCodes } = use2FA();
   const [viewMode, setViewMode] = useState<ViewMode>('status');

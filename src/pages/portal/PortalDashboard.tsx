@@ -1,4 +1,3 @@
-import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
@@ -46,8 +45,6 @@ const statusColors: Record<string, string> = {
 };
 
 const PortalDashboard = () => {
-  useDocumentTitle('Portal - Dashboard');
-
   usePageTitle('Portal - Dashboard');
 
   const navigate = useNavigate();

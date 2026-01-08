@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { useDocumentTitle } from '@/hooks/useDocumentTitle';
+import { usePageTitle } from '@/hooks/usePageTitle';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -38,7 +38,7 @@ const ROLE_COLORS: Record<AppRole, string> = {
 };
 
 export default function RolesPage() {
-  useDocumentTitle('Gerenciar Roles');
+  usePageTitle('Gerenciar Roles');
   const { hasRole } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();

@@ -1,4 +1,3 @@
-import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -28,7 +27,6 @@ const signupSchema = z.object({
 });
 
 const AuthPage = () => {
-  useDocumentTitle('Login');
   usePageTitle('Login');
 
   const navigate = useNavigate();

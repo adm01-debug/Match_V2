@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useToast } from '@/hooks/use-toast';
-import { useDocumentTitle } from '@/hooks/useDocumentTitle';
+import { usePageTitle } from '@/hooks/usePageTitle';
 import { Briefcase, Loader2, Mail, Lock, AlertTriangle } from 'lucide-react';
 import { z } from 'zod';
 
@@ -17,7 +17,7 @@ const loginSchema = z.object({
 });
 
 export default function LoginPage() {
-  useDocumentTitle('Login');
+  usePageTitle('Login');
   const navigate = useNavigate();
   const { user, signIn, loading: authLoading } = useAuth();
   const { toast } = useToast();

@@ -1,4 +1,3 @@
-import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { usePageTitle } from '@/hooks/usePageTitle';
@@ -66,7 +65,6 @@ const tipoConfig = {
 
 export default function AgendaPage() {
   usePageTitle('Agenda');
-  useDocumentTitle('Agenda');
 
   const navigate = useNavigate();
   const { toast } = useToast();

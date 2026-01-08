@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { useDocumentTitle } from '@/hooks/useDocumentTitle';
+import { usePageTitle } from '@/hooks/usePageTitle';
 import { useToast } from '@/hooks/use-toast';
 import { Briefcase, Loader2, Lock, CheckCircle2, AlertTriangle } from 'lucide-react';
 import { z } from 'zod';
@@ -32,7 +32,7 @@ const passwordRequirements = [
 ];
 
 export default function ResetPasswordPage() {
-  useDocumentTitle('Redefinir Senha');
+  usePageTitle('Redefinir Senha');
   const navigate = useNavigate();
   const { toast } = useToast();
   

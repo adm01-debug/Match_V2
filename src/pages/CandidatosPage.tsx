@@ -1,4 +1,3 @@
-import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState, useEffect, useMemo } from 'react';
 import { format, subDays, startOfDay, endOfDay } from 'date-fns';
@@ -110,7 +109,6 @@ export default function CandidatosPage() {
 
   const allSkills = [...new Set(candidatos.flatMap(c => c.habilidades || []))].sort();
   
-  useDocumentTitle('Candidatos');
   usePageTitle('Talentos');
 
   useEffect(() => {

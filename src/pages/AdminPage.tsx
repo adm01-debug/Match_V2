@@ -1,4 +1,3 @@
-import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { usePageTitle } from '@/hooks/usePageTitle';
@@ -67,8 +66,6 @@ const roleDescriptions: Record<AppRole, string> = {
 };
 
 const AdminPage = () => {
-  useDocumentTitle('Administração');
-
   usePageTitle('Administração');
 
   const { user } = useAuth();

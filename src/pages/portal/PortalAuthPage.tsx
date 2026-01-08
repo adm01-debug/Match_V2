@@ -1,4 +1,3 @@
-import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -12,8 +11,6 @@ import { toast } from 'sonner';
 import { Briefcase, User, Mail, Phone, Lock, ArrowRight } from 'lucide-react';
 
 const PortalAuthPage = () => {
-  useDocumentTitle('Portal - Login');
-
   usePageTitle('Portal - Login');
 
   const navigate = useNavigate();
