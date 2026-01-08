@@ -1,25 +1,38 @@
 /**
- * @fileoverview Provider de analytics para tracking
- * @module AnalyticsProvider
+ * @fileoverview Analytics Provider - wrapper para tracking de analytics
+ * @module contexts/AnalyticsProvider
  */
 
-import { createContext, useContext, useEffect, ReactNode } from 'react';
-import { useLocation } from 'react-router-dom';
-import { useAnalytics } from '@/hooks/useAnalytics';
+import { ReactNode, createContext, useContext } from 'react';
 
-const AnalyticsContext = createContext<ReturnType<typeof useAnalytics> | null>(null);
+interface AnalyticsContextType {
+  trackEvent: (name: string, data?: Record<string, unknown>) => void;
+  trackPageView: (path: string) => void;
+}
 
-export function AnalyticsProvider({ children }: { children: ReactNode }) {
-  const location = useLocation();
-  const analytics = useAnalytics();
+const AnalyticsContext = createContext<AnalyticsContextType | undefined>(undefined);
 
-  useEffect(() => {
-    const pageName = getPageName(location.pathname);
-    analytics.trackPageView(pageName, location.pathname);
-  }, [location.pathname, analytics]);
+interface AnalyticsProviderProps {
+  children: ReactNode;
+}
+
+export function AnalyticsProvider({ children }: AnalyticsProviderProps) {
+  const trackEvent = (name: string, data?: Record<string, unknown>) => {
+    // Integração com analytics pode ser adicionada aqui
+    if (import.meta.env.DEV) {
+      console.debug('[Analytics] Event:', name, data);
+    }
+  };
+
+  const trackPageView = (path: string) => {
+    // Integração com analytics pode ser adicionada aqui
+    if (import.meta.env.DEV) {
+      console.debug('[Analytics] Page View:', path);
+    }
+  };
 
   return (
-    <AnalyticsContext.Provider value={analytics}>
+    <AnalyticsContext.Provider value={{ trackEvent, trackPageView }}>
       {children}
     </AnalyticsContext.Provider>
   );
@@ -31,31 +44,6 @@ export function useAnalyticsContext() {
     throw new Error('useAnalyticsContext must be used within AnalyticsProvider');
   }
   return context;
-}
-
-function getPageName(pathname: string): string {
-  const routes: Record<string, string> = {
-    '/': 'Dashboard',
-    '/vagas': 'Vagas',
-    '/pipeline': 'Pipeline',
-    '/talentos': 'Candidatos',
-    '/testes': 'Testes',
-    '/agenda': 'Agenda',
-    '/comunicacao': 'Comunicação',
-    '/relatorios': 'Relatórios',
-    '/indicacoes': 'Indicações',
-    '/admin': 'Administração',
-    '/auth': 'Login',
-    '/portal': 'Portal Candidato',
-  };
-
-  if (routes[pathname]) return routes[pathname];
-  if (pathname.startsWith('/vagas/')) return 'Detalhes Vaga';
-  if (pathname.startsWith('/candidato/')) return 'Perfil Candidato';
-  if (pathname.startsWith('/testes/')) return 'Editor Prova';
-  if (pathname.startsWith('/portal/')) return 'Portal Candidato';
-
-  return 'Página Desconhecida';
 }
 
 export default AnalyticsProvider;
