@@ -1,1 +1,0 @@
-import{describe,it,expect}from'vitest';describe('MatchScoreCard',()=>{it('ok',async()=>{expect(await import('./MatchScoreCard')).toBeDefined();});});

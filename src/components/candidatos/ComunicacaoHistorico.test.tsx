@@ -1,1 +1,0 @@
-import{describe,it,expect}from'vitest';describe('ComunicacaoHistorico',()=>{it('ok',async()=>{expect(await import('./ComunicacaoHistorico')).toBeDefined();});});

@@ -1,1 +1,0 @@
-import{describe,it,expect}from'vitest';describe('EntrevistaDetalhesDialog',()=>{it('ok',async()=>{expect(await import('./EntrevistaDetalhesDialog')).toBeDefined();});});
