@@ -31,6 +31,16 @@ serve(async (req) => {
   }
 
   try {
+    // Validação JWT
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader?.startsWith('Bearer ')) {
+      console.error('Unauthorized: Missing or invalid Authorization header');
+      return new Response(
+        JSON.stringify({ error: 'Unauthorized', details: 'Token de autenticação ausente' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
     const SUPABASE_URL = Deno.env.get('SUPABASE_URL');
     const SUPABASE_ANON_KEY = Deno.env.get('SUPABASE_ANON_KEY');
@@ -42,6 +52,24 @@ serve(async (req) => {
       );
     }
 
+    const supabase = createClient(SUPABASE_URL!, SUPABASE_ANON_KEY!, {
+      global: { headers: { Authorization: authHeader } }
+    });
+
+    const token = authHeader.replace('Bearer ', '');
+    const { data: claimsData, error: claimsError } = await supabase.auth.getClaims(token);
+    
+    if (claimsError || !claimsData?.claims) {
+      console.error('Unauthorized: Invalid token', claimsError);
+      return new Response(
+        JSON.stringify({ error: 'Unauthorized', details: 'Token inválido ou expirado' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const userId = claimsData.claims.sub;
+    console.log(`Authenticated user for match-score: ${userId}`);
+
     const { candidatoId, vagaId } = await req.json();
 
     if (!candidatoId || !vagaId) {
@@ -50,8 +78,6 @@ serve(async (req) => {
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
-
-    const supabase = createClient(SUPABASE_URL!, SUPABASE_ANON_KEY!);
 
     const { data: candidato, error: candidatoError } = await supabase
       .from('candidatos')
