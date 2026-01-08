@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { generateDeviceFingerprint, DeviceInfo } from '@/lib/deviceFingerprint';
-import { useAuth } from './useAuth';
+import { useAuth } from '@/contexts/AuthContext';
 import { createContextLogger } from '@/services/logger';
 
 const log = createContextLogger('NewDeviceDetection');
