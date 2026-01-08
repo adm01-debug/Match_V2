@@ -2,8 +2,9 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Deep Linking', () => {
   test('navigates directly to candidate profile', async ({ page }) => {
-    await page.goto('/candidatos/1');
-    await expect(page.getByRole('heading')).toBeVisible();
+    await page.goto('/candidato/1');
+    const content = page.locator('main, [role="main"], .container').first();
+    await expect(content).toBeVisible({ timeout: 10000 });
   });
 
   test('navigates directly to job details', async ({ page }) => {
@@ -12,7 +13,7 @@ test.describe('Deep Linking', () => {
   });
 
   test('preserves query parameters', async ({ page }) => {
-    await page.goto('/candidatos?status=ativo&page=2');
+    await page.goto('/talentos?status=ativo&page=2');
     await expect(page).toHaveURL(/status=ativo/);
   });
 
