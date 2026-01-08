@@ -1,4 +1,3 @@
-import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
@@ -29,7 +28,6 @@ interface Questao {
 
 export default function ProvaEditor() {
   usePageTitle('Editor de Prova');
-  useDocumentTitle('Editor de Prova');
   
   const { id } = useParams();
   const navigate = useNavigate();

@@ -1,4 +1,3 @@
-import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState, useEffect } from "react";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
@@ -41,7 +40,6 @@ interface NotaCompetencia {
 
 export default function AvaliacaoForm() {
   usePageTitle('Avaliação');
-  useDocumentTitle('Avaliação');
 
   const { id } = useParams();
   const [searchParams] = useSearchParams();

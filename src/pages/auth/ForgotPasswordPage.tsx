@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { useDocumentTitle } from '@/hooks/useDocumentTitle';
+import { usePageTitle } from '@/hooks/usePageTitle';
 import { Briefcase, Loader2, Mail, ArrowLeft, CheckCircle2, AlertTriangle } from 'lucide-react';
 import { z } from 'zod';
 
@@ -15,7 +15,7 @@ const emailSchema = z.object({
 });
 
 export default function ForgotPasswordPage() {
-  useDocumentTitle('Recuperar Senha');
+  usePageTitle('Recuperar Senha');
   
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');

@@ -1,4 +1,3 @@
-import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -150,8 +149,6 @@ export default function VagaForm() {
   }, [existingVaga]);
 
   const handleChange = (field: string, value: any) => {
-  useDocumentTitle('Formulário de Vaga');
-
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 

@@ -1,4 +1,3 @@
-import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -164,8 +163,6 @@ export default function IndicacoesPage() {
   const bonusTotal = indicacoes.reduce((acc, i) => acc + (i.bonus || 0), 0);
 
   const handleCopyLink = () => {
-  useDocumentTitle('Indicações');
-
     navigator.clipboard.writeText(linkIndicacao);
     toast.success("Link copiado!");
   };

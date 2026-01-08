@@ -1,4 +1,3 @@
-import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { useState } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { VagaCard } from "@/components/vagas/VagaCard";
@@ -17,7 +16,6 @@ import { useVagas } from "@/hooks/useVagas";
 import { Plus, Search, LayoutGrid, List, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { usePageTitle } from '@/hooks/usePageTitle';
 import { VagasEmptyState } from "@/components/empty-states";
 
 export default function VagasList() {
@@ -54,10 +52,6 @@ export default function VagasList() {
   const hasActiveFilters = statusFilter !== "todas" || prioridadeFilter !== "todas" || departamentoFilter !== "todos" || searchTerm !== "";
 
   const clearFilters = () => {
-  useDocumentTitle('Lista de Vagas');
-
-  usePageTitle('Vagas');
-
     setSearchTerm("");
     setStatusFilter("todas");
     setPrioridadeFilter("todas");

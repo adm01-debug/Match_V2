@@ -1,11 +1,11 @@
-import { useDocumentTitle } from '@/hooks/useDocumentTitle';
+import { usePageTitle } from '@/hooks/usePageTitle';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
 import { useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Home, ArrowLeft, Search } from 'lucide-react';
 
 function NotFound() {
-  useDocumentTitle('Página não encontrada');
+  usePageTitle('Página não encontrada');
   const location = useLocation();
   const navigate = useNavigate();
 

@@ -1,4 +1,3 @@
-import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -15,8 +14,6 @@ import { ArrowLeft, User, Mail, Phone, Save, Lock } from 'lucide-react';
 import CurriculoUpload from '@/components/portal/CurriculoUpload';
 
 const PortalPerfil = () => {
-  useDocumentTitle('Portal - Meu Perfil');
-
   usePageTitle('Portal - Meu Perfil');
 
   const navigate = useNavigate();

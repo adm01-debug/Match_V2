@@ -1,4 +1,3 @@
-import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { Suspense, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -40,7 +39,6 @@ const contratoLabels: Record<string, string> = {
 };
 
 const PortalVagas = () => {
-  useDocumentTitle('Portal - Vagas');
   usePageTitle('Portal - Vagas');
 
   const navigate = useNavigate();

@@ -1,4 +1,3 @@
-import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
@@ -42,7 +41,6 @@ interface ComunicacaoLocal {
 
 export default function ComunicacaoPage() {
   usePageTitle('Comunicação');
-  useDocumentTitle('Comunicação');
   
   const [searchParams] = useSearchParams();
   const candidatoIdParam = searchParams.get('candidato');

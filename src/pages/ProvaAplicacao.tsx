@@ -1,4 +1,3 @@
-import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
@@ -27,7 +26,6 @@ interface Questao {
 
 export default function ProvaAplicacao() {
   usePageTitle('Aplicação de Prova');
-  useDocumentTitle('Aplicar Prova');
   
   const { id } = useParams();
   const navigate = useNavigate();

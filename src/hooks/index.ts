@@ -1,16 +1,13 @@
 // Authentication
 export { useAuth } from './useAuth';
 
-// Data Hooks
-export { useCandidates } from './useCandidates';
-export type { Candidate } from './useCandidates';
+// Page Title
+export { usePageTitle, PAGE_TITLES } from './usePageTitle';
 
-export { useJobs } from './useJobs';
-export type { Job } from './useJobs';
-
-export { useInterviews } from './useInterviews';
-export type { Interview, Interviewer, InterviewFeedback } from './useInterviews';
-
+// Data Hooks - Real Supabase hooks
+export { useCandidatos } from './useCandidatos';
+export { useVagas } from './useVagas';
+export { useEntrevistas } from './useEntrevistas';
 export { useWorkflows } from './useATSData';
 
 // UI Hooks (re-exports from shadcn)

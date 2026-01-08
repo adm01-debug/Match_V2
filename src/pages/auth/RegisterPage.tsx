@@ -8,7 +8,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
-import { useDocumentTitle } from '@/hooks/useDocumentTitle';
+import { usePageTitle } from '@/hooks/usePageTitle';
 import { Briefcase, Loader2, Mail, Lock, User, AlertTriangle, CheckCircle2 } from 'lucide-react';
 import { z } from 'zod';
 
@@ -36,7 +36,7 @@ const passwordRequirements = [
 ];
 
 export default function RegisterPage() {
-  useDocumentTitle('Criar Conta');
+  usePageTitle('Criar Conta');
   const navigate = useNavigate();
   const { user, signUp, loading: authLoading } = useAuth();
   const { toast } = useToast();
