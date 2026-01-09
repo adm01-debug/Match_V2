@@ -1,12 +1,11 @@
 /**
- * @fileoverview VagaCard component with motion interactions
+ * @fileoverview VagaCard component with premium design
  * @module VagaCard
  */
 
 import { memo, useState, useCallback, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
-import { CardContent } from "@/components/ui/card";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -17,13 +16,13 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { StatusBadge } from "@/components/ui/status-badge";
-import { PriorityBadge } from "@/components/ui/priority-badge";
+import { Badge } from "@/components/ui/badge";
 import { Vaga } from "@/types/recruitment";
 import { useDeleteVaga } from "@/hooks/useVagas";
 import { 
-  Eye, Edit, Kanban, Share2, MapPin, Briefcase, DollarSign,
-  Users, Target, Clock, MoreHorizontal, Trash2, Loader2
+  Eye, Edit, Kanban, Share2, Briefcase, DollarSign,
+  Users, Target, Clock, MoreHorizontal, Trash2, Loader2, 
+  Building2, Sparkles, TrendingUp, Zap
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
@@ -59,9 +58,22 @@ function calculateDaysOpen(dateStr?: string): number {
   }
 }
 
-// Motion transition config
+const statusConfig: Record<string, { label: string; className: string; icon?: React.ElementType }> = {
+  publicada: { label: "Aberta", className: "bg-success/10 text-success border-success/20", icon: Sparkles },
+  aguardando_aprovacao: { label: "Aguardando", className: "bg-warning/10 text-warning border-warning/20", icon: Clock },
+  em_selecao: { label: "Em Seleção", className: "bg-primary/10 text-primary border-primary/20", icon: TrendingUp },
+  encerrada: { label: "Encerrada", className: "bg-muted text-muted-foreground border-muted", icon: undefined },
+  rascunho: { label: "Rascunho", className: "bg-muted text-muted-foreground border-muted", icon: undefined },
+};
 
-function VagaCardComponent({ vaga, onDeleted }: VagaCardProps) {
+const prioridadeConfig: Record<string, { label: string; className: string }> = {
+  urgente: { label: "Urgente", className: "bg-destructive/10 text-destructive border-destructive/20 animate-pulse" },
+  alta: { label: "Alta", className: "bg-warning/10 text-warning border-warning/20" },
+  media: { label: "Média", className: "bg-primary/10 text-primary border-primary/20" },
+  baixa: { label: "Baixa", className: "bg-muted text-muted-foreground border-muted" },
+};
+
+function VagaCardComponent({ vaga, onDeleted, index = 0 }: VagaCardProps) {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const deleteVaga = useDeleteVaga();
   
@@ -75,7 +87,10 @@ function VagaCardComponent({ vaga, onDeleted }: VagaCardProps) {
     [vaga.salarioMin, vaga.salarioMax, vaga.salarioACombinar]
   );
 
+  const status = statusConfig[vaga.status] || statusConfig['rascunho'];
+  const prioridade = prioridadeConfig[vaga.prioridade] || prioridadeConfig['media'];
   const showPriority = vaga.prioridade === "urgente" || vaga.prioridade === "alta";
+  const StatusIcon = status?.icon;
 
   const handleOpenDeleteDialog = useCallback(() => {
     setShowDeleteDialog(true);
@@ -100,72 +115,100 @@ function VagaCardComponent({ vaga, onDeleted }: VagaCardProps) {
   return (
     <>
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        whileHover={{ 
-          y: -4,
-          boxShadow: '0 20px 40px -15px hsl(var(--primary) / 0.15)',
+        initial={{ opacity: 0, y: 20, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ 
+          type: 'spring', 
+          stiffness: 400, 
+          damping: 25,
+          delay: index * 0.05
         }}
-        transition={{ type: 'spring' as const, stiffness: 400, damping: 25 }}
-        className="rounded-lg border bg-card text-card-foreground shadow-sm border-l-4 border-l-primary"
+        whileHover={{ 
+          y: -6,
+          transition: { duration: 0.2 }
+        }}
+        className={cn(
+          "group relative rounded-xl overflow-hidden",
+          "bg-gradient-to-br from-card via-card to-card/80",
+          "border border-border/50 hover:border-primary/30",
+          "shadow-sm hover:shadow-xl hover:shadow-primary/5",
+          "transition-all duration-300"
+        )}
         role="article"
         aria-label={`Vaga: ${vaga.titulo}`}
       >
-        <CardContent className="p-5">
+        {/* Gradient accent bar */}
+        <div className={cn(
+          "absolute top-0 left-0 right-0 h-1",
+          vaga.prioridade === "urgente" 
+            ? "bg-gradient-to-r from-destructive via-destructive/80 to-warning"
+            : vaga.prioridade === "alta"
+            ? "bg-gradient-to-r from-warning via-warning/80 to-primary"
+            : "bg-gradient-to-r from-primary via-primary/80 to-accent"
+        )} />
+
+        {/* Hover glow effect */}
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+
+        <div className="relative p-5">
+          {/* Header */}
           <div 
             data-testid="vaga-card" 
             className="flex items-start justify-between gap-3 mb-4"
           >
             <div className="flex-1 min-w-0">
-              <motion.div 
-                className="flex items-center gap-2 mb-1"
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.1 }}
-              >
-                <StatusBadge status={vaga.status} size="sm" />
+              {/* Badges */}
+              <div className="flex items-center gap-2 mb-2 flex-wrap">
+                <Badge variant="outline" className={cn("text-xs font-medium", status?.className)}>
+                  {StatusIcon && <StatusIcon className="h-3 w-3 mr-1" />}
+                  {status?.label}
+                </Badge>
                 {showPriority && (
-                  <PriorityBadge 
-                    priority={vaga.prioridade} 
-                    size="sm" 
-                    pulse={vaga.prioridade === "urgente"}
-                  />
+                  <Badge variant="outline" className={cn("text-xs font-medium", prioridade?.className)}>
+                    {vaga.prioridade === "urgente" && <Zap className="h-3 w-3 mr-1" />}
+                    {prioridade?.label}
+                  </Badge>
                 )}
-              </motion.div>
-              <h3 className="font-semibold text-lg text-foreground truncate">
+              </div>
+
+              {/* Title */}
+              <h3 className="font-bold text-lg text-foreground truncate group-hover:text-primary transition-colors">
                 {vaga.titulo}
               </h3>
-              <div className="flex items-center gap-3 text-sm text-muted-foreground mt-1 flex-wrap">
-                <span className="flex items-center gap-1">
-                  <MapPin className="h-3.5 w-3.5" aria-hidden="true" />
+              
+              {/* Meta info */}
+              <div className="flex items-center gap-3 text-sm text-muted-foreground mt-2 flex-wrap">
+                <span className="flex items-center gap-1.5">
+                  <Building2 className="h-3.5 w-3.5 text-primary/60" aria-hidden="true" />
                   <span>{vaga.departamento}</span>
                 </span>
-                <span className="flex items-center gap-1">
-                  <Briefcase className="h-3.5 w-3.5" aria-hidden="true" />
-                  <span>{vaga.tipoContrato.toUpperCase()}</span>
+                <span className="flex items-center gap-1.5">
+                  <Briefcase className="h-3.5 w-3.5 text-primary/60" aria-hidden="true" />
+                  <span className="uppercase text-xs font-medium">{vaga.tipoContrato}</span>
                 </span>
-                <span className="flex items-center gap-1">
-                  <DollarSign className="h-3.5 w-3.5" aria-hidden="true" />
-                  <span>{salarioFormatado}</span>
-                </span>
+              </div>
+              
+              {/* Salary */}
+              <div className="flex items-center gap-1.5 mt-2">
+                <DollarSign className="h-4 w-4 text-success" aria-hidden="true" />
+                <span className="font-semibold text-foreground">{salarioFormatado}</span>
               </div>
             </div>
             
+            {/* Actions dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-                  <Button 
-                    type="button" 
-                    variant="ghost" 
-                    size="icon" 
-                    className="h-8 w-8"
-                    aria-label="Mais opções"
-                  >
-                    <MoreHorizontal className="h-4 w-4" aria-hidden="true" />
-                  </Button>
-                </motion.div>
+                <Button 
+                  type="button" 
+                  variant="ghost" 
+                  size="icon" 
+                  className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-primary/10"
+                  aria-label="Mais opções"
+                >
+                  <MoreHorizontal className="h-4 w-4" aria-hidden="true" />
+                </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48 bg-popover">
+              <DropdownMenuContent align="end" className="w-48 bg-popover/95 backdrop-blur-sm">
                 <DropdownMenuItem asChild>
                   <Link to={`/vagas/${vaga.id}`} className="flex items-center gap-2">
                     <Eye className="h-4 w-4" aria-hidden="true" />
@@ -202,82 +245,84 @@ function VagaCardComponent({ vaga, onDeleted }: VagaCardProps) {
             </DropdownMenu>
           </div>
 
+          {/* Stats Grid */}
           <div 
-            className="grid grid-cols-4 gap-3 mb-4"
+            className="grid grid-cols-4 gap-2 mb-4"
             role="group"
             aria-label="Estatísticas da vaga"
           >
             {[
-              { icon: Users, value: vaga.totalCandidatos, label: 'candidatos' },
-              { icon: Target, value: vaga.emProcesso, label: 'em processo' },
-              { icon: Clock, value: `${diasAberta}d`, label: 'aberta', warning: diasAberta > 30 },
-              { icon: Briefcase, value: vaga.quantidade, label: vaga.quantidade > 1 ? 'vagas' : 'vaga' },
+              { icon: Users, value: vaga.totalCandidatos, label: 'candidatos', color: 'text-primary' },
+              { icon: Target, value: vaga.emProcesso, label: 'em processo', color: 'text-accent' },
+              { icon: Clock, value: `${diasAberta}d`, label: 'aberta', color: diasAberta > 30 ? 'text-warning' : 'text-muted-foreground' },
+              { icon: Briefcase, value: vaga.quantidade, label: vaga.quantidade > 1 ? 'vagas' : 'vaga', color: 'text-success' },
             ].map((stat, i) => (
               <motion.div
                 key={stat.label}
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: i * 0.05, type: 'spring' as const, stiffness: 300, damping: 20 }}
-                whileHover={{ scale: 1.05, backgroundColor: 'hsl(var(--muted))' }}
-                className="text-center p-2.5 rounded-lg bg-muted/50 transition-colors"
+                transition={{ delay: (index * 0.05) + (i * 0.05) }}
+                className={cn(
+                  "text-center p-3 rounded-lg",
+                  "bg-gradient-to-br from-muted/60 to-muted/30",
+                  "border border-border/30",
+                  "group-hover:border-primary/20 transition-colors"
+                )}
               >
                 <div className="flex items-center justify-center gap-1.5 mb-1">
-                  <stat.icon className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
-                  <span className={cn(
-                    "text-lg font-bold",
-                    stat.warning ? "text-warning" : "text-foreground"
-                  )}>
+                  <stat.icon className={cn("h-4 w-4", stat.color)} aria-hidden="true" />
+                  <span className={cn("text-lg font-bold", stat.color)}>
                     {stat.value}
                   </span>
                 </div>
-                <p className="text-xs text-muted-foreground">{stat.label}</p>
+                <p className="text-[10px] text-muted-foreground uppercase tracking-wide">{stat.label}</p>
               </motion.div>
             ))}
           </div>
 
-          <motion.div 
-            className="flex gap-2"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-          >
+          {/* Action Buttons */}
+          <div className="flex gap-2">
             {[
-              { to: `/vagas/${vaga.id}`, icon: Eye, label: 'Ver' },
-              { to: `/vagas/${vaga.id}/editar`, icon: Edit, label: 'Editar' },
-              { to: `/pipeline?vaga=${vaga.id}`, icon: Kanban, label: 'Pipeline' },
+              { to: `/vagas/${vaga.id}`, icon: Eye, label: 'Detalhes', primary: false },
+              { to: `/vagas/${vaga.id}/editar`, icon: Edit, label: 'Editar', primary: false },
+              { to: `/pipeline?vaga=${vaga.id}`, icon: Kanban, label: 'Pipeline', primary: true },
             ].map((btn) => (
-              <motion.div
+              <Button 
                 key={btn.label}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="flex-1"
+                type="button" 
+                variant={btn.primary ? "default" : "outline"}
+                size="sm" 
+                className={cn(
+                  "flex-1 transition-all",
+                  btn.primary 
+                    ? "bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-sm"
+                    : "hover:bg-primary/5 hover:border-primary/30"
+                )}
+                asChild
               >
-                <Button type="button" variant="outline" size="sm" className="w-full" asChild>
-                  <Link to={btn.to}>
-                    <btn.icon className="h-3.5 w-3.5 mr-1.5" aria-hidden="true" />
-                    {btn.label}
-                  </Link>
-                </Button>
-              </motion.div>
+                <Link to={btn.to}>
+                  <btn.icon className="h-3.5 w-3.5 mr-1.5" aria-hidden="true" />
+                  {btn.label}
+                </Link>
+              </Button>
             ))}
             {vaga.status === "publicada" && (
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button 
-                  type="button" 
-                  variant="outline" 
-                  size="sm"
-                  aria-label="Compartilhar vaga"
-                >
-                  <Share2 className="h-3.5 w-3.5" aria-hidden="true" />
-                </Button>
-              </motion.div>
+              <Button 
+                type="button" 
+                variant="outline" 
+                size="sm"
+                className="hover:bg-primary/5 hover:border-primary/30"
+                aria-label="Compartilhar vaga"
+              >
+                <Share2 className="h-3.5 w-3.5" aria-hidden="true" />
+              </Button>
             )}
-          </motion.div>
-        </CardContent>
+          </div>
+        </div>
       </motion.div>
 
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
-        <AlertDialogContent>
+        <AlertDialogContent className="bg-card/95 backdrop-blur-sm border-border/50">
           <AlertDialogHeader>
             <AlertDialogTitle>Excluir vaga</AlertDialogTitle>
             <AlertDialogDescription>
