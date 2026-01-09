@@ -37,47 +37,72 @@ export const CandidatoAuthProvider: FC<{ children: ReactNode }> = ({ children })
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState<CandidatoProfile | null>(null);
 
-  const fetchCandidatoProfile = async (userId: string) => {
-    const { data, error } = await supabase
+  const ensureCandidatoProfile = async (authUser: User): Promise<CandidatoProfile | null> => {
+    // Only treat users created via the candidate portal as candidates.
+    const isCandidateUser = authUser.user_metadata?.['user_type'] === 'candidato';
+    if (!isCandidateUser) return null;
+
+    // Prefer maybeSingle to avoid hard errors when row doesn't exist.
+    const { data: existing, error: existingError } = await supabase
       .from('candidatos_auth')
       .select('*')
-      .eq('user_id', userId)
-      .single();
-    
-    if (!error && data) {
-      setProfile(data as CandidatoProfile);
-    } else {
-      setProfile(null);
+      .eq('user_id', authUser.id)
+      .maybeSingle();
+
+    if (existingError) {
+      // If RLS or other errors occur, fail closed and treat as non-candidate.
+      return null;
     }
+
+    if (existing) return existing as CandidatoProfile;
+
+    // Create profile on first login/signup (idempotent for new accounts).
+    const nome = (authUser.user_metadata?.['nome'] as string | undefined) || 'Candidato';
+    const telefone = (authUser.user_metadata?.['telefone'] as string | undefined) || null;
+    const email = authUser.email || '';
+
+    const { data: inserted, error: insertError } = await supabase
+      .from('candidatos_auth')
+      .insert({
+        user_id: authUser.id,
+        nome,
+        email,
+        telefone,
+        candidato_id: null,
+        curriculo_url: null,
+        curriculo_nome: null,
+      })
+      .select('*')
+      .single();
+
+    if (insertError) return null;
+    return inserted as CandidatoProfile;
   };
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        setSession(session);
-        setUser(session?.user ?? null);
-        
-        if (session?.user) {
-          setTimeout(() => {
-            fetchCandidatoProfile(session.user.id);
-          }, 0);
-        } else {
-          setProfile(null);
-        }
-        
+    const processSession = async (nextSession: Session | null) => {
+      setSession(nextSession);
+      setUser(nextSession?.user ?? null);
+
+      if (!nextSession?.user) {
+        setProfile(null);
         setLoading(false);
+        return;
       }
-    );
+
+      // While we fetch/create the candidate profile, keep portal routes in a stable loading state.
+      setLoading(true);
+      const nextProfile = await ensureCandidatoProfile(nextSession.user);
+      setProfile(nextProfile);
+      setLoading(false);
+    };
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, nextSession) => {
+      void processSession(nextSession);
+    });
 
     supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      
-      if (session?.user) {
-        fetchCandidatoProfile(session.user.id);
-      }
-      
-      setLoading(false);
+      void processSession(session);
     });
 
     return () => subscription.unsubscribe();
@@ -90,20 +115,20 @@ export const CandidatoAuthProvider: FC<{ children: ReactNode }> = ({ children })
 
   const signUp = async (email: string, password: string, nome: string, telefone?: string) => {
     const redirectUrl = `${window.location.origin}/portal`;
-    
+
     const { error } = await supabase.auth.signUp({
       email,
       password,
       options: {
         emailRedirectTo: redirectUrl,
-        data: { 
+        data: {
           nome,
           telefone,
-          user_type: 'candidato'
-        }
-      }
+          user_type: 'candidato',
+        },
+      },
     });
-    
+
     return { error: error as Error | null };
   };
 
