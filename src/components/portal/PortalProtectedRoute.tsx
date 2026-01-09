@@ -44,6 +44,49 @@ const PortalProtectedRoute: React.FC<PortalProtectedRouteProps> = ({ children })
 
   const currentStepIndex = steps.findIndex(s => s.id === currentStep);
 
+  // Play celebration sound using Web Audio API
+  const playCelebrationSound = () => {
+    try {
+      const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+      
+      // Create a cheerful ascending chord sequence
+      const playNote = (frequency: number, startTime: number, duration: number, gain: number = 0.15) => {
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        oscillator.type = 'sine';
+        oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime + startTime);
+        
+        gainNode.gain.setValueAtTime(0, audioContext.currentTime + startTime);
+        gainNode.gain.linearRampToValueAtTime(gain, audioContext.currentTime + startTime + 0.02);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + startTime + duration);
+        
+        oscillator.start(audioContext.currentTime + startTime);
+        oscillator.stop(audioContext.currentTime + startTime + duration);
+      };
+
+      // Celebration fanfare notes (C major chord arpeggio + resolution)
+      const notes = [
+        { freq: 523.25, start: 0, duration: 0.15 },      // C5
+        { freq: 659.25, start: 0.08, duration: 0.15 },   // E5
+        { freq: 783.99, start: 0.16, duration: 0.15 },   // G5
+        { freq: 1046.50, start: 0.24, duration: 0.4 },   // C6 (held)
+        { freq: 523.25, start: 0.24, duration: 0.4 },    // C5 (harmony)
+        { freq: 783.99, start: 0.24, duration: 0.4 },    // G5 (harmony)
+      ];
+
+      notes.forEach(note => playNote(note.freq, note.start, note.duration));
+      
+      // Cleanup
+      setTimeout(() => audioContext.close(), 1000);
+    } catch (error) {
+      console.log('Audio not available:', error);
+    }
+  };
+
   // Trigger confetti celebration when transitioning from 'criando' to 'carregando'
   useEffect(() => {
     if (
@@ -52,6 +95,9 @@ const PortalProtectedRoute: React.FC<PortalProtectedRouteProps> = ({ children })
       !confettiTriggeredRef.current
     ) {
       confettiTriggeredRef.current = true;
+      
+      // Play celebration sound
+      playCelebrationSound();
       
       // Fire confetti celebration
       const duration = 2000;
