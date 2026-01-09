@@ -14,3 +14,5 @@ export { BulkSelectionBar } from './BulkSelectionBar';
 export { CommandMenu } from './CommandMenu';
 export { CommandMenuTrigger } from './CommandMenuTrigger';
 export { ThemeToggle } from './ThemeToggle';
+export { LazyLoad, LazyImage, LazyComponent, FadeInOnScroll, StaggerChildren } from './LazyLoad';
+export { VirtualList, VirtualGrid, InfiniteList, WindowedList } from './VirtualList';
