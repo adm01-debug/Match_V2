@@ -1,9 +1,10 @@
 /**
- * @fileoverview AppSidebar component with tour integration
+ * @fileoverview AppSidebar component with premium design
  * @module AppSidebar
  */
 
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import {
   LayoutDashboard,
   Briefcase,
@@ -86,9 +87,9 @@ const roleLabels: Record<AppRole, string> = {
 };
 
 const roleColors: Record<AppRole, string> = {
-  admin: 'bg-destructive/20 text-destructive',
-  rh: 'bg-primary/20 text-primary',
-  gestor: 'bg-amber-500/20 text-amber-600',
+  admin: 'bg-destructive/20 text-destructive border-destructive/30',
+  rh: 'bg-primary/20 text-primary border-primary/30',
+  gestor: 'bg-warning/20 text-warning border-warning/30',
 };
 
 export function AppSidebar() {
@@ -133,63 +134,97 @@ export function AppSidebar() {
   };
 
   return (
-    <Sidebar role="navigation" aria-label="Menu de navegação principal"
+    <Sidebar 
+      role="navigation" 
+      aria-label="Menu de navegação principal"
       className={cn(
         "border-r-0 transition-all duration-300",
         collapsed ? "w-[70px]" : "w-[260px]"
       )}
       collapsible="icon"
     >
-      <SidebarHeader className="border-b border-sidebar-border">
-        <div data-testid="app-sidebar" className={cn(
-          "flex items-center gap-3 px-4 py-4",
-          collapsed && "justify-center px-2"
-        )}>
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold text-lg">
-            PB
-          </div>
+      {/* Header with Logo */}
+      <SidebarHeader className="border-b border-sidebar-border/50">
+        <div 
+          data-testid="app-sidebar" 
+          className={cn(
+            "flex items-center gap-3 px-4 py-4",
+            collapsed && "justify-center px-2"
+          )}
+        >
+          <motion.div 
+            className="flex h-10 w-10 items-center justify-center rounded-xl gradient-primary shadow-glow text-white font-bold text-lg"
+            whileHover={{ scale: 1.05, rotate: 2 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            M
+          </motion.div>
           {!collapsed && (
-            <div className="flex flex-col">
-              <span className="font-semibold text-sidebar-foreground">Promo Brindes</span>
+            <motion.div 
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="flex flex-col"
+            >
+              <span className="font-semibold text-sidebar-foreground">Match ATS</span>
               <span className="text-xs text-sidebar-muted">Recrutamento</span>
-            </div>
+            </motion.div>
           )}
         </div>
       </SidebarHeader>
 
       <SidebarContent className="px-2 py-4 scrollbar-thin">
-        {menuItems.map((group) => (
+        {menuItems.map((group, groupIndex) => (
           <SidebarGroup key={group.group}>
             {!collapsed && (
-              <SidebarGroupLabel className="text-sidebar-muted text-xs uppercase tracking-wider mb-2">
+              <SidebarGroupLabel className="text-sidebar-muted text-[11px] font-medium uppercase tracking-wider mb-2 px-3">
                 {group.group}
               </SidebarGroupLabel>
             )}
             <SidebarGroupContent>
               <SidebarMenu>
-                {group.items.map((item) => {
+                {group.items.map((item, itemIndex) => {
                   const itemWithRoles = item as typeof item & { roles?: AppRole[]; tourId?: string };
                   if (!canAccessItem(itemWithRoles.roles)) return null;
+                  
+                  const active = isActive(item.url);
                   
                   return (
                     <SidebarMenuItem key={item.title}>
                       <SidebarMenuButton
                         asChild
-                        isActive={isActive(item.url)}
+                        isActive={active}
                         tooltip={collapsed ? item.title : undefined}
                       >
                         <NavLink
                           to={item.url}
                           data-tour={itemWithRoles.tourId}
                           className={cn(
-                            "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all",
-                            "text-sidebar-foreground/80 hover:text-sidebar-foreground hover:bg-sidebar-accent",
-                            isActive(item.url) && "bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground",
+                            "group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200",
+                            "text-sidebar-foreground/70 hover:text-sidebar-foreground",
+                            active 
+                              ? "bg-sidebar-primary/10 text-sidebar-primary before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:h-6 before:w-1 before:rounded-r-full before:bg-sidebar-primary" 
+                              : "hover:bg-sidebar-accent",
                             collapsed && "justify-center px-2"
                           )}
                         >
-                          <item.icon className={cn("h-5 w-5 shrink-0", collapsed && "h-5 w-5")} />
-                          {!collapsed && <span>{item.title}</span>}
+                          <motion.div
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.95 }}
+                          >
+                            <item.icon className={cn(
+                              "h-5 w-5 shrink-0 transition-colors",
+                              active ? "text-sidebar-primary" : "text-sidebar-muted group-hover:text-sidebar-foreground"
+                            )} />
+                          </motion.div>
+                          {!collapsed && (
+                            <motion.span
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              transition={{ delay: groupIndex * 0.05 + itemIndex * 0.02 }}
+                            >
+                              {item.title}
+                            </motion.span>
+                          )}
                         </NavLink>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
@@ -201,14 +236,15 @@ export function AppSidebar() {
         ))}
       </SidebarContent>
 
-      <SidebarFooter className="border-t border-sidebar-border p-2">
+      <SidebarFooter className="border-t border-sidebar-border/50 p-3">
+        {/* User Profile Card */}
         <div className={cn(
-          "flex items-center gap-3 rounded-lg p-2",
-          collapsed && "justify-center"
+          "flex items-center gap-3 rounded-xl p-2.5 bg-sidebar-accent/50 backdrop-blur-sm",
+          collapsed && "justify-center bg-transparent"
         )}>
-          <Avatar className="h-9 w-9">
+          <Avatar className="h-9 w-9 ring-2 ring-sidebar-primary/20">
             <AvatarImage src="" />
-            <AvatarFallback className="bg-primary/20 text-primary text-sm">
+            <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-white text-sm font-medium">
               {getUserInitials()}
             </AvatarFallback>
           </Avatar>
@@ -217,12 +253,15 @@ export function AppSidebar() {
               <span className="text-sm font-medium text-sidebar-foreground truncate">
                 {getUserName()}
               </span>
-              <div className="flex gap-1 flex-wrap">
+              <div className="flex gap-1 flex-wrap mt-0.5">
                 {roles.map((role) => (
                   <Badge 
                     key={role} 
-                    variant="secondary" 
-                    className={cn("text-[10px] px-1.5 py-0", roleColors[role])}
+                    variant="outline" 
+                    className={cn(
+                      "text-[10px] px-1.5 py-0 h-4 border",
+                      roleColors[role]
+                    )}
                   >
                     {roleLabels[role]}
                   </Badge>
@@ -234,7 +273,7 @@ export function AppSidebar() {
             <Button 
               variant="ghost" 
               size="icon" 
-              className="h-8 w-8 text-sidebar-muted hover:text-destructive"
+              className="h-8 w-8 text-sidebar-muted hover:text-destructive hover:bg-destructive/10 transition-colors"
               onClick={handleLogout}
               title="Sair"
             >
@@ -247,7 +286,7 @@ export function AppSidebar() {
           <Button
             variant="ghost"
             size="icon"
-            className="w-full mt-2 text-sidebar-muted hover:text-destructive"
+            className="w-full mt-2 text-sidebar-muted hover:text-destructive hover:bg-destructive/10"
             onClick={handleLogout}
             title="Sair"
           >
@@ -255,49 +294,50 @@ export function AppSidebar() {
           </Button>
         )}
 
-        {/* Help / Reset Tour Button */}
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={resetTour}
-          className={cn(
-            "w-full mt-2 text-sidebar-muted hover:text-primary hover:bg-sidebar-accent",
-            collapsed && "px-2"
-          )}
-          title="Refazer tour de introdução"
-        >
-          {collapsed ? (
-            <HelpCircle className="h-4 w-4" />
-          ) : (
-            <>
-              <HelpCircle className="h-4 w-4 mr-2" />
-              Refazer Tour
-            </>
-          )}
-        </Button>
+        {/* Actions */}
+        <div className={cn("flex gap-1 mt-2", collapsed && "flex-col")}>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={resetTour}
+            className={cn(
+              "flex-1 text-sidebar-muted hover:text-sidebar-primary hover:bg-sidebar-primary/10 transition-colors",
+              collapsed && "px-2 w-full"
+            )}
+            title="Refazer tour de introdução"
+          >
+            {collapsed ? (
+              <HelpCircle className="h-4 w-4" />
+            ) : (
+              <>
+                <HelpCircle className="h-4 w-4 mr-2" />
+                <span className="text-xs">Tour</span>
+              </>
+            )}
+          </Button>
 
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={toggleSidebar}
-          className={cn(
-            "w-full mt-2 text-sidebar-muted hover:text-sidebar-foreground hover:bg-sidebar-accent",
-            collapsed && "px-2"
-          )}
-        >
-          {collapsed ? (
-            <ChevronRight className="h-4 w-4" />
-          ) : (
-            <>
-              <ChevronLeft className="h-4 w-4 mr-2" />
-              Recolher menu
-            </>
-          )}
-        </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={toggleSidebar}
+            className={cn(
+              "flex-1 text-sidebar-muted hover:text-sidebar-foreground hover:bg-sidebar-accent transition-colors",
+              collapsed && "px-2 w-full"
+            )}
+          >
+            {collapsed ? (
+              <ChevronRight className="h-4 w-4" />
+            ) : (
+              <>
+                <ChevronLeft className="h-4 w-4 mr-2" />
+                <span className="text-xs">Recolher</span>
+              </>
+            )}
+          </Button>
+        </div>
       </SidebarFooter>
     </Sidebar>
   );
 }
-
 
 AppSidebar.displayName = "AppSidebar";

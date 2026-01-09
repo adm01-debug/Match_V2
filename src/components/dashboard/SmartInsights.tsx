@@ -1,13 +1,14 @@
 /**
- * @fileoverview SmartInsights component
+ * @fileoverview Premium SmartInsights component
  * @module SmartInsights
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, memo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Sparkles, TrendingUp, AlertTriangle, CheckCircle2, RefreshCw, Lightbulb } from 'lucide-react';
+import { Sparkles, TrendingUp, AlertTriangle, CheckCircle2, RefreshCw, Lightbulb, ArrowRight, Brain } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface Insight {
@@ -33,27 +34,31 @@ interface SmartInsightsProps {
 const tipoConfig = {
   positivo: {
     icon: CheckCircle2,
-    color: 'text-emerald-600 dark:text-emerald-400',
-    bgColor: 'bg-emerald-500/10',
-    borderColor: 'border-emerald-500/20',
+    color: 'text-success',
+    bgColor: 'bg-success/10',
+    borderColor: 'border-success/20',
+    glowColor: 'hover:shadow-[0_0_20px_-5px_hsl(var(--success)/0.3)]',
   },
   alerta: {
     icon: AlertTriangle,
-    color: 'text-amber-600 dark:text-amber-400',
-    bgColor: 'bg-amber-500/10',
-    borderColor: 'border-amber-500/20',
+    color: 'text-warning',
+    bgColor: 'bg-warning/10',
+    borderColor: 'border-warning/20',
+    glowColor: 'hover:shadow-[0_0_20px_-5px_hsl(var(--warning)/0.3)]',
   },
   sugestao: {
     icon: Lightbulb,
-    color: 'text-blue-600 dark:text-blue-400',
-    bgColor: 'bg-blue-500/10',
-    borderColor: 'border-blue-500/20',
+    color: 'text-info',
+    bgColor: 'bg-info/10',
+    borderColor: 'border-info/20',
+    glowColor: 'hover:shadow-[0_0_20px_-5px_hsl(var(--info)/0.3)]',
   },
   tendencia: {
     icon: TrendingUp,
-    color: 'text-purple-600 dark:text-purple-400',
-    bgColor: 'bg-purple-500/10',
-    borderColor: 'border-purple-500/20',
+    color: 'text-accent',
+    bgColor: 'bg-accent/10',
+    borderColor: 'border-accent/20',
+    glowColor: 'hover:shadow-[0_0_20px_-5px_hsl(var(--accent)/0.3)]',
   },
 };
 
@@ -134,10 +139,10 @@ function generateInsights(kpiData: SmartInsightsProps['kpiData'], funilData: Sma
     });
   }
 
-  return insights.slice(0, 4); // Máximo 4 insights
+  return insights.slice(0, 4);
 }
 
-export function SmartInsights({ kpiData, funilData }: SmartInsightsProps) {
+function SmartInsightsComponent({ kpiData, funilData }: SmartInsightsProps) {
   const [insights, setInsights] = useState<Insight[]>([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
@@ -154,73 +159,119 @@ export function SmartInsights({ kpiData, funilData }: SmartInsightsProps) {
   };
 
   return (
-    <Card role="article" aria-label="Insights inteligentes" className="border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
-      <CardHeader className="pb-3">
-        <div data-testid="smart-insights" className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="p-1.5 rounded-lg bg-primary/10">
-              <Sparkles className="h-4 w-4 text-primary" />
-            </div>
-            <CardTitle className="text-base font-semibold">Insights Inteligentes</CardTitle>
-            <Badge variant="secondary" className="text-[10px] px-1.5 py-0">IA</Badge>
-          </div>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleRefresh}
-            disabled={isRefreshing}
-            className="h-7 w-7 p-0"
-          >
-            <RefreshCw className={cn("h-3.5 w-3.5", isRefreshing && "animate-spin")} />
-          </Button>
-        </div>
-      </CardHeader>
-      <CardContent className="space-y-2">
-        {insights.map((insight) => {
-          const config = tipoConfig[insight.tipo];
-          const Icon = config.icon;
-
-          return (
-            <div
-              key={insight.id}
-              className={cn(
-                "p-3 rounded-lg border transition-all hover:shadow-sm cursor-pointer",
-                config.bgColor,
-                config.borderColor
-              )}
-            >
-              <div className="flex items-start gap-2.5">
-                <Icon className={cn("h-4 w-4 mt-0.5 shrink-0", config.color)} />
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-0.5">
-                    <span className="font-medium text-sm">{insight.titulo}</span>
-                    {insight.impacto === 'alto' && (
-                      <Badge variant="outline" className="text-[9px] px-1 py-0 h-4">
-                        Prioridade
-                      </Badge>
-                    )}
-                  </div>
-                  <p className="text-xs text-muted-foreground leading-relaxed">
-                    {insight.descricao}
-                  </p>
-                  {insight.acao && (
-                    <Button
-                      variant="link"
-                      size="sm"
-                      className={cn("h-auto p-0 mt-1 text-xs", config.color)}
-                    >
-                      {insight.acao} →
-                    </Button>
-                  )}
-                </div>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+    >
+      <Card 
+        role="article" 
+        aria-label="Insights inteligentes" 
+        className="h-full border-primary/20 shadow-elevated overflow-hidden relative"
+      >
+        {/* Gradient background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5 pointer-events-none" />
+        
+        {/* Header accent */}
+        <div className="h-1 bg-gradient-to-r from-primary via-accent to-primary" />
+        
+        <CardHeader className="relative pb-3">
+          <div data-testid="smart-insights" className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <motion.div 
+                className="p-2 rounded-xl gradient-primary"
+                animate={{ scale: [1, 1.05, 1] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
+                <Brain className="h-5 w-5 text-white" />
+              </motion.div>
+              <div>
+                <CardTitle className="text-base font-semibold">Insights Inteligentes</CardTitle>
+                <p className="text-xs text-muted-foreground">Análise automática do seu recrutamento</p>
               </div>
             </div>
-          );
-        })}
-      </CardContent>
-    </Card>
+            <div className="flex items-center gap-2">
+              <Badge className="bg-gradient-to-r from-primary to-accent text-white border-0 text-[10px] px-2">
+                <Sparkles className="h-3 w-3 mr-1" />
+                IA
+              </Badge>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={handleRefresh}
+                disabled={isRefreshing}
+                className="h-8 w-8 text-muted-foreground hover:text-primary"
+              >
+                <RefreshCw className={cn("h-4 w-4", isRefreshing && "animate-spin")} />
+              </Button>
+            </div>
+          </div>
+        </CardHeader>
+        
+        <CardContent className="relative space-y-3">
+          <AnimatePresence mode="popLayout">
+            {insights.map((insight, index) => {
+              const config = tipoConfig[insight.tipo];
+              const Icon = config.icon;
+
+              return (
+                <motion.div
+                  key={insight.id}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 20 }}
+                  transition={{ delay: index * 0.08 }}
+                  whileHover={{ x: 4 }}
+                  className={cn(
+                    "group p-4 rounded-xl border transition-all cursor-pointer",
+                    config.bgColor,
+                    config.borderColor,
+                    config.glowColor
+                  )}
+                >
+                  <div className="flex items-start gap-3">
+                    <motion.div 
+                      className={cn("p-2 rounded-lg", config.bgColor)}
+                      whileHover={{ scale: 1.1, rotate: 5 }}
+                    >
+                      <Icon className={cn("h-4 w-4", config.color)} />
+                    </motion.div>
+                    
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="font-semibold text-sm text-foreground">{insight.titulo}</span>
+                        {insight.impacto === 'alto' && (
+                          <Badge variant="outline" className="text-[9px] px-1.5 py-0 h-4 border-current">
+                            Prioridade
+                          </Badge>
+                        )}
+                      </div>
+                      <p className="text-xs text-muted-foreground leading-relaxed">
+                        {insight.descricao}
+                      </p>
+                      {insight.acao && (
+                        <Button
+                          variant="link"
+                          size="sm"
+                          className={cn("h-auto p-0 mt-2 text-xs font-medium group/btn", config.color)}
+                        >
+                          {insight.acao}
+                          <ArrowRight className="h-3 w-3 ml-1 transition-transform group-hover/btn:translate-x-1" />
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </AnimatePresence>
+        </CardContent>
+      </Card>
+    </motion.div>
   );
 }
 
+SmartInsightsComponent.displayName = "SmartInsights";
 
-SmartInsights.displayName = "SmartInsights";
+export const SmartInsights = memo(SmartInsightsComponent);
+export default SmartInsights;

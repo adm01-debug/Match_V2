@@ -1,5 +1,5 @@
 /**
- * @fileoverview KPICard component with motion interactions
+ * @fileoverview Premium KPICard component
  * @module KPICard
  */
 
@@ -25,26 +25,41 @@ interface KPICardProps {
   index?: number;
 }
 
-const variantStyles: Record<KPIVariant, { icon: string; card: string }> = {
+const variantStyles: Record<KPIVariant, { 
+  icon: string; 
+  iconBg: string;
+  glow: string;
+  border: string;
+}> = {
   default: {
-    icon: "bg-muted text-muted-foreground",
-    card: "",
+    icon: "text-muted-foreground",
+    iconBg: "bg-muted",
+    glow: "",
+    border: "",
   },
   primary: {
-    icon: "bg-primary/10 text-primary",
-    card: "",
+    icon: "text-primary",
+    iconBg: "bg-primary/10",
+    glow: "shadow-glow",
+    border: "border-primary/20",
   },
   success: {
-    icon: "bg-success/10 text-success",
-    card: "",
+    icon: "text-success",
+    iconBg: "bg-success/10",
+    glow: "shadow-glow-success",
+    border: "border-success/20",
   },
   warning: {
-    icon: "bg-warning/10 text-warning",
-    card: "",
+    icon: "text-warning",
+    iconBg: "bg-warning/10",
+    glow: "shadow-glow-accent",
+    border: "border-warning/20",
   },
   danger: {
-    icon: "bg-destructive/10 text-destructive",
-    card: "",
+    icon: "text-destructive",
+    iconBg: "bg-destructive/10",
+    glow: "",
+    border: "border-destructive/20",
   },
 };
 
@@ -72,15 +87,15 @@ function KPICardComponent({
 
   if (isLoading) {
     return (
-      <Card className={cn("card-hover overflow-hidden", styles.card)}>
+      <Card className="overflow-hidden border-border/50 shadow-elevated">
         <CardContent className="p-6">
           <div className="flex items-start justify-between">
-            <div className="space-y-2 flex-1">
-              <div className="h-4 bg-muted rounded w-20 relative overflow-hidden before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_1.5s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent" />
-              <div className="h-8 bg-muted rounded w-16 relative overflow-hidden before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_1.5s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent" />
-              <div className="h-3 bg-muted rounded w-24 relative overflow-hidden before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_1.5s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent" />
+            <div className="space-y-3 flex-1">
+              <div className="h-4 bg-muted rounded-lg w-24 animate-shimmer" />
+              <div className="h-9 bg-muted rounded-lg w-20 animate-shimmer" />
+              <div className="h-3 bg-muted rounded-lg w-28 animate-shimmer" />
             </div>
-            <div className="h-12 w-12 bg-muted rounded-xl relative overflow-hidden before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_1.5s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent" />
+            <div className="h-14 w-14 bg-muted rounded-2xl animate-shimmer" />
           </div>
         </CardContent>
       </Card>
@@ -93,22 +108,31 @@ function KPICardComponent({
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ 
         delay: index * 0.08,
-        type: 'spring' as const, 
+        type: 'spring', 
         stiffness: 300, 
         damping: 25 
-      }}
-      whileHover={{ 
-        y: -4,
-        boxShadow: '0 20px 40px -15px hsl(var(--primary) / 0.12)',
       }}
     >
       <Card
         data-testid="kpi-card"
         role="article"
         aria-label={`${title}: ${formattedValue}${subtitle ? `, ${subtitle}` : ''}`}
-        className={cn("card-hover overflow-hidden", styles.card)}
+        className={cn(
+          "group relative overflow-hidden border-border/50 shadow-elevated transition-all duration-300",
+          "hover:shadow-elevated-lg hover:-translate-y-1",
+          styles.border
+        )}
       >
-        <CardContent className="p-6">
+        {/* Subtle gradient overlay on hover */}
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        
+        {/* Decorative corner element */}
+        <div className={cn(
+          "absolute -top-12 -right-12 w-32 h-32 rounded-full opacity-10 transition-transform duration-500 group-hover:scale-150",
+          styles.iconBg
+        )} />
+        
+        <CardContent className="relative p-6">
           <div className="flex items-start justify-between">
             <div className="space-y-2">
               <p className="text-sm font-medium text-muted-foreground">
@@ -116,10 +140,10 @@ function KPICardComponent({
               </p>
               <div className="flex items-baseline gap-2">
                 <motion.p 
-                  className="text-3xl font-bold text-foreground"
+                  className="text-3xl font-bold text-foreground tracking-tight"
                   initial={{ opacity: 0, scale: 0.5 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: index * 0.08 + 0.2, type: 'spring' as const, stiffness: 400 }}
+                  transition={{ delay: index * 0.08 + 0.2, type: 'spring', stiffness: 400 }}
                 >
                   {formattedValue}
                 </motion.p>
@@ -128,7 +152,11 @@ function KPICardComponent({
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.08 + 0.3 }}
-                    className={cn("text-xs font-medium flex items-center gap-0.5", trendColor)}
+                    className={cn(
+                      "text-xs font-semibold flex items-center gap-0.5 px-1.5 py-0.5 rounded-full",
+                      trend.positive ? "bg-success/10" : "bg-destructive/10",
+                      trendColor
+                    )}
                     aria-label={`Tendência: ${trend.value}`}
                   >
                     <TrendIcon className="h-3 w-3" aria-hidden="true" />
@@ -142,13 +170,18 @@ function KPICardComponent({
                 </p>
               )}
             </div>
+            
             <motion.div 
-              className={cn("rounded-xl p-3", styles.icon)}
+              className={cn(
+                "rounded-2xl p-3.5 transition-all duration-300",
+                styles.iconBg,
+                "group-hover:scale-110"
+              )}
               aria-hidden="true"
-              whileHover={{ scale: 1.1, rotate: 5 }}
-              transition={{ type: 'spring' as const, stiffness: 400 }}
+              whileHover={{ rotate: 5 }}
+              transition={{ type: 'spring', stiffness: 400 }}
             >
-              <Icon className="h-6 w-6" />
+              <Icon className={cn("h-6 w-6", styles.icon)} />
             </motion.div>
           </div>
         </CardContent>
