@@ -64,9 +64,39 @@ const AuthPage = () => {
   const [signupData, setSignupData] = useState({ nome: '', email: '', password: '', confirmPassword: '' });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  // Demo login handler
+  // Demo login handler - pre-fill existing demo credentials
   const handleDemoLogin = () => {
     setLoginData({ email: 'adm01@promobrindes.com.br', password: '123456' });
+  };
+
+  // Auto-create demo account and login
+  const handleCreateDemoAccount = async () => {
+    setIsLoading(true);
+    const randomId = Math.random().toString(36).substring(2, 8);
+    const demoEmail = `demo_${randomId}@matchats.demo`;
+    const demoPassword = '123456';
+    const demoName = `Usuário Demo ${randomId}`;
+
+    // First, try to sign up
+    const { error: signUpError } = await signUp(demoEmail, demoPassword, demoName);
+    
+    if (signUpError) {
+      setIsLoading(false);
+      toast({
+        variant: 'destructive',
+        title: 'Erro ao criar conta demo',
+        description: signUpError.message,
+      });
+      return;
+    }
+
+    // With auto-confirm enabled, the user should be logged in automatically
+    // Just show success message
+    toast({
+      title: 'Conta demo criada!',
+      description: `Email: ${demoEmail} | Senha: ${demoPassword}`,
+    });
+    setIsLoading(false);
   };
 
   // Get redirect info from location state
@@ -410,8 +440,28 @@ const AuthPage = () => {
                         disabled={isLoading}
                       >
                         <User className="mr-2 h-4 w-4 text-primary" />
-                        <span className="text-muted-foreground">Usar conta de</span>
-                        <span className="ml-1 font-semibold text-primary">demonstração</span>
+                        <span className="text-muted-foreground">Preencher credenciais</span>
+                        <span className="ml-1 font-semibold text-primary">demo</span>
+                      </Button>
+
+                      <Button 
+                        type="button"
+                        variant="default"
+                        className="w-full h-11 gradient-success hover:opacity-90 transition-opacity text-white font-medium"
+                        onClick={handleCreateDemoAccount}
+                        disabled={isLoading}
+                      >
+                        {isLoading ? (
+                          <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            Criando conta...
+                          </>
+                        ) : (
+                          <>
+                            <Sparkles className="mr-2 h-4 w-4" />
+                            Criar conta demo automática
+                          </>
+                        )}
                       </Button>
                     </CardFooter>
                   </form>
