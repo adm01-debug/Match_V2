@@ -42,3 +42,8 @@ export { useSavedFilters } from './useSavedFilters';
 export { useOnboarding } from './useOnboarding';
 export { useCandidatoPerfil } from './useCandidatoPerfil';
 export { useImportData } from './useImportData';
+export { useSoundPreferences } from './useSoundPreferences';
+
+// Performance Hooks
+export { useIntersectionObserver, useInfiniteScroll, useLazyImage } from './useIntersectionObserver';
+export { useVirtualScroll, useVirtualGrid } from './useVirtualScroll';
