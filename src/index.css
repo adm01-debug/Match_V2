@@ -458,4 +458,188 @@
   .stage-card:hover {
     @apply shadow-elevated;
   }
+
+  /* ========== PREMIUM SKELETON SHIMMER ========== */
+  .skeleton-shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .skeleton-shimmer::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      hsl(var(--primary) / 0.08) 20%,
+      hsl(var(--primary) / 0.15) 50%,
+      hsl(var(--primary) / 0.08) 80%,
+      transparent 100%
+    );
+    animation: skeleton-shimmer 2s infinite ease-in-out;
+  }
+
+  @keyframes skeleton-shimmer {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  /* Staggered animation for lists */
+  .skeleton-stagger > * {
+    animation: skeleton-fade-in 0.5s ease-out forwards;
+    opacity: 0;
+  }
+
+  .skeleton-stagger > *:nth-child(1) { animation-delay: 0ms; }
+  .skeleton-stagger > *:nth-child(2) { animation-delay: 75ms; }
+  .skeleton-stagger > *:nth-child(3) { animation-delay: 150ms; }
+  .skeleton-stagger > *:nth-child(4) { animation-delay: 225ms; }
+  .skeleton-stagger > *:nth-child(5) { animation-delay: 300ms; }
+  .skeleton-stagger > *:nth-child(6) { animation-delay: 375ms; }
+  .skeleton-stagger > *:nth-child(7) { animation-delay: 450ms; }
+  .skeleton-stagger > *:nth-child(8) { animation-delay: 525ms; }
+
+  @keyframes skeleton-fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Pulse variant for loading states */
+  .skeleton-pulse {
+    animation: skeleton-pulse 1.5s ease-in-out infinite;
+  }
+
+  @keyframes skeleton-pulse {
+    0%, 100% {
+      opacity: 0.4;
+    }
+    50% {
+      opacity: 0.8;
+    }
+  }
+}
+
+/* ========== ACCESSIBILITY ENHANCEMENTS ========== */
+@layer utilities {
+  /* Premium Focus Rings */
+  .focus-ring-wrapper:focus-within {
+    outline: none;
+  }
+
+  .focus-ring-default:focus-within {
+    @apply ring-2 ring-ring ring-offset-2 ring-offset-background rounded-md;
+  }
+
+  .focus-ring-primary:focus-within {
+    @apply ring-2 ring-primary/70 ring-offset-2 ring-offset-background rounded-md;
+    box-shadow: 0 0 0 4px hsl(var(--primary) / 0.15);
+  }
+
+  .focus-ring-success:focus-within {
+    @apply ring-2 ring-success/70 ring-offset-2 ring-offset-background rounded-md;
+    box-shadow: 0 0 0 4px hsl(var(--success) / 0.15);
+  }
+
+  .focus-ring-warning:focus-within {
+    @apply ring-2 ring-warning/70 ring-offset-2 ring-offset-background rounded-md;
+    box-shadow: 0 0 0 4px hsl(var(--warning) / 0.15);
+  }
+
+  .focus-ring-error:focus-within {
+    @apply ring-2 ring-destructive/70 ring-offset-2 ring-offset-background rounded-md;
+    box-shadow: 0 0 0 4px hsl(var(--destructive) / 0.15);
+  }
+
+  /* Animated focus transition */
+  .focus-ring-wrapper {
+    @apply transition-shadow duration-200;
+  }
+}
+
+/* ========== HIGH CONTRAST MODE ========== */
+.high-contrast {
+  --background: 0 0% 0%;
+  --foreground: 0 0% 100%;
+  --card: 0 0% 5%;
+  --card-foreground: 0 0% 100%;
+  --border: 0 0% 100%;
+  --primary: 210 100% 60%;
+  --primary-foreground: 0 0% 0%;
+  --muted: 0 0% 15%;
+  --muted-foreground: 0 0% 85%;
+  --accent: 210 100% 60%;
+  --accent-foreground: 0 0% 0%;
+}
+
+.high-contrast * {
+  border-color: hsl(0 0% 100% / 0.5) !important;
+}
+
+.high-contrast button,
+.high-contrast a,
+.high-contrast [role="button"] {
+  border: 2px solid currentColor !important;
+}
+
+.high-contrast :focus-visible {
+  outline: 3px solid hsl(60 100% 50%) !important;
+  outline-offset: 2px !important;
+}
+
+/* ========== REDUCED MOTION ========== */
+.reduce-motion,
+.reduce-motion * {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+.reduce-motion .skeleton-shimmer::after {
+  animation: none !important;
+}
+
+/* Keep essential feedback animations even in reduced motion */
+.reduce-motion .essential-animation {
+  animation-duration: 0.3s !important;
+  transition-duration: 0.2s !important;
+}
+
+/* ========== SCREEN READER ONLY ========== */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.not-sr-only {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: 0;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
 }
