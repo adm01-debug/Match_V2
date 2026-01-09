@@ -4,6 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { ThemeProvider } from "next-themes";
 import { AuthProvider } from "./contexts/AuthContext";
 import { CandidatoAuthProvider } from "./contexts/CandidatoAuthContext";
 import { NotificationProvider } from "./contexts/NotificationContext";
@@ -81,8 +82,9 @@ const queryClient = new QueryClient({
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <BrowserRouter>
+      <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+        <TooltipProvider>
+          <BrowserRouter>
           <AnalyticsProvider>
             <AuthProvider>
               <CandidatoAuthProvider>
@@ -171,9 +173,10 @@ function App() {
               </CandidatoAuthProvider>
             </AuthProvider>
           </AnalyticsProvider>
-        </BrowserRouter>
-      <SpeedInsights />
-      </TooltipProvider>
+          </BrowserRouter>
+          <SpeedInsights />
+        </TooltipProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }
