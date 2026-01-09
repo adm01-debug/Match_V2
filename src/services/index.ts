@@ -1,6 +1,24 @@
 /**
- * @fileoverview Exportações centralizadas dos serviços
+ * @fileoverview Centralized exports for all services
  * @module services
  */
 
-export * from './logger';
+export { logger, createContextLogger, authLogger, apiLogger, supabaseLogger, realtimeLogger, edgeFunctionLogger } from './logger';
+export { 
+  getClientIP, 
+  getAllowedIPsFromDB, 
+  isIPAllowed,
+  logBlockedAttempt,
+  addIPToWhitelist,
+  removeIPFromWhitelist,
+  clearIPCache
+} from './ipService';
+export { checkPasswordBreach, type BreachCheckResult } from './passwordBreachService';
+export { 
+  createPasswordResetRequest, 
+  getPasswordResetRequests, 
+  processResetRequest, 
+  validateResetToken, 
+  completePasswordReset,
+  type PasswordResetRequest
+} from './passwordResetService';

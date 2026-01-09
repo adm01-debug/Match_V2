@@ -239,19 +239,7 @@ export interface Avaliacao {
 
 
 // Tipos adicionais
-
-export interface Prova {
-  readonly id: string;
-  readonly  titulo: string;
-  readonly  descricao: string | null;
-  readonly  categoria: 'logica' | 'tecnica' | 'portugues' | 'ingles' | 'excel' | 'comportamental' | 'fit_cultural';
-  readonly  nivel: 'junior' | 'pleno' | 'senior';
-  readonly  tempo_limite_minutos: number;
-  readonly  nota_minima: number;
-  readonly  ativo: boolean;
-  readonly  departamento: string | null;
-  readonly  created_at: string;
-}
+// Note: Prova interface is defined in types/tests.ts to avoid duplication
 
 export interface Comunicacao {
   readonly id: string;
