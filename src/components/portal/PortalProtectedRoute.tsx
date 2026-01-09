@@ -3,32 +3,57 @@
  * @module PortalProtectedRoute
  */
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useCandidatoAuth } from '@/contexts/CandidatoAuthContext';
-import { Loader2, UserPlus, Briefcase } from 'lucide-react';
+import { Loader2, UserPlus, Briefcase, CheckCircle2, LayoutDashboard, ShieldCheck } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { cn } from '@/lib/utils';
 
 interface PortalProtectedRouteProps {
   children: React.ReactNode;
 }
 
+type LoadingStep = 'verificando' | 'criando' | 'carregando';
+
+interface StepInfo {
+  id: LoadingStep;
+  label: string;
+  icon: React.ReactNode;
+}
+
+const steps: StepInfo[] = [
+  { id: 'verificando', label: 'Verificando', icon: <ShieldCheck className="h-4 w-4" /> },
+  { id: 'criando', label: 'Criando perfil', icon: <UserPlus className="h-4 w-4" /> },
+  { id: 'carregando', label: 'Carregando', icon: <LayoutDashboard className="h-4 w-4" /> },
+];
+
 const PortalProtectedRoute: React.FC<PortalProtectedRouteProps> = ({ children }) => {
   const { user, isCandidato, loading } = useCandidatoAuth();
   const location = useLocation();
 
-  // Loading state with enhanced UI
+  // Determine current step based on auth state
+  const currentStep = useMemo((): LoadingStep => {
+    if (!user) return 'verificando';
+    if (!isCandidato) return 'criando';
+    return 'carregando';
+  }, [user, isCandidato]);
+
+  const currentStepIndex = steps.findIndex(s => s.id === currentStep);
+
+  // Loading state with stepped progress indicator
   if (loading) {
     return (
       <div 
         role="region" 
         aria-label="Carregando" 
+        aria-live="polite"
         className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 via-background to-secondary/5"
       >
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="flex flex-col items-center gap-6 p-8"
+          className="flex flex-col items-center gap-8 p-8"
         >
           {/* Logo */}
           <div className="relative">
@@ -38,30 +63,70 @@ const PortalProtectedRoute: React.FC<PortalProtectedRouteProps> = ({ children })
             </div>
           </div>
 
-          {/* Loading indicator */}
-          <div className="flex flex-col items-center gap-3">
-            <Loader2 className="h-6 w-6 animate-spin text-primary" />
-            
-            {/* Show contextual message based on auth state */}
-            {user ? (
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-                className="flex flex-col items-center gap-2"
-              >
-                <div className="flex items-center gap-2 text-primary">
-                  <UserPlus className="h-4 w-4" />
-                  <span className="text-sm font-medium">Preparando seu perfil...</span>
-                </div>
-                <p className="text-xs text-muted-foreground text-center max-w-xs">
-                  Estamos configurando sua conta. Isso pode levar alguns segundos.
-                </p>
-              </motion.div>
-            ) : (
-              <span className="text-sm text-muted-foreground">Verificando autenticação...</span>
-            )}
+          {/* Step Progress Indicator */}
+          <div className="flex items-center gap-2">
+            {steps.map((step, index) => {
+              const isCompleted = index < currentStepIndex;
+              const isCurrent = index === currentStepIndex;
+              
+              return (
+                <React.Fragment key={step.id}>
+                  <motion.div
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ delay: index * 0.15 }}
+                    className={cn(
+                      "flex items-center gap-2 px-3 py-2 rounded-full text-xs font-medium transition-all duration-300",
+                      isCompleted && "bg-primary/10 text-primary",
+                      isCurrent && "bg-primary text-primary-foreground shadow-lg",
+                      !isCompleted && !isCurrent && "bg-muted/50 text-muted-foreground"
+                    )}
+                  >
+                    {isCompleted ? (
+                      <CheckCircle2 className="h-4 w-4" />
+                    ) : isCurrent ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      step.icon
+                    )}
+                    <span className="hidden sm:inline">{step.label}</span>
+                  </motion.div>
+                  
+                  {/* Connector line */}
+                  {index < steps.length - 1 && (
+                    <motion.div
+                      initial={{ scaleX: 0 }}
+                      animate={{ scaleX: 1 }}
+                      transition={{ delay: index * 0.15 + 0.1 }}
+                      className={cn(
+                        "h-0.5 w-6 origin-left",
+                        index < currentStepIndex ? "bg-primary" : "bg-muted"
+                      )}
+                    />
+                  )}
+                </React.Fragment>
+              );
+            })}
           </div>
+
+          {/* Current step message */}
+          <motion.div
+            key={currentStep}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex flex-col items-center gap-2 text-center"
+          >
+            <p className="text-sm font-medium text-foreground">
+              {currentStep === 'verificando' && 'Verificando sua autenticação...'}
+              {currentStep === 'criando' && 'Preparando seu perfil...'}
+              {currentStep === 'carregando' && 'Carregando seu dashboard...'}
+            </p>
+            <p className="text-xs text-muted-foreground max-w-xs">
+              {currentStep === 'verificando' && 'Aguarde enquanto verificamos suas credenciais.'}
+              {currentStep === 'criando' && 'Estamos configurando sua conta. Isso pode levar alguns segundos.'}
+              {currentStep === 'carregando' && 'Quase lá! Preparando tudo para você.'}
+            </p>
+          </motion.div>
         </motion.div>
       </div>
     );
