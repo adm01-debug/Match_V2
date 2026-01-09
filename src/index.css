@@ -2,126 +2,172 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Design System - Sistema de Recrutamento Promo Brindes */
+/* 
+  Design System - Match ATS
+  Paleta baseada em Psicologia das Cores para RH/Recrutamento:
+  
+  - Teal/Ciano (Primary): Confiança, profissionalismo, equilíbrio
+  - Violeta (Accent): Criatividade, inovação, premium feel
+  - Esmeralda (Success): Crescimento, contratações, resultados positivos
+  - Âmbar (Warning): Atenção, urgência, ação necessária
+  - Rose (Destructive): Alerta crítico, cuidado
+  
+  Inspiração: Interfaces enterprise modernas com toque humano
+*/
 
 @layer base {
   :root {
-    --background: 220 20% 97%;
-    --foreground: 224 71% 4%;
+    /* Base - Clean Slate */
+    --background: 210 20% 98%;
+    --foreground: 222 47% 11%;
 
+    /* Cards - Elevated White */
     --card: 0 0% 100%;
-    --card-foreground: 224 71% 4%;
+    --card-foreground: 222 47% 11%;
 
+    /* Popover */
     --popover: 0 0% 100%;
-    --popover-foreground: 224 71% 4%;
+    --popover-foreground: 222 47% 11%;
 
-    --primary: 239 84% 67%;
+    /* Primary - Deep Teal (Confiança, Profissionalismo) */
+    --primary: 173 58% 39%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 220 14% 96%;
-    --secondary-foreground: 224 71% 4%;
+    /* Secondary - Soft Gray Blue */
+    --secondary: 214 32% 91%;
+    --secondary-foreground: 222 47% 11%;
 
-    --muted: 220 14% 96%;
-    --muted-foreground: 220 9% 46%;
+    /* Muted - Sophisticated Gray */
+    --muted: 210 20% 93%;
+    --muted-foreground: 215 16% 47%;
 
-    --accent: 262 83% 58%;
+    /* Accent - Rich Violet (Inovação, Premium) */
+    --accent: 262 60% 52%;
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84% 60%;
+    /* Destructive - Soft Rose */
+    --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
-    --ring: 239 84% 67%;
+    /* Borders & Inputs */
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 173 58% 39%;
 
-    --radius: 0.625rem;
+    /* Radius - Elegant rounded */
+    --radius: 0.75rem;
 
-    /* Pipeline Stage Colors */
-    --stage-novo: 217 91% 60%;
-    --stage-triagem: 263 70% 50%;
-    --stage-entrevista: 38 92% 50%;
-    --stage-teste: 330 81% 60%;
-    --stage-final: 160 84% 39%;
-    --stage-aprovado: 158 64% 32%;
-    --stage-contratado: 160 84% 25%;
-    --stage-reprovado: 0 84% 60%;
+    /* ========== SEMANTIC COLORS ========== */
 
-    /* Match Score Colors */
-    --score-alto: 160 84% 39%;
-    --score-medio: 38 92% 50%;
-    --score-baixo: 0 84% 60%;
-
-    /* Priority Colors */
-    --priority-urgente: 0 84% 60%;
-    --priority-alta: 38 92% 50%;
-    --priority-media: 217 91% 60%;
-    --priority-baixa: 220 9% 46%;
-
-    /* Success/Warning/Info */
+    /* Success - Esmeralda (Crescimento, Vitórias) */
     --success: 160 84% 39%;
     --success-foreground: 0 0% 100%;
+    
+    /* Warning - Rich Amber (Atenção) */
     --warning: 38 92% 50%;
-    --warning-foreground: 0 0% 100%;
-    --info: 217 91% 60%;
+    --warning-foreground: 38 92% 10%;
+    
+    /* Info - Sky Blue (Informativo) */
+    --info: 199 89% 48%;
     --info-foreground: 0 0% 100%;
 
-    /* Sidebar */
-    --sidebar-background: 224 71% 4%;
-    --sidebar-foreground: 220 14% 96%;
-    --sidebar-primary: 239 84% 67%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 224 50% 12%;
-    --sidebar-accent-foreground: 220 14% 96%;
-    --sidebar-border: 224 50% 15%;
-    --sidebar-ring: 239 84% 67%;
-    --sidebar-muted: 220 9% 46%;
+    /* ========== PIPELINE STAGES ========== */
+    --stage-novo: 199 89% 48%;
+    --stage-triagem: 262 60% 52%;
+    --stage-entrevista: 38 92% 50%;
+    --stage-teste: 330 65% 55%;
+    --stage-final: 160 84% 39%;
+    --stage-aprovado: 160 74% 35%;
+    --stage-contratado: 173 58% 39%;
+    --stage-reprovado: 0 72% 51%;
 
-    /* Chart Colors */
-    --chart-1: 239 84% 67%;
-    --chart-2: 262 83% 58%;
+    /* ========== MATCH SCORES ========== */
+    --score-alto: 160 84% 39%;
+    --score-medio: 38 92% 50%;
+    --score-baixo: 0 72% 51%;
+
+    /* ========== PRIORITIES ========== */
+    --priority-urgente: 0 72% 51%;
+    --priority-alta: 38 92% 50%;
+    --priority-media: 199 89% 48%;
+    --priority-baixa: 215 16% 47%;
+
+    /* ========== SIDEBAR - Dark Professional ========== */
+    --sidebar-background: 222 47% 11%;
+    --sidebar-foreground: 210 20% 93%;
+    --sidebar-primary: 173 58% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 222 40% 18%;
+    --sidebar-accent-foreground: 210 20% 93%;
+    --sidebar-border: 222 40% 20%;
+    --sidebar-ring: 173 58% 50%;
+    --sidebar-muted: 215 16% 50%;
+
+    /* ========== CHARTS ========== */
+    --chart-1: 173 58% 39%;
+    --chart-2: 262 60% 52%;
     --chart-3: 160 84% 39%;
     --chart-4: 38 92% 50%;
-    --chart-5: 330 81% 60%;
+    --chart-5: 330 65% 55%;
+    --chart-6: 199 89% 48%;
+
+    /* ========== GRADIENTS ========== */
+    --gradient-primary-start: 173 58% 39%;
+    --gradient-primary-end: 190 60% 35%;
+    --gradient-accent-start: 262 60% 52%;
+    --gradient-accent-end: 280 65% 45%;
+    --gradient-success-start: 160 84% 39%;
+    --gradient-success-end: 173 58% 39%;
   }
 
   .dark {
-    --background: 224 71% 4%;
-    --foreground: 220 14% 96%;
+    /* Base - Rich Dark */
+    --background: 222 47% 6%;
+    --foreground: 210 20% 95%;
 
-    --card: 224 50% 8%;
-    --card-foreground: 220 14% 96%;
+    /* Cards - Elevated Dark */
+    --card: 222 47% 10%;
+    --card-foreground: 210 20% 95%;
 
-    --popover: 224 50% 8%;
-    --popover-foreground: 220 14% 96%;
+    /* Popover */
+    --popover: 222 47% 10%;
+    --popover-foreground: 210 20% 95%;
 
-    --primary: 239 84% 67%;
-    --primary-foreground: 0 0% 100%;
+    /* Primary - Bright Teal */
+    --primary: 173 58% 50%;
+    --primary-foreground: 222 47% 6%;
 
-    --secondary: 224 50% 12%;
-    --secondary-foreground: 220 14% 96%;
+    /* Secondary */
+    --secondary: 222 40% 18%;
+    --secondary-foreground: 210 20% 93%;
 
-    --muted: 224 50% 12%;
-    --muted-foreground: 220 9% 60%;
+    /* Muted */
+    --muted: 222 40% 15%;
+    --muted-foreground: 215 16% 60%;
 
-    --accent: 262 83% 58%;
+    /* Accent */
+    --accent: 262 60% 60%;
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 62% 30%;
+    /* Destructive */
+    --destructive: 0 72% 45%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 224 50% 15%;
-    --input: 224 50% 15%;
-    --ring: 239 84% 67%;
+    /* Borders */
+    --border: 222 40% 20%;
+    --input: 222 40% 20%;
+    --ring: 173 58% 50%;
 
-    --sidebar-background: 224 71% 4%;
-    --sidebar-foreground: 220 14% 96%;
-    --sidebar-primary: 239 84% 67%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 224 50% 12%;
-    --sidebar-accent-foreground: 220 14% 96%;
-    --sidebar-border: 224 50% 15%;
-    --sidebar-ring: 239 84% 67%;
-    --sidebar-muted: 220 9% 50%;
+    /* Sidebar */
+    --sidebar-background: 222 47% 8%;
+    --sidebar-foreground: 210 20% 93%;
+    --sidebar-primary: 173 58% 55%;
+    --sidebar-primary-foreground: 222 47% 6%;
+    --sidebar-accent: 222 40% 15%;
+    --sidebar-accent-foreground: 210 20% 93%;
+    --sidebar-border: 222 40% 18%;
+    --sidebar-ring: 173 58% 55%;
+    --sidebar-muted: 215 16% 55%;
   }
 }
 
@@ -130,28 +176,127 @@
     @apply border-border;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     @apply bg-background text-foreground antialiased;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   }
+
+  /* Melhorar foco para acessibilidade */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-primary;
+  }
 }
 
 @layer utilities {
+  /* ========== GRADIENTS ========== */
   .gradient-primary {
-    @apply bg-gradient-to-r from-primary to-accent;
+    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(190 60% 35%) 100%);
   }
 
+  .gradient-accent {
+    background: linear-gradient(135deg, hsl(var(--accent)) 0%, hsl(280 65% 45%) 100%);
+  }
+
+  .gradient-success {
+    background: linear-gradient(135deg, hsl(var(--success)) 0%, hsl(var(--primary)) 100%);
+  }
+
+  .gradient-hero {
+    background: linear-gradient(135deg, hsl(222 47% 11%) 0%, hsl(222 47% 20%) 50%, hsl(var(--primary) / 0.2) 100%);
+  }
+
+  .gradient-mesh {
+    background: 
+      radial-gradient(at 40% 20%, hsl(var(--primary) / 0.15) 0px, transparent 50%),
+      radial-gradient(at 80% 0%, hsl(var(--accent) / 0.1) 0px, transparent 50%),
+      radial-gradient(at 0% 50%, hsl(var(--success) / 0.1) 0px, transparent 50%),
+      radial-gradient(at 80% 50%, hsl(var(--warning) / 0.05) 0px, transparent 50%),
+      radial-gradient(at 0% 100%, hsl(var(--primary) / 0.1) 0px, transparent 50%);
+  }
+
+  /* ========== TEXT GRADIENTS ========== */
   .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent;
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%);
   }
 
+  .text-gradient-success {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, hsl(var(--success)) 0%, hsl(var(--primary)) 100%);
+  }
+
+  /* ========== GLASS MORPHISM ========== */
+  .glass {
+    @apply bg-background/80 backdrop-blur-xl border border-border/50;
+  }
+
+  .glass-card {
+    @apply bg-card/90 backdrop-blur-sm border border-border/50 shadow-lg;
+  }
+
+  .glass-dark {
+    @apply bg-sidebar-background/95 backdrop-blur-xl border border-sidebar-border/50;
+  }
+
+  /* ========== SHADOWS ========== */
+  .shadow-glow-primary {
+    box-shadow: 0 0 40px -10px hsl(var(--primary) / 0.4);
+  }
+
+  .shadow-glow-accent {
+    box-shadow: 0 0 40px -10px hsl(var(--accent) / 0.4);
+  }
+
+  .shadow-glow-success {
+    box-shadow: 0 0 40px -10px hsl(var(--success) / 0.4);
+  }
+
+  .shadow-elevated {
+    box-shadow: 
+      0 0 0 1px hsl(var(--border) / 0.5),
+      0 1px 2px 0 hsl(222 47% 11% / 0.03),
+      0 4px 8px -2px hsl(222 47% 11% / 0.05),
+      0 12px 24px -4px hsl(222 47% 11% / 0.08);
+  }
+
+  .shadow-elevated-lg {
+    box-shadow: 
+      0 0 0 1px hsl(var(--border) / 0.5),
+      0 4px 8px -2px hsl(222 47% 11% / 0.06),
+      0 16px 32px -8px hsl(222 47% 11% / 0.12),
+      0 24px 64px -16px hsl(222 47% 11% / 0.16);
+  }
+
+  /* ========== CARD INTERACTIONS ========== */
   .card-hover {
-    @apply transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5;
+    @apply transition-all duration-300 ease-out;
   }
 
+  .card-hover:hover {
+    @apply -translate-y-1;
+    box-shadow: 
+      0 0 0 1px hsl(var(--primary) / 0.2),
+      0 4px 8px -2px hsl(222 47% 11% / 0.06),
+      0 16px 32px -8px hsl(222 47% 11% / 0.1),
+      0 0 40px -10px hsl(var(--primary) / 0.15);
+  }
+
+  .card-interactive {
+    @apply transition-all duration-200 cursor-pointer;
+  }
+
+  .card-interactive:hover {
+    @apply border-primary/30 bg-primary/5;
+  }
+
+  /* ========== SCROLLBAR ========== */
   .scrollbar-thin {
     scrollbar-width: thin;
-    scrollbar-color: hsl(var(--muted)) transparent;
+    scrollbar-color: hsl(var(--muted-foreground) / 0.3) transparent;
   }
 
   .scrollbar-thin::-webkit-scrollbar {
@@ -164,7 +309,153 @@
   }
 
   .scrollbar-thin::-webkit-scrollbar-thumb {
-    background-color: hsl(var(--muted));
+    background-color: hsl(var(--muted-foreground) / 0.3);
     border-radius: 3px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background-color: hsl(var(--muted-foreground) / 0.5);
+  }
+
+  /* ========== ANIMATIONS ========== */
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% {
+      box-shadow: 0 0 20px -5px hsl(var(--primary) / 0.3);
+    }
+    50% {
+      box-shadow: 0 0 30px -5px hsl(var(--primary) / 0.5);
+    }
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+
+  @keyframes gradient-shift {
+    0%, 100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  .animate-shimmer {
+    background: linear-gradient(
+      90deg,
+      hsl(var(--muted) / 0) 0%,
+      hsl(var(--muted) / 0.5) 50%,
+      hsl(var(--muted) / 0) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+
+  .animate-gradient {
+    background-size: 200% 200%;
+    animation: gradient-shift 3s ease infinite;
+  }
+
+  /* ========== PATTERNS ========== */
+  .pattern-dots {
+    background-image: radial-gradient(hsl(var(--muted-foreground) / 0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+
+  .pattern-grid {
+    background-image: 
+      linear-gradient(hsl(var(--border) / 0.5) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--border) / 0.5) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  /* ========== STATUS INDICATORS ========== */
+  .status-dot {
+    @apply w-2 h-2 rounded-full;
+  }
+
+  .status-dot-success {
+    @apply bg-success shadow-[0_0_8px_2px_hsl(var(--success)/0.4)];
+  }
+
+  .status-dot-warning {
+    @apply bg-warning shadow-[0_0_8px_2px_hsl(var(--warning)/0.4)];
+  }
+
+  .status-dot-destructive {
+    @apply bg-destructive shadow-[0_0_8px_2px_hsl(var(--destructive)/0.4)];
+  }
+
+  /* ========== BADGES ========== */
+  .badge-glow {
+    @apply relative;
+  }
+
+  .badge-glow::before {
+    content: '';
+    @apply absolute inset-0 rounded-full blur-sm opacity-50;
+    background: inherit;
+    z-index: -1;
+  }
+}
+
+/* ========== CUSTOM COMPONENT STYLES ========== */
+@layer components {
+  /* Premium Button Variant */
+  .btn-premium {
+    @apply relative overflow-hidden;
+    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(190 60% 35%) 100%);
+  }
+
+  .btn-premium::before {
+    content: '';
+    @apply absolute inset-0 opacity-0 transition-opacity duration-300;
+    background: linear-gradient(135deg, hsl(190 60% 35%) 0%, hsl(var(--primary)) 100%);
+  }
+
+  .btn-premium:hover::before {
+    @apply opacity-100;
+  }
+
+  /* KPI Card Variants */
+  .kpi-card {
+    @apply relative overflow-hidden;
+  }
+
+  .kpi-card::before {
+    content: '';
+    @apply absolute top-0 right-0 w-32 h-32 -mr-8 -mt-8 rounded-full opacity-10;
+    background: currentColor;
+  }
+
+  /* Pipeline Stage Cards */
+  .stage-card {
+    @apply relative border-l-4 transition-all duration-200;
+  }
+
+  .stage-card:hover {
+    @apply shadow-elevated;
   }
 }
