@@ -16,14 +16,16 @@ import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { 
   Users, Search, Target, Mail, Phone, Briefcase, 
-  GraduationCap, Sparkles, Calendar as CalendarIcon, Loader2, UserPlus,
-  TrendingUp, ChevronRight, Trash2, MessageSquare, X, UserCheck, UserX, Clock
+  GraduationCap, Sparkles, Calendar as CalendarIcon, UserPlus,
+  TrendingUp, ChevronRight, Trash2, MessageSquare, X, UserCheck, UserX, Clock,
+  Filter, SortAsc
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { ComunicacaoHistorico } from '@/components/candidatos/ComunicacaoHistorico';
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend, LineChart, Line, XAxis, YAxis, CartesianGrid } from 'recharts';
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend, AreaChart, Area, XAxis, YAxis, CartesianGrid } from 'recharts';
 import { CandidatosEmptyState } from '@/components/empty-states';
+import { motion, AnimatePresence, Variants } from 'framer-motion';
 
 interface Experiencia {
   cargo: string;
@@ -73,23 +75,41 @@ const statusOptions = [
 ];
 
 const getStatusConfig = (status: string | null) => {
-
   switch (status) {
-    case 'novo': return { label: 'Novo', color: 'bg-blue-500', chartColor: '#3b82f6' };
-    case 'em_triagem': return { label: 'Em Triagem', color: 'bg-yellow-500', chartColor: '#eab308' };
-    case 'entrevista': return { label: 'Entrevista', color: 'bg-purple-500', chartColor: '#a855f7' };
-    case 'aprovado': return { label: 'Aprovado', color: 'bg-green-500', chartColor: '#22c55e' };
-    case 'reprovado': return { label: 'Reprovado', color: 'bg-red-500', chartColor: '#ef4444' };
-    case 'banco_talentos': return { label: 'Banco de Talentos', color: 'bg-indigo-500', chartColor: '#6366f1' };
-    default: return { label: status || 'Novo', color: 'bg-gray-500', chartColor: '#6b7280' };
+    case 'novo': return { label: 'Novo', color: 'bg-info text-info-foreground', chartColor: 'hsl(var(--info))' };
+    case 'em_triagem': return { label: 'Em Triagem', color: 'bg-warning text-warning-foreground', chartColor: 'hsl(var(--warning))' };
+    case 'entrevista': return { label: 'Entrevista', color: 'bg-accent text-accent-foreground', chartColor: 'hsl(var(--accent))' };
+    case 'aprovado': return { label: 'Aprovado', color: 'bg-success text-success-foreground', chartColor: 'hsl(var(--success))' };
+    case 'reprovado': return { label: 'Reprovado', color: 'bg-destructive text-destructive-foreground', chartColor: 'hsl(var(--destructive))' };
+    case 'banco_talentos': return { label: 'Banco de Talentos', color: 'bg-primary text-primary-foreground', chartColor: 'hsl(var(--primary))' };
+    default: return { label: status || 'Novo', color: 'bg-muted text-muted-foreground', chartColor: 'hsl(var(--muted-foreground))' };
   }
 };
 
 const getScoreColor = (score: number) => {
-  if (score >= 80) return 'text-green-500 bg-green-50 dark:bg-green-950/30';
-  if (score >= 60) return 'text-yellow-600 bg-yellow-50 dark:bg-yellow-950/30';
-  if (score >= 40) return 'text-orange-500 bg-orange-50 dark:bg-orange-950/30';
-  return 'text-red-500 bg-red-50 dark:bg-red-950/30';
+  if (score >= 80) return 'text-success bg-success/10 border-success/20';
+  if (score >= 60) return 'text-warning bg-warning/10 border-warning/20';
+  if (score >= 40) return 'text-accent bg-accent/10 border-accent/20';
+  return 'text-destructive bg-destructive/10 border-destructive/20';
+};
+
+// Animation variants
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.05 }
+  }
+};
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4 } }
+};
+
+const cardHoverVariants: Variants = {
+  rest: { scale: 1, y: 0 },
+  hover: { scale: 1.02, y: -4, transition: { duration: 0.2 } }
 };
 
 export default function CandidatosPage() {
@@ -106,6 +126,7 @@ export default function CandidatosPage() {
   const [dateFrom, setDateFrom] = useState<Date | undefined>(undefined);
   const [dateTo, setDateTo] = useState<Date | undefined>(undefined);
   const [minExperiences, setMinExperiences] = useState<number>(0);
+  const [showFilters, setShowFilters] = useState(false);
 
   const allSkills = [...new Set(candidatos.flatMap(c => c.habilidades || []))].sort();
   
@@ -127,7 +148,6 @@ export default function CandidatosPage() {
 
       setCandidatos((candidatosData || []) as Candidato[]);
 
-      // Fetch match scores
       if (candidatosData && candidatosData.length > 0) {
         const { data: scoresData, error: scoresError } = await supabase
           .from('match_scores')
@@ -243,7 +263,6 @@ export default function CandidatosPage() {
       return dateB - dateA;
     });
 
-  // Statistics by status
   const statusStats = useMemo(() => {
     const counts: Record<string, number> = {};
     candidatos.forEach(c => {
@@ -270,12 +289,10 @@ export default function CandidatosPage() {
     return { novos, emProcesso, aprovados, reprovados };
   }, [candidatos]);
 
-  // Evolution over time (last 30 days)
   const evolutionData = useMemo(() => {
     const last30Days: { date: string; label: string; count: number; accumulated: number }[] = [];
     const today = new Date();
     
-    // Create array of last 30 days
     for (let i = 29; i >= 0; i--) {
       const date = subDays(today, i);
       last30Days.push({
@@ -286,7 +303,6 @@ export default function CandidatosPage() {
       });
     }
     
-    // Count candidates per day
     candidatos.forEach(c => {
       if (!c.created_at) return;
       const candidatoDate = format(new Date(c.created_at), 'yyyy-MM-dd');
@@ -296,7 +312,6 @@ export default function CandidatosPage() {
       }
     });
     
-    // Calculate accumulated
     let accumulated = candidatos.filter(c => {
       if (!c.created_at) return true;
       const candidatoDate = new Date(c.created_at);
@@ -308,94 +323,185 @@ export default function CandidatosPage() {
       day.accumulated = accumulated;
     });
     
-    // Return only every 3rd day for cleaner display
     return last30Days.filter((_, i) => i % 3 === 0 || i === last30Days.length - 1);
   }, [candidatos]);
 
+  const activeFiltersCount = [
+    statusFilter !== 'todos',
+    skillFilter !== 'todas',
+    dateFrom !== undefined,
+    dateTo !== undefined,
+    minExperiences > 0
+  ].filter(Boolean).length;
+
   return (
     <Layout>
-      <div className="space-y-6">
-        {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <div>
-            <h1 className="text-3xl font-bold">Banco de Candidatos</h1>
-            <p className="text-muted-foreground mt-1">
-              {candidatos.length} candidatos cadastrados
-            </p>
-          </div>
-          <Button onClick={() => navigate('/parser-curriculo')}>
-            <UserPlus className="h-4 w-4 mr-2" />
-            Novo Candidato via Parser
-          </Button>
-        </div>
-
-        {/* Statistics */}
-        {!isLoading && candidatos.length > 0 && (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            {/* Quick Stats */}
-            <div className="lg:col-span-2 grid grid-cols-2 md:grid-cols-4 gap-3">
-              <Card>
-                <CardContent className="p-4 flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-blue-500/10">
-                    <Users className="h-5 w-5 text-blue-500" />
-                  </div>
-                  <div>
-                    <p className="text-2xl font-bold">{quickStats.novos}</p>
-                    <p className="text-xs text-muted-foreground">Novos</p>
-                  </div>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent className="p-4 flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-yellow-500/10">
-                    <Clock className="h-5 w-5 text-yellow-500" />
-                  </div>
-                  <div>
-                    <p className="text-2xl font-bold">{quickStats.emProcesso}</p>
-                    <p className="text-xs text-muted-foreground">Em Processo</p>
-                  </div>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent className="p-4 flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-green-500/10">
-                    <UserCheck className="h-5 w-5 text-green-500" />
-                  </div>
-                  <div>
-                    <p className="text-2xl font-bold">{quickStats.aprovados}</p>
-                    <p className="text-xs text-muted-foreground">Aprovados</p>
-                  </div>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent className="p-4 flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-red-500/10">
-                    <UserX className="h-5 w-5 text-red-500" />
-                  </div>
-                  <div>
-                    <p className="text-2xl font-bold">{quickStats.reprovados}</p>
-                    <p className="text-xs text-muted-foreground">Reprovados</p>
-                  </div>
-                </CardContent>
-              </Card>
+      <div className="space-y-6 relative">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 -z-10 gradient-mesh opacity-30" />
+        
+        {/* Premium Header */}
+        <motion.div 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="relative overflow-hidden rounded-2xl glass-card p-6 md:p-8"
+        >
+          <div className="absolute inset-0 gradient-primary opacity-5" />
+          <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+          
+          <div className="relative flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+              <div className="flex items-center gap-3 mb-2">
+                <div className="p-2.5 rounded-xl bg-primary/10 shadow-glow-primary">
+                  <Users className="h-6 w-6 text-primary" />
+                </div>
+                <h1 className="text-2xl md:text-3xl font-bold text-gradient">
+                  Banco de Talentos
+                </h1>
+              </div>
+              <p className="text-muted-foreground">
+                <span className="font-semibold text-foreground">{candidatos.length}</span> candidatos cadastrados no sistema
+              </p>
             </div>
+            <Button 
+              onClick={() => navigate('/parser-curriculo')}
+              className="btn-premium text-primary-foreground shadow-lg hover:shadow-xl transition-all"
+            >
+              <UserPlus className="h-4 w-4 mr-2" />
+              Novo Candidato
+            </Button>
+          </div>
+        </motion.div>
+
+        {/* Statistics Cards */}
+        {!isLoading && candidatos.length > 0 && (
+          <motion.div 
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            className="grid grid-cols-2 md:grid-cols-4 gap-4"
+          >
+            {[
+              { icon: Users, label: 'Novos', value: quickStats.novos, color: 'info' },
+              { icon: Clock, label: 'Em Processo', value: quickStats.emProcesso, color: 'warning' },
+              { icon: UserCheck, label: 'Aprovados', value: quickStats.aprovados, color: 'success' },
+              { icon: UserX, label: 'Reprovados', value: quickStats.reprovados, color: 'destructive' },
+            ].map((stat) => (
+              <motion.div key={stat.label} variants={itemVariants}>
+                <Card variant="glass" hover="lift" className="group overflow-hidden">
+                  <CardContent className="p-4 md:p-5 relative">
+                    <div className={cn(
+                      "absolute top-0 right-0 w-20 h-20 rounded-full blur-2xl opacity-20 -translate-y-1/2 translate-x-1/2",
+                      stat.color === 'info' && "bg-info",
+                      stat.color === 'warning' && "bg-warning",
+                      stat.color === 'success' && "bg-success",
+                      stat.color === 'destructive' && "bg-destructive"
+                    )} />
+                    <div className="flex items-center gap-3 relative">
+                      <div className={cn(
+                        "p-2.5 rounded-xl transition-all duration-300 group-hover:scale-110",
+                        stat.color === 'info' && "bg-info/10 text-info",
+                        stat.color === 'warning' && "bg-warning/10 text-warning",
+                        stat.color === 'success' && "bg-success/10 text-success",
+                        stat.color === 'destructive' && "bg-destructive/10 text-destructive"
+                      )}>
+                        <stat.icon className="h-5 w-5" />
+                      </div>
+                      <div>
+                        <p className="text-2xl md:text-3xl font-bold">{stat.value}</p>
+                        <p className="text-xs text-muted-foreground">{stat.label}</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </motion.div>
+        )}
+
+        {/* Charts Row */}
+        {!isLoading && candidatos.length > 0 && (
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="grid grid-cols-1 lg:grid-cols-3 gap-4"
+          >
+            {/* Area Chart - Evolution */}
+            <Card variant="glass" className="lg:col-span-2 overflow-hidden">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-base font-semibold flex items-center gap-2">
+                  <TrendingUp className="h-4 w-4 text-primary" />
+                  Evolução de Candidatos
+                  <Badge variant="secondary" size="sm">30 dias</Badge>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="h-[200px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={evolutionData}>
+                      <defs>
+                        <linearGradient id="colorAccumulated" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.3}/>
+                          <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0}/>
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid strokeDasharray="3 3" className="stroke-muted/50" />
+                      <XAxis 
+                        dataKey="label" 
+                        tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }} 
+                        tickLine={false}
+                        axisLine={false}
+                      />
+                      <YAxis 
+                        tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }} 
+                        tickLine={false}
+                        axisLine={false}
+                        width={40}
+                      />
+                      <Tooltip
+                        contentStyle={{ 
+                          backgroundColor: 'hsl(var(--popover))', 
+                          border: '1px solid hsl(var(--border))',
+                          borderRadius: '12px',
+                          boxShadow: '0 10px 40px -10px hsl(var(--primary) / 0.2)'
+                        }}
+                        formatter={(value: number, name: string) => [
+                          value,
+                          name === 'accumulated' ? 'Total Acumulado' : 'Novos no dia'
+                        ]}
+                        labelFormatter={(label) => `Data: ${label}`}
+                      />
+                      <Area 
+                        type="monotone" 
+                        dataKey="accumulated" 
+                        stroke="hsl(var(--primary))" 
+                        strokeWidth={2}
+                        fill="url(#colorAccumulated)"
+                      />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
 
             {/* Pie Chart */}
-            <Card>
+            <Card variant="glass" className="overflow-hidden">
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">Distribuição por Status</CardTitle>
+                <CardTitle className="text-base font-semibold">Distribuição por Status</CardTitle>
               </CardHeader>
-              <CardContent className="pb-4">
-                <div className="h-[140px]">
+              <CardContent>
+                <div className="h-[200px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
                       <Pie
                         data={statusStats}
                         cx="50%"
                         cy="50%"
-                        innerRadius={35}
-                        outerRadius={55}
-                        paddingAngle={2}
+                        innerRadius={40}
+                        outerRadius={65}
+                        paddingAngle={3}
                         dataKey="value"
                       >
                         {statusStats.map((entry, index) => (
@@ -407,7 +513,7 @@ export default function CandidatosPage() {
                         contentStyle={{ 
                           backgroundColor: 'hsl(var(--popover))', 
                           border: '1px solid hsl(var(--border))',
-                          borderRadius: '8px'
+                          borderRadius: '12px'
                         }}
                       />
                       <Legend 
@@ -415,235 +521,207 @@ export default function CandidatosPage() {
                         align="right" 
                         verticalAlign="middle"
                         iconSize={8}
-                        formatter={(value) => <span className="text-xs">{value}</span>}
+                        iconType="circle"
+                        formatter={(value) => <span className="text-xs text-muted-foreground">{value}</span>}
                       />
                     </PieChart>
                   </ResponsiveContainer>
                 </div>
               </CardContent>
             </Card>
-          </div>
+          </motion.div>
         )}
 
-        {/* Evolution Chart */}
-        {!isLoading && candidatos.length > 0 && (
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium flex items-center gap-2">
-                <TrendingUp className="h-4 w-4" />
-                Evolução de Candidatos (últimos 30 dias)
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="h-[200px]">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={evolutionData}>
-                    <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                    <XAxis 
-                      dataKey="label" 
-                      tick={{ fontSize: 11 }} 
-                      tickLine={false}
-                      axisLine={false}
-                    />
-                    <YAxis 
-                      tick={{ fontSize: 11 }} 
-                      tickLine={false}
-                      axisLine={false}
-                      width={40}
-                    />
-                    <Tooltip
-                      contentStyle={{ 
-                        backgroundColor: 'hsl(var(--popover))', 
-                        border: '1px solid hsl(var(--border))',
-                        borderRadius: '8px'
-                      }}
-                      formatter={(value: number, name: string) => [
-                        value,
-                        name === 'accumulated' ? 'Total Acumulado' : 'Novos no dia'
-                      ]}
-                      labelFormatter={(label) => `Data: ${label}`}
-                    />
-                    <Legend 
-                      formatter={(value) => (
-                        <span className="text-xs">
-                          {value === 'accumulated' ? 'Total Acumulado' : 'Novos no dia'}
-                        </span>
-                      )}
-                    />
-                    <Line 
-                      type="monotone" 
-                      dataKey="accumulated" 
-                      stroke="hsl(var(--primary))" 
-                      strokeWidth={2}
-                      dot={false}
-                      activeDot={{ r: 4 }}
-                    />
-                    <Line 
-                      type="monotone" 
-                      dataKey="count" 
-                      stroke="hsl(var(--muted-foreground))" 
-                      strokeWidth={1}
-                      strokeDasharray="4 4"
-                      dot={false}
-                      activeDot={{ r: 3 }}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Filters */}
-        <Card>
-          <CardContent className="pt-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="lg:col-span-2">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        {/* Search and Filters */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+        >
+          <Card variant="glass" className="overflow-hidden">
+            <CardContent className="p-4 md:p-6">
+              {/* Main Search Row */}
+              <div className="flex flex-col md:flex-row gap-3">
+                <div className="flex-1 relative">
+                  <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input
                     placeholder="Buscar por nome ou email..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10"
+                    className="pl-10 h-11 bg-background/50 border-border/50 focus:bg-background transition-colors"
                   />
+                </div>
+
+                <div className="flex gap-2">
+                  <Select value={statusFilter} onValueChange={setStatusFilter}>
+                    <SelectTrigger className="w-[160px] h-11 bg-background/50">
+                      <SelectValue placeholder="Status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {statusOptions.map(opt => (
+                        <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+
+                  <Button 
+                    variant={showFilters ? "secondary" : "outline"} 
+                    size="icon"
+                    className="h-11 w-11 shrink-0"
+                    onClick={() => setShowFilters(!showFilters)}
+                  >
+                    <Filter className="h-4 w-4" />
+                    {activeFiltersCount > 0 && (
+                      <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-primary text-[10px] font-bold text-primary-foreground flex items-center justify-center">
+                        {activeFiltersCount}
+                      </span>
+                    )}
+                  </Button>
+
+                  <Select value={sortBy} onValueChange={setSortBy}>
+                    <SelectTrigger className="w-[160px] h-11 bg-background/50">
+                      <SortAsc className="h-4 w-4 mr-2" />
+                      <SelectValue placeholder="Ordenar" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="created_at">Mais recentes</SelectItem>
+                      <SelectItem value="match_score">Maior Match Score</SelectItem>
+                      <SelectItem value="nome">Nome (A-Z)</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
 
-              <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Status" />
-                </SelectTrigger>
-                <SelectContent>
-                  {statusOptions.map(opt => (
-                    <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              {/* Advanced Filters */}
+              <AnimatePresence>
+                {showFilters && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="overflow-hidden"
+                  >
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4 pt-4 border-t border-border/50">
+                      {/* Skill Filter */}
+                      <div>
+                        <label className="text-xs font-medium text-muted-foreground mb-2 block">Habilidade</label>
+                        <Select value={skillFilter} onValueChange={setSkillFilter}>
+                          <SelectTrigger className="bg-background/50">
+                            <SelectValue placeholder="Filtrar por skill" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="todas">Todas as skills</SelectItem>
+                            {allSkills.slice(0, 50).map(skill => (
+                              <SelectItem key={skill} value={skill}>{skill}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
 
-              <Select value={skillFilter} onValueChange={setSkillFilter}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Filtrar por skill" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="todas">Todas as skills</SelectItem>
-                  {allSkills.slice(0, 50).map(skill => (
-                    <SelectItem key={skill} value={skill}>{skill}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+                      {/* Date From */}
+                      <div>
+                        <label className="text-xs font-medium text-muted-foreground mb-2 block">Cadastrado a partir de</label>
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <Button
+                              variant="outline"
+                              className={cn(
+                                "w-full justify-start text-left font-normal bg-background/50",
+                                !dateFrom && "text-muted-foreground"
+                              )}
+                            >
+                              <CalendarIcon className="mr-2 h-4 w-4" />
+                              {dateFrom ? format(dateFrom, "dd/MM/yyyy", { locale: ptBR }) : "Selecionar"}
+                              {dateFrom && (
+                                <X 
+                                  className="ml-auto h-4 w-4 hover:text-destructive" 
+                                  onClick={(e) => { e.stopPropagation(); setDateFrom(undefined); }}
+                                />
+                              )}
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto p-0" align="start">
+                            <Calendar
+                              mode="single"
+                              selected={dateFrom}
+                              onSelect={setDateFrom}
+                              initialFocus
+                              className="p-3 pointer-events-auto"
+                            />
+                          </PopoverContent>
+                        </Popover>
+                      </div>
 
-            {/* Advanced Filters */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4 pt-4 border-t">
-              {/* Date From */}
-              <div>
-                <label className="text-xs text-muted-foreground mb-1 block">Data de cadastro (de)</label>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className={cn(
-                        "w-full justify-start text-left font-normal",
-                        !dateFrom && "text-muted-foreground"
-                      )}
-                    >
-                      <CalendarIcon className="mr-2 h-4 w-4" />
-                      {dateFrom ? format(dateFrom, "dd/MM/yyyy", { locale: ptBR }) : "Selecionar"}
-                      {dateFrom && (
-                        <X 
-                          className="ml-auto h-4 w-4 hover:text-destructive" 
-                          onClick={(e) => { e.stopPropagation(); setDateFrom(undefined); }}
-                        />
-                      )}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={dateFrom}
-                      onSelect={setDateFrom}
-                      initialFocus
-                      className="p-3 pointer-events-auto"
-                    />
-                  </PopoverContent>
-                </Popover>
-              </div>
+                      {/* Date To */}
+                      <div>
+                        <label className="text-xs font-medium text-muted-foreground mb-2 block">Cadastrado até</label>
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <Button
+                              variant="outline"
+                              className={cn(
+                                "w-full justify-start text-left font-normal bg-background/50",
+                                !dateTo && "text-muted-foreground"
+                              )}
+                            >
+                              <CalendarIcon className="mr-2 h-4 w-4" />
+                              {dateTo ? format(dateTo, "dd/MM/yyyy", { locale: ptBR }) : "Selecionar"}
+                              {dateTo && (
+                                <X 
+                                  className="ml-auto h-4 w-4 hover:text-destructive" 
+                                  onClick={(e) => { e.stopPropagation(); setDateTo(undefined); }}
+                                />
+                              )}
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto p-0" align="start">
+                            <Calendar
+                              mode="single"
+                              selected={dateTo}
+                              onSelect={setDateTo}
+                              initialFocus
+                              className="p-3 pointer-events-auto"
+                            />
+                          </PopoverContent>
+                        </Popover>
+                      </div>
 
-              {/* Date To */}
-              <div>
-                <label className="text-xs text-muted-foreground mb-1 block">Data de cadastro (até)</label>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className={cn(
-                        "w-full justify-start text-left font-normal",
-                        !dateTo && "text-muted-foreground"
-                      )}
-                    >
-                      <CalendarIcon className="mr-2 h-4 w-4" />
-                      {dateTo ? format(dateTo, "dd/MM/yyyy", { locale: ptBR }) : "Selecionar"}
-                      {dateTo && (
-                        <X 
-                          className="ml-auto h-4 w-4 hover:text-destructive" 
-                          onClick={(e) => { e.stopPropagation(); setDateTo(undefined); }}
-                        />
-                      )}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={dateTo}
-                      onSelect={setDateTo}
-                      initialFocus
-                      className="p-3 pointer-events-auto"
-                    />
-                  </PopoverContent>
-                </Popover>
-              </div>
-
-              {/* Min Experience */}
-              <div>
-                <label className="text-xs text-muted-foreground mb-1 block">
-                  Experiências mínimas: {minExperiences === 0 ? "Todas" : minExperiences}
-                </label>
-                <div className="flex items-center gap-3 h-10 px-3 border rounded-md">
-                  <Briefcase className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-                  <Slider
-                    value={[minExperiences]}
-                    onValueChange={(value) => setMinExperiences(value[0] ?? 0)}
-                    max={10}
-                    step={1}
-                    className="flex-1"
-                  />
-                  <span className="text-sm font-medium w-6 text-right">{minExperiences}</span>
-                </div>
-              </div>
-
-              {/* Sort */}
-              <div>
-                <label className="text-xs text-muted-foreground mb-1 block">Ordenar por</label>
-                <Select value={sortBy} onValueChange={setSortBy}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Ordenar por" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="created_at">Mais recentes</SelectItem>
-                    <SelectItem value="match_score">Maior Match Score</SelectItem>
-                    <SelectItem value="nome">Nome (A-Z)</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+                      {/* Min Experience */}
+                      <div>
+                        <label className="text-xs font-medium text-muted-foreground mb-2 block">
+                          Experiências mínimas: <span className="font-bold text-foreground">{minExperiences === 0 ? "Todas" : minExperiences}</span>
+                        </label>
+                        <div className="flex items-center gap-3 h-10 px-3 border rounded-lg bg-background/50">
+                          <Briefcase className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                          <Slider
+                            value={[minExperiences]}
+                            onValueChange={(value) => setMinExperiences(value[0] ?? 0)}
+                            max={10}
+                            step={1}
+                            className="flex-1"
+                          />
+                          <span className="text-sm font-medium w-6 text-right">{minExperiences}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </CardContent>
+          </Card>
+        </motion.div>
 
         {/* Results */}
         {isLoading ? (
-          <div className="flex items-center justify-center py-12">
-            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          <div className="flex items-center justify-center py-16">
+            <div className="text-center space-y-4">
+              <div className="relative">
+                <div className="w-16 h-16 border-4 border-primary/20 rounded-full" />
+                <div className="absolute inset-0 w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+              </div>
+              <p className="text-muted-foreground">Carregando talentos...</p>
+            </div>
           </div>
         ) : filteredCandidatos.length === 0 ? (
           <CandidatosEmptyState 
@@ -658,235 +736,290 @@ export default function CandidatosPage() {
             }}
           />
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <motion.div 
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+          >
             {filteredCandidatos.map((candidato) => {
               const bestScore = getBestMatchScore(candidato.id);
               const statusConfig = getStatusConfig(candidato.status ?? 'novo');
 
               return (
-                <Sheet key={candidato.id}>
-                  <SheetTrigger asChild>
-                    <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => setSelectedCandidato(candidato)}>
-                      <CardContent className="pt-6">
-                        <div className="flex items-start justify-between mb-3">
-                          <div className="flex-1 min-w-0">
-                            <h3 className="font-semibold truncate">{candidato.nome}</h3>
-                            <p className="text-sm text-muted-foreground truncate">{candidato.email}</p>
-                          </div>
-                          <Badge className={cn("text-white text-xs", statusConfig.color)}>
-                            {statusConfig.label}
-                          </Badge>
-                        </div>
-
-                        {bestScore && (
-                          <div className={cn("p-2 rounded-lg mb-3 flex items-center justify-between", getScoreColor(bestScore.score_total))}>
-                            <div className="flex items-center gap-2">
-                              <Target className="h-4 w-4" />
-                              <span className="text-sm font-medium">Match Score</span>
-                            </div>
-                            <span className="font-bold">{bestScore.score_total}%</span>
-                          </div>
-                        )}
-
-                        <div className="space-y-2 text-sm">
-                          <div className="flex items-center gap-2 text-muted-foreground">
-                            <Briefcase className="h-4 w-4" />
-                            <span>{candidato.experiencias?.length || 0} experiências</span>
-                          </div>
-                          <div className="flex items-center gap-2 text-muted-foreground">
-                            <Sparkles className="h-4 w-4" />
-                            <span>{candidato.habilidades?.length || 0} habilidades</span>
-                          </div>
-                        </div>
-
-                        {candidato.habilidades && candidato.habilidades.length > 0 && (
-                          <div className="flex flex-wrap gap-1 mt-3">
-                            {candidato.habilidades.slice(0, 3).map((skill, i) => (
-                              <Badge key={i} variant="secondary" className="text-xs">{skill}</Badge>
-                            ))}
-                            {candidato.habilidades.length > 3 && (
-                              <Badge variant="outline" className="text-xs">+{candidato.habilidades.length - 3}</Badge>
+                <motion.div 
+                  key={candidato.id} 
+                  variants={itemVariants}
+                  layout
+                >
+                  <Sheet>
+                    <SheetTrigger asChild>
+                      <motion.div
+                        variants={cardHoverVariants}
+                        initial="rest"
+                        whileHover="hover"
+                        className="cursor-pointer"
+                        onClick={() => setSelectedCandidato(candidato)}
+                      >
+                        <Card variant="glass" className="h-full overflow-hidden border-border/50 hover:border-primary/30 transition-colors">
+                          <CardContent className="p-5 relative">
+                            {/* Glow effect */}
+                            {bestScore && bestScore.score_total >= 80 && (
+                              <div className="absolute top-0 right-0 w-24 h-24 bg-success/20 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2" />
                             )}
-                          </div>
-                        )}
-
-                        <div className="flex items-center justify-between mt-4 pt-3 border-t">
-                          <span className="text-xs text-muted-foreground">
-                            <CalendarIcon className="h-3 w-3 inline mr-1" />
-                            {candidato.created_at ? new Date(candidato.created_at).toLocaleDateString('pt-BR') : '-'}
-                          </span>
-                          <ChevronRight className="h-4 w-4 text-muted-foreground" />
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </SheetTrigger>
-
-                  <SheetContent className="w-full sm:max-w-lg overflow-y-auto">
-                    <SheetHeader>
-                      <SheetTitle className="flex items-center gap-2">
-                        <Users className="h-5 w-5" />
-                        {candidato.nome}
-                      </SheetTitle>
-                    </SheetHeader>
-
-                    <div className="space-y-6 mt-6">
-                      {/* Status Edit */}
-                      <div>
-                        <h4 className="text-sm font-medium mb-2">Alterar Status</h4>
-                        <Select 
-                          value={candidato.status || 'novo'} 
-                          onValueChange={(value) => updateCandidatoStatus(candidato.id, value)}
-                        >
-                          <SelectTrigger>
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {statusOptions.filter(opt => opt.value !== 'todos').map(opt => (
-                              <SelectItem key={opt.value} value={opt.value}>
-                                <div className="flex items-center gap-2">
-                                  <div className={cn("w-2 h-2 rounded-full", getStatusConfig(opt.value).color)} />
-                                  {opt.label}
+                            
+                            <div className="relative">
+                              {/* Header */}
+                              <div className="flex items-start justify-between mb-4">
+                                <div className="flex-1 min-w-0">
+                                  <h3 className="font-semibold text-lg truncate">{candidato.nome}</h3>
+                                  <p className="text-sm text-muted-foreground truncate">{candidato.email}</p>
                                 </div>
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
+                                <Badge className={cn("shrink-0 ml-2", statusConfig.color)} size="sm">
+                                  {statusConfig.label}
+                                </Badge>
+                              </div>
 
-                      {/* Contact */}
-                      <div className="space-y-2">
-                        <div className="flex items-center gap-2 text-sm">
-                          <Mail className="h-4 w-4 text-muted-foreground" />
-                          <span>{candidato.email}</span>
+                              {/* Match Score */}
+                              {bestScore && (
+                                <div className={cn(
+                                  "p-3 rounded-xl mb-4 flex items-center justify-between border",
+                                  getScoreColor(bestScore.score_total)
+                                )}>
+                                  <div className="flex items-center gap-2">
+                                    <Target className="h-4 w-4" />
+                                    <span className="text-sm font-medium">Match Score</span>
+                                  </div>
+                                  <span className="text-lg font-bold">{bestScore.score_total}%</span>
+                                </div>
+                              )}
+
+                              {/* Stats */}
+                              <div className="grid grid-cols-2 gap-3 mb-4">
+                                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                  <Briefcase className="h-4 w-4" />
+                                  <span>{candidato.experiencias?.length || 0} experiências</span>
+                                </div>
+                                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                  <Sparkles className="h-4 w-4" />
+                                  <span>{candidato.habilidades?.length || 0} habilidades</span>
+                                </div>
+                              </div>
+
+                              {/* Skills */}
+                              {candidato.habilidades && candidato.habilidades.length > 0 && (
+                                <div className="flex flex-wrap gap-1.5">
+                                  {candidato.habilidades.slice(0, 3).map((skill, i) => (
+                                    <Badge key={i} variant="secondary" size="sm" className="bg-secondary/50">
+                                      {skill}
+                                    </Badge>
+                                  ))}
+                                  {candidato.habilidades.length > 3 && (
+                                    <Badge variant="outline" size="sm">
+                                      +{candidato.habilidades.length - 3}
+                                    </Badge>
+                                  )}
+                                </div>
+                              )}
+
+                              {/* Footer */}
+                              <div className="flex items-center justify-between mt-4 pt-4 border-t border-border/50">
+                                <span className="text-xs text-muted-foreground flex items-center gap-1">
+                                  <CalendarIcon className="h-3 w-3" />
+                                  {candidato.created_at ? format(new Date(candidato.created_at), "dd/MM/yyyy", { locale: ptBR }) : '-'}
+                                </span>
+                                <div className="flex items-center gap-1 text-xs text-primary font-medium">
+                                  Ver detalhes
+                                  <ChevronRight className="h-3 w-3" />
+                                </div>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </motion.div>
+                    </SheetTrigger>
+
+                    <SheetContent className="w-full sm:max-w-lg overflow-y-auto">
+                      <SheetHeader>
+                        <SheetTitle className="flex items-center gap-3">
+                          <div className="p-2 rounded-lg bg-primary/10">
+                            <Users className="h-5 w-5 text-primary" />
+                          </div>
+                          {candidato.nome}
+                        </SheetTitle>
+                      </SheetHeader>
+
+                      <div className="space-y-6 mt-6">
+                        {/* Status Edit */}
+                        <div>
+                          <h4 className="text-sm font-medium mb-2">Alterar Status</h4>
+                          <Select 
+                            value={candidato.status || 'novo'} 
+                            onValueChange={(value) => updateCandidatoStatus(candidato.id, value)}
+                          >
+                            <SelectTrigger className="bg-muted/50">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {statusOptions.filter(opt => opt.value !== 'todos').map(opt => (
+                                <SelectItem key={opt.value} value={opt.value}>
+                                  <div className="flex items-center gap-2">
+                                    <div className={cn("w-2 h-2 rounded-full", getStatusConfig(opt.value).color)} />
+                                    {opt.label}
+                                  </div>
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
                         </div>
-                        {candidato.telefone && (
+
+                        {/* Contact */}
+                        <div className="p-4 rounded-xl bg-muted/30 space-y-2">
                           <div className="flex items-center gap-2 text-sm">
-                            <Phone className="h-4 w-4 text-muted-foreground" />
-                            <span>{candidato.telefone}</span>
+                            <Mail className="h-4 w-4 text-primary" />
+                            <span>{candidato.email}</span>
+                          </div>
+                          {candidato.telefone && (
+                            <div className="flex items-center gap-2 text-sm">
+                              <Phone className="h-4 w-4 text-primary" />
+                              <span>{candidato.telefone}</span>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Match Scores */}
+                        {matchScores[candidato.id] && (matchScores[candidato.id]?.length ?? 0) > 0 && (
+                          <div>
+                            <h4 className="text-sm font-medium mb-3 flex items-center gap-2">
+                              <Target className="h-4 w-4 text-primary" />
+                              Match Scores
+                            </h4>
+                            <div className="space-y-2">
+                              {(matchScores[candidato.id] ?? []).map((score) => (
+                                <div key={score.id} className={cn(
+                                  "p-3 rounded-xl border",
+                                  getScoreColor(score.score_total)
+                                )}>
+                                  <div className="flex justify-between items-center">
+                                    <span className="text-sm font-medium">{score.vaga_titulo}</span>
+                                    <span className="font-bold">{score.score_total}%</span>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
                           </div>
                         )}
-                      </div>
 
-                      {/* Match Scores */}
-                      {matchScores[candidato.id] && (matchScores[candidato.id]?.length ?? 0) > 0 && (
-                        <div>
-                          <h4 className="text-sm font-medium mb-2 flex items-center gap-2">
-                            <Target className="h-4 w-4" />
-                            Match Scores
-                          </h4>
-                          <div className="space-y-2">
-                            {(matchScores[candidato.id] ?? []).map((score) => (
-                              <div key={score.id} className={cn("p-3 rounded-lg", getScoreColor(score.score_total))}>
-                                <div className="flex justify-between items-center">
-                                  <span className="text-sm font-medium">{score.vaga_titulo}</span>
-                                  <span className="font-bold">{score.score_total}%</span>
+                        {/* Resume */}
+                        {candidato.resumo && (
+                          <div>
+                            <h4 className="text-sm font-medium mb-2">Resumo</h4>
+                            <p className="text-sm text-muted-foreground bg-muted/30 p-4 rounded-xl">
+                              {candidato.resumo}
+                            </p>
+                          </div>
+                        )}
+
+                        {/* Skills */}
+                        {candidato.habilidades && candidato.habilidades.length > 0 && (
+                          <div>
+                            <h4 className="text-sm font-medium mb-3 flex items-center gap-2">
+                              <Sparkles className="h-4 w-4 text-primary" />
+                              Habilidades ({candidato.habilidades.length})
+                            </h4>
+                            <div className="flex flex-wrap gap-2">
+                              {candidato.habilidades.map((skill, i) => (
+                                <Badge key={i} variant="secondary">{skill}</Badge>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Experience */}
+                        {candidato.experiencias && candidato.experiencias.length > 0 && (
+                          <div>
+                            <h4 className="text-sm font-medium mb-3 flex items-center gap-2">
+                              <Briefcase className="h-4 w-4 text-primary" />
+                              Experiências ({candidato.experiencias.length})
+                            </h4>
+                            <div className="space-y-2">
+                              {candidato.experiencias.map((exp: Experiencia, i: number) => (
+                                <div key={i} className="p-4 bg-muted/30 rounded-xl">
+                                  <p className="font-medium text-sm">{exp.cargo}</p>
+                                  <p className="text-sm text-primary">{exp.empresa}</p>
+                                  <p className="text-xs text-muted-foreground mt-1">{exp.periodo}</p>
                                 </div>
-                              </div>
-                            ))}
+                              ))}
+                            </div>
                           </div>
-                        </div>
-                      )}
+                        )}
 
-                      {/* Resume */}
-                      {candidato.resumo && (
-                        <div>
-                          <h4 className="text-sm font-medium mb-2">Resumo</h4>
-                          <p className="text-sm text-muted-foreground bg-muted p-3 rounded-lg">
-                            {candidato.resumo}
-                          </p>
-                        </div>
-                      )}
+                        {/* Education */}
+                        {candidato.formacao && candidato.formacao.length > 0 && (
+                          <div>
+                            <h4 className="text-sm font-medium mb-3 flex items-center gap-2">
+                              <GraduationCap className="h-4 w-4 text-primary" />
+                              Formação ({candidato.formacao.length})
+                            </h4>
+                            <div className="space-y-2">
+                              {candidato.formacao.map((edu: Formacao, i: number) => (
+                                <div key={i} className="p-4 bg-muted/30 rounded-xl">
+                                  <p className="font-medium text-sm">{edu.curso}</p>
+                                  <p className="text-sm text-primary">{edu.instituicao}</p>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
 
-                      {/* Skills */}
-                      {candidato.habilidades && candidato.habilidades.length > 0 && (
+                        {/* Communication History */}
                         <div>
-                          <h4 className="text-sm font-medium mb-2 flex items-center gap-2">
-                            <Sparkles className="h-4 w-4" />
-                            Habilidades ({candidato.habilidades.length})
+                          <h4 className="text-sm font-medium mb-3 flex items-center gap-2">
+                            <MessageSquare className="h-4 w-4 text-primary" />
+                            Histórico de Comunicações
                           </h4>
-                          <div className="flex flex-wrap gap-2">
-                            {candidato.habilidades.map((skill, i) => (
-                              <Badge key={i} variant="secondary">{skill}</Badge>
-                            ))}
-                          </div>
+                          <ComunicacaoHistorico candidatoId={candidato.id} />
                         </div>
-                      )}
 
-                      {/* Experience */}
-                      {candidato.experiencias && candidato.experiencias.length > 0 && (
-                        <div>
-                          <h4 className="text-sm font-medium mb-2 flex items-center gap-2">
-                            <Briefcase className="h-4 w-4" />
-                            Experiências ({candidato.experiencias.length})
-                          </h4>
-                          <div className="space-y-2">
-                            {candidato.experiencias.map((exp: any, i: number) => (
-                              <div key={i} className="p-3 bg-muted rounded-lg">
-                                <p className="font-medium text-sm">{exp.cargo}</p>
-                                <p className="text-sm text-primary">{exp.empresa}</p>
-                                <p className="text-xs text-muted-foreground">{exp.periodo}</p>
-                              </div>
-                            ))}
-                          </div>
+                        {/* Actions */}
+                        <div className="flex gap-3 pt-4 border-t">
+                          <Button 
+                            className="flex-1 btn-premium text-primary-foreground"
+                            onClick={() => navigate(`/candidato/${candidato.id}`)}
+                          >
+                            <Users className="h-4 w-4 mr-2" />
+                            Ver Perfil Completo
+                          </Button>
+                          <Button 
+                            variant="outline" 
+                            size="icon"
+                            className="text-destructive hover:bg-destructive hover:text-destructive-foreground"
+                            onClick={() => deleteCandidato(candidato.id)}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
                         </div>
-                      )}
-
-                      {/* Education */}
-                      {candidato.formacao && candidato.formacao.length > 0 && (
-                        <div>
-                          <h4 className="text-sm font-medium mb-2 flex items-center gap-2">
-                            <GraduationCap className="h-4 w-4" />
-                            Formação ({candidato.formacao.length})
-                          </h4>
-                          <div className="space-y-2">
-                            {candidato.formacao.map((edu: any, i: number) => (
-                              <div key={i} className="p-3 bg-muted rounded-lg">
-                                <p className="font-medium text-sm">{edu.curso}</p>
-                                <p className="text-sm text-primary">{edu.instituicao}</p>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Communication History */}
-                      <div>
-                        <h4 className="text-sm font-medium mb-2 flex items-center gap-2">
-                          <MessageSquare className="h-4 w-4" />
-                          Histórico de Comunicações
-                        </h4>
-                        <ComunicacaoHistorico candidatoId={candidato.id} />
                       </div>
-
-                      {/* Actions */}
-                      <div className="flex gap-3 pt-4 border-t">
-                        <Button 
-                          size="sm"
-                          onClick={() => navigate(`/candidato/${candidato.id}`)}
-                        >
-                          <Users className="h-4 w-4 mr-2" />
-                          Ver Perfil Completo
-                        </Button>
-                        <Button 
-                          variant="destructive" 
-                          size="sm"
-                          onClick={() => deleteCandidato(candidato.id)}
-                        >
-                          <Trash2 className="h-4 w-4 mr-2" />
-                          Excluir
-                        </Button>
-                      </div>
-                    </div>
-                  </SheetContent>
-                </Sheet>
+                    </SheetContent>
+                  </Sheet>
+                </motion.div>
               );
             })}
-          </div>
+          </motion.div>
+        )}
+
+        {/* Results Count */}
+        {!isLoading && filteredCandidatos.length > 0 && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-center text-sm text-muted-foreground"
+          >
+            Exibindo <span className="font-semibold text-foreground">{filteredCandidatos.length}</span> de{' '}
+            <span className="font-semibold text-foreground">{candidatos.length}</span> candidatos
+          </motion.div>
         )}
       </div>
     </Layout>
   );
 }
-
-
-
