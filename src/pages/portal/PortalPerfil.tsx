@@ -40,8 +40,9 @@ const PortalPerfil = () => {
       toast.success('Perfil atualizado com sucesso!');
       queryClient.invalidateQueries({ queryKey: ['candidato-profile'] });
     },
-    onError: (error: any) => {
-      toast.error('Erro ao atualizar perfil', { description: error.message });
+    onError: (error: unknown) => {
+      const message = error instanceof Error ? error.message : 'Erro desconhecido';
+      toast.error('Erro ao atualizar perfil', { description: message });
     }
   });
 
@@ -62,8 +63,9 @@ const PortalPerfil = () => {
       setNewPassword('');
       setConfirmPassword('');
     },
-    onError: (error: any) => {
-      toast.error('Erro ao alterar senha', { description: error.message });
+    onError: (error: unknown) => {
+      const message = error instanceof Error ? error.message : 'Erro desconhecido';
+      toast.error('Erro ao alterar senha', { description: message });
     }
   });
 

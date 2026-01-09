@@ -1,5 +1,4 @@
-import { memo } from 'react';
-import { useState } from "react";
+import { memo, useState } from 'react';
 import { supabase } from "@/integrations/supabase/client";
 import { useVagas } from "@/hooks/useVagas";
 import { Button } from "@/components/ui/button";
@@ -88,8 +87,8 @@ export function MatchScoreCalculator({ candidatoId, candidatoNome, onScoreCalcul
       });
 
       toast({ title: "Sucesso", description: `Match Score: ${matchResult.scoreTotal}%` });
-    } catch (err: any) {
-      setErro(err.message || "Erro ao calcular match score");
+    } catch (err: unknown) {
+      setErro(err instanceof Error ? err.message : "Erro ao calcular match score");
       toast({ title: "Erro", description: "Falha ao calcular", variant: "destructive" });
     } finally {
       setCalculando(false);

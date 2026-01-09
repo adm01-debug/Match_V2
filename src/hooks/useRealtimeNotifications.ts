@@ -42,6 +42,28 @@ interface DatabaseNotification {
   created_at: string;
 }
 
+interface MatchScorePayload {
+  candidato_id: string;
+  score_total?: number;
+}
+
+interface VagaPayload {
+  id: string;
+  titulo: string;
+  status?: string;
+}
+
+interface ProcessoPayload {
+  candidato_nome: string;
+  etapa_atual?: string;
+}
+
+interface EntrevistaPayload {
+  candidato_nome: string;
+  tipo: string;
+  status?: string;
+}
+
 interface UseRealtimeNotificationsOptions {
   enableMatchScores?: boolean;
   enableVagas?: boolean;
@@ -222,7 +244,7 @@ export function useRealtimeNotifications(options: UseRealtimeNotificationsOption
       const matchChannel = supabase
         .channel('match-scores-realtime')
         .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'match_scores' }, (payload) => {
-          const score = payload.new as any;
+          const score = payload.new as MatchScorePayload;
           const total = Number(score.score_total ?? 0);
           if (total >= 80) {
             addNotification({
@@ -243,8 +265,8 @@ export function useRealtimeNotifications(options: UseRealtimeNotificationsOption
       const vagasChannel = supabase
         .channel('vagas-realtime')
         .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'vagas' }, (payload) => {
-          const vaga = payload.new as any;
-          const oldVaga = payload.old as any;
+          const vaga = payload.new as VagaPayload;
+          const oldVaga = payload.old as VagaPayload;
 
           if (oldVaga?.status !== vaga?.status && vaga?.status === 'publicada') {
             addNotification({
@@ -264,8 +286,8 @@ export function useRealtimeNotifications(options: UseRealtimeNotificationsOption
       const processosChannel = supabase
         .channel('processos-realtime')
         .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'processos_seletivos' }, (payload) => {
-          const processo = payload.new as any;
-          const oldProcesso = payload.old as any;
+          const processo = payload.new as ProcessoPayload;
+          const oldProcesso = payload.old as ProcessoPayload;
 
           if (oldProcesso?.etapa_atual !== processo?.etapa_atual) {
             addNotification({
@@ -285,7 +307,7 @@ export function useRealtimeNotifications(options: UseRealtimeNotificationsOption
       const entrevistasChannel = supabase
         .channel('entrevistas-realtime')
         .on('postgres_changes', { event: '*', schema: 'public', table: 'entrevistas' }, (payload) => {
-          const entrevista = payload.new as any;
+          const entrevista = payload.new as EntrevistaPayload;
 
           if (payload.eventType === 'INSERT') {
             addNotification({
@@ -297,7 +319,7 @@ export function useRealtimeNotifications(options: UseRealtimeNotificationsOption
           }
 
           if (payload.eventType === 'UPDATE') {
-            const oldEntrevista = payload.old as any;
+            const oldEntrevista = payload.old as EntrevistaPayload;
             if (oldEntrevista?.status !== entrevista?.status) {
               addNotification({
                 type: 'interview_updated',
