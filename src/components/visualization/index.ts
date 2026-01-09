@@ -1,0 +1,37 @@
+/**
+ * @fileoverview Premium Data Visualization components export
+ * @module visualization
+ */
+
+// Sparkline components
+export {
+  Sparkline,
+  SparkBar,
+  TrendIndicator,
+  MiniProgress,
+} from "./Sparkline";
+
+// Heatmap components
+export {
+  Heatmap,
+  CalendarHeatmap,
+  ActivityIndicator,
+} from "./Heatmap";
+
+// Animated chart components
+export {
+  AnimatedAreaChart,
+  AnimatedBarChart,
+  AnimatedPieChart,
+  AnimatedLineChart,
+  StatCard,
+} from "./AnimatedCharts";
+
+// Trend indicator components
+export {
+  TrendBadge,
+  ComparisonIndicator,
+  MetricChange,
+  GoalProgress,
+  StreakCounter,
+} from "./TrendIndicators";
