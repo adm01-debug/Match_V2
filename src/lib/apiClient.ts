@@ -60,16 +60,7 @@ export const apiClient = {
   },
 };
 
-export function handleApiError(error: unknown): void {
-  if (error instanceof Error) {
-    console.error('API Error:', error.message);
-  } else if (error && typeof error === 'object' && 'response' in error) {
-    const apiError = error as { response?: { status?: number; data?: { message?: string } } };
-    console.error('API Error:', apiError.response?.status, apiError.response?.data?.message);
-  } else {
-    console.error('Unknown API Error:', error);
-  }
-}
+// Note: handleApiError is now centralized in errorHandler.ts
 
 export function createApiUrl(path: string, params?: Record<string, unknown>): string {
   const baseUrl = path.startsWith('/') ? path : `/${path}`;
