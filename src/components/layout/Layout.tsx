@@ -13,6 +13,7 @@ import { CommandMenu } from "@/components/common/CommandMenu";
 import { CommandMenuTrigger } from "@/components/common/CommandMenuTrigger";
 import { OnboardingTour } from "@/components/onboarding/OnboardingTour";
 import { BottomNavigation } from "@/components/navigation/BottomNavigation";
+import { ThemeToggle } from "@/components/common/ThemeToggle";
 import { Menu } from 'lucide-react';
 
 interface LayoutProps {
@@ -64,6 +65,9 @@ export function Layout({ children, title }: LayoutProps) {
               </div>
 
               <div className="h-6 w-px bg-border hidden md:block" />
+
+              {/* Theme Toggle */}
+              <ThemeToggle />
 
               <NotificationPanel
                 notifications={notifications}
