@@ -3,12 +3,13 @@
  * @module PortalProtectedRoute
  */
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect, useRef } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useCandidatoAuth } from '@/contexts/CandidatoAuthContext';
 import { Loader2, UserPlus, Briefcase, CheckCircle2, LayoutDashboard, ShieldCheck } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import confetti from 'canvas-confetti';
 
 interface PortalProtectedRouteProps {
   children: React.ReactNode;
@@ -31,6 +32,8 @@ const steps: StepInfo[] = [
 const PortalProtectedRoute: React.FC<PortalProtectedRouteProps> = ({ children }) => {
   const { user, isCandidato, loading } = useCandidatoAuth();
   const location = useLocation();
+  const previousStepRef = useRef<LoadingStep | null>(null);
+  const confettiTriggeredRef = useRef(false);
 
   // Determine current step based on auth state
   const currentStep = useMemo((): LoadingStep => {
@@ -40,6 +43,47 @@ const PortalProtectedRoute: React.FC<PortalProtectedRouteProps> = ({ children })
   }, [user, isCandidato]);
 
   const currentStepIndex = steps.findIndex(s => s.id === currentStep);
+
+  // Trigger confetti celebration when transitioning from 'criando' to 'carregando'
+  useEffect(() => {
+    if (
+      previousStepRef.current === 'criando' && 
+      currentStep === 'carregando' && 
+      !confettiTriggeredRef.current
+    ) {
+      confettiTriggeredRef.current = true;
+      
+      // Fire confetti celebration
+      const duration = 2000;
+      const animationEnd = Date.now() + duration;
+      const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 9999 };
+
+      const randomInRange = (min: number, max: number) => Math.random() * (max - min) + min;
+
+      const interval = setInterval(() => {
+        const timeLeft = animationEnd - Date.now();
+
+        if (timeLeft <= 0) {
+          return clearInterval(interval);
+        }
+
+        const particleCount = 50 * (timeLeft / duration);
+
+        confetti({
+          ...defaults,
+          particleCount,
+          origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }
+        });
+        confetti({
+          ...defaults,
+          particleCount,
+          origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }
+        });
+      }, 250);
+    }
+
+    previousStepRef.current = currentStep;
+  }, [currentStep]);
 
   // Loading state with stepped progress indicator
   if (loading) {
