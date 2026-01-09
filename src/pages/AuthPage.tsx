@@ -64,6 +64,11 @@ const AuthPage = () => {
   const [signupData, setSignupData] = useState({ nome: '', email: '', password: '', confirmPassword: '' });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
+  // Demo login handler
+  const handleDemoLogin = () => {
+    setLoginData({ email: 'adm01@promobrindes.com.br', password: '123456' });
+  };
+
   // Get redirect info from location state
   const locationState = location.state as LocationState | null;
   const redirectedFrom = locationState?.from;
@@ -386,6 +391,27 @@ const AuthPage = () => {
                             Entrar no Sistema
                           </>
                         )}
+                      </Button>
+                      
+                      <div className="relative w-full">
+                        <div className="absolute inset-0 flex items-center">
+                          <span className="w-full border-t border-border" />
+                        </div>
+                        <div className="relative flex justify-center text-xs uppercase">
+                          <span className="bg-card px-2 text-muted-foreground">ou</span>
+                        </div>
+                      </div>
+                      
+                      <Button 
+                        type="button"
+                        variant="outline"
+                        className="w-full h-11 border-dashed border-primary/50 hover:bg-primary/5 hover:border-primary transition-all"
+                        onClick={handleDemoLogin}
+                        disabled={isLoading}
+                      >
+                        <User className="mr-2 h-4 w-4 text-primary" />
+                        <span className="text-muted-foreground">Usar conta de</span>
+                        <span className="ml-1 font-semibold text-primary">demonstração</span>
                       </Button>
                     </CardFooter>
                   </form>
