@@ -32,7 +32,9 @@ import {
   XCircle,
   ArrowRight,
   Filter,
-  Calendar
+  Calendar,
+  LayoutGrid,
+  List
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -143,6 +145,7 @@ export default function Pipeline() {
   const [vagaSelecionada, setVagaSelecionada] = useState<string>(vagaIdParam || "todas");
   const [searchQuery, setSearchQuery] = useState("");
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isCompact, setIsCompact] = useState(false);
 
   // Hooks de dados
   const { data: vagas = [], isLoading: loadingVagas } = useVagas();
@@ -310,6 +313,28 @@ export default function Pipeline() {
                 </SelectContent>
               </Select>
 
+              {/* Compact Mode Toggle */}
+              <div className="flex items-center rounded-lg bg-card/50 backdrop-blur-sm border border-border/50 p-1">
+                <Button
+                  variant={!isCompact ? "secondary" : "ghost"}
+                  size="sm"
+                  onClick={() => setIsCompact(false)}
+                  className="h-8 px-3 gap-1.5"
+                >
+                  <LayoutGrid className="h-4 w-4" />
+                  <span className="hidden sm:inline text-xs">Normal</span>
+                </Button>
+                <Button
+                  variant={isCompact ? "secondary" : "ghost"}
+                  size="sm"
+                  onClick={() => setIsCompact(true)}
+                  className="h-8 px-3 gap-1.5"
+                >
+                  <List className="h-4 w-4" />
+                  <span className="hidden sm:inline text-xs">Compacto</span>
+                </Button>
+              </div>
+
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Button 
                   variant="outline" 
@@ -388,7 +413,7 @@ export default function Pipeline() {
                 <motion.div 
                   key={etapa} 
                   variants={columnVariants}
-                  className="flex-shrink-0 w-80"
+                  className={cn("flex-shrink-0 transition-all duration-300", isCompact ? "w-56" : "w-80")}
                 >
                   <Card className={cn(
                     "h-full overflow-hidden",
@@ -399,23 +424,27 @@ export default function Pipeline() {
                   )}>
                     {/* Column Header */}
                     <CardHeader className={cn(
-                      "pb-3 pt-4 bg-gradient-to-b",
-                      colorScheme.gradient
+                      "bg-gradient-to-b",
+                      colorScheme.gradient,
+                      isCompact ? "pb-2 pt-3 px-3" : "pb-3 pt-4"
                     )}>
                       <CardTitle className="flex items-center justify-between">
-                        <span className="flex items-center gap-2.5">
+                        <span className="flex items-center gap-2">
                           <motion.div 
-                            className={cn("w-3 h-3 rounded-full shadow-lg", colorScheme.icon)}
+                            className={cn("rounded-full shadow-lg", colorScheme.icon, isCompact ? "w-2 h-2" : "w-3 h-3")}
                             animate={{ scale: [1, 1.2, 1] }}
                             transition={{ duration: 2, repeat: Infinity, delay: colIndex * 0.2 }}
                           />
-                          <span className="font-semibold text-sm">
+                          <span className={cn("font-semibold truncate", isCompact ? "text-xs max-w-[100px]" : "text-sm")}>
                             {config?.nome || etapa}
                           </span>
                         </span>
                         <Badge 
                           variant="secondary" 
-                          className="text-xs font-bold bg-background/70 backdrop-blur-sm border border-border/50 shadow-sm"
+                          className={cn(
+                            "font-bold bg-background/70 backdrop-blur-sm border border-border/50 shadow-sm",
+                            isCompact ? "text-[10px] h-5 px-1.5" : "text-xs"
+                          )}
                         >
                           {candidatos.length}
                         </Badge>
@@ -423,15 +452,16 @@ export default function Pipeline() {
                     </CardHeader>
 
                     {/* Column Content */}
-                    <CardContent className="p-3">
-                      <ScrollArea className="h-[420px] pr-2">
+                    <CardContent className={cn(isCompact ? "p-2" : "p-3")}>
+                      <ScrollArea className={cn(isCompact ? "h-[480px]" : "h-[420px]", "pr-2")}>
                         <Droppable droppableId={etapa}>
                           {(provided, snapshot) => (
                             <div
                               ref={provided.innerRef}
                               {...provided.droppableProps}
                               className={cn(
-                                "space-y-3 min-h-[380px] p-2 rounded-xl transition-all duration-200",
+                                "rounded-xl transition-all duration-200",
+                                isCompact ? "space-y-2 min-h-[440px] p-1" : "space-y-3 min-h-[380px] p-2",
                                 snapshot.isDraggingOver && "bg-primary/5 ring-2 ring-primary/20 ring-inset"
                               )}
                             >
@@ -452,66 +482,94 @@ export default function Pipeline() {
                                         exit="exit"
                                         layout
                                         className={cn(
-                                          "group relative bg-card/95 backdrop-blur-sm rounded-xl p-4 border shadow-sm",
+                                          "group relative bg-card/95 backdrop-blur-sm border shadow-sm",
                                           "hover:shadow-xl hover:border-primary/40 transition-all duration-300",
                                           "cursor-grab active:cursor-grabbing",
+                                          isCompact ? "rounded-lg p-2.5" : "rounded-xl p-4",
                                           snapshot.isDragging && "shadow-2xl ring-2 ring-primary scale-[1.02] z-50 rotate-1"
                                         )}
                                       >
                                         {/* Drag handle */}
                                         <div 
                                           {...provided.dragHandleProps}
-                                          className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-all duration-200 hover:scale-110"
+                                          className={cn(
+                                            "absolute opacity-0 group-hover:opacity-100 transition-all duration-200 hover:scale-110",
+                                            isCompact ? "top-2 right-2" : "top-3 right-3"
+                                          )}
                                         >
-                                          <GripVertical className="h-4 w-4 text-muted-foreground/50" />
+                                          <GripVertical className={cn(isCompact ? "h-3 w-3" : "h-4 w-4", "text-muted-foreground/50")} />
                                         </div>
 
                                         {/* Card Content */}
-                                        <div className="flex items-start gap-3">
+                                        <div className={cn("flex items-start", isCompact ? "gap-2" : "gap-3")}>
                                           <motion.div whileHover={{ scale: 1.1 }} transition={{ type: "spring", stiffness: 300 }}>
-                                            <Avatar className="h-11 w-11 border-2 border-background shadow-md ring-2 ring-primary/10">
+                                            <Avatar className={cn(
+                                              "border-2 border-background shadow-md ring-2 ring-primary/10",
+                                              isCompact ? "h-8 w-8" : "h-11 w-11"
+                                            )}>
                                               <AvatarImage src={processo.candidatoFoto} />
-                                              <AvatarFallback className="bg-gradient-to-br from-primary/30 to-accent/30 text-primary font-bold text-sm">
+                                              <AvatarFallback className={cn(
+                                                "bg-gradient-to-br from-primary/30 to-accent/30 text-primary font-bold",
+                                                isCompact ? "text-xs" : "text-sm"
+                                              )}>
                                                 {processo.candidatoNome?.charAt(0) || '?'}
                                               </AvatarFallback>
                                             </Avatar>
                                           </motion.div>
                                           <div className="flex-1 min-w-0">
-                                            <p className="font-semibold text-sm truncate group-hover:text-primary transition-colors">
+                                            <p className={cn(
+                                              "font-semibold truncate group-hover:text-primary transition-colors",
+                                              isCompact ? "text-xs" : "text-sm"
+                                            )}>
                                               {processo.candidatoNome}
                                             </p>
-                                            <p className="text-xs text-muted-foreground truncate flex items-center gap-1.5 mt-0.5">
-                                              <Briefcase className="h-3 w-3 flex-shrink-0" />
-                                              {processo.vagaTitulo}
-                                            </p>
+                                            {!isCompact && (
+                                              <p className="text-xs text-muted-foreground truncate flex items-center gap-1.5 mt-0.5">
+                                                <Briefcase className="h-3 w-3 flex-shrink-0" />
+                                                {processo.vagaTitulo}
+                                              </p>
+                                            )}
                                           </div>
                                         </div>
 
                                         {/* Match Score & Time */}
-                                        <div className="mt-4 flex items-center justify-between">
+                                        <div className={cn(
+                                          "flex items-center justify-between",
+                                          isCompact ? "mt-2" : "mt-4"
+                                        )}>
                                           {processo.matchScore > 0 ? (
-                                            <MatchScoreBadge 
-                                              score={processo.matchScore} 
-                                              variant="minimal" 
-                                              size="sm"
-                                            />
+                                            isCompact ? (
+                                              <span className="text-[10px] font-medium text-primary bg-primary/10 px-1.5 py-0.5 rounded">
+                                                {processo.matchScore}%
+                                              </span>
+                                            ) : (
+                                              <MatchScoreBadge 
+                                                score={processo.matchScore} 
+                                                variant="minimal" 
+                                                size="sm"
+                                              />
+                                            )
                                           ) : (
-                                            <span className="text-xs text-muted-foreground/50">Sem score</span>
+                                            <span className={cn(isCompact ? "text-[10px]" : "text-xs", "text-muted-foreground/50")}>
+                                              {isCompact ? "-" : "Sem score"}
+                                            </span>
                                           )}
                                           <span className={cn(
-                                            "text-xs flex items-center gap-1.5 px-2 py-1 rounded-full",
+                                            "flex items-center rounded-full",
+                                            isCompact ? "text-[10px] gap-1 px-1.5 py-0.5" : "text-xs gap-1.5 px-2 py-1",
                                             processo.diasNaEtapa > 10 
                                               ? "bg-destructive/10 text-destructive" 
                                               : processo.diasNaEtapa > 5 
                                                 ? "bg-warning/10 text-warning" 
                                                 : "bg-muted/50 text-muted-foreground"
                                           )}>
-                                            <Clock className="h-3 w-3" />
+                                            <Clock className={cn(isCompact ? "h-2.5 w-2.5" : "h-3 w-3")} />
                                             {processo.diasNaEtapa}d
                                           </span>
                                         </div>
 
                                         {/* Quick Actions */}
+                                        {!isCompact && (
                                         <div className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-all duration-200">
                                           <DropdownMenu>
                                             <DropdownMenuTrigger asChild>
@@ -549,9 +607,13 @@ export default function Pipeline() {
                                             </DropdownMenuContent>
                                           </DropdownMenu>
                                         </div>
+                                        )}
 
                                         {/* Hover gradient overlay */}
-                                        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl pointer-events-none" />
+                                        <div className={cn(
+                                          "absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none",
+                                          isCompact ? "rounded-lg" : "rounded-xl"
+                                        )} />
                                       </motion.div>
                                     )}
                                   </Draggable>
@@ -565,21 +627,27 @@ export default function Pipeline() {
                                   initial={{ opacity: 0, scale: 0.9 }}
                                   animate={{ opacity: 1, scale: 1 }}
                                   transition={{ delay: 0.2 }}
-                                  className="flex flex-col items-center justify-center py-16 text-center"
+                                  className={cn(
+                                    "flex flex-col items-center justify-center text-center",
+                                    isCompact ? "py-8" : "py-16"
+                                  )}
                                 >
                                   <div className={cn(
-                                    "w-16 h-16 rounded-2xl flex items-center justify-center mb-4",
-                                    "bg-gradient-to-br from-muted/50 to-muted/30 backdrop-blur-sm"
+                                    "rounded-2xl flex items-center justify-center",
+                                    "bg-gradient-to-br from-muted/50 to-muted/30 backdrop-blur-sm",
+                                    isCompact ? "w-10 h-10 mb-2" : "w-16 h-16 mb-4"
                                   )}>
-                                    <User className="h-7 w-7 text-muted-foreground/40" />
+                                    <User className={cn(isCompact ? "h-5 w-5" : "h-7 w-7", "text-muted-foreground/40")} />
                                   </div>
-                                  <p className="text-sm font-medium text-muted-foreground/70">
-                                    Nenhum candidato
+                                  <p className={cn(isCompact ? "text-xs" : "text-sm", "font-medium text-muted-foreground/70")}>
+                                    {isCompact ? "Vazio" : "Nenhum candidato"}
                                   </p>
+                                  {!isCompact && (
                                   <p className="text-xs text-muted-foreground/50 mt-1 flex items-center gap-1">
                                     <ArrowRight className="h-3 w-3" />
                                     Arraste um candidato para cá
                                   </p>
+                                  )}
                                 </motion.div>
                               )}
                             </div>
