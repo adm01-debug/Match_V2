@@ -157,7 +157,7 @@ export default function ProvaEditor() {
         await createProvaMutation.mutateAsync(data); 
         toast({ title: "Prova criada" }); 
       }
-      navigate("/provas");
+      navigate("/testes");
     } catch { 
       toast({ title: "Erro ao salvar", variant: "destructive" }); 
     }
@@ -181,7 +181,7 @@ export default function ProvaEditor() {
       <div className="p-6 space-y-6 animate-fade-in">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Button variant="ghost" size="icon" onClick={() => navigate("/provas")}>
+            <Button variant="ghost" size="icon" onClick={() => navigate("/testes")}>
               <ArrowLeft className="h-5 w-5" />
             </Button>
             <div>

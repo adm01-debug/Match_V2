@@ -24,13 +24,11 @@ type Experiencia = {
 };
 
 export function ExperienciaTab({ candidato }: ExperienciaTabProps) {
-  const experiencias = (Array.isArray((candidato as any).experiencias)
-    ? (candidato as any).experiencias
+  const experiencias = (Array.isArray(candidato.experiencias)
+    ? candidato.experiencias
     : []) as Experiencia[];
 
-  const skills = Array.isArray((candidato as any).skills)
-    ? ((candidato as any).skills as { nivel: number }[])
-    : [];
+  const skills = candidato.skills ?? [];
 
   return (
     <div data-testid="component" className="space-y-6">

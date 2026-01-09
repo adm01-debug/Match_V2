@@ -34,7 +34,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { TestsEmptyState } from "@/components/empty-states";
-import type { Prova } from "@/types/tests";
+import type { Prova, NivelCargo } from "@/types/tests";
 
 // Mapa de ícones
 const iconeMap: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -67,7 +67,7 @@ export default function TestsPage() {
       if (searchQuery && !p.titulo.toLowerCase().includes(searchQuery.toLowerCase())) return false;
       if (filtroCategoria !== "todas" && p.categoria !== filtroCategoria) return false;
       // Filter by niveisAplicaveis array
-      if (filtroNivel !== "todos" && !p.niveisAplicaveis?.includes(filtroNivel as any)) return false;
+      if (filtroNivel !== "todos" && !p.niveisAplicaveis?.includes(filtroNivel as NivelCargo)) return false;
       return true;
     });
   }, [provas, searchQuery, filtroCategoria, filtroNivel]);
@@ -158,7 +158,7 @@ export default function TestsPage() {
         </CardContent>
         <CardFooter className="flex justify-between pt-0">
           <div className="flex gap-1">
-            <Button size="sm" variant="ghost" onClick={() => navigate(`/provas/${prova.id}/editar`)}>
+            <Button size="sm" variant="ghost" onClick={() => navigate(`/testes/${prova.id}/editar`)}>
               <Edit className="h-4 w-4" />
             </Button>
             <Button size="sm" variant="ghost" onClick={() => handleDuplicar(prova.id)}>
@@ -168,7 +168,7 @@ export default function TestsPage() {
               <Trash2 className="h-4 w-4" />
             </Button>
           </div>
-          <Button size="sm" onClick={() => navigate(`/provas/${prova.id}/aplicar`)}>
+          <Button size="sm" onClick={() => navigate(`/testes/${prova.id}/aplicar`)}>
             <Play className="h-4 w-4 mr-1" />
             Aplicar
           </Button>
@@ -206,7 +206,7 @@ export default function TestsPage() {
             <Button variant="outline" size="icon" onClick={() => refetch()}>
               <RefreshCw className="h-4 w-4" />
             </Button>
-            <Button onClick={() => navigate("/provas/nova")}>
+            <Button onClick={() => navigate("/testes/nova")}>
               <Plus className="h-4 w-4 mr-2" />
               Nova Prova
             </Button>

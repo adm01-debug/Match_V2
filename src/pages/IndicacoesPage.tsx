@@ -78,10 +78,11 @@ export default function IndicacoesPage() {
   const linkIndicacao = `${window.location.origin}/indicar`;
 
   // Fetch indicações
+  usePageTitle('Indicações');
+
   const { data: indicacoes = [], isLoading } = useQuery({
     queryKey: ['indicacoes'],
     queryFn: async () => {
-  usePageTitle('Indicações');
 
       const { data, error } = await supabase
         .from('indicacoes')
@@ -131,8 +132,9 @@ export default function IndicacoesPage() {
       });
       toast.success("Indicação registrada com sucesso!");
     },
-    onError: (error: any) => {
-      toast.error("Erro ao registrar indicação", { description: error.message });
+    onError: (error: unknown) => {
+      const message = error instanceof Error ? error.message : 'Erro desconhecido';
+      toast.error("Erro ao registrar indicação", { description: message });
     }
   });
 
@@ -152,8 +154,9 @@ export default function IndicacoesPage() {
       queryClient.invalidateQueries({ queryKey: ['indicacoes'] });
       toast.success("Status atualizado");
     },
-    onError: (error: any) => {
-      toast.error("Erro ao atualizar status", { description: error.message });
+    onError: (error: unknown) => {
+      const message = error instanceof Error ? error.message : 'Erro desconhecido';
+      toast.error("Erro ao atualizar status", { description: message });
     }
   });
 

@@ -286,7 +286,7 @@ const PortalAuthPage = () => {
 
       {/* Footer */}
       <footer className="p-6 text-center text-sm text-muted-foreground">
-        © 2024 Sistema de Recrutamento. Todos os direitos reservados.
+        © {new Date().getFullYear()} Match ATS. Todos os direitos reservados.
       </footer>
     </div>
   );
