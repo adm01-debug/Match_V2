@@ -24,7 +24,9 @@ import {
   AlertCircle, 
   RefreshCw,
   Sparkles,
-  Calendar
+  Calendar,
+  Activity,
+  LayoutDashboard
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -116,70 +118,129 @@ function DashboardContent() {
 
   return (
     <Layout title="Dashboard">
-      <div className="relative">
-        {/* Background decorations */}
+      <div className="relative min-h-screen">
+        {/* Premium animated background */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/5 rounded-full blur-3xl" />
-          <div className="absolute top-1/2 -left-40 w-80 h-80 bg-accent/5 rounded-full blur-3xl" />
-          <div className="absolute -bottom-40 right-1/4 w-80 h-80 bg-success/5 rounded-full blur-3xl" />
+          <motion.div 
+            className="absolute -top-40 -right-40 w-[600px] h-[600px] rounded-full blur-[120px]"
+            style={{ background: "radial-gradient(circle, hsl(var(--primary) / 0.15) 0%, transparent 70%)" }}
+            animate={{ 
+              scale: [1, 1.2, 1],
+              x: [0, 50, 0],
+              y: [0, -30, 0],
+            }}
+            transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.div 
+            className="absolute top-1/3 -left-40 w-[500px] h-[500px] rounded-full blur-[100px]"
+            style={{ background: "radial-gradient(circle, hsl(var(--accent) / 0.12) 0%, transparent 70%)" }}
+            animate={{ 
+              scale: [1.2, 1, 1.2],
+              x: [0, 30, 0],
+            }}
+            transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.div 
+            className="absolute -bottom-40 right-1/4 w-[400px] h-[400px] rounded-full blur-[80px]"
+            style={{ background: "radial-gradient(circle, hsl(var(--success) / 0.1) 0%, transparent 70%)" }}
+            animate={{ 
+              scale: [1, 1.3, 1],
+              y: [0, -40, 0],
+            }}
+            transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+          />
+          {/* Grid pattern overlay */}
+          <div 
+            className="absolute inset-0 opacity-[0.02]"
+            style={{
+              backgroundImage: `linear-gradient(hsl(var(--foreground)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--foreground)) 1px, transparent 1px)`,
+              backgroundSize: '60px 60px'
+            }}
+          />
         </div>
 
         <motion.div 
           className="relative p-6 space-y-8"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.6 }}
         >
-          {/* Premium Header */}
+          {/* Premium Glassmorphism Header */}
           <motion.div 
-            initial={{ opacity: 0, y: -20 }}
+            initial={{ opacity: 0, y: -30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ type: 'spring' as const, stiffness: 300, damping: 24 }}
-            className="flex flex-col md:flex-row md:items-center justify-between gap-4"
+            transition={{ type: 'spring' as const, stiffness: 200, damping: 20 }}
+            className="relative"
           >
-            <div className="space-y-1">
-              <div className="flex items-center gap-3">
-                <h1 className="text-3xl font-bold bg-gradient-to-r from-foreground via-foreground to-muted-foreground bg-clip-text">
-                  Dashboard
-                </h1>
-                <Badge variant="glass-primary" size="sm" className="gap-1">
-                  <Sparkles className="h-3 w-3" />
-                  IA Ativa
-                </Badge>
-              </div>
-              <p className="text-muted-foreground flex items-center gap-2">
-                <Calendar className="h-4 w-4" />
-                Visão geral do recrutamento • Atualizado agora
-              </p>
-            </div>
+            {/* Header glow effect */}
+            <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 via-accent/10 to-primary/20 blur-3xl opacity-40 -z-10" />
             
-            <div className="flex items-center gap-3">
-              <Select defaultValue="30">
-                <SelectTrigger className="w-44 bg-card/50 backdrop-blur-sm border-border/50">
-                  <SelectValue placeholder="Período" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="7">Últimos 7 dias</SelectItem>
-                  <SelectItem value="30">Últimos 30 dias</SelectItem>
-                  <SelectItem value="90">Últimos 90 dias</SelectItem>
-                  <SelectItem value="365">Este ano</SelectItem>
-                </SelectContent>
-              </Select>
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 p-6 rounded-3xl bg-card/40 backdrop-blur-xl border border-border/30 shadow-2xl">
+              <div className="space-y-2">
+                <div className="flex items-center gap-4">
+                  <motion.div 
+                    className="p-4 rounded-2xl bg-gradient-to-br from-primary via-primary to-accent shadow-lg shadow-primary/25"
+                    whileHover={{ scale: 1.05, rotate: 5 }}
+                    transition={{ type: "spring", stiffness: 400 }}
+                  >
+                    <LayoutDashboard className="h-7 w-7 text-white" />
+                  </motion.div>
+                  <div>
+                    <div className="flex items-center gap-3">
+                      <h1 className="text-4xl font-bold bg-gradient-to-r from-foreground via-foreground to-foreground/60 bg-clip-text">
+                        Dashboard
+                      </h1>
+                      <Badge className="bg-gradient-to-r from-primary/90 to-accent/90 text-white border-0 shadow-lg shadow-primary/20 gap-1.5 px-3 py-1">
+                        <Sparkles className="h-3.5 w-3.5" />
+                        IA Ativa
+                      </Badge>
+                    </div>
+                    <p className="text-muted-foreground flex items-center gap-2 mt-1">
+                      <Activity className="h-4 w-4 text-primary animate-pulse" />
+                      Visão geral do recrutamento • Atualizado em tempo real
+                    </p>
+                  </div>
+                </div>
+              </div>
               
-              <Button variant="outline" size="icon" className="bg-card/50 backdrop-blur-sm">
-                <RefreshCw className="h-4 w-4" />
-              </Button>
+              <div className="flex items-center gap-3">
+                {/* Period selector with glassmorphism */}
+                <div className="flex items-center gap-2 p-1.5 rounded-xl bg-background/50 backdrop-blur-md border border-border/40">
+                  <Calendar className="h-4 w-4 text-muted-foreground ml-2" />
+                  <Select defaultValue="30">
+                    <SelectTrigger className="w-40 border-0 bg-transparent focus:ring-0 focus:ring-offset-0">
+                      <SelectValue placeholder="Período" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-card/95 backdrop-blur-xl border-border/50">
+                      <SelectItem value="7">Últimos 7 dias</SelectItem>
+                      <SelectItem value="30">Últimos 30 dias</SelectItem>
+                      <SelectItem value="90">Últimos 90 dias</SelectItem>
+                      <SelectItem value="365">Este ano</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                  <Button 
+                    variant="outline" 
+                    size="icon" 
+                    className="h-11 w-11 bg-background/50 backdrop-blur-md border-border/40 hover:bg-primary/10 hover:border-primary/40 transition-all"
+                  >
+                    <RefreshCw className="h-4 w-4" />
+                  </Button>
+                </motion.div>
+              </div>
             </div>
           </motion.div>
 
-          {/* KPIs Grid */}
+          {/* Premium KPIs Grid with Glass Effect */}
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1, type: 'spring' as const, stiffness: 300, damping: 24 }}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
+            transition={{ delay: 0.15, type: 'spring' as const, stiffness: 200, damping: 20 }}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"
           >
-            <Suspense fallback={<Skeleton className="h-36 rounded-xl" />}>
+            <Suspense fallback={<Skeleton className="h-36 rounded-2xl" />}>
               <KPICard
                 title="Vagas Abertas"
                 value={kpis.vagasAbertas}
@@ -187,9 +248,10 @@ function DashboardContent() {
                 icon={Briefcase}
                 variant="primary"
                 trend={kpis.vagasNovas > 0 ? { value: `+${kpis.vagasNovas}`, positive: true } : undefined}
+                index={0}
               />
             </Suspense>
-            <Suspense fallback={<Skeleton className="h-36 rounded-xl" />}>
+            <Suspense fallback={<Skeleton className="h-36 rounded-2xl" />}>
               <KPICard
                 title="Candidatos"
                 value={kpis.candidatosTotal}
@@ -197,18 +259,20 @@ function DashboardContent() {
                 icon={Users}
                 variant="primary"
                 trend={kpis.candidatosNovos > 0 ? { value: `+${kpis.candidatosNovos}`, positive: true } : undefined}
+                index={1}
               />
             </Suspense>
-            <Suspense fallback={<Skeleton className="h-36 rounded-xl" />}>
+            <Suspense fallback={<Skeleton className="h-36 rounded-2xl" />}>
               <KPICard
                 title="Em Processo"
                 value={kpis.emProcesso}
                 subtitle={`${kpis.vagasEmProcesso} vagas em seleção`}
                 icon={Target}
                 variant="warning"
+                index={2}
               />
             </Suspense>
-            <Suspense fallback={<Skeleton className="h-36 rounded-xl" />}>
+            <Suspense fallback={<Skeleton className="h-36 rounded-2xl" />}>
               <KPICard
                 title="Contratados"
                 value={kpis.contratadosMes}
@@ -216,81 +280,82 @@ function DashboardContent() {
                 icon={UserCheck}
                 variant="success"
                 trend={{ value: `${Math.round((kpis.contratadosMes / Math.max(kpis.metaContratacao, 1)) * 100)}%`, positive: true }}
+                index={3}
               />
             </Suspense>
           </motion.div>
 
-          {/* Main Content Grid */}
+          {/* Main Content Grid with Enhanced Cards */}
           <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
             {/* Left Column - 2/3 width */}
             <motion.div 
-              initial={{ opacity: 0, x: -20 }}
+              initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.2, type: 'spring' as const, stiffness: 300, damping: 24 }}
+              transition={{ delay: 0.25, type: 'spring' as const, stiffness: 200, damping: 20 }}
               className="xl:col-span-2 space-y-6"
             >
-              <Suspense fallback={<Skeleton className="h-[400px] rounded-xl" />}>
+              <Suspense fallback={<Skeleton className="h-[400px] rounded-2xl" />}>
                 <FunilChart data={funilData} />
               </Suspense>
               
-              <Suspense fallback={<Skeleton className="h-[350px] rounded-xl" />}>
+              <Suspense fallback={<Skeleton className="h-[350px] rounded-2xl" />}>
                 <EntrevistasChart />
               </Suspense>
             </motion.div>
 
             {/* Right Column - 1/3 width */}
             <motion.div 
-              initial={{ opacity: 0, x: 20 }}
+              initial={{ opacity: 0, x: 30 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.3, type: 'spring' as const, stiffness: 300, damping: 24 }}
+              transition={{ delay: 0.35, type: 'spring' as const, stiffness: 200, damping: 20 }}
               className="space-y-6"
             >
-              <Suspense fallback={<Skeleton className="h-48 rounded-xl" />}>
+              <Suspense fallback={<Skeleton className="h-48 rounded-2xl" />}>
                 <AcoesRapidas />
               </Suspense>
               
-              <Suspense fallback={<Skeleton className="h-64 rounded-xl" />}>
+              <Suspense fallback={<Skeleton className="h-64 rounded-2xl" />}>
                 <VagasUrgentes vagas={vagasUrgentes} />
               </Suspense>
               
-              <Suspense fallback={<Skeleton className="h-48 rounded-xl" />}>
+              <Suspense fallback={<Skeleton className="h-48 rounded-2xl" />}>
                 <AcoesPendentes acoes={acoesPendentes} />
               </Suspense>
             </motion.div>
           </div>
 
-          {/* Bottom Section - Insights & Alerts */}
+          {/* Bottom Section - Insights & Alerts with Glass Effect */}
           <motion.div 
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, type: 'spring' as const, stiffness: 300, damping: 24 }}
+            transition={{ delay: 0.45, type: 'spring' as const, stiffness: 200, damping: 20 }}
             className="grid grid-cols-1 lg:grid-cols-3 gap-6"
           >
-            <Suspense fallback={<Skeleton className="h-72 rounded-xl" />}>
+            <Suspense fallback={<Skeleton className="h-72 rounded-2xl" />}>
               <AgendaHoje agenda={agendaDia} />
             </Suspense>
             
-            <Suspense fallback={<Skeleton className="h-72 rounded-xl" />}>
+            <Suspense fallback={<Skeleton className="h-72 rounded-2xl" />}>
               <SmartInsights kpiData={kpis} funilData={funilData} />
             </Suspense>
             
-            <Suspense fallback={<Skeleton className="h-72 rounded-xl" />}>
+            <Suspense fallback={<Skeleton className="h-72 rounded-2xl" />}>
               <AlertasInteligentes acoesPendentes={acoesPendentes} vagasUrgentes={vagasUrgentes} />
             </Suspense>
           </motion.div>
 
           {/* Stats Section */}
           <motion.div 
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, type: 'spring' as const, stiffness: 300, damping: 24 }}
+            transition={{ delay: 0.55, type: 'spring' as const, stiffness: 200, damping: 20 }}
             className="grid grid-cols-1 lg:grid-cols-2 gap-6"
           >
-            <Suspense fallback={<Skeleton className="h-96 rounded-xl" />}>
+            <Suspense fallback={<Skeleton className="h-96 rounded-2xl" />}>
               <TopCandidatos processos={processos} />
             </Suspense>
             
-            <Suspense fallback={<Skeleton className="h-96 rounded-xl" />}>
+            <Suspense fallback={<Skeleton className="h-96 rounded-2xl" />}>
               <EntrevistasStats />
             </Suspense>
           </motion.div>
