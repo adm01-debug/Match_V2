@@ -24,6 +24,7 @@ import { MFAMethodSelector } from '@/components/auth/MFAMethodSelector';
 import { ActiveSessionsPanel } from '@/components/security/ActiveSessionsPanel';
 import { SecurityActivityLog } from '@/components/security/SecurityActivityLog';
 import { PushNotificationSettings } from '@/components/security/PushNotificationSettings';
+import { SoundSettingsCard } from '@/components/settings/SoundSettingsCard';
 import { PasskeyManager } from '@/components/security/PasskeyManager';
 import { ReauthDialog } from '@/components/auth/ReauthDialog';
 import { use2FA } from '@/hooks/use2FA';
@@ -292,8 +293,9 @@ export default function SecuritySettingsPage() {
         </TabsContent>
 
         {/* Notifications Tab */}
-        <TabsContent value="notifications">
+        <TabsContent value="notifications" className="space-y-6">
           <PushNotificationSettings />
+          <SoundSettingsCard />
         </TabsContent>
 
         {/* Activity Tab */}

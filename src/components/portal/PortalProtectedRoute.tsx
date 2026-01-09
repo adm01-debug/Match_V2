@@ -10,6 +10,7 @@ import { Loader2, UserPlus, Briefcase, CheckCircle2, LayoutDashboard, ShieldChec
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import confetti from 'canvas-confetti';
+import { isCelebrationSoundEnabled } from '@/hooks/useSoundPreferences';
 
 interface PortalProtectedRouteProps {
   children: React.ReactNode;
@@ -96,8 +97,10 @@ const PortalProtectedRoute: React.FC<PortalProtectedRouteProps> = ({ children })
     ) {
       confettiTriggeredRef.current = true;
       
-      // Play celebration sound
-      playCelebrationSound();
+      // Play celebration sound if enabled
+      if (isCelebrationSoundEnabled()) {
+        playCelebrationSound();
+      }
       
       // Fire confetti celebration
       const duration = 2000;
