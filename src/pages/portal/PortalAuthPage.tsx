@@ -49,16 +49,17 @@ const PortalAuthPage = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     const { error } = await signIn(loginEmail, loginPassword);
-    
+
     if (error) {
       toast.error('Erro ao entrar', { description: error.message });
-    } else {
-      toast.success('Login realizado com sucesso!');
-      navigate('/portal/dashboard');
+      setIsSubmitting(false);
+      return;
     }
-    
+
+    // Don't navigate immediately: we need the candidate profile to be fetched/created first.
+    toast.success('Login realizado com sucesso!');
     setIsSubmitting(false);
   };
 
