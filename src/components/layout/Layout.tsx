@@ -3,8 +3,9 @@
  * @module Layout
  */
 
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "./AppSidebar";
 import { NotificationPanel } from "@/components/notifications/NotificationPanel";
@@ -14,6 +15,11 @@ import { CommandMenuTrigger } from "@/components/common/CommandMenuTrigger";
 import { OnboardingTour } from "@/components/onboarding/OnboardingTour";
 import { BottomNavigation } from "@/components/navigation/BottomNavigation";
 import { ThemeToggle } from "@/components/common/ThemeToggle";
+import { 
+  KeyboardShortcutsOverlay, 
+  useKeyboardShortcuts,
+  type KeyboardShortcut 
+} from "@/components/intelligence/KeyboardShortcuts";
 import { Menu } from 'lucide-react';
 
 interface LayoutProps {
@@ -22,12 +28,117 @@ interface LayoutProps {
 }
 
 export function Layout({ children, title }: LayoutProps) {
+  const navigate = useNavigate();
   const { notifications, unreadCount, isConnected, isLoading, markAsRead, markAllAsRead, clearAll, reconnect } = useNotifications();
+
+  // Define global keyboard shortcuts
+  const shortcuts: KeyboardShortcut[] = useMemo(() => [
+    // Navigation shortcuts
+    {
+      id: 'nav-dashboard',
+      keys: ['g', 'd'],
+      description: 'Ir para Dashboard',
+      category: 'Navegação',
+      action: () => navigate('/'),
+    },
+    {
+      id: 'nav-vagas',
+      keys: ['g', 'v'],
+      description: 'Ir para Vagas',
+      category: 'Navegação',
+      action: () => navigate('/vagas'),
+    },
+    {
+      id: 'nav-candidatos',
+      keys: ['g', 'c'],
+      description: 'Ir para Candidatos',
+      category: 'Navegação',
+      action: () => navigate('/candidatos'),
+    },
+    {
+      id: 'nav-pipeline',
+      keys: ['g', 'p'],
+      description: 'Ir para Pipeline',
+      category: 'Navegação',
+      action: () => navigate('/pipeline'),
+    },
+    {
+      id: 'nav-agenda',
+      keys: ['g', 'a'],
+      description: 'Ir para Agenda',
+      category: 'Navegação',
+      action: () => navigate('/agenda'),
+    },
+    {
+      id: 'nav-testes',
+      keys: ['g', 't'],
+      description: 'Ir para Testes',
+      category: 'Navegação',
+      action: () => navigate('/testes'),
+    },
+    {
+      id: 'nav-relatorios',
+      keys: ['g', 'r'],
+      description: 'Ir para Relatórios',
+      category: 'Navegação',
+      action: () => navigate('/relatorios'),
+    },
+    // Actions
+    {
+      id: 'action-search',
+      keys: ['ctrl', 'k'],
+      description: 'Abrir busca rápida',
+      category: 'Ações',
+    },
+    {
+      id: 'action-new-vaga',
+      keys: ['ctrl', 'shift', 'v'],
+      description: 'Nova vaga',
+      category: 'Ações',
+      action: () => navigate('/vagas/nova'),
+    },
+    {
+      id: 'action-new-candidato',
+      keys: ['ctrl', 'shift', 'c'],
+      description: 'Novo candidato',
+      category: 'Ações',
+      action: () => navigate('/candidatos?new=true'),
+    },
+    // General
+    {
+      id: 'general-help',
+      keys: ['?'],
+      description: 'Mostrar atalhos de teclado',
+      category: 'Geral',
+    },
+    {
+      id: 'general-escape',
+      keys: ['esc'],
+      description: 'Fechar modal/dialog',
+      category: 'Geral',
+    },
+    {
+      id: 'general-home',
+      keys: ['h'],
+      description: 'Voltar ao início',
+      category: 'Geral',
+      action: () => navigate('/'),
+    },
+  ], [navigate]);
+
+  const { overlayOpen, closeOverlay } = useKeyboardShortcuts({ shortcuts });
 
   return (
     <SidebarProvider defaultOpen={true}>
       {/* Global Command Menu */}
       <CommandMenu />
+      
+      {/* Keyboard Shortcuts Overlay */}
+      <KeyboardShortcutsOverlay 
+        shortcuts={shortcuts}
+        isOpen={overlayOpen}
+        onClose={closeOverlay}
+      />
       
       {/* Onboarding Tour for new users */}
       <OnboardingTour />
