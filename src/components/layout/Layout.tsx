@@ -20,7 +20,8 @@ import {
   useKeyboardShortcuts,
   type KeyboardShortcut 
 } from "@/components/intelligence/KeyboardShortcuts";
-import { Menu } from 'lucide-react';
+import { Menu, Keyboard } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -126,7 +127,7 @@ export function Layout({ children, title }: LayoutProps) {
     },
   ], [navigate]);
 
-  const { overlayOpen, closeOverlay } = useKeyboardShortcuts({ shortcuts });
+  const { overlayOpen, closeOverlay, openOverlay } = useKeyboardShortcuts({ shortcuts });
 
   return (
     <SidebarProvider defaultOpen={true}>
@@ -176,6 +177,24 @@ export function Layout({ children, title }: LayoutProps) {
               </div>
 
               <div className="h-6 w-px bg-border hidden md:block" />
+
+              {/* Keyboard Shortcuts Hint */}
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    onClick={openOverlay}
+                    className="hidden md:flex items-center gap-1.5 px-2 py-1.5 text-xs text-muted-foreground hover:text-foreground hover:bg-muted/50 rounded-md transition-colors"
+                  >
+                    <Keyboard className="h-3.5 w-3.5" />
+                    <kbd className="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 bg-muted border border-border rounded text-[10px] font-mono">
+                      ?
+                    </kbd>
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent side="bottom">
+                  <p>Ver atalhos de teclado</p>
+                </TooltipContent>
+              </Tooltip>
 
               {/* Theme Toggle */}
               <ThemeToggle />
