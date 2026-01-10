@@ -1,5 +1,5 @@
 /**
- * @fileoverview Premium KPICard component
+ * @fileoverview Premium KPICard component with sparklines and trend indicators
  * @module KPICard
  */
 
@@ -8,6 +8,7 @@ import { motion } from 'framer-motion';
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { LucideIcon, TrendingUp, TrendingDown } from "lucide-react";
+import { Sparkline, MiniProgress } from "@/components/visualization/Sparkline";
 
 type KPIVariant = 'default' | 'primary' | 'success' | 'warning' | 'danger';
 
@@ -23,6 +24,12 @@ interface KPICardProps {
   variant?: KPIVariant;
   isLoading?: boolean;
   index?: number;
+  /** Historical data for sparkline visualization */
+  sparklineData?: number[];
+  /** Goal progress (0-100) */
+  goalProgress?: number;
+  /** Previous value for comparison */
+  previousValue?: number;
 }
 
 const variantStyles: Record<KPIVariant, { 
@@ -30,36 +37,42 @@ const variantStyles: Record<KPIVariant, {
   iconBg: string;
   glow: string;
   border: string;
+  sparklineColor: string;
 }> = {
   default: {
     icon: "text-muted-foreground",
     iconBg: "bg-muted",
     glow: "",
     border: "",
+    sparklineColor: "hsl(var(--muted-foreground))",
   },
   primary: {
     icon: "text-primary",
     iconBg: "bg-primary/10",
     glow: "shadow-glow",
     border: "border-primary/20",
+    sparklineColor: "hsl(var(--primary))",
   },
   success: {
     icon: "text-success",
     iconBg: "bg-success/10",
     glow: "shadow-glow-success",
     border: "border-success/20",
+    sparklineColor: "hsl(142, 76%, 36%)",
   },
   warning: {
     icon: "text-warning",
     iconBg: "bg-warning/10",
     glow: "shadow-glow-accent",
     border: "border-warning/20",
+    sparklineColor: "hsl(38, 92%, 50%)",
   },
   danger: {
     icon: "text-destructive",
     iconBg: "bg-destructive/10",
     glow: "",
     border: "border-destructive/20",
+    sparklineColor: "hsl(var(--destructive))",
   },
 };
 
@@ -72,6 +85,9 @@ function KPICardComponent({
   variant = "default",
   isLoading = false,
   index = 0,
+  sparklineData,
+  goalProgress,
+  previousValue,
 }: KPICardProps) {
   const styles = useMemo(() => variantStyles[variant], [variant]);
 
@@ -84,6 +100,17 @@ function KPICardComponent({
 
   const trendColor = trend?.positive ? "text-success" : "text-destructive";
   const TrendIcon = trend?.positive ? TrendingUp : TrendingDown;
+
+  // Calculate animated percentage change
+  const percentChange = useMemo(() => {
+    if (previousValue !== undefined && typeof value === 'number') {
+      const diff = value - previousValue;
+      if (previousValue !== 0) {
+        return ((diff / previousValue) * 100).toFixed(1);
+      }
+    }
+    return null;
+  }, [value, previousValue]);
 
   if (isLoading) {
     return (
@@ -134,7 +161,7 @@ function KPICardComponent({
         
         <CardContent className="relative p-6">
           <div className="flex items-start justify-between">
-            <div className="space-y-2">
+            <div className="space-y-2 flex-1">
               <p className="text-sm font-medium text-muted-foreground">
                 {title}
               </p>
@@ -164,10 +191,68 @@ function KPICardComponent({
                   </motion.span>
                 )}
               </div>
+              
+              {/* Sparkline visualization */}
+              {sparklineData && sparklineData.length > 1 && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.08 + 0.4 }}
+                  className="mt-3"
+                >
+                  <Sparkline
+                    data={sparklineData}
+                    width={120}
+                    height={28}
+                    color={styles.sparklineColor}
+                    strokeWidth={2}
+                    showArea={true}
+                    fillOpacity={0.15}
+                    animated={true}
+                  />
+                </motion.div>
+              )}
+
+              {/* Goal progress bar */}
+              {goalProgress !== undefined && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.08 + 0.5 }}
+                  className="mt-3"
+                >
+                  <MiniProgress
+                    value={goalProgress}
+                    max={100}
+                    color={styles.sparklineColor}
+                    showLabel={true}
+                    size="sm"
+                    animated={true}
+                  />
+                </motion.div>
+              )}
+              
               {subtitle && (
                 <p className="text-xs text-muted-foreground">
                   {subtitle}
                 </p>
+              )}
+
+              {/* Percentage change indicator */}
+              {percentChange && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: index * 0.08 + 0.6 }}
+                  className="flex items-center gap-1 mt-1"
+                >
+                  <span className={cn(
+                    "text-xs font-medium",
+                    parseFloat(percentChange) >= 0 ? "text-success" : "text-destructive"
+                  )}>
+                    {parseFloat(percentChange) >= 0 ? "+" : ""}{percentChange}% vs anterior
+                  </span>
+                </motion.div>
               )}
             </div>
             

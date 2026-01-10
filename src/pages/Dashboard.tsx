@@ -259,14 +259,14 @@ function DashboardContent() {
             </div>
           </motion.div>
 
-          {/* Premium KPIs Grid with Glass Effect */}
+          {/* Premium KPIs Grid with Glass Effect & Data Visualization */}
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.15, type: 'spring' as const, stiffness: 200, damping: 20 }}
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"
           >
-            <Suspense fallback={<Skeleton className="h-36 rounded-2xl" />}>
+            <Suspense fallback={<Skeleton className="h-44 rounded-2xl" />}>
               <KPICard
                 title="Vagas Abertas"
                 value={kpis.vagasAbertas}
@@ -275,9 +275,11 @@ function DashboardContent() {
                 variant="primary"
                 trend={kpis.vagasNovas > 0 ? { value: `+${kpis.vagasNovas}`, positive: true } : undefined}
                 index={0}
+                sparklineData={[12, 15, 18, 14, 22, 19, kpis.vagasAbertas]}
+                previousValue={Math.max(1, kpis.vagasAbertas - kpis.vagasNovas)}
               />
             </Suspense>
-            <Suspense fallback={<Skeleton className="h-36 rounded-2xl" />}>
+            <Suspense fallback={<Skeleton className="h-44 rounded-2xl" />}>
               <KPICard
                 title="Candidatos"
                 value={kpis.candidatosTotal}
@@ -286,9 +288,11 @@ function DashboardContent() {
                 variant="primary"
                 trend={kpis.candidatosNovos > 0 ? { value: `+${kpis.candidatosNovos}`, positive: true } : undefined}
                 index={1}
+                sparklineData={[45, 52, 48, 61, 58, 72, kpis.candidatosTotal]}
+                previousValue={Math.max(1, kpis.candidatosTotal - kpis.candidatosNovos)}
               />
             </Suspense>
-            <Suspense fallback={<Skeleton className="h-36 rounded-2xl" />}>
+            <Suspense fallback={<Skeleton className="h-44 rounded-2xl" />}>
               <KPICard
                 title="Em Processo"
                 value={kpis.emProcesso}
@@ -296,9 +300,10 @@ function DashboardContent() {
                 icon={Target}
                 variant="warning"
                 index={2}
+                sparklineData={[28, 32, 35, 30, 38, 42, kpis.emProcesso]}
               />
             </Suspense>
-            <Suspense fallback={<Skeleton className="h-36 rounded-2xl" />}>
+            <Suspense fallback={<Skeleton className="h-44 rounded-2xl" />}>
               <KPICard
                 title="Contratados"
                 value={kpis.contratadosMes}
@@ -307,6 +312,9 @@ function DashboardContent() {
                 variant="success"
                 trend={{ value: `${Math.round((kpis.contratadosMes / Math.max(kpis.metaContratacao, 1)) * 100)}%`, positive: true }}
                 index={3}
+                goalProgress={Math.round((kpis.contratadosMes / Math.max(kpis.metaContratacao, 1)) * 100)}
+                sparklineData={[1, 2, 2, 3, 4, 3, kpis.contratadosMes]}
+                previousValue={Math.max(1, kpis.contratadosMes - 1)}
               />
             </Suspense>
           </motion.div>
