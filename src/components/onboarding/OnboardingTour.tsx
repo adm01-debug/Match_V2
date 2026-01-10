@@ -97,11 +97,13 @@ export function OnboardingTour({ steps = DEFAULT_STEPS, onComplete, forceShow }:
   const [cardPosition, setCardPosition] = useState<{ top: number; left: number } | null>(null);
 
   useEffect(() => {
-    const hasSeenTour = localStorage.getItem('match-ats-tour-completed');
-    if (!hasSeenTour || forceShow) {
-      // Small delay to allow page to render
-      const timer = setTimeout(() => setIsVisible(true), 500);
+    // Only show tour if explicitly requested via forceShow
+    // Never auto-show on page load to prevent blocking the UI
+    if (forceShow) {
+      const timer = setTimeout(() => setIsVisible(true), 300);
       return () => clearTimeout(timer);
+    } else {
+      setIsVisible(false);
     }
     return undefined;
   }, [forceShow]);
