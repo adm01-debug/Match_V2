@@ -15,6 +15,7 @@ import { TopCandidatos } from "@/components/dashboard/TopCandidatos";
 import { EntrevistasStats } from "@/components/dashboard/EntrevistasStats";
 import { EntrevistasChart } from "@/components/dashboard/EntrevistasChart";
 import { useDashboardData } from "@/hooks/useDashboardData";
+import { useOnboarding } from "@/components/onboarding/OnboardingProvider";
 import { ErrorBoundary } from 'react-error-boundary';
 import { 
   Briefcase, 
@@ -26,7 +27,8 @@ import {
   Sparkles,
   Calendar,
   Activity,
-  LayoutDashboard
+  LayoutDashboard,
+  HelpCircle
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -38,6 +40,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 function DashboardErrorFallback({ error, resetErrorBoundary }: { error: Error; resetErrorBoundary: () => void }) {
   return (
@@ -75,6 +82,7 @@ function DashboardErrorFallback({ error, resetErrorBoundary }: { error: Error; r
 
 function DashboardContent() {
   usePageTitle('Dashboard');
+  const { resetTour } = useOnboarding();
   const { 
     kpiData, 
     funilData, 
@@ -219,6 +227,24 @@ function DashboardContent() {
                     </SelectContent>
                   </Select>
                 </div>
+                
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                      <Button 
+                        variant="outline" 
+                        size="icon" 
+                        onClick={resetTour}
+                        className="h-11 w-11 bg-background/50 backdrop-blur-md border-border/40 hover:bg-primary/10 hover:border-primary/40 transition-all"
+                      >
+                        <HelpCircle className="h-4 w-4" />
+                      </Button>
+                    </motion.div>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Ver tour do sistema</p>
+                  </TooltipContent>
+                </Tooltip>
                 
                 <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                   <Button 
