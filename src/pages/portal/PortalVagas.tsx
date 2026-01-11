@@ -38,6 +38,22 @@ const contratoLabels: Record<string, string> = {
   temporario: 'Temporário'
 };
 
+interface VagaPublicada {
+  id: string;
+  titulo: string;
+  departamento: string;
+  cidade: string | null;
+  estado: string | null;
+  modalidade: string;
+  tipo_contrato: string;
+  descricao?: string | null;
+  salario_min: number | null;
+  salario_max: number | null;
+  salario_a_combinar?: boolean;
+  data_publicacao: string | null;
+  [key: string]: unknown;
+}
+
 const PortalVagas = () => {
   usePageTitle('Portal - Vagas');
 
@@ -46,7 +62,7 @@ const PortalVagas = () => {
   const { profile } = useCandidatoAuth();
   
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedVaga, setSelectedVaga] = useState<any>(null);
+  const [selectedVaga, setSelectedVaga] = useState<VagaPublicada | null>(null);
   const [cartaApresentacao, setCartaApresentacao] = useState('');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -109,7 +125,7 @@ const PortalVagas = () => {
       setCartaApresentacao('');
       setSelectedVaga(null);
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast.error('Erro ao enviar candidatura', { description: error.message });
     }
   });
@@ -157,7 +173,7 @@ const PortalVagas = () => {
             </div>
           ) : vagas && vagas.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {vagas.map((vaga: any) => (
+              {vagas.map((vaga: VagaPublicada) => (
                 <Card key={vaga.id} className="hover:shadow-lg transition-all duration-300 group">
                   <CardHeader>
                     <div className="flex items-start justify-between">

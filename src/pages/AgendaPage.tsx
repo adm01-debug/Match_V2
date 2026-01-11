@@ -75,7 +75,7 @@ export default function AgendaPage() {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [activeTab, setActiveTab] = useState("calendario");
   const [filtroStatus, setFiltroStatus] = useState<string>("todos");
-  const [_dialogOpen, setDialogOpen] = useState(false);
+  const [, setDialogOpen] = useState(false);
   const [feedbackDialog, setFeedbackDialog] = useState(false);
   const [showAIScheduler, setShowAIScheduler] = useState(false);
   const [entrevistaSelecionada, setEntrevistaSelecionada] = useState<EntrevistaCardData | null>(null);

@@ -43,7 +43,7 @@ export function AdvancedFilters({
 
   const activeFiltersCount = Object.values(values).filter(v => v !== undefined && v !== '').length;
 
-  const updateFilter = (id: string, value: any) => {
+  const updateFilter = (id: string, value: FilterValue[keyof FilterValue]) => {
     onChange({ ...values, [id]: value || undefined });
   };
 

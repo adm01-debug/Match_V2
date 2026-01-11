@@ -148,7 +148,7 @@ export default function VagaForm() {
     }
   }, [existingVaga]);
 
-  const handleChange = (field: string, value: any) => {
+  const handleChange = (field: string, value: string | number | boolean | string[]) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -178,7 +178,7 @@ export default function VagaForm() {
     setPerguntasTriagem((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const updatePergunta = (index: number, field: string, value: any) => {
+  const updatePergunta = (index: number, field: string, value: string | boolean) => {
     setPerguntasTriagem((prev) =>
       prev.map((p, i) => (i === index ? { ...p, [field]: value } : p))
     );
