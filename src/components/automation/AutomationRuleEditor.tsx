@@ -90,8 +90,9 @@ export function AutomationRuleEditor({ rule, onSave, onCancel }: AutomationRuleE
   };
 
   const updateCondition = (index: number, field: keyof AutomationCondition, value: string | number | boolean) => {
-    const updated = [...condicoes];
-    (updated[index] as Record<string, unknown>)[field] = value;
+    const updated = condicoes.map((cond, i) => 
+      i === index ? { ...cond, [field]: value } : cond
+    );
     setCondicoes(updated);
   };
 
@@ -104,8 +105,9 @@ export function AutomationRuleEditor({ rule, onSave, onCancel }: AutomationRuleE
   };
 
   const updateAction = (index: number, field: keyof AutomationAction, value: unknown) => {
-    const updated = [...acoes];
-    (updated[index] as Record<string, unknown>)[field] = value;
+    const updated = acoes.map((acao, i) => 
+      i === index ? { ...acao, [field]: value } : acao
+    );
     setAcoes(updated);
   };
 

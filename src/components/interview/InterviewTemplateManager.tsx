@@ -371,7 +371,7 @@ export function InterviewTemplateManager() {
                   <div>
                     <h3 className="font-medium">{template.nome}</h3>
                     <div className="flex items-center gap-2 mt-1">
-                      <Badge className={TIPO_COLORS[template.tipo] || TIPO_COLORS.mista}>
+                      <Badge className={TIPO_COLORS[template.tipo] || TIPO_COLORS['mista']}>
                         {TIPO_LABELS[template.tipo] || template.tipo}
                       </Badge>
                       <div className="flex items-center gap-1 text-xs text-muted-foreground">

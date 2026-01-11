@@ -15,6 +15,26 @@ export * from './common';
 // Empty states
 export * from './empty-states';
 
+// Assessments & Selection
+export * from './assessments';
+export * from './scorecard';
+export * from './perfil-cargo';
+export * from './automation';
+export * from './interview';
+export * from './analytics';
+
+// Gamification
+export * from './gamification';
+
+// Intelligence
+export * from './intelligence';
+
+// Mobile
+export * from './mobile';
+
+// Visualization
+export * from './visualization';
+
 // Data components
 export { default as DataImporter } from './DataImporter';
 export { default as BulkActionsBar } from './BulkActionsBar';
