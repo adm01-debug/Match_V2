@@ -15,6 +15,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { AIInterviewScheduler } from "@/components/agenda/AIInterviewScheduler";
 import {
   Calendar as CalendarIcon,
   Clock,
@@ -28,6 +29,7 @@ import {
   AlertCircle,
   RefreshCw,
   Filter,
+  Sparkles,
 } from "lucide-react";
 import { format, isSameDay, startOfMonth, endOfMonth, eachDayOfInterval, isToday } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -74,6 +76,7 @@ export default function AgendaPage() {
   const [filtroStatus, setFiltroStatus] = useState<string>("todos");
   const [_dialogOpen, setDialogOpen] = useState(false);
   const [feedbackDialog, setFeedbackDialog] = useState(false);
+  const [showAIScheduler, setShowAIScheduler] = useState(false);
   const [entrevistaSelecionada, setEntrevistaSelecionada] = useState<EntrevistaCardData | null>(null);
 
   const { data: entrevistas = [], isLoading, refetch } = useEntrevistas();
@@ -312,12 +315,35 @@ export default function AgendaPage() {
                 <RefreshCw className="h-4 w-4" />
               </Button>
 
+              <Button 
+                variant="outline" 
+                onClick={() => setShowAIScheduler(!showAIScheduler)}
+                className={showAIScheduler ? "bg-primary/10" : ""}
+              >
+                <Sparkles className="h-4 w-4 mr-2" />
+                AI Scheduler
+              </Button>
+
               <Button onClick={() => setDialogOpen(true)}>
                 <Plus className="h-4 w-4 mr-2" />
                 Nova Entrevista
               </Button>
             </div>
           </div>
+
+          {/* AI Interview Scheduler Panel */}
+          {showAIScheduler && (
+            <AIInterviewScheduler
+              duracao={60}
+              onSelectSlot={(slot) => {
+                toast({
+                  title: "Horário selecionado!",
+                  description: `${format(slot.data, "dd/MM/yyyy")} às ${slot.horaInicio} com ${slot.entrevistadores.map(e => e.nome).join(", ")}`,
+                });
+              }}
+              candidatoNome="Candidato Selecionado"
+            />
+          )}
 
           <Tabs value={activeTab} onValueChange={setActiveTab}>
             <TabsList>
