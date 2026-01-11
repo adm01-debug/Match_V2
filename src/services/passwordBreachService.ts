@@ -64,8 +64,8 @@ export const checkPasswordBreach = async (password: string): Promise<BreachCheck
     }
 
     return { isBreached: false, count: 0, isLoading: false, error: null };
-  } catch (error) {
-    console.error('Erro ao verificar vazamento de senha:', error);
+  } catch {
+    // Silently handle - user will see "não foi possível verificar"
     return { 
       isBreached: false, 
       count: 0, 

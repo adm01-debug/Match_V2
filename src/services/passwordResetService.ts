@@ -4,6 +4,7 @@
  */
 
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from './logger';
 
 export interface PasswordResetRequest {
   readonly id: string;
@@ -68,7 +69,7 @@ export const createPasswordResetRequest = async (
       });
 
     if (error) {
-      console.error('Error creating reset request:', error);
+      logger.error('Error creating reset request:', error, 'PasswordReset');
       return { success: false, message: 'Erro ao criar solicitação.' };
     }
 
@@ -77,7 +78,7 @@ export const createPasswordResetRequest = async (
       message: 'Solicitação enviada para aprovação. Você receberá um email quando aprovada.' 
     };
   } catch (error) {
-    console.error('Error in createPasswordResetRequest:', error);
+    logger.error('Error in createPasswordResetRequest:', error, 'PasswordReset');
     return { success: false, message: 'Erro interno.' };
   }
 };
@@ -101,7 +102,7 @@ export const getPasswordResetRequests = async (
     const { data, error } = await query;
 
     if (error) {
-      console.error('Error fetching reset requests:', error);
+      logger.error('Error fetching reset requests:', error, 'PasswordReset');
       return [];
     }
 
@@ -118,7 +119,7 @@ export const getPasswordResetRequests = async (
       reviewNotes: row.review_notes,
     }));
   } catch (error) {
-    console.error('Error in getPasswordResetRequests:', error);
+    logger.error('Error in getPasswordResetRequests:', error, 'PasswordReset');
     return [];
   }
 };
@@ -139,7 +140,7 @@ export const processResetRequest = async (
     });
 
     if (error) {
-      console.error('Error processing request:', error);
+      logger.error('Error processing request:', error, 'PasswordReset');
       return { success: false, message: 'Erro ao processar solicitação.' };
     }
 
@@ -149,7 +150,7 @@ export const processResetRequest = async (
       resetLink: data.resetLink,
     };
   } catch (error) {
-    console.error('Error in processResetRequest:', error);
+    logger.error('Error in processResetRequest:', error, 'PasswordReset');
     return { success: false, message: 'Erro interno.' };
   }
 };
@@ -179,7 +180,7 @@ export const validateResetToken = async (
 
     return { valid: true, email: data.user_email, requestId: data.id };
   } catch (error) {
-    console.error('Error validating token:', error);
+    logger.error('Error validating token:', error, 'PasswordReset');
     return { valid: false };
   }
 };
@@ -210,7 +211,7 @@ export const completePasswordReset = async (
       .eq('id', validation.requestId ?? '');
 
     if (error) {
-      console.error('Error completing reset:', error);
+      logger.error('Error completing reset:', error, 'PasswordReset');
       return { success: false, message: 'Erro ao completar reset.' };
     }
 
@@ -219,7 +220,7 @@ export const completePasswordReset = async (
       message: 'Senha alterada com sucesso. Faça login com sua nova senha.' 
     };
   } catch (error) {
-    console.error('Error in completePasswordReset:', error);
+    logger.error('Error in completePasswordReset:', error, 'PasswordReset');
     return { success: false, message: 'Erro interno.' };
   }
 };
