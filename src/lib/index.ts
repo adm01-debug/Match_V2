@@ -5,7 +5,7 @@
 
 export * from './utils';
 export * from './constants';
-export * from './schemas';
+export * from './matchSchemas';
 export * from './queryConfig';
 export { apiClient, createApiUrl } from './apiClient';
 export { handleError, handleApiError } from './errorHandler';
