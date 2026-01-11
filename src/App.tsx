@@ -40,6 +40,9 @@ const IndicacoesPage = lazy(() => import("./pages/IndicacoesPage"));
 const DiagnosticoPage = lazy(() => import("./pages/DiagnosticoPage"));
 const EdgeFunctionTestPage = lazy(() => import("./pages/EdgeFunctionTestPage"));
 const GamificationPage = lazy(() => import("./pages/GamificationPage"));
+const OfferManagementPage = lazy(() => import("./pages/OfferManagementPage"));
+const HiringManagerPortalPage = lazy(() => import("./pages/HiringManagerPortalPage"));
+const AdvancedAnalyticsPage = lazy(() => import("./pages/AdvancedAnalyticsPage"));
 const PortalAuthPage = lazy(() => import("./pages/portal/PortalAuthPage"));
 const PortalDashboard = lazy(() => import("./pages/portal/PortalDashboard"));
 const PortalVagas = lazy(() => import("./pages/portal/PortalVagas"));
@@ -161,6 +164,9 @@ function App() {
                           <Route path="/agenda" element={<ProtectedRoute><AgendaPage /></ProtectedRoute>} />
                           <Route path="/indicacoes" element={<ProtectedRoute><IndicacoesPage /></ProtectedRoute>} />
                           <Route path="/gamification" element={<ProtectedRoute><GamificationPage /></ProtectedRoute>} />
+                          <Route path="/ofertas" element={<ProtectedRoute><OfferManagementPage /></ProtectedRoute>} />
+                          <Route path="/gestor" element={<ProtectedRoute requiredRoles={['gestor', 'admin']}><HiringManagerPortalPage /></ProtectedRoute>} />
+                          <Route path="/analytics" element={<ProtectedRoute requiredRoles={['admin', 'rh']}><AdvancedAnalyticsPage /></ProtectedRoute>} />
                           <Route path="/admin" element={<ProtectedRoute><AdminPage /></ProtectedRoute>} />
 
                           {/* 404 */}

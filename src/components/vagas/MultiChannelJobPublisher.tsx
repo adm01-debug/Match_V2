@@ -146,6 +146,7 @@ export function MultiChannelJobPublisher({
 
     for (let i = 0; i < selectedBoards.length; i++) {
       const boardId = selectedBoards[i];
+      if (!boardId) continue;
       try {
         // Simular publicação
         await new Promise(r => setTimeout(r, 800));
