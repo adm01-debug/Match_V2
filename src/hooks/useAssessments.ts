@@ -129,9 +129,9 @@ export function useSubmitAssessment() {
         .insert({
           assessment_id: assessmentId,
           candidato_id: candidatoId,
-          processo_id: processoId,
-          respostas,
-          resultados,
+          processo_id: processoId || null,
+          respostas: respostas as unknown as { [key: string]: string },
+          resultados: resultados as unknown as { [key: string]: string } | null,
           tempo_gasto: tempoGasto,
           finalizado_em: new Date().toISOString(),
           status: 'finalizado',
@@ -228,9 +228,10 @@ function calcularCultural(
 
   Object.entries(respostas).forEach(([questaoId, valor]) => {
     const questao = questoes.find(q => q.id === questaoId);
-    if (questao?.dimensao) {
-      if (!scores[questao.dimensao]) scores[questao.dimensao] = [];
-      scores[questao.dimensao].push(Number(valor));
+    const dimensao = questao?.dimensao;
+    if (dimensao) {
+      if (!scores[dimensao]) scores[dimensao] = [];
+      scores[dimensao].push(Number(valor));
     }
   });
 
