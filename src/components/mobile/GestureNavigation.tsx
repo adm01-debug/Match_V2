@@ -35,7 +35,7 @@ export const GestureNavigation = memo(function GestureNavigation({
     setIndex(currentIndex);
   }, [currentIndex]);
 
-  const handleDragEnd = useCallback((_: any, info: PanInfo) => {
+  const handleDragEnd = useCallback((_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
     const threshold = 50;
     const velocity = info.velocity.x;
     const offset = info.offset.x;
@@ -237,7 +237,7 @@ export const EdgeSwipeNavigation = memo(function EdgeSwipeNavigation({
   const backOpacity = useTransform(x, [0, 100], [0, 1]);
   const forwardOpacity = useTransform(x, [-100, 0], [1, 0]);
 
-  const handleDragEnd = (_: any, info: PanInfo) => {
+  const handleDragEnd = (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
     if (info.offset.x > 100 && onSwipeBack) {
       onSwipeBack();
     } else if (info.offset.x < -100 && onSwipeForward) {

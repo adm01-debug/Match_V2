@@ -304,11 +304,11 @@ export function useRecentActions({ maxActions = 50, persistKey }: UseRecentActio
       try {
         const stored = localStorage.getItem(persistKey);
         if (stored) {
-          const parsed = JSON.parse(stored);
-          setActions(parsed.map((a: any) => ({
+          const parsed = JSON.parse(stored) as Array<{ timestamp: string; [key: string]: unknown }>;
+          setActions(parsed.map((a) => ({
             ...a,
             timestamp: new Date(a.timestamp),
-          })));
+          })) as RecentAction[]);
         }
       } catch (e) {
         console.error('Failed to load recent actions:', e);

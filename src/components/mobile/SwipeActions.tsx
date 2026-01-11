@@ -65,7 +65,7 @@ export const SwipeActions = memo(function SwipeActions({
   const leftScale = useTransform(x, [0, threshold], [0.8, 1]);
   const rightScale = useTransform(x, [-threshold, 0], [1, 0.8]);
 
-  const handleDragEnd = (_: any, info: PanInfo) => {
+  const handleDragEnd = (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
     const offset = info.offset.x;
     const velocity = info.velocity.x;
 
@@ -178,7 +178,7 @@ export const SwipeToConfirm = memo(function SwipeToConfirm({
   const checkOpacity = useTransform(x, [threshold - 20, threshold], [0, 1]);
   const bgOpacity = useTransform(x, [0, threshold], [0.3, 1]);
 
-  const handleDragEnd = (_: any, info: PanInfo) => {
+  const handleDragEnd = (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
     if (info.offset.x >= threshold) {
       setIsConfirmed(true);
       onConfirm();
@@ -252,7 +252,7 @@ export const SwipeableCard = memo(function SwipeableCard({
   const leftOpacity = useTransform(x, [-200, -50], [1, 0]);
   const rightOpacity = useTransform(x, [50, 200], [0, 1]);
 
-  const handleDragEnd = (_: any, info: PanInfo) => {
+  const handleDragEnd = (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
     if (info.offset.x > 150 && onSwipeRight) {
       onSwipeRight();
     } else if (info.offset.x < -150 && onSwipeLeft) {

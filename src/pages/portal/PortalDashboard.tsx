@@ -44,6 +44,30 @@ const statusColors: Record<string, string> = {
   desistencia: 'bg-gray-500/10 text-gray-600 border-gray-500/20'
 };
 
+interface Candidatura {
+  id: string;
+  status: string;
+  etapa_atual: string;
+  data_candidatura: string;
+  vagas?: {
+    id: string;
+    titulo: string;
+    departamento: string;
+    modalidade: string;
+    cidade: string | null;
+    estado: string | null;
+    tipo_contrato: string;
+  } | null;
+}
+
+interface VagaDisponivel {
+  id: string;
+  titulo: string;
+  departamento: string;
+  modalidade: string;
+  tipo_contrato: string;
+}
+
 const PortalDashboard = () => {
   usePageTitle('Portal - Dashboard');
 
@@ -220,7 +244,7 @@ const PortalDashboard = () => {
 
             {candidaturas && candidaturas.length > 0 ? (
               <div className="space-y-4">
-                {candidaturas.map((candidatura: any) => (
+                {candidaturas.map((candidatura: Candidatura) => (
                   <Card key={candidatura.id} className="overflow-hidden">
                     <CardContent className="p-6">
                       <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
@@ -315,7 +339,7 @@ const PortalDashboard = () => {
             
             {vagasDisponiveis && vagasDisponiveis.length > 0 ? (
               <div className="space-y-3">
-                {vagasDisponiveis.map((vaga: any) => (
+                {vagasDisponiveis.map((vaga: VagaDisponivel) => (
                   <Card key={vaga.id} className="hover:shadow-md transition-shadow cursor-pointer" onClick={() => navigate(`/portal/vagas/${vaga.id}`)}>
                     <CardContent className="p-4">
                       <h4 className="font-medium mb-1">{vaga.titulo}</h4>

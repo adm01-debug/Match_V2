@@ -63,7 +63,7 @@ export const BottomSheet = memo(function BottomSheet({
     return 0;
   }, [peekHeight]);
 
-  const handleDragEnd = useCallback((_: any, info: PanInfo) => {
+  const handleDragEnd = useCallback((_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
     const velocity = info.velocity.y;
     const offset = info.offset.y;
     const currentHeight = getSnapHeight(currentSnap);
@@ -304,7 +304,7 @@ export const ExpandableBottomBar = memo(function ExpandableBottomBar({
     onExpandChange?.(newValue);
   };
 
-  const handleDragEnd = (_: any, info: PanInfo) => {
+  const handleDragEnd = (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
     if (info.offset.y < -50) {
       setIsExpanded(true);
       onExpandChange?.(true);

@@ -83,8 +83,8 @@ const PortalProtectedRoute: React.FC<PortalProtectedRouteProps> = ({ children })
       
       // Cleanup
       setTimeout(() => audioContext.close(), 1000);
-    } catch (error) {
-      console.log('Audio not available:', error);
+    } catch {
+      // Audio not available, silently fail
     }
   };
 

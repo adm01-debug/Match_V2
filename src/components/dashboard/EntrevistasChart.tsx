@@ -25,7 +25,19 @@ import {
 import { TrendingUp, BarChart3, PieChart as PieChartIcon, Sparkles } from 'lucide-react';
 import { useEntrevistasEvolucao, useEntrevistasPizza } from '@/hooks/useEntrevistas';
 
-const CustomTooltip = ({ active, payload, label }: any) => {
+interface TooltipPayloadItem {
+  color: string;
+  name: string;
+  value: number;
+}
+
+interface CustomTooltipProps {
+  active?: boolean;
+  payload?: TooltipPayloadItem[];
+  label?: string;
+}
+
+const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
   if (active && payload && payload.length) {
     return (
       <motion.div 
@@ -35,7 +47,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
         animate={{ opacity: 1, scale: 1 }}
       >
         <p className="font-semibold text-sm mb-2 text-foreground">{label}</p>
-        {payload.map((entry: any, index: number) => (
+        {payload.map((entry, index) => (
           <div key={index} className="flex items-center gap-2 text-sm">
             <div 
               className="w-3 h-3 rounded-full" 
