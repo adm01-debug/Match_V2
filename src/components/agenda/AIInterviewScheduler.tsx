@@ -3,20 +3,22 @@
  * @module AIInterviewScheduler
  */
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { format, addDays, setHours, setMinutes, isWeekend, isBefore, addMinutes } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Sparkles, Calendar, Clock, Users, CheckCircle2, 
-  RefreshCw, Zap, Brain, ArrowRight, Star
+  RefreshCw, Zap, Brain, ArrowRight, Star, AlertTriangle
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Progress } from '@/components/ui/progress';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
+import { useEntrevistas } from '@/hooks/useEntrevistas';
 
 interface Entrevistador {
   id: string;
@@ -33,6 +35,20 @@ interface SugestedSlot {
   entrevistadores: Entrevistador[];
   score: number;
   reasons: string[];
+  conflicts?: ConflictInfo[];
+  hasConflict?: boolean;
+}
+
+interface ConflictInfo {
+  type: 'overlap' | 'interviewer_busy' | 'time_proximity';
+  severity: 'high' | 'medium' | 'low';
+  message: string;
+  conflictingInterview?: {
+    id: string;
+    candidatoNome: string;
+    horaInicio: string;
+    horaFim: string;
+  };
 }
 
 interface AIInterviewSchedulerProps {
@@ -87,6 +103,91 @@ export function AIInterviewScheduler({
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [conflictWarnings, setConflictWarnings] = useState<ConflictInfo[]>([]);
+
+  // Buscar entrevistas existentes para detecção de conflitos
+  const { data: existingInterviews = [] } = useEntrevistas();
+
+  // Função para converter horário em minutos
+  const timeToMinutes = (time: string): number => {
+    const [hours, minutes] = time.split(':').map(Number) as [number, number];
+    return hours * 60 + minutes;
+  };
+
+  // Função para verificar sobreposição de horários
+  const hasTimeOverlap = (
+    start1: number, end1: number,
+    start2: number, end2: number
+  ): boolean => {
+    return start1 < end2 && end1 > start2;
+  };
+
+  // Detectar conflitos para um slot específico
+  const detectConflicts = (slotDate: Date, slotStart: string, slotEnd: string): ConflictInfo[] => {
+    const conflicts: ConflictInfo[] = [];
+    const slotStartMin = timeToMinutes(slotStart);
+    const slotEndMin = timeToMinutes(slotEnd);
+    const slotDateStr = format(slotDate, 'yyyy-MM-dd');
+
+    for (const interview of existingInterviews) {
+      const interviewDate = interview.data;
+      const interviewDateStr = format(interviewDate, 'yyyy-MM-dd');
+      
+      if (interviewDateStr !== slotDateStr) continue;
+
+      const interviewStartMin = timeToMinutes(interview.horaInicio);
+      const interviewEndMin = timeToMinutes(interview.horaFim);
+
+      // Verificar sobreposição direta
+      if (hasTimeOverlap(slotStartMin, slotEndMin, interviewStartMin, interviewEndMin)) {
+        conflicts.push({
+          type: 'overlap',
+          severity: 'high',
+          message: `Conflito com entrevista de ${interview.candidatoNome} (${interview.horaInicio} - ${interview.horaFim})`,
+          conflictingInterview: {
+            id: interview.id,
+            candidatoNome: interview.candidatoNome,
+            horaInicio: interview.horaInicio,
+            horaFim: interview.horaFim
+          }
+        });
+      }
+
+      // Verificar proximidade (menos de 15 minutos entre entrevistas)
+      const gap = Math.min(
+        Math.abs(slotStartMin - interviewEndMin),
+        Math.abs(interviewStartMin - slotEndMin)
+      );
+
+      if (gap > 0 && gap < 15 && !hasTimeOverlap(slotStartMin, slotEndMin, interviewStartMin, interviewEndMin)) {
+        conflicts.push({
+          type: 'time_proximity',
+          severity: 'medium',
+          message: `Apenas ${gap} min entre esta e a entrevista de ${interview.candidatoNome}`,
+          conflictingInterview: {
+            id: interview.id,
+            candidatoNome: interview.candidatoNome,
+            horaInicio: interview.horaInicio,
+            horaFim: interview.horaFim
+          }
+        });
+      }
+    }
+
+    return conflicts;
+  };
+
+  // Atualizar avisos quando um slot é selecionado
+  useEffect(() => {
+    if (selectedSlot) {
+      const slot = suggestedSlots.find(s => s.id === selectedSlot);
+      if (slot && slot.conflicts) {
+        setConflictWarnings(slot.conflicts);
+      } else {
+        setConflictWarnings([]);
+      }
+    }
+  }, [selectedSlot]);
 
   // Gerar slots sugeridos baseados na disponibilidade
   const suggestedSlots = useMemo((): SugestedSlot[] => {
@@ -107,6 +208,7 @@ export function AIInterviewScheduler({
       const [hours, minutes] = time.split(':').map(Number) as [number, number];
       const slotStart = setMinutes(setHours(date, hours), minutes);
         const slotEnd = addMinutes(slotStart, duracao);
+        const slotEndFormatted = format(slotEnd, 'HH:mm');
         
         if (isBefore(slotStart, today)) continue;
         
@@ -125,9 +227,22 @@ export function AIInterviewScheduler({
         );
         
         if (availableInterviewers.length >= 2) {
+          // Detectar conflitos com entrevistas existentes
+          const conflicts = detectConflicts(date, time, slotEndFormatted);
+          const hasConflict = conflicts.some(c => c.severity === 'high');
+          
           // Calcular score do slot
           let score = 50;
           const reasons: string[] = [];
+          
+          // Penalizar slots com conflitos
+          if (hasConflict) {
+            score -= 40;
+            reasons.push('⚠️ Conflito de horário');
+          } else if (conflicts.length > 0) {
+            score -= 15;
+            reasons.push('⏰ Horário apertado');
+          }
           
           // Mais entrevistadores = melhor
           if (availableInterviewers.length >= 3) {
@@ -153,22 +268,30 @@ export function AIInterviewScheduler({
             reasons.push('Data próxima');
           }
           
+          // Bonus para slots sem conflitos
+          if (conflicts.length === 0) {
+            score += 10;
+            reasons.push('✓ Sem conflitos');
+          }
+          
           slots.push({
             id: `${format(date, 'yyyy-MM-dd')}-${time}`,
             data: date,
             horaInicio: time,
-            horaFim: format(slotEnd, 'HH:mm'),
+            horaFim: slotEndFormatted,
             entrevistadores: availableInterviewers,
-            score: Math.min(score, 100),
-            reasons
+            score: Math.max(0, Math.min(score, 100)),
+            reasons,
+            conflicts,
+            hasConflict
           });
         }
       }
     }
     
-    // Ordenar por score e retornar top 5
+    // Ordenar por score (conflitos vão para baixo) e retornar top 5
     return slots.sort((a, b) => b.score - a.score).slice(0, 5);
-  }, [entrevistadores, duracao]);
+  }, [entrevistadores, duracao, existingInterviews, detectConflicts]);
 
   const handleAnalyze = async () => {
     setIsAnalyzing(true);
@@ -276,6 +399,29 @@ export function AIInterviewScheduler({
                 </Button>
               </div>
 
+              {/* Conflict Summary */}
+              {conflictWarnings.length > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="p-4 rounded-lg bg-destructive/10 border border-destructive/20"
+                >
+                  <div className="flex items-start gap-3">
+                    <AlertTriangle className="h-5 w-5 text-destructive mt-0.5" />
+                    <div className="flex-1">
+                      <p className="font-medium text-destructive">Conflitos detectados</p>
+                      <ul className="mt-1 space-y-1">
+                        {conflictWarnings.map((conflict, i) => (
+                          <li key={i} className="text-sm text-muted-foreground">
+                            {conflict.message}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+
               <div className="space-y-3">
                 {suggestedSlots.map((slot, index) => (
                   <motion.div
@@ -285,14 +431,64 @@ export function AIInterviewScheduler({
                     transition={{ delay: index * 0.1 }}
                     className={cn(
                       "relative p-4 rounded-xl border-2 cursor-pointer transition-all",
-                      selectedSlot === slot.id 
-                        ? "border-primary bg-primary/5 shadow-lg" 
-                        : "border-border hover:border-primary/50 hover:shadow-md",
-                      getScoreBg(slot.score)
+                      slot.hasConflict 
+                        ? "border-destructive/50 bg-destructive/5"
+                        : selectedSlot === slot.id 
+                          ? "border-primary bg-primary/5 shadow-lg" 
+                          : "border-border hover:border-primary/50 hover:shadow-md",
+                      !slot.hasConflict && getScoreBg(slot.score)
                     )}
                     onClick={() => handleSelectSlot(slot)}
                   >
-                    {index === 0 && (
+                    {/* Conflict indicator */}
+                    {slot.hasConflict && (
+                      <div className="absolute -top-2 -left-2">
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger>
+                              <Badge variant="destructive" className="animate-pulse">
+                                <AlertTriangle className="h-3 w-3 mr-1" />
+                                Conflito
+                              </Badge>
+                            </TooltipTrigger>
+                            <TooltipContent className="max-w-xs">
+                              <p className="font-medium mb-1">Conflitos de horário:</p>
+                              <ul className="text-sm space-y-1">
+                                {slot.conflicts?.map((c, i) => (
+                                  <li key={i}>• {c.message}</li>
+                                ))}
+                              </ul>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      </div>
+                    )}
+
+                    {/* Proximity warning */}
+                    {!slot.hasConflict && slot.conflicts && slot.conflicts.length > 0 && (
+                      <div className="absolute -top-2 -left-2">
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger>
+                              <Badge variant="outline" className="bg-yellow-500/10 text-yellow-600 border-yellow-500/30">
+                                <Clock className="h-3 w-3 mr-1" />
+                                Atenção
+                              </Badge>
+                            </TooltipTrigger>
+                            <TooltipContent className="max-w-xs">
+                              <p className="font-medium mb-1">Aviso:</p>
+                              <ul className="text-sm space-y-1">
+                                {slot.conflicts?.map((c, i) => (
+                                  <li key={i}>• {c.message}</li>
+                                ))}
+                              </ul>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      </div>
+                    )}
+
+                    {index === 0 && !slot.hasConflict && !slot.conflicts?.length && (
                       <div className="absolute -top-2 -right-2">
                         <Badge className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white border-0">
                           <Star className="h-3 w-3 mr-1" />
@@ -349,7 +545,7 @@ export function AIInterviewScheduler({
                       </div>
 
                       <div className="text-right">
-                        <div className={cn("text-2xl font-bold", getScoreColor(slot.score))}>
+                        <div className={cn("text-2xl font-bold", slot.hasConflict ? "text-destructive" : getScoreColor(slot.score))}>
                           {slot.score}%
                         </div>
                         <Progress 
