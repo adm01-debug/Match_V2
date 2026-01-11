@@ -12,6 +12,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/co
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
 import { Slider } from '@/components/ui/slider';
+import { SkeletonCard } from '@/components/ui/premium-skeleton';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { 
@@ -714,14 +715,10 @@ export default function CandidatosPage() {
 
         {/* Results */}
         {isLoading ? (
-          <div className="flex items-center justify-center py-16">
-            <div className="text-center space-y-4">
-              <div className="relative">
-                <div className="w-16 h-16 border-4 border-primary/20 rounded-full" />
-                <div className="absolute inset-0 w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin" />
-              </div>
-              <p className="text-muted-foreground">Carregando talentos...</p>
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <SkeletonCard key={i} lines={3} showActions showBadge />
+            ))}
           </div>
         ) : filteredCandidatos.length === 0 ? (
           <CandidatosEmptyState 

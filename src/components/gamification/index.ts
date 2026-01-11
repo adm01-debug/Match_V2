@@ -33,3 +33,12 @@ export {
 export {
   GamificationDashboard,
 } from "./GamificationDashboard";
+
+export {
+  GamificationWidget,
+} from "./GamificationWidget";
+
+export {
+  AchievementNotification,
+  useAchievementNotification,
+} from "./AchievementNotification";

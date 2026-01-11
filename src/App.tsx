@@ -39,6 +39,7 @@ const AgendaPage = lazy(() => import("./pages/AgendaPage"));
 const IndicacoesPage = lazy(() => import("./pages/IndicacoesPage"));
 const DiagnosticoPage = lazy(() => import("./pages/DiagnosticoPage"));
 const EdgeFunctionTestPage = lazy(() => import("./pages/EdgeFunctionTestPage"));
+const GamificationPage = lazy(() => import("./pages/GamificationPage"));
 const PortalAuthPage = lazy(() => import("./pages/portal/PortalAuthPage"));
 const PortalDashboard = lazy(() => import("./pages/portal/PortalDashboard"));
 const PortalVagas = lazy(() => import("./pages/portal/PortalVagas"));
@@ -159,6 +160,7 @@ function App() {
                           <Route path="/comunicacao" element={<ProtectedRoute><ComunicacaoPage /></ProtectedRoute>} />
                           <Route path="/agenda" element={<ProtectedRoute><AgendaPage /></ProtectedRoute>} />
                           <Route path="/indicacoes" element={<ProtectedRoute><IndicacoesPage /></ProtectedRoute>} />
+                          <Route path="/gamification" element={<ProtectedRoute><GamificationPage /></ProtectedRoute>} />
                           <Route path="/admin" element={<ProtectedRoute><AdminPage /></ProtectedRoute>} />
 
                           {/* 404 */}

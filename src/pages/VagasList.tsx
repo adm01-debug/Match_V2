@@ -13,7 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Skeleton } from "@/components/ui/skeleton";
+import { SkeletonCard, SkeletonList } from "@/components/ui/premium-skeleton";
 import { useVagas } from "@/hooks/useVagas";
 import { Plus, Search, LayoutGrid, List, X, Briefcase, Users, Target, TrendingUp, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -286,16 +286,15 @@ export default function VagasList() {
 
         {/* Vagas Grid/List */}
         {isLoading ? (
-          <div className={cn(
-            "gap-4",
-            viewMode === "grid" 
-              ? "grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3" 
-              : "flex flex-col"
-          )}>
-            {[1, 2, 3].map((i) => (
-              <Skeleton key={i} className="h-56 w-full rounded-xl" />
-            ))}
-          </div>
+          viewMode === "grid" ? (
+            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <SkeletonCard key={i} lines={3} showActions showBadge />
+              ))}
+            </div>
+          ) : (
+            <SkeletonList items={6} variant="detailed" />
+          )
         ) : filteredVagas.length === 0 ? (
           <VagasEmptyState 
             hasFilters={hasActiveFilters} 

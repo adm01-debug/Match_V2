@@ -14,6 +14,7 @@ import { AlertasInteligentes } from "@/components/dashboard/AlertasInteligentes"
 import { TopCandidatos } from "@/components/dashboard/TopCandidatos";
 import { EntrevistasStats } from "@/components/dashboard/EntrevistasStats";
 import { EntrevistasChart } from "@/components/dashboard/EntrevistasChart";
+import { GamificationWidget } from "@/components/gamification/GamificationWidget";
 import { useDashboardData } from "@/hooks/useDashboardData";
 import { useOnboarding } from "@/components/onboarding/OnboardingProvider";
 import { ErrorBoundary } from 'react-error-boundary';
@@ -344,6 +345,11 @@ function DashboardContent() {
               transition={{ delay: 0.35, type: 'spring' as const, stiffness: 200, damping: 20 }}
               className="space-y-6"
             >
+              {/* Gamification Widget */}
+              <Suspense fallback={<Skeleton className="h-64 rounded-2xl" />}>
+                <GamificationWidget />
+              </Suspense>
+              
               <Suspense fallback={<Skeleton className="h-48 rounded-2xl" />}>
                 <AcoesRapidas />
               </Suspense>
