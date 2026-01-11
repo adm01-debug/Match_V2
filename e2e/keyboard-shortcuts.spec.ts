@@ -10,7 +10,8 @@ test.describe('Keyboard Shortcuts', () => {
   });
 
   test('escape closes modals', async ({ page }) => {
-    await page.goto('/candidatos');
+    // A rota correta é /talentos (não /candidatos)
+    await page.goto('/talentos');
     const addBtn = page.getByRole('button', { name: /adicionar|novo|add/i });
     if (await addBtn.isVisible()) {
       await addBtn.click();

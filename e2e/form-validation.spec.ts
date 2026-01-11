@@ -11,7 +11,8 @@ test.describe('Form Validation', () => {
   });
 
   test('validates email format', async ({ page }) => {
-    await page.goto('/candidatos');
+    // A rota correta é /talentos (não /candidatos)
+    await page.goto('/talentos');
     const emailInput = page.getByLabel(/email/i);
     if (await emailInput.isVisible()) {
       await emailInput.fill('invalid-email');
