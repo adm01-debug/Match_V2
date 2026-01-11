@@ -13,8 +13,9 @@ test.describe('Portal do Candidato', () => {
     });
 
     test('deve mostrar página de login do portal', async ({ page }) => {
-      await page.goto('/portal/auth');
-      await expect(page).toHaveURL(/\/portal\/auth/);
+      // A rota correta é /portal (não /portal/auth)
+      await page.goto('/portal');
+      await expect(page).toHaveURL(/\/portal/);
     });
   });
 
