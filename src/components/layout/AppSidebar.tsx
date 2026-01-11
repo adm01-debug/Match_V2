@@ -23,6 +23,7 @@ import {
   Mail,
   Shield,
   HelpCircle,
+  Trophy,
 } from "lucide-react";
 import {
   Sidebar,
@@ -67,6 +68,7 @@ const menuItems = [
     group: "Gestão",
     items: [
       { title: "Indicações", url: "/indicacoes", icon: Gift },
+      { title: "Conquistas", url: "/gamification", icon: Trophy },
       { title: "Comunicação", url: "/comunicacao", icon: Mail },
       { title: "Relatórios", url: "/relatorios", icon: BarChart3, roles: ['admin', 'rh'] as AppRole[] },
       { title: "Administração", url: "/admin", icon: Shield, roles: ['admin'] as AppRole[] },
