@@ -115,16 +115,28 @@ export function PerfilCargoForm({ vagaId, onSuccess }: PerfilCargoFormProps) {
     }
 
     try {
-      const perfil = await createMutation.mutateAsync({
+      const perfilData = await createMutation.mutateAsync({
         ...data,
         vagaId,
-        criterios: selectedCompetencias.map(c => ({
-          competenciaId: c.id,
-          peso: c.peso,
-          obrigatorio: c.obrigatorio,
-        })),
-        valores: selectedValores,
       });
+      
+      // Map the database response to PerfilCargo type
+      const perfil: PerfilCargo = {
+        id: perfilData.id,
+        vagaId: perfilData.vaga_id || undefined,
+        nome: perfilData.nome,
+        descricao: perfilData.descricao || undefined,
+        perfilDominancia: perfilData.perfil_dominancia || 25,
+        perfilInfluencia: perfilData.perfil_influencia || 25,
+        perfilEstabilidade: perfilData.perfil_estabilidade || 25,
+        perfilConformidade: perfilData.perfil_conformidade || 25,
+        toleranciaPerfil: perfilData.tolerancia_perfil || 15,
+        pesoTecnico: perfilData.peso_tecnico || 40,
+        pesoBehavioral: perfilData.peso_comportamental || 30,
+        pesoCultural: perfilData.peso_cultural || 30,
+        notaMinimaAprovacao: perfilData.nota_minima_aprovacao || 70,
+      };
+      
       toast.success('Perfil de cargo criado com sucesso!');
       onSuccess?.(perfil);
     } catch (error) {

@@ -23,7 +23,7 @@ import {
   Target,
   Sparkles
 } from 'lucide-react';
-import type { AssessmentQuestao, AssessmentOpcao } from '@/types/selection';
+import type { AssessmentOpcao } from '@/types/selection';
 import { toast } from 'sonner';
 
 interface AssessmentPlayerProps {
@@ -194,7 +194,7 @@ export function AssessmentPlayer({
                     </div>
                     <Slider
                       value={[Number(currentAnswer) || 3]}
-                      onValueChange={([val]) => handleAnswer(val)}
+                      onValueChange={(values) => handleAnswer(values[0] ?? 3)}
                       min={1}
                       max={5}
                       step={1}

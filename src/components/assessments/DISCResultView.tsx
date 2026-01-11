@@ -5,9 +5,7 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Separator } from '@/components/ui/separator';
-import { Brain, TrendingUp, AlertTriangle, CheckCircle2 } from 'lucide-react';
+import { Brain, TrendingUp, CheckCircle2 } from 'lucide-react';
 import type { DISCResultado } from '@/types/selection';
 import { DISC_PROFILES } from '@/types/selection';
 

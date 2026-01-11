@@ -9,13 +9,11 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Progress } from '@/components/ui/progress';
 import { 
   Trophy, 
   Medal,
   Users,
   BarChart3,
-  ArrowRight,
   Sparkles,
   ChevronDown,
   ChevronUp
@@ -44,11 +42,6 @@ const getScoreColor = (score: number) => {
   return 'text-red-600';
 };
 
-const getScoreBg = (score: number) => {
-  if (score >= 80) return 'bg-green-500';
-  if (score >= 60) return 'bg-yellow-500';
-  return 'bg-red-500';
-};
 
 export function CandidateComparison({ vagaId, vagaTitulo }: CandidateComparisonProps) {
   const { data: scorecards = [], isLoading } = useScorecards(vagaId);
@@ -58,7 +51,7 @@ export function CandidateComparison({ vagaId, vagaTitulo }: CandidateComparisonP
   const [comparisonResult, setComparisonResult] = useState<{
     ranking: Array<{
       posicao: number;
-      candidatoId: string;
+      candidatoId: string | null;
       candidatoNome: string;
       scoreFinal: number;
       scores: Record<string, number>;
@@ -174,13 +167,13 @@ export function CandidateComparison({ vagaId, vagaTitulo }: CandidateComparisonP
                       <p className="font-semibold">{item.candidatoNome}</p>
                       <div className="flex gap-2 mt-1">
                         <Badge variant="outline" className="text-xs">
-                          T: {item.scores.tecnico || 0}
+                          T: {item.scores['tecnico'] || 0}
                         </Badge>
                         <Badge variant="outline" className="text-xs">
-                          C: {item.scores.comportamental || 0}
+                          C: {item.scores['comportamental'] || 0}
                         </Badge>
                         <Badge variant="outline" className="text-xs">
-                          Cult: {item.scores.cultural || 0}
+                          Cult: {item.scores['cultural'] || 0}
                         </Badge>
                       </div>
                     </div>
