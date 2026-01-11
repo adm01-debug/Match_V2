@@ -99,7 +99,7 @@ export interface AssessmentQuestao {
   tipo: TipoQuestaoAssessment;
   opcoes?: AssessmentOpcao[];
   dimensao?: string;
-  peso: number;
+  peso?: number;
   ordem: number;
   obrigatoria: boolean;
 }
