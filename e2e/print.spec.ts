@@ -23,7 +23,7 @@ test.describe('Print Functionality', () => {
   });
 
   test('reports are print-optimized', async ({ page }) => {
-    await page.goto('/analytics');
+    await page.goto('/relatorios');
     await page.emulateMedia({ media: 'print' });
     await expect(page.locator('body')).toBeVisible();
   });
