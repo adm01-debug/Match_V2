@@ -36,8 +36,8 @@ interface SugestedSlot {
 }
 
 interface AIInterviewSchedulerProps {
-  entrevistadores: Entrevistador[];
-  duracao: number; // em minutos
+  entrevistadores?: Entrevistador[];
+  duracao?: number; // em minutos
   onSelectSlot: (slot: SugestedSlot) => void;
   candidatoNome?: string;
 }
