@@ -6,8 +6,7 @@
  * const result = usePageTitle();
  */
 import { useEffect } from 'react';
-
-const APP_NAME = 'Match ATS';
+import { APP_NAME } from '@/lib/constants';
 
 /**
  * Hook para definir título dinâmico da página
