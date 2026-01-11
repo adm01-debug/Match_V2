@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 test.describe('Clipboard Operations', () => {
   test('copies candidate email to clipboard', async ({ page, context }) => {
     await context.grantPermissions(['clipboard-read', 'clipboard-write']);
-    await page.goto('/candidatos');
+    await page.goto('/talentos');
     const copyBtn = page.getByRole('button', { name: /copy|copiar/i });
     if (await copyBtn.first().isVisible()) {
       await copyBtn.first().click();
@@ -21,7 +21,7 @@ test.describe('Clipboard Operations', () => {
 
   test('shows copy success feedback', async ({ page, context }) => {
     await context.grantPermissions(['clipboard-read', 'clipboard-write']);
-    await page.goto('/candidatos');
+    await page.goto('/talentos');
     const copyBtn = page.getByRole('button', { name: /copy|copiar/i });
     if (await copyBtn.first().isVisible()) {
       await copyBtn.first().click();

@@ -3,7 +3,7 @@ import path from 'path';
 
 test.describe('File Upload', () => {
   test('uploads resume PDF', async ({ page }) => {
-    await page.goto('/candidatos');
+    await page.goto('/talentos');
     const fileInput = page.locator('input[type="file"]');
     if (await fileInput.isVisible()) {
       await fileInput.setInputFiles(path.join(__dirname, 'fixtures/resume.pdf'));
@@ -11,7 +11,7 @@ test.describe('File Upload', () => {
   });
 
   test('shows upload progress', async ({ page }) => {
-    await page.goto('/candidatos');
+    await page.goto('/talentos');
     const fileInput = page.locator('input[type="file"]');
     if (await fileInput.isVisible()) {
       await fileInput.setInputFiles(path.join(__dirname, 'fixtures/resume.pdf'));
@@ -23,7 +23,7 @@ test.describe('File Upload', () => {
   });
 
   test('validates file type', async ({ page }) => {
-    await page.goto('/candidatos');
+    await page.goto('/talentos');
     const fileInput = page.locator('input[type="file"]');
     if (await fileInput.isVisible()) {
       await fileInput.setInputFiles(path.join(__dirname, 'fixtures/invalid.exe'));
@@ -32,7 +32,7 @@ test.describe('File Upload', () => {
   });
 
   test('validates file size', async ({ page }) => {
-    await page.goto('/candidatos');
+    await page.goto('/talentos');
     // Large file test would need a fixture
   });
 });

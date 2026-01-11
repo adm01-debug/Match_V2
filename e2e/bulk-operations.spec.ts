@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Bulk Operations', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/candidatos');
+    await page.goto('/talentos');
   });
 
   test('should show selection bar when items selected', async ({ page }) => {

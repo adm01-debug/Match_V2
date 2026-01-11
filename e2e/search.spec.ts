@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Search Functionality', () => {
   test('searches candidates by name', async ({ page }) => {
-    await page.goto('/candidatos');
+    await page.goto('/talentos');
     const searchInput = page.getByPlaceholder(/buscar|search|pesquisar/i);
     if (await searchInput.isVisible()) {
       await searchInput.fill('João');
@@ -19,7 +19,7 @@ test.describe('Search Functionality', () => {
   });
 
   test('shows no results message', async ({ page }) => {
-    await page.goto('/candidatos');
+    await page.goto('/talentos');
     const searchInput = page.getByPlaceholder(/buscar|search/i);
     if (await searchInput.isVisible()) {
       await searchInput.fill('xyznonexistent123');
@@ -28,7 +28,7 @@ test.describe('Search Functionality', () => {
   });
 
   test('clears search', async ({ page }) => {
-    await page.goto('/candidatos');
+    await page.goto('/talentos');
     const searchInput = page.getByPlaceholder(/buscar|search/i);
     if (await searchInput.isVisible()) {
       await searchInput.fill('test');
