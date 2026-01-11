@@ -16,6 +16,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { AIInterviewScheduler } from "@/components/agenda/AIInterviewScheduler";
+import { InterviewReminderButton } from "@/components/agenda/InterviewReminderButton";
 import {
   Calendar as CalendarIcon,
   Clock,
@@ -238,6 +239,13 @@ export default function AgendaPage() {
                     </Button>
                   </>
                 )}
+                {(entrevista.status === 'agendada' || entrevista.status === 'confirmada') && (
+                  <InterviewReminderButton 
+                    entrevistaId={entrevista.id} 
+                    candidatoNome={entrevista.candidatoNome}
+                    size="sm"
+                  />
+                )}
                 {entrevista.candidatoId && (
                   <Button 
                     size="sm" 
@@ -314,6 +322,8 @@ export default function AgendaPage() {
               <Button variant="outline" size="icon" onClick={() => refetch()}>
                 <RefreshCw className="h-4 w-4" />
               </Button>
+
+              <InterviewReminderButton variant="bulk" />
 
               <Button 
                 variant="outline" 
