@@ -12,6 +12,11 @@ import { cn } from '@/lib/utils';
 import confetti from 'canvas-confetti';
 import { isCelebrationSoundEnabled } from '@/hooks/useSoundPreferences';
 
+// Extend Window interface for Safari's webkitAudioContext
+interface ExtendedWindow extends Window {
+  webkitAudioContext?: typeof AudioContext;
+}
+
 interface PortalProtectedRouteProps {
   children: React.ReactNode;
 }
@@ -48,7 +53,8 @@ const PortalProtectedRoute: React.FC<PortalProtectedRouteProps> = ({ children })
   // Play celebration sound using Web Audio API
   const playCelebrationSound = () => {
     try {
-      const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const extWindow = window as ExtendedWindow;
+      const audioContext = new (window.AudioContext || extWindow.webkitAudioContext!)();
       
       // Create a cheerful ascending chord sequence
       const playNote = (frequency: number, startTime: number, duration: number, gain: number = 0.15) => {

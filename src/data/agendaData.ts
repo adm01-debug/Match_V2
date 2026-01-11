@@ -95,27 +95,27 @@ export interface Local {
   capacidade?: number;
 }
 
-// Configurações de tipo de entrevista
+// Configurações de tipo de entrevista (usando tokens semânticos do design system)
 export const tipoConfig: Record<string, { label: string; color: string; bgColor: string; icon?: string }> = {
-  tecnica: { label: 'Técnica', color: 'text-blue-700', bgColor: 'bg-blue-100', icon: 'Code' },
-  rh: { label: 'RH', color: 'text-green-700', bgColor: 'bg-green-100', icon: 'Users' },
-  cultural: { label: 'Cultural', color: 'text-purple-700', bgColor: 'bg-purple-100', icon: 'Heart' },
-  final: { label: 'Final', color: 'text-orange-700', bgColor: 'bg-orange-100', icon: 'Award' },
-  triagem: { label: 'Triagem', color: 'text-gray-700', bgColor: 'bg-gray-100', icon: 'Filter' },
-  presencial: { label: 'Presencial', color: 'text-blue-600', bgColor: 'bg-blue-500/10', icon: 'MapPin' },
-  online: { label: 'Online', color: 'text-purple-600', bgColor: 'bg-purple-500/10', icon: 'Video' },
-  telefone: { label: 'Telefone', color: 'text-green-600', bgColor: 'bg-green-500/10', icon: 'Phone' },
+  tecnica: { label: 'Técnica', color: 'text-info', bgColor: 'bg-info/10', icon: 'Code' },
+  rh: { label: 'RH', color: 'text-success', bgColor: 'bg-success/10', icon: 'Users' },
+  cultural: { label: 'Cultural', color: 'text-accent', bgColor: 'bg-accent/10', icon: 'Heart' },
+  final: { label: 'Final', color: 'text-warning', bgColor: 'bg-warning/10', icon: 'Award' },
+  triagem: { label: 'Triagem', color: 'text-muted-foreground', bgColor: 'bg-muted', icon: 'Filter' },
+  presencial: { label: 'Presencial', color: 'text-info', bgColor: 'bg-info/10', icon: 'MapPin' },
+  online: { label: 'Online', color: 'text-accent', bgColor: 'bg-accent/10', icon: 'Video' },
+  telefone: { label: 'Telefone', color: 'text-success', bgColor: 'bg-success/10', icon: 'Phone' },
 };
 
-// Configurações de status
+// Configurações de status (usando tokens semânticos do design system)
 export const statusConfig: Record<string, { label: string; color: string; bgColor: string }> = {
-  agendada: { label: 'Agendada', color: 'text-blue-700', bgColor: 'bg-blue-100' },
-  confirmada: { label: 'Confirmada', color: 'text-green-700', bgColor: 'bg-green-100' },
-  realizada: { label: 'Realizada', color: 'text-gray-700', bgColor: 'bg-gray-100' },
-  cancelada: { label: 'Cancelada', color: 'text-red-700', bgColor: 'bg-red-100' },
-  remarcada: { label: 'Remarcada', color: 'text-yellow-700', bgColor: 'bg-yellow-100' },
-  reagendada: { label: 'Reagendada', color: 'text-orange-700', bgColor: 'bg-orange-100' },
-  no_show: { label: 'No Show', color: 'text-red-700', bgColor: 'bg-red-100' },
+  agendada: { label: 'Agendada', color: 'text-info', bgColor: 'bg-info/10' },
+  confirmada: { label: 'Confirmada', color: 'text-success', bgColor: 'bg-success/10' },
+  realizada: { label: 'Realizada', color: 'text-muted-foreground', bgColor: 'bg-muted' },
+  cancelada: { label: 'Cancelada', color: 'text-destructive', bgColor: 'bg-destructive/10' },
+  remarcada: { label: 'Remarcada', color: 'text-warning', bgColor: 'bg-warning/10' },
+  reagendada: { label: 'Reagendada', color: 'text-warning', bgColor: 'bg-warning/10' },
+  no_show: { label: 'No Show', color: 'text-destructive', bgColor: 'bg-destructive/10' },
 };
 
 // Alias para compatibilidade

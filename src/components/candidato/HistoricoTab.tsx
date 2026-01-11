@@ -46,8 +46,8 @@ export function HistoricoTab({ candidato }: HistoricoTabProps) {
     }
   };
 
-  const historico = (Array.isArray((candidato as any).historico)
-    ? (candidato as any).historico
+  const historico = (Array.isArray(candidato.historico)
+    ? candidato.historico
     : []) as HistoricoEvento[];
 
   // Agrupar eventos por data
