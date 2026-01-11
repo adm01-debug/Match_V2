@@ -28,8 +28,9 @@ test.describe('Dashboard Page', () => {
   });
 
   test('should navigate to candidates page', async ({ page }) => {
-    await page.click('text=/candidatos/i');
-    await expect(page).toHaveURL(/candidatos/);
+    // A rota correta é /talentos (não /candidatos)
+    await page.click('text=/talentos|candidatos/i');
+    await expect(page).toHaveURL(/talentos/);
   });
 
   test('should navigate to jobs page', async ({ page }) => {
