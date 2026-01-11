@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Pagination', () => {
   test('displays pagination controls', async ({ page }) => {
-    await page.goto('/candidatos');
+    await page.goto('/talentos');
     const pagination = page.locator('[data-testid="pagination"]');
     if (await pagination.isVisible()) {
       await expect(pagination).toBeVisible();
@@ -10,7 +10,7 @@ test.describe('Pagination', () => {
   });
 
   test('navigates to next page', async ({ page }) => {
-    await page.goto('/candidatos');
+    await page.goto('/talentos');
     const nextBtn = page.getByRole('button', { name: /next|próximo|>/i });
     if (await nextBtn.isVisible() && await nextBtn.isEnabled()) {
       await nextBtn.click();
@@ -18,7 +18,7 @@ test.describe('Pagination', () => {
   });
 
   test('navigates to previous page', async ({ page }) => {
-    await page.goto('/candidatos');
+    await page.goto('/talentos');
     const prevBtn = page.getByRole('button', { name: /prev|anterior|</i });
     if (await prevBtn.isVisible()) {
       await expect(prevBtn).toBeVisible();
@@ -26,7 +26,7 @@ test.describe('Pagination', () => {
   });
 
   test('shows current page indicator', async ({ page }) => {
-    await page.goto('/candidatos');
+    await page.goto('/talentos');
     const pageIndicator = page.getByText(/página|page/i);
     if (await pageIndicator.isVisible()) {
       await expect(pageIndicator).toBeVisible();
