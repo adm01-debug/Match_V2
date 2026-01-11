@@ -239,7 +239,7 @@ export function useCreateVaga() {
       
       const { data, error } = await supabase
         .from('vagas')
-        .insert(dbData as any)
+        .insert(dbData)
         .select()
         .single();
 
