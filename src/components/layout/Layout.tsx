@@ -5,7 +5,7 @@
 
 import { memo, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "./AppSidebar";
 import { NotificationPanel } from "@/components/notifications/NotificationPanel";
@@ -15,6 +15,7 @@ import { CommandMenuTrigger } from "@/components/common/CommandMenuTrigger";
 import { OnboardingTour } from "@/components/onboarding/OnboardingTour";
 import { BottomNavigation } from "@/components/navigation/BottomNavigation";
 import { ThemeToggle } from "@/components/common/ThemeToggle";
+import { SmartBreadcrumbs } from "@/components/navigation/SmartBreadcrumbs";
 import { 
   KeyboardShortcutsOverlay, 
   useKeyboardShortcuts,
@@ -30,7 +31,11 @@ interface LayoutProps {
 
 export function Layout({ children, title }: LayoutProps) {
   const navigate = useNavigate();
+  const location = useLocation();
   const { notifications, unreadCount, isConnected, isLoading, markAsRead, markAllAsRead, clearAll, reconnect } = useNotifications();
+  
+  // Show breadcrumbs on all pages except dashboard
+  const showBreadcrumbs = location.pathname !== '/';
 
   // Define global keyboard shortcuts
   const shortcuts: KeyboardShortcut[] = useMemo(() => [
@@ -223,6 +228,13 @@ export function Layout({ children, title }: LayoutProps) {
               transition={{ duration: 0.3 }}
               className="relative z-10"
             >
+              {/* Smart Breadcrumbs - shown on internal pages */}
+              {showBreadcrumbs && (
+                <div className="px-6 py-3 border-b border-border/30 bg-card/50 backdrop-blur-sm">
+                  <SmartBreadcrumbs maxItems={4} showActions />
+                </div>
+              )}
+              
               {children}
             </motion.div>
           </main>

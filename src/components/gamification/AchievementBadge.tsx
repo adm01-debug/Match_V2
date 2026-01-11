@@ -146,7 +146,7 @@ export const AchievementBadge = memo(function AchievementBadge({
           className="absolute inset-0 -rotate-90"
           width={sizeStyle.ring}
           height={sizeStyle.ring}
-          style={{ margin: -(sizeStyle.ring - parseInt(sizeStyle.container.split(" ")[0].replace("w-", "") || "0") * 4) / 2 }}
+          style={{ margin: -(sizeStyle.ring - (parseInt(sizeStyle.container.split(" ")[0]?.replace("w-", "") ?? "0", 10) * 4)) / 2 }}
         >
           {/* Background circle */}
           <circle
