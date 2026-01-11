@@ -18,7 +18,7 @@ test.describe('Export Functionality', () => {
   });
 
   test('exports analytics data', async ({ page }) => {
-    await page.goto('/analytics');
+    await page.goto('/relatorios');
     const exportBtn = page.getByRole('button', { name: /export|download/i });
     if (await exportBtn.isVisible()) {
       await expect(exportBtn).toBeEnabled();
