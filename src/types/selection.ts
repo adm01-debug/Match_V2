@@ -189,29 +189,29 @@ export interface EntrevistaResposta {
 
 export interface Scorecard {
   id: string;
-  processoId: string;
-  candidatoId: string;
-  perfilCargoId?: string;
+  processoId: string | null;
+  candidatoId: string | null;
+  perfilCargoId?: string | null;
   // Scores
-  scoreTecnico?: number;
-  scoreComportamental?: number;
-  scoreCultural?: number;
-  scoreExperiencia?: number;
-  scoreFinal?: number;
+  scoreTecnico?: number | null;
+  scoreComportamental?: number | null;
+  scoreCultural?: number | null;
+  scoreExperiencia?: number | null;
+  scoreFinal?: number | null;
   // DISC do Candidato
-  discDominancia?: number;
-  discInfluencia?: number;
-  discEstabilidade?: number;
-  discConformidade?: number;
-  fitPerfil?: number;
+  discDominancia?: number | null;
+  discInfluencia?: number | null;
+  discEstabilidade?: number | null;
+  discConformidade?: number | null;
+  fitPerfil?: number | null;
   // Análise
-  pontosFortes?: string[];
-  pontosDesenvolvimento?: string[];
-  riscos?: string[];
-  recomendacao?: 'aprovar' | 'reprovar' | 'avaliar_mais';
-  justificativa?: string;
-  geradoPor: 'sistema' | 'manual' | 'ai';
-  atualizadoEm: string;
+  pontosFortes?: string[] | null;
+  pontosDesenvolvimento?: string[] | null;
+  riscos?: string[] | null;
+  recomendacao?: 'aprovar' | 'reprovar' | 'avaliar_mais' | null;
+  justificativa?: string | null;
+  geradoPor: 'sistema' | 'manual' | 'ai' | null;
+  atualizadoEm: string | null;
   // Relacionamentos
   competencias?: ScorecardCompetencia[];
   candidatoNome?: string;
@@ -220,15 +220,15 @@ export interface Scorecard {
 
 export interface ScorecardCompetencia {
   id: string;
-  scorecardId: string;
-  competenciaId?: string;
-  criterioId?: string;
+  scorecardId: string | null;
+  competenciaId?: string | null;
+  criterioId?: string | null;
   nome: string;
-  tipo?: string;
-  nota?: number;
+  tipo?: string | null;
+  nota?: number | null;
   peso: number;
-  evidencias?: string[];
-  fonte?: 'prova' | 'entrevista' | 'assessment' | 'avaliacao';
+  evidencias?: string[] | null;
+  fonte?: 'prova' | 'entrevista' | 'assessment' | 'avaliacao' | null;
 }
 
 export interface RegraAutomacao {
