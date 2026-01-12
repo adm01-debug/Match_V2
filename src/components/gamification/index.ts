@@ -42,3 +42,7 @@ export {
   AchievementNotification,
   useAchievementNotification,
 } from "./AchievementNotification";
+
+export {
+  LevelUpCelebration,
+} from "./LevelUpCelebration";
