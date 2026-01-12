@@ -1,51 +1,23 @@
 # Architecture Decision Records
 
-## ADR-001: React Query para Data Fetching
+Este diretório contém as decisões arquiteturais do projeto Match ATS.
 
-**Status:** Aceito  
-**Data:** 2024-12-01
+## Índice de ADRs
 
-### Contexto
-Precisamos de uma solução robusta para gerenciamento de estado servidor.
+| ADR | Título | Status |
+|-----|--------|--------|
+| [0001](ADR/0001-architecture.md) | Arquitetura Geral | Aceito |
+| [0002](ADR/0002-state-management.md) | State Management | Aceito |
+| [0003](ADR/0003-authentication.md) | Autenticação | Aceito |
+| [0004](ADR/0004-database-structure.md) | Estrutura do Banco | Aceito |
+| [0005](ADR/0005-testing-strategy.md) | Estratégia de Testes | Aceito |
+| [0006](ADR/0006-ci-cd-pipeline.md) | CI/CD Pipeline | Aceito |
+| [0007](ADR/0007-i18n-strategy.md) | Internacionalização | Aceito |
+| [0008](ADR/0008-monitoring-observability.md) | Monitoramento | Aceito |
 
-### Decisão
-Usar TanStack Query (React Query) v5.
+## Como Adicionar Nova ADR
 
-### Consequências
-- ✅ Cache automático
-- ✅ Refetch inteligente
-- ✅ Optimistic updates
-- ⚠️ Curva de aprendizado
-
-## ADR-002: Supabase como Backend
-
-**Status:** Aceito  
-**Data:** 2024-12-01
-
-### Contexto
-Precisamos de backend escalável com autenticação e realtime.
-
-### Decisão
-Usar Supabase (PostgreSQL + Auth + Realtime + Storage).
-
-### Consequências
-- ✅ Setup rápido
-- ✅ Row Level Security
-- ✅ Realtime nativo
-- ⚠️ Vendor lock-in
-
-## ADR-003: Shadcn/ui para Componentes
-
-**Status:** Aceito  
-**Data:** 2024-12-01
-
-### Contexto
-Precisamos de componentes acessíveis e customizáveis.
-
-### Decisão
-Usar shadcn/ui com Tailwind CSS.
-
-### Consequências
-- ✅ Acessibilidade built-in
-- ✅ Full ownership do código
-- ✅ Tailwind integration
+1. Crie um arquivo `docs/ADR/XXXX-titulo.md`
+2. Siga o template padrão
+3. Adicione ao índice acima
+4. Commit com mensagem `docs: add ADR-XXXX`
