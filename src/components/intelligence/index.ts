@@ -18,3 +18,4 @@ export {
   type RecentAction 
 } from './RecentActions';
 export { PredictiveSearch } from './PredictiveSearch';
+export { RecentActionsWidget } from './RecentActionsWidget';

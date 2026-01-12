@@ -14,3 +14,4 @@ export { CommandMenuTrigger } from './CommandMenuTrigger';
 export { ThemeToggle } from './ThemeToggle';
 export { LazyLoad, LazyImage, LazyComponent, FadeInOnScroll, StaggerChildren } from './LazyLoad';
 export { VirtualList, VirtualGrid, InfiniteList, WindowedList } from './VirtualList';
+export { GlobalShortcutsProvider, useGlobalShortcuts, ShortcutHint } from './GlobalShortcutsProvider';

@@ -53,8 +53,11 @@ export { useSavedFilters } from './useSavedFilters';
 export { useOnboarding } from './useOnboarding';
 export { useCandidatoPerfil } from './useCandidatoPerfil';
 export { useImportData } from './useImportData';
-export { useSoundPreferences } from './useSoundPreferences';
+export { useSoundPreferences, playSoundEffect, isCelebrationSoundEnabled } from './useSoundPreferences';
 export { useSoundEffects, SoundEffects } from './useSoundEffects';
+export { useFormAutoSave, useFormDirtyState, useFormSubmit } from './useFormAutoSave';
+export { useGamification, levels, xpRewards } from './useGamification';
+export { useOptimisticUpdate } from './useOptimisticUpdate';
 
 // Performance Hooks
 export { useIntersectionObserver, useInfiniteScroll, useLazyImage } from './useIntersectionObserver';

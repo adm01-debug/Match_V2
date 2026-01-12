@@ -10,6 +10,7 @@ import { CandidatoAuthProvider } from "./contexts/CandidatoAuthContext";
 import { NotificationProvider } from "./contexts/NotificationContext";
 import { AnalyticsProvider } from "./contexts/AnalyticsProvider";
 import { AnimatedRoutes } from "./components/layout/AnimatedRoutes";
+import { GlobalShortcutsProvider } from "./components/common/GlobalShortcutsProvider";
 
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import PortalProtectedRoute from "./components/portal/PortalProtectedRoute";
@@ -95,9 +96,10 @@ function App() {
               <CandidatoAuthProvider>
                 <NotificationProvider>
                   <ErrorBoundary>
-                    <NewDeviceDetector />
-                    <Suspense fallback={<PageLoader />}>
-                      <AnimatedRoutes>
+                    <GlobalShortcutsProvider>
+                      <NewDeviceDetector />
+                      <Suspense fallback={<PageLoader />}>
+                        <AnimatedRoutes>
                         <Routes>
                           {/* Portal do Candidato - Rotas Públicas */}
                           <Route path="/portal" element={<PortalAuthPage />} />
@@ -174,8 +176,9 @@ function App() {
                           {/* 404 */}
                           <Route path="*" element={<NotFound />} />
                         </Routes>
-                      </AnimatedRoutes>
-                    </Suspense>
+                        </AnimatedRoutes>
+                      </Suspense>
+                    </GlobalShortcutsProvider>
                   </ErrorBoundary>
                   <Toaster />
                   <Sonner />
