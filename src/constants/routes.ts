@@ -31,6 +31,9 @@ export const ROUTES = {
   TESTE_NOVO: '/testes/nova',
   TESTE_EDITAR: (id: string) => `/testes/${id}/editar`,
   TESTE_APLICAR: (provaId: string) => `/testes/${provaId}/aplicar`,
+  
+  // Avaliações Comportamentais
+  AVALIACOES_COMPORTAMENTAIS: '/avaliacoes-comportamentais',
 
   // Agenda
   AGENDA: '/agenda',
