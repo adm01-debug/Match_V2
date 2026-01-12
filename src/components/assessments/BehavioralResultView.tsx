@@ -5,13 +5,12 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
 import { 
   Brain, Eye, Lightbulb, Zap, MessageSquare, Heart, 
   Target, Sparkles, AlertTriangle, Users, CheckCircle2,
   TrendingUp, Clock
 } from 'lucide-react';
-import type { BehavioralResult } from '@/types/behavioral';
+import type { BehavioralResult, BehavioralTool } from '@/types/behavioral';
 import { BEHAVIORAL_TOOLS } from '@/types/behavioral';
 
 interface BehavioralResultViewProps {
@@ -85,6 +84,9 @@ const DIMENSION_LABELS: Record<string, Record<string, string>> = {
     hindsight: 'Retrospectiva',
     attribution: 'Atribuição',
     planning: 'Planejamento',
+    anchoring: 'Ancoragem',
+    availability: 'Disponibilidade',
+    overconfidence: 'Excesso de Confiança',
   },
   rapport: {
     voice_matching: 'Espelhamento de Voz',
@@ -137,12 +139,12 @@ export function BehavioralResultView({
   candidatoNome, 
   showDetails = true 
 }: BehavioralResultViewProps) {
-  const tool = BEHAVIORAL_TOOLS.find(t => t.id === result.toolId);
+  const tool = BEHAVIORAL_TOOLS.find((t: BehavioralTool) => t.id === result.toolId);
   
   if (!tool) return null;
 
   const sortedScores = Object.entries(result.scores)
-    .sort(([, a], [, b]) => b - a);
+    .sort(([, a], [, b]) => (b as number) - (a as number)) as [string, number][];
 
   const getDimensionLabel = (dimension: string) => {
     return DIMENSION_LABELS[result.toolId]?.[dimension] || dimension.replace(/_/g, ' ');
@@ -154,9 +156,10 @@ export function BehavioralResultView({
     return `${mins}m ${secs}s`;
   };
 
-  const averageScore = Math.round(
-    Object.values(result.scores).reduce((a, b) => a + b, 0) / Object.values(result.scores).length
-  );
+  const scoresArray = Object.values(result.scores) as number[];
+  const averageScore = scoresArray.length > 0
+    ? Math.round(scoresArray.reduce((a, b) => a + b, 0) / scoresArray.length)
+    : 0;
 
   return (
     <div className="space-y-6">

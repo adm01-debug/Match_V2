@@ -60,7 +60,7 @@ export function BehavioralAssessmentPlayer({
   onComplete,
   onCancel,
 }: BehavioralAssessmentPlayerProps) {
-  const tool = BEHAVIORAL_TOOLS.find(t => t.id === toolId);
+  const tool = BEHAVIORAL_TOOLS.find((t: BehavioralTool) => t.id === toolId);
   const questions = useMemo(() => getQuestionsForTool(toolId), [toolId]);
   
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -107,7 +107,7 @@ export function BehavioralAssessmentPlayer({
     const dimensionCounts: Record<string, number> = {};
 
     // Calculate scores per dimension
-    questions.forEach(q => {
+    questions.forEach((q: BehavioralQuestion) => {
       const answer = answers[q.id];
       if (answer === undefined) return;
 
@@ -118,13 +118,14 @@ export function BehavioralAssessmentPlayer({
       }
 
       if (q.type === 'scale') {
-        scores[dimension] += Number(answer);
-        dimensionCounts[dimension] += 1;
+        scores[dimension] = (scores[dimension] || 0) + Number(answer);
+        dimensionCounts[dimension] = (dimensionCounts[dimension] || 0) + 1;
       } else if (q.type === 'forced_choice' || q.type === 'situational') {
         const selectedOption = q.options?.[Number(answer)];
         if (selectedOption) {
-          scores[selectedOption.dimension] = (scores[selectedOption.dimension] || 0) + selectedOption.score;
-          dimensionCounts[selectedOption.dimension] = (dimensionCounts[selectedOption.dimension] || 0) + 1;
+          const optDim = selectedOption.dimension;
+          scores[optDim] = (scores[optDim] || 0) + selectedOption.score;
+          dimensionCounts[optDim] = (dimensionCounts[optDim] || 0) + 1;
         }
       }
     });
@@ -132,8 +133,9 @@ export function BehavioralAssessmentPlayer({
     // Calculate percentages
     const percentages: Record<string, number> = {};
     Object.keys(scores).forEach(dim => {
-      const maxPossible = dimensionCounts[dim] * 5; // Max score per question is 5
-      percentages[dim] = Math.round((scores[dim] / maxPossible) * 100) || 0;
+      const count = dimensionCounts[dim] || 1;
+      const maxPossible = count * 5;
+      percentages[dim] = Math.round(((scores[dim] || 0) / maxPossible) * 100) || 0;
     });
 
     // Determine primary and secondary profiles
@@ -156,7 +158,7 @@ export function BehavioralAssessmentPlayer({
   };
 
   const handleSubmit = async () => {
-    const unansweredCount = questions.filter(q => answers[q.id] === undefined).length;
+    const unansweredCount = questions.filter((q: BehavioralQuestion) => answers[q.id] === undefined).length;
     if (unansweredCount > 0) {
       toast.error(`Você precisa responder ${unansweredCount} questões`);
       return;
@@ -298,7 +300,7 @@ export function BehavioralAssessmentPlayer({
                     onValueChange={(val) => handleAnswer(Number(val))}
                     className="space-y-3"
                   >
-                    {(currentQuestion.options || []).map((option, idx) => (
+                    {(currentQuestion.options || []).map((option: { text: string; dimension: string; score: number }, idx: number) => (
                       <div
                         key={idx}
                         className={`flex items-start space-x-3 p-4 rounded-lg border-2 transition-all cursor-pointer ${
@@ -325,7 +327,7 @@ export function BehavioralAssessmentPlayer({
                     onValueChange={(val) => handleAnswer(Number(val))}
                     className="space-y-3"
                   >
-                    {(currentQuestion.options || []).map((option, idx) => (
+                    {(currentQuestion.options || []).map((option: { text: string; dimension: string; score: number }, idx: number) => (
                       <div
                         key={idx}
                         className={`flex items-center space-x-3 p-4 rounded-lg border-2 transition-all cursor-pointer ${
@@ -362,26 +364,30 @@ export function BehavioralAssessmentPlayer({
         </Button>
 
         <div className="flex gap-1.5 flex-wrap justify-center max-w-md">
-          {questions.map((_, idx) => (
-            <button
-              key={idx}
-              onClick={() => setCurrentIndex(idx)}
-              className={`w-2.5 h-2.5 rounded-full transition-all ${
-                idx === currentIndex
-                  ? 'scale-125'
-                  : answers[questions[idx].id] !== undefined
-                  ? 'opacity-60'
-                  : 'bg-muted'
-              }`}
-              style={
-                idx === currentIndex
-                  ? { backgroundColor: tool.color }
-                  : answers[questions[idx].id] !== undefined
-                  ? { backgroundColor: tool.color }
-                  : {}
-              }
-            />
-          ))}
+          {questions.map((q: BehavioralQuestion, idx: number) => {
+            const qId = q.id;
+            const isAnswered = answers[qId] !== undefined;
+            return (
+              <button
+                key={idx}
+                onClick={() => setCurrentIndex(idx)}
+                className={`w-2.5 h-2.5 rounded-full transition-all ${
+                  idx === currentIndex
+                    ? 'scale-125'
+                    : isAnswered
+                    ? 'opacity-60'
+                    : 'bg-muted'
+                }`}
+                style={
+                  idx === currentIndex
+                    ? { backgroundColor: tool.color }
+                    : isAnswered
+                    ? { backgroundColor: tool.color }
+                    : {}
+                }
+              />
+            );
+          })}
         </div>
 
         {isLastQuestion ? (

@@ -18,7 +18,7 @@ import {
 } from 'lucide-react';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { BEHAVIORAL_TOOLS } from '@/types/behavioral';
-import type { BehavioralResult } from '@/types/behavioral';
+import type { BehavioralResult, BehavioralTool } from '@/types/behavioral';
 import { BehavioralAssessmentPlayer } from '@/components/assessments/BehavioralAssessmentPlayer';
 import { BehavioralResultView } from '@/components/assessments/BehavioralResultView';
 
@@ -173,7 +173,7 @@ export default function BehavioralAssessmentsPage() {
           <TabsContent value="tools" className="mt-6">
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
               <AnimatePresence mode="popLayout">
-                {BEHAVIORAL_TOOLS.map((tool, index) => {
+                {BEHAVIORAL_TOOLS.map((tool: BehavioralTool, index: number) => {
                   const isCompleted = completedToolIds.includes(tool.id);
                   
                   return (
@@ -217,7 +217,7 @@ export default function BehavioralAssessmentsPage() {
                         <CardContent className="space-y-4">
                           {/* Dimensions */}
                           <div className="flex flex-wrap gap-1">
-                            {tool.dimensions.slice(0, 4).map((dim, i) => (
+                            {tool.dimensions.slice(0, 4).map((dim: string, i: number) => (
                               <Badge 
                                 key={i} 
                                 variant="secondary" 
@@ -282,13 +282,13 @@ export default function BehavioralAssessmentsPage() {
             ) : (
               <div className="grid md:grid-cols-2 gap-4">
                 {completedResults.map((result, index) => {
-                  const tool = BEHAVIORAL_TOOLS.find(t => t.id === result.toolId);
+                  const tool = BEHAVIORAL_TOOLS.find((t: BehavioralTool) => t.id === result.toolId);
                   if (!tool) return null;
                   
-                  const avgScore = Math.round(
-                    Object.values(result.scores).reduce((a, b) => a + b, 0) / 
-                    Object.values(result.scores).length
-                  );
+                  const scoresArray = Object.values(result.scores) as number[];
+                  const avgScore = scoresArray.length > 0
+                    ? Math.round(scoresArray.reduce((a, b) => a + b, 0) / scoresArray.length)
+                    : 0;
 
                   return (
                     <motion.div

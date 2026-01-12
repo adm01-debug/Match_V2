@@ -3,7 +3,7 @@
  * @module BehavioralAssessmentsData
  */
 
-import type { BehavioralTool, BehavioralQuestion } from '@/types/behavioral';
+import type { BehavioralQuestion } from '@/types/behavioral';
 
 // ========================================
 // 1. DISC - Perfis Comportamentais
@@ -478,23 +478,48 @@ export const valuesQuestions: BehavioralQuestion[] = [
     dimension: 'anti_values',
     type: 'forced_choice',
     options: [
-      { text: 'Falta de transparência e honestidade', dimension: 'integrity', score: 4 },
-      { text: 'Microgerenciamento constante', dimension: 'autonomy', score: 4 },
-      { text: 'Ambiente competitivo e hostil', dimension: 'collaboration', score: 4 },
+      { text: 'Microgerenciamento e falta de autonomia', dimension: 'autonomy', score: 4 },
+      { text: 'Falta de reconhecimento pelo trabalho', dimension: 'recognition', score: 4 },
+      { text: 'Instabilidade e insegurança', dimension: 'security', score: 4 },
       { text: 'Estagnação e falta de desafios', dimension: 'growth', score: 4 },
+    ],
+  },
+  {
+    id: 'values-5',
+    toolId: 'values',
+    text: 'Quando você se sente mais realizado(a)?',
+    dimension: 'fulfillment',
+    type: 'forced_choice',
+    options: [
+      { text: 'Ao completar um projeto desafiador', dimension: 'achievement', score: 4 },
+      { text: 'Ao ajudar outros a crescerem', dimension: 'contribution', score: 4 },
+      { text: 'Ao inovar e criar algo novo', dimension: 'creativity', score: 4 },
+      { text: 'Ao ser reconhecido(a) pelo meu trabalho', dimension: 'recognition', score: 4 },
+    ],
+  },
+  {
+    id: 'values-6',
+    toolId: 'values',
+    text: 'O que define sucesso para você?',
+    dimension: 'success_definition',
+    type: 'forced_choice',
+    options: [
+      { text: 'Liberdade financeira e estabilidade', dimension: 'financial', score: 4 },
+      { text: 'Impacto positivo na sociedade', dimension: 'purpose', score: 4 },
+      { text: 'Crescimento pessoal e profissional contínuo', dimension: 'growth', score: 4 },
+      { text: 'Equilíbrio e qualidade de vida', dimension: 'balance', score: 4 },
     ],
   },
 ];
 
 // ========================================
-// 8. Inteligência Emocional (EQ)
+// 8. Inteligência Emocional
 // ========================================
-export const eqQuestions: BehavioralQuestion[] = [
-  // Autoconsciência
+export const emotionalIntelligenceQuestions: BehavioralQuestion[] = [
   {
     id: 'eq-1',
     toolId: 'emotional_intelligence',
-    text: 'Consigo identificar claramente quando estou ficando frustrado ou irritado.',
+    text: 'Eu reconheço facilmente minhas emoções enquanto as experimento.',
     dimension: 'self_awareness',
     type: 'scale',
     scaleLabels: { min: 'Discordo totalmente', max: 'Concordo totalmente' },
@@ -502,75 +527,71 @@ export const eqQuestions: BehavioralQuestion[] = [
   {
     id: 'eq-2',
     toolId: 'emotional_intelligence',
-    text: 'Entendo como minhas emoções afetam meu desempenho.',
-    dimension: 'self_awareness',
+    text: 'Consigo manter a calma em situações estressantes.',
+    dimension: 'self_regulation',
     type: 'scale',
     scaleLabels: { min: 'Discordo totalmente', max: 'Concordo totalmente' },
   },
-  // Autorregulação
   {
     id: 'eq-3',
     toolId: 'emotional_intelligence',
-    text: 'Consigo manter a calma em situações de alta pressão.',
-    dimension: 'self_regulation',
+    text: 'Continuo motivado(a) mesmo quando enfrento obstáculos.',
+    dimension: 'motivation',
     type: 'scale',
     scaleLabels: { min: 'Discordo totalmente', max: 'Concordo totalmente' },
   },
   {
     id: 'eq-4',
     toolId: 'emotional_intelligence',
-    text: 'Penso antes de agir, mesmo quando estou emocionalmente afetado.',
-    dimension: 'self_regulation',
+    text: 'Percebo facilmente como os outros estão se sentindo.',
+    dimension: 'empathy',
     type: 'scale',
     scaleLabels: { min: 'Discordo totalmente', max: 'Concordo totalmente' },
   },
-  // Motivação
   {
     id: 'eq-5',
     toolId: 'emotional_intelligence',
-    text: 'Persisto em buscar meus objetivos mesmo quando enfrento obstáculos.',
-    dimension: 'motivation',
+    text: 'Consigo resolver conflitos de forma construtiva.',
+    dimension: 'social_skills',
     type: 'scale',
     scaleLabels: { min: 'Discordo totalmente', max: 'Concordo totalmente' },
   },
   {
     id: 'eq-6',
     toolId: 'emotional_intelligence',
-    text: 'Encontro motivação interna mesmo sem reconhecimento externo.',
-    dimension: 'motivation',
+    text: 'Entendo como minhas emoções afetam meu desempenho.',
+    dimension: 'self_awareness',
     type: 'scale',
     scaleLabels: { min: 'Discordo totalmente', max: 'Concordo totalmente' },
   },
-  // Empatia
   {
     id: 'eq-7',
     toolId: 'emotional_intelligence',
-    text: 'Consigo perceber facilmente quando alguém está desconfortável ou triste.',
-    dimension: 'empathy',
+    text: 'Penso antes de agir quando estou com raiva ou frustrado(a).',
+    dimension: 'self_regulation',
     type: 'scale',
     scaleLabels: { min: 'Discordo totalmente', max: 'Concordo totalmente' },
   },
   {
     id: 'eq-8',
     toolId: 'emotional_intelligence',
-    text: 'Considero os sentimentos dos outros antes de tomar decisões que os afetam.',
-    dimension: 'empathy',
+    text: 'Busco constantemente me superar e atingir novas metas.',
+    dimension: 'motivation',
     type: 'scale',
     scaleLabels: { min: 'Discordo totalmente', max: 'Concordo totalmente' },
   },
-  // Habilidades Sociais
   {
     id: 'eq-9',
     toolId: 'emotional_intelligence',
-    text: 'Construo facilmente relacionamentos de confiança com colegas.',
-    dimension: 'social_skills',
+    text: 'Consigo me colocar no lugar dos outros facilmente.',
+    dimension: 'empathy',
     type: 'scale',
     scaleLabels: { min: 'Discordo totalmente', max: 'Concordo totalmente' },
   },
   {
     id: 'eq-10',
     toolId: 'emotional_intelligence',
-    text: 'Consigo resolver conflitos de forma que todos se sintam ouvidos.',
+    text: 'Construo e mantenho relacionamentos de qualidade.',
     dimension: 'social_skills',
     type: 'scale',
     scaleLabels: { min: 'Discordo totalmente', max: 'Concordo totalmente' },
@@ -584,61 +605,56 @@ export const cognitiveBiasesQuestions: BehavioralQuestion[] = [
   {
     id: 'bias-1',
     toolId: 'cognitive_biases',
-    text: 'Você investiu muito tempo em um projeto que não está dando resultados. Você:',
-    dimension: 'sunk_cost',
-    type: 'situational',
+    text: 'Ao pesquisar uma decisão, você busca:',
+    dimension: 'confirmation',
+    type: 'forced_choice',
     options: [
-      { text: 'Continua investindo porque já dedicou muito', dimension: 'high', score: 1 },
-      { text: 'Avalia objetivamente se vale continuar', dimension: 'medium', score: 3 },
-      { text: 'Para imediatamente se os dados indicam', dimension: 'low', score: 5 },
+      { text: 'Informações que confirmem sua intuição inicial', dimension: 'high_bias', score: 1 },
+      { text: 'Algumas visões diferentes, mas priorizo minha perspectiva', dimension: 'medium_bias', score: 2 },
+      { text: 'Ativamente visões que contradizem minha opinião', dimension: 'low_bias', score: 5 },
+      { text: 'Todas as perspectivas igualmente antes de decidir', dimension: 'no_bias', score: 5 },
     ],
   },
   {
     id: 'bias-2',
     toolId: 'cognitive_biases',
-    text: 'Quando sua primeira impressão de alguém é confirmada por evidências posteriores:',
-    dimension: 'confirmation',
-    type: 'situational',
-    options: [
-      { text: 'Sinto que sempre tive razão sobre a pessoa', dimension: 'high', score: 1 },
-      { text: 'Considero que talvez eu tenha buscado confirmar', dimension: 'medium', score: 3 },
-      { text: 'Busco ativamente evidências que contradigam', dimension: 'low', score: 5 },
-    ],
+    text: 'Quando uma primeira informação é apresentada, você:',
+    dimension: 'anchoring',
+    type: 'scale',
+    scaleLabels: { min: 'Ignoro e busco outras referências', max: 'Uso como base principal' },
   },
   {
     id: 'bias-3',
     toolId: 'cognitive_biases',
-    text: 'Após um evento acontecer, você:',
-    dimension: 'hindsight',
-    type: 'situational',
+    text: 'Ao avaliar riscos, você se baseia mais em:',
+    dimension: 'availability',
+    type: 'forced_choice',
     options: [
-      { text: 'Frequentemente pensa "eu sabia que isso ia acontecer"', dimension: 'high', score: 1 },
-      { text: 'Às vezes sente que deveria ter previsto', dimension: 'medium', score: 3 },
-      { text: 'Reconhece que é difícil prever eventos complexos', dimension: 'low', score: 5 },
+      { text: 'Exemplos recentes que lembro facilmente', dimension: 'high_bias', score: 1 },
+      { text: 'Uma mistura de memórias e alguns dados', dimension: 'medium_bias', score: 3 },
+      { text: 'Estatísticas e dados objetivos', dimension: 'low_bias', score: 5 },
+      { text: 'Análise sistemática de múltiplas fontes', dimension: 'no_bias', score: 5 },
     ],
   },
   {
     id: 'bias-4',
     toolId: 'cognitive_biases',
-    text: 'Quando você é bem-sucedido em algo, você atribui o sucesso a:',
-    dimension: 'attribution',
-    type: 'forced_choice',
-    options: [
-      { text: 'Principalmente às minhas habilidades e esforço', dimension: 'internal', score: 2 },
-      { text: 'Uma combinação de habilidade e circunstâncias', dimension: 'balanced', score: 4 },
-      { text: 'Principalmente a fatores externos favoráveis', dimension: 'external', score: 2 },
-    ],
+    text: 'Quanto você confia em suas previsões e estimativas?',
+    dimension: 'overconfidence',
+    type: 'scale',
+    scaleLabels: { min: 'Sempre questiono', max: 'Confio plenamente' },
   },
   {
     id: 'bias-5',
     toolId: 'cognitive_biases',
-    text: 'Ao estimar quanto tempo uma tarefa vai levar:',
-    dimension: 'planning',
-    type: 'situational',
+    text: 'Ao decidir sobre continuar um projeto que está falhando:',
+    dimension: 'sunk_cost',
+    type: 'forced_choice',
     options: [
-      { text: 'Geralmente subestimo o tempo necessário', dimension: 'high', score: 1 },
-      { text: 'Às vezes acerto, às vezes erro', dimension: 'medium', score: 3 },
-      { text: 'Adiciono tempo extra para imprevistos', dimension: 'low', score: 5 },
+      { text: 'Considero todo o tempo e recursos já investidos', dimension: 'high_bias', score: 1 },
+      { text: 'Peso os investimentos passados na decisão', dimension: 'medium_bias', score: 2 },
+      { text: 'Foco principalmente nas perspectivas futuras', dimension: 'low_bias', score: 4 },
+      { text: 'Decido apenas com base no valor futuro esperado', dimension: 'no_bias', score: 5 },
     ],
   },
 ];
@@ -650,7 +666,7 @@ export const rapportQuestions: BehavioralQuestion[] = [
   {
     id: 'rapport-1',
     toolId: 'rapport',
-    text: 'Com que frequência você naturalmente ajusta seu tom de voz ao falar com diferentes pessoas?',
+    text: 'Você naturalmente ajusta seu tom de voz ao falar com diferentes pessoas?',
     dimension: 'voice_matching',
     type: 'scale',
     scaleLabels: { min: 'Nunca', max: 'Sempre' },
@@ -658,7 +674,7 @@ export const rapportQuestions: BehavioralQuestion[] = [
   {
     id: 'rapport-2',
     toolId: 'rapport',
-    text: 'Você percebe quando está espelhando a linguagem corporal de alguém?',
+    text: 'Você percebe e espelha a linguagem corporal dos outros?',
     dimension: 'body_matching',
     type: 'scale',
     scaleLabels: { min: 'Nunca', max: 'Sempre' },
@@ -666,15 +682,15 @@ export const rapportQuestions: BehavioralQuestion[] = [
   {
     id: 'rapport-3',
     toolId: 'rapport',
-    text: 'Com que facilidade você estabelece conexão com pessoas desconhecidas?',
+    text: 'Pessoas se abrem facilmente com você?',
     dimension: 'connection',
     type: 'scale',
-    scaleLabels: { min: 'Com muita dificuldade', max: 'Com muita facilidade' },
+    scaleLabels: { min: 'Raramente', max: 'Frequentemente' },
   },
   {
     id: 'rapport-4',
     toolId: 'rapport',
-    text: 'Você adapta seu vocabulário e estilo de comunicação conforme a pessoa com quem fala?',
+    text: 'Você adapta seu vocabulário para se comunicar melhor com diferentes pessoas?',
     dimension: 'language_matching',
     type: 'scale',
     scaleLabels: { min: 'Nunca', max: 'Sempre' },
@@ -682,38 +698,47 @@ export const rapportQuestions: BehavioralQuestion[] = [
   {
     id: 'rapport-5',
     toolId: 'rapport',
-    text: 'Você consegue perceber quando está "em sintonia" com alguém em uma conversa?',
+    text: 'Você percebe quando alguém está desconfortável em uma conversa?',
     dimension: 'awareness',
     type: 'scale',
-    scaleLabels: { min: 'Raramente', max: 'Frequentemente' },
+    scaleLabels: { min: 'Raramente', max: 'Sempre' },
   },
   {
     id: 'rapport-6',
     toolId: 'rapport',
-    text: 'Quando a conexão com alguém não está boa, você consegue ajustar para melhorar?',
+    text: 'Você consegue criar conexão rapidamente com pessoas novas?',
     dimension: 'adjustment',
     type: 'scale',
-    scaleLabels: { min: 'Raramente', max: 'Frequentemente' },
+    scaleLabels: { min: 'Com dificuldade', max: 'Facilmente' },
   },
 ];
 
 // ========================================
-// Export all questions grouped
+// Function to get questions for a tool
 // ========================================
-export const allBehavioralQuestions: Record<string, BehavioralQuestion[]> = {
-  disc: discQuestions,
-  vakd: vakdQuestions,
-  metaprograms: metaprogramsQuestions,
-  mental_triggers: mentalTriggersQuestions,
-  sleight_of_mouth: sleightOfMouthQuestions,
-  emotional_states: emotionalStatesQuestions,
-  values: valuesQuestions,
-  emotional_intelligence: eqQuestions,
-  cognitive_biases: cognitiveBiasesQuestions,
-  rapport: rapportQuestions,
-};
-
-// Get questions for a specific tool
-export const getQuestionsForTool = (toolId: string): BehavioralQuestion[] => {
-  return allBehavioralQuestions[toolId] || [];
-};
+export function getQuestionsForTool(toolId: string): BehavioralQuestion[] {
+  switch (toolId) {
+    case 'disc':
+      return discQuestions;
+    case 'vakd':
+      return vakdQuestions;
+    case 'metaprograms':
+      return metaprogramsQuestions;
+    case 'mental_triggers':
+      return mentalTriggersQuestions;
+    case 'sleight_of_mouth':
+      return sleightOfMouthQuestions;
+    case 'emotional_states':
+      return emotionalStatesQuestions;
+    case 'values':
+      return valuesQuestions;
+    case 'emotional_intelligence':
+      return emotionalIntelligenceQuestions;
+    case 'cognitive_biases':
+      return cognitiveBiasesQuestions;
+    case 'rapport':
+      return rapportQuestions;
+    default:
+      return [];
+  }
+}
