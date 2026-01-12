@@ -12,6 +12,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BehavioralToolsCard } from "@/components/assessments";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useSoundEffects } from "@/hooks/useSoundEffects";
+import { enhancedToast } from "@/components/ui/enhanced-toast";
 import {
   Search,
   Plus,
@@ -33,7 +35,6 @@ import {
   Heart,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useToast } from "@/hooks/use-toast";
 import { TestsEmptyState } from "@/components/empty-states";
 import type { Prova, NivelCargo } from "@/types/tests";
 
@@ -51,7 +52,7 @@ const iconeMap: Record<string, React.ComponentType<{ className?: string }>> = {
 export default function TestsPage() {
   usePageTitle('Testes');
   const navigate = useNavigate();
-  const { toast } = useToast();
+  const { playSuccess, playError, playPop, playClick } = useSoundEffects();
 
   const { data: provas = [], isLoading, refetch } = useProvas();
   const deleteProvaMutation = useDeleteProva();
@@ -89,9 +90,11 @@ export default function TestsPage() {
   const handleDuplicar = async (id: string) => {
     try {
       await duplicarProvaMutation.mutateAsync(id);
-      toast({ title: "Prova duplicada com sucesso" });
+      playPop();
+      enhancedToast.success("Prova duplicada com sucesso!");
     } catch {
-      toast({ title: "Erro ao duplicar", variant: "destructive" });
+      playError();
+      enhancedToast.error("Erro ao duplicar prova");
     }
   };
 
@@ -99,10 +102,17 @@ export default function TestsPage() {
     if (!confirm("Deseja excluir esta prova?")) return;
     try {
       await deleteProvaMutation.mutateAsync(id);
-      toast({ title: "Prova excluída" });
+      playSuccess();
+      enhancedToast.info("Prova excluída");
     } catch {
-      toast({ title: "Erro ao excluir", variant: "destructive" });
+      playError();
+      enhancedToast.error("Erro ao excluir");
     }
+  };
+
+  const handleTabChange = (tab: string) => {
+    setActiveTab(tab);
+    playClick();
   };
 
   // Render Card de Prova
@@ -299,7 +309,7 @@ export default function TestsPage() {
         </div>
 
         {/* Tabs */}
-        <Tabs value={activeTab} onValueChange={setActiveTab}>
+        <Tabs value={activeTab} onValueChange={handleTabChange}>
           <TabsList>
             <TabsTrigger value="provas">Provas ({provasFiltradas.length})</TabsTrigger>
             <TabsTrigger value="comportamentais">Comportamentais (10)</TabsTrigger>
