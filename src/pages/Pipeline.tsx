@@ -16,6 +16,8 @@ import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { MatchScoreBadge } from "@/components/ui/match-score-badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { enhancedToast, useConfetti } from "@/components/ui";
+import { useSoundEffects } from "@/hooks/useSoundEffects";
 import { 
   Search, 
   MoreHorizontal, 
@@ -44,7 +46,6 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import { useToast } from "@/hooks/use-toast";
 import { EtapaProcesso } from "@/types/recruitment";
 
 // Premium color schemes for each stage
@@ -139,7 +140,8 @@ export default function Pipeline() {
   
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { toast } = useToast();
+  const { playSuccess, playError, playSwoosh } = useSoundEffects();
+  const { fireCelebration } = useConfetti();
   
   const vagaIdParam = searchParams.get('vaga');
   const [vagaSelecionada, setVagaSelecionada] = useState<string>(vagaIdParam || "todas");
@@ -194,19 +196,23 @@ export default function Pipeline() {
     const novaEtapa = destination.droppableId as EtapaProcesso;
 
     try {
+      playSwoosh();
       await updateEtapaMutation.mutateAsync({ id: draggableId, etapaAtual: novaEtapa });
-      toast({
-        title: "✨ Pipeline atualizado",
-        description: `Candidato movido para ${getEtapaConfig(novaEtapa)?.nome}`,
-      });
+      
+      // Celebrar contratação com confetti e som especial
+      if (novaEtapa === 'contratado') {
+        fireCelebration();
+        playSuccess();
+        enhancedToast.celebration(`🎉 Candidato contratado! Parabéns!`);
+      } else {
+        playSuccess();
+        enhancedToast.success(`Candidato movido para ${getEtapaConfig(novaEtapa)?.nome}`);
+      }
     } catch {
-      toast({
-        title: "Erro",
-        description: "Não foi possível mover o candidato",
-        variant: "destructive",
-      });
+      playError();
+      enhancedToast.error("Não foi possível mover o candidato");
     }
-  }, [updateEtapaMutation, toast]);
+  }, [updateEtapaMutation, playSwoosh, playSuccess, playError, fireCelebration]);
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
