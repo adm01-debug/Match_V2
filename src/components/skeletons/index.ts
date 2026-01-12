@@ -45,11 +45,5 @@ export {
   DayViewSkeleton
 } from './AgendaSkeleton';
 
-// Generic Skeleton (re-export from common - these are simple versions)
-export { 
-  LoadingSkeleton, 
-  SkeletonText as SimpleSkeletonText, 
-  SkeletonCard as SimpleSkeletonCard, 
-  SkeletonTable as SimpleSkeletonTable, 
-  SkeletonAvatar 
-} from '../common/LoadingSkeleton';
+// Note: Generic LoadingSkeleton is exported from common/index.ts
+// Use imports from '@/components/common' for basic skeleton components
