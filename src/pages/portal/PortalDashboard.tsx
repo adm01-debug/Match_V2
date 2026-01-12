@@ -340,7 +340,7 @@ const PortalDashboard = () => {
             {vagasDisponiveis && vagasDisponiveis.length > 0 ? (
               <div className="space-y-3">
                 {vagasDisponiveis.map((vaga: VagaDisponivel) => (
-                  <Card key={vaga.id} className="hover:shadow-md transition-shadow cursor-pointer" onClick={() => navigate(`/portal/vagas/${vaga.id}`)}>
+                  <Card key={vaga.id} className="hover:shadow-md transition-shadow cursor-pointer" onClick={() => navigate(`/portal/vagas?vaga=${vaga.id}`)}>
                     <CardContent className="p-4">
                       <h4 className="font-medium mb-1">{vaga.titulo}</h4>
                       <p className="text-sm text-muted-foreground mb-2">{vaga.departamento}</p>

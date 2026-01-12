@@ -78,7 +78,7 @@ export default function AgendaPage() {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [activeTab, setActiveTab] = useState("calendario");
   const [filtroStatus, setFiltroStatus] = useState<string>("todos");
-  const [, setDialogOpen] = useState(false);
+  // Dialog states managed via showAIScheduler and feedbackDialog
   const [feedbackDialog, setFeedbackDialog] = useState(false);
   const [showAIScheduler, setShowAIScheduler] = useState(false);
   const [entrevistaSelecionada, setEntrevistaSelecionada] = useState<EntrevistaCardData | null>(null);
@@ -356,7 +356,7 @@ export default function AgendaPage() {
                 AI Scheduler
               </Button>
 
-              <Button onClick={() => setDialogOpen(true)}>
+              <Button onClick={() => setShowAIScheduler(true)}>
                 <Plus className="h-4 w-4 mr-2" />
                 Nova Entrevista
               </Button>
@@ -414,7 +414,7 @@ export default function AgendaPage() {
                   </h2>
 
                   {entrevistasDoDia.length === 0 ? (
-                    <AgendaEmptyState dateSelected={true} />
+                    <AgendaEmptyState dateSelected={true} onOpenDialog={() => setShowAIScheduler(true)} />
                   ) : (
                     <div className="space-y-3">
                       {entrevistasDoDia.map(entrevista => (
@@ -429,7 +429,7 @@ export default function AgendaPage() {
             <TabsContent value="proximas" className="mt-4">
               <div className="space-y-3">
                 {proximasEntrevistas.length === 0 ? (
-                  <AgendaEmptyState />
+                  <AgendaEmptyState onOpenDialog={() => setShowAIScheduler(true)} />
                 ) : (
                   proximasEntrevistas.map(entrevista => (
                     <div key={entrevista.id}>

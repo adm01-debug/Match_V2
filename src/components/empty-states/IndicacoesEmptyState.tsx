@@ -2,13 +2,21 @@
  * @fileoverview Empty State para Indicações
  */
 
-import { useNavigate } from 'react-router-dom';
-import { UserPlus } from 'lucide-react';
+import { UserPlus, Share2 } from 'lucide-react';
 import { EmptyStateCard } from './EmptyStateCard';
 import { IndicacoesEmptyIllustration } from './illustrations';
+import { toast } from 'sonner';
 
-export function IndicacoesEmptyState() {
-  const navigate = useNavigate();
+interface IndicacoesEmptyStateProps {
+  /** Callback to open the new indication dialog */
+  onOpenDialog?: () => void;
+}
+
+export function IndicacoesEmptyState({ onOpenDialog }: IndicacoesEmptyStateProps) {
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(window.location.origin + '/indicacoes');
+    toast.success('Link copiado para a área de transferência!');
+  };
 
   return (
     <EmptyStateCard
@@ -17,15 +25,13 @@ export function IndicacoesEmptyState() {
       description="Incentive colaboradores a indicarem talentos e construa um pipeline de candidatos qualificados através de referências internas."
       primaryAction={{
         label: "Registrar Indicação",
-        onClick: () => navigate('/indicacoes/nova'),
+        onClick: onOpenDialog,
         icon: UserPlus,
       }}
       secondaryAction={{
         label: "Compartilhar Programa",
-        onClick: () => {
-          // Copy share link
-          navigator.clipboard.writeText(window.location.origin + '/indicacoes');
-        },
+        onClick: handleCopyLink,
+        icon: Share2,
       }}
     />
   );

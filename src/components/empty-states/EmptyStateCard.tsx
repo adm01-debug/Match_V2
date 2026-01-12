@@ -16,12 +16,13 @@ interface EmptyStateCardProps {
   description: string;
   primaryAction?: {
     label: string;
-    onClick: () => void;
+    onClick?: () => void;
     icon?: LucideIcon;
   };
   secondaryAction?: {
     label: string;
-    onClick: () => void;
+    onClick?: () => void;
+    icon?: LucideIcon;
   };
   className?: string;
   variant?: 'default' | 'minimal' | 'card';
@@ -165,7 +166,8 @@ export function EmptyStateCard({
               whileHover="hover"
               whileTap="tap"
             >
-              <Button variant="outline" onClick={secondaryAction.onClick}>
+              <Button variant="outline" onClick={secondaryAction.onClick} className="gap-2">
+                {secondaryAction.icon && <secondaryAction.icon className="h-4 w-4" />}
                 {secondaryAction.label}
               </Button>
             </motion.div>

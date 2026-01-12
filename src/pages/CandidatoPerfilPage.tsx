@@ -11,7 +11,6 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   ArrowLeft,
-  Edit,
   Mail,
   Phone,
   Briefcase,
@@ -92,12 +91,7 @@ export default function CandidatoPerfilPage() {
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
-            <Button variant="outline" onClick={() => navigate(`/talentos/${id}/editar`)}>
-              <Edit className="h-4 w-4 mr-2" />
-              Editar
-            </Button>
-          </div>
+          {/* Action buttons - future edit functionality would go here */}
         </div>
 
         {/* Stats */}
