@@ -3,7 +3,8 @@
  * @description Página principal das 10 ferramentas comportamentais
  */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import Layout from '@/components/layout/Layout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -21,6 +22,8 @@ import { BEHAVIORAL_TOOLS } from '@/types/behavioral';
 import type { BehavioralResult, BehavioralTool } from '@/types/behavioral';
 import { BehavioralAssessmentPlayer } from '@/components/assessments/BehavioralAssessmentPlayer';
 import { BehavioralResultView } from '@/components/assessments/BehavioralResultView';
+import { useSaveBehavioralResult } from '@/hooks/useBehavioralAssessments';
+import { toast } from 'sonner';
 
 const TOOL_ICONS: Record<string, React.ReactNode> = {
   disc: <Brain className="h-6 w-6" />,
@@ -37,6 +40,8 @@ const TOOL_ICONS: Record<string, React.ReactNode> = {
 
 export default function BehavioralAssessmentsPage() {
   usePageTitle('Ferramentas Comportamentais');
+  const [searchParams] = useSearchParams();
+  const saveResult = useSaveBehavioralResult();
   
   const [activeTab, setActiveTab] = useState('tools');
   const [selectedTool, setSelectedTool] = useState<string | null>(null);
@@ -44,12 +49,37 @@ export default function BehavioralAssessmentsPage() {
   const [completedResults, setCompletedResults] = useState<BehavioralResult[]>([]);
   const [viewingResult, setViewingResult] = useState<BehavioralResult | null>(null);
 
+  // Handle URL parameter to start specific tool
+  useEffect(() => {
+    const toolParam = searchParams.get('tool');
+    if (toolParam && BEHAVIORAL_TOOLS.some(t => t.id === toolParam)) {
+      handleStartAssessment(toolParam);
+    }
+  }, [searchParams]);
+
   const handleStartAssessment = (toolId: string) => {
     setSelectedTool(toolId);
     setIsPlaying(true);
   };
 
-  const handleCompleteAssessment = (result: BehavioralResult) => {
+  const handleCompleteAssessment = async (result: BehavioralResult) => {
+    const tool = BEHAVIORAL_TOOLS.find(t => t.id === result.toolId);
+    
+    // Save to database
+    try {
+      await saveResult.mutateAsync({
+        toolId: result.toolId,
+        toolName: tool?.name || result.toolId,
+        answers: result.rawAnswers,
+        results: result,
+        timeSpent: result.timeSpent,
+      });
+      toast.success('Resultado salvo com sucesso!');
+    } catch (error) {
+      console.error('Error saving result:', error);
+      // Still allow viewing results even if save fails
+    }
+
     setCompletedResults(prev => [...prev, result]);
     setIsPlaying(false);
     setSelectedTool(null);

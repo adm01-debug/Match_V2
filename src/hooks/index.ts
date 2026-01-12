@@ -21,6 +21,13 @@ export { useDashboardData } from './useDashboardData';
 
 // Selection & Assessment Hooks
 export { useAssessments, useAssessment, useSubmitAssessment, useCandidateAssessments } from './useAssessments';
+export { 
+  useCandidateBehavioralResults, 
+  useProcessoBehavioralResults, 
+  useSaveBehavioralResult, 
+  useBehavioralStats, 
+  useCompletedTools 
+} from './useBehavioralAssessments';
 
 // UI Hooks (re-exports from shadcn)
 export { useToast } from './use-toast';

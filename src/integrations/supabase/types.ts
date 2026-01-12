@@ -302,6 +302,75 @@ export type Database = {
         }
         Relationships: []
       }
+      behavioral_assessment_results: {
+        Row: {
+          answers: Json
+          candidato_id: string | null
+          completed_at: string | null
+          created_at: string
+          id: string
+          primary_result: string | null
+          processo_id: string | null
+          results: Json
+          score: number | null
+          secondary_result: string | null
+          started_at: string | null
+          time_spent: number | null
+          tool_id: string
+          tool_name: string
+          updated_at: string
+        }
+        Insert: {
+          answers?: Json
+          candidato_id?: string | null
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          primary_result?: string | null
+          processo_id?: string | null
+          results?: Json
+          score?: number | null
+          secondary_result?: string | null
+          started_at?: string | null
+          time_spent?: number | null
+          tool_id: string
+          tool_name: string
+          updated_at?: string
+        }
+        Update: {
+          answers?: Json
+          candidato_id?: string | null
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          primary_result?: string | null
+          processo_id?: string | null
+          results?: Json
+          score?: number | null
+          secondary_result?: string | null
+          started_at?: string | null
+          time_spent?: number | null
+          tool_id?: string
+          tool_name?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "behavioral_assessment_results_candidato_id_fkey"
+            columns: ["candidato_id"]
+            isOneToOne: false
+            referencedRelation: "candidatos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "behavioral_assessment_results_processo_id_fkey"
+            columns: ["processo_id"]
+            isOneToOne: false
+            referencedRelation: "processos_seletivos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       blocked_ips: {
         Row: {
           blocked_at: string
