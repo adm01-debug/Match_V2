@@ -158,7 +158,7 @@ export const SparkBar = memo(function SparkBar({
   );
 });
 
-interface TrendIndicatorProps {
+interface SparklineTrendProps {
   value: number;
   previousValue: number;
   showValue?: boolean;
@@ -168,7 +168,11 @@ interface TrendIndicatorProps {
   className?: string;
 }
 
-export const TrendIndicator = memo(function TrendIndicator({
+/**
+ * Simple sparkline trend indicator
+ * Note: Renamed to SparklineTrend to avoid conflict with TrendIndicator in TrendIndicators.tsx
+ */
+export const SparklineTrend = memo(function SparklineTrend({
   value,
   previousValue,
   showValue = true,
@@ -176,7 +180,7 @@ export const TrendIndicator = memo(function TrendIndicator({
   size = "md",
   animated = true,
   className,
-}: TrendIndicatorProps) {
+}: SparklineTrendProps) {
   const { trend, percentage, color, Icon } = useMemo(() => {
     const diff = value - previousValue;
     const pct = previousValue !== 0 ? ((diff / previousValue) * 100) : 0;
@@ -295,5 +299,8 @@ export const MiniProgress = memo(function MiniProgress({
 
 Sparkline.displayName = "Sparkline";
 SparkBar.displayName = "SparkBar";
-TrendIndicator.displayName = "TrendIndicator";
+SparklineTrend.displayName = "SparklineTrend";
 MiniProgress.displayName = "MiniProgress";
+
+// Backward compatibility alias
+export { SparklineTrend as TrendIndicator };
