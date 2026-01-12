@@ -33,7 +33,7 @@ match-ats/
 ├── e2e/                  # Testes E2E (Playwright)
 ├── grafana/              # Dashboards de monitoramento
 ├── k8s/                  # Manifests Kubernetes
-├── postman/              # Coleção de APIs
+├── public/               # Assets estáticos
 ├── public/               # Assets estáticos
 ├── scripts/              # Scripts de automação
 ├── src/                  # Código fonte principal
@@ -63,13 +63,11 @@ match-ats/
 ### Linting & Formatting
 | Arquivo | Função |
 |---------|--------|
-| `.eslintrc.json` | Regras ESLint |
 | `eslint.config.js` | Config ESLint moderno |
 | `.prettierrc` | Formatação código |
 | `.prettierignore` | Ignorar formatação |
 | `.editorconfig` | Consistência IDE |
 | `commitlint.config.js` | Validação commits |
-| `.lintstagedrc.json` | Lint em staged files |
 | `lint-staged.config.js` | Config lint-staged |
 
 ### Docker & Deploy
@@ -77,8 +75,7 @@ match-ats/
 |---------|--------|
 | `Dockerfile` | Imagem Docker desenvolvimento |
 | `Dockerfile.prod` | Imagem Docker produção |
-| `docker-compose.yml` | Orquestração containers |
-| `docker-compose.yaml` | Alternativo compose |
+| `docker-compose.yaml` | Orquestração containers principal |
 | `docker-compose.override.yml` | Overrides locais |
 | `docker-compose.prod.yml` | Compose produção |
 | `.dockerignore` | Exclusões Docker |
