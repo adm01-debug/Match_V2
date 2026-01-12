@@ -272,7 +272,7 @@ export default function AgendaPage() {
                   <Button 
                     size="sm" 
                     variant="ghost"
-                    onClick={() => navigate(`/candidatos/${entrevista.candidatoId}`)}
+                    onClick={() => navigate(`/candidato/${entrevista.candidatoId}`)}
                   >
                     Ver Perfil
                   </Button>

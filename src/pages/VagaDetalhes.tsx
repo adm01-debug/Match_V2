@@ -345,7 +345,7 @@ export default function VagaDetalhes() {
                       <div
                         key={processo.id}
                         className="flex items-center justify-between p-3 bg-muted/50 rounded-lg hover:bg-muted cursor-pointer"
-                        onClick={() => navigate(`/candidatos/${processo.candidatoId}`)}
+                        onClick={() => navigate(`/candidato/${processo.candidatoId}`)}
                       >
                         <div className="flex items-center gap-3">
                           <Avatar>
