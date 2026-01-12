@@ -190,15 +190,16 @@ export function ProgressLoader({
   );
 }
 
-interface SkeletonTextProps {
+interface AnimatedSkeletonTextProps {
   lines?: number;
   className?: string;
 }
 
 /**
  * Animated skeleton text loader
+ * Note: Named AnimatedSkeletonText to avoid conflict with LoadingSkeleton.tsx
  */
-export function SkeletonText({ lines = 3, className }: SkeletonTextProps) {
+export function AnimatedSkeletonText({ lines = 3, className }: AnimatedSkeletonTextProps) {
   return (
     <div className={cn("space-y-2", className)}>
       {Array.from({ length: lines }).map((_, i) => (
@@ -222,5 +223,5 @@ export default {
   InlineLoader,
   DotsLoader,
   ProgressLoader,
-  SkeletonText
+  AnimatedSkeletonText
 };
