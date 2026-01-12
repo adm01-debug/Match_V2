@@ -3,15 +3,18 @@
  */
 
 import { useNavigate } from 'react-router-dom';
-import { CalendarPlus } from 'lucide-react';
+import { CalendarPlus, Kanban } from 'lucide-react';
 import { EmptyStateCard } from './EmptyStateCard';
 import { AgendaEmptyIllustration } from './illustrations';
 
 interface AgendaEmptyStateProps {
+  /** Whether a specific date is selected */
   dateSelected?: boolean;
+  /** Callback to open the scheduling dialog */
+  onOpenDialog?: () => void;
 }
 
-export function AgendaEmptyState({ dateSelected }: AgendaEmptyStateProps) {
+export function AgendaEmptyState({ dateSelected, onOpenDialog }: AgendaEmptyStateProps) {
   const navigate = useNavigate();
 
   if (dateSelected) {
@@ -22,7 +25,7 @@ export function AgendaEmptyState({ dateSelected }: AgendaEmptyStateProps) {
         description="Não há entrevistas agendadas para o dia selecionado. Que tal agendar uma nova entrevista?"
         primaryAction={{
           label: "Agendar Entrevista",
-          onClick: () => navigate('/agenda/nova'),
+          onClick: onOpenDialog,
           icon: CalendarPlus,
         }}
         variant="minimal"
@@ -37,12 +40,13 @@ export function AgendaEmptyState({ dateSelected }: AgendaEmptyStateProps) {
       description="Você não tem entrevistas agendadas. Inicie processos seletivos e agende entrevistas com os candidatos que mais se destacarem."
       primaryAction={{
         label: "Agendar Entrevista",
-        onClick: () => navigate('/agenda/nova'),
+        onClick: onOpenDialog,
         icon: CalendarPlus,
       }}
       secondaryAction={{
         label: "Ver Pipeline",
         onClick: () => navigate('/pipeline'),
+        icon: Kanban,
       }}
     />
   );

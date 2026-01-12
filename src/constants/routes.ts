@@ -59,6 +59,7 @@ export const ROUTES = {
     DASHBOARD: '/portal/dashboard',
     PERFIL: '/portal/perfil',
     VAGAS: '/portal/vagas',
+    VAGA_DETALHES: (id: string) => `/portal/vagas?vaga=${id}`,
   },
 } as const;
 

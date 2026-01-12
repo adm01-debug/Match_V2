@@ -40,8 +40,8 @@ export function CandidatosEmptyState({ hasFilters, onClearFilters }: CandidatosE
         icon: Upload,
       }}
       secondaryAction={{
-        label: "Cadastrar Candidato",
-        onClick: () => navigate('/talentos/novo'),
+        label: "Ver Banco de Talentos",
+        onClick: () => navigate('/talentos'),
       }}
     />
   );

@@ -390,7 +390,7 @@ export default function IndicacoesPage() {
             return (
               <TabsContent key={tab} value={tab} className="space-y-4">
                 {filtered.length === 0 ? (
-                  <IndicacoesEmptyState />
+                  <IndicacoesEmptyState onOpenDialog={() => setDialogOpen(true)} />
                 ) : (
                   <div className="space-y-3">
                     {filtered.map(indicacao => {
