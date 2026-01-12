@@ -3,8 +3,8 @@
  * @module supabase/functions/ip-guard/index.test
  */
 
-import { assertEquals, assertExists } from 'https://deno.land/std@0.168.0/testing/asserts.ts';
-import { describe, it, beforeEach } from 'https://deno.land/std@0.168.0/testing/bdd.ts';
+import { assertEquals, assertExists } from 'https://deno.land/std@0.208.0/testing/asserts.ts';
+import { describe, it } from 'https://deno.land/std@0.208.0/testing/bdd.ts';
 
 // Mock Supabase client
 const mockSupabase = {

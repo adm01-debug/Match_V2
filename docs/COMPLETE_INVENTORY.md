@@ -14,9 +14,9 @@
 | **Páginas** | 29 |
 | **Serviços** | 5 |
 | **Edge Functions** | 12 |
-| **Testes E2E** | 45+ |
-| **Documentação** | 40+ arquivos |
-| **GitHub Workflows** | 36 |
+| **Testes E2E** | 55 |
+| **Documentação** | 35+ arquivos |
+| **GitHub Workflows** | 31 |
 
 ---
 
@@ -95,7 +95,6 @@ match-ats/
 | `bun.lock` / `bun.lockb` | Lock files Bun |
 | `.npmrc` | Configuração NPM |
 | `.nvmrc` | Versão Node |
-| `renovate.json` | Atualizações automáticas |
 
 ### Outros
 | Arquivo | Função |
