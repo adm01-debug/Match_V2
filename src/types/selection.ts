@@ -17,7 +17,13 @@ export interface ValorCultural {
   ordem: number;
 }
 
-export interface Competencia {
+/**
+ * Selection-specific Competencia interface
+ * Note: This extends the base Competencia from recruitment.ts with additional fields
+ * for the advanced selection system. Use SelectionCompetencia when working with
+ * perfis de cargo and criterios de selecao.
+ */
+export interface SelectionCompetencia {
   id: string;
   nome: string;
   descricao?: string;
@@ -27,6 +33,9 @@ export interface Competencia {
   perguntasSugeridas?: string[];
   ativo: boolean;
 }
+
+// Backward compatibility alias
+export type Competencia = SelectionCompetencia;
 
 export interface PerfilCargo {
   id: string;
