@@ -46,12 +46,40 @@ export const ROUTES = {
 
   // Relatórios
   RELATORIOS: '/relatorios',
+  
+  // Analytics Avançado
+  ANALYTICS: '/analytics',
 
   // Admin
   ADMIN: '/admin',
 
   // Parser
   PARSER_CURRICULO: '/parser-curriculo',
+  
+  // Gamification
+  GAMIFICATION: '/gamification',
+  
+  // Ofertas
+  OFERTAS: '/ofertas',
+  
+  // Portal Gestor
+  GESTOR: '/gestor',
+  
+  // Diagnóstico
+  DIAGNOSTICO: '/diagnostico',
+  EDGE_FUNCTIONS_TEST: '/edge-functions-test',
+
+  // Auth Pages
+  AUTH_LOGIN: '/auth/login',
+  AUTH_REGISTER: '/auth/register',
+  AUTH_FORGOT_PASSWORD: '/auth/forgot-password',
+  AUTH_RESET_PASSWORD: '/auth/reset-password',
+  AUTH_2FA: '/auth/2fa',
+  
+  // Security
+  SECURITY_ROLES: '/security/roles',
+  SECURITY_RATE_LIMIT: '/security/rate-limit',
+  CONFIGURACOES_SEGURANCA: '/configuracoes/seguranca',
 
   // Portal do Candidato
   PORTAL: {
