@@ -7,7 +7,8 @@
 export {
   Sparkline,
   SparkBar,
-  TrendIndicator,
+  SparklineTrend,
+  TrendIndicator, // Backward compatibility alias
   MiniProgress,
 } from "./Sparkline";
 
