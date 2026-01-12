@@ -36,14 +36,14 @@ export function TestsEmptyState({ hasFilters, onClearFilters, context = 'provas'
       description: "Desenvolva provas técnicas, comportamentais e de conhecimento para avaliar candidatos de forma objetiva e padronizada.",
       primaryLabel: "Criar Prova",
       primaryIcon: FilePlus,
-      navigateTo: '/testes/nova-prova',
+      navigateTo: '/testes/nova',
     },
     baterias: {
       title: "Monte baterias de provas",
       description: "Agrupe provas em baterias para aplicar conjuntos de avaliações padronizadas por cargo ou departamento.",
       primaryLabel: "Criar Bateria",
       primaryIcon: BookOpen,
-      navigateTo: '/testes/nova-bateria',
+      navigateTo: '/testes/nova',
     },
     resultados: {
       title: "Nenhum resultado ainda",
