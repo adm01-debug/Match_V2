@@ -15,6 +15,8 @@ export {
 } from './tests';
 export * from './api';
 export * from './forms';
+// Behavioral assessment types - 10 ferramentas de comportamento humano
+export * from './behavioral';
 // Selection types - exclude Competencia to avoid conflict with recruitment
 export { 
   type ValorCultural,
@@ -39,6 +41,5 @@ export {
   type RegraAcao,
   type ComparativoCandidatos,
   type ComparativoResultado,
-  type DISCProfile,
   DISC_PROFILES
 } from './selection';
