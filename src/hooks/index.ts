@@ -54,6 +54,7 @@ export { useOnboarding } from './useOnboarding';
 export { useCandidatoPerfil } from './useCandidatoPerfil';
 export { useImportData } from './useImportData';
 export { useSoundPreferences } from './useSoundPreferences';
+export { useSoundEffects, SoundEffects } from './useSoundEffects';
 
 // Performance Hooks
 export { useIntersectionObserver, useInfiniteScroll, useLazyImage } from './useIntersectionObserver';
