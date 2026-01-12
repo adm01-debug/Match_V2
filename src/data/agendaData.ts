@@ -1,8 +1,20 @@
-// Tipos de entrevista
-export type TipoEntrevista = 'tecnica' | 'rh' | 'cultural' | 'final' | 'triagem' | 'presencial' | 'online' | 'telefone';
+/**
+ * @fileoverview Agenda data types, configurations and mock data
+ * @module data/agendaData
+ * 
+ * Note: These types extend the base types from recruitment.ts for
+ * agenda-specific use cases with additional status values.
+ */
 
-// Status de entrevista
-export type StatusEntrevista = 'agendada' | 'confirmada' | 'realizada' | 'cancelada' | 'remarcada' | 'reagendada' | 'no_show';
+// Extended tipos de entrevista for agenda context
+export type AgendaTipoEntrevista = 'tecnica' | 'rh' | 'cultural' | 'final' | 'triagem' | 'presencial' | 'online' | 'telefone';
+
+// Extended status de entrevista for agenda context
+export type AgendaStatusEntrevista = 'agendada' | 'confirmada' | 'realizada' | 'cancelada' | 'remarcada' | 'reagendada' | 'no_show';
+
+// Backward compatibility aliases
+export type TipoEntrevista = AgendaTipoEntrevista;
+export type StatusEntrevista = AgendaStatusEntrevista;
 
 // Interface de Entrevistador
 export interface Entrevistador {

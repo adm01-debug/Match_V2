@@ -141,7 +141,7 @@ export default function CandidatoPerfilPage() {
                 <CardContent>
                   {candidato.habilidades.length > 0 ? (
                     <div className="flex flex-wrap gap-2">
-                      {candidato.habilidades.map((h, i) => (
+                      {candidato.habilidades.map((h: string, i: number) => (
                         <Badge key={i} variant="secondary">{h}</Badge>
                       ))}
                     </div>
@@ -201,7 +201,7 @@ export default function CandidatoPerfilPage() {
               <CardContent>
                 {candidato.candidaturas.length > 0 ? (
                   <div className="space-y-3">
-                    {candidato.candidaturas.map((c) => (
+                    {candidato.candidaturas.map((c: { id: string; vaga_titulo: string; status: string }) => (
                       <div key={c.id} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
                         <p className="font-medium">{c.vaga_titulo}</p>
                         <Badge variant="outline">{c.status}</Badge>
@@ -221,7 +221,7 @@ export default function CandidatoPerfilPage() {
               <CardContent>
                 {candidato.entrevistas.length > 0 ? (
                   <div className="space-y-3">
-                    {candidato.entrevistas.map((e) => (
+                    {candidato.entrevistas.map((e: { id: string; data: string; tipo: string; status: string }) => (
                       <div key={e.id} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
                         <div>
                           <p className="font-medium">{format(new Date(e.data), 'dd/MM/yyyy', { locale: ptBR })}</p>

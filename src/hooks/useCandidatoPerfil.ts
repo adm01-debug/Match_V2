@@ -1,7 +1,19 @@
+/**
+ * @fileoverview Hook for fetching candidate profile data from Supabase
+ * @module hooks/useCandidatoPerfil
+ */
+
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 
-export interface CandidatoPerfil {
+/**
+ * Data structure returned by useCandidatoPerfil hook.
+ * This represents the actual database data structure.
+ * 
+ * Note: For UI components that need more fields (like PerfilHeader),
+ * use the CandidatoPerfil interface from @/data/candidatoPerfilData
+ */
+export interface CandidatoPerfilData {
   id: string;
   nome: string;
   email: string;
@@ -16,6 +28,9 @@ export interface CandidatoPerfil {
   created_at: string;
   updated_at: string;
 }
+
+// Re-export for backward compatibility
+export type { CandidatoPerfilData as CandidatoPerfil };
 
 interface CandidaturaWithVaga {
   id: string;
@@ -90,7 +105,7 @@ export const useCandidatoPerfil = (candidatoId: string) => {
           status: e.status,
           entrevistador: e.entrevistadores?.[0] || 'N/A',
         })),
-      } as CandidatoPerfil;
+      } as CandidatoPerfilData;
     },
     enabled: !!candidatoId,
     staleTime: 1000 * 60 * 5,
