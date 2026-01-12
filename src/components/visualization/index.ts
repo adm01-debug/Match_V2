@@ -18,6 +18,9 @@ export {
   ActivityIndicator,
 } from "./Heatmap";
 
+// Candidate Heatmap
+export { CandidateHeatmap } from "./CandidateHeatmap";
+
 // Animated chart components
 export {
   AnimatedAreaChart,

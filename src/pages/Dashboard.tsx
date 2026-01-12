@@ -1,4 +1,4 @@
-import { Suspense } from 'react';
+import { Suspense, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Skeleton } from '@/components/ui/skeleton';
 import { usePageTitle } from '@/hooks/usePageTitle';
@@ -15,8 +15,10 @@ import { TopCandidatos } from "@/components/dashboard/TopCandidatos";
 import { EntrevistasStats } from "@/components/dashboard/EntrevistasStats";
 import { EntrevistasChart } from "@/components/dashboard/EntrevistasChart";
 import { GamificationWidget } from "@/components/gamification/GamificationWidget";
+import { RecentActionsWidget } from "@/components/intelligence/RecentActionsWidget";
 import { useDashboardData } from "@/hooks/useDashboardData";
 import { useOnboarding } from "@/components/onboarding/OnboardingProvider";
+import { useGamification } from "@/hooks/useGamification";
 import { ErrorBoundary } from 'react-error-boundary';
 import { 
   Briefcase, 
@@ -84,6 +86,7 @@ function DashboardErrorFallback({ error, resetErrorBoundary }: { error: Error; r
 function DashboardContent() {
   usePageTitle('Dashboard');
   const { resetTour } = useOnboarding();
+  const { updateStreak, rewardAction } = useGamification();
   const { 
     kpiData, 
     funilData, 
@@ -93,6 +96,12 @@ function DashboardContent() {
     processos,
     isLoading 
   } = useDashboardData();
+
+  // Update streak on dashboard visit
+  useEffect(() => {
+    updateStreak();
+    rewardAction('loginDiario');
+  }, [updateStreak, rewardAction]);
 
   if (isLoading) {
     return (
@@ -348,6 +357,11 @@ function DashboardContent() {
               {/* Gamification Widget */}
               <Suspense fallback={<Skeleton className="h-64 rounded-2xl" />}>
                 <GamificationWidget />
+              </Suspense>
+              
+              {/* Recent Actions Widget */}
+              <Suspense fallback={<Skeleton className="h-48 rounded-2xl" />}>
+                <RecentActionsWidget />
               </Suspense>
               
               <Suspense fallback={<Skeleton className="h-48 rounded-2xl" />}>
