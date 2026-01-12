@@ -26,7 +26,7 @@ const navItems: NavItem[] = [
   { path: '/vagas', label: 'Vagas', icon: Briefcase },
   { path: '/pipeline', label: 'Pipeline', icon: Kanban },
   { path: '/agenda', label: 'Agenda', icon: Calendar },
-  { path: '/configuracoes', label: 'Config', icon: Settings },
+  { path: '/configuracoes/seguranca', label: 'Config', icon: Settings },
 ];
 
 function BottomNavigationComponent() {

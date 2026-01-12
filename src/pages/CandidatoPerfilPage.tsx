@@ -55,8 +55,8 @@ export default function CandidatoPerfilPage() {
         <div className="p-6 text-center">
           <AlertCircle className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
           <p>Candidato não encontrado</p>
-          <Button onClick={() => navigate("/candidatos")} className="mt-4">
-            Voltar para Candidatos
+          <Button onClick={() => navigate("/talentos")} className="mt-4">
+            Voltar para Banco de Talentos
           </Button>
         </div>
       </Layout>
@@ -69,7 +69,7 @@ export default function CandidatoPerfilPage() {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
           <div className="flex items-start gap-4">
-            <Button variant="ghost" size="icon" onClick={() => navigate("/candidatos")}>
+            <Button variant="ghost" size="icon" onClick={() => navigate("/talentos")}>
               <ArrowLeft className="h-5 w-5" />
             </Button>
             <Avatar className="h-20 w-20">
@@ -93,7 +93,7 @@ export default function CandidatoPerfilPage() {
           </div>
 
           <div className="flex items-center gap-2">
-            <Button variant="outline" onClick={() => navigate(`/candidatos/${id}/editar`)}>
+            <Button variant="outline" onClick={() => navigate(`/talentos/${id}/editar`)}>
               <Edit className="h-4 w-4 mr-2" />
               Editar
             </Button>

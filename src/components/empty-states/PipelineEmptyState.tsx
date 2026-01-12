@@ -35,8 +35,8 @@ export function PipelineEmptyState({ hasVagas = true }: PipelineEmptyStateProps)
       title="Nenhum candidato no pipeline"
       description="Quando candidatos se inscreverem em suas vagas ou forem adicionados manualmente, eles aparecerão aqui para você gerenciar o processo seletivo."
       primaryAction={{
-        label: "Ver Candidatos",
-        onClick: () => navigate('/candidatos'),
+        label: "Ver Banco de Talentos",
+        onClick: () => navigate('/talentos'),
         icon: Users,
       }}
       secondaryAction={{

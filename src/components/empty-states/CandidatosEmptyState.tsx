@@ -41,7 +41,7 @@ export function CandidatosEmptyState({ hasFilters, onClearFilters }: CandidatosE
       }}
       secondaryAction={{
         label: "Cadastrar Candidato",
-        onClick: () => navigate('/candidatos/novo'),
+        onClick: () => navigate('/talentos/novo'),
       }}
     />
   );

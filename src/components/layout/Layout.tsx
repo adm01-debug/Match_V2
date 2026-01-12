@@ -57,9 +57,9 @@ export function Layout({ children, title }: LayoutProps) {
     {
       id: 'nav-candidatos',
       keys: ['g', 'c'],
-      description: 'Ir para Candidatos',
+      description: 'Ir para Banco de Talentos',
       category: 'Navegação',
-      action: () => navigate('/candidatos'),
+      action: () => navigate('/talentos'),
     },
     {
       id: 'nav-pipeline',
@@ -108,7 +108,7 @@ export function Layout({ children, title }: LayoutProps) {
       keys: ['ctrl', 'shift', 'c'],
       description: 'Novo candidato',
       category: 'Ações',
-      action: () => navigate('/candidatos?new=true'),
+      action: () => navigate('/talentos?new=true'),
     },
     // General
     {
