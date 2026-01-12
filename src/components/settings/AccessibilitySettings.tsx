@@ -32,7 +32,7 @@ interface AccessibilitySettingsProps {
 export function AccessibilitySettings({ className }: AccessibilitySettingsProps) {
   const { isHighContrast, toggleHighContrast } = useHighContrast();
   const prefersReducedMotion = usePrefersReducedMotion();
-  const { preferences, setVolume, setSoundsEnabled } = useSoundPreferences();
+  const { preferences, setVolume, toggleSounds } = useSoundPreferences();
   
   const [reducedMotionOverride, setReducedMotionOverride] = useState<boolean>(prefersReducedMotion);
   const [fontSize, setFontSize] = useState<number>(100);
@@ -189,7 +189,7 @@ export function AccessibilitySettings({ className }: AccessibilitySettingsProps)
               <Switch
                 id="sounds-enabled"
                 checked={preferences.enabled}
-                onCheckedChange={setSoundsEnabled}
+                onCheckedChange={toggleSounds}
               />
             </motion.div>
 
