@@ -48,6 +48,45 @@ export * from './onboarding';
 // Notifications
 export * from './notifications';
 
+// Pipeline
+export * from './pipeline';
+
+// Candidatos
+export * from './candidatos';
+
+// Candidato (Profile tabs)
+export * from './candidato';
+
+// Comunicacao
+export * from './comunicacao';
+
+// Vagas
+export * from './vagas';
+
+// Agenda
+export * from './agenda';
+
+// Tests
+export * from './tests';
+
+// Settings
+export * from './settings';
+
+// Auth
+export * from './auth';
+
+// Dashboard
+export * from './dashboard';
+
+// Portal
+export * from './portal';
+
+// Layout
+export * from './layout';
+
+// Search
+export * from './search';
+
 // Data components
 export { default as DataImporter } from './DataImporter';
 export { default as BulkActionsBar } from './BulkActionsBar';

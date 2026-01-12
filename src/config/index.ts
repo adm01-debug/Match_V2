@@ -1,5 +1,11 @@
+/**
+ * @fileoverview Centralized config exports
+ * @module config
+ */
+
 export * from './pipelineConfig';
 export * from './testsConfig';
+export * from './ipWhitelist';
 
 import { APP_NAME, APP_VERSION, DATE_FORMATS, PAGINATION } from '@/lib/constants';
 
