@@ -1,13 +1,12 @@
 /**
  * @fileoverview Avaliacao mock data
+ * Uses Competencia type from recruitment.ts to avoid duplication
  */
 
-export interface Competencia {
-  id: string;
-  nome: string;
-  descricao: string;
-  tipo: 'tecnica' | 'comportamental';
-}
+import { Competencia } from '@/types/recruitment';
+
+// Re-export for backward compatibility
+export type { Competencia } from '@/types/recruitment';
 
 export const competencias: Competencia[] = [
   { id: '1', nome: 'Comunicação', descricao: 'Clareza e objetividade', tipo: 'comportamental' },
