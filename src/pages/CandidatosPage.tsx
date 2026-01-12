@@ -13,7 +13,8 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Calendar } from '@/components/ui/calendar';
 import { Slider } from '@/components/ui/slider';
 import { SkeletonCard } from '@/components/ui/premium-skeleton';
-import { useToast } from '@/hooks/use-toast';
+import { enhancedToast } from '@/components/ui';
+import { useSoundEffects } from '@/hooks/useSoundEffects';
 import { supabase } from '@/integrations/supabase/client';
 import { 
   Users, Search, Target, Mail, Phone, Briefcase, 
@@ -114,7 +115,7 @@ const cardHoverVariants: Variants = {
 };
 
 export default function CandidatosPage() {
-  const { toast } = useToast();
+  const { playSuccess, playError, playPop } = useSoundEffects();
   const navigate = useNavigate();
   const [candidatos, setCandidatos] = useState<Candidato[]>([]);
   const [matchScores, setMatchScores] = useState<Record<string, MatchScore[]>>({});
@@ -166,12 +167,9 @@ export default function CandidatosPage() {
         });
         setMatchScores(scoresMap);
       }
-    } catch (error) {
-      toast({
-        title: "Erro ao carregar",
-        description: "Não foi possível carregar os candidatos.",
-        variant: "destructive",
-      });
+    } catch {
+      playError();
+      enhancedToast.error("Não foi possível carregar os candidatos.");
     } finally {
       setIsLoading(false);
     }
@@ -184,9 +182,11 @@ export default function CandidatosPage() {
 
       setCandidatos(prev => prev.filter(c => c.id !== id));
       setSelectedCandidato(null);
-      toast({ title: "Candidato removido", description: "O candidato foi excluído do banco de dados." });
-    } catch (error) {
-      toast({ title: "Erro ao excluir", description: "Não foi possível excluir o candidato.", variant: "destructive" });
+      playSuccess();
+      enhancedToast.success("Candidato removido do banco de dados.");
+    } catch {
+      playError();
+      enhancedToast.error("Não foi possível excluir o candidato.");
     }
   };
 
@@ -207,16 +207,11 @@ export default function CandidatosPage() {
         setSelectedCandidato(prev => prev ? { ...prev, status: newStatus } : null);
       }
       
-      toast({ 
-        title: "Status atualizado", 
-        description: `O status foi alterado para "${getStatusConfig(newStatus).label}".` 
-      });
-    } catch (error) {
-      toast({ 
-        title: "Erro ao atualizar", 
-        description: "Não foi possível atualizar o status.", 
-        variant: "destructive" 
-      });
+      playPop();
+      enhancedToast.success(`Status alterado para "${getStatusConfig(newStatus).label}".`);
+    } catch {
+      playError();
+      enhancedToast.error("Não foi possível atualizar o status.");
     }
   };
 
