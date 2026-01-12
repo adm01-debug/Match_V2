@@ -15,13 +15,8 @@ export * from './common';
 // Empty states
 export * from './empty-states';
 
-// Assessments & Selection
+// Assessments
 export * from './assessments';
-export * from './scorecard';
-export * from './perfil-cargo';
-export * from './automation';
-export * from './interview';
-export * from './analytics';
 
 // Gamification
 export * from './gamification';
