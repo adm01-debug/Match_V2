@@ -39,6 +39,7 @@ const AgendaPage = lazy(() => import("./pages/AgendaPage"));
 const IndicacoesPage = lazy(() => import("./pages/IndicacoesPage"));
 const DiagnosticoPage = lazy(() => import("./pages/DiagnosticoPage"));
 const EdgeFunctionTestPage = lazy(() => import("./pages/EdgeFunctionTestPage"));
+const BehavioralAssessmentsPage = lazy(() => import("./pages/BehavioralAssessmentsPage"));
 const GamificationPage = lazy(() => import("./pages/GamificationPage"));
 const OfferManagementPage = lazy(() => import("./pages/OfferManagementPage"));
 const HiringManagerPortalPage = lazy(() => import("./pages/HiringManagerPortalPage"));
@@ -163,6 +164,7 @@ function App() {
                           <Route path="/comunicacao" element={<ProtectedRoute><ComunicacaoPage /></ProtectedRoute>} />
                           <Route path="/agenda" element={<ProtectedRoute><AgendaPage /></ProtectedRoute>} />
                           <Route path="/indicacoes" element={<ProtectedRoute><IndicacoesPage /></ProtectedRoute>} />
+                          <Route path="/avaliacoes-comportamentais" element={<ProtectedRoute><BehavioralAssessmentsPage /></ProtectedRoute>} />
                           <Route path="/gamification" element={<ProtectedRoute><GamificationPage /></ProtectedRoute>} />
                           <Route path="/ofertas" element={<ProtectedRoute><OfferManagementPage /></ProtectedRoute>} />
                           <Route path="/gestor" element={<ProtectedRoute requiredRoles={['gestor', 'admin']}><HiringManagerPortalPage /></ProtectedRoute>} />

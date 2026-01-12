@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { BehavioralToolsCard } from "@/components/assessments";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Search,
@@ -301,6 +302,7 @@ export default function TestsPage() {
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList>
             <TabsTrigger value="provas">Provas ({provasFiltradas.length})</TabsTrigger>
+            <TabsTrigger value="comportamentais">Comportamentais (10)</TabsTrigger>
             <TabsTrigger value="categorias">Por Categoria</TabsTrigger>
           </TabsList>
 
@@ -323,6 +325,14 @@ export default function TestsPage() {
                 ))}
               </div>
             )}
+          </TabsContent>
+
+          {/* Tab Comportamentais */}
+          <TabsContent value="comportamentais" className="mt-4">
+            <BehavioralToolsCard 
+              onStartAssessment={(assessmentId) => navigate(`/avaliacoes-comportamentais?tool=${assessmentId}`)}
+              className="max-w-4xl"
+            />
           </TabsContent>
 
           {/* Tab Por Categoria */}
