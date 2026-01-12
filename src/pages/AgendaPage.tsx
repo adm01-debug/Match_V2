@@ -1,7 +1,6 @@
-import { Suspense } from 'react';
+import { Suspense, useState, useMemo } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { usePageTitle } from '@/hooks/usePageTitle';
-import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { useEntrevistas, useUpdateEntrevista } from "@/hooks/useEntrevistas";
