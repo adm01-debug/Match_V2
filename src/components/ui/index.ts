@@ -9,6 +9,8 @@ export { AnimatedCard, AnimatedButtonWrapper, Shimmer, FloatingActionButton } fr
 // Premium Skeletons
 export { 
   PremiumSkeleton,
+  PremiumSkeletonCard,
+  PremiumSkeletonTable,
   SkeletonCard,
   SkeletonTable,
   SkeletonKanban,
@@ -22,7 +24,7 @@ export {
   InlineLoader, 
   DotsLoader, 
   ProgressLoader, 
-  SkeletonText 
+  AnimatedSkeletonText 
 } from './contextual-loader';
 
 // Haptic Feedback Effects

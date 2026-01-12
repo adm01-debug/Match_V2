@@ -45,5 +45,11 @@ export {
   DayViewSkeleton
 } from './AgendaSkeleton';
 
-// Generic Skeleton (re-export from common)
-export { LoadingSkeleton, SkeletonText, SkeletonCard, SkeletonTable, SkeletonAvatar } from '../common/LoadingSkeleton';
+// Generic Skeleton (re-export from common - these are simple versions)
+export { 
+  LoadingSkeleton, 
+  SkeletonText as SimpleSkeletonText, 
+  SkeletonCard as SimpleSkeletonCard, 
+  SkeletonTable as SimpleSkeletonTable, 
+  SkeletonAvatar 
+} from '../common/LoadingSkeleton';

@@ -327,8 +327,8 @@ export const RecentActionsWidget = memo(function RecentActionsWidget({
   );
 });
 
-// Hook for tracking and managing recent actions
-export function useRecentActions() {
+// Hook for simple tracking of recent actions (localStorage-based)
+export function useRecentActionsTracker() {
   const addAction = (action: Omit<RecentAction, 'id' | 'timestamp'>) => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);

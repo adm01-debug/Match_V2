@@ -40,7 +40,7 @@ export function PremiumSkeleton({
   );
 }
 
-interface SkeletonCardProps extends React.HTMLAttributes<HTMLDivElement> {
+interface PremiumSkeletonCardProps extends React.HTMLAttributes<HTMLDivElement> {
   className?: string;
   showAvatar?: boolean;
   lines?: number;
@@ -48,7 +48,7 @@ interface SkeletonCardProps extends React.HTMLAttributes<HTMLDivElement> {
   showActions?: boolean;
 }
 
-export function SkeletonCard({ 
+export function PremiumSkeletonCard({ 
   className,
   showAvatar = true,
   lines = 3,
@@ -56,7 +56,7 @@ export function SkeletonCard({
   showActions = true,
   style,
   ...props
-}: SkeletonCardProps) {
+}: PremiumSkeletonCardProps) {
   return (
     <div 
       className={cn(
@@ -98,17 +98,20 @@ export function SkeletonCard({
   );
 }
 
-interface SkeletonTableProps {
+// Re-export as SkeletonCard for backward compatibility
+export { PremiumSkeletonCard as SkeletonCard };
+
+interface PremiumSkeletonTableProps {
   rows?: number;
   columns?: number;
   className?: string;
 }
 
-export function SkeletonTable({ 
+export function PremiumSkeletonTable({ 
   rows = 5, 
   columns = 4,
   className 
-}: SkeletonTableProps) {
+}: PremiumSkeletonTableProps) {
   return (
     <div className={cn("space-y-3", className)}>
       {/* Header */}
@@ -141,6 +144,9 @@ export function SkeletonTable({
   );
 }
 
+// Re-export as SkeletonTable for backward compatibility
+export { PremiumSkeletonTable as SkeletonTable };
+
 interface SkeletonKanbanProps {
   columns?: number;
   cardsPerColumn?: number;
@@ -169,7 +175,7 @@ export function SkeletonKanban({
           {/* Cards */}
           <div className="space-y-3">
             {Array.from({ length: cardsPerColumn }).map((_, cardIdx) => (
-              <SkeletonCard 
+              <PremiumSkeletonCard 
                 key={cardIdx}
                 className="p-4"
                 lines={2}
@@ -224,7 +230,7 @@ export function SkeletonDashboard({ className }: SkeletonDashboardProps) {
       {/* Table */}
       <div className="p-6 rounded-xl border border-border/50 bg-card/50 backdrop-blur-sm space-y-4">
         <PremiumSkeleton className="h-6 w-48" />
-        <SkeletonTable rows={4} columns={5} />
+        <PremiumSkeletonTable rows={4} columns={5} />
       </div>
     </div>
   );
