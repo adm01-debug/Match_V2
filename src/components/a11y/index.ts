@@ -5,3 +5,5 @@ export * from './FocusRing';
 export * from './ReducedMotion';
 export * from './HighContrastMode';
 export * from './ScreenReaderAnnounce';
+export * from './FocusTrap';
+export * from './KeyboardNavigation';
