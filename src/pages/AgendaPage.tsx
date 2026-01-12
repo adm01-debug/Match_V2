@@ -17,6 +17,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { AIInterviewScheduler } from "@/components/agenda/AIInterviewScheduler";
 import { InterviewReminderButton } from "@/components/agenda/InterviewReminderButton";
+import { useSoundEffects } from "@/hooks/useSoundEffects";
+import { enhancedToast } from "@/components/ui/enhanced-toast";
+import { useConfetti } from "@/components/ui/confetti";
 import {
   Calendar as CalendarIcon,
   Clock,
@@ -35,7 +38,6 @@ import {
 import { format, isSameDay, startOfMonth, endOfMonth, eachDayOfInterval, isToday } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { cn } from "@/lib/utils";
-import { useToast } from "@/hooks/use-toast";
 import { AgendaEmptyState } from "@/components/empty-states";
 
 interface EntrevistaCardData {
@@ -70,7 +72,8 @@ export default function AgendaPage() {
   usePageTitle('Agenda');
 
   const navigate = useNavigate();
-  const { toast } = useToast();
+  const { playSuccess, playError, playNotification, playClick } = useSoundEffects();
+  const { fireCelebration } = useConfetti();
 
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [activeTab, setActiveTab] = useState("calendario");
@@ -117,9 +120,11 @@ export default function AgendaPage() {
   const handleConfirmar = async (id: string) => {
     try {
       await updateEntrevista.mutateAsync({ id, status: 'confirmada' });
-      toast({ title: "Entrevista confirmada" });
+      playSuccess();
+      enhancedToast.success("Entrevista confirmada!");
     } catch {
-      toast({ title: "Erro", variant: "destructive" });
+      playError();
+      enhancedToast.error("Erro ao confirmar entrevista");
     }
   };
 
@@ -127,18 +132,21 @@ export default function AgendaPage() {
     if (!confirm("Deseja cancelar esta entrevista?")) return;
     try {
       await updateEntrevista.mutateAsync({ id, status: 'cancelada' });
-      toast({ title: "Entrevista cancelada" });
+      playNotification();
+      enhancedToast.warning("Entrevista cancelada");
     } catch {
-      toast({ title: "Erro", variant: "destructive" });
+      playError();
+      enhancedToast.error("Erro ao cancelar");
     }
   };
 
   const handleNoShow = async (id: string) => {
     try {
       await updateEntrevista.mutateAsync({ id, status: 'realizada', feedback_resultado: 'pendente' });
-      toast({ title: "No-show registrado", variant: "destructive" });
+      playError();
+      enhancedToast.error("No-show registrado");
     } catch {
-      toast({ title: "Erro", variant: "destructive" });
+      enhancedToast.error("Erro ao registrar no-show");
     }
   };
 
@@ -153,12 +161,26 @@ export default function AgendaPage() {
         feedback_resultado: avaliacao >= 3 ? 'aprovado' : 'reprovado',
         feedback_avaliado_em: new Date().toISOString(),
       });
-      toast({ title: "Feedback registrado" });
+      
+      if (avaliacao >= 4) {
+        fireCelebration();
+        enhancedToast.celebration("Excelente feedback registrado!");
+      } else {
+        playSuccess();
+        enhancedToast.success("Feedback registrado com sucesso");
+      }
+      
       setFeedbackDialog(false);
       setEntrevistaSelecionada(null);
     } catch {
-      toast({ title: "Erro", variant: "destructive" });
+      playError();
+      enhancedToast.error("Erro ao registrar feedback");
     }
+  };
+
+  const handleTabChange = (tab: string) => {
+    setActiveTab(tab);
+    playClick();
   };
 
   const EntrevistaCard = ({ entrevista }: { entrevista: EntrevistaCardData }) => {
@@ -346,16 +368,16 @@ export default function AgendaPage() {
             <AIInterviewScheduler
               duracao={60}
               onSelectSlot={(slot) => {
-                toast({
-                  title: "Horário selecionado!",
-                  description: `${format(slot.data, "dd/MM/yyyy")} às ${slot.horaInicio} com ${slot.entrevistadores.map(e => e.nome).join(", ")}`,
-                });
+                playSuccess();
+                enhancedToast.success(
+                  `Horário selecionado: ${format(slot.data, "dd/MM/yyyy")} às ${slot.horaInicio}`
+                );
               }}
               candidatoNome="Candidato Selecionado"
             />
           )}
 
-          <Tabs value={activeTab} onValueChange={setActiveTab}>
+          <Tabs value={activeTab} onValueChange={handleTabChange}>
             <TabsList>
               <TabsTrigger value="calendario">Calendário</TabsTrigger>
               <TabsTrigger value="proximas">Próximas ({proximasEntrevistas.length})</TabsTrigger>

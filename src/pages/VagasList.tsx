@@ -15,6 +15,8 @@ import {
 } from "@/components/ui/select";
 import { SkeletonCard, SkeletonList } from "@/components/ui/premium-skeleton";
 import { useVagas } from "@/hooks/useVagas";
+import { useSoundEffects } from "@/hooks/useSoundEffects";
+import { enhancedToast } from "@/components/ui/enhanced-toast";
 import { Plus, Search, LayoutGrid, List, X, Briefcase, Users, Target, TrendingUp, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
@@ -41,6 +43,7 @@ export default function VagasList() {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
   const { data: vagas = [], isLoading } = useVagas();
+  const { playClick, playToggle, playSwoosh } = useSoundEffects();
 
   // Get unique departments
   const departamentos = [...new Set(vagas.map((v) => v.departamento))];
@@ -76,6 +79,18 @@ export default function VagasList() {
     setStatusFilter("todas");
     setPrioridadeFilter("todas");
     setDepartamentoFilter("todos");
+    playSwoosh();
+    enhancedToast.info("Filtros limpos");
+  };
+
+  const handleStatusFilterChange = (value: string) => {
+    setStatusFilter(value);
+    playClick();
+  };
+
+  const handleViewModeChange = (mode: "grid" | "list") => {
+    setViewMode(mode);
+    playToggle();
   };
 
   return (
@@ -181,7 +196,7 @@ export default function VagasList() {
               key={tab.value}
               variant={statusFilter === tab.value ? "default" : "outline"}
               size="sm"
-              onClick={() => setStatusFilter(tab.value)}
+              onClick={() => handleStatusFilterChange(tab.value)}
               className={cn(
                 "gap-2 transition-all",
                 statusFilter === tab.value 
@@ -261,7 +276,7 @@ export default function VagasList() {
                 variant={viewMode === "grid" ? "secondary" : "ghost"}
                 size="icon"
                 className="rounded-none border-0"
-                onClick={() => setViewMode("grid")}
+                onClick={() => handleViewModeChange("grid")}
               >
                 <LayoutGrid className="h-4 w-4" />
               </Button>
@@ -269,7 +284,7 @@ export default function VagasList() {
                 variant={viewMode === "list" ? "secondary" : "ghost"}
                 size="icon"
                 className="rounded-none border-0"
-                onClick={() => setViewMode("list")}
+                onClick={() => handleViewModeChange("list")}
               >
                 <List className="h-4 w-4" />
               </Button>
