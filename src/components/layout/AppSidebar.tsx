@@ -27,6 +27,7 @@ import {
   FileCheck,
   UserCog,
   TrendingUp,
+  Brain,
 } from "lucide-react";
 import {
   Sidebar,
@@ -64,6 +65,7 @@ const menuItems = [
     items: [
       { title: "Agenda", url: "/agenda", icon: Calendar, tourId: "agenda" },
       { title: "Avaliações", url: "/avaliacoes", icon: ClipboardCheck },
+      { title: "Comportamentais", url: "/avaliacoes-comportamentais", icon: Brain },
       { title: "Testes", url: "/testes", icon: FileText },
     ],
   },
