@@ -1,89 +1,109 @@
 // Service Worker - Match ATS
-const CACHE_NAME = 'match-ats-v1';
-const STATIC_CACHE = 'match-ats-static-v1';
-const DYNAMIC_CACHE = 'match-ats-dynamic-v1';
+// Nota: versão do cache incrementada para evitar "tela branca" por assets antigos.
+const CACHE_VERSION = 'v2';
+const STATIC_CACHE = `match-ats-static-${CACHE_VERSION}`;
+const DYNAMIC_CACHE = `match-ats-dynamic-${CACHE_VERSION}`;
 
-// Arquivos para cachear no install
-const STATIC_ASSETS = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/favicon.svg',
-  '/favicon.ico',
-];
+// Arquivos essenciais para offline fallback
+const STATIC_ASSETS = ['/', '/index.html', '/manifest.json', '/favicon.svg', '/favicon.ico'];
 
-// Install - cachear assets estáticos
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(STATIC_CACHE).then((cache) => {
-      console.log('[SW] Caching static assets');
+      // console.log('[SW] Caching static assets');
       return cache.addAll(STATIC_ASSETS);
     })
   );
   self.skipWaiting();
 });
 
-// Activate - limpar caches antigos
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((keys) => {
-      return Promise.all(
-        keys
-          .filter((key) => key !== STATIC_CACHE && key !== DYNAMIC_CACHE)
-          .map((key) => caches.delete(key))
-      );
-    })
+    caches.keys().then((keys) =>
+      Promise.all(keys.filter((key) => key !== STATIC_CACHE && key !== DYNAMIC_CACHE).map((key) => caches.delete(key)))
+    )
   );
   self.clients.claim();
 });
 
-// Fetch - estratégia Network First para API, Cache First para assets
+// Permite que o cliente force atualização imediata do SW
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+});
+
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
 
-  // Ignorar requisições não-GET
   if (request.method !== 'GET') return;
-
-  // Ignorar requisições para APIs externas
   if (url.origin !== location.origin) return;
 
-  // API requests - Network First
-  if (url.pathname.startsWith('/api') || url.pathname.includes('supabase')) {
+  // Navegações (SPA): sempre tentar rede primeiro para evitar HTML/JS desatualizado.
+  if (request.mode === 'navigate') {
     event.respondWith(networkFirst(request));
     return;
   }
 
-  // Assets estáticos - Cache First
+  // Assets buildados (hash): cache-first é ok; mas sempre revalida em segundo plano.
+  if (url.pathname.startsWith('/assets/')) {
+    event.respondWith(staleWhileRevalidate(request));
+    return;
+  }
+
+  // Demais recursos locais: cache-first conservador.
   event.respondWith(cacheFirst(request));
 });
 
-// Network First strategy
 async function networkFirst(request) {
   try {
     const response = await fetch(request);
-    const cache = await caches.open(DYNAMIC_CACHE);
-    cache.put(request, response.clone());
+    // Só cacheia respostas OK e documentos
+    if (response && response.ok) {
+      const cache = await caches.open(DYNAMIC_CACHE);
+      cache.put(request, response.clone());
+    }
     return response;
-  } catch (error) {
+  } catch (_error) {
     const cached = await caches.match(request);
-    return cached || new Response('Offline', { status: 503 });
+    if (cached) return cached;
+
+    // Fallback para app shell
+    const fallback = await caches.match('/index.html');
+    return fallback || new Response('Offline', { status: 503 });
   }
 }
 
-// Cache First strategy
 async function cacheFirst(request) {
   const cached = await caches.match(request);
   if (cached) return cached;
 
   try {
     const response = await fetch(request);
-    const cache = await caches.open(STATIC_CACHE);
-    cache.put(request, response.clone());
+    if (response && response.ok) {
+      const cache = await caches.open(STATIC_CACHE);
+      cache.put(request, response.clone());
+    }
     return response;
-  } catch (error) {
+  } catch (_error) {
     return new Response('Offline', { status: 503 });
   }
+}
+
+async function staleWhileRevalidate(request) {
+  const cached = await caches.match(request);
+  const fetchPromise = fetch(request)
+    .then(async (response) => {
+      if (response && response.ok) {
+        const cache = await caches.open(STATIC_CACHE);
+        cache.put(request, response.clone());
+      }
+      return response;
+    })
+    .catch(() => undefined);
+
+  return cached || (await fetchPromise) || new Response('Offline', { status: 503 });
 }
 
 // Background Sync para operações offline
@@ -94,7 +114,7 @@ self.addEventListener('sync', (event) => {
 });
 
 async function syncData() {
-  console.log('[SW] Syncing data...');
+  // console.log('[SW] Syncing data...');
   // Implementar sincronização de dados offline
 }
 
@@ -108,15 +128,12 @@ self.addEventListener('push', (event) => {
     vibrate: [200, 100, 200],
     data: data.url || '/',
   };
-  
-  event.waitUntil(
-    self.registration.showNotification(data.title || 'Match ATS', options)
-  );
+
+  event.waitUntil(self.registration.showNotification(data.title || 'Match ATS', options));
 });
 
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
-  event.waitUntil(
-    clients.openWindow(event.notification.data)
-  );
+  event.waitUntil(clients.openWindow(event.notification.data));
 });
+
