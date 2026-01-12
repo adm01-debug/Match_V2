@@ -1,1 +1,0 @@
-export { PerfilCargoForm } from './PerfilCargoForm';

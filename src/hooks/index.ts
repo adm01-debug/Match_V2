@@ -21,10 +21,6 @@ export { useDashboardData } from './useDashboardData';
 
 // Selection & Assessment Hooks
 export { useAssessments, useAssessment, useSubmitAssessment, useCandidateAssessments } from './useAssessments';
-export { useCompetencias, useCreateCompetencia, useValoresCulturais, useCreateValorCultural, usePerfisCargoByVaga, useCreatePerfilCargo, useUpdatePerfilCargo, useCreateCriterio, useDeleteCriterio } from './useCompetencias';
-export { useScorecards, useScorecard, useCreateScorecard, useUpdateScorecard, useGenerateScorecardAI, useCompareCandidates } from './useScorecards';
-export { useInterviewTemplates, useInterviewTemplate, useCreateInterviewTemplate, useUpdateInterviewTemplate, useDeleteInterviewTemplate, useAddTemplatePergunta, useUpdateTemplatePergunta, useDeleteTemplatePergunta, useSaveInterviewResponses, useInterviewResponses } from './useInterviewTemplates';
-export { useAutomationRules, useActiveAutomationRules, useCreateAutomationRule, useUpdateAutomationRule, useDeleteAutomationRule, useToggleAutomationRule, useAutomationLogs, useExecuteAutomationRule } from './useAutomationRules';
 
 // UI Hooks (re-exports from shadcn)
 export { useToast } from './use-toast';
