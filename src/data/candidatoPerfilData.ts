@@ -1,5 +1,9 @@
 /**
- * @fileoverview Candidato perfil mock data
+ * @fileoverview Candidato perfil types and mock data
+ * @module data/candidatoPerfilData
+ * 
+ * This file contains the UI-focused CandidatoPerfil interface used by
+ * presentation components. For the data-fetching version, see useCandidatoPerfil hook.
  */
 
 export interface ArquivoAnexo {
@@ -11,6 +15,14 @@ export interface ArquivoAnexo {
   url?: string;
 }
 
+/**
+ * UI-focused CandidatoPerfil interface for presentation components.
+ * Contains all fields needed for rendering candidate profile UI.
+ * 
+ * Note: The useCandidatoPerfil hook returns a different structure
+ * (CandidatoPerfilData) from the database. Components should use
+ * this interface for UI props, and transform data as needed.
+ */
 export interface CandidatoPerfil {
   id: string;
   nome: string;
@@ -61,6 +73,19 @@ export interface CandidatoPerfil {
   }>;
 }
 
+/**
+ * Default/empty CandidatoPerfil for fallback usage
+ */
+export const emptyCandidatoPerfil: CandidatoPerfil = {
+  id: '',
+  nome: '',
+  email: '',
+  arquivos: [],
+  skills: [],
+  certificacoes: [],
+  avaliacoes: [],
+};
+
 export const mockCandidatoPerfil: CandidatoPerfil = {
   id: '1',
   nome: 'Candidato Exemplo',
@@ -86,4 +111,4 @@ export const mockCandidatoPerfil: CandidatoPerfil = {
   historico: [],
 };
 
-export default { mockCandidatoPerfil };
+export default { mockCandidatoPerfil, emptyCandidatoPerfil };
