@@ -690,3 +690,142 @@ export interface FullBehavioralProfile {
   readonly scoreCompatibilidade?: number;
   readonly recomendacaoFinal: 'altamente_recomendado' | 'recomendado' | 'com_ressalvas' | 'nao_recomendado';
 }
+
+// ============================================================
+// Types for the Assessment System
+// ============================================================
+
+/** Interface for tool configuration */
+export interface BehavioralTool {
+  id: string;
+  name: string;
+  description: string;
+  color: string;
+  estimatedTime: number;
+  dimensions: string[];
+  questionCount: number;
+}
+
+/** Interface for questions */
+export interface BehavioralQuestion {
+  id: string;
+  toolId: string;
+  text: string;
+  dimension: string;
+  type: 'scale' | 'forced_choice' | 'situational' | 'ranking';
+  options?: {
+    text: string;
+    dimension: string;
+    score: number;
+  }[];
+  scaleLabels?: {
+    min: string;
+    max: string;
+  };
+}
+
+/** Interface for assessment results */
+export interface BehavioralResult {
+  toolId: string;
+  candidatoId?: string;
+  completedAt: string;
+  timeSpent: number;
+  scores: Record<string, number>;
+  primaryProfile: string;
+  secondaryProfile?: string;
+  rawAnswers: Record<string, number | string>;
+}
+
+/** Array of all 10 behavioral tools */
+export const BEHAVIORAL_TOOLS: BehavioralTool[] = [
+  {
+    id: 'disc',
+    name: 'DISC',
+    description: 'Avalia perfis comportamentais: Dominância, Influência, Estabilidade e Conformidade',
+    color: '#ef4444',
+    estimatedTime: 15,
+    dimensions: ['Dominância', 'Influência', 'Estabilidade', 'Conformidade'],
+    questionCount: 8,
+  },
+  {
+    id: 'vakd',
+    name: 'VAK/D',
+    description: 'Identifica sistemas representacionais: Visual, Auditivo, Cinestésico e Digital',
+    color: '#8b5cf6',
+    estimatedTime: 10,
+    dimensions: ['Visual', 'Auditivo', 'Cinestésico', 'Digital'],
+    questionCount: 6,
+  },
+  {
+    id: 'metaprograms',
+    name: 'Metaprogramas',
+    description: 'Mapeia padrões de processamento mental e tomada de decisão',
+    color: '#6366f1',
+    estimatedTime: 20,
+    dimensions: ['Aproximação', 'Referência', 'Opções', 'Escopo', 'Mudança', 'Iniciativa', 'Afiliação'],
+    questionCount: 8,
+  },
+  {
+    id: 'mental_triggers',
+    name: 'Gatilhos Mentais',
+    description: 'Avalia sensibilidade aos princípios de persuasão de Cialdini',
+    color: '#eab308',
+    estimatedTime: 12,
+    dimensions: ['Escassez', 'Autoridade', 'Prova Social', 'Reciprocidade', 'Compromisso', 'Afinidade'],
+    questionCount: 6,
+  },
+  {
+    id: 'sleight_of_mouth',
+    name: 'Sleight of Mouth',
+    description: 'Mede habilidade em padrões de reframe linguístico',
+    color: '#f97316',
+    estimatedTime: 15,
+    dimensions: ['Reframe', 'Consequência', 'Contra-exemplo', 'Redefinição', 'Meta-Frame'],
+    questionCount: 3,
+  },
+  {
+    id: 'emotional_states',
+    name: 'Estados Emocionais',
+    description: 'Avalia detecção e gestão de emoções e âncoras',
+    color: '#ec4899',
+    estimatedTime: 15,
+    dimensions: ['Autoconsciência', 'Gestão de Estados', 'Empatia', 'Ancoragem', 'Recuperação'],
+    questionCount: 6,
+  },
+  {
+    id: 'values',
+    name: 'Valores & Critérios',
+    description: 'Mapeia valores prioritários e critérios de decisão',
+    color: '#22c55e',
+    estimatedTime: 12,
+    dimensions: ['Autonomia', 'Reconhecimento', 'Segurança', 'Crescimento', 'Propósito'],
+    questionCount: 6,
+  },
+  {
+    id: 'emotional_intelligence',
+    name: 'Inteligência Emocional',
+    description: 'Avalia os 5 pilares de Goleman: autoconsciência, autorregulação, motivação, empatia e habilidades sociais',
+    color: '#06b6d4',
+    estimatedTime: 25,
+    dimensions: ['Autoconsciência', 'Autorregulação', 'Motivação', 'Empatia', 'Habilidades Sociais'],
+    questionCount: 10,
+  },
+  {
+    id: 'cognitive_biases',
+    name: 'Vieses Cognitivos',
+    description: 'Identifica padrões de pensamento e vieses na tomada de decisão',
+    color: '#f59e0b',
+    estimatedTime: 15,
+    dimensions: ['Confirmação', 'Ancoragem', 'Disponibilidade', 'Excesso de Confiança', 'Aversão à Perda'],
+    questionCount: 5,
+  },
+  {
+    id: 'rapport',
+    name: 'Rapport & Espelhamento',
+    description: 'Avalia habilidades de conexão, sintonia e espelhamento',
+    color: '#14b8a6',
+    estimatedTime: 10,
+    dimensions: ['Espelhamento Físico', 'Espelhamento Verbal', 'Escuta Ativa', 'Sintonia', 'Flexibilidade'],
+    questionCount: 6,
+  },
+];
