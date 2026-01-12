@@ -1030,11 +1030,9 @@ Migrations SQL para evolução do schema:
 | Arquivo | Conteúdo |
 |---------|----------|
 | `CONTRIBUTING.md` | Contribuição |
-| `CONTRIBUTING_GUIDELINES.md` | Guidelines |
 | `RELEASE-PROCESS.md` | Processo release |
 | `VERSIONING.md` | Versionamento |
 | `ROADMAP.md` | Roadmap |
-| `CHANGELOG.md` | Changelog |
 
 ### ADR (Architecture Decision Records)
 | Arquivo | Decisão |
@@ -1058,7 +1056,6 @@ Migrations SQL para evolução do schema:
 | `WEBHOOKS.md` | Webhooks |
 | `IP_WHITELIST.md` | Whitelist IP |
 | `SECURITY-CHECKLIST.md` | Checklist segurança |
-| `STYLE-GUIDE.md` | Guia estilo |
 | `STYLEGUIDE.md` | Style guide |
 | `PROJECT_TEMPLATE.md` | Template projeto |
 | `DEPENDENCIES_INSTALL.md` | Instalação deps |
