@@ -17,3 +17,4 @@ export {
   useRecentActions, 
   type RecentAction 
 } from './RecentActions';
+export { PredictiveSearch } from './PredictiveSearch';
