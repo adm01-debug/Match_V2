@@ -222,7 +222,6 @@ export const DNAJourneyExperience: React.FC<DNAJourneyExperienceProps> = ({
     adaptive: 50
   });
   const [showDNAPreview, setShowDNAPreview] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [gameResults, setGameResults] = useState<MiniGameResult[]>([]);
 
   const miniGames: Array<'value-tower' | 'reaction' | 'pressure' | 'emotional-radar'> = [
