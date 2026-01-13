@@ -227,6 +227,148 @@ export type Database = {
         }
         Relationships: []
       }
+      avaliacoes_comportamentais_resultados: {
+        Row: {
+          candidato_id: string | null
+          cenarios_pulados: number | null
+          cenarios_respondidos: number | null
+          consistencia_interna: number | null
+          created_at: string
+          duracao_total: number | null
+          finalizado_em: string | null
+          fit_geral: number | null
+          fit_por_pilar: Json | null
+          id: string
+          iniciado_em: string | null
+          ip_address: string | null
+          justificativa_fit: string | null
+          potencializadores: Json | null
+          processo_id: string | null
+          recomendacao: string | null
+          respostas: Json
+          respostas_socialmente_desejaveis: number | null
+          riscos: Json | null
+          score_adaptabilidade: number | null
+          score_colaboracao: number | null
+          score_comunicacao: number | null
+          score_geral: number | null
+          score_integridade: number | null
+          score_inteligencia_emocional: number | null
+          score_lideranca: number | null
+          score_orientacao_resultados: number | null
+          score_pensamento_critico: number | null
+          score_proatividade: number | null
+          score_resiliencia: number | null
+          status: string
+          tempo_medio_resposta: number | null
+          total_hesitacoes: number | null
+          updated_at: string
+          user_agent: string | null
+          vaga_id: string | null
+          variacao_tempo: number | null
+        }
+        Insert: {
+          candidato_id?: string | null
+          cenarios_pulados?: number | null
+          cenarios_respondidos?: number | null
+          consistencia_interna?: number | null
+          created_at?: string
+          duracao_total?: number | null
+          finalizado_em?: string | null
+          fit_geral?: number | null
+          fit_por_pilar?: Json | null
+          id?: string
+          iniciado_em?: string | null
+          ip_address?: string | null
+          justificativa_fit?: string | null
+          potencializadores?: Json | null
+          processo_id?: string | null
+          recomendacao?: string | null
+          respostas?: Json
+          respostas_socialmente_desejaveis?: number | null
+          riscos?: Json | null
+          score_adaptabilidade?: number | null
+          score_colaboracao?: number | null
+          score_comunicacao?: number | null
+          score_geral?: number | null
+          score_integridade?: number | null
+          score_inteligencia_emocional?: number | null
+          score_lideranca?: number | null
+          score_orientacao_resultados?: number | null
+          score_pensamento_critico?: number | null
+          score_proatividade?: number | null
+          score_resiliencia?: number | null
+          status?: string
+          tempo_medio_resposta?: number | null
+          total_hesitacoes?: number | null
+          updated_at?: string
+          user_agent?: string | null
+          vaga_id?: string | null
+          variacao_tempo?: number | null
+        }
+        Update: {
+          candidato_id?: string | null
+          cenarios_pulados?: number | null
+          cenarios_respondidos?: number | null
+          consistencia_interna?: number | null
+          created_at?: string
+          duracao_total?: number | null
+          finalizado_em?: string | null
+          fit_geral?: number | null
+          fit_por_pilar?: Json | null
+          id?: string
+          iniciado_em?: string | null
+          ip_address?: string | null
+          justificativa_fit?: string | null
+          potencializadores?: Json | null
+          processo_id?: string | null
+          recomendacao?: string | null
+          respostas?: Json
+          respostas_socialmente_desejaveis?: number | null
+          riscos?: Json | null
+          score_adaptabilidade?: number | null
+          score_colaboracao?: number | null
+          score_comunicacao?: number | null
+          score_geral?: number | null
+          score_integridade?: number | null
+          score_inteligencia_emocional?: number | null
+          score_lideranca?: number | null
+          score_orientacao_resultados?: number | null
+          score_pensamento_critico?: number | null
+          score_proatividade?: number | null
+          score_resiliencia?: number | null
+          status?: string
+          tempo_medio_resposta?: number | null
+          total_hesitacoes?: number | null
+          updated_at?: string
+          user_agent?: string | null
+          vaga_id?: string | null
+          variacao_tempo?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "avaliacoes_comportamentais_resultados_candidato_id_fkey"
+            columns: ["candidato_id"]
+            isOneToOne: false
+            referencedRelation: "candidatos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "avaliacoes_comportamentais_resultados_processo_id_fkey"
+            columns: ["processo_id"]
+            isOneToOne: false
+            referencedRelation: "processos_seletivos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "avaliacoes_comportamentais_resultados_vaga_id_fkey"
+            columns: ["vaga_id"]
+            isOneToOne: false
+            referencedRelation: "vagas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       bateria_provas_rel: {
         Row: {
           bateria_id: string
@@ -1341,6 +1483,83 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "perfis_cargo_vaga_id_fkey"
+            columns: ["vaga_id"]
+            isOneToOne: false
+            referencedRelation: "vagas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      perfis_comportamentais_empresa: {
+        Row: {
+          ativo: boolean | null
+          created_at: string
+          created_by: string | null
+          dealbreakers: Json | null
+          descricao: string | null
+          dimensoes_culturais: Json | null
+          id: string
+          nome: string
+          peso_adaptabilidade: number | null
+          peso_colaboracao: number | null
+          peso_comunicacao: number | null
+          peso_integridade: number | null
+          peso_inteligencia_emocional: number | null
+          peso_lideranca: number | null
+          peso_orientacao_resultados: number | null
+          peso_pensamento_critico: number | null
+          peso_proatividade: number | null
+          peso_resiliencia: number | null
+          updated_at: string
+          vaga_id: string | null
+        }
+        Insert: {
+          ativo?: boolean | null
+          created_at?: string
+          created_by?: string | null
+          dealbreakers?: Json | null
+          descricao?: string | null
+          dimensoes_culturais?: Json | null
+          id?: string
+          nome: string
+          peso_adaptabilidade?: number | null
+          peso_colaboracao?: number | null
+          peso_comunicacao?: number | null
+          peso_integridade?: number | null
+          peso_inteligencia_emocional?: number | null
+          peso_lideranca?: number | null
+          peso_orientacao_resultados?: number | null
+          peso_pensamento_critico?: number | null
+          peso_proatividade?: number | null
+          peso_resiliencia?: number | null
+          updated_at?: string
+          vaga_id?: string | null
+        }
+        Update: {
+          ativo?: boolean | null
+          created_at?: string
+          created_by?: string | null
+          dealbreakers?: Json | null
+          descricao?: string | null
+          dimensoes_culturais?: Json | null
+          id?: string
+          nome?: string
+          peso_adaptabilidade?: number | null
+          peso_colaboracao?: number | null
+          peso_comunicacao?: number | null
+          peso_integridade?: number | null
+          peso_inteligencia_emocional?: number | null
+          peso_lideranca?: number | null
+          peso_orientacao_resultados?: number | null
+          peso_pensamento_critico?: number | null
+          peso_proatividade?: number | null
+          peso_resiliencia?: number | null
+          updated_at?: string
+          vaga_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "perfis_comportamentais_empresa_vaga_id_fkey"
             columns: ["vaga_id"]
             isOneToOne: false
             referencedRelation: "vagas"
