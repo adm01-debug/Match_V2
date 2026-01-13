@@ -296,7 +296,7 @@ const TeamCard = memo(({
       <div className="mt-4 pt-4 border-t border-border/30">
         <div className="flex items-center justify-between">
           <div className="flex -space-x-2">
-            {team.members.slice(0, 4).map((member, idx) => (
+            {team.members.slice(0, 4).map((member) => (
               <Avatar key={member.id} className="h-8 w-8 border-2 border-background">
                 <AvatarImage src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${member.name.replace(' ', '')}`} />
                 <AvatarFallback className="text-xs">

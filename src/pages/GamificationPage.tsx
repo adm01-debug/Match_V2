@@ -12,7 +12,7 @@ import { XPToast } from "@/components/gamification/XPToast";
 import { GamificationOnboarding, useGamificationOnboarding } from "@/components/gamification/GamificationOnboarding";
 import { DailyChallenges } from "@/components/gamification/DailyChallenges";
 import { WeeklyMissions } from "@/components/gamification/WeeklyMissions";
-import { PowerUps } from "@/components/gamification/PowerUps";
+import { PowerUps, type PowerUpType } from "@/components/gamification/PowerUps";
 import { usePageTitle } from "@/hooks/usePageTitle";
 import { useGamification } from "@/hooks/useGamification";
 import { motion } from "framer-motion";
@@ -409,27 +409,27 @@ export default function GamificationPage() {
 
               <TabsContent value="challenges" className="mt-4">
                 <DailyChallenges
-                  onComplete={(xpEarned: number) => {
-                    addXP(xpEarned, 'daily_challenge');
-                    showXPToast(xpEarned, 'Desafio Diário!', 'bonus');
+                  onClaimReward={(_challengeId: string, xpAmount: number) => {
+                    addXP(xpAmount, 'daily_challenge');
+                    showXPToast(xpAmount, 'Desafio Diário!', 'bonus');
                   }}
                 />
               </TabsContent>
 
               <TabsContent value="missions" className="mt-4">
                 <WeeklyMissions
-                  onComplete={(xpEarned: number) => {
-                    addXP(xpEarned, 'weekly_mission');
-                    showXPToast(xpEarned, 'Missão Semanal!', 'large');
+                  onClaimReward={(_missionId: string, xpAmount: number) => {
+                    addXP(xpAmount, 'weekly_mission');
+                    showXPToast(xpAmount, 'Missão Semanal!', 'large');
                   }}
                 />
               </TabsContent>
 
               <TabsContent value="powerups" className="mt-4">
                 <PowerUps
-                  onActivate={(powerUp) => {
-                    toast.success(`${powerUp.name} Ativado!`, {
-                      description: powerUp.description,
+                  onActivatePowerUp={(_powerUpId: string, type: PowerUpType) => {
+                    toast.success(`Power-Up Ativado!`, {
+                      description: `${type} ativado com sucesso`,
                       icon: <Sparkles className="h-5 w-5 text-yellow-500" />
                     });
                   }}
