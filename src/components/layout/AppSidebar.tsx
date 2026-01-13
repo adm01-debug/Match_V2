@@ -66,6 +66,7 @@ const menuItems = [
       { title: "Agenda", url: "/agenda", icon: Calendar, tourId: "agenda" },
       { title: "Avaliações", url: "/avaliacoes", icon: ClipboardCheck },
       { title: "Comportamentais", url: "/avaliacoes-comportamentais", icon: Brain },
+      { title: "Avaliação Imersiva", url: "/avaliacao-comportamental", icon: Sparkles },
       { title: "Testes", url: "/testes", icon: FileText },
     ],
   },
