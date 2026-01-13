@@ -33,6 +33,7 @@ export {
 export { useToast } from './use-toast';
 export { useIsMobile } from './use-mobile';
 export { useDebounce } from './useDebounce';
+export { useFuzzySearch, FUZZY_PRESETS, type FuzzySearchOptions, type FuzzyResultItem, type FuseMatch, type UseFuzzySearchReturn } from './useFuzzySearch';
 
 // Auth & Security Hooks
 export { use2FA } from './use2FA';

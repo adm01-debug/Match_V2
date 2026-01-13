@@ -108,26 +108,7 @@ export function BehavioralResultsDashboard({
     }));
   }, [scores, companyProfile]);
 
-  // Dados para comparação (usado internamente)
-  const _comparisonData = useMemo(() => {
-    if (!companyProfile) return [];
-    
-    return BEHAVIORAL_PILLARS.map((pilar) => {
-      const candidatoScore = scores[pilar.id] || 0;
-      const empresaPeso = (companyProfile[pilar.id] || 5) * 10;
-      const gap = Math.abs(candidatoScore - empresaPeso);
-      
-      return {
-        pilar: pilar.nome.split(' ')[0],
-        fullName: pilar.nome,
-        candidato: candidatoScore,
-        empresa: empresaPeso,
-        gap,
-        cor: pilar.cor,
-      };
-    }).sort((a, b) => b.gap - a.gap);
-  }, [scores, companyProfile]);
-  void _comparisonData; // Suppress unused warning - reserved for future use
+  // Top 3 pilares
 
   // Top 3 pilares
   const topPilares = useMemo(() => {
