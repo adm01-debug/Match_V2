@@ -1,6 +1,6 @@
 /**
  * @module BehavioralAssessmentsPage
- * @description Página principal das 10 ferramentas comportamentais com gamificação
+ * @description Página principal das 10 ferramentas comportamentais com gamificação integrada
  */
 
 import { useState, useEffect } from 'react';
@@ -16,7 +16,7 @@ import {
   Brain, Eye, Lightbulb, Zap, MessageSquare, Heart, 
   Target, Sparkles, AlertTriangle, Users, Play,
   Trophy, Clock, CheckCircle2, ArrowRight, BarChart3,
-  Gamepad2, Star, Flame
+  Gamepad2, Star, Flame, Award, Crown
 } from 'lucide-react';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { BEHAVIORAL_TOOLS } from '@/types/behavioral';
@@ -24,6 +24,8 @@ import type { BehavioralResult, BehavioralTool } from '@/types/behavioral';
 import { BehavioralAssessmentPlayer } from '@/components/assessments/BehavioralAssessmentPlayer';
 import { BehavioralResultView } from '@/components/assessments/BehavioralResultView';
 import { useSaveBehavioralResult } from '@/hooks/useBehavioralAssessments';
+import { useBehavioralGamification } from '@/hooks/useBehavioralGamification';
+import { useGamification } from '@/hooks/useGamification';
 import { toast } from 'sonner';
 import { 
   GamifiedAssessmentEngine,
@@ -44,7 +46,6 @@ import {
   PERSONALITY_MINI_GAMES 
 } from '@/data/gamifiedAssessmentData';
 import { CHALLENGE_PHASES } from '@/data/phaseChallengeData';
-import { Award, Crown } from 'lucide-react';
 
 const TOOL_ICONS: Record<string, React.ReactNode> = {
   disc: <Brain className="h-6 w-6" />,
@@ -64,36 +65,60 @@ export default function BehavioralAssessmentsPage() {
   const [searchParams] = useSearchParams();
   const saveResult = useSaveBehavioralResult();
   
+  // Gamification hooks - integração com o sistema real
+  const {
+    completedToolIds,
+    completedCount,
+    totalTools,
+    totalBehavioralXP,
+    dailyCombo,
+    behavioralLevel,
+    nextBehavioralLevel,
+    levelProgress,
+    toolsWithGamification,
+    achievementsWithStatus,
+    unlockedCount,
+    totalAchievements,
+    completeAssessment: gamificationComplete,
+  } = useBehavioralGamification();
+
+  const {
+    xp: globalXP,
+    level: globalLevel,
+    streak,
+  } = useGamification();
+  
   const [activeTab, setActiveTab] = useState('gamified');
   const [selectedTool, setSelectedTool] = useState<string | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [completedResults, setCompletedResults] = useState<BehavioralResult[]>([]);
   const [viewingResult, setViewingResult] = useState<BehavioralResult | null>(null);
   
-  // Gamification states
+  // Gamification states - agora integrados com o hook
   const [gamifiedMode, setGamifiedMode] = useState<'quiz' | 'swipe' | 'minigame' | 'phases' | null>(null);
-  const [totalXP, setTotalXP] = useState(0);
-  const [earnedBadges, setEarnedBadges] = useState<string[]>([]);
-  const [streak, setStreak] = useState(0);
 
-  // Demo leaderboard data
+  // Demo leaderboard data - usando dados reais onde possível
   const leaderboardUsers: LeaderboardUser[] = [
     { id: '1', name: 'Ana Silva', score: 2450, streak: 7, achievements: 12 },
     { id: '2', name: 'Carlos Mendes', score: 2100, streak: 5, achievements: 10 },
     { id: '3', name: 'Beatriz Santos', score: 1850, streak: 3, achievements: 8 },
     { id: '4', name: 'Diego Oliveira', score: 1600, streak: 4, achievements: 7 },
     { id: '5', name: 'Elena Costa', score: 1450, streak: 2, achievements: 6 },
-    { id: 'current', name: 'Você', score: totalXP, streak, achievements: earnedBadges.length },
+    { id: 'current', name: 'Você', score: globalXP, streak, achievements: unlockedCount },
   ];
 
-  // Demo achievements
-  const demoAchievements: Achievement[] = [
-    { id: 'first-quiz', title: 'Primeiro Quiz', description: 'Complete seu primeiro quiz', icon: Award, tier: 'bronze', category: 'milestone', unlockedAt: totalXP > 0 ? new Date() : undefined },
-    { id: 'value-master', title: 'Mestre dos Valores', description: 'Complete o swipe de valores', icon: Heart, tier: 'silver', category: 'milestone', unlockedAt: earnedBadges.includes('Mestre dos Valores') ? new Date() : undefined, progress: totalXP > 50 ? 100 : 50, maxProgress: 100 },
-    { id: 'speed-demon', title: 'Velocista', description: 'Responda 5 perguntas em menos de 3 segundos', icon: Zap, tier: 'gold', category: 'speed', progress: Math.min(streak, 5), maxProgress: 5 },
-    { id: 'perfectionist', title: 'Perfeccionista', description: 'Complete todas as fases com 100%', icon: Crown, tier: 'platinum', category: 'quality' },
-    { id: 'all-rounder', title: 'Completo', description: 'Complete todos os tipos de assessment', icon: Target, tier: 'diamond', category: 'milestone', progress: gamifiedMode ? 1 : 0, maxProgress: 4 },
-  ];
+  // Achievements integrados com o sistema real
+  const demoAchievements: Achievement[] = achievementsWithStatus.slice(0, 5).map(a => ({
+    id: a.id,
+    title: a.title,
+    description: a.description,
+    icon: a.tier === 'diamond' ? Crown : a.tier === 'gold' ? Star : Award,
+    tier: a.tier,
+    category: 'milestone' as const,
+    unlockedAt: a.isUnlocked ? new Date() : undefined,
+    progress: a.isUnlocked ? 100 : 0,
+    maxProgress: 100,
+  }));
 
   // Handle URL parameter to start specific tool
   useEffect(() => {
@@ -110,6 +135,13 @@ export default function BehavioralAssessmentsPage() {
 
   const handleCompleteAssessment = async (result: BehavioralResult) => {
     const tool = BEHAVIORAL_TOOLS.find(t => t.id === result.toolId);
+    
+    // Integração com gamificação - calcular e dar XP
+    const avgScore = Object.values(result.scores).length > 0
+      ? Object.values(result.scores).reduce((a, b) => a + b, 0) / Object.values(result.scores).length
+      : 0;
+    
+    await gamificationComplete(result.toolId, result.timeSpent, result.scores);
     
     // Save to database
     try {
@@ -138,14 +170,14 @@ export default function BehavioralAssessmentsPage() {
     setSelectedTool(null);
   };
 
-  const completedToolIds = completedResults.map(r => r.toolId);
-  const progressPercentage = (completedToolIds.length / BEHAVIORAL_TOOLS.length) * 100;
+  // Usar dados do hook de gamificação para progresso
+  const progressPercentage = (completedCount / totalTools) * 100;
 
-  // Gamification handlers
+  // Gamification handlers - agora integrados com useGamification
+  const { addXP, unlockAchievement } = useGamification();
+  
   const handleGamifiedComplete = (_answers: Record<string, unknown>, stats: { totalXP: number; badges: string[]; comboMax: number; fastAnswers: number; timeElapsed: number; accuracy: number }) => {
-    setTotalXP(prev => prev + stats.totalXP);
-    setEarnedBadges(prev => [...new Set([...prev, ...stats.badges])]);
-    setStreak(prev => Math.max(prev, stats.comboMax));
+    addXP(stats.totalXP, 'gamified_quiz');
     setGamifiedMode(null);
     toast.success(`+${stats.totalXP} XP ganhos!`, {
       description: stats.badges.length > 0 ? `Novas conquistas: ${stats.badges.join(', ')}` : undefined
@@ -154,22 +186,21 @@ export default function BehavioralAssessmentsPage() {
 
   const handleSwipeComplete = (liked: string[], _passed: string[], superLiked: string[]) => {
     const xpEarned = liked.length * 10 + superLiked.length * 25;
-    setTotalXP(prev => prev + xpEarned);
+    addXP(xpEarned, 'swipe_values');
     setGamifiedMode(null);
     toast.success(`Valores mapeados! +${xpEarned} XP`);
   };
 
   const handleMiniGameComplete = (_results: Array<{ gameId: string; selectedOption: string; responseTime: number; earnedXP: number; trait?: string }>, xp: number) => {
-    setTotalXP(prev => prev + xp);
-    setStreak(prev => prev + 1);
+    addXP(xp, 'mini_game');
     setGamifiedMode(null);
     toast.success(`Mini-game completo! +${xp} XP`);
   };
 
   const handlePhaseComplete = (results: PhaseResult[]) => {
     const xpEarned = results.reduce((sum, r) => sum + r.xpEarned, 0);
-    setTotalXP(prev => prev + xpEarned);
-    setEarnedBadges(prev => [...new Set([...prev, 'Desafiador'])]);
+    addXP(xpEarned, 'phase_challenge');
+    unlockAchievement('phase_challenger');
     setGamifiedMode(null);
     toast.success(`Desafios completos! +${xpEarned} XP`);
   };
@@ -294,7 +325,7 @@ export default function BehavioralAssessmentsPage() {
                 <CardContent className="p-4 flex items-center gap-3">
                   <Star className="h-8 w-8 text-yellow-500" />
                   <div>
-                    <div className="text-2xl font-bold">{totalXP}</div>
+                    <div className="text-2xl font-bold">{totalBehavioralXP}</div>
                     <div className="text-sm text-muted-foreground">XP Total</div>
                   </div>
                 </CardContent>
@@ -303,7 +334,7 @@ export default function BehavioralAssessmentsPage() {
                 <CardContent className="p-4 flex items-center gap-3">
                   <Trophy className="h-8 w-8 text-purple-500" />
                   <div>
-                    <div className="text-2xl font-bold">{earnedBadges.length}</div>
+                    <div className="text-2xl font-bold">{unlockedCount}</div>
                     <div className="text-sm text-muted-foreground">Conquistas</div>
                   </div>
                 </CardContent>
@@ -312,7 +343,7 @@ export default function BehavioralAssessmentsPage() {
                 <CardContent className="p-4 flex items-center gap-3">
                   <Flame className="h-8 w-8 text-orange-500" />
                   <div>
-                    <div className="text-2xl font-bold">{streak}x</div>
+                    <div className="text-2xl font-bold">{dailyCombo}x</div>
                     <div className="text-sm text-muted-foreground">Combo</div>
                   </div>
                 </CardContent>
@@ -552,25 +583,25 @@ export default function BehavioralAssessmentsPage() {
                         <Star className="h-6 w-6" />
                       </div>
                       <div>
-                        <h3 className="font-bold">Nível {Math.floor(totalXP / 500) + 1}</h3>
+                        <h3 className="font-bold">{behavioralLevel?.icon} {behavioralLevel?.title}</h3>
                         <p className="text-sm text-muted-foreground">
-                          {totalXP % 500}/500 XP para o próximo nível
+                          {completedCount}/{totalTools} ferramentas completas
                         </p>
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="text-2xl font-bold text-primary">{totalXP} XP</div>
+                      <div className="text-2xl font-bold text-primary">{totalBehavioralXP} XP</div>
                       <p className="text-sm text-muted-foreground">Total acumulado</p>
                     </div>
                   </div>
-                  <Progress value={(totalXP % 500) / 5} className="h-3" />
+                  <Progress value={levelProgress} className="h-3" />
                   
-                  {earnedBadges.length > 0 && (
+                  {unlockedCount > 0 && (
                     <div className="mt-4 flex flex-wrap gap-2">
-                      {earnedBadges.map((badge, i) => (
-                        <Badge key={i} variant="outline" className="gap-1">
+                      {achievementsWithStatus.filter(a => a.isUnlocked).slice(0, 5).map((achievement) => (
+                        <Badge key={achievement.id} variant="outline" className="gap-1">
                           <Trophy className="h-3 w-3 text-yellow-500" />
-                          {badge}
+                          {achievement.title}
                         </Badge>
                       ))}
                     </div>
