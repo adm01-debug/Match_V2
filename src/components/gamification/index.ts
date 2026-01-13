@@ -57,3 +57,9 @@ export { InteractiveXPCard, XPStatCard, XPActionCard } from "./MicroInteractionC
 export { DailyChallenges, type DailyChallenge, type ChallengeType, type ChallengeDifficulty } from "./DailyChallenges";
 export { WeeklyMissions, type WeeklyMission, type MissionTier } from "./WeeklyMissions";
 export { PowerUps, type PowerUp, type PowerUpType } from "./PowerUps";
+
+// Phase 3 - Social & Competition
+export { RealtimeLeaderboard, type LeaderboardEntry as RealtimeLeaderboardEntry } from "./RealtimeLeaderboard";
+export { AchievementProfile } from "./AchievementProfile";
+export { TeamCompetition, type Team, type TeamMember } from "./TeamCompetition";
+export { GiftBadge, type GiftableBadge, type Colleague, type GiftHistory } from "./GiftBadge";

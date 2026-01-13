@@ -10,10 +10,14 @@ import { GamificationDashboard } from "@/components/gamification/GamificationDas
 import { LevelUpCelebration } from "@/components/gamification/LevelUpCelebration";
 import { XPToast } from "@/components/gamification/XPToast";
 import { GamificationOnboarding, useGamificationOnboarding } from "@/components/gamification/GamificationOnboarding";
+import { DailyChallenges } from "@/components/gamification/DailyChallenges";
+import { WeeklyMissions } from "@/components/gamification/WeeklyMissions";
+import { PowerUps } from "@/components/gamification/PowerUps";
 import { usePageTitle } from "@/hooks/usePageTitle";
 import { useGamification } from "@/hooks/useGamification";
 import { motion } from "framer-motion";
-import { Trophy, Award, Flame, Gamepad2, Brain, Heart, Layers, ArrowLeft, Sparkles, Zap, Star } from "lucide-react";
+import { Trophy, Award, Flame, Gamepad2, Brain, Heart, Layers, ArrowLeft, Sparkles, Zap, Star, Target, Calendar, Rocket } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -375,6 +379,63 @@ export default function GamificationPage() {
                 </motion.div>
               ))}
             </div>
+          </motion.div>
+
+          {/* PHASE 2: Daily Challenges, Weekly Missions & Power-Ups */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="space-y-4"
+          >
+            <Tabs defaultValue="challenges" className="w-full">
+              <TabsList className="grid w-full grid-cols-3 bg-card/50 backdrop-blur-sm">
+                <TabsTrigger value="challenges" className="gap-2">
+                  <Target className="h-4 w-4" />
+                  <span className="hidden sm:inline">Desafios Diários</span>
+                  <span className="sm:hidden">Diários</span>
+                </TabsTrigger>
+                <TabsTrigger value="missions" className="gap-2">
+                  <Calendar className="h-4 w-4" />
+                  <span className="hidden sm:inline">Missões Semanais</span>
+                  <span className="sm:hidden">Semanais</span>
+                </TabsTrigger>
+                <TabsTrigger value="powerups" className="gap-2">
+                  <Rocket className="h-4 w-4" />
+                  <span className="hidden sm:inline">Power-Ups</span>
+                  <span className="sm:hidden">Power</span>
+                </TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="challenges" className="mt-4">
+                <DailyChallenges
+                  onComplete={(xpEarned: number) => {
+                    addXP(xpEarned, 'daily_challenge');
+                    showXPToast(xpEarned, 'Desafio Diário!', 'bonus');
+                  }}
+                />
+              </TabsContent>
+
+              <TabsContent value="missions" className="mt-4">
+                <WeeklyMissions
+                  onComplete={(xpEarned: number) => {
+                    addXP(xpEarned, 'weekly_mission');
+                    showXPToast(xpEarned, 'Missão Semanal!', 'large');
+                  }}
+                />
+              </TabsContent>
+
+              <TabsContent value="powerups" className="mt-4">
+                <PowerUps
+                  onActivate={(powerUp) => {
+                    toast.success(`${powerUp.name} Ativado!`, {
+                      description: powerUp.description,
+                      icon: <Sparkles className="h-5 w-5 text-yellow-500" />
+                    });
+                  }}
+                />
+              </TabsContent>
+            </Tabs>
           </motion.div>
 
           {/* Gamification Dashboard */}
