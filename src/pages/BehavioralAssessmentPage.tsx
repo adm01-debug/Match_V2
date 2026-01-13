@@ -3,7 +3,7 @@
  * Sistema completo de avaliação baseado nos 10 pilares do comportamento
  */
 
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Layout } from '@/components/layout/Layout';
@@ -25,12 +25,12 @@ import {
   type PredictiveFitAnalysis,
   type AuthenticityMetrics
 } from '@/config/behavioralPillars';
+import { useBehavioralAssessment } from '@/hooks/useBehavioralAssessmentResults';
 import { 
   Brain, 
   Play, 
   Target, 
   Building2, 
-  Users, 
   BarChart3,
   Sparkles,
   ChevronRight,
@@ -43,7 +43,9 @@ import {
   Shuffle,
   Rocket,
   MessageCircle,
-  Heart
+  Heart,
+  Users,
+  Loader2
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -67,11 +69,19 @@ export default function BehavioralAssessmentPage() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('avaliar');
   
+  // Hook para salvar no banco de dados
+  const { 
+    isLoading: isSaving, 
+    completeAssessment,
+  } = useBehavioralAssessment();
+  
   // Estado da avaliação
   const [phase, setPhase] = useState<AssessmentPhase>('intro');
   const [currentScenarioIndex, setCurrentScenarioIndex] = useState(0);
   const [responses, setResponses] = useState<ScenarioResponse[]>([]);
+  const [skippedCount, setSkippedCount] = useState(0);
   const [companyProfile, setCompanyProfile] = useState<CompanyProfile | null>(null);
+  const [hasSavedResults, setHasSavedResults] = useState(false);
   
   // Cenários selecionados (podemos randomizar ou filtrar)
   const scenarios = useMemo(() => {
@@ -234,6 +244,7 @@ export default function BehavioralAssessmentPage() {
   }, [currentScenarioIndex, scenarios.length]);
 
   const handleSkipScenario = useCallback(() => {
+    setSkippedCount(prev => prev + 1);
     if (currentScenarioIndex < scenarios.length - 1) {
       setCurrentScenarioIndex(prev => prev + 1);
     } else {
@@ -245,11 +256,35 @@ export default function BehavioralAssessmentPage() {
     setPhase('assessment');
     setCurrentScenarioIndex(0);
     setResponses([]);
+    setSkippedCount(0);
+    setHasSavedResults(false);
   };
 
   const handleSaveCompanyProfile = (profile: CompanyProfile) => {
     setCompanyProfile(profile);
   };
+  
+  // Salvar resultados quando a avaliação for concluída
+  useEffect(() => {
+    if (phase === 'results' && responses.length > 0 && !hasSavedResults) {
+      const saveResults = async () => {
+        try {
+          await completeAssessment(
+            calculatedScores,
+            responses,
+            authenticityMetrics,
+            predictiveFit,
+            responses.length,
+            skippedCount
+          );
+          setHasSavedResults(true);
+        } catch (error) {
+          console.error('Erro ao salvar resultados:', error);
+        }
+      };
+      saveResults();
+    }
+  }, [phase, responses, calculatedScores, authenticityMetrics, predictiveFit, skippedCount, hasSavedResults, completeAssessment]);
 
   // Render assessment phase
   if (phase === 'assessment') {
@@ -283,12 +318,26 @@ export default function BehavioralAssessmentPage() {
             predictiveFit={predictiveFit}
           />
           
+          {isSaving && (
+            <div className="flex items-center justify-center gap-2 text-muted-foreground">
+              <Loader2 className="h-4 w-4 animate-spin" />
+              <span>Salvando resultados...</span>
+            </div>
+          )}
+          
+          {hasSavedResults && (
+            <div className="flex items-center justify-center gap-2 text-emerald-600">
+              <CheckCircle2 className="h-4 w-4" />
+              <span>Resultados salvos com sucesso!</span>
+            </div>
+          )}
+          
           <div className="flex justify-center gap-4">
             <Button variant="outline" onClick={() => setPhase('intro')}>
               Nova Avaliação
             </Button>
-            <Button onClick={() => navigate('/candidatos')}>
-              Voltar para Candidatos
+            <Button onClick={() => navigate('/talentos')}>
+              Voltar para Talentos
             </Button>
           </div>
         </div>
