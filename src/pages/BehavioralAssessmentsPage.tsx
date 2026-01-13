@@ -75,7 +75,6 @@ export default function BehavioralAssessmentsPage() {
     behavioralLevel,
     nextBehavioralLevel,
     levelProgress,
-    toolsWithGamification,
     achievementsWithStatus,
     unlockedCount,
     totalAchievements,
@@ -84,7 +83,6 @@ export default function BehavioralAssessmentsPage() {
 
   const {
     xp: globalXP,
-    level: globalLevel,
     streak,
   } = useGamification();
   
@@ -137,10 +135,6 @@ export default function BehavioralAssessmentsPage() {
     const tool = BEHAVIORAL_TOOLS.find(t => t.id === result.toolId);
     
     // Integração com gamificação - calcular e dar XP
-    const avgScore = Object.values(result.scores).length > 0
-      ? Object.values(result.scores).reduce((a, b) => a + b, 0) / Object.values(result.scores).length
-      : 0;
-    
     await gamificationComplete(result.toolId, result.timeSpent, result.scores);
     
     // Save to database
@@ -568,44 +562,127 @@ export default function BehavioralAssessmentsPage() {
               </Card>
             </div>
 
-            {/* XP Progress */}
+            {/* XP Progress & Level Card */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
               className="mt-8"
             >
-              <Card className="bg-gradient-to-r from-primary/5 to-primary/10">
-                <CardContent className="py-6">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 rounded-xl bg-primary text-primary-foreground">
-                        <Star className="h-6 w-6" />
-                      </div>
-                      <div>
-                        <h3 className="font-bold">{behavioralLevel?.icon} {behavioralLevel?.title}</h3>
-                        <p className="text-sm text-muted-foreground">
-                          {completedCount}/{totalTools} ferramentas completas
-                        </p>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-2xl font-bold text-primary">{totalBehavioralXP} XP</div>
-                      <p className="text-sm text-muted-foreground">Total acumulado</p>
-                    </div>
-                  </div>
-                  <Progress value={levelProgress} className="h-3" />
+              <Card className="bg-gradient-to-r from-primary/5 via-primary/10 to-purple-500/10 overflow-hidden">
+                <CardContent className="py-6 relative">
+                  {/* Background decoration */}
+                  <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-primary/10 to-transparent rounded-full -translate-y-1/2 translate-x-1/2" />
                   
-                  {unlockedCount > 0 && (
-                    <div className="mt-4 flex flex-wrap gap-2">
-                      {achievementsWithStatus.filter(a => a.isUnlocked).slice(0, 5).map((achievement) => (
-                        <Badge key={achievement.id} variant="outline" className="gap-1">
-                          <Trophy className="h-3 w-3 text-yellow-500" />
-                          {achievement.title}
-                        </Badge>
-                      ))}
+                  <div className="relative">
+                    <div className="flex items-center justify-between mb-6">
+                      <div className="flex items-center gap-4">
+                        <div className="relative">
+                          <div className="p-3 rounded-2xl bg-gradient-to-br from-primary to-primary/70 text-primary-foreground shadow-lg">
+                            <Crown className="h-8 w-8" />
+                          </div>
+                          <div className="absolute -bottom-1 -right-1 bg-background rounded-full px-2 py-0.5 text-xs font-bold border shadow-sm">
+                            Lv.{behavioralLevel?.level || 1}
+                          </div>
+                        </div>
+                        <div>
+                          <h3 className="text-xl font-bold flex items-center gap-2">
+                            <span className="text-2xl">{behavioralLevel?.icon}</span> 
+                            {behavioralLevel?.title}
+                          </h3>
+                          <p className="text-sm text-muted-foreground">
+                            {completedCount}/{totalTools} ferramentas completas
+                          </p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-3xl font-bold bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent">
+                          {totalBehavioralXP} XP
+                        </div>
+                        <p className="text-sm text-muted-foreground">Total acumulado</p>
+                      </div>
                     </div>
-                  )}
+                    
+                    {/* Progress to next level */}
+                    <div className="space-y-2">
+                      <div className="flex justify-between text-sm">
+                        <span className="text-muted-foreground">Progresso para próximo nível</span>
+                        {nextBehavioralLevel ? (
+                          <span className="font-medium">
+                            {nextBehavioralLevel.icon} {nextBehavioralLevel.title} 
+                            <span className="text-muted-foreground ml-1">
+                              ({nextBehavioralLevel.minAssessments - completedCount} restantes)
+                            </span>
+                          </span>
+                        ) : (
+                          <span className="font-medium text-yellow-500">Nível Máximo! 🎉</span>
+                        )}
+                      </div>
+                      <div className="relative">
+                        <Progress value={levelProgress} className="h-4" />
+                        <div className="absolute inset-0 flex items-center justify-center text-xs font-medium">
+                          {Math.round(levelProgress)}%
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Unlocked Achievements */}
+                    {unlockedCount > 0 && (
+                      <div className="mt-6 pt-4 border-t">
+                        <div className="flex items-center justify-between mb-3">
+                          <h4 className="text-sm font-semibold flex items-center gap-2">
+                            <Trophy className="h-4 w-4 text-yellow-500" />
+                            Conquistas Desbloqueadas ({unlockedCount}/{totalAchievements})
+                          </h4>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {achievementsWithStatus.filter(a => a.isUnlocked).map((achievement) => (
+                            <motion.div
+                              key={achievement.id}
+                              initial={{ scale: 0 }}
+                              animate={{ scale: 1 }}
+                              transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                            >
+                              <Badge 
+                                className={`gap-1.5 py-1.5 px-3 ${
+                                  achievement.tier === 'diamond' 
+                                    ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white border-0' 
+                                    : achievement.tier === 'gold'
+                                    ? 'bg-gradient-to-r from-yellow-500 to-amber-500 text-white border-0'
+                                    : achievement.tier === 'silver'
+                                    ? 'bg-gradient-to-r from-gray-400 to-gray-500 text-white border-0'
+                                    : 'bg-gradient-to-r from-amber-600 to-amber-700 text-white border-0'
+                                }`}
+                              >
+                                {achievement.tier === 'diamond' ? <Crown className="h-3.5 w-3.5" /> :
+                                 achievement.tier === 'gold' ? <Star className="h-3.5 w-3.5" /> :
+                                 <Award className="h-3.5 w-3.5" />}
+                                {achievement.title}
+                              </Badge>
+                            </motion.div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                    
+                    {/* Locked achievements teaser */}
+                    {unlockedCount < totalAchievements && (
+                      <div className="mt-4 p-3 rounded-lg bg-muted/50 flex items-center gap-3">
+                        <div className="p-2 rounded-lg bg-muted">
+                          <Trophy className="h-5 w-5 text-muted-foreground" />
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-sm font-medium">
+                            {totalAchievements - unlockedCount} conquistas bloqueadas
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            Complete mais assessments para desbloquear!
+                          </p>
+                        </div>
+                        <ArrowRight className="h-4 w-4 text-muted-foreground" />
+                      </div>
+                    )}
+                  </div>
                 </CardContent>
               </Card>
             </motion.div>
