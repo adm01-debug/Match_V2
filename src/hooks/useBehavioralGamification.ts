@@ -1,12 +1,17 @@
 /**
  * @fileoverview Hook para integrar gamificação com assessments comportamentais
  * @module useBehavioralGamification
+ * 
+ * Este hook integra os 10 Pilares Comportamentais com o sistema de XP, conquistas e níveis.
+ * Persiste dados localmente e sincroniza com Supabase quando autenticado.
  */
 
 import { useState, useCallback, useEffect, useMemo } from 'react';
 import { toast } from 'sonner';
 import { useGamification } from './useGamification';
 import { useGamificationTriggers } from './useGamificationTriggers';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
 import { 
   BEHAVIORAL_XP_REWARDS, 
   BEHAVIORAL_ACHIEVEMENTS,
@@ -39,24 +44,61 @@ const defaultState: BehavioralGamificationState = {
 export function useBehavioralGamification() {
   const { addXP, unlockAchievement } = useGamification();
   const { onAssessmentCompleto, isAuthenticated } = useGamificationTriggers();
+  const { user } = useAuth();
   
   const [state, setState] = useState<BehavioralGamificationState>(defaultState);
   const [isLoaded, setIsLoaded] = useState(false);
   const [newAchievements, setNewAchievements] = useState<BehavioralAchievement[]>([]);
 
-  // Load state from localStorage
+  // Load state from localStorage and sync with DB if authenticated
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        setState({ ...defaultState, ...parsed });
+    const loadState = async () => {
+      try {
+        // First load from localStorage
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          setState({ ...defaultState, ...parsed });
+        }
+
+        // If authenticated, sync from database
+        if (user?.id) {
+          const { data: dbResults } = await supabase
+            .from('behavioral_assessment_results')
+            .select('tool_id, time_spent, score, created_at')
+            .not('completed_at', 'is', null);
+
+          if (dbResults && dbResults.length > 0) {
+            const dbToolIds = dbResults.map(r => r.tool_id);
+            const dbAssessmentResults = dbResults.map(r => ({
+              toolId: r.tool_id,
+              timeSpent: r.time_spent || 0,
+              score: r.score || 0,
+              completedAt: r.created_at,
+            }));
+
+            // Merge DB data with localStorage (DB takes precedence for completion status)
+            setState(prev => {
+              const mergedToolIds = [...new Set([...prev.completedToolIds, ...dbToolIds])];
+              const existingResultIds = new Set(prev.assessmentResults.map(r => r.toolId));
+              const newResults = dbAssessmentResults.filter(r => !existingResultIds.has(r.toolId));
+              
+              return {
+                ...prev,
+                completedToolIds: mergedToolIds,
+                assessmentResults: [...prev.assessmentResults, ...newResults],
+              };
+            });
+          }
+        }
+      } catch (error) {
+        console.error('Error loading behavioral gamification state:', error);
       }
-    } catch (error) {
-      console.error('Error loading behavioral gamification state:', error);
-    }
-    setIsLoaded(true);
-  }, []);
+      setIsLoaded(true);
+    };
+
+    loadState();
+  }, [user?.id]);
 
   // Save state to localStorage
   const saveState = useCallback((newState: Partial<BehavioralGamificationState>) => {

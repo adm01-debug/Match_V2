@@ -1,6 +1,13 @@
 /**
- * @fileoverview Hook para gerenciar resultados de avaliações comportamentais
- * Salva, atualiza e busca resultados no banco de dados
+ * @fileoverview Hook para gerenciar resultados de avaliações comportamentais imersivas
+ * @module useBehavioralAssessmentResults
+ * 
+ * Este hook gerencia a tabela avaliacoes_comportamentais_resultados para
+ * os 10 Pilares Comportamentais (avaliação imersiva com cenários).
+ * 
+ * DIFERENÇA IMPORTANTE:
+ * - useBehavioralAssessments.ts → tabela behavioral_assessment_results (10 ferramentas DISC, VAK, etc)
+ * - useBehavioralAssessmentResults.ts → tabela avaliacoes_comportamentais_resultados (pilares imersivos)
  */
 
 import { useState } from 'react';
