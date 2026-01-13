@@ -72,58 +72,13 @@ export function ImmersiveScenarioPlayer({
   const tipoInfo = tipoLabels[scenario.tipo] || tipoLabels['dilema_etico'];
   const TipoIcon = tipoInfo?.icon || AlertTriangle;
 
-  // Timer countdown
-  useEffect(() => {
-    if (!isTimerActive || phase === 'transitioning') return;
-
-    const interval = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev <= 1) {
-          // Tempo esgotado - força seleção ou usa primeira opção
-          if (selectedOption) {
-            handleConfirm();
-          } else if (scenario.opcoes[0]) {
-            setSelectedOption(scenario.opcoes[0].id);
-            setTimeout(() => handleConfirm(), 500);
-          }
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(interval);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isTimerActive, phase, selectedOption]);
-
-  // Track read time
-  useEffect(() => {
-    if (phase === 'narrative' && !firstInteractionRef.current) {
-      const interval = setInterval(() => {
-        readTimeRef.current += 100;
-      }, 100);
-      return () => clearInterval(interval);
-    }
-    return undefined;
-  }, [phase]);
-
   const handleOptionInteraction = useCallback(() => {
     if (!firstInteractionRef.current) {
       firstInteractionRef.current = true;
     }
   }, []);
 
-  const handleOptionSelect = (optionId: string) => {
-    handleOptionInteraction();
-    
-    if (previousSelectionRef.current && previousSelectionRef.current !== optionId) {
-      setHesitations((prev) => prev + 1);
-    }
-    previousSelectionRef.current = optionId;
-    setSelectedOption(optionId);
-  };
-
-  const handleConfirm = () => {
+  const handleConfirm = useCallback(() => {
     if (!selectedOption) return;
 
     const timeToRespond = Date.now() - startTimeRef.current;
@@ -150,6 +105,50 @@ export function ImmersiveScenarioPlayer({
     setTimeout(() => {
       onComplete(response);
     }, 800);
+  }, [selectedOption, scenario.followUp, scenario.id, followUpResponse, hesitations, onComplete]);
+
+  // Timer countdown
+  useEffect(() => {
+    if (!isTimerActive || phase === 'transitioning') return;
+
+    const interval = setInterval(() => {
+      setTimeLeft((prev) => {
+        if (prev <= 1) {
+          // Tempo esgotado - força seleção ou usa primeira opção
+          if (selectedOption) {
+            handleConfirm();
+          } else if (scenario.opcoes[0]) {
+            setSelectedOption(scenario.opcoes[0].id);
+            setTimeout(() => handleConfirm(), 500);
+          }
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [isTimerActive, phase, selectedOption, handleConfirm, scenario.opcoes]);
+
+  // Track read time
+  useEffect(() => {
+    if (phase === 'narrative' && !firstInteractionRef.current) {
+      const interval = setInterval(() => {
+        readTimeRef.current += 100;
+      }, 100);
+      return () => clearInterval(interval);
+    }
+    return undefined;
+  }, [phase]);
+
+  const handleOptionSelect = (optionId: string) => {
+    handleOptionInteraction();
+    
+    if (previousSelectionRef.current && previousSelectionRef.current !== optionId) {
+      setHesitations((prev) => prev + 1);
+    }
+    previousSelectionRef.current = optionId;
+    setSelectedOption(optionId);
   };
 
   const startScenario = () => {
