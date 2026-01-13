@@ -62,3 +62,9 @@ export { useOptimisticUpdate } from './useOptimisticUpdate';
 // Performance Hooks
 export { useIntersectionObserver, useInfiniteScroll, useLazyImage } from './useIntersectionObserver';
 export { useVirtualScroll, useVirtualGrid } from './useVirtualScroll';
+
+// UI/UX Enhancement Hooks
+export { useKeyboardShortcuts } from './useKeyboardShortcuts';
+export { usePullToRefresh } from './usePullToRefresh';
+export { useFocusTrap } from './useFocusTrap';
+export { useSwipeGesture } from './useSwipeGesture';
