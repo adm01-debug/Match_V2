@@ -104,6 +104,7 @@ export function ImmersiveScenarioPlayer({
       }, 100);
       return () => clearInterval(interval);
     }
+    return undefined;
   }, [phase]);
 
   const handleOptionInteraction = useCallback(() => {
