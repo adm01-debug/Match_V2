@@ -1,5 +1,6 @@
 import { usePageTitle } from '@/hooks/usePageTitle';
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
+import { useFuzzySearch, FUZZY_PRESETS } from '@/hooks/useFuzzySearch';
 import { useSearchParams } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { supabase } from "@/integrations/supabase/client";
@@ -132,10 +133,20 @@ export default function ComunicacaoPage() {
     }
   };
 
-  const comunicacoesFiltradas = comunicacoes.filter(c => 
-    searchQuery === "" ||
-    c.assunto.toLowerCase().includes(searchQuery.toLowerCase())
+  // Busca fuzzy com Fuse.js
+  const { results: fuzzyResults } = useFuzzySearch(
+    comunicacoes,
+    [
+      { name: 'assunto', weight: 2 },
+      { name: 'conteudo', weight: 1 },
+    ],
+    searchQuery,
+    { ...FUZZY_PRESETS.default }
   );
+
+  const comunicacoesFiltradas = useMemo(() => {
+    return searchQuery ? fuzzyResults : comunicacoes;
+  }, [comunicacoes, fuzzyResults, searchQuery]);
 
   const statusStyles: Record<string, { icon: React.ComponentType<{ className?: string }>; color: string }> = {
     enviado: { icon: CheckCircle2, color: "text-green-500" },

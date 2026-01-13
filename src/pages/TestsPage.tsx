@@ -1,5 +1,6 @@
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState, useMemo } from "react";
+import { useFuzzySearch, FUZZY_PRESETS } from '@/hooks/useFuzzySearch';
 import { useNavigate } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { useProvas, useDeleteProva, useDuplicateProva } from "@/hooks/useProvas";
@@ -63,16 +64,29 @@ export default function TestsPage() {
   const [filtroNivel, setFiltroNivel] = useState<string>("todos");
   const [activeTab, setActiveTab] = useState("provas");
 
+  // Busca fuzzy com Fuse.js
+  const { results: fuzzyResults } = useFuzzySearch(
+    provas,
+    [
+      { name: 'titulo', weight: 2 },
+      { name: 'descricao', weight: 1 },
+      { name: 'categoria', weight: 1 },
+      { name: 'tags', weight: 0.5 },
+    ],
+    searchQuery,
+    { ...FUZZY_PRESETS.default }
+  );
+
   // Filtrar provas
   const provasFiltradas = useMemo(() => {
-    return provas.filter(p => {
-      if (searchQuery && !p.titulo.toLowerCase().includes(searchQuery.toLowerCase())) return false;
+    const baseProvas = searchQuery ? fuzzyResults : provas;
+    return baseProvas.filter(p => {
       if (filtroCategoria !== "todas" && p.categoria !== filtroCategoria) return false;
       // Filter by niveisAplicaveis array
       if (filtroNivel !== "todos" && !p.niveisAplicaveis?.includes(filtroNivel as NivelCargo)) return false;
       return true;
     });
-  }, [provas, searchQuery, filtroCategoria, filtroNivel]);
+  }, [provas, fuzzyResults, searchQuery, filtroCategoria, filtroNivel]);
 
   // Estatísticas
   const stats = useMemo(() => {

@@ -3,7 +3,8 @@
  * @module KeyboardShortcuts
  */
 
-import { memo, useState, useEffect, useCallback, ReactNode } from 'react';
+import { memo, useState, useEffect, useCallback, ReactNode, useMemo } from 'react';
+import { useFuzzySearch, FUZZY_PRESETS } from '@/hooks/useFuzzySearch';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { 
@@ -64,15 +65,25 @@ export const KeyboardShortcutsOverlay = memo(function KeyboardShortcutsOverlay({
   // Group shortcuts by category
   const categories = [...new Set(shortcuts.map(s => s.category))];
 
-  const filteredShortcuts = shortcuts.filter(shortcut => {
-    const matchesSearch = searchQuery === '' ||
-      shortcut.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      shortcut.keys.join(' ').toLowerCase().includes(searchQuery.toLowerCase());
-    
-    const matchesCategory = !activeCategory || shortcut.category === activeCategory;
-    
-    return matchesSearch && matchesCategory;
-  });
+  // Busca fuzzy com Fuse.js
+  const { results: fuzzyResults } = useFuzzySearch(
+    shortcuts,
+    [
+      { name: 'description', weight: 2 },
+      { name: 'keys', weight: 1 },
+      { name: 'category', weight: 0.5 },
+    ],
+    searchQuery,
+    { ...FUZZY_PRESETS.loose }
+  );
+
+  const filteredShortcuts = useMemo(() => {
+    const baseShortcuts = searchQuery ? fuzzyResults : shortcuts;
+    return baseShortcuts.filter(shortcut => {
+      const matchesCategory = !activeCategory || shortcut.category === activeCategory;
+      return matchesCategory;
+    });
+  }, [shortcuts, fuzzyResults, searchQuery, activeCategory]);
 
   const groupedShortcuts = categories.reduce((acc, category) => {
     const categoryShortcuts = filteredShortcuts.filter(s => s.category === category);

@@ -1,7 +1,8 @@
 /**
  * Command Center - Central de Ações Rápidas com IA
  */
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
+import { useFuzzySearch, FUZZY_PRESETS } from '@/hooks/useFuzzySearch';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -166,10 +167,20 @@ export function CommandCenter({ onAction }: CommandCenterProps) {
     },
   ];
 
-  const filteredActions = quickActions.filter(
-    action =>
-      action.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      action.description.toLowerCase().includes(searchQuery.toLowerCase())
+  // Busca fuzzy com Fuse.js
+  const { results: fuzzyResults } = useFuzzySearch(
+    quickActions,
+    [
+      { name: 'label', weight: 2 },
+      { name: 'description', weight: 1 },
+    ],
+    searchQuery,
+    { ...FUZZY_PRESETS.loose }
+  );
+
+  const filteredActions = useMemo(() => 
+    searchQuery ? fuzzyResults : quickActions,
+    [quickActions, fuzzyResults, searchQuery]
   );
 
   const groupedActions = {

@@ -1,7 +1,8 @@
-import { Suspense } from 'react';
+import { Suspense, useMemo } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState, useEffect } from 'react';
+import { useFuzzySearch, FUZZY_PRESETS } from '@/hooks/useFuzzySearch';
 import { Layout } from '@/components/layout/Layout';
 import { useAuth, AppRole } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
@@ -193,11 +194,20 @@ const AdminPage = () => {
     setSaving(false);
   };
 
-  const filteredUsers = users.filter(
-    (u) =>
-      u.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      u.email.toLowerCase().includes(searchTerm.toLowerCase())
+  // Busca fuzzy com Fuse.js
+  const { results: fuzzyResults } = useFuzzySearch(
+    users,
+    [
+      { name: 'nome', weight: 2 },
+      { name: 'email', weight: 1.5 },
+    ],
+    searchTerm,
+    { ...FUZZY_PRESETS.default }
   );
+
+  const filteredUsers = useMemo(() => {
+    return searchTerm ? fuzzyResults : users;
+  }, [users, fuzzyResults, searchTerm]);
 
   const getInitials = (nome: string) => {
     return nome

@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
+import { useFuzzySearch, FUZZY_PRESETS } from '@/hooks/useFuzzySearch';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { usePageTitle } from '@/hooks/usePageTitle';
@@ -124,10 +125,20 @@ export default function RolesPage() {
     },
   });
 
-  const filteredUsers = users?.filter(user => 
-    user.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    user.email.toLowerCase().includes(searchTerm.toLowerCase())
+  // Busca fuzzy com Fuse.js
+  const { results: fuzzyResults } = useFuzzySearch(
+    users || [],
+    [
+      { name: 'nome', weight: 2 },
+      { name: 'email', weight: 1.5 },
+    ],
+    searchTerm,
+    { ...FUZZY_PRESETS.default }
   );
+
+  const filteredUsers = useMemo(() => {
+    return searchTerm ? fuzzyResults : (users || []);
+  }, [users, fuzzyResults, searchTerm]);
 
   const availableRoles = (user: UserWithRoles): AppRole[] => {
     const allRoles: AppRole[] = ['admin', 'rh', 'gestor'];
