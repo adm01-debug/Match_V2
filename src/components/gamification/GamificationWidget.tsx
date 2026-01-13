@@ -1,9 +1,10 @@
 /**
  * @fileoverview Compact Gamification Widget for Dashboard
  * Shows streak, next achievements, and ranking position
+ * Now uses real data from useGamification hook with demo fallback
  */
 
-import { memo } from "react";
+import { memo, useMemo } from "react";
 import { motion } from "framer-motion";
 import { 
   Trophy, 
@@ -20,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { useNavigate } from "react-router-dom";
 import { ProgressRing } from "./ProgressRing";
+import { useGamification } from "@/hooks/useGamification";
 
 interface GamificationWidgetProps {
   className?: string;
@@ -29,32 +31,50 @@ export const GamificationWidget = memo(function GamificationWidget({
   className,
 }: GamificationWidgetProps) {
   const navigate = useNavigate();
+  
+  // Get real data from gamification hook
+  const { 
+    xp, 
+    level, 
+    streak, 
+    currentLevel, 
+    nextLevel,
+    achievements
+  } = useGamification();
 
-  // Demo data - in production, this would come from a hook
-  const userData = {
-    level: 12,
-    currentXP: 7200,
-    requiredXP: 10000,
-    streak: 12,
-    rank: 6,
-    rankChange: 1,
-    nextAchievements: [
-      { 
-        id: "talent-hunter", 
-        title: "Caçador de Talentos", 
-        progress: 70,
-        icon: Target 
-      },
-      { 
-        id: "speed-demon", 
-        title: "Velocista", 
-        progress: 85,
-        icon: Zap 
-      },
-    ],
-  };
+  // Calculate required XP for next level
+  const requiredXP = useMemo(() => {
+    return nextLevel?.minXP || (currentLevel?.maxXP || 10000);
+  }, [nextLevel, currentLevel]);
 
-  const xpProgress = Math.round((userData.currentXP / userData.requiredXP) * 100);
+  // Calculate rank based on XP (simplified - in real app would come from leaderboard)
+  const estimatedRank = useMemo(() => {
+    if (xp >= 12000) return 1;
+    if (xp >= 10000) return 2;
+    if (xp >= 8000) return 3;
+    if (xp >= 6000) return 4;
+    if (xp >= 4000) return 5;
+    if (xp >= 2000) return 6;
+    return 7;
+  }, [xp]);
+
+  // Demo data for achievements (hybrid approach)
+  const nextAchievements = useMemo(() => [
+    { 
+      id: "talent-hunter", 
+      title: "Caçador de Talentos", 
+      progress: Math.min(100, Math.round((achievements.length / 10) * 100) + 30),
+      icon: Target 
+    },
+    { 
+      id: "speed-demon", 
+      title: "Velocista", 
+      progress: Math.min(100, 50 + level * 5),
+      icon: Zap 
+    },
+  ], [achievements.length, level]);
+
+  const xpProgress = Math.round((xp / requiredXP) * 100);
 
   return (
     <Card 
@@ -91,20 +111,20 @@ export const GamificationWidget = memo(function GamificationWidget({
         {/* Level & XP */}
         <div className="flex items-center gap-4">
           <ProgressRing
-            value={userData.currentXP}
-            max={userData.requiredXP}
+            value={xp}
+            max={requiredXP}
             size="sm"
             color="primary"
             showValue={false}
           >
-            <span className="text-sm font-bold">{userData.level}</span>
+            <span className="text-sm font-bold">{level}</span>
           </ProgressRing>
           
           <div className="flex-1">
             <div className="flex items-center justify-between mb-1">
-              <span className="text-sm font-medium">Nível {userData.level}</span>
+              <span className="text-sm font-medium">Nível {level}</span>
               <span className="text-xs text-muted-foreground">
-                {userData.currentXP.toLocaleString()} / {userData.requiredXP.toLocaleString()} XP
+                {xp.toLocaleString()} / {requiredXP.toLocaleString()} XP
               </span>
             </div>
             <Progress value={xpProgress} className="h-2" />
@@ -119,13 +139,13 @@ export const GamificationWidget = memo(function GamificationWidget({
             whileHover={{ scale: 1.02 }}
           >
             <motion.div
-              animate={{ scale: [1, 1.2, 1] }}
+              animate={streak >= 3 ? { scale: [1, 1.2, 1] } : {}}
               transition={{ duration: 1, repeat: Infinity }}
             >
-              <Flame className="h-5 w-5 text-orange-500" />
+              <Flame className={cn("h-5 w-5", streak >= 7 ? "text-orange-500" : streak >= 3 ? "text-amber-500" : "text-muted-foreground")} />
             </motion.div>
             <div>
-              <p className="text-lg font-bold">{userData.streak}</p>
+              <p className="text-lg font-bold">{streak}</p>
               <p className="text-xs text-muted-foreground">dias seguidos</p>
             </div>
           </motion.div>
@@ -138,10 +158,9 @@ export const GamificationWidget = memo(function GamificationWidget({
             <Star className="h-5 w-5 text-success" />
             <div>
               <div className="flex items-center gap-1">
-                <p className="text-lg font-bold">#{userData.rank}</p>
+                <p className="text-lg font-bold">#{estimatedRank}</p>
                 <span className="text-xs text-success flex items-center">
                   <TrendingUp className="h-3 w-3" />
-                  +{userData.rankChange}
                 </span>
               </div>
               <p className="text-xs text-muted-foreground">no ranking</p>
@@ -152,7 +171,7 @@ export const GamificationWidget = memo(function GamificationWidget({
         {/* Next Achievements */}
         <div className="space-y-2">
           <p className="text-xs font-medium text-muted-foreground">Próximas conquistas</p>
-          {userData.nextAchievements.map((achievement) => (
+          {nextAchievements.map((achievement) => (
             <motion.div
               key={achievement.id}
               className="flex items-center gap-3 p-2 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors cursor-pointer"

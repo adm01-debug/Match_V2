@@ -1,9 +1,11 @@
 /**
  * @fileoverview Complete Gamification Dashboard component
  * @module GamificationDashboard
+ * 
+ * Now uses real data from useGamification hook with fallback to demo data
  */
 
-import { memo, useState } from "react";
+import { memo, useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { 
   Trophy, 
@@ -30,6 +32,7 @@ import {
 import { ProgressRing, LevelProgress } from "./ProgressRing";
 import { StreakDisplay, StreakCalendar } from "./StreakDisplay";
 import { Leaderboard, type LeaderboardUser } from "./Leaderboard";
+import { useGamification } from "@/hooks/useGamification";
 
 // Demo data
 const demoAchievements: Achievement[] = [
@@ -151,14 +154,81 @@ export const GamificationDashboard = memo(function GamificationDashboard({
 }: GamificationDashboardProps) {
   const [showUnlock, setShowUnlock] = useState(false);
   const [selectedAchievement] = useState<Achievement | null>(null);
+  
+  // Get real data from gamification hook
+  const { 
+    xp, 
+    level, 
+    streak, 
+    achievements: userAchievements,
+    currentLevel,
+    nextLevel,
+  } = useGamification();
 
-  const unlockedAchievements = demoAchievements.filter(a => a.unlockedAt);
-  const inProgressAchievements = demoAchievements.filter(a => !a.unlockedAt && a.progress);
-  const lockedAchievements = demoAchievements.filter(a => !a.unlockedAt && !a.progress);
+  // Calculate XP required for next level
+  const requiredXP = useMemo(() => {
+    return nextLevel?.minXP || (currentLevel?.maxXP || 10000);
+  }, [nextLevel, currentLevel]);
+
+  // Generate streak days based on real streak
+  const realStreakDays = useMemo(() => {
+    const days: Date[] = [];
+    const today = new Date();
+    for (let i = 0; i < streak; i++) {
+      const date = new Date(today);
+      date.setDate(date.getDate() - i);
+      days.push(date);
+    }
+    return days;
+  }, [streak]);
+
+  // Merge real achievements with demo achievements for hybrid display
+  const mergedAchievements = useMemo(() => {
+    return demoAchievements.map(achievement => {
+      // Check if user has unlocked this achievement
+      const isUnlockedByUser = userAchievements.includes(achievement.id);
+      if (isUnlockedByUser && !achievement.unlockedAt) {
+        return { ...achievement, unlockedAt: new Date() };
+      }
+      return achievement;
+    });
+  }, [userAchievements]);
+
+  const unlockedAchievements = mergedAchievements.filter(a => a.unlockedAt);
+  const inProgressAchievements = mergedAchievements.filter(a => !a.unlockedAt && a.progress);
+  const lockedAchievements = mergedAchievements.filter(a => !a.unlockedAt && !a.progress);
+
+  // Calculate current user rank based on XP
+  const currentUserRank = useMemo(() => {
+    const sortedUsers = demoLeaderboard.map(user => {
+      if (user.id === 'current') {
+        return { ...user, score: xp };
+      }
+      return user;
+    }).sort((a, b) => b.score - a.score);
+    
+    const userIndex = sortedUsers.findIndex(u => u.id === 'current');
+    return userIndex + 1;
+  }, [xp]);
+
+  // Update demo leaderboard with current user's real data
+  const updatedLeaderboard = useMemo(() => {
+    return demoLeaderboard.map(user => {
+      if (user.id === 'current') {
+        return {
+          ...user,
+          score: xp,
+          streak: streak,
+          achievements: unlockedAchievements.length,
+        };
+      }
+      return user;
+    }).sort((a, b) => b.score - a.score);
+  }, [xp, streak, unlockedAchievements.length]);
 
   return (
     <div className={cn("space-y-6", className)}>
-      {/* Header Stats */}
+      {/* Header Stats - Now using real data */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -169,12 +239,12 @@ export const GamificationDashboard = memo(function GamificationDashboard({
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Nível Atual</p>
-                  <p className="text-3xl font-bold">12</p>
-                  <p className="text-xs text-primary">Recrutador Expert</p>
+                  <p className="text-3xl font-bold">{level}</p>
+                  <p className="text-xs text-primary">{currentLevel?.title || 'Iniciante'}</p>
                 </div>
                 <ProgressRing
-                  value={7200}
-                  max={10000}
+                  value={xp}
+                  max={requiredXP}
                   size="md"
                   color="primary"
                   showValue={false}
@@ -196,14 +266,16 @@ export const GamificationDashboard = memo(function GamificationDashboard({
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Streak Atual</p>
-                  <p className="text-3xl font-bold">12 dias</p>
-                  <p className="text-xs text-orange-500">🔥 Em chamas!</p>
+                  <p className="text-3xl font-bold">{streak} dias</p>
+                  <p className="text-xs text-orange-500">
+                    {streak >= 7 ? '🔥 Em chamas!' : streak >= 3 ? '🌟 Continuando!' : '✨ Comece agora!'}
+                  </p>
                 </div>
                 <motion.div
-                  animate={{ scale: [1, 1.1, 1] }}
+                  animate={streak >= 3 ? { scale: [1, 1.1, 1] } : {}}
                   transition={{ duration: 1, repeat: Infinity }}
                 >
-                  <Flame className="w-10 h-10 text-orange-500" />
+                  <Flame className={cn("w-10 h-10", streak >= 7 ? "text-orange-500" : streak >= 3 ? "text-amber-500" : "text-muted-foreground")} />
                 </motion.div>
               </div>
             </CardContent>
@@ -239,10 +311,10 @@ export const GamificationDashboard = memo(function GamificationDashboard({
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Ranking</p>
-                  <p className="text-3xl font-bold">#6</p>
+                  <p className="text-3xl font-bold">#{currentUserRank}</p>
                   <p className="text-xs text-success flex items-center gap-1">
                     <TrendingUp className="w-3 h-3" />
-                    Subiu 1 posição
+                    Continue jogando!
                   </p>
                 </div>
                 <Medal className="w-10 h-10 text-success" />
@@ -266,9 +338,9 @@ export const GamificationDashboard = memo(function GamificationDashboard({
             </CardHeader>
             <CardContent>
               <LevelProgress
-                level={12}
-                currentXP={7200}
-                requiredXP={10000}
+                level={level}
+                currentXP={xp}
+                requiredXP={requiredXP}
                 title="Nível"
               />
             </CardContent>
@@ -276,8 +348,8 @@ export const GamificationDashboard = memo(function GamificationDashboard({
 
           {/* Streak Display */}
           <StreakDisplay
-            currentStreak={12}
-            longestStreak={45}
+            currentStreak={streak}
+            longestStreak={Math.max(streak, 45)} // Fallback to demo longest streak
             streakType="days"
             lastActivity={new Date()}
             variant="card"
@@ -289,7 +361,7 @@ export const GamificationDashboard = memo(function GamificationDashboard({
               <CardTitle className="text-sm">Histórico de Atividade</CardTitle>
             </CardHeader>
             <CardContent>
-              <StreakCalendar streakDays={generateStreakDays()} />
+              <StreakCalendar streakDays={realStreakDays.length > 0 ? realStreakDays : generateStreakDays()} />
             </CardContent>
           </Card>
         </div>
@@ -320,7 +392,7 @@ export const GamificationDashboard = memo(function GamificationDashboard({
 
                 <TabsContent value="all" className="mt-4">
                   <AchievementGrid
-                    achievements={demoAchievements}
+                    achievements={mergedAchievements}
                     size="md"
                     columns={4}
                   />
@@ -355,7 +427,7 @@ export const GamificationDashboard = memo(function GamificationDashboard({
 
           {/* Leaderboard */}
           <Leaderboard
-            users={demoLeaderboard}
+            users={updatedLeaderboard}
             currentUserId="current"
             title="Ranking Mensal"
             showRankChange

@@ -2370,6 +2370,90 @@ export type Database = {
         }
         Relationships: []
       }
+      user_achievements: {
+        Row: {
+          achievement_id: string
+          id: string
+          unlocked_at: string
+          user_id: string
+          xp_earned: number | null
+        }
+        Insert: {
+          achievement_id: string
+          id?: string
+          unlocked_at?: string
+          user_id: string
+          xp_earned?: number | null
+        }
+        Update: {
+          achievement_id?: string
+          id?: string
+          unlocked_at?: string
+          user_id?: string
+          xp_earned?: number | null
+        }
+        Relationships: []
+      }
+      user_badges: {
+        Row: {
+          badge_id: string
+          earned_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          badge_id: string
+          earned_at?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          badge_id?: string
+          earned_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_gamification: {
+        Row: {
+          created_at: string
+          id: string
+          last_active_date: string | null
+          level: number
+          longest_streak: number
+          streak: number
+          total_actions: number
+          updated_at: string
+          user_id: string
+          xp: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          last_active_date?: string | null
+          level?: number
+          longest_streak?: number
+          streak?: number
+          total_actions?: number
+          updated_at?: string
+          user_id: string
+          xp?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          last_active_date?: string | null
+          level?: number
+          longest_streak?: number
+          streak?: number
+          total_actions?: number
+          updated_at?: string
+          user_id?: string
+          xp?: number
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string | null
@@ -2565,11 +2649,56 @@ export type Database = {
         }
         Relationships: []
       }
+      xp_transactions: {
+        Row: {
+          action: string
+          amount: number
+          created_at: string
+          description: string | null
+          id: string
+          multiplier: number | null
+          user_id: string
+        }
+        Insert: {
+          action: string
+          amount: number
+          created_at?: string
+          description?: string | null
+          id?: string
+          multiplier?: number | null
+          user_id: string
+        }
+        Update: {
+          action?: string
+          amount?: number
+          created_at?: string
+          description?: string | null
+          id?: string
+          multiplier?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      add_user_xp: {
+        Args: {
+          p_action: string
+          p_amount: number
+          p_description?: string
+          p_multiplier?: number
+          p_user_id: string
+        }
+        Returns: {
+          leveled_up: boolean
+          new_level: number
+          new_xp: number
+        }[]
+      }
+      calculate_level_from_xp: { Args: { xp_amount: number }; Returns: number }
       cleanup_old_login_attempts: { Args: never; Returns: undefined }
       cleanup_old_logs: { Args: never; Returns: undefined }
       get_user_permissions: {
@@ -2596,6 +2725,13 @@ export type Database = {
         Returns: boolean
       }
       is_hr_staff: { Args: { _user_id: string }; Returns: boolean }
+      update_user_streak: {
+        Args: { p_user_id: string }
+        Returns: {
+          new_streak: number
+          streak_bonus: number
+        }[]
+      }
     }
     Enums: {
       app_role: "admin" | "rh" | "gestor"

@@ -1,11 +1,13 @@
 /**
  * @fileoverview Dedicated Gamification Page
  * Shows achievements, levels, streaks, and leaderboard
+ * Now with LevelUpCelebration integration
  */
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { GamificationDashboard } from "@/components/gamification/GamificationDashboard";
+import { LevelUpCelebration } from "@/components/gamification/LevelUpCelebration";
 import { usePageTitle } from "@/hooks/usePageTitle";
 import { useGamification } from "@/hooks/useGamification";
 import { motion } from "framer-motion";
@@ -67,7 +69,12 @@ const GAME_CARDS = [
 export default function GamificationPage() {
   usePageTitle('Conquistas');
   const [gamifiedMode, setGamifiedMode] = useState<GamifiedMode>(null);
-  const { addXP, level, streak, xp } = useGamification();
+  const { addXP, level, streak, xp, levelUpData, clearLevelUp, updateStreak } = useGamification();
+
+  // Update streak on page load
+  useEffect(() => {
+    updateStreak();
+  }, [updateStreak]);
 
   const handleGameComplete = (xpAmount: number) => {
     addXP(xpAmount, 'game');
@@ -331,6 +338,16 @@ export default function GamificationPage() {
           <GamificationDashboard />
         </motion.div>
       </div>
+
+      {/* Level Up Celebration Modal */}
+      {levelUpData && (
+        <LevelUpCelebration
+          isVisible={!!levelUpData}
+          oldLevel={levelUpData.oldLevel}
+          newLevel={levelUpData.newLevel}
+          onClose={clearLevelUp}
+        />
+      )}
     </Layout>
   );
 }
