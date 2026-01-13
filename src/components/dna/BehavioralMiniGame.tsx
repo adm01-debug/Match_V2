@@ -282,6 +282,8 @@ export const PressureGame: React.FC<MiniGameProps> = ({ onComplete }) => {
   };
   
   const scenario = PRESSURE_SCENARIOS[currentIndex];
+  
+  if (!scenario) return null;
 
   return (
     <div className="max-w-lg mx-auto space-y-6">
@@ -357,7 +359,10 @@ export const EmotionalRadarGame: React.FC<MiniGameProps> = ({ onComplete }) => {
   const [showResult, setShowResult] = useState<'correct' | 'wrong' | null>(null);
   
   const handleAnswer = (answer: string) => {
-    const isCorrect = answer === EMOTIONS[currentIndex].emotion;
+    const currentEmotion = EMOTIONS[currentIndex];
+    if (!currentEmotion) return;
+    
+    const isCorrect = answer === currentEmotion.emotion;
     if (isCorrect) setCorrect(c => c + 1);
     setShowResult(isCorrect ? 'correct' : 'wrong');
     
@@ -380,6 +385,8 @@ export const EmotionalRadarGame: React.FC<MiniGameProps> = ({ onComplete }) => {
   };
   
   const emotion = EMOTIONS[currentIndex];
+  
+  if (!emotion) return null;
 
   return (
     <div className="max-w-lg mx-auto space-y-6">

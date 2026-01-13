@@ -222,6 +222,8 @@ export const DNAJourneyExperience: React.FC<DNAJourneyExperienceProps> = ({
     adaptive: 50
   });
   const [showDNAPreview, setShowDNAPreview] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [gameResults, setGameResults] = useState<MiniGameResult[]>([]);
 
   const miniGames: Array<'value-tower' | 'reaction' | 'pressure' | 'emotional-radar'> = [
     'value-tower',
@@ -293,6 +295,11 @@ export const DNAJourneyExperience: React.FC<DNAJourneyExperienceProps> = ({
     const archetype = determineArchetype(helixScores);
     const archetypeData = DNA_ARCHETYPES.find(a => a.id === archetype);
 
+    // Calculate average game performance for ideal environment description
+    const avgGameScore = gameResults.length > 0 
+      ? gameResults.reduce((sum, r) => sum + r.score, 0) / gameResults.length 
+      : 50;
+
     return {
       id: `${participantType}-${Date.now()}`,
       type: participantType,
@@ -303,11 +310,11 @@ export const DNAJourneyExperience: React.FC<DNAJourneyExperienceProps> = ({
       strengths: archetypeData?.strengths || [],
       challenges: archetypeData?.challenges || [],
       idealEnvironment: archetypeData 
-        ? `Ambiente que valoriza ${archetypeData.name.toLowerCase()} e permite expressão autêntica`
+        ? `Ambiente que valoriza ${archetypeData.name.toLowerCase()} e permite expressão autêntica${avgGameScore >= 70 ? ', com ritmo dinâmico e desafios constantes' : ''}`
         : 'Ambiente colaborativo e desafiador',
       completedAt: new Date().toISOString()
     };
-  }, [helixScores, participantType, participantName]);
+  }, [helixScores, participantType, participantName, gameResults]);
 
   const handleComplete = useCallback(() => {
     const profile = buildProfile();
@@ -414,6 +421,12 @@ export const DNAJourneyExperience: React.FC<DNAJourneyExperienceProps> = ({
   // Scenario Phase
   if (phase === 'scenario') {
     const scenario = JOURNEY_SCENARIOS[currentScenarioIndex];
+    
+    if (!scenario) {
+      setPhase('minigame');
+      return null;
+    }
+    
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
         {/* Progress Header */}
@@ -474,6 +487,13 @@ export const DNAJourneyExperience: React.FC<DNAJourneyExperienceProps> = ({
 
   // Mini-game Phase
   if (phase === 'minigame') {
+    const currentGameType = miniGames[currentGameIndex];
+    
+    if (!currentGameType) {
+      setPhase('results');
+      return null;
+    }
+    
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 pt-20 p-4">
         {/* Progress Header */}
@@ -487,7 +507,7 @@ export const DNAJourneyExperience: React.FC<DNAJourneyExperienceProps> = ({
         </div>
 
         <MiniGameSelector
-          gameType={miniGames[currentGameIndex]}
+          gameType={currentGameType}
           onComplete={handleGameComplete}
         />
       </div>
