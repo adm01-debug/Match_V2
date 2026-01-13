@@ -1,7 +1,8 @@
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { useFuzzySearch, FUZZY_PRESETS } from '@/hooks/useFuzzySearch';
+import { useFuzzySearch, FUZZY_PRESETS, FuseMatch } from '@/hooks/useFuzzySearch';
+import { HighlightMatch, getMatchIndices } from '@/components/ui/highlight-match';
 import { motion, AnimatePresence } from "framer-motion";
 import { Layout } from "@/components/layout/Layout";
 import { useProcessosSeletivos, useUpdateProcessoEtapa } from "@/hooks/useProcessosSeletivos";
@@ -171,15 +172,20 @@ export default function Pipeline() {
   );
 
   // Busca fuzzy com Fuse.js
-  const { results: fuzzyResults } = useFuzzySearch(
+  const { results: fuzzyResults, matchesMap } = useFuzzySearch(
     processosPorVaga,
     [
       { name: 'candidatoNome', weight: 2 },
       { name: 'vagaTitulo', weight: 1 },
     ],
     searchQuery,
-    { ...FUZZY_PRESETS.default }
+    { ...FUZZY_PRESETS.default, includeMatches: true }
   );
+
+  // Helper para obter índices de match de um processo
+  const getMatchesForProcesso = (processoId: string): readonly FuseMatch[] | undefined => {
+    return matchesMap.get(processoId);
+  };
 
   // Processos filtrados
   const processosFiltrados = searchQuery ? fuzzyResults : processosPorVaga;
@@ -537,12 +543,19 @@ export default function Pipeline() {
                                               "font-semibold truncate group-hover:text-primary transition-colors",
                                               isCompact ? "text-xs" : "text-sm"
                                             )}>
-                                              {processo.candidatoNome}
+                                              <HighlightMatch
+                                                text={processo.candidatoNome}
+                                                indices={getMatchIndices(getMatchesForProcesso(processo.id), 'candidatoNome')}
+                                              />
                                             </p>
                                             {!isCompact && (
                                               <p className="text-xs text-muted-foreground truncate flex items-center gap-1.5 mt-0.5">
                                                 <Briefcase className="h-3 w-3 flex-shrink-0" />
-                                                {processo.vagaTitulo}
+                                                <HighlightMatch
+                                                  text={processo.vagaTitulo}
+                                                  indices={getMatchIndices(getMatchesForProcesso(processo.id), 'vagaTitulo')}
+                                                  highlightClassName="bg-primary/15 text-primary font-medium rounded-sm"
+                                                />
                                               </p>
                                             )}
                                           </div>

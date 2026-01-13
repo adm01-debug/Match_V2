@@ -1,6 +1,7 @@
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState, useEffect, useMemo } from 'react';
-import { useFuzzySearch, FUZZY_PRESETS } from '@/hooks/useFuzzySearch';
+import { useFuzzySearch, FUZZY_PRESETS, FuseMatch } from '@/hooks/useFuzzySearch';
+import { HighlightMatch, getMatchIndices } from '@/components/ui/highlight-match';
 import { format, subDays, startOfDay, endOfDay } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { Layout } from '@/components/layout/Layout';
@@ -225,7 +226,7 @@ export default function CandidatosPage() {
   };
 
   // Busca fuzzy com Fuse.js
-  const { results: fuzzyResults } = useFuzzySearch(
+  const { results: fuzzyResults, matchesMap } = useFuzzySearch(
     candidatos,
     [
       { name: 'nome', weight: 2 },
@@ -234,8 +235,13 @@ export default function CandidatosPage() {
       { name: 'habilidades', weight: 1.5 },
     ],
     searchTerm,
-    { ...FUZZY_PRESETS.default, includeScore: true }
+    { ...FUZZY_PRESETS.default, includeMatches: true }
   );
+
+  // Helper para obter índices de match de um candidato
+  const getMatchesForCandidate = (candidatoId: string): readonly FuseMatch[] | undefined => {
+    return matchesMap.get(candidatoId);
+  };
 
   const filteredCandidatos = (searchTerm ? fuzzyResults : candidatos)
     .filter(c => {
@@ -777,8 +783,19 @@ export default function CandidatosPage() {
                               {/* Header */}
                               <div className="flex items-start justify-between mb-4">
                                 <div className="flex-1 min-w-0">
-                                  <h3 className="font-semibold text-lg truncate">{candidato.nome}</h3>
-                                  <p className="text-sm text-muted-foreground truncate">{candidato.email}</p>
+                                  <h3 className="font-semibold text-lg truncate">
+                                    <HighlightMatch
+                                      text={candidato.nome}
+                                      indices={getMatchIndices(getMatchesForCandidate(candidato.id), 'nome')}
+                                    />
+                                  </h3>
+                                  <p className="text-sm text-muted-foreground truncate">
+                                    <HighlightMatch
+                                      text={candidato.email}
+                                      indices={getMatchIndices(getMatchesForCandidate(candidato.id), 'email')}
+                                      highlightClassName="bg-primary/15 text-primary font-medium rounded-sm"
+                                    />
+                                  </p>
                                 </div>
                                 <Badge className={cn("shrink-0 ml-2", statusConfig.color)} size="sm">
                                   {statusConfig.label}

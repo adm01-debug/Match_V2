@@ -33,14 +33,14 @@ export interface FuzzySearchOptions {
   useExtendedSearch?: boolean;
 }
 
-interface FuseMatch {
+export interface FuseMatch {
   indices: readonly [number, number][];
   key?: string;
   value?: string;
   refIndex?: number;
 }
 
-interface FuzzyResultItem<T> {
+export interface FuzzyResultItem<T> {
   item: T;
   score: number;
   matches?: readonly FuseMatch[];
@@ -49,14 +49,18 @@ interface FuzzyResultItem<T> {
 export interface UseFuzzySearchReturn<T> {
   /** Resultados da busca */
   results: T[];
-  /** Resultados com pontuação */
+  /** Resultados com pontuação e informações de match */
   resultsWithScore: Array<FuzzyResultItem<T>>;
+  /** Mapa de IDs para informações de match (para fácil acesso) */
+  matchesMap: Map<string, readonly FuseMatch[]>;
   /** Instância do Fuse para buscas customizadas */
   fuse: Fuse<T> | null;
   /** Se há resultados */
   hasResults: boolean;
   /** Total de resultados */
   totalResults: number;
+  /** Termo de busca atual */
+  searchTerm: string;
 }
 
 /**
@@ -89,7 +93,7 @@ export function useFuzzySearch<T>(
     distance = 100,
     limit,
     includeScore = true,
-    includeMatches = false,
+    includeMatches = true, // Alterado para true por padrão para suportar destaque
     minMatchCharLength = 2,
     isCaseSensitive = false,
     shouldSort = true,
@@ -146,12 +150,28 @@ export function useFuzzySearch<T>(
     return searchResults.map(r => r.item);
   }, [searchResults]);
 
+  // Criar mapa de matches por ID para fácil acesso
+  const matchesMap = useMemo(() => {
+    const map = new Map<string, readonly FuseMatch[]>();
+    searchResults.forEach(result => {
+      // Tentar encontrar ID no item (suporta 'id', '_id', ou primeiro campo string)
+      const item = result.item as Record<string, unknown>;
+      const id = item['id'] ?? item['_id'] ?? item['key'];
+      if (typeof id === 'string' && result.matches) {
+        map.set(id, result.matches);
+      }
+    });
+    return map;
+  }, [searchResults]);
+
   return {
     results,
     resultsWithScore: searchResults,
+    matchesMap,
     fuse,
     hasResults: results.length > 0,
     totalResults: results.length,
+    searchTerm,
   };
 }
 

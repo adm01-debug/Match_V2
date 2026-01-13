@@ -4,6 +4,8 @@
  */
 
 import { memo, useState, useCallback, useMemo } from 'react';
+import { useItemMatches } from '@/contexts/FuzzySearchContext';
+import { HighlightMatch, getMatchIndices } from '@/components/ui/highlight-match';
 import { motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
 import {
@@ -74,6 +76,7 @@ const prioridadeConfig: Record<string, { label: string; className: string }> = {
 };
 
 function VagaCardComponent({ vaga, onDeleted, index = 0 }: VagaCardProps) {
+  const { matches: fuzzyMatches } = useItemMatches(vaga.id);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const deleteVaga = useDeleteVaga();
   
@@ -173,14 +176,23 @@ function VagaCardComponent({ vaga, onDeleted, index = 0 }: VagaCardProps) {
 
               {/* Title */}
               <h3 className="font-bold text-lg text-foreground truncate group-hover:text-primary transition-colors">
-                {vaga.titulo}
+                <HighlightMatch
+                  text={vaga.titulo}
+                  indices={getMatchIndices(fuzzyMatches, 'titulo')}
+                />
               </h3>
               
               {/* Meta info */}
               <div className="flex items-center gap-3 text-sm text-muted-foreground mt-2 flex-wrap">
                 <span className="flex items-center gap-1.5">
                   <Building2 className="h-3.5 w-3.5 text-primary/60" aria-hidden="true" />
-                  <span>{vaga.departamento}</span>
+                  <span>
+                    <HighlightMatch
+                      text={vaga.departamento}
+                      indices={getMatchIndices(fuzzyMatches, 'departamento')}
+                      highlightClassName="bg-primary/15 text-primary font-medium rounded-sm"
+                    />
+                  </span>
                 </span>
                 <span className="flex items-center gap-1.5">
                   <Briefcase className="h-3.5 w-3.5 text-primary/60" aria-hidden="true" />
