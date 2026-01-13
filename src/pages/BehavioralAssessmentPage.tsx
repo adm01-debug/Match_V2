@@ -85,8 +85,13 @@ export default function BehavioralAssessmentPage() {
   
   // Cenários selecionados (podemos randomizar ou filtrar)
   const scenarios = useMemo(() => {
-    // Seleciona 5 cenários diversos
-    return IMMERSIVE_SCENARIOS.slice(0, 5);
+    // Importa cenários expandidos se disponíveis, senão usa os originais
+    try {
+      const { selectBalancedScenarios } = require('@/data/immersiveScenariosData');
+      return selectBalancedScenarios(10, true);
+    } catch {
+      return IMMERSIVE_SCENARIOS.slice(0, 5);
+    }
   }, []);
 
   // Calcular scores baseados nas respostas
