@@ -11,11 +11,13 @@ if (!import.meta.env.PROD && 'serviceWorker' in navigator) {
   });
 
   // Best-effort cache cleanup (ignore if not available)
-  (window as any).caches?.keys?.().then((keys: string[]) => {
-    keys
-      .filter((k) => k.startsWith('match-ats-'))
-      .forEach((k) => (window as any).caches.delete(k));
-  });
+  if ('caches' in window) {
+    caches.keys().then((keys) => {
+      keys
+        .filter((k) => k.startsWith('match-ats-'))
+        .forEach((k) => caches.delete(k));
+    });
+  }
 }
 
 // Registrar Service Worker para PWA
