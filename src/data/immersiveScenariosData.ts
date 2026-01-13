@@ -1458,18 +1458,24 @@ export function selectBalancedScenarios(count: number, requireAllPillars: boolea
       const scenarios = SCENARIOS_BY_PILLAR[pilar];
       if (scenarios && scenarios.length > 0) {
         const randomIndex = Math.floor(Math.random() * scenarios.length);
-        selected.push(scenarios[randomIndex]);
+        const scenario = scenarios[randomIndex];
+        if (scenario) {
+          selected.push(scenario);
+        }
       }
     });
     
     // Preenche o resto aleatoriamente
     while (selected.length < count) {
       const randomPillar = pillars[Math.floor(Math.random() * pillars.length)];
-      const scenarios = SCENARIOS_BY_PILLAR[randomPillar];
-      if (scenarios && scenarios.length > 0) {
-        const randomScenario = scenarios[Math.floor(Math.random() * scenarios.length)];
-        if (!selected.find(s => s.id === randomScenario.id)) {
-          selected.push(randomScenario);
+      if (randomPillar) {
+        const scenarios = SCENARIOS_BY_PILLAR[randomPillar];
+        if (scenarios && scenarios.length > 0) {
+          const randomScenario = scenarios[Math.floor(Math.random() * scenarios.length)];
+          if (randomScenario && !selected.find(s => s.id === randomScenario.id)) {
+            selected.push(randomScenario);
+          }
+        }
       }
     }
     
