@@ -28,13 +28,23 @@ import { toast } from 'sonner';
 import { 
   GamifiedAssessmentEngine,
   SwipeValuesCard,
-  PersonalityMiniGame 
+  PersonalityMiniGame,
+  PhaseChallenge,
+  type PhaseResult
 } from '@/components/assessments/gamified';
+import { 
+  Leaderboard,
+  AchievementGrid,
+  type LeaderboardUser,
+  type Achievement,
+} from '@/components/gamification';
 import { 
   GAMIFIED_QUESTIONS, 
   VALUE_CARDS, 
   PERSONALITY_MINI_GAMES 
 } from '@/data/gamifiedAssessmentData';
+import { CHALLENGE_PHASES } from '@/data/phaseChallengeData';
+import { Award, Crown } from 'lucide-react';
 
 const TOOL_ICONS: Record<string, React.ReactNode> = {
   disc: <Brain className="h-6 w-6" />,
@@ -61,10 +71,29 @@ export default function BehavioralAssessmentsPage() {
   const [viewingResult, setViewingResult] = useState<BehavioralResult | null>(null);
   
   // Gamification states
-  const [gamifiedMode, setGamifiedMode] = useState<'quiz' | 'swipe' | 'minigame' | null>(null);
+  const [gamifiedMode, setGamifiedMode] = useState<'quiz' | 'swipe' | 'minigame' | 'phases' | null>(null);
   const [totalXP, setTotalXP] = useState(0);
   const [earnedBadges, setEarnedBadges] = useState<string[]>([]);
   const [streak, setStreak] = useState(0);
+
+  // Demo leaderboard data
+  const leaderboardUsers: LeaderboardUser[] = [
+    { id: '1', name: 'Ana Silva', score: 2450, streak: 7, achievements: 12 },
+    { id: '2', name: 'Carlos Mendes', score: 2100, streak: 5, achievements: 10 },
+    { id: '3', name: 'Beatriz Santos', score: 1850, streak: 3, achievements: 8 },
+    { id: '4', name: 'Diego Oliveira', score: 1600, streak: 4, achievements: 7 },
+    { id: '5', name: 'Elena Costa', score: 1450, streak: 2, achievements: 6 },
+    { id: 'current', name: 'Você', score: totalXP, streak, achievements: earnedBadges.length },
+  ];
+
+  // Demo achievements
+  const demoAchievements: Achievement[] = [
+    { id: 'first-quiz', title: 'Primeiro Quiz', description: 'Complete seu primeiro quiz', icon: Award, tier: 'bronze', category: 'milestone', unlockedAt: totalXP > 0 ? new Date() : undefined },
+    { id: 'value-master', title: 'Mestre dos Valores', description: 'Complete o swipe de valores', icon: Heart, tier: 'silver', category: 'milestone', unlockedAt: earnedBadges.includes('Mestre dos Valores') ? new Date() : undefined, progress: totalXP > 50 ? 100 : 50, maxProgress: 100 },
+    { id: 'speed-demon', title: 'Velocista', description: 'Responda 5 perguntas em menos de 3 segundos', icon: Zap, tier: 'gold', category: 'speed', progress: Math.min(streak, 5), maxProgress: 5 },
+    { id: 'perfectionist', title: 'Perfeccionista', description: 'Complete todas as fases com 100%', icon: Crown, tier: 'platinum', category: 'quality' },
+    { id: 'all-rounder', title: 'Completo', description: 'Complete todos os tipos de assessment', icon: Target, tier: 'diamond', category: 'milestone', progress: gamifiedMode ? 1 : 0, maxProgress: 4 },
+  ];
 
   // Handle URL parameter to start specific tool
   useEffect(() => {
@@ -137,6 +166,14 @@ export default function BehavioralAssessmentsPage() {
     toast.success(`Mini-game completo! +${xp} XP`);
   };
 
+  const handlePhaseComplete = (results: PhaseResult[]) => {
+    const xpEarned = results.reduce((sum, r) => sum + r.xpEarned, 0);
+    setTotalXP(prev => prev + xpEarned);
+    setEarnedBadges(prev => [...new Set([...prev, 'Desafiador'])]);
+    setGamifiedMode(null);
+    toast.success(`Desafios completos! +${xpEarned} XP`);
+  };
+
   // If playing gamified mode
   if (gamifiedMode === 'quiz') {
     return (
@@ -175,6 +212,20 @@ export default function BehavioralAssessmentsPage() {
           <PersonalityMiniGame 
             games={PERSONALITY_MINI_GAMES}
             onComplete={handleMiniGameComplete}
+            onExit={() => setGamifiedMode(null)}
+          />
+        </div>
+      </Layout>
+    );
+  }
+
+  if (gamifiedMode === 'phases') {
+    return (
+      <Layout title="Desafio por Fases">
+        <div className="max-w-2xl mx-auto">
+          <PhaseChallenge 
+            phases={CHALLENGE_PHASES}
+            onComplete={handlePhaseComplete}
             onExit={() => setGamifiedMode(null)}
           />
         </div>
@@ -422,6 +473,68 @@ export default function BehavioralAssessmentsPage() {
                   </CardContent>
                 </Card>
               </motion.div>
+
+              {/* Desafio por Fases */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+              >
+                <Card className="h-full hover:shadow-xl transition-all cursor-pointer group border-2 border-purple-500/20 hover:border-purple-500/50">
+                  <CardHeader className="text-center pb-2">
+                    <div className="mx-auto p-4 rounded-2xl bg-gradient-to-br from-purple-500 to-violet-600 text-white mb-2 group-hover:scale-110 transition-transform">
+                      <Award className="h-10 w-10" />
+                    </div>
+                    <CardTitle className="text-xl">Desafio por Fases</CardTitle>
+                    <CardDescription>
+                      Complete desafios progressivos para provar suas habilidades
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="flex flex-wrap gap-2 justify-center">
+                      <Badge variant="secondary" className="bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300">
+                        🎯 5 Fases
+                      </Badge>
+                      <Badge variant="secondary" className="bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300">
+                        ⭐ +620 XP
+                      </Badge>
+                    </div>
+                    <Button 
+                      className="w-full gap-2 bg-gradient-to-r from-purple-500 to-violet-600 hover:from-purple-600 hover:to-violet-700" 
+                      size="lg"
+                      onClick={() => setGamifiedMode('phases')}
+                    >
+                      <Award className="h-5 w-5" />
+                      Iniciar Jornada
+                    </Button>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            </div>
+
+            {/* Leaderboard & Achievements */}
+            <div className="grid md:grid-cols-2 gap-6 mt-8">
+              <Leaderboard 
+                users={leaderboardUsers}
+                currentUserId="current"
+                title="Ranking da Semana"
+                maxDisplay={5}
+              />
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Trophy className="h-5 w-5 text-yellow-500" />
+                    Conquistas
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <AchievementGrid 
+                    achievements={demoAchievements}
+                    size="md"
+                    columns={5}
+                  />
+                </CardContent>
+              </Card>
             </div>
 
             {/* XP Progress */}
