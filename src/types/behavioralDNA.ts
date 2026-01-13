@@ -284,7 +284,7 @@ export function determineArchetype(helix: DNAHelix): DNAArchetypeId {
   });
   
   scores.sort((a, b) => b.score - a.score);
-  return scores[0].id;
+  return scores[0]?.id ?? 'visionary';
 }
 
 export function calculateMatchCompatibility(profile1: DNAProfile, profile2: DNAProfile): number {

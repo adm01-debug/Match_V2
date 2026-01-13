@@ -51,6 +51,7 @@ const PortalAuthPage = lazy(() => import("./pages/portal/PortalAuthPage"));
 const PortalDashboard = lazy(() => import("./pages/portal/PortalDashboard"));
 const PortalVagas = lazy(() => import("./pages/portal/PortalVagas"));
 const PortalPerfil = lazy(() => import("./pages/portal/PortalPerfil"));
+const DeuMatchPage = lazy(() => import("./pages/DeuMatchPage"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 // Auth pages
@@ -368,6 +369,14 @@ function App() {
                                   element={
                                     <ProtectedRoute>
                                       <AdminPage />
+                                    </ProtectedRoute>
+                                  }
+                                />
+                                <Route
+                                  path="/deu-match"
+                                  element={
+                                    <ProtectedRoute>
+                                      <DeuMatchPage />
                                     </ProtectedRoute>
                                   }
                                 />

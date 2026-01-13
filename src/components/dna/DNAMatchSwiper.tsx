@@ -62,7 +62,9 @@ export const DNAMatchSwiper: React.FC<DNAMatchSwiperProps> = ({
     if (history.length === 0) return;
     const lastIndex = history[history.length - 1];
     setHistory(prev => prev.slice(0, -1));
-    setCurrentIndex(lastIndex);
+    if (lastIndex !== undefined) {
+      setCurrentIndex(lastIndex);
+    }
   }, [history]);
 
   const handleDragEnd = useCallback((_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
