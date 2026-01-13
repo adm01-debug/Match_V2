@@ -1,5 +1,6 @@
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState, useEffect, useMemo } from 'react';
+import { useFuzzySearch, FUZZY_PRESETS } from '@/hooks/useFuzzySearch';
 import { format, subDays, startOfDay, endOfDay } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { Layout } from '@/components/layout/Layout';
@@ -223,12 +224,21 @@ export default function CandidatosPage() {
     );
   };
 
-  const filteredCandidatos = candidatos
+  // Busca fuzzy com Fuse.js
+  const { results: fuzzyResults } = useFuzzySearch(
+    candidatos,
+    [
+      { name: 'nome', weight: 2 },
+      { name: 'email', weight: 1.5 },
+      { name: 'resumo', weight: 1 },
+      { name: 'habilidades', weight: 1.5 },
+    ],
+    searchTerm,
+    { ...FUZZY_PRESETS.default, includeScore: true }
+  );
+
+  const filteredCandidatos = (searchTerm ? fuzzyResults : candidatos)
     .filter(c => {
-      const matchesSearch = !searchTerm || 
-        c.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        c.email.toLowerCase().includes(searchTerm.toLowerCase());
-      
       const matchesStatus = statusFilter === 'todos' || c.status === statusFilter;
       
       const matchesSkill = skillFilter === 'todas' || 
@@ -243,9 +253,12 @@ export default function CandidatosPage() {
       const experienceCount = c.experiencias?.length || 0;
       const matchesExperience = experienceCount >= minExperiences;
 
-      return matchesSearch && matchesStatus && matchesSkill && matchesDateFrom && matchesDateTo && matchesExperience;
+      return matchesStatus && matchesSkill && matchesDateFrom && matchesDateTo && matchesExperience;
     })
     .sort((a, b) => {
+      // Se houver termo de busca, a ordenação fuzzy já foi aplicada
+      if (searchTerm) return 0;
+      
       if (sortBy === 'match_score') {
         const scoreA = getBestMatchScore(a.id)?.score_total || 0;
         const scoreB = getBestMatchScore(b.id)?.score_total || 0;

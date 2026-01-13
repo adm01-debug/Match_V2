@@ -9,6 +9,7 @@ import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { Layout } from '@/components/layout/Layout';
 import { usePageTitle } from '@/hooks/usePageTitle';
+import { useFuzzySearch, FUZZY_PRESETS } from '@/hooks/useFuzzySearch';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -145,12 +146,21 @@ export default function OfferManagementPage() {
     template: '',
   });
 
-  const filteredOffers = offers.filter(offer => {
-    const matchesSearch = 
-      offer.candidatoNome.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      offer.vagaTitulo.toLowerCase().includes(searchTerm.toLowerCase());
+  // Busca fuzzy com Fuse.js
+  const { results: fuzzyResults } = useFuzzySearch(
+    offers,
+    [
+      { name: 'candidatoNome', weight: 2 },
+      { name: 'vagaTitulo', weight: 1.5 },
+      { name: 'candidatoEmail', weight: 1 },
+    ],
+    searchTerm,
+    { ...FUZZY_PRESETS.default }
+  );
+
+  const filteredOffers = (searchTerm ? fuzzyResults : offers).filter(offer => {
     const matchesStatus = statusFilter === 'all' || offer.status === statusFilter;
-    return matchesSearch && matchesStatus;
+    return matchesStatus;
   });
 
   const stats = {

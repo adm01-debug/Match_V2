@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
+import { useFuzzySearch, FUZZY_PRESETS } from '@/hooks/useFuzzySearch';
 import { motion } from "framer-motion";
 import { Layout } from "@/components/layout/Layout";
 import { VagaCard } from "@/components/vagas/VagaCard";
@@ -48,16 +49,29 @@ export default function VagasList() {
   // Get unique departments
   const departamentos = [...new Set(vagas.map((v) => v.departamento))];
 
+  // Busca fuzzy com Fuse.js
+  const { results: fuzzyResults } = useFuzzySearch(
+    vagas,
+    [
+      { name: 'titulo', weight: 2 },
+      { name: 'departamento', weight: 1.5 },
+      { name: 'descricaoEmpresa', weight: 0.5 },
+    ],
+    searchTerm,
+    { ...FUZZY_PRESETS.default }
+  );
+
   // Filter vagas
-  const filteredVagas = vagas.filter((vaga) => {
-    const matchesSearch = vaga.titulo.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      vaga.departamento.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === "todas" || vaga.status === statusFilter;
-    const matchesPrioridade = prioridadeFilter === "todas" || vaga.prioridade === prioridadeFilter;
-    const matchesDepartamento = departamentoFilter === "todos" || vaga.departamento === departamentoFilter;
-    
-    return matchesSearch && matchesStatus && matchesPrioridade && matchesDepartamento;
-  });
+  const filteredVagas = useMemo(() => {
+    const baseVagas = searchTerm ? fuzzyResults : vagas;
+    return baseVagas.filter((vaga) => {
+      const matchesStatus = statusFilter === "todas" || vaga.status === statusFilter;
+      const matchesPrioridade = prioridadeFilter === "todas" || vaga.prioridade === prioridadeFilter;
+      const matchesDepartamento = departamentoFilter === "todos" || vaga.departamento === departamentoFilter;
+      
+      return matchesStatus && matchesPrioridade && matchesDepartamento;
+    });
+  }, [vagas, fuzzyResults, searchTerm, statusFilter, prioridadeFilter, departamentoFilter]);
 
   // Count by status
   const statusCounts = {

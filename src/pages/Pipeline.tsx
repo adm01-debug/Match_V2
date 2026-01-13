@@ -1,6 +1,7 @@
 import { usePageTitle } from '@/hooks/usePageTitle';
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
+import { useFuzzySearch, FUZZY_PRESETS } from '@/hooks/useFuzzySearch';
 import { motion, AnimatePresence } from "framer-motion";
 import { Layout } from "@/components/layout/Layout";
 import { useProcessosSeletivos, useUpdateProcessoEtapa } from "@/hooks/useProcessosSeletivos";
@@ -163,16 +164,25 @@ export default function Pipeline() {
     }
   }, [vagaSelecionada, setSearchParams]);
 
-  // Filtrar processos
-  const processosFiltrados = processos.filter(p => {
-    if (vagaSelecionada !== "todas" && p.vagaId !== vagaSelecionada) return false;
-    if (!searchQuery) return true;
-    const query = searchQuery.toLowerCase();
-    return (
-      p.candidatoNome?.toLowerCase().includes(query) ||
-      p.vagaTitulo?.toLowerCase().includes(query)
-    );
-  });
+  // Filtrar por vaga primeiro
+  const processosPorVaga = useMemo(() => 
+    processos.filter(p => vagaSelecionada === "todas" || p.vagaId === vagaSelecionada),
+    [processos, vagaSelecionada]
+  );
+
+  // Busca fuzzy com Fuse.js
+  const { results: fuzzyResults } = useFuzzySearch(
+    processosPorVaga,
+    [
+      { name: 'candidatoNome', weight: 2 },
+      { name: 'vagaTitulo', weight: 1 },
+    ],
+    searchQuery,
+    { ...FUZZY_PRESETS.default }
+  );
+
+  // Processos filtrados
+  const processosFiltrados = searchQuery ? fuzzyResults : processosPorVaga;
 
   // Agrupar processos por etapa
   const processosPorEtapa = etapasPipeline.reduce((acc, etapa) => {
