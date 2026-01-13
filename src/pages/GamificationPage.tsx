@@ -3,15 +3,177 @@
  * Shows achievements, levels, streaks, and leaderboard
  */
 
+import { useState } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { GamificationDashboard } from "@/components/gamification/GamificationDashboard";
 import { usePageTitle } from "@/hooks/usePageTitle";
 import { motion } from "framer-motion";
-import { Trophy, Award, Flame, Medal } from "lucide-react";
+import { Trophy, Award, Flame, Medal, Gamepad2, Brain, Heart, Layers, ArrowLeft, Sparkles, Zap, Star } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { 
+  GamifiedAssessmentEngine,
+  SwipeValuesCard,
+  PersonalityMiniGame,
+  PhaseChallenge
+} from "@/components/assessments/gamified";
+import { GAMIFIED_QUESTIONS, VALUE_CARDS, PERSONALITY_MINI_GAMES } from "@/data/gamifiedAssessmentData";
+import { CHALLENGE_PHASES } from "@/data/phaseChallengeData";
+import { toast } from "sonner";
+
+type GamifiedMode = 'quiz' | 'swipe' | 'minigame' | 'phases' | null;
+
+const GAME_CARDS = [
+  {
+    id: 'quiz' as GamifiedMode,
+    title: 'Quiz Interativo',
+    description: 'Responda perguntas e ganhe XP com combos',
+    icon: Brain,
+    gradient: 'from-violet-500 to-purple-600',
+    glow: 'violet',
+    xp: '150-300 XP'
+  },
+  {
+    id: 'swipe' as GamifiedMode,
+    title: 'Swipe de Valores',
+    description: 'Deslize para descobrir seus valores culturais',
+    icon: Heart,
+    gradient: 'from-pink-500 to-rose-600',
+    glow: 'pink',
+    xp: '100-200 XP'
+  },
+  {
+    id: 'minigame' as GamifiedMode,
+    title: 'Mini-Games',
+    description: 'Desafios rápidos de personalidade',
+    icon: Zap,
+    gradient: 'from-amber-500 to-orange-600',
+    glow: 'amber',
+    xp: '50-150 XP'
+  },
+  {
+    id: 'phases' as GamifiedMode,
+    title: 'Desafio por Fases',
+    description: 'Avance pelos níveis e desbloqueie recompensas',
+    icon: Layers,
+    gradient: 'from-cyan-500 to-teal-600',
+    glow: 'cyan',
+    xp: '200-500 XP'
+  }
+];
 
 export default function GamificationPage() {
   usePageTitle('Conquistas');
+  const [gamifiedMode, setGamifiedMode] = useState<GamifiedMode>(null);
+
+  const handleGameComplete = (xp: number) => {
+    toast.success(`+${xp} XP ganhos!`, {
+      description: "Continue jogando para subir de nível!",
+      icon: <Sparkles className="h-5 w-5 text-yellow-500" />
+    });
+    setGamifiedMode(null);
+  };
+
+  // Render active game
+  if (gamifiedMode === 'quiz') {
+    return (
+      <Layout title="Quiz Interativo">
+        <div className="p-6">
+          <Button 
+            variant="ghost" 
+            onClick={() => setGamifiedMode(null)}
+            className="mb-4"
+          >
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Voltar
+          </Button>
+          <GamifiedAssessmentEngine
+            questions={GAMIFIED_QUESTIONS}
+            onComplete={(stats) => handleGameComplete(stats['totalXP'] || 0)}
+            onExit={() => setGamifiedMode(null)}
+            title="Quiz Comportamental"
+            subtitle="Teste seus conhecimentos e ganhe XP!"
+            theme="cosmic"
+          />
+        </div>
+      </Layout>
+    );
+  }
+
+  if (gamifiedMode === 'swipe') {
+    return (
+      <Layout title="Swipe de Valores">
+        <div className="p-6">
+          <Button 
+            variant="ghost" 
+            onClick={() => setGamifiedMode(null)}
+            className="mb-4"
+          >
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Voltar
+          </Button>
+          <SwipeValuesCard
+            cards={VALUE_CARDS}
+            onComplete={(liked, _passed, superLiked) => {
+              const xp = (liked.length * 10) + (superLiked.length * 25);
+              handleGameComplete(xp);
+            }}
+            title="Descubra Seus Valores"
+          />
+        </div>
+      </Layout>
+    );
+  }
+
+  if (gamifiedMode === 'minigame') {
+    return (
+      <Layout title="Mini-Games">
+        <div className="p-6">
+          <Button 
+            variant="ghost" 
+            onClick={() => setGamifiedMode(null)}
+            className="mb-4"
+          >
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Voltar
+          </Button>
+          <PersonalityMiniGame
+            games={PERSONALITY_MINI_GAMES}
+            onComplete={(_results, totalXP) => {
+              handleGameComplete(totalXP);
+            }}
+            onExit={() => setGamifiedMode(null)}
+          />
+        </div>
+      </Layout>
+    );
+  }
+
+  if (gamifiedMode === 'phases') {
+    return (
+      <Layout title="Desafio por Fases">
+        <div className="p-6">
+          <Button 
+            variant="ghost" 
+            onClick={() => setGamifiedMode(null)}
+            className="mb-4"
+          >
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Voltar
+          </Button>
+          <PhaseChallenge
+            phases={CHALLENGE_PHASES}
+            onComplete={(results) => {
+              const xp = results.reduce((acc, r) => acc + r.xpEarned, 0);
+              handleGameComplete(xp);
+            }}
+            onExit={() => setGamifiedMode(null)}
+          />
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <Layout title="Conquistas">
@@ -105,6 +267,60 @@ export default function GamificationPage() {
                   <p className="font-bold text-primary">#6</p>
                 </div>
               </div>
+            </div>
+          </motion.div>
+
+          {/* PLAY NOW SECTION */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="space-y-4"
+          >
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600">
+                <Gamepad2 className="h-5 w-5 text-white" />
+              </div>
+              <h2 className="text-xl font-bold">Jogar Agora</h2>
+              <Badge variant="outline" className="border-emerald-500/50 text-emerald-600">
+                <Star className="h-3 w-3 mr-1" />
+                Ganhe XP
+              </Badge>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {GAME_CARDS.map((game, index) => (
+                <motion.div
+                  key={game.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 * index }}
+                >
+                  <Card 
+                    className="group cursor-pointer overflow-hidden border-0 bg-card/50 backdrop-blur-sm hover:bg-card/80 transition-all duration-300"
+                    onClick={() => setGamifiedMode(game.id)}
+                  >
+                    <CardContent className="p-0">
+                      <div className={`relative p-6 bg-gradient-to-br ${game.gradient}`}>
+                        <motion.div
+                          className="absolute inset-0 opacity-0 group-hover:opacity-30 transition-opacity"
+                          style={{
+                            background: `radial-gradient(circle at center, white 0%, transparent 70%)`
+                          }}
+                        />
+                        <game.icon className="h-10 w-10 text-white mb-2 relative z-10" />
+                        <Badge className="bg-white/20 text-white border-0 text-xs">
+                          {game.xp}
+                        </Badge>
+                      </div>
+                      <div className="p-4">
+                        <h3 className="font-semibold mb-1">{game.title}</h3>
+                        <p className="text-sm text-muted-foreground">{game.description}</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
             </div>
           </motion.div>
 
