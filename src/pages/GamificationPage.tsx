@@ -1,13 +1,15 @@
 /**
  * @fileoverview Dedicated Gamification Page
  * Shows achievements, levels, streaks, and leaderboard
- * Now with LevelUpCelebration integration
+ * Now with LevelUpCelebration, XPToast, and Onboarding integration
  */
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { GamificationDashboard } from "@/components/gamification/GamificationDashboard";
 import { LevelUpCelebration } from "@/components/gamification/LevelUpCelebration";
+import { XPToast } from "@/components/gamification/XPToast";
+import { GamificationOnboarding, useGamificationOnboarding } from "@/components/gamification/GamificationOnboarding";
 import { usePageTitle } from "@/hooks/usePageTitle";
 import { useGamification } from "@/hooks/useGamification";
 import { motion } from "framer-motion";
@@ -70,20 +72,61 @@ export default function GamificationPage() {
   usePageTitle('Conquistas');
   const [gamifiedMode, setGamifiedMode] = useState<GamifiedMode>(null);
   const { addXP, level, streak, xp, levelUpData, clearLevelUp, updateStreak } = useGamification();
+  
+  // XP Toast state
+  const [xpToast, setXpToast] = useState<{
+    isVisible: boolean;
+    amount: number;
+    action?: string;
+    variant?: 'small' | 'medium' | 'large' | 'bonus' | 'streak' | 'levelup';
+  }>({ isVisible: false, amount: 0 });
+
+  // Onboarding
+  const { isComplete: onboardingComplete, isOpen: onboardingOpen, startOnboarding, completeOnboarding, skipOnboarding } = useGamificationOnboarding();
+
+  // Auto-show onboarding for new users
+  useEffect(() => {
+    if (!onboardingComplete && xp === 0) {
+      const timer = setTimeout(() => startOnboarding(), 1000);
+      return () => clearTimeout(timer);
+    }
+    return undefined;
+  }, [onboardingComplete, xp, startOnboarding]);
 
   // Update streak on page load
   useEffect(() => {
     updateStreak();
   }, [updateStreak]);
 
-  const handleGameComplete = (xpAmount: number) => {
+  // Show XP Toast
+  const showXPToast = useCallback((amount: number, action?: string, variant?: 'small' | 'medium' | 'large' | 'bonus' | 'streak' | 'levelup') => {
+    setXpToast({ isVisible: true, amount, action, variant });
+    setTimeout(() => setXpToast(prev => ({ ...prev, isVisible: false })), 3000);
+  }, []);
+
+  const handleGameComplete = useCallback((xpAmount: number) => {
     addXP(xpAmount, 'game');
+    
+    // Show XP Toast
+    const variant = xpAmount >= 200 ? 'large' : xpAmount >= 100 ? 'medium' : 'small';
+    showXPToast(xpAmount, 'Jogo concluído!', variant);
+    
     toast.success(`+${xpAmount} XP ganhos!`, {
       description: "Continue jogando para subir de nível!",
       icon: <Sparkles className="h-5 w-5 text-yellow-500" />
     });
     setGamifiedMode(null);
-  };
+  }, [addXP, showXPToast]);
+
+  const handleOnboardingComplete = useCallback((xpEarned: number) => {
+    addXP(xpEarned, 'onboarding');
+    showXPToast(xpEarned, 'Tutorial completo!', 'bonus');
+    completeOnboarding();
+    toast.success('Bem-vindo ao sistema de gamificação!', {
+      description: `Você ganhou +${xpEarned} XP de bônus!`,
+      icon: <Sparkles className="h-5 w-5 text-yellow-500" />
+    });
+  }, [addXP, showXPToast, completeOnboarding]);
 
   // Render active game
   if (gamifiedMode === 'quiz') {
@@ -348,6 +391,22 @@ export default function GamificationPage() {
           onClose={clearLevelUp}
         />
       )}
+
+      {/* XP Toast */}
+      <XPToast
+        isVisible={xpToast.isVisible}
+        amount={xpToast.amount}
+        action={xpToast.action}
+        variant={xpToast.variant}
+        onComplete={() => setXpToast(prev => ({ ...prev, isVisible: false }))}
+      />
+
+      {/* Onboarding Modal */}
+      <GamificationOnboarding
+        isOpen={onboardingOpen}
+        onComplete={handleOnboardingComplete}
+        onSkip={skipOnboarding}
+      />
     </Layout>
   );
 }
