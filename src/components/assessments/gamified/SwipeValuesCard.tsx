@@ -76,15 +76,23 @@ export const SwipeValuesCard = memo(function SwipeValuesCard({
 
     setExitDirection(direction);
     
+    // Calculate new arrays including the current card
+    let newLiked = liked;
+    let newPassed = passed;
+    let newSuperLiked = superLiked;
+    
     if (direction === 'right') {
-      setLiked(prev => [...prev, currentCard.id]);
+      newLiked = [...liked, currentCard.id];
+      setLiked(newLiked);
       setHistory(prev => [...prev, { cardId: currentCard.id, action: 'like' }]);
       triggerConfetti('like');
     } else if (direction === 'left') {
-      setPassed(prev => [...prev, currentCard.id]);
+      newPassed = [...passed, currentCard.id];
+      setPassed(newPassed);
       setHistory(prev => [...prev, { cardId: currentCard.id, action: 'pass' }]);
     } else if (direction === 'up') {
-      setSuperLiked(prev => [...prev, currentCard.id]);
+      newSuperLiked = [...superLiked, currentCard.id];
+      setSuperLiked(newSuperLiked);
       setHistory(prev => [...prev, { cardId: currentCard.id, action: 'super' }]);
       triggerConfetti('super');
     }
@@ -98,7 +106,8 @@ export const SwipeValuesCard = memo(function SwipeValuesCard({
         x.set(0);
         y.set(0);
       } else {
-        onComplete(liked, passed, superLiked);
+        // Use the updated arrays for completion
+        onComplete(newLiked, newPassed, newSuperLiked);
       }
     }, 300);
   }, [currentCard, currentIndex, cards.length, liked, passed, superLiked, onComplete, onSwipe, triggerConfetti, x, y]);
