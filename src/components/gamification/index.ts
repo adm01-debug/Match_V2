@@ -47,3 +47,13 @@ export {
 export {
   LevelUpCelebration,
 } from "./LevelUpCelebration";
+
+// Phase 1 - Visual Quick Wins
+export { XPToast, useXPToast, XPToastManager } from "./XPToast";
+export { GamificationOnboarding, useGamificationOnboarding } from "./GamificationOnboarding";
+export { InteractiveXPCard, XPStatCard, XPActionCard } from "./MicroInteractionCards";
+
+// Phase 2 - Engagement
+export { DailyChallenges, type DailyChallenge, type ChallengeType, type ChallengeDifficulty } from "./DailyChallenges";
+export { WeeklyMissions, type WeeklyMission, type MissionTier } from "./WeeklyMissions";
+export { PowerUps, type PowerUp, type PowerUpType } from "./PowerUps";
