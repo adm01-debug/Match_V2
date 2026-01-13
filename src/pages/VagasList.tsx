@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
 import { useFuzzySearch, FUZZY_PRESETS } from '@/hooks/useFuzzySearch';
+import { FuzzySearchProvider } from '@/contexts/FuzzySearchContext';
 import { motion } from "framer-motion";
 import { Layout } from "@/components/layout/Layout";
 import { VagaCard } from "@/components/vagas/VagaCard";
@@ -50,7 +51,7 @@ export default function VagasList() {
   const departamentos = [...new Set(vagas.map((v) => v.departamento))];
 
   // Busca fuzzy com Fuse.js
-  const { results: fuzzyResults } = useFuzzySearch(
+  const { results: fuzzyResults, matchesMap, searchTerm: activeSearchTerm } = useFuzzySearch(
     vagas,
     [
       { name: 'titulo', weight: 2 },
@@ -58,7 +59,7 @@ export default function VagasList() {
       { name: 'descricaoEmpresa', weight: 0.5 },
     ],
     searchTerm,
-    { ...FUZZY_PRESETS.default }
+    { ...FUZZY_PRESETS.default, includeMatches: true }
   );
 
   // Filter vagas
@@ -330,23 +331,25 @@ export default function VagasList() {
             onClearFilters={clearFilters} 
           />
         ) : (
-          <motion.div 
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-            className={cn(
-              "gap-4",
-              viewMode === "grid" 
-                ? "grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3" 
-                : "flex flex-col"
-            )}
-          >
-            {filteredVagas.map((vaga, index) => (
-              <motion.div key={vaga.id} variants={itemVariants}>
-                <VagaCard vaga={vaga} index={index} />
-              </motion.div>
-            ))}
-          </motion.div>
+          <FuzzySearchProvider matchesMap={matchesMap} searchTerm={activeSearchTerm}>
+            <motion.div 
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+              className={cn(
+                "gap-4",
+                viewMode === "grid" 
+                  ? "grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3" 
+                  : "flex flex-col"
+              )}
+            >
+              {filteredVagas.map((vaga, index) => (
+                <motion.div key={vaga.id} variants={itemVariants}>
+                  <VagaCard vaga={vaga} index={index} />
+                </motion.div>
+              ))}
+            </motion.div>
+          </FuzzySearchProvider>
         )}
       </div>
     </Layout>
