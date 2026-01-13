@@ -16,14 +16,8 @@ export default defineConfig(({ mode }) => ({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
-      // Force a single React instance (fixes hooks reading from null)
-      react: path.resolve(__dirname, "./node_modules/react/index.js"),
-      "react/jsx-runtime": path.resolve(__dirname, "./node_modules/react/jsx-runtime.js"),
-      "react/jsx-dev-runtime": path.resolve(__dirname, "./node_modules/react/jsx-dev-runtime.js"),
-      "react-dom": path.resolve(__dirname, "./node_modules/react-dom/index.js"),
-      "react-dom/client": path.resolve(__dirname, "./node_modules/react-dom/client.js"),
     },
-    dedupe: ["react", "react-dom", "react/jsx-runtime", "react/jsx-dev-runtime"],
+    dedupe: ["react", "react-dom"],
   },
   build: {
     sourcemap: false,
@@ -46,14 +40,6 @@ export default defineConfig(({ mode }) => ({
     host: "::",
   },
   optimizeDeps: {
-    include: [
-      "react",
-      "react-dom",
-      "react/jsx-runtime",
-      "react/jsx-dev-runtime",
-      "react-router-dom",
-      "@tanstack/react-query",
-    ],
-    force: true,
+    include: ["react", "react-dom", "react-router-dom", "@tanstack/react-query"],
   },
 }));
