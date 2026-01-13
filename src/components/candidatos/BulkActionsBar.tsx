@@ -95,13 +95,11 @@ export function BulkActionsBar({
       // Reset after short delay
       setTimeout(() => {
         setIsProcessing(false);
-        setProcessingAction(null);
         setProgress(0);
         onClearSelection();
       }, 500);
-    } catch (error) {
+    } catch {
       setIsProcessing(false);
-      setProcessingAction(null);
       setProgress(0);
     }
   };
