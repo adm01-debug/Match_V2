@@ -1,6 +1,7 @@
 import { usePageTitle } from '@/hooks/usePageTitle';
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { useFuzzySearch, FUZZY_PRESETS } from '@/hooks/useFuzzySearch';
+import { HighlightMatch, getMatchIndices } from '@/components/ui/highlight-match';
 import { useSearchParams } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { supabase } from "@/integrations/supabase/client";
@@ -134,7 +135,7 @@ export default function ComunicacaoPage() {
   };
 
   // Busca fuzzy com Fuse.js
-  const { results: fuzzyResults } = useFuzzySearch(
+  const { results: fuzzyResults, matchesMap } = useFuzzySearch(
     comunicacoes,
     [
       { name: 'assunto', weight: 2 },
@@ -143,6 +144,12 @@ export default function ComunicacaoPage() {
     searchQuery,
     { ...FUZZY_PRESETS.default }
   );
+
+  // Função para obter índices de match
+  const getComunicacaoMatchIndices = useCallback((id: string, key: string) => {
+    const matches = matchesMap.get(id);
+    return getMatchIndices(matches, key);
+  }, [matchesMap]);
 
   const comunicacoesFiltradas = useMemo(() => {
     return searchQuery ? fuzzyResults : comunicacoes;
@@ -279,13 +286,23 @@ export default function ComunicacaoPage() {
                           </Avatar>
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center justify-between mb-1">
-                              <p className="font-medium">{c.assunto}</p>
+                              <p className="font-medium">
+                                <HighlightMatch 
+                                  text={c.assunto} 
+                                  indices={getComunicacaoMatchIndices(c.id, 'assunto')} 
+                                />
+                              </p>
                               <div className="flex items-center gap-2">
                                 <Badge variant="outline">{c.tipo}</Badge>
                                 <StatusIcon className={cn("h-4 w-4", status?.color ?? "text-green-500")} />
                               </div>
                             </div>
-                            <p className="text-sm text-muted-foreground line-clamp-1">{c.conteudo}</p>
+                            <p className="text-sm text-muted-foreground line-clamp-1">
+                              <HighlightMatch 
+                                text={c.conteudo} 
+                                indices={getComunicacaoMatchIndices(c.id, 'conteudo')} 
+                              />
+                            </p>
                             <p className="text-xs text-muted-foreground mt-1">
                               {formatDistanceToNow(new Date(c.created_at), { addSuffix: true, locale: ptBR })}
                             </p>

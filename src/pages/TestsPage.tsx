@@ -1,6 +1,7 @@
 import { usePageTitle } from '@/hooks/usePageTitle';
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { useFuzzySearch, FUZZY_PRESETS } from '@/hooks/useFuzzySearch';
+import { HighlightMatch, getMatchIndices } from '@/components/ui/highlight-match';
 import { useNavigate } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { useProvas, useDeleteProva, useDuplicateProva } from "@/hooks/useProvas";
@@ -65,7 +66,7 @@ export default function TestsPage() {
   const [activeTab, setActiveTab] = useState("provas");
 
   // Busca fuzzy com Fuse.js
-  const { results: fuzzyResults } = useFuzzySearch(
+  const { results: fuzzyResults, matchesMap } = useFuzzySearch(
     provas,
     [
       { name: 'titulo', weight: 2 },
@@ -76,6 +77,12 @@ export default function TestsPage() {
     searchQuery,
     { ...FUZZY_PRESETS.default }
   );
+
+  // Função para obter índices de match de uma prova
+  const getProvaMatchIndices = useCallback((provaId: string, key: string) => {
+    const matches = matchesMap.get(provaId);
+    return getMatchIndices(matches, key);
+  }, [matchesMap]);
 
   // Filtrar provas
   const provasFiltradas = useMemo(() => {
@@ -144,8 +151,18 @@ export default function TestsPage() {
             </div>
             <Badge variant="outline">{nivel?.nome || 'Geral'}</Badge>
           </div>
-          <CardTitle className="text-lg mt-2">{prova.titulo}</CardTitle>
-          <CardDescription className="line-clamp-2">{prova.descricao}</CardDescription>
+          <CardTitle className="text-lg mt-2">
+            <HighlightMatch 
+              text={prova.titulo} 
+              indices={getProvaMatchIndices(prova.id, 'titulo')} 
+            />
+          </CardTitle>
+          <CardDescription className="line-clamp-2">
+            <HighlightMatch 
+              text={prova.descricao || ''} 
+              indices={getProvaMatchIndices(prova.id, 'descricao')} 
+            />
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-3 gap-4 text-sm">

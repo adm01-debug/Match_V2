@@ -1,8 +1,9 @@
-import { Suspense, useMemo } from 'react';
+import { Suspense, useMemo, useCallback } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState, useEffect } from 'react';
 import { useFuzzySearch, FUZZY_PRESETS } from '@/hooks/useFuzzySearch';
+import { HighlightMatch, getMatchIndices } from '@/components/ui/highlight-match';
 import { Layout } from '@/components/layout/Layout';
 import { useAuth, AppRole } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
@@ -195,7 +196,7 @@ const AdminPage = () => {
   };
 
   // Busca fuzzy com Fuse.js
-  const { results: fuzzyResults } = useFuzzySearch(
+  const { results: fuzzyResults, matchesMap } = useFuzzySearch(
     users,
     [
       { name: 'nome', weight: 2 },
@@ -204,6 +205,12 @@ const AdminPage = () => {
     searchTerm,
     { ...FUZZY_PRESETS.default }
   );
+
+  // Função para obter índices de match
+  const getUserMatchIndices = useCallback((userId: string, key: string) => {
+    const matches = matchesMap.get(userId);
+    return getMatchIndices(matches, key);
+  }, [matchesMap]);
 
   const filteredUsers = useMemo(() => {
     return searchTerm ? fuzzyResults : users;
@@ -337,9 +344,17 @@ const AdminPage = () => {
                               </AvatarFallback>
                             </Avatar>
                             <div>
-                              <p className="font-medium">{userProfile.nome}</p>
+                              <p className="font-medium">
+                                <HighlightMatch 
+                                  text={userProfile.nome} 
+                                  indices={getUserMatchIndices(userProfile.id, 'nome')} 
+                                />
+                              </p>
                               <p className="text-sm text-muted-foreground">
-                                {userProfile.email}
+                                <HighlightMatch 
+                                  text={userProfile.email} 
+                                  indices={getUserMatchIndices(userProfile.id, 'email')} 
+                                />
                               </p>
                             </div>
                             {userProfile.user_id === user?.id && (
