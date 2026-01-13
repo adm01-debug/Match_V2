@@ -28,6 +28,7 @@ export {
   Leaderboard,
   LeaderboardEntry,
   MiniLeaderboard,
+  type LeaderboardUser,
 } from "./Leaderboard";
 
 export {

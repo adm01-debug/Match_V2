@@ -17,3 +17,9 @@ export {
   PersonalityMiniGame,
   type MiniGameType,
 } from './PersonalityMiniGame';
+
+export {
+  PhaseChallenge,
+  type ChallengePhase,
+  type PhaseResult,
+} from './PhaseChallenge';
