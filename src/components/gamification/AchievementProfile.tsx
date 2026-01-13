@@ -7,7 +7,7 @@ import { useState, useMemo, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Trophy, Share2, Star, Flame, Award, 
-  Crown, Sparkles, Copy, Check, ExternalLink, Medal
+  Crown, Sparkles, Copy, Check, ExternalLink, Medal, Target
 } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
