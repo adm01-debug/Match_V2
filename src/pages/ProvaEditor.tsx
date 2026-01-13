@@ -4,7 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { useProva, useCreateProva, useUpdateProva } from "@/hooks/useProvas";
 import { categoriasInfo, niveisInfo, departamentosInfo, tiposQuestao } from "@/config/testsConfig";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -14,8 +14,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ArrowLeft, Save, Plus, Trash2, GripVertical, CheckCircle2, XCircle, Settings, ListChecks } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from "@/components/ui/dialog";
+import { ArrowLeft, Save, Plus, Trash2, GripVertical, CheckCircle2, XCircle, Settings, ListChecks, FileText, Clock, Target, Sparkles } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { allTestTemplates, getTemplatesByCategory, type TestTemplate } from "@/data/testTemplatesData";
 
 interface Questao { 
   id: string; 
@@ -46,7 +48,9 @@ export default function ProvaEditor() {
   const [notaMinima, setNotaMinima] = useState(70);
   const [ativo, setAtivo] = useState(true);
   const [questoes, setQuestoes] = useState<Questao[]>([]);
-  const [activeTab, setActiveTab] = useState("info");
+  const [activeTab, setActiveTab] = useState("templates");
+  const [templateDialogOpen, setTemplateDialogOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
 
   useEffect(() => {
     if (provaExistente) {
