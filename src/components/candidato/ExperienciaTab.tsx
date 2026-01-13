@@ -13,20 +13,8 @@ interface ExperienciaTabProps {
   candidato: CandidatoPerfil;
 }
 
-type Experiencia = {
-  id: string;
-  cargo: string;
-  empresa: string;
-  dataInicio: string;
-  dataFim?: string | null;
-  atual?: boolean;
-  descricao: string[];
-};
-
 export function ExperienciaTab({ candidato }: ExperienciaTabProps) {
-  const experiencias = (Array.isArray(candidato.experiencias)
-    ? candidato.experiencias
-    : []) as Experiencia[];
+  const experiencias = candidato.experiencias ?? [];
 
   const skills = candidato.skills ?? [];
 
@@ -74,15 +62,16 @@ export function ExperienciaTab({ candidato }: ExperienciaTabProps) {
                       </div>
                     </div>
                   </div>
-
-                  <ul className="mt-4 space-y-2">
-                    {exp.descricao.map((item, idx) => (
-                      <li key={idx} className="flex items-start gap-2 text-muted-foreground">
-                        <span className="text-primary mt-1.5">•</span>
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
+                  {exp.descricao && (
+                    <ul className="mt-4 space-y-2">
+                      {(Array.isArray(exp.descricao) ? exp.descricao : [exp.descricao]).map((item: string, idx: number) => (
+                        <li key={idx} className="flex items-start gap-2 text-muted-foreground">
+                          <span className="text-primary mt-1.5">•</span>
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
               </div>
             ))}

@@ -11,38 +11,16 @@
 import { memo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { CandidatoPerfil } from "@/data/candidatoPerfilData";
+import { CandidatoPerfil, FormacaoAcademica, Certificacao } from "@/data/candidatoPerfilData";
 import { GraduationCap, Award, BookOpen } from "lucide-react";
 
 interface FormacaoTabProps {
   candidato: CandidatoPerfil;
 }
 
-type Formacao = {
-  id: string;
-  curso: string;
-  instituicao: string;
-  nivel: string;
-  anoConclusao: string | number;
-  status: string;
-};
-
-type Certificacao = {
-  id: string;
-  nome: string;
-  instituicao: string;
-  dataEmissao: string;
-  dataValidade?: string | null;
-};
-
 export function FormacaoTab({ candidato }: FormacaoTabProps) {
-  const formacao = (Array.isArray((candidato as any).formacao)
-    ? (candidato as any).formacao
-    : []) as Formacao[];
-
-  const certificacoes = (Array.isArray((candidato as any).certificacoes)
-    ? (candidato as any).certificacoes
-    : []) as Certificacao[];
+  const formacao: FormacaoAcademica[] = candidato.formacao ?? [];
+  const certificacoes: Certificacao[] = candidato.certificacoes ?? [];
 
   const getNivelLabel = (nivel: string) => {
     const labels: Record<string, string> = {

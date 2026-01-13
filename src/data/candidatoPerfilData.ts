@@ -23,6 +23,77 @@ export interface ArquivoAnexo {
  * (CandidatoPerfilData) from the database. Components should use
  * this interface for UI props, and transform data as needed.
  */
+/**
+ * Estrutura de formação acadêmica
+ */
+export interface FormacaoAcademica {
+  id: string;
+  curso: string;
+  instituicao: string;
+  nivel: string;
+  anoConclusao: string | number;
+  status: string;
+}
+
+/**
+ * Estrutura de experiência profissional
+ */
+export interface ExperienciaProfissional {
+  id: string;
+  cargo: string;
+  empresa: string;
+  inicio?: string;
+  fim?: string;
+  dataInicio?: string;
+  dataFim?: string | null;
+  atual?: boolean;
+  descricao?: string | string[];
+}
+
+/**
+ * Estrutura de certificação
+ */
+export interface Certificacao {
+  id: string;
+  nome: string;
+  instituicao: string;
+  dataEmissao: string;
+  dataValidade?: string | null;
+}
+
+/**
+ * Estrutura de histórico
+ */
+export interface HistoricoCandidato {
+  id: string;
+  data: string;
+  hora: string;
+  tipo: string;
+  tipoIcon: string;
+  descricao: string;
+  detalhes?: string | null;
+  usuario?: string | null;
+}
+
+/**
+ * Estrutura de avaliação
+ */
+export interface AvaliacaoCandidato {
+  id: string;
+  tipo: string;
+  tipoLabel: string;
+  data: string;
+  avaliador: string;
+  notaGeral: number;
+  recomendacao: string;
+  observacoes: string;
+  notas: Array<{ criterio: string; nota: number }>;
+}
+
+/**
+ * UI-focused CandidatoPerfil interface for presentation components.
+ * Contains all fields needed for rendering candidate profile UI.
+ */
 export interface CandidatoPerfil {
   id: string;
   nome: string;
@@ -32,24 +103,14 @@ export interface CandidatoPerfil {
   foto?: string;
   resumo?: string;
   habilidades?: string[];
-  experiencias?: unknown[];
-  formacao?: unknown[];
+  experiencias?: ExperienciaProfissional[];
+  formacao?: FormacaoAcademica[];
   resumoProfissional?: string;
   vagaAtual?: string;
   arquivos: ArquivoAnexo[];
   skills: Array<{ nome: string; nivel: number }>;
-  certificacoes: Array<{ id: string; nome: string; instituicao: string; dataEmissao: string; dataValidade?: string }>;
-  avaliacoes: Array<{
-    id: string;
-    tipo: string;
-    tipoLabel: string;
-    data: string;
-    avaliador: string;
-    notaGeral: number;
-    recomendacao: string;
-    observacoes: string;
-    notas: Array<{ criterio: string; nota: number }>;
-  }>;
+  certificacoes: Certificacao[];
+  avaliacoes: AvaliacaoCandidato[];
   // Additional fields used by PerfilHeader and other components
   cargoAtual?: string;
   empresaAtual?: string;
@@ -61,16 +122,7 @@ export interface CandidatoPerfil {
   pretensaoSalarial?: number;
   etapaAtualLabel?: string;
   dataCadastro?: string;
-  historico?: Array<{
-    id: string;
-    data: string;
-    hora: string;
-    tipo: string;
-    tipoIcon: string;
-    descricao: string;
-    detalhes?: string | null;
-    usuario?: string | null;
-  }>;
+  historico?: HistoricoCandidato[];
 }
 
 /**
