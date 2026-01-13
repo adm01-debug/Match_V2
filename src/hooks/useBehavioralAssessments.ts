@@ -1,5 +1,8 @@
 /**
- * @fileoverview Hook para gerenciar avaliações comportamentais
+ * @fileoverview Hook para gerenciar avaliações comportamentais das 10 ferramentas
+ * @module useBehavioralAssessments
+ * 
+ * Integra com a tabela behavioral_assessment_results no Supabase
  */
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -27,6 +30,7 @@ export interface BehavioralAssessmentRecord {
 
 /**
  * Hook para buscar resultados de avaliações comportamentais de um candidato
+ * @param candidatoId - ID do candidato (opcional)
  */
 export function useCandidateBehavioralResults(candidatoId: string | undefined) {
   return useQuery({
@@ -40,10 +44,15 @@ export function useCandidateBehavioralResults(candidatoId: string | undefined) {
         .eq('candidato_id', candidatoId)
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching behavioral results:', error);
+        throw error;
+      }
       return data as BehavioralAssessmentRecord[];
     },
     enabled: !!candidatoId,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    retry: 2,
   });
 }
 
@@ -71,6 +80,7 @@ export function useProcessoBehavioralResults(processoId: string | undefined) {
 
 /**
  * Hook para salvar resultado de avaliação comportamental
+ * Salva na tabela behavioral_assessment_results no Supabase
  */
 export function useSaveBehavioralResult() {
   const queryClient = useQueryClient();
@@ -85,6 +95,12 @@ export function useSaveBehavioralResult() {
       results: BehavioralResult;
       timeSpent: number;
     }) => {
+      // Calculate average score from all dimension scores
+      const scoreValues = data.results.scores ? Object.values(data.results.scores) : [];
+      const avgScore = scoreValues.length > 0 
+        ? Math.round(scoreValues.reduce((a, b) => a + b, 0) / scoreValues.length)
+        : null;
+
       const { data: result, error } = await supabase
         .from('behavioral_assessment_results')
         .insert({
@@ -96,18 +112,21 @@ export function useSaveBehavioralResult() {
           results: data.results as unknown as Json,
           primary_result: data.results.primaryProfile || null,
           secondary_result: data.results.secondaryProfile || null,
-          score: data.results.scores ? 
-            Math.max(...Object.values(data.results.scores)) : null,
+          score: avgScore,
           time_spent: data.timeSpent,
           completed_at: new Date().toISOString(),
         })
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error saving behavioral result:', error);
+        throw error;
+      }
       return result;
     },
     onSuccess: (_, variables) => {
+      // Invalidate all related queries to ensure fresh data
       queryClient.invalidateQueries({ 
         queryKey: ['behavioral-results', variables.candidatoId] 
       });
@@ -117,6 +136,12 @@ export function useSaveBehavioralResult() {
       queryClient.invalidateQueries({ 
         queryKey: ['completed-tools', variables.candidatoId] 
       });
+      queryClient.invalidateQueries({ 
+        queryKey: ['behavioral-stats'] 
+      });
+    },
+    onError: (error) => {
+      console.error('Failed to save behavioral result:', error);
     },
   });
 }
