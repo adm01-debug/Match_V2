@@ -136,9 +136,11 @@ export const GamifiedAssessmentEngine = memo(function GamifiedAssessmentEngine({
     let xpGained = currentQuestion?.xpReward || 10;
     
     // Fast answer bonus
+    let newFastAnswers = fastAnswers;
     if (isFastAnswer && currentQuestion?.timeBonus) {
       xpGained += currentQuestion.timeBonus;
-      setFastAnswers(prev => prev + 1);
+      newFastAnswers = fastAnswers + 1;
+      setFastAnswers(newFastAnswers);
     }
 
     // Combo multiplier
@@ -163,17 +165,24 @@ export const GamifiedAssessmentEngine = memo(function GamifiedAssessmentEngine({
     }
 
     // Check for badges
+    let newBadges = [...earnedBadges];
     if (newCombo.count === 5 && !earnedBadges.includes('combo-master')) {
-      setEarnedBadges(prev => [...prev, 'combo-master']);
+      newBadges = [...newBadges, 'combo-master'];
+      setEarnedBadges(newBadges);
     }
-    if (fastAnswers >= 5 && !earnedBadges.includes('speed-demon')) {
-      setEarnedBadges(prev => [...prev, 'speed-demon']);
+    if (newFastAnswers >= 5 && !earnedBadges.includes('speed-demon')) {
+      newBadges = [...newBadges, 'speed-demon'];
+      setEarnedBadges(newBadges);
     }
 
-    // Update state
-    setTotalXP(prev => prev + xpGained);
+    // Calculate new total XP including current answer
+    const newTotalXP = totalXP + xpGained;
+    setTotalXP(newTotalXP);
     addXP(xpGained, 'avaliacao');
-    setAnswers(prev => ({ ...prev, [questionId]: { answer, responseTime, combo: newCombo.count } }));
+    
+    // Update answers with current answer included
+    const newAnswers = { ...answers, [questionId]: { answer, responseTime, combo: newCombo.count } };
+    setAnswers(newAnswers);
 
     // Next question or complete
     if (currentIndex < questions.length - 1) {
@@ -185,13 +194,13 @@ export const GamifiedAssessmentEngine = memo(function GamifiedAssessmentEngine({
       triggerConfetti('big');
       setTimeout(() => {
         setPhase('complete');
-        onComplete(answers, {
-          totalXP,
+        onComplete(newAnswers, {
+          totalXP: newTotalXP,
           comboMax: Math.max(combo.count, newCombo.count),
-          fastAnswers,
+          fastAnswers: newFastAnswers,
           timeElapsed: Date.now() - startTime,
           accuracy: 100,
-          badges: earnedBadges,
+          badges: newBadges,
         });
       }, 1000);
     }

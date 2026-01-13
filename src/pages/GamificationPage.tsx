@@ -7,8 +7,9 @@ import { useState } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { GamificationDashboard } from "@/components/gamification/GamificationDashboard";
 import { usePageTitle } from "@/hooks/usePageTitle";
+import { useGamification } from "@/hooks/useGamification";
 import { motion } from "framer-motion";
-import { Trophy, Award, Flame, Medal, Gamepad2, Brain, Heart, Layers, ArrowLeft, Sparkles, Zap, Star } from "lucide-react";
+import { Trophy, Award, Flame, Gamepad2, Brain, Heart, Layers, ArrowLeft, Sparkles, Zap, Star } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -66,9 +67,11 @@ const GAME_CARDS = [
 export default function GamificationPage() {
   usePageTitle('Conquistas');
   const [gamifiedMode, setGamifiedMode] = useState<GamifiedMode>(null);
+  const { addXP, level, streak, xp } = useGamification();
 
-  const handleGameComplete = (xp: number) => {
-    toast.success(`+${xp} XP ganhos!`, {
+  const handleGameComplete = (xpAmount: number) => {
+    addXP(xpAmount, 'game');
+    toast.success(`+${xpAmount} XP ganhos!`, {
       description: "Continue jogando para subir de nível!",
       icon: <Sparkles className="h-5 w-5 text-yellow-500" />
     });
@@ -244,27 +247,27 @@ export default function GamificationPage() {
               </div>
             </div>
 
-            {/* Quick Stats */}
+            {/* Quick Stats - Now using real data from hook */}
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-yellow-500/10 border border-yellow-500/20">
                 <Award className="h-5 w-5 text-yellow-500" />
                 <div>
                   <p className="text-xs text-muted-foreground">Nível</p>
-                  <p className="font-bold text-yellow-600">12</p>
+                  <p className="font-bold text-yellow-600">{level}</p>
                 </div>
               </div>
               <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-orange-500/10 border border-orange-500/20">
                 <Flame className="h-5 w-5 text-orange-500" />
                 <div>
                   <p className="text-xs text-muted-foreground">Streak</p>
-                  <p className="font-bold text-orange-600">12 dias</p>
+                  <p className="font-bold text-orange-600">{streak} dias</p>
                 </div>
               </div>
               <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary/10 border border-primary/20">
-                <Medal className="h-5 w-5 text-primary" />
+                <Star className="h-5 w-5 text-primary" />
                 <div>
-                  <p className="text-xs text-muted-foreground">Rank</p>
-                  <p className="font-bold text-primary">#6</p>
+                  <p className="text-xs text-muted-foreground">XP</p>
+                  <p className="font-bold text-primary">{xp.toLocaleString()}</p>
                 </div>
               </div>
             </div>

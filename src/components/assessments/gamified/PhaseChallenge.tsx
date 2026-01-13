@@ -113,18 +113,22 @@ export const PhaseChallenge = memo(function PhaseChallenge({
   const handleAnswer = useCallback((answerId: string) => {
     if (!currentPhase || !currentQuestion) return;
 
-    setCurrentAnswers(prev => [...prev, { questionId: currentQuestion.id, answerId }]);
+    // Include current answer in the new answers array
+    const newAnswers = [...currentAnswers, { questionId: currentQuestion.id, answerId }];
+    setCurrentAnswers(newAnswers);
 
     if (currentQuestionIndex < currentPhase.questions.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1);
     } else {
-      // Phase complete
+      // Phase complete - calculate score with all answers including current
       const timeSpent = Math.floor((Date.now() - phaseStartTime) / 1000);
-      const correctAnswers = currentAnswers.filter((answer, idx) => {
+      
+      // Count correct answers from all answers including current
+      const correctAnswers = newAnswers.filter((answer, idx) => {
         const question = currentPhase.questions[idx];
         const selectedOption = question?.options.find(o => o.id === answer.answerId);
         return selectedOption?.isCorrect;
-      }).length + 1; // +1 for current answer
+      }).length;
       
       const score = Math.round((correctAnswers / currentPhase.questions.length) * 100);
       const xpEarned = Math.round((score / 100) * currentPhase.xpReward);
@@ -134,7 +138,7 @@ export const PhaseChallenge = memo(function PhaseChallenge({
         score,
         xpEarned,
         timeSpent,
-        answers: [...currentAnswers, { questionId: currentQuestion.id, answerId }],
+        answers: newAnswers,
       };
 
       setLastPhaseResult(result);
@@ -149,8 +153,8 @@ export const PhaseChallenge = memo(function PhaseChallenge({
     setCurrentPhaseIndex(null);
     setLastPhaseResult(null);
 
-    // Check if all phases complete
-    if (phaseResults.length >= phases.length - 1) {
+    // Check if all phases complete - need to account for the result we just added
+    if (phaseResults.length >= phases.length) {
       onComplete(phaseResults);
     }
   }, [phaseResults, phases.length, onComplete]);

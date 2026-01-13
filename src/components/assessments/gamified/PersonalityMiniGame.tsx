@@ -3,7 +3,7 @@
  * Jogos rápidos e divertidos para revelar traços de personalidade
  */
 
-import { useState, useCallback, useEffect, memo } from 'react';
+import { useState, useCallback, useEffect, memo, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Zap, 
@@ -62,19 +62,30 @@ export const PersonalityMiniGame = memo(function PersonalityMiniGame({
   const [questionStart, setQuestionStart] = useState(0);
   const [showXP, setShowXP] = useState<number | null>(null);
   const [streak, setStreak] = useState(0);
+  
+  // Ref to hold handleSelect for use in timer
+  const handleSelectRef = useRef<((optionId: string) => void) | null>(null);
 
   const currentGame = games[currentIndex];
   const progress = (currentIndex / games.length) * 100;
 
-  // Timer effect
+  // Timer effect - auto-select on timeout
   useEffect(() => {
     if (phase !== 'playing' || !currentGame?.timeLimit) return;
 
     const interval = setInterval(() => {
       setTimeLeft(prev => {
-        if (prev <= 0) {
+        if (prev <= 1) {
           // Auto-select first option on timeout
-          handleSelect(currentGame.options[0]?.id || '');
+          const firstOptionId = currentGame.options[0]?.id;
+          if (firstOptionId) {
+            // Defer the state update to avoid calling during render
+            setTimeout(() => {
+              if (phase === 'playing') {
+                handleSelectRef.current?.(firstOptionId);
+              }
+            }, 0);
+          }
           return 0;
         }
         return prev - 1;
@@ -82,7 +93,7 @@ export const PersonalityMiniGame = memo(function PersonalityMiniGame({
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [phase, currentGame]);
+  }, [phase, currentGame?.timeLimit, currentGame?.options]);
 
   const startGame = useCallback(() => {
     setPhase('playing');
@@ -156,6 +167,11 @@ export const PersonalityMiniGame = memo(function PersonalityMiniGame({
       }
     }, 1000);
   }, [phase, currentGame, questionStart, streak, currentIndex, games, results, totalXP, onComplete]);
+
+  // Update ref when handleSelect changes
+  useEffect(() => {
+    handleSelectRef.current = handleSelect;
+  }, [handleSelect]);
 
   // Game type renderers
   const renderQuickChoice = () => (
