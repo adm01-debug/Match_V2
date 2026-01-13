@@ -16,7 +16,7 @@ interface CustomCursorProps {
 }
 
 export const CustomCursor = memo(function CustomCursor({
-  enabled = true,
+  enabled = false,
   size = 20,
   color = "hsl(var(--primary))",
   mixBlendMode = true,
@@ -48,6 +48,15 @@ export const CustomCursor = memo(function CustomCursor({
   const handleMouseUp = useCallback(() => setIsPressed(false), []);
   const handleMouseEnter = useCallback(() => setIsVisible(true), []);
   const handleMouseLeave = useCallback(() => setIsVisible(false), []);
+
+  // Se o cursor customizado foi removido do app, pode sobrar um <style> no cache.
+  // Este efeito garante que o cursor do browser volte ao normal.
+  useEffect(() => {
+    if (enabled) return;
+    document.body.style.cursor = '';
+    const existingStyle = document.getElementById('custom-cursor-style');
+    existingStyle?.remove();
+  }, [enabled]);
 
   useEffect(() => {
     if (!enabled) return;

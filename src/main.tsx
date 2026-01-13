@@ -3,6 +3,20 @@ import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
 
+
+// Desabilitar definitivamente o cursor customizado ("bolinha")
+// e remover CSS legado caso tenha ficado no cache.
+try {
+  localStorage.setItem('custom-cursor-enabled', 'false');
+} catch {
+  // ignore
+}
+
+if (typeof document !== 'undefined') {
+  document.body.style.cursor = '';
+  document.getElementById('custom-cursor-style')?.remove();
+}
+
 // Registrar Service Worker para PWA
 // Importante: forçar update/skipWaiting para evitar cache antigo causar "tela branca"
 if ('serviceWorker' in navigator && import.meta.env.PROD) {
