@@ -43,6 +43,7 @@ const IndicacoesPage = lazy(() => import("./pages/IndicacoesPage"));
 const DiagnosticoPage = lazy(() => import("./pages/DiagnosticoPage"));
 const EdgeFunctionTestPage = lazy(() => import("./pages/EdgeFunctionTestPage"));
 const BehavioralAssessmentsPage = lazy(() => import("./pages/BehavioralAssessmentsPage"));
+const BehavioralAssessmentPage = lazy(() => import("./pages/BehavioralAssessmentPage"));
 const GamificationPage = lazy(() => import("./pages/GamificationPage"));
 const OfferManagementPage = lazy(() => import("./pages/OfferManagementPage"));
 const HiringManagerPortalPage = lazy(() => import("./pages/HiringManagerPortalPage"));
@@ -329,6 +330,14 @@ function App() {
                                   element={
                                     <ProtectedRoute>
                                       <BehavioralAssessmentsPage />
+                                    </ProtectedRoute>
+                                  }
+                                />
+                                <Route
+                                  path="/avaliacao-comportamental"
+                                  element={
+                                    <ProtectedRoute>
+                                      <BehavioralAssessmentPage />
                                     </ProtectedRoute>
                                   }
                                 />
