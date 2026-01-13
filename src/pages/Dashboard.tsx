@@ -329,89 +329,102 @@ function DashboardContent() {
             </Suspense>
           </motion.div>
 
-          {/* Main Content Grid with Enhanced Cards */}
-          <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-            {/* Left Column - 2/3 width */}
-            <motion.div 
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.25, type: 'spring' as const, stiffness: 200, damping: 20 }}
-              className="xl:col-span-2 space-y-6"
-            >
-              <Suspense fallback={<Skeleton className="h-[400px] rounded-2xl" />}>
+          {/* Row 1: Funil + Gamification Widget */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.25, type: 'spring' as const, stiffness: 200, damping: 20 }}
+            className="grid grid-cols-1 lg:grid-cols-12 gap-6"
+          >
+            {/* Funil de Recrutamento - 8 colunas */}
+            <div className="lg:col-span-8">
+              <Suspense fallback={<Skeleton className="h-[420px] rounded-2xl" />}>
                 <FunilChart data={funilData} />
               </Suspense>
-              
-              <Suspense fallback={<Skeleton className="h-[350px] rounded-2xl" />}>
-                <EntrevistasChart />
-              </Suspense>
-            </motion.div>
-
-            {/* Right Column - 1/3 width */}
-            <motion.div 
-              initial={{ opacity: 0, x: 30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.35, type: 'spring' as const, stiffness: 200, damping: 20 }}
-              className="space-y-6"
-            >
-              {/* Gamification Widget */}
-              <Suspense fallback={<Skeleton className="h-64 rounded-2xl" />}>
+            </div>
+            
+            {/* Gamification Widget - 4 colunas */}
+            <div className="lg:col-span-4">
+              <Suspense fallback={<Skeleton className="h-[420px] rounded-2xl" />}>
                 <GamificationWidget />
               </Suspense>
-              
-              {/* Recent Actions Widget */}
-              <Suspense fallback={<Skeleton className="h-48 rounded-2xl" />}>
-                <RecentActionsWidget />
+            </div>
+          </motion.div>
+
+          {/* Row 2: Gráfico Entrevistas + Ações Rápidas + Vagas Urgentes */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.35, type: 'spring' as const, stiffness: 200, damping: 20 }}
+            className="grid grid-cols-1 lg:grid-cols-12 gap-6"
+          >
+            {/* Gráfico de Entrevistas - 7 colunas */}
+            <div className="lg:col-span-7">
+              <Suspense fallback={<Skeleton className="h-[380px] rounded-2xl" />}>
+                <EntrevistasChart />
               </Suspense>
-              
-              <Suspense fallback={<Skeleton className="h-48 rounded-2xl" />}>
+            </div>
+            
+            {/* Ações Rápidas + Vagas Urgentes - 5 colunas */}
+            <div className="lg:col-span-5 space-y-6">
+              <Suspense fallback={<Skeleton className="h-44 rounded-2xl" />}>
                 <AcoesRapidas />
               </Suspense>
               
-              <Suspense fallback={<Skeleton className="h-64 rounded-2xl" />}>
+              <Suspense fallback={<Skeleton className="h-[200px] rounded-2xl" />}>
                 <VagasUrgentes vagas={vagasUrgentes} />
               </Suspense>
-              
-              <Suspense fallback={<Skeleton className="h-48 rounded-2xl" />}>
-                <AcoesPendentes acoes={acoesPendentes} />
-              </Suspense>
-            </motion.div>
-          </div>
+            </div>
+          </motion.div>
 
-          {/* Bottom Section - Insights & Alerts with Glass Effect */}
+          {/* Row 3: Agenda + Insights + Ações Pendentes + Alertas */}
           <motion.div 
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.45, type: 'spring' as const, stiffness: 200, damping: 20 }}
-            className="grid grid-cols-1 lg:grid-cols-3 gap-6"
+            className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6"
           >
-            <Suspense fallback={<Skeleton className="h-72 rounded-2xl" />}>
+            <Suspense fallback={<Skeleton className="h-80 rounded-2xl" />}>
               <AgendaHoje agenda={agendaDia} />
             </Suspense>
             
-            <Suspense fallback={<Skeleton className="h-72 rounded-2xl" />}>
+            <Suspense fallback={<Skeleton className="h-80 rounded-2xl" />}>
               <SmartInsights kpiData={kpis} funilData={funilData} />
             </Suspense>
             
-            <Suspense fallback={<Skeleton className="h-72 rounded-2xl" />}>
+            <Suspense fallback={<Skeleton className="h-80 rounded-2xl" />}>
+              <AcoesPendentes acoes={acoesPendentes} />
+            </Suspense>
+            
+            <Suspense fallback={<Skeleton className="h-80 rounded-2xl" />}>
               <AlertasInteligentes acoesPendentes={acoesPendentes} vagasUrgentes={vagasUrgentes} />
             </Suspense>
           </motion.div>
 
-          {/* Stats Section */}
+          {/* Row 4: Top Candidatos + Entrevistas Stats + Recent Actions */}
           <motion.div 
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.55, type: 'spring' as const, stiffness: 200, damping: 20 }}
-            className="grid grid-cols-1 lg:grid-cols-2 gap-6"
+            className="grid grid-cols-1 lg:grid-cols-12 gap-6"
           >
-            <Suspense fallback={<Skeleton className="h-96 rounded-2xl" />}>
-              <TopCandidatos processos={processos} />
-            </Suspense>
+            <div className="lg:col-span-5">
+              <Suspense fallback={<Skeleton className="h-96 rounded-2xl" />}>
+                <TopCandidatos processos={processos} />
+              </Suspense>
+            </div>
             
-            <Suspense fallback={<Skeleton className="h-96 rounded-2xl" />}>
-              <EntrevistasStats />
-            </Suspense>
+            <div className="lg:col-span-4">
+              <Suspense fallback={<Skeleton className="h-96 rounded-2xl" />}>
+                <EntrevistasStats />
+              </Suspense>
+            </div>
+            
+            <div className="lg:col-span-3">
+              <Suspense fallback={<Skeleton className="h-96 rounded-2xl" />}>
+                <RecentActionsWidget />
+              </Suspense>
+            </div>
           </motion.div>
         </motion.div>
       </div>
