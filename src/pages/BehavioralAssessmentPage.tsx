@@ -26,6 +26,7 @@ import {
   type AuthenticityMetrics
 } from '@/config/behavioralPillars';
 import { useBehavioralAssessment } from '@/hooks/useBehavioralAssessmentResults';
+import { selectBalancedScenarios } from '@/data/immersiveScenariosData';
 import { 
   Brain, 
   Play, 
@@ -83,15 +84,9 @@ export default function BehavioralAssessmentPage() {
   const [companyProfile, setCompanyProfile] = useState<CompanyProfile | null>(null);
   const [hasSavedResults, setHasSavedResults] = useState(false);
   
-  // Cenários selecionados (podemos randomizar ou filtrar)
+  // Cenários selecionados (balanceados para cobrir todos os pilares)
   const scenarios = useMemo(() => {
-    // Importa cenários expandidos se disponíveis, senão usa os originais
-    try {
-      const { selectBalancedScenarios } = require('@/data/immersiveScenariosData');
-      return selectBalancedScenarios(10, true);
-    } catch {
-      return IMMERSIVE_SCENARIOS.slice(0, 5);
-    }
+    return selectBalancedScenarios(10, true);
   }, []);
 
   // Calcular scores baseados nas respostas
