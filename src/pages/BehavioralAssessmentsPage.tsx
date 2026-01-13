@@ -1,6 +1,6 @@
 /**
  * @module BehavioralAssessmentsPage
- * @description Página principal das 10 ferramentas comportamentais
+ * @description Página principal das 10 ferramentas comportamentais com gamificação
  */
 
 import { useState, useEffect } from 'react';
@@ -15,7 +15,8 @@ import { Progress } from '@/components/ui/progress';
 import { 
   Brain, Eye, Lightbulb, Zap, MessageSquare, Heart, 
   Target, Sparkles, AlertTriangle, Users, Play,
-  Trophy, Clock, CheckCircle2, ArrowRight, BarChart3
+  Trophy, Clock, CheckCircle2, ArrowRight, BarChart3,
+  Gamepad2, Star, Flame
 } from 'lucide-react';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { BEHAVIORAL_TOOLS } from '@/types/behavioral';
@@ -24,6 +25,16 @@ import { BehavioralAssessmentPlayer } from '@/components/assessments/BehavioralA
 import { BehavioralResultView } from '@/components/assessments/BehavioralResultView';
 import { useSaveBehavioralResult } from '@/hooks/useBehavioralAssessments';
 import { toast } from 'sonner';
+import { 
+  GamifiedAssessmentEngine,
+  SwipeValuesCard,
+  PersonalityMiniGame 
+} from '@/components/assessments/gamified';
+import { 
+  GAMIFIED_QUESTIONS, 
+  VALUE_CARDS, 
+  PERSONALITY_MINI_GAMES 
+} from '@/data/gamifiedAssessmentData';
 
 const TOOL_ICONS: Record<string, React.ReactNode> = {
   disc: <Brain className="h-6 w-6" />,
@@ -43,11 +54,17 @@ export default function BehavioralAssessmentsPage() {
   const [searchParams] = useSearchParams();
   const saveResult = useSaveBehavioralResult();
   
-  const [activeTab, setActiveTab] = useState('tools');
+  const [activeTab, setActiveTab] = useState('gamified');
   const [selectedTool, setSelectedTool] = useState<string | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [completedResults, setCompletedResults] = useState<BehavioralResult[]>([]);
   const [viewingResult, setViewingResult] = useState<BehavioralResult | null>(null);
+  
+  // Gamification states
+  const [gamifiedMode, setGamifiedMode] = useState<'quiz' | 'swipe' | 'minigame' | null>(null);
+  const [totalXP, setTotalXP] = useState(0);
+  const [earnedBadges, setEarnedBadges] = useState<string[]>([]);
+  const [streak, setStreak] = useState(0);
 
   // Handle URL parameter to start specific tool
   useEffect(() => {
@@ -95,7 +112,77 @@ export default function BehavioralAssessmentsPage() {
   const completedToolIds = completedResults.map(r => r.toolId);
   const progressPercentage = (completedToolIds.length / BEHAVIORAL_TOOLS.length) * 100;
 
-  // If playing, show the player
+  // Gamification handlers
+  const handleGamifiedComplete = (_answers: Record<string, unknown>, stats: { totalXP: number; badges: string[]; comboMax: number; fastAnswers: number; timeElapsed: number; accuracy: number }) => {
+    setTotalXP(prev => prev + stats.totalXP);
+    setEarnedBadges(prev => [...new Set([...prev, ...stats.badges])]);
+    setStreak(prev => Math.max(prev, stats.comboMax));
+    setGamifiedMode(null);
+    toast.success(`+${stats.totalXP} XP ganhos!`, {
+      description: stats.badges.length > 0 ? `Novas conquistas: ${stats.badges.join(', ')}` : undefined
+    });
+  };
+
+  const handleSwipeComplete = (liked: string[], _passed: string[], superLiked: string[]) => {
+    const xpEarned = liked.length * 10 + superLiked.length * 25;
+    setTotalXP(prev => prev + xpEarned);
+    setGamifiedMode(null);
+    toast.success(`Valores mapeados! +${xpEarned} XP`);
+  };
+
+  const handleMiniGameComplete = (_results: Array<{ gameId: string; selectedOption: string; responseTime: number; earnedXP: number; trait?: string }>, xp: number) => {
+    setTotalXP(prev => prev + xp);
+    setStreak(prev => prev + 1);
+    setGamifiedMode(null);
+    toast.success(`Mini-game completo! +${xp} XP`);
+  };
+
+  // If playing gamified mode
+  if (gamifiedMode === 'quiz') {
+    return (
+      <Layout title="Quiz Interativo">
+        <div className="max-w-4xl mx-auto">
+          <GamifiedAssessmentEngine 
+            questions={GAMIFIED_QUESTIONS}
+            onComplete={handleGamifiedComplete}
+            onExit={() => setGamifiedMode(null)}
+            title="Quiz de Personalidade"
+            subtitle="Descubra seus traços dominantes"
+          />
+        </div>
+      </Layout>
+    );
+  }
+
+  if (gamifiedMode === 'swipe') {
+    return (
+      <Layout title="Swipe de Valores">
+        <div className="max-w-lg mx-auto">
+          <SwipeValuesCard 
+            cards={VALUE_CARDS}
+            onComplete={handleSwipeComplete}
+            title="Quais valores combinam com você?"
+          />
+        </div>
+      </Layout>
+    );
+  }
+
+  if (gamifiedMode === 'minigame') {
+    return (
+      <Layout title="Mini-Game Personalidade">
+        <div className="max-w-2xl mx-auto">
+          <PersonalityMiniGame 
+            games={PERSONALITY_MINI_GAMES}
+            onComplete={handleMiniGameComplete}
+            onExit={() => setGamifiedMode(null)}
+          />
+        </div>
+      </Layout>
+    );
+  }
+
+  // If playing traditional assessment, show the player
   if (isPlaying && selectedTool) {
     return (
       <Layout title="Assessment em Andamento">
@@ -151,13 +238,31 @@ export default function BehavioralAssessmentsPage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-4 mt-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
               <Card className="bg-background/80 backdrop-blur">
                 <CardContent className="p-4 flex items-center gap-3">
-                  <Trophy className="h-8 w-8 text-yellow-500" />
+                  <Star className="h-8 w-8 text-yellow-500" />
                   <div>
-                    <div className="text-2xl font-bold">{completedToolIds.length}/10</div>
-                    <div className="text-sm text-muted-foreground">Concluídos</div>
+                    <div className="text-2xl font-bold">{totalXP}</div>
+                    <div className="text-sm text-muted-foreground">XP Total</div>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card className="bg-background/80 backdrop-blur">
+                <CardContent className="p-4 flex items-center gap-3">
+                  <Trophy className="h-8 w-8 text-purple-500" />
+                  <div>
+                    <div className="text-2xl font-bold">{earnedBadges.length}</div>
+                    <div className="text-sm text-muted-foreground">Conquistas</div>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card className="bg-background/80 backdrop-blur">
+                <CardContent className="p-4 flex items-center gap-3">
+                  <Flame className="h-8 w-8 text-orange-500" />
+                  <div>
+                    <div className="text-2xl font-bold">{streak}x</div>
+                    <div className="text-sm text-muted-foreground">Combo</div>
                   </div>
                 </CardContent>
               </Card>
@@ -167,15 +272,6 @@ export default function BehavioralAssessmentsPage() {
                   <div>
                     <div className="text-2xl font-bold">{Math.round(progressPercentage)}%</div>
                     <div className="text-sm text-muted-foreground">Progresso</div>
-                  </div>
-                </CardContent>
-              </Card>
-              <Card className="bg-background/80 backdrop-blur">
-                <CardContent className="p-4 flex items-center gap-3">
-                  <Clock className="h-8 w-8 text-green-500" />
-                  <div>
-                    <div className="text-2xl font-bold">~{10 - completedToolIds.length * 5}min</div>
-                    <div className="text-sm text-muted-foreground">Restantes</div>
                   </div>
                 </CardContent>
               </Card>
@@ -189,7 +285,11 @@ export default function BehavioralAssessmentsPage() {
 
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full max-w-md grid-cols-2">
+          <TabsList className="grid w-full max-w-2xl grid-cols-3">
+            <TabsTrigger value="gamified" className="gap-2">
+              <Gamepad2 className="h-4 w-4" />
+              Experiência Gamificada
+            </TabsTrigger>
             <TabsTrigger value="tools" className="gap-2">
               <Brain className="h-4 w-4" />
               Ferramentas
@@ -199,6 +299,173 @@ export default function BehavioralAssessmentsPage() {
               Resultados ({completedResults.length})
             </TabsTrigger>
           </TabsList>
+
+          {/* GAMIFIED TAB */}
+          <TabsContent value="gamified" className="mt-6">
+            <div className="grid md:grid-cols-3 gap-6">
+              {/* Quiz Interativo */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+              >
+                <Card className="h-full hover:shadow-xl transition-all cursor-pointer group border-2 border-primary/20 hover:border-primary/50">
+                  <CardHeader className="text-center pb-2">
+                    <div className="mx-auto p-4 rounded-2xl bg-gradient-to-br from-primary to-primary/70 text-white mb-2 group-hover:scale-110 transition-transform">
+                      <Brain className="h-10 w-10" />
+                    </div>
+                    <CardTitle className="text-xl">Quiz Interativo</CardTitle>
+                    <CardDescription>
+                      Responda perguntas de forma dinâmica com XP, combos e conquistas
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="flex flex-wrap gap-2 justify-center">
+                      <Badge variant="secondary" className="gap-1">
+                        <Star className="h-3 w-3" /> XP & Níveis
+                      </Badge>
+                      <Badge variant="secondary" className="gap-1">
+                        <Trophy className="h-3 w-3" /> Conquistas
+                      </Badge>
+                      <Badge variant="secondary" className="gap-1">
+                        <Flame className="h-3 w-3" /> Combos
+                      </Badge>
+                    </div>
+                    <Button 
+                      className="w-full gap-2" 
+                      size="lg"
+                      onClick={() => setGamifiedMode('quiz')}
+                    >
+                      <Play className="h-5 w-5" />
+                      Começar Quiz
+                    </Button>
+                  </CardContent>
+                </Card>
+              </motion.div>
+
+              {/* Swipe Values */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+              >
+                <Card className="h-full hover:shadow-xl transition-all cursor-pointer group border-2 border-pink-500/20 hover:border-pink-500/50">
+                  <CardHeader className="text-center pb-2">
+                    <div className="mx-auto p-4 rounded-2xl bg-gradient-to-br from-pink-500 to-rose-500 text-white mb-2 group-hover:scale-110 transition-transform">
+                      <Heart className="h-10 w-10" />
+                    </div>
+                    <CardTitle className="text-xl">Swipe de Valores</CardTitle>
+                    <CardDescription>
+                      Deslize para a direita nos valores que combinam com você
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="flex flex-wrap gap-2 justify-center">
+                      <Badge variant="secondary" className="bg-pink-100 text-pink-700 dark:bg-pink-900/30 dark:text-pink-300">
+                        ❤️ Like
+                      </Badge>
+                      <Badge variant="secondary" className="bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                        ❌ Pass
+                      </Badge>
+                      <Badge variant="secondary" className="bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300">
+                        ⭐ Super Like
+                      </Badge>
+                    </div>
+                    <Button 
+                      className="w-full gap-2 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600" 
+                      size="lg"
+                      onClick={() => setGamifiedMode('swipe')}
+                    >
+                      <Heart className="h-5 w-5" />
+                      Iniciar Swipe
+                    </Button>
+                  </CardContent>
+                </Card>
+              </motion.div>
+
+              {/* Mini-Games */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+              >
+                <Card className="h-full hover:shadow-xl transition-all cursor-pointer group border-2 border-amber-500/20 hover:border-amber-500/50">
+                  <CardHeader className="text-center pb-2">
+                    <div className="mx-auto p-4 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-500 text-white mb-2 group-hover:scale-110 transition-transform">
+                      <Gamepad2 className="h-10 w-10" />
+                    </div>
+                    <CardTitle className="text-xl">Mini-Games</CardTitle>
+                    <CardDescription>
+                      Jogos rápidos que revelam traços de personalidade
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="flex flex-wrap gap-2 justify-center">
+                      <Badge variant="secondary" className="bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300">
+                        ⚡ Rápido
+                      </Badge>
+                      <Badge variant="secondary" className="bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300">
+                        🎯 Preciso
+                      </Badge>
+                      <Badge variant="secondary" className="bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300">
+                        🧠 Intuitivo
+                      </Badge>
+                    </div>
+                    <Button 
+                      className="w-full gap-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600" 
+                      size="lg"
+                      onClick={() => setGamifiedMode('minigame')}
+                    >
+                      <Zap className="h-5 w-5" />
+                      Jogar Agora
+                    </Button>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            </div>
+
+            {/* XP Progress */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              className="mt-8"
+            >
+              <Card className="bg-gradient-to-r from-primary/5 to-primary/10">
+                <CardContent className="py-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 rounded-xl bg-primary text-primary-foreground">
+                        <Star className="h-6 w-6" />
+                      </div>
+                      <div>
+                        <h3 className="font-bold">Nível {Math.floor(totalXP / 500) + 1}</h3>
+                        <p className="text-sm text-muted-foreground">
+                          {totalXP % 500}/500 XP para o próximo nível
+                        </p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-2xl font-bold text-primary">{totalXP} XP</div>
+                      <p className="text-sm text-muted-foreground">Total acumulado</p>
+                    </div>
+                  </div>
+                  <Progress value={(totalXP % 500) / 5} className="h-3" />
+                  
+                  {earnedBadges.length > 0 && (
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      {earnedBadges.map((badge, i) => (
+                        <Badge key={i} variant="outline" className="gap-1">
+                          <Trophy className="h-3 w-3 text-yellow-500" />
+                          {badge}
+                        </Badge>
+                      ))}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </motion.div>
+          </TabsContent>
 
           <TabsContent value="tools" className="mt-6">
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
