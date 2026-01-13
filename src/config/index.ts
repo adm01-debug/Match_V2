@@ -6,6 +6,7 @@
 export * from './pipelineConfig';
 export * from './testsConfig';
 export * from './ipWhitelist';
+export * from './behavioralPillars';
 
 import { APP_NAME, APP_VERSION, DATE_FORMATS, PAGINATION } from '@/lib/constants';
 

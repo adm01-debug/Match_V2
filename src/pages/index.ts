@@ -23,6 +23,8 @@ export { default as AdvancedAnalyticsPage } from './AdvancedAnalyticsPage';
 export { default as AdminPage } from './AdminPage';
 export { default as ResumeParserPage } from './ResumeParserPage';
 export { default as BehavioralAssessmentsPage } from './BehavioralAssessmentsPage';
+export { default as BehavioralAssessmentPage } from './BehavioralAssessmentPage';
+export { default as DeuMatchPage } from './DeuMatchPage';
 export { default as GamificationPage } from './GamificationPage';
 export { default as OfferManagementPage } from './OfferManagementPage';
 export { default as HiringManagerPortalPage } from './HiringManagerPortalPage';
