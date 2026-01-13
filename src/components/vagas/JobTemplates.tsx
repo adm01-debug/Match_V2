@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
+import { useFuzzySearch, FUZZY_PRESETS } from '@/hooks/useFuzzySearch';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -25,7 +26,19 @@ export function JobTemplates({ onSelectTemplate }: JobTemplatesProps) {
   const [newTemplate, setNewTemplate] = useState({ name: '', description: '', category: '', requirements: '', benefits: '', contract_type: 'CLT' });
   const { toast } = useToast();
 
-  const filtered = templates.filter(t => t.name.toLowerCase().includes(search.toLowerCase()) || t.category.toLowerCase().includes(search.toLowerCase()));
+  // Busca fuzzy com Fuse.js
+  const { results: fuzzyResults } = useFuzzySearch(
+    templates,
+    [
+      { name: 'name', weight: 2 },
+      { name: 'category', weight: 1 },
+      { name: 'description', weight: 0.5 },
+    ],
+    search,
+    { ...FUZZY_PRESETS.default }
+  );
+
+  const filtered = useMemo(() => search ? fuzzyResults : templates, [templates, fuzzyResults, search]);
   const categories = [...new Set(templates.map(t => t.category))];
 
   const handleCreate = () => {
