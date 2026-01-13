@@ -183,7 +183,7 @@ export function CandidatoCardEnhanced({
               {/* Status indicator dot */}
               <div className={cn(
                 'absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full border-2 border-background',
-                status.color
+                status?.color ?? 'bg-muted'
               )} />
             </div>
 
