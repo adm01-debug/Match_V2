@@ -290,6 +290,7 @@ export const Type16Quiz = memo(function Type16Quiz({
 
   // Determinar categoria da pergunta
   const getQuestionCategory = () => {
+    if (!currentQuestion) return { label: 'Pergunta', icon: Brain, color: 'text-muted-foreground' };
     const id = currentQuestion.id;
     if (id.startsWith('ei')) return { label: 'Energia', icon: Zap, color: 'text-yellow-500' };
     if (id.startsWith('sn')) return { label: 'Informação', icon: Eye, color: 'text-blue-500' };
@@ -299,6 +300,10 @@ export const Type16Quiz = memo(function Type16Quiz({
 
   const category = getQuestionCategory();
   const CategoryIcon = category.icon;
+
+  if (!currentQuestion) {
+    return null;
+  }
 
   return (
     <Card className="w-full max-w-2xl mx-auto overflow-hidden">

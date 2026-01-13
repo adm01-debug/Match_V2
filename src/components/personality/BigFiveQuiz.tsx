@@ -138,8 +138,11 @@ export const BigFiveQuiz = memo(function BigFiveQuiz({
       neuroticism: 'N'
     };
 
-    const traitPrimario = traitMap[sortedTraits[0]] ?? 'O';
-    const traitSecundario = traitMap[sortedTraits[1]] ?? 'C';
+    const firstTrait = sortedTraits[0] as string | undefined;
+    const secondTrait = sortedTraits[1] as string | undefined;
+    
+    const traitPrimario: BigFiveTrait = (firstTrait && traitMap[firstTrait]) ? traitMap[firstTrait] : 'O';
+    const traitSecundario: BigFiveTrait = (secondTrait && traitMap[secondTrait]) ? traitMap[secondTrait] : 'C';
 
     const infoPrimario = BIG_FIVE_INFO[traitPrimario];
     const infoSecundario = BIG_FIVE_INFO[traitSecundario];
@@ -156,7 +159,7 @@ export const BigFiveQuiz = memo(function BigFiveQuiz({
       compatibilidadeCarreira: infoPrimario.carreirasCompativeis,
       ambienteIdeal: `Ambiente que valoriza ${infoPrimario.nome.toLowerCase()} e ${infoSecundario.nome.toLowerCase()}`,
       estiloTrabalho: infoPrimario.descricaoAlta,
-      relacionamentoEquipe: `Contribui com ${infoPrimario.caracteristicasAltas[0].toLowerCase()}`,
+      relacionamentoEquipe: `Contribui com ${(infoPrimario.caracteristicasAltas[0] ?? 'colaboração').toLowerCase()}`,
     };
   }, [answers]);
 
