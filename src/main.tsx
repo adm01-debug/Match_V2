@@ -3,6 +3,21 @@ import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
 
+// Dev safety: if a Service Worker was previously registered, disable it in non-PROD
+// to avoid caching mismatched bundles that can cause React hook crashes.
+if (!import.meta.env.PROD && 'serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then((regs) => {
+    regs.forEach((reg) => reg.unregister());
+  });
+
+  // Best-effort cache cleanup (ignore if not available)
+  (window as any).caches?.keys?.().then((keys: string[]) => {
+    keys
+      .filter((k) => k.startsWith('match-ats-'))
+      .forEach((k) => (window as any).caches.delete(k));
+  });
+}
+
 // Registrar Service Worker para PWA
 // Importante: forçar update/skipWaiting para evitar cache antigo causar "tela branca"
 if ('serviceWorker' in navigator && import.meta.env.PROD) {
