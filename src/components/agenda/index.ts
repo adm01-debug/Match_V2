@@ -11,3 +11,4 @@ export { default as EntrevistaDetalhesDialog } from './EntrevistaDetalhesDialog'
 export { GoogleCalendarExport } from './GoogleCalendarExport';
 export { InterviewReminderButton } from './InterviewReminderButton';
 export { WeekView } from './WeekView';
+export { AgendaTimeline } from './AgendaTimeline';

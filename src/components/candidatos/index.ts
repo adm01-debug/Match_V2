@@ -10,3 +10,7 @@ export { ComunicacaoHistorico } from './ComunicacaoHistorico';
 export { MatchScoreCalculator } from './MatchScoreCalculator';
 export { MatchScoreCard } from './MatchScoreCard';
 export { ResumeParser } from './ResumeParser';
+
+// Enhanced Components
+export { CandidatoCardEnhanced } from './CandidatoCardEnhanced';
+export { BulkActionsBar } from './BulkActionsBar';

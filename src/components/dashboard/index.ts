@@ -14,3 +14,8 @@ export { KPICard } from './KPICard';
 export { SmartInsights } from './SmartInsights';
 export { TopCandidatos } from './TopCandidatos';
 export { VagasUrgentes } from './VagasUrgentes';
+
+// New Premium Components
+export { InteractiveKPICard } from './InteractiveKPICard';
+export { CommandCenter } from './CommandCenter';
+export { LiveActivityFeed } from './LiveActivityFeed';
