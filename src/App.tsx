@@ -11,7 +11,7 @@ import { NotificationProvider } from "./contexts/NotificationContext";
 import { AnalyticsProvider } from "./contexts/AnalyticsProvider";
 import { AnimatedRoutes } from "./components/layout/AnimatedRoutes";
 import { GlobalShortcutsProvider } from "./components/common/GlobalShortcutsProvider";
-import { CustomCursor } from "./components/ui/custom-cursor";
+
 
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import PortalProtectedRoute from "./components/portal/PortalProtectedRoute";
@@ -398,7 +398,7 @@ function App() {
                         </GlobalShortcutsProvider>
                       </ErrorBoundary>
                     </OnboardingProvider>
-                    <CustomCursor />
+                    
                     <Toaster />
                     <Sonner />
                   </NotificationProvider>
