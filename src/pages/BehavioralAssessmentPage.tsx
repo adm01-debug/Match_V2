@@ -276,7 +276,6 @@ export default function BehavioralAssessmentPage() {
         <div className="p-6 space-y-6 animate-fade-in">
           <BehavioralResultsDashboard
             candidatoNome="Candidato Avaliado"
-            candidatoId="demo"
             vagaTitulo="Vaga Demo"
             scores={calculatedScores}
             companyProfile={companyProfile?.pilaresValorizados}
@@ -522,7 +521,6 @@ export default function BehavioralAssessmentPage() {
           <TabsContent value="resultados" className="mt-6">
             <BehavioralResultsDashboard
               candidatoNome="Exemplo de Resultado"
-              candidatoId="demo"
               vagaTitulo="Desenvolvedor Sênior"
               scores={calculatedScores}
               companyProfile={companyProfile?.pilaresValorizados}

@@ -83,16 +83,8 @@ const getScoreLabel = (score: number): string => {
   return 'Em Desenvolvimento';
 };
 
-const getFitColor = (fit: number, gap: number): string => {
-  if (gap <= 10) return 'bg-emerald-500';
-  if (gap <= 25) return 'bg-blue-500';
-  if (gap <= 40) return 'bg-amber-500';
-  return 'bg-red-500';
-};
-
 export function BehavioralResultsDashboard({
   candidatoNome,
-  candidatoId,
   vagaTitulo,
   scores,
   companyProfile,
@@ -116,8 +108,8 @@ export function BehavioralResultsDashboard({
     }));
   }, [scores, companyProfile]);
 
-  // Dados para o bar chart de comparação
-  const comparisonData = useMemo(() => {
+  // Dados para comparação (usado internamente)
+  const _comparisonData = useMemo(() => {
     if (!companyProfile) return [];
     
     return BEHAVIORAL_PILLARS.map((pilar) => {
@@ -135,6 +127,7 @@ export function BehavioralResultsDashboard({
       };
     }).sort((a, b) => b.gap - a.gap);
   }, [scores, companyProfile]);
+  void _comparisonData; // Suppress unused warning - reserved for future use
 
   // Top 3 pilares
   const topPilares = useMemo(() => {
@@ -411,7 +404,7 @@ export function BehavioralResultsDashboard({
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            {topPilares.map((pilar, i) => {
+            {topPilares.map((pilar) => {
               const Icon = pilarIcons[pilar.id] || Target;
               return (
                 <div key={pilar.id} className="flex items-center gap-3">
