@@ -42,6 +42,7 @@ interface BehavioralAssessmentPlayerProps {
 }
 
 const TOOL_ICONS: Record<string, React.ReactNode> = {
+  // Ferramentas originais (10)
   disc: <Brain className="h-6 w-6" />,
   vakd: <Eye className="h-6 w-6" />,
   metaprograms: <Lightbulb className="h-6 w-6" />,
@@ -52,6 +53,11 @@ const TOOL_ICONS: Record<string, React.ReactNode> = {
   emotional_intelligence: <Sparkles className="h-6 w-6" />,
   cognitive_biases: <AlertTriangle className="h-6 w-6" />,
   rapport: <Users className="h-6 w-6" />,
+  // Ferramentas avançadas (4)
+  generational: <Users className="h-6 w-6" />,
+  stress_profile: <Zap className="h-6 w-6" />,
+  triune_brain: <Brain className="h-6 w-6" />,
+  disc_compatibility: <Users className="h-6 w-6" />,
 };
 
 export function BehavioralAssessmentPlayer({
@@ -103,6 +109,14 @@ export function BehavioralAssessmentPlayer({
   };
 
   const calculateResults = (): BehavioralResult => {
+    // Verificar se é uma ferramenta avançada que requer cálculo especializado
+    const advancedTools = ['generational', 'stress_profile', 'triune_brain'];
+    
+    if (advancedTools.includes(toolId)) {
+      return calculateAdvancedResults();
+    }
+    
+    // Cálculo padrão para ferramentas originais
     const scores: Record<string, number> = {};
     const dimensionCounts: Record<string, number> = {};
 
@@ -130,12 +144,14 @@ export function BehavioralAssessmentPlayer({
       }
     });
 
-    // Calculate percentages
+    // Calculate percentages with improved normalization
     const percentages: Record<string, number> = {};
+    
     Object.keys(scores).forEach(dim => {
       const count = dimensionCounts[dim] || 1;
-      const maxPossible = count * 5;
-      percentages[dim] = Math.round(((scores[dim] || 0) / maxPossible) * 100) || 0;
+      // Normalização melhorada: considera score máximo de 4 por questão forced_choice
+      const maxPossible = count * 4;
+      percentages[dim] = Math.round(((scores[dim] || 0) / Math.max(maxPossible, 1)) * 100);
     });
 
     // Determine primary and secondary profiles
@@ -144,6 +160,11 @@ export function BehavioralAssessmentPlayer({
     
     const primary = sortedDimensions[0]?.[0] || '';
     const secondary = sortedDimensions[1]?.[0] || '';
+
+    // Calcular confiança baseada na diferença entre primeiro e segundo
+    const primaryScore = sortedDimensions[0]?.[1] || 0;
+    const secondaryScore = sortedDimensions[1]?.[1] || 0;
+    const confidence = Math.min(100, Math.round((primaryScore - secondaryScore) + 50));
 
     return {
       toolId,
@@ -154,7 +175,104 @@ export function BehavioralAssessmentPlayer({
       primaryProfile: primary,
       secondaryProfile: secondary,
       rawAnswers: answers,
+      confidence,
     };
+  };
+
+  // Cálculo especializado para ferramentas avançadas
+  const calculateAdvancedResults = (): BehavioralResult => {
+    const baseResult: BehavioralResult = {
+      toolId,
+      candidatoId,
+      completedAt: new Date().toISOString(),
+      timeSpent: timeElapsed,
+      scores: {},
+      primaryProfile: '',
+      rawAnswers: answers,
+    };
+
+    if (toolId === 'generational') {
+      // Inteligência Geracional
+      const genScores: Record<string, number> = {
+        silent: 0, baby_boomer: 0, gen_x: 0, millennial: 0, gen_z: 0, gen_alpha: 0,
+      };
+
+      Object.entries(answers).forEach(([, answerIndex]) => {
+        if (typeof answerIndex !== 'number') return;
+        const genMap = ['baby_boomer', 'gen_x', 'millennial', 'gen_z'];
+        const selectedGen = genMap[answerIndex];
+        if (selectedGen) genScores[selectedGen] = (genScores[selectedGen] || 0) + 4;
+      });
+
+      const maxScore = Object.keys(answers).length * 4;
+      const normalized: Record<string, number> = {};
+      Object.entries(genScores).forEach(([gen, score]) => {
+        normalized[gen] = Math.round((score / Math.max(maxScore, 1)) * 100);
+      });
+
+      const sorted = Object.entries(normalized).sort(([, a], [, b]) => b - a);
+      return {
+        ...baseResult,
+        scores: normalized,
+        primaryProfile: sorted[0]?.[0] || 'millennial',
+        secondaryProfile: sorted[1]?.[0],
+        confidence: Math.min(100, (sorted[0]?.[1] || 0) - (sorted[1]?.[1] || 0) + 50),
+      };
+    }
+
+    if (toolId === 'stress_profile') {
+      // Perfil sob Stress
+      const discScores: Record<string, number> = { D: 0, I: 0, S: 0, C: 0 };
+
+      Object.entries(answers).forEach(([, answerIndex]) => {
+        if (typeof answerIndex !== 'number') return;
+        const profiles = ['D', 'I', 'S', 'C'];
+        const selected = profiles[answerIndex];
+        if (selected) discScores[selected] = (discScores[selected] || 0) + 4;
+      });
+
+      const maxScore = Object.keys(answers).length * 4;
+      const normalized: Record<string, number> = {};
+      Object.entries(discScores).forEach(([profile, score]) => {
+        normalized[profile] = Math.round((score / Math.max(maxScore, 1)) * 100);
+      });
+
+      const sorted = Object.entries(normalized).sort(([, a], [, b]) => b - a);
+      return {
+        ...baseResult,
+        scores: normalized,
+        primaryProfile: sorted[0]?.[0] || 'S',
+        secondaryProfile: sorted[1]?.[0],
+      };
+    }
+
+    if (toolId === 'triune_brain') {
+      // Modelo 3 Cérebros
+      const brainScores: Record<string, number> = { reptiliano: 0, limbico: 0, neocortex: 0 };
+
+      Object.entries(answers).forEach(([, answerIndex]) => {
+        if (typeof answerIndex !== 'number') return;
+        const brains = ['reptiliano', 'limbico', 'neocortex'];
+        const selected = brains[answerIndex];
+        if (selected) brainScores[selected] = (brainScores[selected] || 0) + 4;
+      });
+
+      const total = Object.values(brainScores).reduce((a, b) => a + b, 0);
+      const normalized: Record<string, number> = {};
+      Object.entries(brainScores).forEach(([brain, score]) => {
+        normalized[brain] = Math.round((score / Math.max(total, 1)) * 100);
+      });
+
+      const sorted = Object.entries(normalized).sort(([, a], [, b]) => b - a);
+      return {
+        ...baseResult,
+        scores: normalized,
+        primaryProfile: sorted[0]?.[0] || 'limbico',
+        secondaryProfile: sorted[1]?.[0],
+      };
+    }
+
+    return baseResult;
   };
 
   const handleSubmit = async () => {

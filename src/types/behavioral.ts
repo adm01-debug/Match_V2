@@ -1,5 +1,5 @@
 /**
- * @fileoverview Tipos para as 10 ferramentas de comportamento humano
+ * @fileoverview Tipos para as 14 ferramentas de comportamento humano
  * @module types/behavioral
  */
 
@@ -734,6 +734,8 @@ export interface BehavioralResult {
   primaryProfile: string;
   secondaryProfile?: string;
   rawAnswers: Record<string, number | string>;
+  /** Confidence level 0-100 for the primary profile detection */
+  confidence?: number;
 }
 
 /** Array of all 14 behavioral tools (10 originais + 4 avançadas) */
