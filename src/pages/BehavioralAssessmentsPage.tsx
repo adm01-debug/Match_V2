@@ -1,6 +1,6 @@
 /**
  * @module BehavioralAssessmentsPage
- * @description Página principal das 10 ferramentas comportamentais com gamificação integrada
+ * @description Página principal das 14 ferramentas comportamentais (10 originais + 4 avançadas) com gamificação integrada
  */
 
 import { useState, useEffect } from 'react';
@@ -48,6 +48,7 @@ import {
 import { CHALLENGE_PHASES } from '@/data/phaseChallengeData';
 
 const TOOL_ICONS: Record<string, React.ReactNode> = {
+  // Ferramentas originais (10)
   disc: <Brain className="h-6 w-6" />,
   vakd: <Eye className="h-6 w-6" />,
   metaprograms: <Lightbulb className="h-6 w-6" />,
@@ -58,6 +59,11 @@ const TOOL_ICONS: Record<string, React.ReactNode> = {
   emotional_intelligence: <Sparkles className="h-6 w-6" />,
   cognitive_biases: <AlertTriangle className="h-6 w-6" />,
   rapport: <Users className="h-6 w-6" />,
+  // Ferramentas avançadas (4)
+  generational: <Users className="h-6 w-6" />,
+  stress_profile: <Zap className="h-6 w-6" />,
+  triune_brain: <Brain className="h-6 w-6" />,
+  disc_compatibility: <Users className="h-6 w-6" />,
 };
 
 export default function BehavioralAssessmentsPage() {

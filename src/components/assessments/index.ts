@@ -7,3 +7,11 @@ export { BehavioralResultView } from './BehavioralResultView';
 export { ImmersiveScenarioPlayer, type ScenarioResponse } from './ImmersiveScenarioPlayer';
 export { BehavioralResultsDashboard } from './BehavioralResultsDashboard';
 export { CompanyProfileBuilder } from './CompanyProfileBuilder';
+
+// Ferramentas Comportamentais Avançadas
+export { 
+  GenerationalResultView, 
+  StressProfileResultView, 
+  TriuneBrainResultView 
+} from './AdvancedBehavioralResultView';
+export { DISCCompatibilityView } from './DISCCompatibilityView';

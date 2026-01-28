@@ -736,7 +736,7 @@ export interface BehavioralResult {
   rawAnswers: Record<string, number | string>;
 }
 
-/** Array of all 10 behavioral tools */
+/** Array of all 14 behavioral tools (10 originais + 4 avançadas) */
 export const BEHAVIORAL_TOOLS: BehavioralTool[] = [
   {
     id: 'disc',
@@ -827,5 +827,42 @@ export const BEHAVIORAL_TOOLS: BehavioralTool[] = [
     estimatedTime: 10,
     dimensions: ['Espelhamento Físico', 'Espelhamento Verbal', 'Escuta Ativa', 'Sintonia', 'Flexibilidade'],
     questionCount: 6,
+  },
+  // ============ NOVAS FERRAMENTAS AVANÇADAS ============
+  {
+    id: 'generational',
+    name: 'Inteligência Geracional',
+    description: 'Identifica perfil geracional e adapta comunicação, motivadores e estilo de trabalho',
+    color: '#a855f7',
+    estimatedTime: 12,
+    dimensions: ['Silent/Boomer', 'Gen X', 'Millennial', 'Gen Z'],
+    questionCount: 8,
+  },
+  {
+    id: 'stress_profile',
+    name: 'Perfil sob Stress',
+    description: 'Avalia como você reage sob pressão e quais gatilhos de stress te afetam',
+    color: '#dc2626',
+    estimatedTime: 10,
+    dimensions: ['Gatilhos', 'Comportamentos', 'Recuperação', 'Riscos'],
+    questionCount: 6,
+  },
+  {
+    id: 'triune_brain',
+    name: 'Modelo 3 Cérebros',
+    description: 'Identifica dominância cerebral: Reptiliano (segurança), Límbico (emoção), Neocórtex (lógica)',
+    color: '#0891b2',
+    estimatedTime: 12,
+    dimensions: ['Reptiliano', 'Límbico', 'Neocórtex'],
+    questionCount: 8,
+  },
+  {
+    id: 'disc_compatibility',
+    name: 'Compatibilidade DISC',
+    description: 'Analisa compatibilidade entre perfis DISC para prever sinergia e conflitos em equipe',
+    color: '#059669',
+    estimatedTime: 5,
+    dimensions: ['Sinergia', 'Conflitos', 'Comunicação', 'Estilo de Trabalho'],
+    questionCount: 0, // Usa resultado do DISC, não tem questões próprias
   },
 ];
