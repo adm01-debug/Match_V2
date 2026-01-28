@@ -15,3 +15,10 @@ export {
   TriuneBrainResultView 
 } from './AdvancedBehavioralResultView';
 export { DISCCompatibilityView } from './DISCCompatibilityView';
+export { CrossFrameworkAnalysisView } from './CrossFrameworkAnalysisView';
+
+// Sistema de Job Fit e Recrutamento Estratégico
+export { JobProfileBuilder } from './JobProfileBuilder';
+export { CandidateComparison } from './CandidateComparison';
+export { RedFlagsAlert } from './RedFlagsAlert';
+export { ExecutiveReport } from './ExecutiveReport';
