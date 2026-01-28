@@ -1,3 +1,7 @@
+// Personality Assessment
+export { PersonalityAssessmentPlayer } from './PersonalityAssessmentPlayer';
+export { PersonalityResultsView } from './PersonalityResultsView';
+
 export { AssessmentPlayer } from './AssessmentPlayer';
 export { DISCResultView } from './DISCResultView';
 export { CulturalResultView } from './CulturalResultView';
