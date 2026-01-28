@@ -2,13 +2,14 @@
  * @fileoverview Configuração de gamificação para avaliações comportamentais
  * @module behavioralGamification
  * 
- * Integra os 10 Pilares Comportamentais com o sistema de XP, conquistas e níveis
+ * Integra os 14 Pilares Comportamentais (10 originais + 4 avançados) com o sistema de XP, conquistas e níveis
  */
 
 import { BEHAVIORAL_TOOLS } from '@/types/behavioral';
 
 // XP por ferramenta comportamental (baseado em complexidade e tempo)
 export const BEHAVIORAL_XP_REWARDS: Record<string, number> = {
+  // Ferramentas originais (10)
   disc: 50,
   vakd: 35,
   metaprograms: 75,
@@ -19,6 +20,11 @@ export const BEHAVIORAL_XP_REWARDS: Record<string, number> = {
   emotional_intelligence: 85,
   cognitive_biases: 55,
   rapport: 35,
+  // Ferramentas avançadas (4)
+  generational: 55,       // Inteligência Geracional
+  stress_profile: 45,     // Perfil sob Stress
+  triune_brain: 60,       // Modelo 3 Cérebros
+  disc_compatibility: 30, // Compatibilidade DISC (usa resultado do DISC)
 };
 
 // Bônus por performance

@@ -1,9 +1,14 @@
 /**
- * @fileoverview Dados completos das 10 ferramentas de comportamento humano
+ * @fileoverview Dados completos das 14 ferramentas de comportamento humano
  * @module BehavioralAssessmentsData
  */
 
 import type { BehavioralQuestion } from '@/types/behavioral';
+import { 
+  generationalQuestions, 
+  stressProfileQuestions, 
+  triuneBrainQuestions 
+} from './advancedBehavioralData';
 
 // ========================================
 // 1. DISC - Perfis Comportamentais
@@ -718,6 +723,7 @@ export const rapportQuestions: BehavioralQuestion[] = [
 // ========================================
 export function getQuestionsForTool(toolId: string): BehavioralQuestion[] {
   switch (toolId) {
+    // Ferramentas originais (10)
     case 'disc':
       return discQuestions;
     case 'vakd':
@@ -738,6 +744,15 @@ export function getQuestionsForTool(toolId: string): BehavioralQuestion[] {
       return cognitiveBiasesQuestions;
     case 'rapport':
       return rapportQuestions;
+    // Novas ferramentas avançadas (4)
+    case 'generational':
+      return generationalQuestions;
+    case 'stress_profile':
+      return stressProfileQuestions;
+    case 'triune_brain':
+      return triuneBrainQuestions;
+    case 'disc_compatibility':
+      return []; // Usa resultado do DISC, não tem questões próprias
     default:
       return [];
   }
