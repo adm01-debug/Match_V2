@@ -236,10 +236,10 @@ export default function ProvaEditor() {
                   </div>
                   <div>
                     <Label>Departamento</Label>
-                    <Select value={departamento} onValueChange={setDepartamento}>
+                    <Select value={departamento || "geral"} onValueChange={(v) => setDepartamento(v === "geral" ? "" : v)}>
                       <SelectTrigger><SelectValue placeholder="Geral" /></SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="">Geral</SelectItem>
+                        <SelectItem value="geral">Geral</SelectItem>
                         {departamentosInfo.map(d => <SelectItem key={d.id} value={d.id}>{d.nome}</SelectItem>)}
                       </SelectContent>
                     </Select>
