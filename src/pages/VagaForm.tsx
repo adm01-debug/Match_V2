@@ -111,9 +111,10 @@ export default function VagaForm() {
   const [skills, setSkills] = useState<string[]>([]);
   const [newSkill, setNewSkill] = useState("");
 
+  usePageTitle('Formulário de Vaga');
+
   // Load existing vaga data when editing
   useEffect(() => {
-  usePageTitle('Formulário de Vaga');
 
     if (existingVaga) {
       setFormData({
