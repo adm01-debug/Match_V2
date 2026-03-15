@@ -206,7 +206,7 @@ async function fetchFunilReport(_config: ReportConfig): Promise<ReportData> {
   };
 }
 
-async function fetchEntrevistasReport(config: ReportConfig): Promise<ReportData> {
+async function fetchEntrevistasReport(_config: ReportConfig): Promise<ReportData> {
   const { data: entrevistas, error } = await supabase
     .from('entrevistas')
     .select('id, tipo, status, data, etapa, feedback_resultado');
