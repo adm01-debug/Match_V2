@@ -16,9 +16,10 @@ import TriggerNode from './nodes/TriggerNode';
 import ActionNode from './nodes/ActionNode';
 import ConditionNode from './nodes/ConditionNode';
 import DelayNode from './nodes/DelayNode';
+import { WebhookNode } from './nodes/WebhookNode';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { PlusCircle, Zap, Play, GitBranch, Clock } from 'lucide-react';
+import { PlusCircle, Zap, Play, GitBranch, Clock, Globe } from 'lucide-react';
 // Workflow type imports available in types/workflow.ts
 
 interface WorkflowCanvasProps {
