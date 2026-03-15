@@ -55,6 +55,7 @@ const PortalDashboard = lazy(() => import("./pages/portal/PortalDashboard"));
 const PortalVagas = lazy(() => import("./pages/portal/PortalVagas"));
 const PortalPerfil = lazy(() => import("./pages/portal/PortalPerfil"));
 const DeuMatchPage = lazy(() => import("./pages/DeuMatchPage"));
+const TalentPoolPage = lazy(() => import("./pages/TalentPoolPage"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 // Auth pages
