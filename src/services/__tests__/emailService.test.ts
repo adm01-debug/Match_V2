@@ -97,7 +97,7 @@ describe('emailService', () => {
         body: expect.objectContaining({
           to: 'dest@test.com',
           subject: 'Olá Maria',
-          content: '<p>Bem-vindo, Maria!</p>',
+          html: '<p>Bem-vindo, Maria!</p>',
         }),
       });
     });
