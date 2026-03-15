@@ -34,6 +34,7 @@ export function WorkflowCanvas({ initialNodes = [], initialEdges = [], onSave }:
     action: ActionNode,
     condition: ConditionNode,
     delay: DelayNode,
+    webhook: WebhookNode,
   }), []);
 
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes as any[]);
