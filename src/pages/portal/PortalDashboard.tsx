@@ -1,4 +1,5 @@
 import { usePageTitle } from '@/hooks/usePageTitle';
+import { NotificacoesDropdown } from '@/components/portal/NotificacoesDropdown';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -159,6 +160,7 @@ const PortalDashboard = () => {
             </div>
           </div>
           <div className="flex items-center gap-2">
+            <NotificacoesDropdown />
             <Button variant="ghost" size="sm" onClick={() => navigate('/portal/perfil')}>
               <User className="h-4 w-4 mr-2" />
               Meu Perfil

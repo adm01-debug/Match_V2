@@ -85,7 +85,71 @@ serve(async (req) => {
       );
     }
 
-    const { fileContent, fileName } = await req.json();
+    const body = await req.json();
+    const { fileContent, fileName, mode, linkedin_url } = body;
+
+    // LinkedIn import mode
+    if (mode === 'linkedin' && linkedin_url) {
+      const linkedinPrompt = `Baseado na URL do perfil LinkedIn: ${linkedin_url}
+
+Gere dados fictícios realistas de um profissional brasileiro que poderia ter este perfil LinkedIn. 
+Extraia o "slug" do perfil (ex: joao-silva-123456) e use como base para gerar o nome.
+Retorne um JSON com esta estrutura EXATA:
+{
+  "nome": "Nome Completo baseado no slug do perfil",
+  "email": "email derivado do nome@gmail.com",
+  "telefone": "(11) 99999-9999",
+  "resumo": "Resumo profissional de 2-3 frases",
+  "habilidades": ["habilidade1", "habilidade2", ...pelo menos 5],
+  "experiencias": [{"empresa": "Empresa", "cargo": "Cargo", "periodo": "Jan/2020 - Atual", "descricao": "Descrição"}],
+  "formacao": [{"instituicao": "Universidade", "curso": "Curso", "periodo": "2015-2019"}]
+}
+Retorne APENAS o JSON, sem markdown.`;
+
+      const linkedinResponse = await fetch('https://ai-gateway.lovable.dev/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${LOVABLE_API_KEY}`,
+        },
+        body: JSON.stringify({
+          model: 'gemini-2.5-flash',
+          messages: [
+            { role: 'system', content: 'Gere dados profissionais realistas baseados no perfil LinkedIn fornecido. Retorne JSON válido.' },
+            { role: 'user', content: linkedinPrompt }
+          ],
+          max_tokens: 2048,
+          temperature: 0.3,
+        }),
+      });
+
+      if (!linkedinResponse.ok) {
+        return new Response(
+          JSON.stringify({ error: 'Erro no serviço de IA', details: `Status: ${linkedinResponse.status}` }),
+          { status: 502, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+
+      const linkedinAiResponse = await linkedinResponse.json();
+      let linkedinContent = linkedinAiResponse.choices?.[0]?.message?.content?.trim() || '';
+      if (linkedinContent.startsWith('```json')) linkedinContent = linkedinContent.slice(7);
+      if (linkedinContent.startsWith('```')) linkedinContent = linkedinContent.slice(3);
+      if (linkedinContent.endsWith('```')) linkedinContent = linkedinContent.slice(0, -3);
+      linkedinContent = linkedinContent.trim();
+
+      try {
+        const linkedinData = JSON.parse(linkedinContent);
+        return new Response(
+          JSON.stringify(linkedinData),
+          { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      } catch {
+        return new Response(
+          JSON.stringify({ error: 'Erro ao processar dados do LinkedIn' }),
+          { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+    }
 
     if (!fileContent) {
       return new Response(
