@@ -160,6 +160,7 @@ const PortalDashboard = () => {
             </div>
           </div>
           <div className="flex items-center gap-2">
+            <NotificacoesDropdown />
             <Button variant="ghost" size="sm" onClick={() => navigate('/portal/perfil')}>
               <User className="h-4 w-4 mr-2" />
               Meu Perfil
