@@ -1,5 +1,5 @@
 // LinkedIn Integration Service
-import { supabase } from '@/integrations/supabase/client';
+
 
 export interface LinkedInProfile {
   id: string;
