@@ -57,13 +57,13 @@ export class WorkflowEngine {
         result.message = `Email enviado para candidato ${context.candidatoId}`;
         break;
       case 'mover_etapa':
-        result.message = `Candidato movido para etapa ${action.config.etapa}`;
+        result.message = `Candidato movido para etapa ${action.config['etapa']}`;
         break;
       case 'notificar':
-        result.message = `Notificação enviada: ${action.config.mensagem}`;
+        result.message = `Notificação enviada: ${action.config['mensagem']}`;
         break;
       case 'atribuir_tag':
-        result.message = `Tag "${action.config.tag}" atribuída`;
+        result.message = `Tag "${action.config['tag']}" atribuída`;
         break;
       case 'agendar_entrevista':
         result.message = `Entrevista agendada automaticamente`;
@@ -72,7 +72,7 @@ export class WorkflowEngine {
         result.message = `Teste enviado ao candidato`;
         break;
       case 'webhook':
-        result.message = `Webhook chamado: ${action.config.url}`;
+        result.message = `Webhook chamado: ${action.config['url']}`;
         break;
       default:
         result.success = false;

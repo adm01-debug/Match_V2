@@ -9,7 +9,7 @@ import { Switch } from '@/components/ui/switch';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { PlusCircle, Settings, Trash2, Play, Pause, GitBranch } from 'lucide-react';
+import { PlusCircle, Settings, Trash2, GitBranch } from 'lucide-react';
 import { useWorkflow } from '@/hooks/useWorkflow';
 import { WorkflowCanvas } from '@/components/workflow/WorkflowCanvas';
 import { useToast } from '@/hooks/use-toast';

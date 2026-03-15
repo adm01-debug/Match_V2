@@ -19,7 +19,7 @@ import DelayNode from './nodes/DelayNode';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { PlusCircle, Zap, Play, GitBranch, Clock } from 'lucide-react';
-import { TRIGGER_OPTIONS, ACTION_OPTIONS } from '@/types/workflow';
+// Workflow type imports available in types/workflow.ts
 
 interface WorkflowCanvasProps {
   initialNodes?: unknown[];
