@@ -178,7 +178,7 @@ export function AppSidebar() {
               animate={{ opacity: 1, x: 0 }}
               className="flex flex-col"
             >
-              <span className="font-semibold text-sidebar-foreground">Match ATS</span>
+              <span className="font-semibold text-sidebar-foreground">People Lovers</span>
               <span className="text-xs text-sidebar-muted">Recrutamento</span>
             </motion.div>
           )}

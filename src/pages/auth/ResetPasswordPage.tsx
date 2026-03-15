@@ -104,7 +104,7 @@ export default function ResetPasswordPage() {
           <div className="p-3 rounded-xl bg-primary/10 mb-4">
             <Briefcase className="h-10 w-10 text-primary" />
           </div>
-          <h1 className="text-2xl font-bold text-foreground">Match ATS</h1>
+          <h1 className="text-2xl font-bold text-foreground">People Lovers</h1>
           <p className="text-muted-foreground">Redefinição de Senha</p>
         </div>
 

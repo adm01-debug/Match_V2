@@ -13,7 +13,7 @@ interface QRCodeGeneratorProps {
   onVerify: (code: string) => Promise<boolean>;
 }
 
-export function QRCodeGenerator({ secret, accountName, issuer = 'Match ATS', onVerify }: QRCodeGeneratorProps) {
+export function QRCodeGenerator({ secret, accountName, issuer = 'People Lovers', onVerify }: QRCodeGeneratorProps) {
   const [showSecret, setShowSecret] = useState(false);
   const [verificationCode, setVerificationCode] = useState('');
   const [isVerifying, setIsVerifying] = useState(false);

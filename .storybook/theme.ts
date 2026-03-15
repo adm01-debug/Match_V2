@@ -2,7 +2,7 @@ import { create } from '@storybook/theming/create';
 
 export default create({
   base: 'light',
-  brandTitle: 'MATCH ATS',
+  brandTitle: 'PEOPLE LOVERS',
   brandUrl: 'https://github.com/adm01-debug/match',
   brandTarget: '_self',
   
