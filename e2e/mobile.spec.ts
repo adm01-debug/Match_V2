@@ -5,7 +5,7 @@ test.describe('Mobile Responsiveness', () => {
 
   test('dashboard renders on mobile', async ({ page }) => {
     await page.goto('/');
-    await expect(page).toHaveTitle(/Match ATS/);
+    await expect(page).toHaveTitle(/People Lovers/);
   });
 
   test('navigation menu works on mobile', async ({ page }) => {
