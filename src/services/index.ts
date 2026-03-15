@@ -22,3 +22,5 @@ export {
   completePasswordReset,
   type PasswordResetRequest
 } from './passwordResetService';
+export { evolutionApi, evolutionInstances, evolutionMessages, evolutionChats } from './evolutionApiService';
+export { whatsappService } from './whatsappService';
