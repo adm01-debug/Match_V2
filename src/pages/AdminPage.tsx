@@ -478,6 +478,20 @@ const AdminPage = () => {
             </DialogFooter>
           </DialogContent>
         </Dialog>
+          </TabsContent>
+
+          <TabsContent value="auditoria">
+            <AuditLogViewer />
+          </TabsContent>
+
+          <TabsContent value="sla">
+            <SLAConfig />
+          </TabsContent>
+
+          <TabsContent value="sso">
+            <SSOSettings />
+          </TabsContent>
+        </Tabs>
         </div>
       </Layout>
     </Suspense>
