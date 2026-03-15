@@ -7,7 +7,7 @@ import { gdprService } from '../gdprService';
 describe('gdprService', () => {
   it('exportUserData retorna mensagem de registro', async () => {
     const result = await gdprService.exportUserData('user-1');
-    expect(result.message).toBeTruthy();
+    expect(result['message']).toBeTruthy();
   });
 
   it('deleteUserData retorna false (requer aprovação)', async () => {
