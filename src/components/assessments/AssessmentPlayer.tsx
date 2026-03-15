@@ -221,7 +221,7 @@ export function AssessmentPlayer({
                 {/* Escolha Forçada / Múltipla */}
                 {(currentQuestao.tipo === 'escolha_forcada' || currentQuestao.tipo === 'multipla') && (
                   <RadioGroup
-                    value={String(currentAnswer || '')}
+                    value={currentAnswer !== undefined && currentAnswer !== null ? String(currentAnswer) : undefined}
                     onValueChange={(val) => handleAnswer(Number(val))}
                     className="space-y-3"
                   >
