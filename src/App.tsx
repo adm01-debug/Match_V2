@@ -34,6 +34,7 @@ const ProvaAplicacao = lazy(() => import("./pages/ProvaAplicacao"));
 const ResumeParserPage = lazy(() => import("./pages/ResumeParserPage"));
 const CandidatosPage = lazy(() => import("./pages/CandidatosPage"));
 const AnalyticsPage = lazy(() => import("./pages/AnalyticsPage"));
+const ReportsPage = lazy(() => import("./pages/ReportsPage"));
 const ComunicacaoPage = lazy(() => import("./pages/ComunicacaoPage"));
 const AuthPage = lazy(() => import("./pages/AuthPage"));
 const AdminPage = lazy(() => import("./pages/AdminPage"));
@@ -48,6 +49,7 @@ const GamificationPage = lazy(() => import("./pages/GamificationPage"));
 const OfferManagementPage = lazy(() => import("./pages/OfferManagementPage"));
 const HiringManagerPortalPage = lazy(() => import("./pages/HiringManagerPortalPage"));
 const AdvancedAnalyticsPage = lazy(() => import("./pages/AdvancedAnalyticsPage"));
+const WorkflowEditorPage = lazy(() => import("./pages/WorkflowEditorPage"));
 const PortalAuthPage = lazy(() => import("./pages/portal/PortalAuthPage"));
 const PortalDashboard = lazy(() => import("./pages/portal/PortalDashboard"));
 const PortalVagas = lazy(() => import("./pages/portal/PortalVagas"));
@@ -297,6 +299,14 @@ function App() {
                                   path="/relatorios"
                                   element={
                                     <ProtectedRoute>
+                                      <ReportsPage />
+                                    </ProtectedRoute>
+                                  }
+                                />
+                                <Route
+                                  path="/analytics-basico"
+                                  element={
+                                    <ProtectedRoute>
                                       <AnalyticsPage />
                                     </ProtectedRoute>
                                   }
@@ -386,6 +396,15 @@ function App() {
                                   element={
                                     <ProtectedRoute>
                                       <DeuMatchPage />
+                                    </ProtectedRoute>
+                                  }
+                                />
+
+                                <Route
+                                  path="/workflows"
+                                  element={
+                                    <ProtectedRoute>
+                                      <WorkflowEditorPage />
                                     </ProtectedRoute>
                                   }
                                 />
