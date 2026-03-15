@@ -30,7 +30,7 @@ describe('emailService', () => {
 
       await emailService.sendEmail('a@b.com', 'Sub', 'Body', 'reply@b.com');
       expect(mockSupabase.functions.invoke).toHaveBeenCalledWith('send-email', {
-        body: { to: 'a@b.com', subject: 'Sub', content: 'Body', replyTo: 'reply@b.com' },
+        body: { to: 'a@b.com', subject: 'Sub', html: 'Body', replyTo: 'reply@b.com' },
       });
     });
 
