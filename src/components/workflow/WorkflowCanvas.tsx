@@ -16,9 +16,10 @@ import TriggerNode from './nodes/TriggerNode';
 import ActionNode from './nodes/ActionNode';
 import ConditionNode from './nodes/ConditionNode';
 import DelayNode from './nodes/DelayNode';
+import { WebhookNode } from './nodes/WebhookNode';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { PlusCircle, Zap, Play, GitBranch, Clock } from 'lucide-react';
+import { PlusCircle, Zap, Play, GitBranch, Clock, Globe } from 'lucide-react';
 // Workflow type imports available in types/workflow.ts
 
 interface WorkflowCanvasProps {
@@ -33,6 +34,7 @@ export function WorkflowCanvas({ initialNodes = [], initialEdges = [], onSave }:
     action: ActionNode,
     condition: ConditionNode,
     delay: DelayNode,
+    webhook: WebhookNode,
   }), []);
 
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes as any[]);
@@ -93,6 +95,9 @@ export function WorkflowCanvas({ initialNodes = [], initialEdges = [], onSave }:
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => addNode('delay', 'Aguardar', 'Configure o atraso')}>
                 <Clock className="h-4 w-4 mr-2 text-purple-500" /> Atraso (Delay)
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => addNode('webhook', 'Webhook', 'Configure o webhook')}>
+                <Globe className="h-4 w-4 mr-2 text-cyan-500" /> Webhook
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

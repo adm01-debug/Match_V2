@@ -108,11 +108,12 @@ export function calcularMatch(
     .slice(0, 3)
     .map(d => d.valorNome);
   
-  // Determinar recomendação
+  // Determinar recomendação (thresholds ajustados para evitar falsos positivos)
   let recomendacao: MatchResult['recomendacao'];
-  if (scoreFinal >= 85) {
+  const temMatchPerfeito = matchesPerfeitos.length >= Math.ceil(detalhes.length * 0.5);
+  if (scoreFinal >= 90 && temMatchPerfeito) {
     recomendacao = 'match_perfeito';
-  } else if (scoreFinal >= 70) {
+  } else if (scoreFinal >= 75) {
     recomendacao = 'match_forte';
   } else if (scoreFinal >= 55) {
     recomendacao = 'match_moderado';
