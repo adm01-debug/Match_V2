@@ -101,6 +101,8 @@ export function EnviarEmailDialog({ open, onOpenChange, candidato, onSuccess }: 
         conteudo,
         template_nome: template?.nome || 'E-mail personalizado',
         template_etapa: template?.etapa || 'geral',
+        destinatario_email: candidato.email,
+        destinatario_nome: candidato.nome,
       });
 
       toast.success(`E-mail registrado para ${candidato.email}`, {
