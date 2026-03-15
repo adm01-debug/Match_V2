@@ -2757,6 +2757,10 @@ export type Database = {
           new_xp: number
         }[]
       }
+      award_xp: {
+        Args: { p_action: string; p_amount: number; p_description?: string }
+        Returns: undefined
+      }
       calculate_level_from_xp: { Args: { xp_amount: number }; Returns: number }
       cleanup_old_login_attempts: { Args: never; Returns: undefined }
       cleanup_old_logs: { Args: never; Returns: undefined }
@@ -2784,6 +2788,10 @@ export type Database = {
         Returns: boolean
       }
       is_hr_staff: { Args: { _user_id: string }; Returns: boolean }
+      safe_update_gamification: {
+        Args: { p_last_active_date?: string; p_streak?: number }
+        Returns: undefined
+      }
       update_user_streak: {
         Args: { p_user_id: string }
         Returns: {
