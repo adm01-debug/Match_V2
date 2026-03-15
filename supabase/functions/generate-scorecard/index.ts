@@ -73,10 +73,10 @@ Deno.serve(async (req) => {
       .select("*, assessments (titulo, tipo)")
       .eq("candidato_id", candidatoId);
 
-    // 4. Buscar resultados de provas
-    const { data: provas } = await supabase
-      .from("resultados_provas")
-      .select("*, provas (titulo, categoria)")
+    // 4. Buscar resultados de behavioral assessments (substitui resultados_provas)
+    const { data: behavioralResults } = await supabase
+      .from("behavioral_assessment_results")
+      .select("*")
       .eq("candidato_id", candidatoId);
 
     // 5. Buscar perfil do cargo (se existir)
