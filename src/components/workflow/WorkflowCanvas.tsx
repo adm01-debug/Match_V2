@@ -96,6 +96,9 @@ export function WorkflowCanvas({ initialNodes = [], initialEdges = [], onSave }:
               <DropdownMenuItem onClick={() => addNode('delay', 'Aguardar', 'Configure o atraso')}>
                 <Clock className="h-4 w-4 mr-2 text-purple-500" /> Atraso (Delay)
               </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => addNode('webhook', 'Webhook', 'Configure o webhook')}>
+                <Globe className="h-4 w-4 mr-2 text-cyan-500" /> Webhook
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
           
