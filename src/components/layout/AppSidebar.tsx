@@ -170,7 +170,7 @@ export function AppSidebar() {
             whileHover={{ scale: 1.05, rotate: 2 }}
             whileTap={{ scale: 0.95 }}
           >
-            M
+            PL
           </motion.div>
           {!collapsed && (
             <motion.div 
