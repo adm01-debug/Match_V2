@@ -34,7 +34,7 @@ describe('parseCSV', () => {
   it('lida com valores ausentes', () => {
     const csv = 'a,b,c\n1,,3';
     const result = parseCSV(csv);
-    expect(result[0]?.b).toBe('');
+    expect(result[0]?.['b']).toBe('');
   });
 
   // Stress: CSV grande
