@@ -4,7 +4,7 @@
  * Uses persistent email_templates from database
  */
 
-import { memo, useMemo, useState } from 'react';
+import { memo, useState } from 'react';
 import {
   Dialog,
   DialogContent,
