@@ -1509,6 +1509,47 @@ export type Database = {
           },
         ]
       }
+      notificacoes_candidato: {
+        Row: {
+          candidato_auth_id: string
+          created_at: string
+          id: string
+          lida: boolean
+          link: string | null
+          mensagem: string
+          tipo: string
+          titulo: string
+        }
+        Insert: {
+          candidato_auth_id: string
+          created_at?: string
+          id?: string
+          lida?: boolean
+          link?: string | null
+          mensagem: string
+          tipo?: string
+          titulo: string
+        }
+        Update: {
+          candidato_auth_id?: string
+          created_at?: string
+          id?: string
+          lida?: boolean
+          link?: string | null
+          mensagem?: string
+          tipo?: string
+          titulo?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notificacoes_candidato_candidato_auth_id_fkey"
+            columns: ["candidato_auth_id"]
+            isOneToOne: false
+            referencedRelation: "candidatos_auth"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       notifications: {
         Row: {
           created_at: string
