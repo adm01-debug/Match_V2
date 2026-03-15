@@ -27,7 +27,7 @@ export function RecoveryCodesDisplay({ codes, onConfirm }: RecoveryCodesDisplayP
   };
 
   const handleDownload = () => {
-    const text = `CÓDIGOS DE RECUPERAÇÃO - MATCH ATS\n${'='.repeat(40)}\n\nGuarde estes códigos em um lugar seguro.\nCada código só pode ser usado uma vez.\n\n${codes.map((c, i) => `${i + 1}. ${c}`).join('\n')}\n\nGerado em: ${new Date().toLocaleString('pt-BR')}`;
+    const text = `CÓDIGOS DE RECUPERAÇÃO - PEOPLE LOVERS\n${'='.repeat(40)}\n\nGuarde estes códigos em um lugar seguro.\nCada código só pode ser usado uma vez.\n\n${codes.map((c, i) => `${i + 1}. ${c}`).join('\n')}\n\nGerado em: ${new Date().toLocaleString('pt-BR')}`;
     
     const blob = new Blob([text], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);

@@ -148,7 +148,7 @@ serve(async (req: Request): Promise<Response> => {
           Authorization: `Bearer ${resendApiKey}`,
         },
         body: JSON.stringify({
-          from: 'MATCH ATS <security@resend.dev>',
+          from: 'PEOPLE LOVERS <security@resend.dev>',
           to: [userEmail],
           subject: '🔐 Novo dispositivo detectado na sua conta',
           html: emailHtml,

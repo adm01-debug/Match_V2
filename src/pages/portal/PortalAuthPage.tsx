@@ -287,7 +287,7 @@ const PortalAuthPage = () => {
 
       {/* Footer */}
       <footer className="p-6 text-center text-sm text-muted-foreground">
-        © {new Date().getFullYear()} Match ATS. Todos os direitos reservados.
+        © {new Date().getFullYear()} People Lovers. Todos os direitos reservados.
       </footer>
     </div>
   );
