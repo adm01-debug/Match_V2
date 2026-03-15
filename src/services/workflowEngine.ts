@@ -31,11 +31,11 @@ export class WorkflowEngine {
       case 'etapa_mudou':
         return context.etapaAnterior !== context.etapaAtual;
       case 'entrevista_agendada':
-        return !!context.data.entrevistaId;
+        return !!context.data['entrevistaId'];
       case 'teste_concluido':
-        return !!context.data.testeId;
+        return !!context.data['testeId'];
       case 'sla_vencido':
-        return (context.data.diasNaEtapa as number) > (trigger.config.maxDias as number || 5);
+        return (context.data['diasNaEtapa'] as number) > ((trigger.config['maxDias'] as number) || 5);
       case 'manual':
         return true;
       default:
