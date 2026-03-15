@@ -200,15 +200,23 @@ describe('calcularMatch', () => {
   });
 
   it('recomendação "match_forte" para score entre 70-84', () => {
-    // Criar perfis com diferença média (intensidades distantes por 1)
+    // Criar perfis com mistura de alinhamentos para ficar entre 70-84
     const empresa = criarPerfilEmpresa({
-      valores: VALORES_CULTURAIS.map(v => ({ valorId: v.id, intensidade: 4, justificativa: '' })),
+      valores: VALORES_CULTURAIS.map((v, i) => ({
+        valorId: v.id,
+        intensidade: i % 2 === 0 ? 5 : 3,
+        justificativa: '',
+      })),
     });
     const candidato = criarPerfilCandidato({
-      valores: VALORES_CULTURAIS.map(v => ({ valorId: v.id, intensidade: 3 })),
+      valores: VALORES_CULTURAIS.map((v, i) => ({
+        valorId: v.id,
+        intensidade: i % 2 === 0 ? 3 : 3,
+      })),
     });
     const resultado = calcularMatch(empresa, candidato);
     expect(resultado.scoreTotal).toBeGreaterThanOrEqual(70);
+    expect(resultado.scoreTotal).toBeLessThan(85);
     expect(resultado.recomendacao).toBe('match_forte');
   });
 
