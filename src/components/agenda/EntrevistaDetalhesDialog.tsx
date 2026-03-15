@@ -237,7 +237,7 @@ const EntrevistaDetalhesDialog = ({
                 </div>
                 <div className="space-y-2">
                   <Label>Etapa</Label>
-                  <Select value={editData.etapa || ''} onValueChange={(v) => setEditData({ ...editData, etapa: v })}>
+                  <Select value={editData.etapa || undefined} onValueChange={(v) => setEditData({ ...editData, etapa: v })}>
                     <SelectTrigger><SelectValue /></SelectTrigger>
                     <SelectContent>{etapas.map((e) => <SelectItem key={e} value={e}>{e}</SelectItem>)}</SelectContent>
                   </Select>
