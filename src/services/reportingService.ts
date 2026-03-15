@@ -260,7 +260,7 @@ async function fetchSLAReport(_config: ReportConfig): Promise<ReportData> {
     labels: etapas,
     datasets: [
       { label: 'Tempo Médio (dias)', data: tempoMedio, color: '#EF4444' },
-      { label: 'SLA Limite (dias)', data: etapas.map(e => SLA_LIMITS[e]), color: '#22C55E' },
+      { label: 'SLA Limite (dias)', data: etapas.map(e => SLA_LIMITS[e] ?? 0), color: '#22C55E' },
     ],
     summary: {
       em_risco: emRisco.length,
