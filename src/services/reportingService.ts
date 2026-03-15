@@ -128,7 +128,7 @@ export async function fetchReportData(config: ReportConfig): Promise<ReportData>
   }
 }
 
-async function fetchVagasReport(config: ReportConfig): Promise<ReportData> {
+async function fetchVagasReport(_config: ReportConfig): Promise<ReportData> {
   const { data: vagas, error } = await supabase
     .from('vagas')
     .select('id, titulo, departamento, status, prioridade, created_at, total_candidatos, contratados');
