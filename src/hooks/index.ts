@@ -18,6 +18,10 @@ export { useAvaliacoes, useAvaliacoesProcesso, useAvaliacao } from './useAvaliac
 export { useProvas, useProva, useCreateProva, useUpdateProva, useDeleteProva, useDuplicateProva } from './useProvas';
 export { useComunicacoes } from './useComunicacoes';
 export { useDashboardData } from './useDashboardData';
+export { useEmailTemplates, type EmailTemplate } from './useEmailTemplates';
+export { useDocumentosCandidato, type DocumentoCandidato } from './useDocumentosCandidato';
+export { useNotasCandidato, type NotaCandidato } from './useNotasCandidato';
+export { useHistoricoEtapas, type HistoricoEtapa } from './useHistoricoEtapas';
 
 // Selection & Assessment Hooks
 export { useAssessments, useAssessment, useSubmitAssessment, useCandidateAssessments } from './useAssessments';
