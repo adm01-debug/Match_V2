@@ -232,7 +232,7 @@ async function fetchEntrevistasReport(_config: ReportConfig): Promise<ReportData
   };
 }
 
-async function fetchSLAReport(config: ReportConfig): Promise<ReportData> {
+async function fetchSLAReport(_config: ReportConfig): Promise<ReportData> {
   const { data: processos, error } = await supabase
     .from('processos_seletivos')
     .select('id, etapa_atual, dias_na_etapa, status, data_ultima_movimentacao');

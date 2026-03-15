@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Download, FileSpreadsheet, FileJson, FileText, Image } from 'lucide-react';
+import { Download, FileSpreadsheet, FileJson, FileText } from 'lucide-react';
 import { exportToCSV, exportToJSON, type ReportData } from '@/services/reportingService';
 import { useToast } from '@/hooks/use-toast';
 

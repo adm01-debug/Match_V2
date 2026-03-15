@@ -20,7 +20,9 @@ export function ReportTable({ data, columns: customColumns, title, maxRows = 50 
   const columns = useMemo(() => {
     if (customColumns) return customColumns;
     if (!data.length) return [];
-    return Object.keys(data[0])
+    const firstRow = data[0];
+    if (!firstRow) return [];
+    return Object.keys(firstRow)
       .filter(k => !['id', 'created_at', 'updated_at'].includes(k))
       .slice(0, 8)
       .map(k => ({ key: k, label: k.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) }));
