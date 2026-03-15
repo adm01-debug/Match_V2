@@ -227,6 +227,65 @@ export type Database = {
         }
         Relationships: []
       }
+      avaliacoes: {
+        Row: {
+          avaliador_id: string | null
+          created_at: string | null
+          etapa: string
+          id: string
+          nota_geral: number | null
+          notas_comportamentais: Json | null
+          notas_tecnicas: Json | null
+          observacoes_gerais: string | null
+          parecer: string
+          pontos_desenvolvimento: string | null
+          pontos_fortes: string | null
+          processo_id: string | null
+          recomendacao: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          avaliador_id?: string | null
+          created_at?: string | null
+          etapa?: string
+          id?: string
+          nota_geral?: number | null
+          notas_comportamentais?: Json | null
+          notas_tecnicas?: Json | null
+          observacoes_gerais?: string | null
+          parecer?: string
+          pontos_desenvolvimento?: string | null
+          pontos_fortes?: string | null
+          processo_id?: string | null
+          recomendacao?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          avaliador_id?: string | null
+          created_at?: string | null
+          etapa?: string
+          id?: string
+          nota_geral?: number | null
+          notas_comportamentais?: Json | null
+          notas_tecnicas?: Json | null
+          observacoes_gerais?: string | null
+          parecer?: string
+          pontos_desenvolvimento?: string | null
+          pontos_fortes?: string | null
+          processo_id?: string | null
+          recomendacao?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "avaliacoes_processo_id_fkey"
+            columns: ["processo_id"]
+            isOneToOne: false
+            referencedRelation: "processos_seletivos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       avaliacoes_comportamentais_resultados: {
         Row: {
           candidato_id: string | null
