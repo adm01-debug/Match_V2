@@ -33,7 +33,7 @@ describe.each(stubServices)('$name (stub)', ({ service }) => {
 describe('Consistência de stubs', () => {
   it('todos os stubs seguem a mesma interface', () => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    stubServices.forEach(({ name, service }) => {
+    stubServices.forEach(({ service }) => {
       expect(typeof service.publishJob).toBe('function');
       expect(typeof service.importCandidates).toBe('function');
       expect(typeof service.isConfigured).toBe('function');
