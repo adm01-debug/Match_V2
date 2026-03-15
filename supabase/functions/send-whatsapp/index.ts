@@ -6,9 +6,9 @@
 import { serve } from 'https://deno.land/std@0.208.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-const WHATSAPP_API_URL = Deno.env.get('WHATSAPP_API_URL');
-const WHATSAPP_API_KEY = Deno.env.get('WHATSAPP_API_KEY');
-const WHATSAPP_INSTANCE = Deno.env.get('WHATSAPP_INSTANCE');
+const EVOLUTION_API_URL = Deno.env.get('EVOLUTION_API_URL');
+const EVOLUTION_API_KEY = Deno.env.get('EVOLUTION_API_KEY');
+const EVOLUTION_INSTANCE = Deno.env.get('EVOLUTION_INSTANCE_NAME');
 
 interface WhatsAppRequest {
   to: string;
