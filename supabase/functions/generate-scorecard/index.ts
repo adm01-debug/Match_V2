@@ -96,10 +96,10 @@ Deno.serve(async (req) => {
     let discEstabilidade = 0;
     let discConformidade = 0;
 
-    // Score técnico baseado em provas
-    if (provas && provas.length > 0) {
-      const mediaProvas = provas.reduce((acc, p) => acc + (p.percentual || 0), 0) / provas.length;
-      scoreTecnico = Math.round(mediaProvas);
+    // Score técnico baseado em behavioral results
+    if (behavioralResults && behavioralResults.length > 0) {
+      const mediaScores = behavioralResults.reduce((acc, r) => acc + (Number(r.score) || 0), 0) / behavioralResults.length;
+      scoreTecnico = Math.round(mediaScores);
     }
 
     // Scores de assessments
