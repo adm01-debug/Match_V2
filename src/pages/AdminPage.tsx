@@ -8,6 +8,7 @@ import { Layout } from '@/components/layout/Layout';
 import { useAuth, AppRole } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   Card,
   CardContent,
@@ -37,6 +38,9 @@ import {
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Input } from '@/components/ui/input';
 import { Users, Shield, Search, Loader2, UserCog } from 'lucide-react';
+import { AuditLogViewer } from '@/components/admin/AuditLogViewer';
+import { SLAConfig } from '@/components/admin/SLAConfig';
+import { SSOSettings } from '@/components/admin/SSOSettings';
 
 interface UserProfile {
   id: string;
@@ -240,10 +244,19 @@ const AdminPage = () => {
         <div>
           <h1 className="text-3xl font-bold text-foreground">Administração</h1>
           <p className="text-muted-foreground mt-1">
-            Gerencie usuários e permissões do sistema
+            Gerencie usuários, permissões e configurações do sistema
           </p>
         </div>
 
+        <Tabs defaultValue="usuarios" className="space-y-6">
+          <TabsList>
+            <TabsTrigger value="usuarios">Usuários</TabsTrigger>
+            <TabsTrigger value="auditoria">Auditoria</TabsTrigger>
+            <TabsTrigger value="sla">SLA</TabsTrigger>
+            <TabsTrigger value="sso">SSO</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="usuarios" className="space-y-6">
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <Card>
@@ -465,6 +478,20 @@ const AdminPage = () => {
             </DialogFooter>
           </DialogContent>
         </Dialog>
+          </TabsContent>
+
+          <TabsContent value="auditoria">
+            <AuditLogViewer />
+          </TabsContent>
+
+          <TabsContent value="sla">
+            <SLAConfig />
+          </TabsContent>
+
+          <TabsContent value="sso">
+            <SSOSettings />
+          </TabsContent>
+        </Tabs>
         </div>
       </Layout>
     </Suspense>
