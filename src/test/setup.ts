@@ -33,9 +33,10 @@ global.ResizeObserver = class ResizeObserver {
 global.IntersectionObserver = class IntersectionObserver {
   root = null;
   rootMargin = '';
-  thresholds = [];
+  thresholds: ReadonlyArray<number> = [];
+  scrollMargin = '';
   observe() {}
   unobserve() {}
   disconnect() {}
-  takeRecords() { return []; }
-};
+  takeRecords(): IntersectionObserverEntry[] { return []; }
+} as unknown as typeof globalThis.IntersectionObserver;
