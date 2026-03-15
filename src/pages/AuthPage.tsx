@@ -250,7 +250,7 @@ const AuthPage = () => {
                 <Briefcase className="h-8 w-8 text-white" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-white">Match ATS</h1>
+                <h1 className="text-2xl font-bold text-white">People Lovers</h1>
                 <p className="text-white/60 text-sm">Sistema de Recrutamento</p>
               </div>
             </div>
