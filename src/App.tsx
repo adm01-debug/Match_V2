@@ -409,6 +409,14 @@ function App() {
                                     </ProtectedRoute>
                                   }
                                 />
+                                <Route
+                                  path="/banco-talentos"
+                                  element={
+                                    <ProtectedRoute>
+                                      <TalentPoolPage />
+                                    </ProtectedRoute>
+                                  }
+                                />
 
                                 {/* 404 */}
                                 <Route path="*" element={<NotFound />} />
