@@ -8,7 +8,8 @@ import { supabase } from '@/integrations/supabase/client';
 import { Avaliacao, Competencia, NotaCompetencia } from '@/types/recruitment';
 
 // A tabela "avaliacoes" ainda não está presente na tipagem gerada do backend.
-const db = supabase as ReturnType<typeof supabase.from>;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const db = supabase as any;
 
 export const COMPETENCIAS_TECNICAS: Competencia[] = [
   { id: 'conhecimento_tecnico', nome: 'Conhecimento Técnico', descricao: 'Domínio dos conceitos e ferramentas essenciais.', tipo: 'tecnica' },
