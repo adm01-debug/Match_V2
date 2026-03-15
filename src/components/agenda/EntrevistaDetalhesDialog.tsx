@@ -237,7 +237,7 @@ const EntrevistaDetalhesDialog = ({
                 </div>
                 <div className="space-y-2">
                   <Label>Etapa</Label>
-                  <Select value={editData.etapa || ''} onValueChange={(v) => setEditData({ ...editData, etapa: v })}>
+                  <Select value={editData.etapa || undefined} onValueChange={(v) => setEditData({ ...editData, etapa: v })}>
                     <SelectTrigger><SelectValue /></SelectTrigger>
                     <SelectContent>{etapas.map((e) => <SelectItem key={e} value={e}>{e}</SelectItem>)}</SelectContent>
                   </Select>
@@ -267,7 +267,7 @@ const EntrevistaDetalhesDialog = ({
               {editData.tipo === 'presencial' && (
                 <div className="space-y-2">
                   <Label>Local</Label>
-                  <Select value={editData.local || ''} onValueChange={(v) => setEditData({ ...editData, local: v })}>
+                  <Select value={editData.local || undefined} onValueChange={(v) => setEditData({ ...editData, local: v })}>
                     <SelectTrigger><SelectValue placeholder="Selecione o local" /></SelectTrigger>
                     <SelectContent>
                       {locaisDisponiveis.filter(l => l.tipo === 'presencial').map((l) => (

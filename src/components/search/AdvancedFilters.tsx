@@ -73,7 +73,7 @@ export function AdvancedFilters({
 
       case 'select':
         return (
-          <Select value={(value as string) || ''} onValueChange={(v) => updateFilter(filter.id, v)}>
+          <Select value={(value as string) || undefined} onValueChange={(v) => updateFilter(filter.id, v)}>
             <SelectTrigger>
               <SelectValue placeholder={filter.placeholder || filter.label} />
             </SelectTrigger>
