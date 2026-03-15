@@ -34,6 +34,7 @@ const ProvaAplicacao = lazy(() => import("./pages/ProvaAplicacao"));
 const ResumeParserPage = lazy(() => import("./pages/ResumeParserPage"));
 const CandidatosPage = lazy(() => import("./pages/CandidatosPage"));
 const AnalyticsPage = lazy(() => import("./pages/AnalyticsPage"));
+const ReportsPage = lazy(() => import("./pages/ReportsPage"));
 const ComunicacaoPage = lazy(() => import("./pages/ComunicacaoPage"));
 const AuthPage = lazy(() => import("./pages/AuthPage"));
 const AdminPage = lazy(() => import("./pages/AdminPage"));
