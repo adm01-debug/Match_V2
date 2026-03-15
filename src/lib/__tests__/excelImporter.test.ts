@@ -46,6 +46,6 @@ describe('parseCSV', () => {
     const csv = [header, ...rows].join('\n');
     const result = parseCSV(csv);
     expect(result.length).toBe(100);
-    expect(result[50]?.nome).toBe('User_50');
+    expect(result[50]?.['nome']).toBe('User_50');
   });
 });

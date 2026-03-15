@@ -17,9 +17,9 @@ describe('gdprService', () => {
 
   it('getConsentStatus retorna consentimentos padrão', async () => {
     const result = await gdprService.getConsentStatus('user-1');
-    expect(result.essential).toBe(true);
-    expect(result.analytics).toBe(true);
-    expect(result.marketing).toBe(false);
+    expect(result['essential']).toBe(true);
+    expect(result['analytics']).toBe(true);
+    expect(result['marketing']).toBe(false);
   });
 
   it('updateConsent não lança erro', async () => {
