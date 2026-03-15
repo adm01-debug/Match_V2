@@ -400,6 +400,15 @@ function App() {
                                   }
                                 />
 
+                                <Route
+                                  path="/workflows"
+                                  element={
+                                    <ProtectedRoute>
+                                      <WorkflowEditorPage />
+                                    </ProtectedRoute>
+                                  }
+                                />
+
                                 {/* 404 */}
                                 <Route path="*" element={<NotFound />} />
                               </Routes>
