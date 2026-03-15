@@ -28,7 +28,7 @@ describe('parseCSV', () => {
   it('remove aspas dos headers', () => {
     const csv = '"nome","email"\n"João","j@t.com"';
     const result = parseCSV(csv);
-    expect(result[0]?.nome).toBe('João');
+    expect(result[0]?.['nome']).toBe('João');
   });
 
   it('lida com valores ausentes', () => {
