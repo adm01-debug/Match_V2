@@ -20,7 +20,7 @@ describe('whatsappService', () => {
 
       const result = await whatsappService.sendMessage('+5511999999999', 'Olá!');
       expect(mockSupabase.functions.invoke).toHaveBeenCalledWith('send-whatsapp', {
-        body: { phone: '+5511999999999', message: 'Olá!' },
+        body: { to: '+5511999999999', message: 'Olá!' },
       });
       expect(result.success).toBe(true);
     });
