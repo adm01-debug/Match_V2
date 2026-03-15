@@ -244,10 +244,19 @@ const AdminPage = () => {
         <div>
           <h1 className="text-3xl font-bold text-foreground">Administração</h1>
           <p className="text-muted-foreground mt-1">
-            Gerencie usuários e permissões do sistema
+            Gerencie usuários, permissões e configurações do sistema
           </p>
         </div>
 
+        <Tabs defaultValue="usuarios" className="space-y-6">
+          <TabsList>
+            <TabsTrigger value="usuarios">Usuários</TabsTrigger>
+            <TabsTrigger value="auditoria">Auditoria</TabsTrigger>
+            <TabsTrigger value="sla">SLA</TabsTrigger>
+            <TabsTrigger value="sso">SSO</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="usuarios" className="space-y-6">
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <Card>
