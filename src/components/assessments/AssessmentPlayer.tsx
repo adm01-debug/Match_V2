@@ -247,7 +247,7 @@ export function AssessmentPlayer({
                 {/* Situacional */}
                 {currentQuestao.tipo === 'situacional' && (
                   <RadioGroup
-                    value={String(currentAnswer || '')}
+                    value={currentAnswer !== undefined && currentAnswer !== null ? String(currentAnswer) : undefined}
                     onValueChange={(val) => handleAnswer(Number(val))}
                     className="space-y-3"
                   >

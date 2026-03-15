@@ -267,7 +267,7 @@ const EntrevistaDetalhesDialog = ({
               {editData.tipo === 'presencial' && (
                 <div className="space-y-2">
                   <Label>Local</Label>
-                  <Select value={editData.local || ''} onValueChange={(v) => setEditData({ ...editData, local: v })}>
+                  <Select value={editData.local || undefined} onValueChange={(v) => setEditData({ ...editData, local: v })}>
                     <SelectTrigger><SelectValue placeholder="Selecione o local" /></SelectTrigger>
                     <SelectContent>
                       {locaisDisponiveis.filter(l => l.tipo === 'presencial').map((l) => (
