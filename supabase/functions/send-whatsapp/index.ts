@@ -6,9 +6,9 @@
 import { serve } from 'https://deno.land/std@0.208.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-const WHATSAPP_API_URL = Deno.env.get('WHATSAPP_API_URL');
-const WHATSAPP_API_KEY = Deno.env.get('WHATSAPP_API_KEY');
-const WHATSAPP_INSTANCE = Deno.env.get('WHATSAPP_INSTANCE');
+const EVOLUTION_API_URL = Deno.env.get('EVOLUTION_API_URL');
+const EVOLUTION_API_KEY = Deno.env.get('EVOLUTION_API_KEY');
+const EVOLUTION_INSTANCE = Deno.env.get('EVOLUTION_INSTANCE_NAME');
 
 interface WhatsAppRequest {
   to: string;
@@ -75,10 +75,10 @@ serve(async (req) => {
       );
     }
 
-    if (!WHATSAPP_API_URL || !WHATSAPP_API_KEY) {
-      console.error('WhatsApp API not configured');
+    if (!EVOLUTION_API_URL || !EVOLUTION_API_KEY) {
+      console.error('Evolution API not configured');
       return new Response(
-        JSON.stringify({ error: 'WhatsApp service not configured' }),
+        JSON.stringify({ error: 'Evolution API não configurada' }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
@@ -90,10 +90,11 @@ serve(async (req) => {
       text: message,
     };
 
-    const response = await fetch(`${WHATSAPP_API_URL}/message/sendText/${WHATSAPP_INSTANCE}`, {
+    const instanceName = EVOLUTION_INSTANCE || 'default';
+    const response = await fetch(`${EVOLUTION_API_URL}/message/sendText/${instanceName}`, {
       method: 'POST',
       headers: {
-        'apikey': WHATSAPP_API_KEY,
+        'apikey': EVOLUTION_API_KEY,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(payload),
