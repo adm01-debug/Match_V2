@@ -49,6 +49,7 @@ const GamificationPage = lazy(() => import("./pages/GamificationPage"));
 const OfferManagementPage = lazy(() => import("./pages/OfferManagementPage"));
 const HiringManagerPortalPage = lazy(() => import("./pages/HiringManagerPortalPage"));
 const AdvancedAnalyticsPage = lazy(() => import("./pages/AdvancedAnalyticsPage"));
+const WorkflowEditorPage = lazy(() => import("./pages/WorkflowEditorPage"));
 const PortalAuthPage = lazy(() => import("./pages/portal/PortalAuthPage"));
 const PortalDashboard = lazy(() => import("./pages/portal/PortalDashboard"));
 const PortalVagas = lazy(() => import("./pages/portal/PortalVagas"));
