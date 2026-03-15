@@ -5,15 +5,15 @@ import { useToast } from '@/hooks/use-toast';
 export function useDuplicate() {
   const { toast } = useToast();
 
-  const duplicate = useCallback(async <T extends Record<string, unknown>>(
+  const duplicate = useCallback(async (
     table: string,
     id: string,
     nameField: string = 'titulo',
     excludeFields: string[] = ['id', 'created_at', 'updated_at']
-  ): Promise<T | null> => {
+  ) => {
     try {
       const { data: original, error: fetchError } = await supabase
-        .from(table)
+        .from(table as 'candidatos')
         .select('*')
         .eq('id', id)
         .single();
@@ -29,15 +29,15 @@ export function useDuplicate() {
       }
 
       const { data: created, error: insertError } = await supabase
-        .from(table)
-        .insert(clone)
+        .from(table as 'candidatos')
+        .insert(clone as never)
         .select()
         .single();
 
       if (insertError) throw insertError;
 
       toast({ title: 'Registro duplicado com sucesso' });
-      return created as T;
+      return created;
     } catch (err) {
       toast({ title: 'Erro ao duplicar', description: String(err), variant: 'destructive' });
       return null;

@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import { useToast } from '@/hooks/use-toast';
 
-type ExportFormat = 'csv' | 'json' | 'xlsx';
+type ExportFormat = 'csv' | 'json';
 
 interface ExportOptions {
   filename: string;
@@ -45,19 +45,14 @@ export function useExportData() {
   const exportData = useCallback(async (data: Record<string, unknown>[], options: ExportOptions) => {
     setIsExporting(true);
     try {
-      switch (options.format) {
-        case 'csv':
-          exportToCSV(data, options.filename, options.columns);
-          break;
-        case 'json':
-          exportToJSON(data, options.filename);
-          break;
-        default:
-          exportToCSV(data, options.filename, options.columns);
+      if (options.format === 'json') {
+        exportToJSON(data, options.filename);
+      } else {
+        exportToCSV(data, options.filename, options.columns);
       }
       toast({ title: 'Exportação concluída', description: `Arquivo ${options.filename}.${options.format} baixado.` });
-    } catch (err) {
-      toast({ title: 'Erro na exportação', description: 'Não foi possível exportar os dados.', variant: 'destructive' });
+    } catch {
+      toast({ title: 'Erro na exportação', variant: 'destructive' });
     } finally {
       setIsExporting(false);
     }

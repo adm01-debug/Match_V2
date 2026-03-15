@@ -17,7 +17,7 @@ export function useRateLimiter({ maxRequests = 10, windowMs = 60000 }: RateLimit
 
     if (timestamps.current.length >= maxRequests) {
       setIsBlocked(true);
-      const oldest = timestamps.current[0];
+      const oldest = timestamps.current[0] ?? now;
       setResetTime(oldest + windowMs);
       setRemainingRequests(0);
       return false;
