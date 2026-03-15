@@ -2,7 +2,7 @@
  * @fileoverview Engine de execução de workflows
  */
 
-import type { WorkflowNodeData, WorkflowTrigger, WorkflowAction, WorkflowCondition, WorkflowDelay } from '@/types/workflow';
+import type { WorkflowTrigger, WorkflowAction, WorkflowCondition, WorkflowDelay } from '@/types/workflow';
 
 export interface WorkflowExecutionContext {
   candidatoId?: string;
