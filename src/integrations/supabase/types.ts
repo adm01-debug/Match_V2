@@ -942,6 +942,95 @@ export type Database = {
           },
         ]
       }
+      documentos_candidatos: {
+        Row: {
+          candidato_id: string
+          created_at: string | null
+          id: string
+          mime_type: string | null
+          nome: string
+          tamanho_bytes: number | null
+          tipo: string
+          updated_at: string | null
+          uploaded_by: string | null
+          url: string
+        }
+        Insert: {
+          candidato_id: string
+          created_at?: string | null
+          id?: string
+          mime_type?: string | null
+          nome: string
+          tamanho_bytes?: number | null
+          tipo?: string
+          updated_at?: string | null
+          uploaded_by?: string | null
+          url: string
+        }
+        Update: {
+          candidato_id?: string
+          created_at?: string | null
+          id?: string
+          mime_type?: string | null
+          nome?: string
+          tamanho_bytes?: number | null
+          tipo?: string
+          updated_at?: string | null
+          uploaded_by?: string | null
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "documentos_candidatos_candidato_id_fkey"
+            columns: ["candidato_id"]
+            isOneToOne: false
+            referencedRelation: "candidatos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      email_templates: {
+        Row: {
+          assunto: string
+          ativo: boolean | null
+          categoria: string
+          conteudo: string
+          created_at: string | null
+          created_by: string | null
+          etapa: string
+          id: string
+          nome: string
+          updated_at: string | null
+          variaveis: string[] | null
+        }
+        Insert: {
+          assunto: string
+          ativo?: boolean | null
+          categoria?: string
+          conteudo: string
+          created_at?: string | null
+          created_by?: string | null
+          etapa?: string
+          id?: string
+          nome: string
+          updated_at?: string | null
+          variaveis?: string[] | null
+        }
+        Update: {
+          assunto?: string
+          ativo?: boolean | null
+          categoria?: string
+          conteudo?: string
+          created_at?: string | null
+          created_by?: string | null
+          etapa?: string
+          id?: string
+          nome?: string
+          updated_at?: string | null
+          variaveis?: string[] | null
+        }
+        Relationships: []
+      }
       entrevista_respostas: {
         Row: {
           avaliador_id: string | null
@@ -1135,6 +1224,44 @@ export type Database = {
         }
         Relationships: []
       }
+      historico_etapas: {
+        Row: {
+          created_at: string | null
+          etapa_anterior: string | null
+          etapa_nova: string
+          id: string
+          motivo: string | null
+          processo_id: string
+          responsavel_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          etapa_anterior?: string | null
+          etapa_nova: string
+          id?: string
+          motivo?: string | null
+          processo_id: string
+          responsavel_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          etapa_anterior?: string | null
+          etapa_nova?: string
+          id?: string
+          motivo?: string | null
+          processo_id?: string
+          responsavel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "historico_etapas_processo_id_fkey"
+            columns: ["processo_id"]
+            isOneToOne: false
+            referencedRelation: "processos_seletivos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       indicacoes: {
         Row: {
           bonus: number | null
@@ -1324,6 +1451,60 @@ export type Database = {
             columns: ["candidato_id"]
             isOneToOne: false
             referencedRelation: "candidatos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notas_candidatos: {
+        Row: {
+          autor_id: string | null
+          autor_nome: string | null
+          candidato_id: string
+          conteudo: string
+          created_at: string | null
+          id: string
+          privada: boolean | null
+          processo_id: string | null
+          tipo: string
+          updated_at: string | null
+        }
+        Insert: {
+          autor_id?: string | null
+          autor_nome?: string | null
+          candidato_id: string
+          conteudo: string
+          created_at?: string | null
+          id?: string
+          privada?: boolean | null
+          processo_id?: string | null
+          tipo?: string
+          updated_at?: string | null
+        }
+        Update: {
+          autor_id?: string | null
+          autor_nome?: string | null
+          candidato_id?: string
+          conteudo?: string
+          created_at?: string | null
+          id?: string
+          privada?: boolean | null
+          processo_id?: string | null
+          tipo?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notas_candidatos_candidato_id_fkey"
+            columns: ["candidato_id"]
+            isOneToOne: false
+            referencedRelation: "candidatos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notas_candidatos_processo_id_fkey"
+            columns: ["processo_id"]
+            isOneToOne: false
+            referencedRelation: "processos_seletivos"
             referencedColumns: ["id"]
           },
         ]
