@@ -28,6 +28,7 @@ const VagaForm = lazy(() => import("./pages/VagaForm"));
 const VagaDetalhes = lazy(() => import("./pages/VagaDetalhes"));
 const Pipeline = lazy(() => import("./pages/Pipeline"));
 const AvaliacaoForm = lazy(() => import("./pages/AvaliacaoForm"));
+const AvaliacoesPage = lazy(() => import("./pages/AvaliacoesPage"));
 const TestsPage = lazy(() => import("./pages/TestsPage"));
 const ProvaEditor = lazy(() => import("./pages/ProvaEditor"));
 const ProvaAplicacao = lazy(() => import("./pages/ProvaAplicacao"));
@@ -387,8 +388,16 @@ function App() {
                                 <Route
                                   path="/admin"
                                   element={
-                                    <ProtectedRoute>
+                                    <ProtectedRoute requiredRoles={["admin"]}>
                                       <AdminPage />
+                                    </ProtectedRoute>
+                                  }
+                                />
+                                <Route
+                                  path="/avaliacoes"
+                                  element={
+                                    <ProtectedRoute>
+                                      <AvaliacoesPage />
                                     </ProtectedRoute>
                                   }
                                 />
