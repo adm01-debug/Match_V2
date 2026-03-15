@@ -18,5 +18,5 @@ export const slackService = {
     return [];
   },
 
-  isConfigured: () => !!import.meta.env.VITE_SLACK_CLIENT_ID,
+  isConfigured: () => !!import.meta.env['VITE_SLACK_CLIENT_ID'],
 };

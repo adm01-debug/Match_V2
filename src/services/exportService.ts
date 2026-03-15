@@ -2,7 +2,7 @@
 
 export const exportService = {
   toCSV(data: Record<string, unknown>[], columns?: string[]): string {
-    const keys = columns || (data.length > 0 ? Object.keys(data[0]) : []);
+    const keys = columns || (data.length > 0 ? Object.keys(data[0] ?? {}) : []);
     const header = keys.join(',');
     const rows = data.map((row) =>
       keys.map((k) => {

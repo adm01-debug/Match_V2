@@ -26,5 +26,5 @@ export const googleCalendarService = {
     return [];
   },
 
-  isConfigured: () => !!import.meta.env.VITE_GOOGLE_CLIENT_ID,
+  isConfigured: () => !!import.meta.env['VITE_GOOGLE_CLIENT_ID'],
 };

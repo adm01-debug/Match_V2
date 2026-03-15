@@ -31,6 +31,6 @@ export const linkedinService = {
   },
 
   isConfigured(): boolean {
-    return !!import.meta.env.VITE_LINKEDIN_CLIENT_ID;
+    return !!import.meta.env['VITE_LINKEDIN_CLIENT_ID'];
   },
 };

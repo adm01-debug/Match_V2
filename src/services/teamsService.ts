@@ -15,5 +15,5 @@ export const teamsService = {
     return this.sendMessage('general', `🆕 Novo candidato: ${candidatoNome} para ${vagaTitulo}`);
   },
 
-  isConfigured: () => !!import.meta.env.VITE_TEAMS_CLIENT_ID,
+  isConfigured: () => !!import.meta.env['VITE_TEAMS_CLIENT_ID'],
 };

@@ -11,7 +11,8 @@ export const importService = {
   parseCSV(csvText: string): Record<string, string>[] {
     const lines = csvText.trim().split('\n');
     if (lines.length < 2) return [];
-    const headers = lines[0].split(',').map((h) => h.trim().replace(/^"|"$/g, ''));
+    const headerLine = lines[0] ?? '';
+    const headers = headerLine.split(',').map((h) => h.trim().replace(/^"|"$/g, ''));
     return lines.slice(1).map((line) => {
       const values = line.split(',').map((v) => v.trim().replace(/^"|"$/g, ''));
       const row: Record<string, string> = {};

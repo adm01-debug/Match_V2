@@ -14,7 +14,7 @@ export function useExportData() {
   const { toast } = useToast();
 
   const exportToCSV = useCallback((data: Record<string, unknown>[], filename: string, columns?: string[]) => {
-    const keys = columns || (data.length > 0 ? Object.keys(data[0]) : []);
+    const keys = columns || (data.length > 0 ? Object.keys(data[0] ?? {}) : []);
     const header = keys.join(',');
     const rows = data.map((row) => keys.map((k) => {
       const val = row[k];

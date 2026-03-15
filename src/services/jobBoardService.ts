@@ -7,8 +7,13 @@ import { vagasComService } from './vagasService';
 
 export type JobBoard = 'linkedin' | 'indeed' | 'catho' | 'infojobs' | 'vagas';
 
-const boardMap = {
-  linkedin: linkedinService,
+interface BoardService {
+  publishJob: (jobData: Record<string, unknown>) => Promise<{ success: boolean; message?: string }>;
+  isConfigured: () => boolean;
+}
+
+const boardMap: Record<JobBoard, BoardService> = {
+  linkedin: { publishJob: (d) => linkedinService.publishJob('', d), isConfigured: linkedinService.isConfigured },
   indeed: indeedService,
   catho: cathoService,
   infojobs: infojobsService,
@@ -22,7 +27,7 @@ export const jobBoardService = {
 
   async publishToAll(jobData: Record<string, unknown>) {
     const results = await Promise.allSettled(
-      Object.entries(boardMap).map(([name, service]) =>
+      (Object.entries(boardMap) as [JobBoard, BoardService][]).map(([name, service]) =>
         service.publishJob(jobData).then((r) => ({ board: name, ...r }))
       )
     );
@@ -30,7 +35,7 @@ export const jobBoardService = {
   },
 
   getConfiguredBoards(): JobBoard[] {
-    return (Object.entries(boardMap) as [JobBoard, typeof linkedinService][])
+    return (Object.entries(boardMap) as [JobBoard, BoardService][])
       .filter(([, s]) => s.isConfigured())
       .map(([name]) => name);
   },
