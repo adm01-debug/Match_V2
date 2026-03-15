@@ -9,9 +9,9 @@ describe('parseCSV', () => {
     const csv = 'nome,email,telefone\nJoão,joao@test.com,11999\nMaria,maria@test.com,11888';
     const result = parseCSV(csv);
     expect(result.length).toBe(2);
-    expect(result[0]?.nome).toBe('João');
-    expect(result[0]?.email).toBe('joao@test.com');
-    expect(result[1]?.nome).toBe('Maria');
+    expect(result[0]?.['nome']).toBe('João');
+    expect(result[0]?.['email']).toBe('joao@test.com');
+    expect(result[1]?.['nome']).toBe('Maria');
   });
 
   it('retorna array vazio para CSV sem dados', () => {
