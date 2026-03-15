@@ -37,7 +37,7 @@ import {
 } from '@/components/ui/dialog';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Input } from '@/components/ui/input';
-import { Users, Shield, Search, Loader2, UserCog, Clock, KeyRound, FileText } from 'lucide-react';
+import { Users, Shield, Search, Loader2, UserCog } from 'lucide-react';
 import { AuditLogViewer } from '@/components/admin/AuditLogViewer';
 import { SLAConfig } from '@/components/admin/SLAConfig';
 import { SSOSettings } from '@/components/admin/SSOSettings';
