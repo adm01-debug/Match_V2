@@ -1,4 +1,4 @@
-import { Suspense, useMemo, useCallback } from 'react';
+import { Suspense, useMemo, useCallback, lazy } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState, useEffect } from 'react';
@@ -7,6 +7,8 @@ import { HighlightMatch, getMatchIndices } from '@/components/ui/highlight-match
 import { Layout } from '@/components/layout/Layout';
 import { useAuth, AppRole } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
 import {
   Card,
