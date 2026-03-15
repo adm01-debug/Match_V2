@@ -196,7 +196,7 @@ async function fetchFunilReport(_config: ReportConfig): Promise<ReportData> {
 
   return {
     labels: etapas,
-    datasets: [{ label: 'Candidatos por Etapa', data: etapas.map(e => byEtapa[e]), color: '#22C55E' }],
+    datasets: [{ label: 'Candidatos por Etapa', data: etapas.map(e => byEtapa[e] ?? 0), color: '#22C55E' }],
     summary: {
       total_processos: processos?.length || 0,
       ativos: processos?.filter(p => p.status === 'ativo').length || 0,
