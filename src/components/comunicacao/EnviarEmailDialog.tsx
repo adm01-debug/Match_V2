@@ -1,10 +1,10 @@
 /**
  * @fileoverview EnviarEmailDialog component
  * @module EnviarEmailDialog
+ * Uses persistent email_templates from database
  */
 
-import { memo } from 'react';
-import { useMemo, useState } from "react";
+import { memo, useState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -19,10 +19,25 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import { Send, Loader2, Eye, User } from "lucide-react";
-import { emailTemplatesMock, variaveisDisponiveis } from "@/data/emailTemplatesData";
+import { useEmailTemplates } from "@/hooks/useEmailTemplates";
 import { useComunicacoes } from "@/hooks/useComunicacoes";
+
+const VARIAVEIS_DISPONIVEIS = [
+  { nome: '{{candidato_nome}}', descricao: 'Nome do candidato' },
+  { nome: '{{vaga_titulo}}', descricao: 'Título da vaga' },
+  { nome: '{{empresa_nome}}', descricao: 'Nome da empresa' },
+  { nome: '{{data_entrevista}}', descricao: 'Data da entrevista' },
+  { nome: '{{hora_entrevista}}', descricao: 'Horário da entrevista' },
+  { nome: '{{local_entrevista}}', descricao: 'Local da entrevista' },
+  { nome: '{{recrutador_nome}}', descricao: 'Nome do recrutador' },
+  { nome: '{{etapa_atual}}', descricao: 'Etapa atual' },
+  { nome: '{{salario}}', descricao: 'Salário proposto' },
+  { nome: '{{beneficios}}', descricao: 'Benefícios' },
+  { nome: '{{data_inicio}}', descricao: 'Data de início' },
+];
 
 interface Candidato {
   id: string;
@@ -38,41 +53,37 @@ interface EnviarEmailDialogProps {
   onSuccess?: () => void;
 }
 
+function replaceVariables(text: string, candidato: Candidato): string {
+  return text
+    .replace(/\{\{candidato_nome\}\}/g, candidato.nome)
+    .replace(/\{\{vaga_titulo\}\}/g, candidato.vagaTitulo || "Vaga em Aberto")
+    .replace(/\{\{empresa_nome\}\}/g, "Promo Brindes")
+    .replace(/\{\{data_entrevista\}\}/g, "[DATA A DEFINIR]")
+    .replace(/\{\{hora_entrevista\}\}/g, "[HORA A DEFINIR]")
+    .replace(/\{\{local_entrevista\}\}/g, "[LOCAL A DEFINIR]")
+    .replace(/\{\{recrutador_nome\}\}/g, "Equipe RH")
+    .replace(/\{\{etapa_atual\}\}/g, "[ETAPA ATUAL]")
+    .replace(/\{\{salario\}\}/g, "[A COMBINAR]")
+    .replace(/\{\{beneficios\}\}/g, "[A DEFINIR]")
+    .replace(/\{\{data_inicio\}\}/g, "[A DEFINIR]");
+}
+
 export function EnviarEmailDialog({ open, onOpenChange, candidato, onSuccess }: EnviarEmailDialogProps) {
   const { registrarComunicacao, isRegistrando } = useComunicacoes();
+  const { templates, isLoading: templatesLoading } = useEmailTemplates();
 
   const [selectedTemplate, setSelectedTemplate] = useState<string>("");
   const [assunto, setAssunto] = useState("");
   const [conteudo, setConteudo] = useState("");
   const [showPreview, setShowPreview] = useState(false);
 
-  const activeTemplates = useMemo(() => emailTemplatesMock.filter((t) => t.ativo), []);
-
   const handleTemplateSelect = (templateId: string) => {
     setSelectedTemplate(templateId);
-    const template = emailTemplatesMock.find((t) => t.id === templateId);
+    const template = templates.find((t) => t.id === templateId);
     if (!template) return;
 
-    // Substitui variáveis com dados do candidato
-    const processedSubject = template.assunto
-      .replace(/{{candidato_nome}}/g, candidato.nome)
-      .replace(/{{vaga_titulo}}/g, candidato.vagaTitulo || "Vaga em Aberto")
-      .replace(/{{empresa_nome}}/g, "Promo Brindes");
-
-    const processedContent = template.conteudo
-      .replace(/{{candidato_nome}}/g, candidato.nome)
-      .replace(/{{vaga_titulo}}/g, candidato.vagaTitulo || "Vaga em Aberto")
-      .replace(/{{empresa_nome}}/g, "Promo Brindes")
-      .replace(/{{data_entrevista}}/g, "[DATA A DEFINIR]")
-      .replace(/{{hora_entrevista}}/g, "[HORA A DEFINIR]")
-      .replace(/{{local_entrevista}}/g, "[LOCAL A DEFINIR]")
-      .replace(/{{recrutador_nome}}/g, "Equipe RH")
-      .replace(/{{prazo_testes}}/g, "3 dias")
-      .replace(/{{salario_proposto}}/g, "[A COMBINAR]")
-      .replace(/{{data_inicio}}/g, "[A DEFINIR]");
-
-    setAssunto(processedSubject);
-    setConteudo(processedContent);
+    setAssunto(replaceVariables(template.assunto, candidato));
+    setConteudo(replaceVariables(template.conteudo, candidato));
   };
 
   const handleSend = async () => {
@@ -82,7 +93,7 @@ export function EnviarEmailDialog({ open, onOpenChange, candidato, onSuccess }: 
     }
 
     try {
-      const template = emailTemplatesMock.find((t) => t.id === selectedTemplate);
+      const template = templates.find((t) => t.id === selectedTemplate);
       
       await registrarComunicacao({
         candidato_id: candidato.id,
@@ -99,12 +110,11 @@ export function EnviarEmailDialog({ open, onOpenChange, candidato, onSuccess }: 
       onOpenChange(false);
       onSuccess?.();
 
-      // Reset
       setSelectedTemplate("");
       setAssunto("");
       setConteudo("");
       setShowPreview(false);
-    } catch (error) {
+    } catch {
       toast.error("Erro ao registrar e-mail", {
         description: "Tente novamente em alguns instantes.",
       });
@@ -144,18 +154,22 @@ export function EnviarEmailDialog({ open, onOpenChange, candidato, onSuccess }: 
           {/* Seleção de Template */}
           <div className="space-y-2">
             <Label>Usar Template</Label>
-            <Select value={selectedTemplate} onValueChange={handleTemplateSelect}>
-              <SelectTrigger>
-                <SelectValue placeholder="Selecione um template ou escreva do zero..." />
-              </SelectTrigger>
-              <SelectContent>
-                {activeTemplates.map((template) => (
-                  <SelectItem key={template.id} value={template.id}>
-                    {template.nome}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            {templatesLoading ? (
+              <Skeleton className="h-10 w-full" />
+            ) : (
+              <Select value={selectedTemplate} onValueChange={handleTemplateSelect}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecione um template ou escreva do zero..." />
+                </SelectTrigger>
+                <SelectContent>
+                  {templates.map((template) => (
+                    <SelectItem key={template.id} value={template.id}>
+                      {template.nome}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
           </div>
 
           {/* Assunto */}
@@ -202,7 +216,7 @@ export function EnviarEmailDialog({ open, onOpenChange, candidato, onSuccess }: 
             <div className="bg-muted/30 p-3 rounded-lg">
               <p className="text-sm font-medium mb-2">Variáveis disponíveis (clique para inserir):</p>
               <div className="flex flex-wrap gap-1">
-                {variaveisDisponiveis.map((v) => (
+                {VARIAVEIS_DISPONIVEIS.map((v) => (
                   <Badge
                     key={v.nome}
                     variant="outline"
