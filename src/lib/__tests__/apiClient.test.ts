@@ -1,9 +1,9 @@
 /**
  * @fileoverview Testes do apiClient e utilitários
  */
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import '@/test/mocks/supabase';
-import { createApiUrl } from '../apiClient';
+import { createApiUrl } from '../../lib/apiClient';
 
 describe('createApiUrl', () => {
   it('retorna path simples sem params', () => {

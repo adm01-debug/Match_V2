@@ -12,6 +12,9 @@ import {
 } from '../behavioralDNA';
 
 const createProfile = (helix: Partial<DNAHelix> = {}, archetype = 'visionary'): DNAProfile => ({
+  id: 'test-profile-1',
+  type: 'candidate',
+  name: 'Test User',
   helix: {
     strategic: 70,
     emotional: 60,
@@ -20,12 +23,12 @@ const createProfile = (helix: Partial<DNAHelix> = {}, archetype = 'visionary'): 
     adaptive: 65,
     ...helix,
   },
-  archetype: archetype as any,
+  dnaCode: 'S70-E60-I50-V80-A65',
+  archetype: archetype as DNAProfile['archetype'],
   strengths: ['test'],
   challenges: ['test'],
-  idealRoles: ['test'],
-  communicationStyle: 'test',
-  leadershipStyle: 'test',
+  idealEnvironment: 'test',
+  completedAt: new Date().toISOString(),
 });
 
 describe('DNA_STRANDS', () => {
@@ -71,10 +74,9 @@ describe('DNA_ARCHETYPES', () => {
 });
 
 describe('calculateMatchCompatibility', () => {
-  it('retorna 100 para perfis idênticos com archetype compatível', () => {
+  it('retorna score alto para perfis idênticos', () => {
     const profile = createProfile();
     const score = calculateMatchCompatibility(profile, profile);
-    // Score should be high for identical profiles
     expect(score).toBeGreaterThanOrEqual(80);
   });
 
@@ -120,11 +122,10 @@ describe('archetypeChemistry', () => {
     expect(archetypeChemistry('invalid' as any, 'invalid' as any)).toBe('neutral');
   });
 
-  it('retorna um dos 4 tipos válidos', () => {
+  it('retorna um dos 4 tipos válidos para arquétipos válidos', () => {
     const validTypes = ['synergy', 'complementary', 'tension', 'neutral'];
-    // Test with first two valid archetypes
     if (DNA_ARCHETYPES.length >= 2) {
-      const result = archetypeChemistry(DNA_ARCHETYPES[0].id, DNA_ARCHETYPES[1].id);
+      const result = archetypeChemistry(DNA_ARCHETYPES[0]!.id, DNA_ARCHETYPES[1]!.id);
       expect(validTypes).toContain(result);
     }
   });
