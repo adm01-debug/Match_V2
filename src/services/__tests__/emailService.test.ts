@@ -20,7 +20,7 @@ describe('emailService', () => {
 
       const result = await emailService.sendEmail('test@test.com', 'Assunto', '<p>Corpo</p>');
       expect(mockSupabase.functions.invoke).toHaveBeenCalledWith('send-email', {
-        body: { to: 'test@test.com', subject: 'Assunto', content: '<p>Corpo</p>', replyTo: undefined },
+        body: { to: 'test@test.com', subject: 'Assunto', html: '<p>Corpo</p>', replyTo: undefined },
       });
       expect(result.success).toBe(true);
     });
@@ -30,7 +30,7 @@ describe('emailService', () => {
 
       await emailService.sendEmail('a@b.com', 'Sub', 'Body', 'reply@b.com');
       expect(mockSupabase.functions.invoke).toHaveBeenCalledWith('send-email', {
-        body: { to: 'a@b.com', subject: 'Sub', content: 'Body', replyTo: 'reply@b.com' },
+        body: { to: 'a@b.com', subject: 'Sub', html: 'Body', replyTo: 'reply@b.com' },
       });
     });
 
@@ -97,7 +97,7 @@ describe('emailService', () => {
         body: expect.objectContaining({
           to: 'dest@test.com',
           subject: 'Olá Maria',
-          content: '<p>Bem-vindo, Maria!</p>',
+          html: '<p>Bem-vindo, Maria!</p>',
         }),
       });
     });

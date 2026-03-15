@@ -4,7 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 export const emailService = {
   async sendEmail(to: string, subject: string, content: string, replyTo?: string) {
     const { data, error } = await supabase.functions.invoke('send-email', {
-      body: { to, subject, content, replyTo },
+      body: { to, subject, html: content, replyTo },
     });
     if (error) throw error;
     return data;

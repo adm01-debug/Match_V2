@@ -21,9 +21,28 @@ Deno.serve(async (req) => {
   }
 
   try {
+    // JWT auth
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader?.startsWith('Bearer ')) {
+      return new Response(
+        JSON.stringify({ error: 'Unauthorized' }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-    const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-    const supabase = createClient(supabaseUrl, supabaseKey);
+    const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
+    const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+      global: { headers: { Authorization: authHeader } },
+    });
+
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    if (userError || !user) {
+      return new Response(
+        JSON.stringify({ error: 'Token inválido' }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
 
     const { processoId, candidatoId }: ScorecardInput = await req.json();
 
@@ -54,10 +73,10 @@ Deno.serve(async (req) => {
       .select("*, assessments (titulo, tipo)")
       .eq("candidato_id", candidatoId);
 
-    // 4. Buscar resultados de provas
-    const { data: provas } = await supabase
-      .from("resultados_provas")
-      .select("*, provas (titulo, categoria)")
+    // 4. Buscar resultados de behavioral assessments (substitui resultados_provas)
+    const { data: behavioralResults } = await supabase
+      .from("behavioral_assessment_results")
+      .select("*")
       .eq("candidato_id", candidatoId);
 
     // 5. Buscar perfil do cargo (se existir)
@@ -77,10 +96,10 @@ Deno.serve(async (req) => {
     let discEstabilidade = 0;
     let discConformidade = 0;
 
-    // Score técnico baseado em provas
-    if (provas && provas.length > 0) {
-      const mediaProvas = provas.reduce((acc, p) => acc + (p.percentual || 0), 0) / provas.length;
-      scoreTecnico = Math.round(mediaProvas);
+    // Score técnico baseado em behavioral results
+    if (behavioralResults && behavioralResults.length > 0) {
+      const mediaScores = behavioralResults.reduce((acc, r) => acc + (Number(r.score) || 0), 0) / behavioralResults.length;
+      scoreTecnico = Math.round(mediaScores);
     }
 
     // Scores de assessments
