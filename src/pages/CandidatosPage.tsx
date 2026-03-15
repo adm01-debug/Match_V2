@@ -138,6 +138,7 @@ export default function CandidatosPage() {
 
   useEffect(() => {
     fetchCandidatos();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchCandidatos = async () => {
