@@ -181,7 +181,7 @@ async function fetchCandidatosReport(_config: ReportConfig): Promise<ReportData>
   };
 }
 
-async function fetchFunilReport(config: ReportConfig): Promise<ReportData> {
+async function fetchFunilReport(_config: ReportConfig): Promise<ReportData> {
   const { data: processos, error } = await supabase
     .from('processos_seletivos')
     .select('id, etapa_atual, status, created_at, data_ultima_movimentacao, dias_na_etapa');
