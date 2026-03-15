@@ -44,7 +44,7 @@ describe('whatsappService', () => {
 
       await whatsappService.sendTemplate('+5511999', 'entrevista_agendada', ['João', '15/03']);
       expect(mockSupabase.functions.invoke).toHaveBeenCalledWith('send-whatsapp', {
-        body: { phone: '+5511999', templateName: 'entrevista_agendada', variables: ['João', '15/03'] },
+        body: { to: '+5511999', message: '', type: 'template', templateName: 'entrevista_agendada', templateParams: ['João', '15/03'] },
       });
     });
   });
