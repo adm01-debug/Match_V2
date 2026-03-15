@@ -11,7 +11,7 @@ export interface WhiteLabelConfig {
 }
 
 const DEFAULT_CONFIG: WhiteLabelConfig = {
-  companyName: 'Match ATS',
+  companyName: 'People Lovers',
   primaryColor: '#6366f1',
   secondaryColor: '#8b5cf6',
   fontFamily: 'Inter',

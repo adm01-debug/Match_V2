@@ -18,7 +18,7 @@ interface TourStep {
 const DEFAULT_STEPS: TourStep[] = [
   {
     id: 'welcome',
-    title: 'Bem-vindo ao Match ATS! 🎉',
+    title: 'Bem-vindo ao People Lovers! 🎉',
     description: 'Vamos fazer um tour rápido pelas principais funcionalidades do seu novo sistema de recrutamento.',
     icon: Rocket,
     position: 'center',

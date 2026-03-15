@@ -133,7 +133,7 @@ serve(async (req: Request): Promise<Response> => {
             </div>
             <div style="background-color: #f9fafb; padding: 20px; text-align: center; border-top: 1px solid #e5e7eb;">
               <p style="color: #6b7280; font-size: 12px; margin: 0;">
-                Este é um email automático de segurança do MATCH ATS.
+                Este é um email automático de segurança do PEOPLE LOVERS.
               </p>
             </div>
           </div>
@@ -148,7 +148,7 @@ serve(async (req: Request): Promise<Response> => {
           Authorization: `Bearer ${resendApiKey}`,
         },
         body: JSON.stringify({
-          from: 'MATCH ATS <security@resend.dev>',
+          from: 'PEOPLE LOVERS <security@resend.dev>',
           to: [userEmail],
           subject: '🔐 Novo dispositivo detectado na sua conta',
           html: emailHtml,

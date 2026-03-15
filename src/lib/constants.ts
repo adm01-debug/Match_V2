@@ -3,9 +3,9 @@
  * @module constants
  */
 
-// Constantes do sistema Match ATS
+// Constantes do sistema People Lovers
 
-export const APP_NAME = 'Match ATS';
+export const APP_NAME = 'People Lovers';
 export const APP_VERSION = '1.0.0';
 
 // API Endpoints

@@ -250,7 +250,7 @@ const AuthPage = () => {
                 <Briefcase className="h-8 w-8 text-white" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-white">Match ATS</h1>
+                <h1 className="text-2xl font-bold text-white">People Lovers</h1>
                 <p className="text-white/60 text-sm">Sistema de Recrutamento</p>
               </div>
             </div>
@@ -306,7 +306,7 @@ const AuthPage = () => {
             <div className="p-3 rounded-xl gradient-primary shadow-glow mb-4">
               <Briefcase className="h-8 w-8 text-white" />
             </div>
-            <h1 className="text-2xl font-bold text-foreground">Match ATS</h1>
+            <h1 className="text-2xl font-bold text-foreground">People Lovers</h1>
             <p className="text-muted-foreground">Sistema de Recrutamento</p>
           </motion.div>
 

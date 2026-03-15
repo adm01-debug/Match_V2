@@ -114,7 +114,7 @@ export function useWebAuthn() {
       const publicKeyCredentialCreationOptions: PublicKeyCredentialCreationOptions = {
         challenge: challenge.buffer,
         rp: {
-          name: 'Match ATS',
+          name: 'People Lovers',
           id: window.location.hostname,
         },
         user: {

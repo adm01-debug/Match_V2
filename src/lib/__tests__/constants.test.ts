@@ -12,7 +12,7 @@ import {
 } from '../constants';
 
 describe('APP constants', () => {
-  it('APP_NAME é "Match ATS"', () => expect(APP_NAME).toBe('Match ATS'));
+  it('APP_NAME é "People Lovers"', () => expect(APP_NAME).toBe('People Lovers'));
   it('APP_VERSION segue semver', () => expect(APP_VERSION).toMatch(/^\d+\.\d+\.\d+$/));
 });
 

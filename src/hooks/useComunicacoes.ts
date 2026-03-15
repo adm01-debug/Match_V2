@@ -96,7 +96,7 @@ export function useComunicacoes(candidatoId?: string) {
               ${input.destinatario_nome ? `<p style="margin:0 0 16px;color:#333;">Olá, <strong>${input.destinatario_nome}</strong>!</p>` : ''}
               ${textToHtml(input.conteudo)}
               <hr style="border:none;border-top:1px solid #e5e7eb;margin:24px 0;" />
-              <p style="font-size:12px;color:#999;margin:0;">Este email foi enviado pelo sistema Match ATS da Promo Brindes.</p>
+              <p style="font-size:12px;color:#999;margin:0;">Este email foi enviado pelo sistema People Lovers da Promo Brindes.</p>
             </div>
           </div>
         `;

@@ -128,7 +128,7 @@ export function TwoFactorSetup({ onComplete, onCancel }: TwoFactorSetupProps) {
   const downloadRecoveryCodes = () => {
     if (!recoveryCodes?.length) return;
     
-    const content = `MATCH ATS - Códigos de Recuperação 2FA
+    const content = `PEOPLE LOVERS - Códigos de Recuperação 2FA
 ========================================
 Data: ${new Date().toLocaleDateString('pt-BR')}
 
