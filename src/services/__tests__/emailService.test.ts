@@ -20,7 +20,7 @@ describe('emailService', () => {
 
       const result = await emailService.sendEmail('test@test.com', 'Assunto', '<p>Corpo</p>');
       expect(mockSupabase.functions.invoke).toHaveBeenCalledWith('send-email', {
-        body: { to: 'test@test.com', subject: 'Assunto', content: '<p>Corpo</p>', replyTo: undefined },
+        body: { to: 'test@test.com', subject: 'Assunto', html: '<p>Corpo</p>', replyTo: undefined },
       });
       expect(result.success).toBe(true);
     });
