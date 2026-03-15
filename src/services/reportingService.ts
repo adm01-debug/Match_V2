@@ -191,7 +191,8 @@ async function fetchFunilReport(_config: ReportConfig): Promise<ReportData> {
   const byEtapa: Record<string, number> = {};
   etapas.forEach(e => { byEtapa[e] = 0; });
   (processos || []).forEach(p => {
-    if (byEtapa[p.etapa_atual] !== undefined) byEtapa[p.etapa_atual]++;
+    const etapa = p.etapa_atual;
+    if (etapa in byEtapa) byEtapa[etapa]++;
   });
 
   return {
