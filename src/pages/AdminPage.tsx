@@ -1,4 +1,4 @@
-import { Suspense, useMemo, useCallback, lazy } from 'react';
+import { Suspense, useMemo, useCallback } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState, useEffect } from 'react';
