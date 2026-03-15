@@ -134,7 +134,7 @@ function generateCandidateEmail(entrevista: Entrevista): string {
         <p>Boa sorte! 🍀</p>
       </div>
       <div class="footer">
-        <p>Match ATS - Sistema de Recrutamento Inteligente</p>
+        <p>People Lovers - Sistema de Recrutamento Inteligente</p>
       </div>
     </body>
     </html>
