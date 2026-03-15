@@ -262,7 +262,7 @@ export default function ProvaAplicacao() {
                 />
               ) : (
                 <RadioGroup 
-                  value={respostas[questao.id] !== undefined && respostas[questao.id] !== null ? respostas[questao.id].toString() : undefined} 
+                  value={respostas[questao.id] != null ? String(respostas[questao.id]) : undefined} 
                   onValueChange={(v) => handleSalvarResposta(questao.id, parseInt(v))}
                 >
                   {questao.opcoes.map((opcao, i) => (
