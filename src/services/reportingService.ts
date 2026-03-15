@@ -154,7 +154,7 @@ async function fetchVagasReport(_config: ReportConfig): Promise<ReportData> {
   };
 }
 
-async function fetchCandidatosReport(config: ReportConfig): Promise<ReportData> {
+async function fetchCandidatosReport(_config: ReportConfig): Promise<ReportData> {
   const { data: candidatos, error } = await supabase
     .from('candidatos')
     .select('id, nome, email, fonte, status, created_at, habilidades');
