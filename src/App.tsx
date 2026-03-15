@@ -298,6 +298,14 @@ function App() {
                                   path="/relatorios"
                                   element={
                                     <ProtectedRoute>
+                                      <ReportsPage />
+                                    </ProtectedRoute>
+                                  }
+                                />
+                                <Route
+                                  path="/analytics-basico"
+                                  element={
+                                    <ProtectedRoute>
                                       <AnalyticsPage />
                                     </ProtectedRoute>
                                   }
