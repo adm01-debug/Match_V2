@@ -250,9 +250,9 @@ async function fetchSLAReport(config: ReportConfig): Promise<ReportData> {
 
   const etapas = Object.keys(SLA_LIMITS);
   const tempoMedio = etapas.map(etapa => {
-    const procs = (processos || []).filter(p => p.etapa_atual === etapa);
+    const procs = (processos ?? []).filter(p => p.etapa_atual === etapa);
     if (procs.length === 0) return 0;
-    return Math.round(procs.reduce((sum, p) => sum + (p.dias_na_etapa || 0), 0) / procs.length);
+    return Math.round(procs.reduce((sum, p) => sum + (p.dias_na_etapa ?? 0), 0) / procs.length);
   });
 
   return {
