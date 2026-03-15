@@ -38,3 +38,6 @@ verify_jwt = true
 
 [functions.evolution-api]
 verify_jwt = false
+
+[functions.evolution-health]
+verify_jwt = false
