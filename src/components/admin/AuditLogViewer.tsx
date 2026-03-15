@@ -8,7 +8,7 @@ import { useAuditLogs } from '@/hooks/useAuditLogs';
 import { Shield, Search, RefreshCw } from 'lucide-react';
 
 export function AuditLogViewer() {
-  const { logs, isLoading, refetch, updateFilters } = useAuditLogs();
+  const { logs, isLoading, refetch } = useAuditLogs();
   const [search, setSearch] = useState('');
 
   const filtered = search
