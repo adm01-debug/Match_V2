@@ -117,7 +117,7 @@ export default function GamificationPage() {
     
     toast.success(`+${xpAmount} XP ganhos!`, {
       description: "Continue jogando para subir de nível!",
-      icon: <Sparkles className="h-5 w-5 text-yellow-500" />
+      icon: <Sparkles className="h-5 w-5 text-warning" />
     });
     setGamifiedMode(null);
   }, [addXP, showXPToast]);
