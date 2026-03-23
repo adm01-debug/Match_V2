@@ -333,8 +333,8 @@ export default function IndicacoesPage() {
           </Card>
           <Card className="bg-card/50 backdrop-blur border-border/50">
             <CardContent className="p-4 flex items-center gap-4">
-              <div className="p-3 rounded-lg bg-green-500/20">
-                <DollarSign className="h-5 w-5 text-green-400" />
+              <div className="p-3 rounded-lg bg-success/20">
+                <DollarSign className="h-5 w-5 text-success" />
               </div>
               <div>
                 <p className="text-2xl font-bold">R$ {bonusTotal.toLocaleString('pt-BR')}</p>
