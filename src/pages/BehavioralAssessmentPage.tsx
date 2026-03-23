@@ -406,8 +406,8 @@ export default function BehavioralAssessmentPage() {
           <Card>
             <CardContent className="pt-4">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-emerald-500/10">
-                  <Sparkles className="h-5 w-5 text-emerald-500" />
+                <div className="p-2 rounded-lg bg-success/10">
+                  <Sparkles className="h-5 w-5 text-success" />
                 </div>
                 <div>
                   <p className="text-2xl font-bold">IA</p>
