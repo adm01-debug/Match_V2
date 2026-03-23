@@ -393,7 +393,7 @@ export default function BehavioralAssessmentsPage() {
               >
                 <Card className="h-full hover:shadow-xl transition-all cursor-pointer group border-2 border-primary/20 hover:border-primary/50">
                   <CardHeader className="text-center pb-2">
-                    <div className="mx-auto p-4 rounded-2xl bg-gradient-to-br from-primary to-primary/70 text-white mb-2 group-hover:scale-110 transition-transform">
+                    <div className="mx-auto p-4 rounded-2xl bg-gradient-to-br from-primary to-primary/70 text-primary-foreground mb-2 group-hover:scale-110 transition-transform">
                       <Brain className="h-10 w-10" />
                     </div>
                     <CardTitle className="text-xl">Quiz Interativo</CardTitle>
