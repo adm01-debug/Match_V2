@@ -490,12 +490,12 @@ export default function BehavioralAssessmentPage() {
                 </CardHeader>
                 <CardContent className="grid grid-cols-2 gap-3">
                   {[
-                    { label: 'Dilemas Éticos', count: 2, color: 'bg-amber-500' },
-                    { label: 'Sob Pressão', count: 1, color: 'bg-red-500' },
-                    { label: 'Conflitos', count: 1, color: 'bg-violet-500' },
-                    { label: 'Gestão de Crise', count: 1, color: 'bg-red-600' },
-                    { label: 'Inovação', count: 1, color: 'bg-emerald-500' },
-                    { label: 'Decisão Estratégica', count: 0, color: 'bg-blue-500' },
+                    { label: 'Dilemas Éticos', count: 2, color: 'bg-warning' },
+                    { label: 'Sob Pressão', count: 1, color: 'bg-destructive' },
+                    { label: 'Conflitos', count: 1, color: 'bg-accent' },
+                    { label: 'Gestão de Crise', count: 1, color: 'bg-destructive' },
+                    { label: 'Inovação', count: 1, color: 'bg-success' },
+                    { label: 'Decisão Estratégica', count: 0, color: 'bg-primary' },
                   ].map((tipo) => (
                     <div 
                       key={tipo.label}

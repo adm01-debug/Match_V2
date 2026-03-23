@@ -456,7 +456,7 @@ export default function HiringManagerPortalPage() {
                           </Button>
                         </>
                       ) : candidato.avaliacao === 'positiva' ? (
-                        <Badge className="bg-green-500">
+                        <Badge className="bg-success text-success-foreground">
                           <CheckCircle2 className="h-3 w-3 mr-1" />
                           Aprovado
                         </Badge>

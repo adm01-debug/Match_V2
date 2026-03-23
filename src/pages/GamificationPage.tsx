@@ -430,7 +430,7 @@ export default function GamificationPage() {
                   onActivatePowerUp={(_powerUpId: string, type: PowerUpType) => {
                     toast.success(`Power-Up Ativado!`, {
                       description: `${type} ativado com sucesso`,
-                      icon: <Sparkles className="h-5 w-5 text-yellow-500" />
+                    icon: <Sparkles className="h-5 w-5 text-warning" />
                     });
                   }}
                 />
