@@ -290,7 +290,7 @@ export default function GamificationPage() {
               <div>
                 <div className="flex items-center gap-3">
                   <h1 className="text-3xl font-bold">Conquistas & Ranking</h1>
-                  <Badge className="bg-gradient-to-r from-yellow-500 to-amber-500 text-white border-0">
+                  <Badge className="bg-gradient-to-r from-warning to-accent text-primary-foreground border-0">
                     <Flame className="h-3 w-3 mr-1" />
                     Em chamas!
                   </Badge>
