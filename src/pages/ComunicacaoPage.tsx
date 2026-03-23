@@ -156,9 +156,9 @@ export default function ComunicacaoPage() {
   }, [comunicacoes, fuzzyResults, searchQuery]);
 
   const statusStyles: Record<string, { icon: React.ComponentType<{ className?: string }>; color: string }> = {
-    enviado: { icon: CheckCircle2, color: "text-green-500" },
-    pendente: { icon: Clock, color: "text-amber-500" },
-    erro: { icon: XCircle, color: "text-red-500" },
+    enviado: { icon: CheckCircle2, color: "text-success" },
+    pendente: { icon: Clock, color: "text-warning" },
+    erro: { icon: XCircle, color: "text-destructive" },
   };
 
   if (loading) {

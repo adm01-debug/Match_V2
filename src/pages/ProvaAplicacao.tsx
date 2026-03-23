@@ -214,7 +214,7 @@ export default function ProvaAplicacao() {
           </div>
           <div className={cn(
             "flex items-center gap-2 px-4 py-2 rounded-lg font-mono text-lg", 
-            tempoAlerta ? "bg-red-100 text-red-700" : "bg-muted"
+            tempoAlerta ? "bg-destructive/10 text-destructive" : "bg-muted"
           )}>
             <Clock className={cn("h-5 w-5", tempoAlerta && "animate-pulse")} />
             {tempoRestante !== null && formatarTempo(tempoRestante)}

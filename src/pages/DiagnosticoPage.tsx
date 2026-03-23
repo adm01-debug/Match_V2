@@ -275,13 +275,13 @@ export default function DiagnosticoPage() {
         <div className="grid grid-cols-3 gap-4">
           <Card>
             <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-green-500">{successCount}</div>
+              <div className="text-2xl font-bold text-success">{successCount}</div>
               <div className="text-xs text-muted-foreground">OK</div>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-yellow-500">{warningCount}</div>
+              <div className="text-2xl font-bold text-warning">{warningCount}</div>
               <div className="text-xs text-muted-foreground">Atenção</div>
             </CardContent>
           </Card>

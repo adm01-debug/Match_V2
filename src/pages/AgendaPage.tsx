@@ -54,11 +54,11 @@ interface EntrevistaCardData {
 }
 
 const statusConfig = {
-  agendada: { label: "Agendada", color: "bg-blue-100 text-blue-700", icon: CalendarIcon },
-  confirmada: { label: "Confirmada", color: "bg-green-100 text-green-700", icon: CheckCircle2 },
-  realizada: { label: "Realizada", color: "bg-purple-100 text-purple-700", icon: CheckCircle2 },
-  cancelada: { label: "Cancelada", color: "bg-red-100 text-red-700", icon: XCircle },
-  reagendada: { label: "Reagendada", color: "bg-amber-100 text-amber-700", icon: AlertCircle },
+  agendada: { label: "Agendada", color: "bg-primary/10 text-primary", icon: CalendarIcon },
+  confirmada: { label: "Confirmada", color: "bg-success/10 text-success", icon: CheckCircle2 },
+  realizada: { label: "Realizada", color: "bg-accent text-accent-foreground", icon: CheckCircle2 },
+  cancelada: { label: "Cancelada", color: "bg-destructive/10 text-destructive", icon: XCircle },
+  reagendada: { label: "Reagendada", color: "bg-warning/10 text-warning", icon: AlertCircle },
 };
 
 const tipoConfig = {
