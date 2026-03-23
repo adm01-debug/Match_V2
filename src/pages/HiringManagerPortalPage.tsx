@@ -336,7 +336,7 @@ export default function HiringManagerPortalPage() {
                     className={cn(
                       "p-4 rounded-xl border-2 transition-all",
                       vaga.urgente 
-                        ? "border-orange-200 bg-orange-50 dark:bg-orange-950/20" 
+                        ? "border-warning/30 bg-warning/5" 
                         : "border-border hover:border-primary/30"
                     )}
                   >
