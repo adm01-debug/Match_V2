@@ -54,11 +54,11 @@ interface Indicacao {
 }
 
 const statusConfig = {
-  pendente: { label: "Pendente", color: "bg-amber-500/20 text-amber-400", icon: Clock },
-  em_analise: { label: "Em Análise", color: "bg-blue-500/20 text-blue-400", icon: User },
-  aprovado: { label: "Aprovado", color: "bg-emerald-500/20 text-emerald-400", icon: CheckCircle },
-  contratado: { label: "Contratado", color: "bg-green-500/20 text-green-400", icon: Trophy },
-  reprovado: { label: "Reprovado", color: "bg-red-500/20 text-red-400", icon: XCircle },
+  pendente: { label: "Pendente", color: "bg-warning/20 text-warning", icon: Clock },
+  em_analise: { label: "Em Análise", color: "bg-info/20 text-info", icon: User },
+  aprovado: { label: "Aprovado", color: "bg-success/20 text-success", icon: CheckCircle },
+  contratado: { label: "Contratado", color: "bg-success/20 text-success", icon: Trophy },
+  reprovado: { label: "Reprovado", color: "bg-destructive/20 text-destructive", icon: XCircle },
 };
 
 export default function IndicacoesPage() {
