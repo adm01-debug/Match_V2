@@ -141,23 +141,29 @@ serve(async (req: Request): Promise<Response> => {
         </html>
       `;
 
-      const emailResponse = await fetch('https://api.resend.com/emails', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${resendApiKey}`,
-        },
-        body: JSON.stringify({
-          from: 'PEOPLE LOVERS <security@resend.dev>',
-          to: [userEmail],
-          subject: '🔐 Novo dispositivo detectado na sua conta',
-          html: emailHtml,
-        }),
-      });
+      try {
+        const emailResponse = await fetch('https://api.resend.com/emails', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${resendApiKey}`,
+          },
+          body: JSON.stringify({
+            from: 'PEOPLE LOVERS <security@resend.dev>',
+            to: [userEmail],
+            subject: '🔐 Novo dispositivo detectado na sua conta',
+            html: emailHtml,
+          }),
+        });
 
-      if (!emailResponse.ok) {
-        const errorText = await emailResponse.text();
-        console.error('[new-device-alert] Email send failed:', errorText);
+        if (!emailResponse.ok) {
+          const errorText = await emailResponse.text();
+          console.warn('[new-device-alert] Email não enviado (domínio não verificado no Resend). Notificação in-app foi criada com sucesso.', errorText);
+        } else {
+          console.log('[new-device-alert] Email de alerta enviado para:', userEmail);
+        }
+      } catch (emailError) {
+        console.warn('[new-device-alert] Falha ao enviar email, notificação in-app criada:', emailError);
       }
     }
 

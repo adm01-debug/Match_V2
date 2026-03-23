@@ -14,9 +14,9 @@ import { Search, ClipboardCheck, Eye } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const parecerConfig: Record<string, { label: string; className: string }> = {
-  aprovar: { label: 'Aprovado', className: 'bg-green-500/20 text-green-600 border-green-500/30' },
+  aprovar: { label: 'Aprovado', className: 'bg-success/20 text-success border-success/30' },
   reprovar: { label: 'Reprovado', className: 'bg-destructive/20 text-destructive border-destructive/30' },
-  em_duvida: { label: 'Em Dúvida', className: 'bg-amber-500/20 text-amber-600 border-amber-500/30' },
+  em_duvida: { label: 'Em Dúvida', className: 'bg-warning/20 text-warning border-warning/30' },
   rascunho: { label: 'Rascunho', className: 'bg-muted text-muted-foreground border-border' },
 };
 
