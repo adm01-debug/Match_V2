@@ -279,10 +279,10 @@ export default function HiringManagerPortalPage() {
               </div>
             </CardContent>
           </Card>
-          <Card className={stats.pendentesAvaliacao > 0 ? "border-yellow-200 bg-yellow-50 dark:bg-yellow-950/20" : ""}>
+          <Card className={stats.pendentesAvaliacao > 0 ? "border-warning/30 bg-warning/5" : ""}>
             <CardContent className="pt-4">
               <div className="flex items-center gap-2">
-                <Clock className="h-5 w-5 text-yellow-500" />
+                <Clock className="h-5 w-5 text-warning" />
                 <div>
                   <p className="text-xs text-muted-foreground">Pendentes</p>
                   <p className="text-xl font-bold">{stats.pendentesAvaliacao}</p>
