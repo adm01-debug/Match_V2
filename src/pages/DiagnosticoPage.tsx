@@ -224,11 +224,11 @@ export default function DiagnosticoPage() {
       case 'loading':
         return <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />;
       case 'success':
-        return <CheckCircle className="h-5 w-5 text-green-500" />;
+        return <CheckCircle className="h-5 w-5 text-success" />;
       case 'error':
         return <XCircle className="h-5 w-5 text-destructive" />;
       case 'warning':
-        return <Shield className="h-5 w-5 text-yellow-500" />;
+        return <Shield className="h-5 w-5 text-warning" />;
     }
   };
 
@@ -237,11 +237,11 @@ export default function DiagnosticoPage() {
       case 'loading':
         return <Badge variant="secondary">Verificando...</Badge>;
       case 'success':
-        return <Badge className="bg-green-500/10 text-green-600 border-green-500/20">OK</Badge>;
+        return <Badge className="bg-success/10 text-success border-success/20">OK</Badge>;
       case 'error':
         return <Badge variant="destructive">Erro</Badge>;
       case 'warning':
-        return <Badge className="bg-yellow-500/10 text-yellow-600 border-yellow-500/20">Atenção</Badge>;
+        return <Badge className="bg-warning/10 text-warning border-warning/20">Atenção</Badge>;
     }
   };
 
@@ -275,13 +275,13 @@ export default function DiagnosticoPage() {
         <div className="grid grid-cols-3 gap-4">
           <Card>
             <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-green-500">{successCount}</div>
+              <div className="text-2xl font-bold text-success">{successCount}</div>
               <div className="text-xs text-muted-foreground">OK</div>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-yellow-500">{warningCount}</div>
+              <div className="text-2xl font-bold text-warning">{warningCount}</div>
               <div className="text-xs text-muted-foreground">Atenção</div>
             </CardContent>
           </Card>

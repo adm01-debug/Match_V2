@@ -191,7 +191,7 @@ export default function ProvaAplicacao() {
     return (
       <Layout title="Prova Finalizada">
         <div className="p-6 max-w-2xl mx-auto text-center space-y-6">
-          <CheckCircle2 className="h-16 w-16 mx-auto text-green-500" />
+          <CheckCircle2 className="h-16 w-16 mx-auto text-success" />
           <h1 className="text-2xl font-bold">Prova Finalizada!</h1>
           <p className="text-muted-foreground">Respostas enviadas com sucesso.</p>
           <Button onClick={() => navigate(-1)}>Voltar</Button>
@@ -214,7 +214,7 @@ export default function ProvaAplicacao() {
           </div>
           <div className={cn(
             "flex items-center gap-2 px-4 py-2 rounded-lg font-mono text-lg", 
-            tempoAlerta ? "bg-red-100 text-red-700" : "bg-muted"
+            tempoAlerta ? "bg-destructive/10 text-destructive" : "bg-muted"
           )}>
             <Clock className={cn("h-5 w-5", tempoAlerta && "animate-pulse")} />
             {tempoRestante !== null && formatarTempo(tempoRestante)}

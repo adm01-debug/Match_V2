@@ -379,9 +379,9 @@ const EntrevistaDetalhesDialog = ({
               <>
                 {canEdit && (
                   <>
-                    <Button type="button" variant="destructive" size="sm" onClick={() => setShowCancelDialog(true)}><X className="h-4 w-4 mr-2" />Cancelar</Button>
-                    <Button type="button" variant="outline" size="sm" onClick={handleStartEdit}><Edit className="h-4 w-4 mr-2" />Editar</Button>
-                    {canConfirm && <Button type="button" size="sm" onClick={handleConfirmEntrevista}><Check className="h-4 w-4 mr-2" />Confirmar</Button>}
+                    <Button type="button" variant="destructive" size="sm" onClick={() => setShowCancelDialog(true)} aria-label="Cancelar entrevista"><X className="h-4 w-4 mr-2" />Cancelar</Button>
+                    <Button type="button" variant="outline" size="sm" onClick={handleStartEdit} aria-label="Editar entrevista"><Edit className="h-4 w-4 mr-2" />Editar</Button>
+                    {canConfirm && <Button type="button" size="sm" onClick={handleConfirmEntrevista} aria-label="Confirmar entrevista"><Check className="h-4 w-4 mr-2" />Confirmar</Button>}
                   </>
                 )}
               </>

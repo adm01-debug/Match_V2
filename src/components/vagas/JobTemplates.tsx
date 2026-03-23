@@ -85,8 +85,8 @@ export function JobTemplates({ onSelectTemplate }: JobTemplatesProps) {
               <div className="flex items-start justify-between">
                 <div><h3 className="font-medium">{template.name}</h3><Badge variant="secondary" className="mt-1">{template.category}</Badge></div>
                 <div className="flex gap-1">
-                  <Button variant="ghost" size="icon" onClick={() => handleUse(template)}><Copy className="h-4 w-4" /></Button>
-                  <Button variant="ghost" size="icon" className="text-destructive" onClick={() => handleDelete(template.id)}><Trash2 className="h-4 w-4" /></Button>
+                  <Button variant="ghost" size="icon" onClick={() => handleUse(template)} aria-label={`Usar template ${template.name}`}><Copy className="h-4 w-4" /></Button>
+                  <Button variant="ghost" size="icon" className="text-destructive" onClick={() => handleDelete(template.id)} aria-label={`Excluir template ${template.name}`}><Trash2 className="h-4 w-4" /></Button>
                 </div>
               </div>
               <p className="text-sm text-muted-foreground mt-2 line-clamp-2">{template.description}</p>
