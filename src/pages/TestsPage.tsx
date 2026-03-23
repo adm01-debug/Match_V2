@@ -146,8 +146,8 @@ export default function TestsPage() {
       <Card className="hover:shadow-md transition-shadow">
         <CardHeader className="pb-2">
           <div className="flex items-start justify-between">
-            <div className={cn("p-2 rounded-lg", categoria?.cor || "bg-gray-500")}>
-              <IconeCategoria className="h-5 w-5 text-white" />
+            <div className={cn("p-2 rounded-lg", categoria?.cor || "bg-muted")}>
+              <IconeCategoria className="h-5 w-5 text-primary-foreground" />
             </div>
             <Badge variant="outline">{nivel?.nome || 'Geral'}</Badge>
           </div>
@@ -387,7 +387,7 @@ export default function TestsPage() {
                 <div role="main" key={categoria.id}>
                   <div className="flex items-center gap-2 mb-3">
                     <div className={cn("p-2 rounded-lg", categoria.cor)}>
-                      <IconeCategoria className="h-5 w-5 text-white" />
+                      <IconeCategoria className="h-5 w-5 text-primary-foreground" />
                     </div>
                     <h2 className="text-lg font-semibold">{categoria.nome}</h2>
                     <Badge variant="secondary">{provasCategoria.length}</Badge>

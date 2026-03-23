@@ -136,7 +136,7 @@ function DashboardContent() {
 
   return (
     <Layout title="Dashboard">
-      <div className="relative min-h-screen">
+      <main aria-label="Painel principal do Dashboard" className="relative min-h-screen">
         {/* Premium animated background */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <motion.div 
@@ -201,7 +201,7 @@ function DashboardContent() {
                     whileHover={{ scale: 1.05, rotate: 5 }}
                     transition={{ type: "spring", stiffness: 400 }}
                   >
-                    <LayoutDashboard className="h-7 w-7 text-white" />
+                    <LayoutDashboard className="h-7 w-7 text-primary-foreground" />
                   </motion.div>
                   <div>
                     <div className="flex items-center gap-3">
@@ -427,7 +427,7 @@ function DashboardContent() {
             </div>
           </motion.div>
         </motion.div>
-      </div>
+      </main>
     </Layout>
   );
 }

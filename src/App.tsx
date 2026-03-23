@@ -180,9 +180,17 @@ function App() {
                                   }
                                 />
 
-                                {/* Diagnóstico - Rota Pública */}
-                                <Route path="/diagnostico" element={<DiagnosticoPage />} />
-                                <Route path="/edge-functions-test" element={<EdgeFunctionTestPage />} />
+                                {/* Diagnóstico - Apenas Admin */}
+                                <Route path="/diagnostico" element={
+                                  <ProtectedRoute requiredRoles={["admin"]}>
+                                    <DiagnosticoPage />
+                                  </ProtectedRoute>
+                                } />
+                                <Route path="/edge-functions-test" element={
+                                  <ProtectedRoute requiredRoles={["admin"]}>
+                                    <EdgeFunctionTestPage />
+                                  </ProtectedRoute>
+                                } />
 
                                 {/* Rotas Protegidas - Sistema Interno */}
                                 <Route

@@ -153,7 +153,7 @@ const EdgeFunctionTestPage = () => {
       case 'loading':
         return <Badge variant="secondary">Testando...</Badge>;
       case 'success':
-        return <Badge className="bg-green-500">Sucesso</Badge>;
+        return <Badge className="bg-success text-success-foreground">Sucesso</Badge>;
       case 'error':
         return <Badge variant="destructive">Erro</Badge>;
       default:

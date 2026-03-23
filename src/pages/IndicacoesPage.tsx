@@ -54,11 +54,11 @@ interface Indicacao {
 }
 
 const statusConfig = {
-  pendente: { label: "Pendente", color: "bg-amber-500/20 text-amber-400", icon: Clock },
-  em_analise: { label: "Em Análise", color: "bg-blue-500/20 text-blue-400", icon: User },
-  aprovado: { label: "Aprovado", color: "bg-emerald-500/20 text-emerald-400", icon: CheckCircle },
-  contratado: { label: "Contratado", color: "bg-green-500/20 text-green-400", icon: Trophy },
-  reprovado: { label: "Reprovado", color: "bg-red-500/20 text-red-400", icon: XCircle },
+  pendente: { label: "Pendente", color: "bg-warning/20 text-warning", icon: Clock },
+  em_analise: { label: "Em Análise", color: "bg-info/20 text-info", icon: User },
+  aprovado: { label: "Aprovado", color: "bg-success/20 text-success", icon: CheckCircle },
+  contratado: { label: "Contratado", color: "bg-success/20 text-success", icon: Trophy },
+  reprovado: { label: "Reprovado", color: "bg-destructive/20 text-destructive", icon: XCircle },
 };
 
 export default function IndicacoesPage() {
@@ -311,8 +311,8 @@ export default function IndicacoesPage() {
           </Card>
           <Card className="bg-card/50 backdrop-blur border-border/50">
             <CardContent className="p-4 flex items-center gap-4">
-              <div className="p-3 rounded-lg bg-amber-500/20">
-                <Clock className="h-5 w-5 text-amber-400" />
+              <div className="p-3 rounded-lg bg-warning/20">
+                <Clock className="h-5 w-5 text-warning" />
               </div>
               <div>
                 <p className="text-2xl font-bold">{emAnalise}</p>
@@ -322,8 +322,8 @@ export default function IndicacoesPage() {
           </Card>
           <Card className="bg-card/50 backdrop-blur border-border/50">
             <CardContent className="p-4 flex items-center gap-4">
-              <div className="p-3 rounded-lg bg-emerald-500/20">
-                <Trophy className="h-5 w-5 text-emerald-400" />
+              <div className="p-3 rounded-lg bg-success/20">
+                <Trophy className="h-5 w-5 text-success" />
               </div>
               <div>
                 <p className="text-2xl font-bold">{contratados}</p>
@@ -333,8 +333,8 @@ export default function IndicacoesPage() {
           </Card>
           <Card className="bg-card/50 backdrop-blur border-border/50">
             <CardContent className="p-4 flex items-center gap-4">
-              <div className="p-3 rounded-lg bg-green-500/20">
-                <DollarSign className="h-5 w-5 text-green-400" />
+              <div className="p-3 rounded-lg bg-success/20">
+                <DollarSign className="h-5 w-5 text-success" />
               </div>
               <div>
                 <p className="text-2xl font-bold">R$ {bonusTotal.toLocaleString('pt-BR')}</p>
@@ -419,7 +419,7 @@ export default function IndicacoesPage() {
                                     {statusConfig[indicacao.status].label}
                                   </Badge>
                                   {indicacao.bonus && indicacao.bonus > 0 && (
-                                    <Badge className="bg-green-500/20 text-green-400">
+                                    <Badge className="bg-success/20 text-success">
                                       <DollarSign className="h-3 w-3 mr-1" />
                                       R$ {indicacao.bonus}
                                     </Badge>

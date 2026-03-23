@@ -170,7 +170,7 @@ export default function LoginPage() {
                 disabled={isLoading}
                 onClick={async () => {
                   const { error } = await lovable.auth.signInWithOAuth('google', {
-                    redirect_uri: window.location.origin,
+                    redirect_uri: `${window.location.origin}/`,
                   });
                   if (error) {
                     setLoginError('Erro ao conectar com Google. Tente novamente.');
