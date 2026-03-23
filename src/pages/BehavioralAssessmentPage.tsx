@@ -380,8 +380,8 @@ export default function BehavioralAssessmentPage() {
           <Card>
             <CardContent className="pt-4">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-violet-500/10">
-                  <Zap className="h-5 w-5 text-violet-500" />
+                <div className="p-2 rounded-lg bg-accent/10">
+                  <Zap className="h-5 w-5 text-accent-foreground" />
                 </div>
                 <div>
                   <p className="text-2xl font-bold">{IMMERSIVE_SCENARIOS.length}</p>
