@@ -271,7 +271,7 @@ export default function GamificationPage() {
           >
             <div className="flex items-center gap-4">
               <motion.div 
-                className="p-4 rounded-2xl bg-gradient-to-br from-yellow-500 via-amber-500 to-orange-500 shadow-lg shadow-yellow-500/25"
+                className="p-4 rounded-2xl bg-gradient-to-br from-warning via-warning to-accent shadow-lg shadow-warning/25"
                 whileHover={{ scale: 1.05, rotate: 5 }}
                 animate={{ 
                   boxShadow: [
