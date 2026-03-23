@@ -448,10 +448,10 @@ export default function HiringManagerPortalPage() {
                     <div className="flex items-center gap-2">
                       {candidato.avaliacao === 'pendente' ? (
                         <>
-                          <Button size="sm" variant="outline" className="text-red-600 hover:bg-red-50">
+                          <Button size="sm" variant="outline" className="text-destructive hover:bg-destructive/10">
                             <ThumbsDown className="h-4 w-4" />
                           </Button>
-                          <Button size="sm" variant="outline" className="text-green-600 hover:bg-green-50">
+                          <Button size="sm" variant="outline" className="text-success hover:bg-success/10">
                             <ThumbsUp className="h-4 w-4" />
                           </Button>
                         </>
