@@ -335,11 +335,11 @@ export default function GamificationPage() {
             className="space-y-4"
           >
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600">
-                <Gamepad2 className="h-5 w-5 text-white" />
+              <div className="p-2 rounded-xl bg-gradient-to-br from-success to-primary">
+                <Gamepad2 className="h-5 w-5 text-primary-foreground" />
               </div>
               <h2 className="text-xl font-bold">Jogar Agora</h2>
-              <Badge variant="outline" className="border-emerald-500/50 text-emerald-600">
+              <Badge variant="outline" className="border-success/50 text-success">
                 <Star className="h-3 w-3 mr-1" />
                 Ganhe XP
               </Badge>
