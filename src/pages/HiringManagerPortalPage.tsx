@@ -413,7 +413,7 @@ export default function HiringManagerPortalPage() {
                     <div className="flex items-center gap-4">
                       <Avatar className="h-12 w-12">
                         <AvatarImage src={candidato.foto} />
-                        <AvatarFallback className="bg-gradient-to-br from-primary to-purple-600 text-white">
+                        <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-primary-foreground">
                           {candidato.nome.split(' ').map(n => n[0]).join('').slice(0, 2)}
                         </AvatarFallback>
                       </Avatar>
