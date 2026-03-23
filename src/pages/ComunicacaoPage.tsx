@@ -294,7 +294,7 @@ export default function ComunicacaoPage() {
                               </p>
                               <div className="flex items-center gap-2">
                                 <Badge variant="outline">{c.tipo}</Badge>
-                                <StatusIcon className={cn("h-4 w-4", status?.color ?? "text-green-500")} />
+                                <StatusIcon className={cn("h-4 w-4", status?.color ?? "text-success")} />
                               </div>
                             </div>
                             <p className="text-sm text-muted-foreground line-clamp-1">
