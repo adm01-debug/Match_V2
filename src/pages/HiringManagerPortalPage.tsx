@@ -293,7 +293,7 @@ export default function HiringManagerPortalPage() {
           <Card>
             <CardContent className="pt-4">
               <div className="flex items-center gap-2">
-                <Calendar className="h-5 w-5 text-purple-500" />
+                <Calendar className="h-5 w-5 text-accent-foreground" />
                 <div>
                   <p className="text-xs text-muted-foreground">Entrevistas Hoje</p>
                   <p className="text-xl font-bold">{stats.entrevistasHoje}</p>
