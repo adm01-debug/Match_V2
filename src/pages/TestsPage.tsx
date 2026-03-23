@@ -146,8 +146,8 @@ export default function TestsPage() {
       <Card className="hover:shadow-md transition-shadow">
         <CardHeader className="pb-2">
           <div className="flex items-start justify-between">
-            <div className={cn("p-2 rounded-lg", categoria?.cor || "bg-gray-500")}>
-              <IconeCategoria className="h-5 w-5 text-white" />
+            <div className={cn("p-2 rounded-lg", categoria?.cor || "bg-muted")}>
+              <IconeCategoria className="h-5 w-5 text-primary-foreground" />
             </div>
             <Badge variant="outline">{nivel?.nome || 'Geral'}</Badge>
           </div>
