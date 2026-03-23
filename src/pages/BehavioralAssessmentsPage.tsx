@@ -511,9 +511,9 @@ export default function BehavioralAssessmentsPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
               >
-                <Card className="h-full hover:shadow-xl transition-all cursor-pointer group border-2 border-purple-500/20 hover:border-purple-500/50">
+                <Card className="h-full hover:shadow-xl transition-all cursor-pointer group border-2 border-secondary/20 hover:border-secondary/50">
                   <CardHeader className="text-center pb-2">
-                    <div className="mx-auto p-4 rounded-2xl bg-gradient-to-br from-purple-500 to-violet-600 text-white mb-2 group-hover:scale-110 transition-transform">
+                    <div className="mx-auto p-4 rounded-2xl bg-gradient-to-br from-secondary to-secondary/70 text-secondary-foreground mb-2 group-hover:scale-110 transition-transform">
                       <Award className="h-10 w-10" />
                     </div>
                     <CardTitle className="text-xl">Desafio por Fases</CardTitle>

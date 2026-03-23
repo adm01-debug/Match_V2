@@ -140,7 +140,7 @@ const EdgeFunctionTestPage = () => {
       case 'loading':
         return <Loader2 className="h-5 w-5 animate-spin text-primary" />;
       case 'success':
-        return <CheckCircle2 className="h-5 w-5 text-green-500" />;
+        return <CheckCircle2 className="h-5 w-5 text-success" />;
       case 'error':
         return <XCircle className="h-5 w-5 text-destructive" />;
       default:
