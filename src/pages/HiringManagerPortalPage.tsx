@@ -260,7 +260,7 @@ export default function HiringManagerPortalPage() {
           <Card className={stats.vagasUrgentes > 0 ? "border-warning/30 bg-warning/5" : ""}>
             <CardContent className="pt-4">
               <div className="flex items-center gap-2">
-                <AlertTriangle className="h-5 w-5 text-orange-500" />
+                <AlertTriangle className="h-5 w-5 text-warning" />
                 <div>
                   <p className="text-xs text-muted-foreground">Urgentes</p>
                   <p className="text-xl font-bold">{stats.vagasUrgentes}</p>
