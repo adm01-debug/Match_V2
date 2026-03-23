@@ -136,7 +136,7 @@ function DashboardContent() {
 
   return (
     <Layout title="Dashboard">
-      <div className="relative min-h-screen">
+      <main aria-label="Painel principal do Dashboard" className="relative min-h-screen">
         {/* Premium animated background */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <motion.div 
