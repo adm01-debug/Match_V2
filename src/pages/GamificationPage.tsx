@@ -303,18 +303,18 @@ export default function GamificationPage() {
 
             {/* Quick Stats - Now using real data from hook */}
             <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-yellow-500/10 border border-yellow-500/20">
-                <Award className="h-5 w-5 text-yellow-500" />
+              <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-warning/10 border border-warning/20">
+                <Award className="h-5 w-5 text-warning" />
                 <div>
                   <p className="text-xs text-muted-foreground">Nível</p>
-                  <p className="font-bold text-yellow-600">{level}</p>
+                  <p className="font-bold text-warning">{level}</p>
                 </div>
               </div>
-              <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-orange-500/10 border border-orange-500/20">
-                <Flame className="h-5 w-5 text-orange-500" />
+              <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-accent/10 border border-accent/20">
+                <Flame className="h-5 w-5 text-accent-foreground" />
                 <div>
                   <p className="text-xs text-muted-foreground">Streak</p>
-                  <p className="font-bold text-orange-600">{streak} dias</p>
+                  <p className="font-bold text-accent-foreground">{streak} dias</p>
                 </div>
               </div>
               <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary/10 border border-primary/20">
