@@ -201,7 +201,7 @@ function DashboardContent() {
                     whileHover={{ scale: 1.05, rotate: 5 }}
                     transition={{ type: "spring", stiffness: 400 }}
                   >
-                    <LayoutDashboard className="h-7 w-7 text-white" />
+                    <LayoutDashboard className="h-7 w-7 text-primary-foreground" />
                   </motion.div>
                   <div>
                     <div className="flex items-center gap-3">
