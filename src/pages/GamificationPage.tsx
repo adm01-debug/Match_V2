@@ -117,7 +117,7 @@ export default function GamificationPage() {
     
     toast.success(`+${xpAmount} XP ganhos!`, {
       description: "Continue jogando para subir de nível!",
-      icon: <Sparkles className="h-5 w-5 text-yellow-500" />
+      icon: <Sparkles className="h-5 w-5 text-warning" />
     });
     setGamifiedMode(null);
   }, [addXP, showXPToast]);
@@ -128,7 +128,7 @@ export default function GamificationPage() {
     completeOnboarding();
     toast.success('Bem-vindo ao sistema de gamificação!', {
       description: `Você ganhou +${xpEarned} XP de bônus!`,
-      icon: <Sparkles className="h-5 w-5 text-yellow-500" />
+      icon: <Sparkles className="h-5 w-5 text-warning" />
     });
   }, [addXP, showXPToast, completeOnboarding]);
 
@@ -271,7 +271,7 @@ export default function GamificationPage() {
           >
             <div className="flex items-center gap-4">
               <motion.div 
-                className="p-4 rounded-2xl bg-gradient-to-br from-yellow-500 via-amber-500 to-orange-500 shadow-lg shadow-yellow-500/25"
+                className="p-4 rounded-2xl bg-gradient-to-br from-warning via-warning to-accent shadow-lg shadow-warning/25"
                 whileHover={{ scale: 1.05, rotate: 5 }}
                 animate={{ 
                   boxShadow: [
@@ -290,7 +290,7 @@ export default function GamificationPage() {
               <div>
                 <div className="flex items-center gap-3">
                   <h1 className="text-3xl font-bold">Conquistas & Ranking</h1>
-                  <Badge className="bg-gradient-to-r from-yellow-500 to-amber-500 text-white border-0">
+                  <Badge className="bg-gradient-to-r from-warning to-accent text-primary-foreground border-0">
                     <Flame className="h-3 w-3 mr-1" />
                     Em chamas!
                   </Badge>
@@ -303,18 +303,18 @@ export default function GamificationPage() {
 
             {/* Quick Stats - Now using real data from hook */}
             <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-yellow-500/10 border border-yellow-500/20">
-                <Award className="h-5 w-5 text-yellow-500" />
+              <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-warning/10 border border-warning/20">
+                <Award className="h-5 w-5 text-warning" />
                 <div>
                   <p className="text-xs text-muted-foreground">Nível</p>
-                  <p className="font-bold text-yellow-600">{level}</p>
+                  <p className="font-bold text-warning">{level}</p>
                 </div>
               </div>
-              <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-orange-500/10 border border-orange-500/20">
-                <Flame className="h-5 w-5 text-orange-500" />
+              <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-accent/10 border border-accent/20">
+                <Flame className="h-5 w-5 text-accent-foreground" />
                 <div>
                   <p className="text-xs text-muted-foreground">Streak</p>
-                  <p className="font-bold text-orange-600">{streak} dias</p>
+                  <p className="font-bold text-accent-foreground">{streak} dias</p>
                 </div>
               </div>
               <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary/10 border border-primary/20">
@@ -335,11 +335,11 @@ export default function GamificationPage() {
             className="space-y-4"
           >
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600">
-                <Gamepad2 className="h-5 w-5 text-white" />
+              <div className="p-2 rounded-xl bg-gradient-to-br from-success to-primary">
+                <Gamepad2 className="h-5 w-5 text-primary-foreground" />
               </div>
               <h2 className="text-xl font-bold">Jogar Agora</h2>
-              <Badge variant="outline" className="border-emerald-500/50 text-emerald-600">
+              <Badge variant="outline" className="border-success/50 text-success">
                 <Star className="h-3 w-3 mr-1" />
                 Ganhe XP
               </Badge>
@@ -430,7 +430,7 @@ export default function GamificationPage() {
                   onActivatePowerUp={(_powerUpId: string, type: PowerUpType) => {
                     toast.success(`Power-Up Ativado!`, {
                       description: `${type} ativado com sucesso`,
-                      icon: <Sparkles className="h-5 w-5 text-yellow-500" />
+                    icon: <Sparkles className="h-5 w-5 text-warning" />
                     });
                   }}
                 />

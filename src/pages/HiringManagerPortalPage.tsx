@@ -249,7 +249,7 @@ export default function HiringManagerPortalPage() {
           <Card>
             <CardContent className="pt-4">
               <div className="flex items-center gap-2">
-                <Briefcase className="h-5 w-5 text-blue-500" />
+                <Briefcase className="h-5 w-5 text-primary" />
                 <div>
                   <p className="text-xs text-muted-foreground">Minhas Vagas</p>
                   <p className="text-xl font-bold">{stats.totalVagas}</p>
@@ -257,10 +257,10 @@ export default function HiringManagerPortalPage() {
               </div>
             </CardContent>
           </Card>
-          <Card className={stats.vagasUrgentes > 0 ? "border-orange-200 bg-orange-50 dark:bg-orange-950/20" : ""}>
+          <Card className={stats.vagasUrgentes > 0 ? "border-warning/30 bg-warning/5" : ""}>
             <CardContent className="pt-4">
               <div className="flex items-center gap-2">
-                <AlertTriangle className="h-5 w-5 text-orange-500" />
+                <AlertTriangle className="h-5 w-5 text-warning" />
                 <div>
                   <p className="text-xs text-muted-foreground">Urgentes</p>
                   <p className="text-xl font-bold">{stats.vagasUrgentes}</p>
@@ -271,7 +271,7 @@ export default function HiringManagerPortalPage() {
           <Card>
             <CardContent className="pt-4">
               <div className="flex items-center gap-2">
-                <Users className="h-5 w-5 text-green-500" />
+                <Users className="h-5 w-5 text-success" />
                 <div>
                   <p className="text-xs text-muted-foreground">Em Processo</p>
                   <p className="text-xl font-bold">{stats.totalCandidatos}</p>
@@ -279,10 +279,10 @@ export default function HiringManagerPortalPage() {
               </div>
             </CardContent>
           </Card>
-          <Card className={stats.pendentesAvaliacao > 0 ? "border-yellow-200 bg-yellow-50 dark:bg-yellow-950/20" : ""}>
+          <Card className={stats.pendentesAvaliacao > 0 ? "border-warning/30 bg-warning/5" : ""}>
             <CardContent className="pt-4">
               <div className="flex items-center gap-2">
-                <Clock className="h-5 w-5 text-yellow-500" />
+                <Clock className="h-5 w-5 text-warning" />
                 <div>
                   <p className="text-xs text-muted-foreground">Pendentes</p>
                   <p className="text-xl font-bold">{stats.pendentesAvaliacao}</p>
@@ -293,7 +293,7 @@ export default function HiringManagerPortalPage() {
           <Card>
             <CardContent className="pt-4">
               <div className="flex items-center gap-2">
-                <Calendar className="h-5 w-5 text-purple-500" />
+                <Calendar className="h-5 w-5 text-accent-foreground" />
                 <div>
                   <p className="text-xs text-muted-foreground">Entrevistas Hoje</p>
                   <p className="text-xl font-bold">{stats.entrevistasHoje}</p>
@@ -304,7 +304,7 @@ export default function HiringManagerPortalPage() {
           <Card>
             <CardContent className="pt-4">
               <div className="flex items-center gap-2">
-                <Zap className="h-5 w-5 text-cyan-500" />
+                <Zap className="h-5 w-5 text-primary" />
                 <div>
                   <p className="text-xs text-muted-foreground">Tempo Médio</p>
                   <p className="text-xl font-bold">{stats.tempoMedioContratacao}d</p>
@@ -336,7 +336,7 @@ export default function HiringManagerPortalPage() {
                     className={cn(
                       "p-4 rounded-xl border-2 transition-all",
                       vaga.urgente 
-                        ? "border-orange-200 bg-orange-50 dark:bg-orange-950/20" 
+                        ? "border-warning/30 bg-warning/5" 
                         : "border-border hover:border-primary/30"
                     )}
                   >
@@ -364,11 +364,11 @@ export default function HiringManagerPortalPage() {
                         <p className="text-xs text-muted-foreground">Candidatos</p>
                       </div>
                       <div className="text-center">
-                        <p className="text-2xl font-bold text-blue-600">{vaga.emProcesso}</p>
+                        <p className="text-2xl font-bold text-primary">{vaga.emProcesso}</p>
                         <p className="text-xs text-muted-foreground">Em Processo</p>
                       </div>
                       <div className="text-center">
-                        <p className="text-2xl font-bold text-green-600">{vaga.contratados}</p>
+                        <p className="text-2xl font-bold text-success">{vaga.contratados}</p>
                         <p className="text-xs text-muted-foreground">Contratados</p>
                       </div>
                       <div className="text-center">
@@ -413,7 +413,7 @@ export default function HiringManagerPortalPage() {
                     <div className="flex items-center gap-4">
                       <Avatar className="h-12 w-12">
                         <AvatarImage src={candidato.foto} />
-                        <AvatarFallback className="bg-gradient-to-br from-primary to-purple-600 text-white">
+                        <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-primary-foreground">
                           {candidato.nome.split(' ').map(n => n[0]).join('').slice(0, 2)}
                         </AvatarFallback>
                       </Avatar>
@@ -424,9 +424,9 @@ export default function HiringManagerPortalPage() {
                             variant="secondary"
                             className={cn(
                               "text-xs",
-                              candidato.matchScore >= 90 && "bg-green-100 text-green-700",
-                              candidato.matchScore >= 80 && candidato.matchScore < 90 && "bg-yellow-100 text-yellow-700",
-                              candidato.matchScore < 80 && "bg-orange-100 text-orange-700"
+                              candidato.matchScore >= 90 && "bg-success/10 text-success",
+                              candidato.matchScore >= 80 && candidato.matchScore < 90 && "bg-warning/10 text-warning",
+                              candidato.matchScore < 80 && "bg-accent/10 text-accent-foreground"
                             )}
                           >
                             <Star className="h-3 w-3 mr-1" />
@@ -448,15 +448,15 @@ export default function HiringManagerPortalPage() {
                     <div className="flex items-center gap-2">
                       {candidato.avaliacao === 'pendente' ? (
                         <>
-                          <Button size="sm" variant="outline" className="text-red-600 hover:bg-red-50">
+                          <Button size="sm" variant="outline" className="text-destructive hover:bg-destructive/10">
                             <ThumbsDown className="h-4 w-4" />
                           </Button>
-                          <Button size="sm" variant="outline" className="text-green-600 hover:bg-green-50">
+                          <Button size="sm" variant="outline" className="text-success hover:bg-success/10">
                             <ThumbsUp className="h-4 w-4" />
                           </Button>
                         </>
                       ) : candidato.avaliacao === 'positiva' ? (
-                        <Badge className="bg-green-500">
+                        <Badge className="bg-success text-success-foreground">
                           <CheckCircle2 className="h-3 w-3 mr-1" />
                           Aprovado
                         </Badge>

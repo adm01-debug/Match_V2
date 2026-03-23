@@ -326,7 +326,7 @@ export default function BehavioralAssessmentPage() {
           )}
           
           {hasSavedResults && (
-            <div className="flex items-center justify-center gap-2 text-emerald-600">
+            <div className="flex items-center justify-center gap-2 text-success">
               <CheckCircle2 className="h-4 w-4" />
               <span>Resultados salvos com sucesso!</span>
             </div>
@@ -380,8 +380,8 @@ export default function BehavioralAssessmentPage() {
           <Card>
             <CardContent className="pt-4">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-violet-500/10">
-                  <Zap className="h-5 w-5 text-violet-500" />
+                <div className="p-2 rounded-lg bg-accent/10">
+                  <Zap className="h-5 w-5 text-accent-foreground" />
                 </div>
                 <div>
                   <p className="text-2xl font-bold">{IMMERSIVE_SCENARIOS.length}</p>
@@ -393,8 +393,8 @@ export default function BehavioralAssessmentPage() {
           <Card>
             <CardContent className="pt-4">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-amber-500/10">
-                  <Clock className="h-5 w-5 text-amber-500" />
+                <div className="p-2 rounded-lg bg-warning/10">
+                  <Clock className="h-5 w-5 text-warning" />
                 </div>
                 <div>
                   <p className="text-2xl font-bold">15-20</p>
@@ -406,8 +406,8 @@ export default function BehavioralAssessmentPage() {
           <Card>
             <CardContent className="pt-4">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-emerald-500/10">
-                  <Sparkles className="h-5 w-5 text-emerald-500" />
+                <div className="p-2 rounded-lg bg-success/10">
+                  <Sparkles className="h-5 w-5 text-success" />
                 </div>
                 <div>
                   <p className="text-2xl font-bold">IA</p>
@@ -455,19 +455,19 @@ export default function BehavioralAssessmentPage() {
                 <CardContent className="space-y-4">
                   <div className="space-y-3">
                     <div className="flex items-center gap-3">
-                      <CheckCircle2 className="h-5 w-5 text-emerald-500" />
+                      <CheckCircle2 className="h-5 w-5 text-success" />
                       <span>Dilemas éticos sem resposta "certa"</span>
                     </div>
                     <div className="flex items-center gap-3">
-                      <CheckCircle2 className="h-5 w-5 text-emerald-500" />
+                      <CheckCircle2 className="h-5 w-5 text-success" />
                       <span>Situações de pressão com tempo limitado</span>
                     </div>
                     <div className="flex items-center gap-3">
-                      <CheckCircle2 className="h-5 w-5 text-emerald-500" />
+                      <CheckCircle2 className="h-5 w-5 text-success" />
                       <span>Análise de padrões de hesitação</span>
                     </div>
                     <div className="flex items-center gap-3">
-                      <CheckCircle2 className="h-5 w-5 text-emerald-500" />
+                      <CheckCircle2 className="h-5 w-5 text-success" />
                       <span>Detecção de respostas "socialmente desejáveis"</span>
                     </div>
                   </div>
@@ -490,12 +490,12 @@ export default function BehavioralAssessmentPage() {
                 </CardHeader>
                 <CardContent className="grid grid-cols-2 gap-3">
                   {[
-                    { label: 'Dilemas Éticos', count: 2, color: 'bg-amber-500' },
-                    { label: 'Sob Pressão', count: 1, color: 'bg-red-500' },
-                    { label: 'Conflitos', count: 1, color: 'bg-violet-500' },
-                    { label: 'Gestão de Crise', count: 1, color: 'bg-red-600' },
-                    { label: 'Inovação', count: 1, color: 'bg-emerald-500' },
-                    { label: 'Decisão Estratégica', count: 0, color: 'bg-blue-500' },
+                    { label: 'Dilemas Éticos', count: 2, color: 'bg-warning' },
+                    { label: 'Sob Pressão', count: 1, color: 'bg-destructive' },
+                    { label: 'Conflitos', count: 1, color: 'bg-accent' },
+                    { label: 'Gestão de Crise', count: 1, color: 'bg-destructive' },
+                    { label: 'Inovação', count: 1, color: 'bg-success' },
+                    { label: 'Decisão Estratégica', count: 0, color: 'bg-primary' },
                   ].map((tipo) => (
                     <div 
                       key={tipo.label}
