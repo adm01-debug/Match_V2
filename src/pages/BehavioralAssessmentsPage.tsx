@@ -431,9 +431,9 @@ export default function BehavioralAssessmentsPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
               >
-                <Card className="h-full hover:shadow-xl transition-all cursor-pointer group border-2 border-pink-500/20 hover:border-pink-500/50">
+                <Card className="h-full hover:shadow-xl transition-all cursor-pointer group border-2 border-accent/20 hover:border-accent/50">
                   <CardHeader className="text-center pb-2">
-                    <div className="mx-auto p-4 rounded-2xl bg-gradient-to-br from-pink-500 to-rose-500 text-white mb-2 group-hover:scale-110 transition-transform">
+                    <div className="mx-auto p-4 rounded-2xl bg-gradient-to-br from-accent to-accent/70 text-accent-foreground mb-2 group-hover:scale-110 transition-transform">
                       <Heart className="h-10 w-10" />
                     </div>
                     <CardTitle className="text-xl">Swipe de Valores</CardTitle>
