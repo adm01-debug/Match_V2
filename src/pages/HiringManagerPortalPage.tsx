@@ -424,9 +424,9 @@ export default function HiringManagerPortalPage() {
                             variant="secondary"
                             className={cn(
                               "text-xs",
-                              candidato.matchScore >= 90 && "bg-green-100 text-green-700",
-                              candidato.matchScore >= 80 && candidato.matchScore < 90 && "bg-yellow-100 text-yellow-700",
-                              candidato.matchScore < 80 && "bg-orange-100 text-orange-700"
+                              candidato.matchScore >= 90 && "bg-success/10 text-success",
+                              candidato.matchScore >= 80 && candidato.matchScore < 90 && "bg-warning/10 text-warning",
+                              candidato.matchScore < 80 && "bg-accent/10 text-accent-foreground"
                             )}
                           >
                             <Star className="h-3 w-3 mr-1" />
