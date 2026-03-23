@@ -128,7 +128,7 @@ export default function GamificationPage() {
     completeOnboarding();
     toast.success('Bem-vindo ao sistema de gamificação!', {
       description: `Você ganhou +${xpEarned} XP de bônus!`,
-      icon: <Sparkles className="h-5 w-5 text-yellow-500" />
+      icon: <Sparkles className="h-5 w-5 text-warning" />
     });
   }, [addXP, showXPToast, completeOnboarding]);
 
