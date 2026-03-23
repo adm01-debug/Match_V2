@@ -249,7 +249,7 @@ export default function HiringManagerPortalPage() {
           <Card>
             <CardContent className="pt-4">
               <div className="flex items-center gap-2">
-                <Briefcase className="h-5 w-5 text-blue-500" />
+                <Briefcase className="h-5 w-5 text-primary" />
                 <div>
                   <p className="text-xs text-muted-foreground">Minhas Vagas</p>
                   <p className="text-xl font-bold">{stats.totalVagas}</p>

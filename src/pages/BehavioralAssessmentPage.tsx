@@ -455,19 +455,19 @@ export default function BehavioralAssessmentPage() {
                 <CardContent className="space-y-4">
                   <div className="space-y-3">
                     <div className="flex items-center gap-3">
-                      <CheckCircle2 className="h-5 w-5 text-emerald-500" />
+                      <CheckCircle2 className="h-5 w-5 text-success" />
                       <span>Dilemas éticos sem resposta "certa"</span>
                     </div>
                     <div className="flex items-center gap-3">
-                      <CheckCircle2 className="h-5 w-5 text-emerald-500" />
+                      <CheckCircle2 className="h-5 w-5 text-success" />
                       <span>Situações de pressão com tempo limitado</span>
                     </div>
                     <div className="flex items-center gap-3">
-                      <CheckCircle2 className="h-5 w-5 text-emerald-500" />
+                      <CheckCircle2 className="h-5 w-5 text-success" />
                       <span>Análise de padrões de hesitação</span>
                     </div>
                     <div className="flex items-center gap-3">
-                      <CheckCircle2 className="h-5 w-5 text-emerald-500" />
+                      <CheckCircle2 className="h-5 w-5 text-success" />
                       <span>Detecção de respostas "socialmente desejáveis"</span>
                     </div>
                   </div>
