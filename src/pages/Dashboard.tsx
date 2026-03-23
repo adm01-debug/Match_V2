@@ -427,7 +427,7 @@ function DashboardContent() {
             </div>
           </motion.div>
         </motion.div>
-      </div>
+      </main>
     </Layout>
   );
 }
