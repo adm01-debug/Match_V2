@@ -471,9 +471,9 @@ export default function BehavioralAssessmentsPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
               >
-                <Card className="h-full hover:shadow-xl transition-all cursor-pointer group border-2 border-amber-500/20 hover:border-amber-500/50">
+                <Card className="h-full hover:shadow-xl transition-all cursor-pointer group border-2 border-warning/20 hover:border-warning/50">
                   <CardHeader className="text-center pb-2">
-                    <div className="mx-auto p-4 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-500 text-white mb-2 group-hover:scale-110 transition-transform">
+                    <div className="mx-auto p-4 rounded-2xl bg-gradient-to-br from-warning to-warning/70 text-warning-foreground mb-2 group-hover:scale-110 transition-transform">
                       <Gamepad2 className="h-10 w-10" />
                     </div>
                     <CardTitle className="text-xl">Mini-Games</CardTitle>
@@ -483,18 +483,18 @@ export default function BehavioralAssessmentsPage() {
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="flex flex-wrap gap-2 justify-center">
-                      <Badge variant="secondary" className="bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300">
+                      <Badge variant="secondary" className="bg-warning/10 text-warning">
                         ⚡ Rápido
                       </Badge>
-                      <Badge variant="secondary" className="bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300">
+                      <Badge variant="secondary" className="bg-warning/10 text-warning">
                         🎯 Preciso
                       </Badge>
-                      <Badge variant="secondary" className="bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300">
+                      <Badge variant="secondary" className="bg-warning/10 text-warning">
                         🧠 Intuitivo
                       </Badge>
                     </div>
                     <Button 
-                      className="w-full gap-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600" 
+                      className="w-full gap-2 bg-gradient-to-r from-warning to-warning/80 hover:from-warning/90 hover:to-warning/70 text-warning-foreground" 
                       size="lg"
                       onClick={() => setGamifiedMode('minigame')}
                     >
