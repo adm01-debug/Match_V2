@@ -271,7 +271,7 @@ export default function HiringManagerPortalPage() {
           <Card>
             <CardContent className="pt-4">
               <div className="flex items-center gap-2">
-                <Users className="h-5 w-5 text-green-500" />
+                <Users className="h-5 w-5 text-success" />
                 <div>
                   <p className="text-xs text-muted-foreground">Em Processo</p>
                   <p className="text-xl font-bold">{stats.totalCandidatos}</p>
