@@ -364,11 +364,11 @@ export default function HiringManagerPortalPage() {
                         <p className="text-xs text-muted-foreground">Candidatos</p>
                       </div>
                       <div className="text-center">
-                        <p className="text-2xl font-bold text-blue-600">{vaga.emProcesso}</p>
+                        <p className="text-2xl font-bold text-primary">{vaga.emProcesso}</p>
                         <p className="text-xs text-muted-foreground">Em Processo</p>
                       </div>
                       <div className="text-center">
-                        <p className="text-2xl font-bold text-green-600">{vaga.contratados}</p>
+                        <p className="text-2xl font-bold text-success">{vaga.contratados}</p>
                         <p className="text-xs text-muted-foreground">Contratados</p>
                       </div>
                       <div className="text-center">
