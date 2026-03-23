@@ -419,7 +419,7 @@ export default function IndicacoesPage() {
                                     {statusConfig[indicacao.status].label}
                                   </Badge>
                                   {indicacao.bonus && indicacao.bonus > 0 && (
-                                    <Badge className="bg-green-500/20 text-green-400">
+                                    <Badge className="bg-success/20 text-success">
                                       <DollarSign className="h-3 w-3 mr-1" />
                                       R$ {indicacao.bonus}
                                     </Badge>
