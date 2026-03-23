@@ -326,7 +326,7 @@ export default function BehavioralAssessmentPage() {
           )}
           
           {hasSavedResults && (
-            <div className="flex items-center justify-center gap-2 text-emerald-600">
+            <div className="flex items-center justify-center gap-2 text-success">
               <CheckCircle2 className="h-4 w-4" />
               <span>Resultados salvos com sucesso!</span>
             </div>
