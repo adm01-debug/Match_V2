@@ -237,11 +237,11 @@ export default function DiagnosticoPage() {
       case 'loading':
         return <Badge variant="secondary">Verificando...</Badge>;
       case 'success':
-        return <Badge className="bg-green-500/10 text-green-600 border-green-500/20">OK</Badge>;
+        return <Badge className="bg-success/10 text-success border-success/20">OK</Badge>;
       case 'error':
         return <Badge variant="destructive">Erro</Badge>;
       case 'warning':
-        return <Badge className="bg-yellow-500/10 text-yellow-600 border-yellow-500/20">Atenção</Badge>;
+        return <Badge className="bg-warning/10 text-warning border-warning/20">Atenção</Badge>;
     }
   };
 
