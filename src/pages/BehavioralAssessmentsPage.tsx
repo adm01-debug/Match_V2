@@ -443,13 +443,13 @@ export default function BehavioralAssessmentsPage() {
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="flex flex-wrap gap-2 justify-center">
-                      <Badge variant="secondary" className="bg-pink-100 text-pink-700 dark:bg-pink-900/30 dark:text-pink-300">
+                      <Badge variant="secondary" className="bg-accent/10 text-accent">
                         ❤️ Like
                       </Badge>
-                      <Badge variant="secondary" className="bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                      <Badge variant="secondary" className="bg-muted text-muted-foreground">
                         ❌ Pass
                       </Badge>
-                      <Badge variant="secondary" className="bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300">
+                      <Badge variant="secondary" className="bg-warning/10 text-warning">
                         ⭐ Super Like
                       </Badge>
                     </div>
