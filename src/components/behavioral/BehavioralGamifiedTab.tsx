@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { Brain, Heart, Zap, Play, Trophy, Star, Flame, Gamepad2, Award, Crown, ArrowRight } from 'lucide-react';
+import { Brain, Heart, Play, Trophy, Star, Flame, Gamepad2, Award, Crown, ArrowRight } from 'lucide-react';
 import { Leaderboard, AchievementGrid, type LeaderboardUser, type Achievement } from '@/components/gamification';
 
 interface BehavioralGamifiedTabProps {
@@ -69,25 +69,28 @@ export function BehavioralGamifiedTab({
       </div>
 
       {/* Phase challenge card */}
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
-        <Card className={`hover:shadow-xl transition-all cursor-pointer group border-2 ${gameModes[3].borderColor}`}>
-          <CardHeader className="text-center pb-2">
-            <div className={`mx-auto p-4 rounded-2xl bg-gradient-to-br ${gameModes[3].gradient} text-secondary-foreground mb-2 group-hover:scale-110 transition-transform`}>
-              <Award className="h-10 w-10" />
-            </div>
-            <CardTitle className="text-xl">{gameModes[3].title}</CardTitle>
-            <CardDescription>{gameModes[3].desc}</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4 max-w-md mx-auto">
-            <div className="flex flex-wrap gap-2 justify-center">
-              {gameModes[3].badges.map((b, j) => (
-                <Badge key={j} variant="secondary" className="bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300">{b.text}</Badge>
-              ))}
-            </div>
-            <Button className={`w-full gap-2 ${gameModes[3].btnClass}`} size="lg" onClick={onStartPhases}>
-              <Award className="h-5 w-5" />{gameModes[3].btnText}
-            </Button>
-          </CardContent>
+      {(() => {
+        const phaseMode = gameModes[3]!;
+        return (
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
+            <Card className={`hover:shadow-xl transition-all cursor-pointer group border-2 ${phaseMode.borderColor}`}>
+              <CardHeader className="text-center pb-2">
+                <div className={`mx-auto p-4 rounded-2xl bg-gradient-to-br ${phaseMode.gradient} text-secondary-foreground mb-2 group-hover:scale-110 transition-transform`}>
+                  <Award className="h-10 w-10" />
+                </div>
+                <CardTitle className="text-xl">{phaseMode.title}</CardTitle>
+                <CardDescription>{phaseMode.desc}</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4 max-w-md mx-auto">
+                <div className="flex flex-wrap gap-2 justify-center">
+                  {phaseMode.badges.map((b, j) => (
+                    <Badge key={j} variant="secondary">{b.text}</Badge>
+                  ))}
+                </div>
+                <Button className={`w-full gap-2 ${phaseMode.btnClass || ''}`} size="lg" onClick={onStartPhases}>
+                  <Award className="h-5 w-5" />{phaseMode.btnText}
+                </Button>
+              </CardContent>
         </Card>
       </motion.div>
 
