@@ -36,10 +36,6 @@ const AuthPage = () => {
     }
   }, [user, authLoading, navigate, redirectedFrom]);
 
-  const handleDemoLogin = () => {
-    // LoginForm manages its own state, so we need a ref or callback approach
-    // For simplicity, we pass a callback that sets the demo credentials
-  };
 
   const handleLogin = async (email: string, password: string) => {
     setIsLoading(true);
