@@ -38,7 +38,7 @@ interface OfferCardProps {
 }
 
 export function OfferCard({ offer, index, onView, onSend }: OfferCardProps) {
-  const config = statusConfig[offer.status];
+  const config = statusConfig[offer.status] || { label: offer.status, color: 'bg-gray-500', icon: Eye };
   const StatusIcon = config.icon;
 
   return (
