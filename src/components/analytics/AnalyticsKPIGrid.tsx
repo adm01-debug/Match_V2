@@ -20,14 +20,14 @@ interface AnalyticsKPIGridProps {
   };
 }
 
-const kpiConfig = [
-  { key: 'timeToHire' as const, icon: Clock, color: 'text-blue-500', label: 'Time to Hire', suffix: ' dias' },
-  { key: 'costPerHire' as const, icon: DollarSign, color: 'text-green-500', label: 'Cost per Hire', prefix: 'R$ ', format: true },
-  { key: 'offerAcceptance' as const, icon: Target, color: 'text-purple-500', label: 'Offer Acceptance', suffix: '%' },
-  { key: 'qualityOfHire' as const, icon: Award, color: 'text-yellow-500', label: 'Quality of Hire', suffix: '%' },
-  { key: 'sourceROI' as const, icon: Globe, color: 'text-cyan-500', label: 'Source ROI', suffix: '%' },
-  { key: 'retention6m' as const, icon: Users, color: 'text-pink-500', label: 'Retenção 6 meses', suffix: '%' },
-] as const;
+const kpiConfig: Array<{ key: keyof AnalyticsKPIGridProps['kpis']; icon: typeof Clock; color: string; label: string; suffix?: string; prefix?: string; format?: boolean }> = [
+  { key: 'timeToHire', icon: Clock, color: 'text-blue-500', label: 'Time to Hire', suffix: ' dias' },
+  { key: 'costPerHire', icon: DollarSign, color: 'text-green-500', label: 'Cost per Hire', prefix: 'R$ ', format: true },
+  { key: 'offerAcceptance', icon: Target, color: 'text-purple-500', label: 'Offer Acceptance', suffix: '%' },
+  { key: 'qualityOfHire', icon: Award, color: 'text-yellow-500', label: 'Quality of Hire', suffix: '%' },
+  { key: 'sourceROI', icon: Globe, color: 'text-cyan-500', label: 'Source ROI', suffix: '%' },
+  { key: 'retention6m', icon: Users, color: 'text-pink-500', label: 'Retenção 6 meses', suffix: '%' },
+];
 
 export function AnalyticsKPIGrid({ kpis }: AnalyticsKPIGridProps) {
   return (
