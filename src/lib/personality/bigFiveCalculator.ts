@@ -34,7 +34,7 @@ export function calculateBigFiveResult(answers: PersonalityAnswer[]): BigFiveRes
       dim.scores.push(value);
       if (question.facet) {
         if (!dim.facets[question.facet]) dim.facets[question.facet] = [];
-        dim.facets[question.facet].push(value);
+        dim.facets[question.facet]!.push(value);
       }
     }
   });
