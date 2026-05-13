@@ -2986,6 +2986,41 @@ export type Database = {
       calculate_level_from_xp: { Args: { xp_amount: number }; Returns: number }
       cleanup_old_login_attempts: { Args: never; Returns: undefined }
       cleanup_old_logs: { Args: never; Returns: undefined }
+      create_candidato_with_details: {
+        Args: {
+          p_arquivo_curriculo?: string
+          p_email: string
+          p_experiencias?: Json
+          p_fonte?: string
+          p_formacao?: Json
+          p_habilidades?: string[]
+          p_nome: string
+          p_resumo?: string
+          p_status?: string
+          p_telefone?: string
+        }
+        Returns: {
+          arquivo_curriculo: string | null
+          created_at: string | null
+          email: string
+          experiencias: Json | null
+          fonte: string | null
+          formacao: Json | null
+          habilidades: string[] | null
+          id: string
+          nome: string
+          resumo: string | null
+          status: string | null
+          telefone: string | null
+          updated_at: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "candidatos"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       get_user_permissions: {
         Args: { _user_id: string }
         Returns: {

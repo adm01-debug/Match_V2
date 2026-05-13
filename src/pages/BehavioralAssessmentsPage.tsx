@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Skeleton } from '@/components/ui/skeleton';
 import { 
   Brain, BarChart3, Gamepad2, Award, Star, Crown
 } from 'lucide-react';
@@ -35,8 +36,9 @@ import { CHALLENGE_PHASES } from '@/data/phaseChallengeData';
 // New Components
 import { BehavioralProgressHeader } from '@/components/behavioral/BehavioralProgressHeader';
 import { BehavioralToolsGrid } from '@/components/behavioral/BehavioralToolsGrid';
-import { BehavioralLeaderboardTab } from '@/components/behavioral/BehavioralLeaderboardTab';
-import { BehavioralGamifiedTab } from '@/components/behavioral/BehavioralGamifiedTab';
+
+const BehavioralLeaderboardTab = lazy(() => import('@/components/behavioral/BehavioralLeaderboardTab').then(m => ({ default: m.BehavioralLeaderboardTab })));
+const BehavioralGamifiedTab = lazy(() => import('@/components/behavioral/BehavioralGamifiedTab').then(m => ({ default: m.BehavioralGamifiedTab })));
 
 const LOCAL_TOOL_ICONS: Record<string, React.ReactNode> = {
   disc: <Brain className="h-6 w-6" />,
@@ -156,23 +158,25 @@ export default function BehavioralAssessmentsPage() {
           </TabsList>
 
           <TabsContent value="gamified" className="mt-6">
-            <BehavioralGamifiedTab
-              onStartQuiz={() => setGamifiedMode('quiz')}
-              onStartSwipe={() => setGamifiedMode('swipe')}
-              onStartMinigame={() => setGamifiedMode('minigame')}
-              onStartPhases={() => setGamifiedMode('phases')}
-              leaderboardUsers={leaderboardUsers}
-              demoAchievements={demoAchievements}
-              totalBehavioralXP={totalBehavioralXP}
-              behavioralLevel={behavioralLevel}
-              nextBehavioralLevel={nextBehavioralLevel || null}
-              levelProgress={levelProgress}
-              completedCount={completedCount}
-              totalTools={totalTools}
-              unlockedCount={unlockedCount}
-              totalAchievements={totalAchievements}
-              achievementsWithStatus={achievementsWithStatus}
-            />
+            <Suspense fallback={<Skeleton className="h-[400px] w-full rounded-2xl" />}>
+              <BehavioralGamifiedTab
+                onStartQuiz={() => setGamifiedMode('quiz')}
+                onStartSwipe={() => setGamifiedMode('swipe')}
+                onStartMinigame={() => setGamifiedMode('minigame')}
+                onStartPhases={() => setGamifiedMode('phases')}
+                leaderboardUsers={leaderboardUsers}
+                demoAchievements={demoAchievements}
+                totalBehavioralXP={totalBehavioralXP}
+                behavioralLevel={behavioralLevel}
+                nextBehavioralLevel={nextBehavioralLevel || null}
+                levelProgress={levelProgress}
+                completedCount={completedCount}
+                totalTools={totalTools}
+                unlockedCount={unlockedCount}
+                totalAchievements={totalAchievements}
+                achievementsWithStatus={achievementsWithStatus}
+              />
+            </Suspense>
           </TabsContent>
 
           <TabsContent value="tools" className="mt-6">
@@ -185,7 +189,9 @@ export default function BehavioralAssessmentsPage() {
           </TabsContent>
 
           <TabsContent value="results" className="mt-6">
-            <BehavioralLeaderboardTab leaderboardUsers={leaderboardUsers} demoAchievements={demoAchievements} />
+            <Suspense fallback={<Skeleton className="h-[300px] w-full rounded-2xl" />}>
+              <BehavioralLeaderboardTab leaderboardUsers={leaderboardUsers} demoAchievements={demoAchievements} />
+            </Suspense>
           </TabsContent>
         </Tabs>
       </div>
