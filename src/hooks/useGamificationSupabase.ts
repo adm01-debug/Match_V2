@@ -7,6 +7,11 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useSoundPreferences } from './useSoundPreferences';
 import { useAuth } from '@/contexts/AuthContext';
+import { levels, xpRewards } from '@/domain/gamification/constants';
+import { calculateLevel, calculateLevelProgress } from '@/domain/gamification/calculator';
+import { supabase } from '@/integrations/supabase/client';
+import { useSoundPreferences } from './useSoundPreferences';
+import { useAuth } from '@/contexts/AuthContext';
 
 const LOCAL_STORAGE_KEY = 'user-gamification';
 
