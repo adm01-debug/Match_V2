@@ -49,7 +49,7 @@ export function useFeatureFlags() {
       }
 
       return data.reduce((acc, flag) => {
-        acc[flag.name] = flag.enabled;
+        acc[flag.name] = !!flag.enabled;
         return acc;
       }, {} as Record<string, boolean>);
     },
