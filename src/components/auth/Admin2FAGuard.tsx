@@ -18,7 +18,7 @@ export function Admin2FAGuard({ children }: Admin2FAGuardProps) {
   const { isEnabled, isLoadingStatus } = use2FA();
   const navigate = useNavigate();
 
-  const isAdmin = userRoles.includes('admin');
+  const isAdmin = roles.includes('admin');
   const loading = authLoading || isLoadingStatus;
 
   useEffect(() => {
