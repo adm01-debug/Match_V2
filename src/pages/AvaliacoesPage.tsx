@@ -150,7 +150,7 @@ export default function AvaliacoesPage() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {filtered.map((avaliacao: any) => {
+                    {filtered.map((avaliacao) => {
                       const parecer = avaliacao.parecer as string;
                       const config = parecerConfig[parecer] ?? { label: parecer, className: 'bg-muted text-muted-foreground border-border' };
                       return (
