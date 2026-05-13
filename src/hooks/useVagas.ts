@@ -126,6 +126,7 @@ export function useVagasSelect() {
       const { data, error } = await supabase
         .from('vagas')
         .select('id, titulo')
+        .is('deleted_at', null)
         .in('status', ['publicada', 'em_selecao'])
         .order('titulo');
 
