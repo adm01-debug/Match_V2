@@ -83,6 +83,7 @@ export function useVagas() {
       const { data, error } = await supabase
         .from('vagas')
         .select('*')
+        .is('deleted_at', null)
         .order('data_criacao', { ascending: false });
 
       if (error) throw error;
@@ -125,6 +126,7 @@ export function useVagasSelect() {
       const { data, error } = await supabase
         .from('vagas')
         .select('id, titulo')
+        .is('deleted_at', null)
         .in('status', ['publicada', 'em_selecao'])
         .order('titulo');
 
@@ -146,6 +148,7 @@ export function useVagasUrgentes() {
       const { data, error } = await supabase
         .from('vagas')
         .select('*')
+        .is('deleted_at', null)
         .in('prioridade', ['urgente', 'alta'])
         .in('status', ['publicada', 'em_selecao'])
         .order('prioridade')
@@ -310,7 +313,10 @@ export function useDeleteVaga() {
 
   return useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('vagas').delete().eq('id', id);
+      const { error } = await supabase
+        .from('vagas')
+        .update({ deleted_at: new Date().toISOString() })
+        .eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {

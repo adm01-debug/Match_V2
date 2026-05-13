@@ -189,6 +189,7 @@ export type Database = {
         Row: {
           ativo: boolean | null
           created_at: string | null
+          deleted_at: string | null
           descricao: string | null
           duracao_estimada: number | null
           id: string
@@ -202,6 +203,7 @@ export type Database = {
         Insert: {
           ativo?: boolean | null
           created_at?: string | null
+          deleted_at?: string | null
           descricao?: string | null
           duracao_estimada?: number | null
           id?: string
@@ -215,6 +217,7 @@ export type Database = {
         Update: {
           ativo?: boolean | null
           created_at?: string | null
+          deleted_at?: string | null
           descricao?: string | null
           duracao_estimada?: number | null
           id?: string
@@ -231,6 +234,7 @@ export type Database = {
         Row: {
           avaliador_id: string | null
           created_at: string | null
+          deleted_at: string | null
           etapa: string
           id: string
           nota_geral: number | null
@@ -247,6 +251,7 @@ export type Database = {
         Insert: {
           avaliador_id?: string | null
           created_at?: string | null
+          deleted_at?: string | null
           etapa?: string
           id?: string
           nota_geral?: number | null
@@ -263,6 +268,7 @@ export type Database = {
         Update: {
           avaliador_id?: string | null
           created_at?: string | null
+          deleted_at?: string | null
           etapa?: string
           id?: string
           nota_geral?: number | null
@@ -609,6 +615,7 @@ export type Database = {
         Row: {
           arquivo_curriculo: string | null
           created_at: string | null
+          deleted_at: string | null
           email: string
           experiencias: Json | null
           fonte: string | null
@@ -624,6 +631,7 @@ export type Database = {
         Insert: {
           arquivo_curriculo?: string | null
           created_at?: string | null
+          deleted_at?: string | null
           email: string
           experiencias?: Json | null
           fonte?: string | null
@@ -639,6 +647,7 @@ export type Database = {
         Update: {
           arquivo_curriculo?: string | null
           created_at?: string | null
+          deleted_at?: string | null
           email?: string
           experiencias?: Json | null
           fonte?: string | null
@@ -707,6 +716,7 @@ export type Database = {
           created_at: string
           curriculo_url: string | null
           data_candidatura: string
+          deleted_at: string | null
           etapa_atual: string
           id: string
           processo_id: string | null
@@ -720,6 +730,7 @@ export type Database = {
           created_at?: string
           curriculo_url?: string | null
           data_candidatura?: string
+          deleted_at?: string | null
           etapa_atual?: string
           id?: string
           processo_id?: string | null
@@ -733,6 +744,7 @@ export type Database = {
           created_at?: string
           curriculo_url?: string | null
           data_candidatura?: string
+          deleted_at?: string | null
           etapa_atual?: string
           id?: string
           processo_id?: string | null
@@ -850,6 +862,7 @@ export type Database = {
           enviado_em: string
           enviado_por: string | null
           id: string
+          idempotency_key: string | null
           template_etapa: string
           template_nome: string
         }
@@ -861,6 +874,7 @@ export type Database = {
           enviado_em?: string
           enviado_por?: string | null
           id?: string
+          idempotency_key?: string | null
           template_etapa: string
           template_nome: string
         }
@@ -872,6 +886,7 @@ export type Database = {
           enviado_em?: string
           enviado_por?: string | null
           id?: string
+          idempotency_key?: string | null
           template_etapa?: string
           template_nome?: string
         }
@@ -1096,6 +1111,7 @@ export type Database = {
           created_at: string
           created_by: string | null
           data: string
+          deleted_at: string | null
           entrevistadores: string[]
           etapa: string
           feedback_avaliado_em: string | null
@@ -1124,6 +1140,7 @@ export type Database = {
           created_at?: string
           created_by?: string | null
           data: string
+          deleted_at?: string | null
           entrevistadores?: string[]
           etapa: string
           feedback_avaliado_em?: string | null
@@ -1152,6 +1169,7 @@ export type Database = {
           created_at?: string
           created_by?: string | null
           data?: string
+          deleted_at?: string | null
           entrevistadores?: string[]
           etapa?: string
           feedback_avaliado_em?: string | null
@@ -1190,6 +1208,36 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      feature_flags: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          enabled: boolean | null
+          id: string
+          name: string
+          rules: Json | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          enabled?: boolean | null
+          id?: string
+          name: string
+          rules?: Json | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          enabled?: boolean | null
+          id?: string
+          name?: string
+          rules?: Json | null
+          updated_at?: string | null
+        }
+        Relationships: []
       }
       geo_access_logs: {
         Row: {
@@ -1553,7 +1601,9 @@ export type Database = {
       notifications: {
         Row: {
           created_at: string
+          deleted_at: string | null
           id: string
+          idempotency_key: string | null
           link: string | null
           match_score: number | null
           message: string
@@ -1564,7 +1614,9 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          deleted_at?: string | null
           id?: string
+          idempotency_key?: string | null
           link?: string | null
           match_score?: number | null
           message: string
@@ -1575,7 +1627,9 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          deleted_at?: string | null
           id?: string
+          idempotency_key?: string | null
           link?: string | null
           match_score?: number | null
           message?: string
@@ -1883,6 +1937,7 @@ export type Database = {
           created_at: string
           data_inscricao: string
           data_ultima_movimentacao: string
+          deleted_at: string | null
           dias_na_etapa: number | null
           etapa_atual: string
           id: string
@@ -1900,6 +1955,7 @@ export type Database = {
           created_at?: string
           data_inscricao?: string
           data_ultima_movimentacao?: string
+          deleted_at?: string | null
           dias_na_etapa?: number | null
           etapa_atual?: string
           id?: string
@@ -1917,6 +1973,7 @@ export type Database = {
           created_at?: string
           data_inscricao?: string
           data_ultima_movimentacao?: string
+          deleted_at?: string | null
           dias_na_etapa?: number | null
           etapa_atual?: string
           id?: string
@@ -1980,6 +2037,7 @@ export type Database = {
           ativo: boolean
           categoria: string
           created_at: string
+          deleted_at: string | null
           departamentos: string[]
           descricao: string | null
           duracao: number
@@ -1998,6 +2056,7 @@ export type Database = {
           ativo?: boolean
           categoria: string
           created_at?: string
+          deleted_at?: string | null
           departamentos?: string[]
           descricao?: string | null
           duracao?: number
@@ -2016,6 +2075,7 @@ export type Database = {
           ativo?: boolean
           categoria?: string
           created_at?: string
+          deleted_at?: string | null
           departamentos?: string[]
           descricao?: string | null
           duracao?: number
@@ -2739,18 +2799,21 @@ export type Database = {
         Row: {
           created_at: string | null
           id: string
+          requires_2fa: boolean | null
           role: Database["public"]["Enums"]["app_role"]
           user_id: string
         }
         Insert: {
           created_at?: string | null
           id?: string
+          requires_2fa?: boolean | null
           role: Database["public"]["Enums"]["app_role"]
           user_id: string
         }
         Update: {
           created_at?: string | null
           id?: string
+          requires_2fa?: boolean | null
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
         }
@@ -2765,6 +2828,7 @@ export type Database = {
           data_criacao: string
           data_encerramento: string | null
           data_publicacao: string | null
+          deleted_at: string | null
           departamento: string
           descricao_empresa: string | null
           em_processo: number
@@ -2797,6 +2861,7 @@ export type Database = {
           data_criacao?: string
           data_encerramento?: string | null
           data_publicacao?: string | null
+          deleted_at?: string | null
           departamento: string
           descricao_empresa?: string | null
           em_processo?: number
@@ -2829,6 +2894,7 @@ export type Database = {
           data_criacao?: string
           data_encerramento?: string | null
           data_publicacao?: string | null
+          deleted_at?: string | null
           departamento?: string
           descricao_empresa?: string | null
           em_processo?: number
@@ -2979,6 +3045,10 @@ export type Database = {
           new_xp: number
         }[]
       }
+      apply_for_job: {
+        Args: { p_candidato_id: string; p_notas?: string; p_vaga_id: string }
+        Returns: Json
+      }
       award_xp: {
         Args: { p_action: string; p_amount: number; p_description?: string }
         Returns: undefined
@@ -3002,6 +3072,7 @@ export type Database = {
         Returns: {
           arquivo_curriculo: string | null
           created_at: string | null
+          deleted_at: string | null
           email: string
           experiencias: Json | null
           fonte: string | null
@@ -3045,6 +3116,7 @@ export type Database = {
         Returns: boolean
       }
       is_hr_staff: { Args: { _user_id: string }; Returns: boolean }
+      is_not_deleted: { Args: { deleted_at: string }; Returns: boolean }
       safe_update_gamification: {
         Args: { p_last_active_date?: string; p_streak?: number }
         Returns: undefined

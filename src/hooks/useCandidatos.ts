@@ -44,6 +44,7 @@ export function useCandidatos(filters?: {
           *,
           match_scores(score_total)
         `)
+        .is('deleted_at', null)
         .order('created_at', { ascending: false });
 
       if (filters?.status) {
@@ -96,7 +97,8 @@ export function useCandidatosStats() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('candidatos')
-        .select('status, fonte');
+        .select('status, fonte')
+        .is('deleted_at', null);
       
       if (error) throw error;
 
@@ -163,7 +165,7 @@ export function useDeleteCandidato() {
     mutationFn: async (id: string) => {
       const { error } = await supabase
         .from('candidatos')
-        .delete()
+        .update({ deleted_at: new Date().toISOString() })
         .eq('id', id);
       if (error) throw error;
       return id;
@@ -182,6 +184,7 @@ export function useCandidatosSelect() {
       const { data, error } = await supabase
         .from('candidatos')
         .select('id, nome, email')
+        .is('deleted_at', null)
         .order('nome');
       if (error) throw error;
       return data;

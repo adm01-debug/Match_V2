@@ -69,7 +69,7 @@ export default tseslint.config(
         "warn",
         { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
       ],
-      "@typescript-eslint/no-explicit-any": "warn",
+      "@typescript-eslint/no-explicit-any": "error",
       "@typescript-eslint/consistent-type-imports": [
         "warn",
         { prefer: "type-imports" },
