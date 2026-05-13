@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { 
   Briefcase, Mail, Phone, GraduationCap, Target, 
-  ChevronRight, Trash2, MessageSquare, UserX, Sparkles
+  ChevronRight, Trash2, MessageSquare, Sparkles
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Candidato, MatchScore, getStatusConfig, getScoreColor } from '@/types/candidate';
