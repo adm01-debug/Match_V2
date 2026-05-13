@@ -313,7 +313,10 @@ export function useDeleteVaga() {
 
   return useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('vagas').delete().eq('id', id);
+      const { error } = await supabase
+        .from('vagas')
+        .update({ deleted_at: new Date().toISOString() })
+        .eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {
