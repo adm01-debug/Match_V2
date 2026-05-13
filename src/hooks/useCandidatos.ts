@@ -184,6 +184,7 @@ export function useCandidatosSelect() {
       const { data, error } = await supabase
         .from('candidatos')
         .select('id, nome, email')
+        .is('deleted_at', null)
         .order('nome');
       if (error) throw error;
       return data;
