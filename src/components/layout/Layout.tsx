@@ -136,6 +136,13 @@ export function Layout({ children, title }: LayoutProps) {
 
   return (
     <SidebarProvider defaultOpen={true}>
+      <a 
+        href="#main-content" 
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md shadow-lg"
+      >
+        Pular para o conteúdo principal
+      </a>
+      
       {/* Global Command Menu */}
       <CommandMenu />
       
@@ -218,7 +225,7 @@ export function Layout({ children, title }: LayoutProps) {
           </header>
 
           {/* Main Content with subtle background pattern */}
-          <main className="flex-1 overflow-auto pb-20 md:pb-0 relative">
+          <main id="main-content" className="flex-1 overflow-auto pb-20 md:pb-0 relative">
             {/* Subtle gradient mesh background */}
             <div className="absolute inset-0 gradient-mesh opacity-30 pointer-events-none" />
             

@@ -1,3 +1,5 @@
+import { logger } from './logger';
+
 // GDPR Compliance Service
 
 export const gdprService = {
@@ -14,7 +16,7 @@ export const gdprService = {
   },
 
   async updateConsent(_userId: string, consents: Record<string, boolean>) {
-    console.log('[GDPR] Update consent:', consents);
+    logger.info('Update consent', { userId: _userId, consents }, 'GDPR');
   },
 
   async getRetentionPolicy() {
@@ -23,6 +25,6 @@ export const gdprService = {
       communicationLogsDays: 180,
       auditLogsDays: 90,
       sessionDataDays: 30,
-    };
+      };
   },
 };

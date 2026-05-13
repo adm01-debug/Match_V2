@@ -1,5 +1,6 @@
-// LinkedIn Integration Service
+import { apiLogger } from './logger';
 
+// LinkedIn Integration Service
 
 export interface LinkedInProfile {
   id: string;
@@ -12,22 +13,22 @@ export interface LinkedInProfile {
 
 export const linkedinService = {
   async importProfile(profileUrl: string): Promise<LinkedInProfile | null> {
-    console.log('[LinkedInService] Import profile:', profileUrl);
+    apiLogger.info('Import profile', { profileUrl });
     return null; // Requires LinkedIn API OAuth setup
   },
 
   async publishJob(vagaId: string, jobData: Record<string, unknown>) {
-    console.log('[LinkedInService] Publishing job:', vagaId, jobData);
+    apiLogger.info('Publishing job', { vagaId, jobData });
     return { success: false, message: 'LinkedIn API not configured' };
   },
 
   async searchCandidates(query: string) {
-    console.log('[LinkedInService] Search:', query);
+    apiLogger.info('Search candidates', { query });
     return [];
   },
 
   async syncStatus(candidatoId: string) {
-    console.log('[LinkedInService] Sync status:', candidatoId);
+    apiLogger.info('Sync status', { candidatoId });
   },
 
   isConfigured(): boolean {

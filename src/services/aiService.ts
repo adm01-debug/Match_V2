@@ -1,5 +1,6 @@
 // AI Service — wraps Lovable AI models via Edge Functions
 import { supabase } from '@/integrations/supabase/client';
+import { edgeFunctionLogger } from './logger';
 
 export const aiService = {
   async analyzeResume(resumeText: string) {
@@ -27,7 +28,7 @@ export const aiService = {
   },
 
   async generateInsights(context: string) {
-    console.log('[AIService] Generate insights for:', context);
+    edgeFunctionLogger.info('Generate insights', { context });
     return { insights: [] };
   },
 };

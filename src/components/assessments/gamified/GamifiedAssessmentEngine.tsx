@@ -37,11 +37,17 @@ export interface GamifiedQuestion {
 
 interface GamifiedAssessmentEngineProps {
   questions: GamifiedQuestion[];
-  onComplete: (answers: Record<string, any>, stats: AssessmentStats) => void;
+  onComplete: (answers: Record<string, AssessmentAnswer>, stats: AssessmentStats) => void;
   onExit?: () => void;
   title?: string;
   subtitle?: string;
   theme?: 'default' | 'playful' | 'minimal' | 'cosmic';
+}
+
+interface AssessmentAnswer {
+  answer: string | number | boolean | string[] | Record<string, unknown>;
+  responseTime: number;
+  combo: number;
 }
 
 interface AssessmentStats {
@@ -96,7 +102,7 @@ export const GamifiedAssessmentEngine = memo(function GamifiedAssessmentEngine({
   const { addXP, level } = useGamification();
   
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [answers, setAnswers] = useState<Record<string, any>>({});
+  const [answers, setAnswers] = useState<Record<string, AssessmentAnswer>>({});
   const [phase, setPhase] = useState<'intro' | 'playing' | 'complete'>('intro');
   const [totalXP, setTotalXP] = useState(0);
   const [showXPGain, setShowXPGain] = useState<{ amount: number; x: number; y: number } | null>(null);
@@ -126,7 +132,7 @@ export const GamifiedAssessmentEngine = memo(function GamifiedAssessmentEngine({
   }, []);
 
   // Handle answer selection
-  const handleAnswer = useCallback((questionId: string, answer: any, event?: React.MouseEvent) => {
+  const handleAnswer = useCallback((questionId: string, answer: AssessmentAnswer['answer'], event?: React.MouseEvent) => {
     const now = Date.now();
     const responseTime = now - questionStartTime;
     const isFastAnswer = responseTime < FAST_ANSWER_THRESHOLD;

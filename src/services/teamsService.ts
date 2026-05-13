@@ -1,13 +1,15 @@
+import { apiLogger } from './logger';
+
 // Microsoft Teams Integration Service
 
 export const teamsService = {
   async sendMessage(channelId: string, message: string) {
-    console.log('[TeamsService] Send to channel:', channelId, message);
+    apiLogger.info('Send to channel', { channelId, message });
     return { success: false, message: 'Teams not configured' };
   },
 
   async createMeeting(subject: string, startTime: string, endTime: string, attendees: string[]) {
-    console.log('[TeamsService] Create meeting:', subject, startTime, endTime, attendees);
+    apiLogger.info('Create meeting', { subject, startTime, endTime, attendees });
     return { success: false, message: 'Teams not configured' };
   },
 

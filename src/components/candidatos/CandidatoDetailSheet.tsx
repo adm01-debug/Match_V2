@@ -7,63 +7,7 @@ import { Users, Mail, Phone, Target, Sparkles, Briefcase, GraduationCap, Message
 import { cn } from '@/lib/utils';
 import { ComunicacaoHistorico } from '@/components/candidatos/ComunicacaoHistorico';
 import { useNavigate } from 'react-router-dom';
-
-interface Experiencia {
-  cargo: string;
-  empresa: string;
-  periodo: string;
-}
-
-interface Formacao {
-  curso: string;
-  instituicao: string;
-}
-
-interface MatchScore {
-  id: string;
-  vaga_titulo: string;
-  score_total: number;
-}
-
-interface Candidato {
-  id: string;
-  nome: string;
-  email: string;
-  telefone: string | null;
-  resumo: string | null;
-  habilidades: string[] | null;
-  experiencias: Experiencia[] | null;
-  formacao: Formacao[] | null;
-  status: string | null;
-}
-
-const statusOptions = [
-  { value: 'novo', label: 'Novo' },
-  { value: 'em_triagem', label: 'Em Triagem' },
-  { value: 'entrevista', label: 'Entrevista' },
-  { value: 'aprovado', label: 'Aprovado' },
-  { value: 'reprovado', label: 'Reprovado' },
-  { value: 'banco_talentos', label: 'Banco de Talentos' },
-];
-
-const getStatusConfig = (status: string | null) => {
-  switch (status) {
-    case 'novo': return { color: 'bg-info text-info-foreground' };
-    case 'em_triagem': return { color: 'bg-warning text-warning-foreground' };
-    case 'entrevista': return { color: 'bg-accent text-accent-foreground' };
-    case 'aprovado': return { color: 'bg-success text-success-foreground' };
-    case 'reprovado': return { color: 'bg-destructive text-destructive-foreground' };
-    case 'banco_talentos': return { color: 'bg-primary text-primary-foreground' };
-    default: return { color: 'bg-muted text-muted-foreground' };
-  }
-};
-
-const getScoreColor = (score: number) => {
-  if (score >= 80) return 'text-success bg-success/10 border-success/20';
-  if (score >= 60) return 'text-warning bg-warning/10 border-warning/20';
-  if (score >= 40) return 'text-accent bg-accent/10 border-accent/20';
-  return 'text-destructive bg-destructive/10 border-destructive/20';
-};
+import { Candidato, MatchScore, statusOptions, getStatusConfig, getScoreColor } from '@/types/candidate';
 
 interface CandidatoDetailSheetProps {
   candidato: Candidato;

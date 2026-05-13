@@ -12,6 +12,14 @@ import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Search, ClipboardCheck, Eye } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Tables } from '@/integrations/supabase/types';
+
+type AvaliacaoWithProcesso = Tables<'avaliacoes'> & {
+  processos_seletivos: {
+    candidato_nome: string | null;
+    vaga_titulo: string | null;
+  } | null;
+};
 
 const parecerConfig: Record<string, { label: string; className: string }> = {
   aprovar: { label: 'Aprovado', className: 'bg-success/20 text-success border-success/30' },
@@ -35,11 +43,11 @@ export default function AvaliacoesPage() {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      return data || [];
+      return (data as AvaliacaoWithProcesso[]) || [];
     },
   });
 
-  const filtered = avaliacoes.filter((a: any) => {
+  const filtered = avaliacoes.filter((a) => {
     const candidato = a.processos_seletivos?.candidato_nome || '';
     const vaga = a.processos_seletivos?.vaga_titulo || '';
     const matchSearch = !search || 
@@ -51,9 +59,9 @@ export default function AvaliacoesPage() {
 
   const stats = {
     total: avaliacoes.length,
-    aprovados: avaliacoes.filter((a: any) => a.parecer === 'aprovar').length,
-    reprovados: avaliacoes.filter((a: any) => a.parecer === 'reprovar').length,
-    pendentes: avaliacoes.filter((a: any) => a.parecer === 'em_duvida' || a.parecer === 'rascunho').length,
+    aprovados: avaliacoes.filter((a) => a.parecer === 'aprovar').length,
+    reprovados: avaliacoes.filter((a) => a.parecer === 'reprovar').length,
+    pendentes: avaliacoes.filter((a) => a.parecer === 'em_duvida' || a.parecer === 'rascunho').length,
   };
 
   return (
@@ -142,7 +150,7 @@ export default function AvaliacoesPage() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {filtered.map((avaliacao: any) => {
+                    {filtered.map((avaliacao) => {
                       const parecer = avaliacao.parecer as string;
                       const config = parecerConfig[parecer] ?? { label: parecer, className: 'bg-muted text-muted-foreground border-border' };
                       return (
@@ -163,7 +171,7 @@ export default function AvaliacoesPage() {
                             </Badge>
                           </TableCell>
                           <TableCell className="text-muted-foreground">
-                            {new Date(avaliacao.created_at).toLocaleDateString('pt-BR')}
+                            {avaliacao.created_at ? new Date(avaliacao.created_at).toLocaleDateString('pt-BR') : '-'}
                           </TableCell>
                           <TableCell className="text-right">
                             <Button
