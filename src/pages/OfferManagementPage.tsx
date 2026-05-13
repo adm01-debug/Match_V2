@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { format } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
 import { Layout } from '@/components/layout/Layout';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useFuzzySearch, FUZZY_PRESETS } from '@/hooks/useFuzzySearch';
