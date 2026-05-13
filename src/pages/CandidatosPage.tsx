@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, lazy, Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { usePageTitle } from '@/hooks/usePageTitle';
@@ -8,6 +8,7 @@ import { Layout } from '@/components/layout/Layout';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Sheet } from '@/components/ui/sheet';
+import { Skeleton } from '@/components/ui/skeleton';
 import { 
   Users, UserPlus, Clock, UserCheck, UserX
 } from 'lucide-react';
@@ -15,11 +16,12 @@ import { cn } from '@/lib/utils';
 
 // New Components
 import { useCandidatosData } from '@/hooks/useCandidatosData';
-import { CandidatosChartsSection } from '@/components/candidatos/CandidatosChartsSection';
 import { CandidatosFilters } from '@/components/candidatos/CandidatosFilters';
 import { CandidatosList } from '@/components/candidatos/CandidatosList';
 import { CandidatoDetailSheet } from '@/components/candidatos/CandidatoDetailSheet';
 import { Candidato, MatchScore } from '@/types/candidate';
+
+const CandidatosChartsSection = lazy(() => import('@/components/candidatos/CandidatosChartsSection').then(m => ({ default: m.CandidatosChartsSection })));
 
 const containerVariants = {
   hidden: { opacity: 0 },
