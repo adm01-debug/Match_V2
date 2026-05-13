@@ -47,7 +47,7 @@ export default tseslint.config(
       "react/display-name": "off",
       "react/jsx-no-leaked-render": "off",
       // Console
-      "no-console": ["warn", { allow: ["warn", "error"] }],
+      "no-console": ["error", { allow: ["warn", "error"] }],
       // Import ordering
       "import/order": [
         "warn",
