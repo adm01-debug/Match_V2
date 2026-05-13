@@ -43,7 +43,6 @@ const cardHoverVariants = {
 export function CandidatosList({
   candidatos,
   isLoading,
-  searchTerm,
   getBestMatchScore,
   getMatchesForCandidate,
   onSelect,
