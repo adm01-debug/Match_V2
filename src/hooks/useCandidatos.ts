@@ -97,7 +97,8 @@ export function useCandidatosStats() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('candidatos')
-        .select('status, fonte');
+        .select('status, fonte')
+        .is('deleted_at', null);
       
       if (error) throw error;
 
