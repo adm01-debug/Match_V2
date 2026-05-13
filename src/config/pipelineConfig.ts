@@ -147,4 +147,73 @@ export const statusColors: Record<string, string> = {
   contratado: 'bg-purple-100 text-purple-700',
 };
 
+export const etapaPremiumColors: Record<string, { gradient: string; border: string; icon: string; glow: string }> = {
+  novo: { 
+    gradient: "from-blue-500/20 via-blue-500/10 to-transparent", 
+    border: "border-blue-500/30 hover:border-blue-500/50",
+    icon: "bg-blue-500",
+    glow: "shadow-blue-500/20"
+  },
+  em_triagem: { 
+    gradient: "from-cyan-500/20 via-cyan-500/10 to-transparent", 
+    border: "border-cyan-500/30 hover:border-cyan-500/50",
+    icon: "bg-cyan-500",
+    glow: "shadow-cyan-500/20"
+  },
+  pre_selecao: { 
+    gradient: "from-indigo-500/20 via-indigo-500/10 to-transparent", 
+    border: "border-indigo-500/30 hover:border-indigo-500/50",
+    icon: "bg-indigo-500",
+    glow: "shadow-indigo-500/20"
+  },
+  entrevista_rh: { 
+    gradient: "from-violet-500/20 via-violet-500/10 to-transparent", 
+    border: "border-violet-500/30 hover:border-violet-500/50",
+    icon: "bg-violet-500",
+    glow: "shadow-violet-500/20"
+  },
+  teste_tecnico: { 
+    gradient: "from-orange-500/20 via-orange-500/10 to-transparent", 
+    border: "border-orange-500/30 hover:border-orange-500/50",
+    icon: "bg-orange-500",
+    glow: "shadow-orange-500/20"
+  },
+  entrevista_gestor: { 
+    gradient: "from-cyan-500/20 via-cyan-500/10 to-transparent", 
+    border: "border-cyan-500/30 hover:border-cyan-500/50",
+    icon: "bg-cyan-500",
+    glow: "shadow-cyan-500/20"
+  },
+  entrevista_final: { 
+    gradient: "from-pink-500/20 via-pink-500/10 to-transparent", 
+    border: "border-pink-500/30 hover:border-pink-500/50",
+    icon: "bg-pink-500",
+    glow: "shadow-pink-500/20"
+  },
+  aprovado: { 
+    gradient: "from-emerald-500/20 via-emerald-500/10 to-transparent", 
+    border: "border-emerald-500/30 hover:border-emerald-500/50",
+    icon: "bg-emerald-500",
+    glow: "shadow-emerald-500/20"
+  },
+  proposta_enviada: { 
+    gradient: "from-amber-500/20 via-amber-500/10 to-transparent", 
+    border: "border-amber-500/30 hover:border-amber-500/50",
+    icon: "bg-amber-500",
+    glow: "shadow-amber-500/20"
+  },
+  contratado: { 
+    gradient: "from-emerald-500/20 via-emerald-500/10 to-transparent", 
+    border: "border-emerald-500/30 hover:border-emerald-500/50",
+    icon: "bg-emerald-500",
+    glow: "shadow-emerald-500/20"
+  },
+  reprovado: { 
+    gradient: "from-red-500/20 via-red-500/10 to-transparent", 
+    border: "border-red-500/30 hover:border-red-500/50",
+    icon: "bg-red-500",
+    glow: "shadow-red-500/20"
+  },
+};
+
 export default etapasConfig;
