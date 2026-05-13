@@ -4,7 +4,7 @@ import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
-  Brain, BarChart3, Gamepad2
+  Brain, BarChart3, Gamepad2, Award, Star, Trophy, Crown
 } from 'lucide-react';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { BEHAVIORAL_TOOLS } from '@/types/behavioral';
@@ -20,7 +20,6 @@ import {
   SwipeValuesCard,
   PersonalityMiniGame,
   PhaseChallenge,
-  type PhaseResult
 } from '@/components/assessments/gamified';
 import { 
   type LeaderboardUser,
@@ -38,7 +37,6 @@ import { BehavioralProgressHeader } from '@/components/behavioral/BehavioralProg
 import { BehavioralToolsGrid } from '@/components/behavioral/BehavioralToolsGrid';
 import { BehavioralLeaderboardTab } from '@/components/behavioral/BehavioralLeaderboardTab';
 import { BehavioralGamifiedTab } from '@/components/behavioral/BehavioralGamifiedTab';
-import { TOOL_ICONS } from './BehavioralAssessmentsPage/icons'; // Moved or kept local if small
 
 const LOCAL_TOOL_ICONS: Record<string, React.ReactNode> = {
   disc: <Brain className="h-6 w-6" />,
