@@ -104,49 +104,63 @@ const DeuMatchPage: React.FC = () => {
   }
 
   if (view === 'resultado-empresa' && perfilEmpresa) {
-    return <DeuMatchProfileResult type="empresa" perfil={perfilEmpresa} hasOtherProfile={!!perfilCandidato} onBack={() => setView('home')} onViewMatches={() => setView('matches')} />;
+    return (
+      <Suspense fallback={<Skeleton className="h-[500px] w-full" />}>
+        <DeuMatchProfileResult type="empresa" perfil={perfilEmpresa} hasOtherProfile={!!perfilCandidato} onBack={() => setView('home')} onViewMatches={() => setView('matches')} />
+      </Suspense>
+    );
   }
 
   if (view === 'resultado-candidato' && perfilCandidato) {
-    return <DeuMatchProfileResult type="candidato" perfil={perfilCandidato} hasOtherProfile={!!perfilEmpresa} onBack={() => setView('home')} onViewMatches={() => setView('matches')} />;
+    return (
+      <Suspense fallback={<Skeleton className="h-[500px] w-full" />}>
+        <DeuMatchProfileResult type="candidato" perfil={perfilCandidato} hasOtherProfile={!!perfilEmpresa} onBack={() => setView('home')} onViewMatches={() => setView('matches')} />
+      </Suspense>
+    );
   }
 
   if (view === 'matches' && matches.length > 0) {
-    return <DeuMatchesView matches={matches} empresaNome={perfilEmpresa?.empresaNome || ''} candidatoNome={perfilCandidato?.candidatoNome || ''} onBack={() => setView('home')} />;
+    return (
+      <Suspense fallback={<Skeleton className="h-[600px] w-full" />}>
+        <DeuMatchesView matches={matches} empresaNome={perfilEmpresa?.empresaNome || ''} candidatoNome={perfilCandidato?.candidatoNome || ''} onBack={() => setView('home')} />
+      </Suspense>
+    );
   }
 
   return (
     <Layout title="Deu Match">
-      <DeuMatchHome 
-        perfilEmpresa={perfilEmpresa} 
-        perfilCandidato={perfilCandidato}
-        empresaNome={empresaNome}
-        candidatoNome={candidatoNome}
-        onEmpresaNomeChange={setEmpresaNome}
-        onCandidatoNomeChange={setCandidatoNome}
-        onStartEmpresa={() => setView('quiz-empresa')}
-        onStartCandidato={() => setView('quiz-candidato')}
-        onViewResultEmpresa={() => setView('resultado-empresa')}
-        onViewResultCandidato={() => setView('resultado-candidato')}
-        onViewMatches={() => setView('matches')}
-        onReset={handleReset}
-        onResetEmpresa={() => setPerfilEmpresa(null)}
-        onResetCandidato={() => setPerfilCandidato(null)}
-      />
-      <DeuMatchActionCards 
-        empresaNome={empresaNome}
-        candidatoNome={candidatoNome}
-        onEmpresaNomeChange={setEmpresaNome}
-        onCandidatoNomeChange={setCandidatoNome}
-        perfilEmpresa={perfilEmpresa}
-        perfilCandidato={perfilCandidato}
-        onStartEmpresa={() => setView('quiz-empresa')}
-        onStartCandidato={() => setView('quiz-candidato')}
-        onViewEmpresaResult={() => setView('resultado-empresa')}
-        onViewCandidatoResult={() => setView('resultado-candidato')}
-        onResetEmpresa={() => setPerfilEmpresa(null)}
-        onResetCandidato={() => setPerfilCandidato(null)}
-      />
+      <Suspense fallback={<Skeleton className="h-screen w-full" />}>
+        <DeuMatchHome 
+          perfilEmpresa={perfilEmpresa} 
+          perfilCandidato={perfilCandidato}
+          empresaNome={empresaNome}
+          candidatoNome={candidatoNome}
+          onEmpresaNomeChange={setEmpresaNome}
+          onCandidatoNomeChange={setCandidatoNome}
+          onStartEmpresa={() => setView('quiz-empresa')}
+          onStartCandidato={() => setView('quiz-candidato')}
+          onViewResultEmpresa={() => setView('resultado-empresa')}
+          onViewResultCandidato={() => setView('resultado-candidato')}
+          onViewMatches={() => setView('matches')}
+          onReset={handleReset}
+          onResetEmpresa={() => setPerfilEmpresa(null)}
+          onResetCandidato={() => setPerfilCandidato(null)}
+        />
+        <DeuMatchActionCards 
+          empresaNome={empresaNome}
+          candidatoNome={candidatoNome}
+          onEmpresaNomeChange={setEmpresaNome}
+          onCandidatoNomeChange={setCandidatoNome}
+          perfilEmpresa={perfilEmpresa}
+          perfilCandidato={perfilCandidato}
+          onStartEmpresa={() => setView('quiz-empresa')}
+          onStartCandidato={() => setView('quiz-candidato')}
+          onViewEmpresaResult={() => setView('resultado-empresa')}
+          onViewCandidatoResult={() => setView('resultado-candidato')}
+          onResetEmpresa={() => setPerfilEmpresa(null)}
+          onResetCandidato={() => setPerfilCandidato(null)}
+        />
+      </Suspense>
     </Layout>
   );
 };
