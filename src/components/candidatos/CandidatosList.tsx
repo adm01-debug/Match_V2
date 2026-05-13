@@ -16,7 +16,6 @@ import { FuseMatch } from '@/hooks/useFuzzySearch';
 interface CandidatosListProps {
   candidatos: Candidato[];
   isLoading: boolean;
-  searchTerm: string;
   getBestMatchScore: (id: string) => MatchScore | null;
   getMatchesForCandidate: (id: string) => readonly FuseMatch[] | undefined;
   onSelect: (candidato: Candidato) => void;
