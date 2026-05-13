@@ -193,7 +193,9 @@ export default function CandidatosPage() {
           </motion.div>
         )}
 
-        <CandidatosChartsSection candidatos={candidatos} />
+        <Suspense fallback={<Skeleton className="h-[250px] w-full rounded-2xl" />}>
+          <CandidatosChartsSection candidatos={candidatos} />
+        </Suspense>
 
         <CandidatosFilters
           searchTerm={searchTerm} setSearchTerm={setSearchTerm}
