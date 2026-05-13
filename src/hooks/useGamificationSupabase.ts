@@ -41,6 +41,14 @@ const defaultState: GamificationState = {
   achievements: [],
   badges: [],
 };
+export function useGamificationSupabase() {
+  const [state, setState] = useState<GamificationState>(defaultState);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [levelUpData, setLevelUpData] = useState<{ oldLevel: number; newLevel: number } | null>(null);
+  const [recentTransactions, setRecentTransactions] = useState<XPTransaction[]>([]);
+  const { playSound } = useSoundPreferences();
+  const { user } = useAuth();
 
   // Load from localStorage (for offline/guest mode)
   const loadFromLocalStorage = useCallback(() => {
