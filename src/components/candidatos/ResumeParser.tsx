@@ -106,18 +106,18 @@ toast({
     setIsSaving(true);
 
     try {
-      const { data, error } = await supabase.from('candidatos').insert({
-        nome: parsedData.nome,
-        email: parsedData.email,
-        telefone: parsedData.telefone,
-        resumo: parsedData.resumo,
-        habilidades: parsedData.habilidades,
-        experiencias: parsedData.experiencias,
-        formacao: parsedData.formacao,
-        arquivo_curriculo: fileName,
-        fonte: 'parser_curriculo',
-        status: 'novo',
-      }).select().single();
+      const { data, error } = await supabase.rpc('create_candidato_with_details', {
+        p_nome: parsedData.nome,
+        p_email: parsedData.email,
+        p_telefone: parsedData.telefone,
+        p_resumo: parsedData.resumo,
+        p_habilidades: parsedData.habilidades,
+        p_experiencias: parsedData.experiencias,
+        p_formacao: parsedData.formacao,
+        p_arquivo_curriculo: fileName,
+        p_fonte: 'parser_curriculo',
+        p_status: 'novo',
+      });
 
       if (error) throw error;
 
