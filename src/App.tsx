@@ -406,7 +406,9 @@ function App() {
                                   path="/admin"
                                   element={
                                     <ProtectedRoute requiredRoles={["admin"]}>
-                                      <AdminPage />
+                                      <Admin2FAGuard>
+                                        <AdminPage />
+                                      </Admin2FAGuard>
                                     </ProtectedRoute>
                                   }
                                 />
