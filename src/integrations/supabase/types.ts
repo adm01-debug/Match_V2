@@ -957,6 +957,33 @@ export type Database = {
           },
         ]
       }
+      departamentos: {
+        Row: {
+          created_at: string | null
+          descricao: string | null
+          gestor_id: string | null
+          id: string
+          nome: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          descricao?: string | null
+          gestor_id?: string | null
+          id?: string
+          nome: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          descricao?: string | null
+          gestor_id?: string | null
+          id?: string
+          nome?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       documentos_candidatos: {
         Row: {
           candidato_id: string
@@ -2005,6 +2032,7 @@ export type Database = {
         Row: {
           avatar_url: string | null
           created_at: string | null
+          departamento_id: string | null
           email: string
           id: string
           nome: string
@@ -2014,6 +2042,7 @@ export type Database = {
         Insert: {
           avatar_url?: string | null
           created_at?: string | null
+          departamento_id?: string | null
           email: string
           id?: string
           nome: string
@@ -2023,13 +2052,22 @@ export type Database = {
         Update: {
           avatar_url?: string | null
           created_at?: string | null
+          departamento_id?: string | null
           email?: string
           id?: string
           nome?: string
           updated_at?: string | null
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "profiles_departamento_id_fkey"
+            columns: ["departamento_id"]
+            isOneToOne: false
+            referencedRelation: "departamentos"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       provas: {
         Row: {
@@ -2830,6 +2868,7 @@ export type Database = {
           data_publicacao: string | null
           deleted_at: string | null
           departamento: string
+          departamento_id: string | null
           descricao_empresa: string | null
           em_processo: number
           estado: string | null
@@ -2863,6 +2902,7 @@ export type Database = {
           data_publicacao?: string | null
           deleted_at?: string | null
           departamento: string
+          departamento_id?: string | null
           descricao_empresa?: string | null
           em_processo?: number
           estado?: string | null
@@ -2896,6 +2936,7 @@ export type Database = {
           data_publicacao?: string | null
           deleted_at?: string | null
           departamento?: string
+          departamento_id?: string | null
           descricao_empresa?: string | null
           em_processo?: number
           estado?: string | null
@@ -2919,7 +2960,15 @@ export type Database = {
           total_candidatos?: number
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "vagas_departamento_id_fkey"
+            columns: ["departamento_id"]
+            isOneToOne: false
+            referencedRelation: "departamentos"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       valores_culturais: {
         Row: {
