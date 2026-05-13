@@ -12,6 +12,14 @@ import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Search, ClipboardCheck, Eye } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Tables } from '@/integrations/supabase/types';
+
+type AvaliacaoWithProcesso = Tables<'avaliacoes'> & {
+  processos_seletivos: {
+    candidato_nome: string | null;
+    vaga_titulo: string | null;
+  } | null;
+};
 
 const parecerConfig: Record<string, { label: string; className: string }> = {
   aprovar: { label: 'Aprovado', className: 'bg-success/20 text-success border-success/30' },
