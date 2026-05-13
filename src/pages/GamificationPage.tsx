@@ -147,7 +147,7 @@ export default function GamificationPage() {
           </Button>
           <GamifiedAssessmentEngine
             questions={GAMIFIED_QUESTIONS}
-            onComplete={(stats) => handleGameComplete(stats['totalXP'] || 0)}
+            onComplete={(_answers, stats) => handleGameComplete(stats.totalXP)}
             onExit={() => setGamifiedMode(null)}
             title="Quiz Comportamental"
             subtitle="Teste seus conhecimentos e ganhe XP!"
