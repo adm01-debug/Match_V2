@@ -1,5 +1,5 @@
 import { Suspense, useEffect } from 'react';
-import { motion } from 'framer-motion';
+
 import { Skeleton } from '@/components/ui/skeleton';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { Layout } from "@/components/layout/Layout";
