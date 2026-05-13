@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import { useFuzzySearch, FUZZY_PRESETS } from '@/hooks/useFuzzySearch';
 import { FuzzySearchProvider } from '@/contexts/FuzzySearchContext';
-import { motion } from "framer-motion";
+
 import { Layout } from "@/components/layout/Layout";
 import { VagaCard } from "@/components/vagas/VagaCard";
 import { Button } from "@/components/ui/button";
