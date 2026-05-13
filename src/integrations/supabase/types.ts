@@ -3045,6 +3045,10 @@ export type Database = {
           new_xp: number
         }[]
       }
+      apply_for_job: {
+        Args: { p_candidato_id: string; p_notas?: string; p_vaga_id: string }
+        Returns: Json
+      }
       award_xp: {
         Args: { p_action: string; p_amount: number; p_description?: string }
         Returns: undefined
