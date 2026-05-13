@@ -377,13 +377,9 @@ export function useGamificationSupabase() {
     return levels.find(l => l.level === state.level + 1);
   }, [state.level]);
 
-  // Calculate progress to next level
   const levelProgress = useMemo(() => {
-    if (!nextLevel || !currentLevel) return 100;
-    const xpInCurrentLevel = state.xp - currentLevel.minXP;
-    const xpNeededForLevel = nextLevel.minXP - currentLevel.minXP;
-    return Math.min(100, (xpInCurrentLevel / xpNeededForLevel) * 100);
-  }, [state.xp, currentLevel, nextLevel]);
+    return calculateLevelProgress(state.xp, state.level);
+  }, [state.xp, state.level]);
 
   // XP needed for next level
   const xpToNextLevel = useMemo(() => {
