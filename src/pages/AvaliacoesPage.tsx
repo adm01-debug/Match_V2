@@ -43,11 +43,11 @@ export default function AvaliacoesPage() {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      return data || [];
+      return (data as AvaliacaoWithProcesso[]) || [];
     },
   });
 
-  const filtered = avaliacoes.filter((a: any) => {
+  const filtered = avaliacoes.filter((a) => {
     const candidato = a.processos_seletivos?.candidato_nome || '';
     const vaga = a.processos_seletivos?.vaga_titulo || '';
     const matchSearch = !search || 
@@ -59,9 +59,9 @@ export default function AvaliacoesPage() {
 
   const stats = {
     total: avaliacoes.length,
-    aprovados: avaliacoes.filter((a: any) => a.parecer === 'aprovar').length,
-    reprovados: avaliacoes.filter((a: any) => a.parecer === 'reprovar').length,
-    pendentes: avaliacoes.filter((a: any) => a.parecer === 'em_duvida' || a.parecer === 'rascunho').length,
+    aprovados: avaliacoes.filter((a) => a.parecer === 'aprovar').length,
+    reprovados: avaliacoes.filter((a) => a.parecer === 'reprovar').length,
+    pendentes: avaliacoes.filter((a) => a.parecer === 'em_duvida' || a.parecer === 'rascunho').length,
   };
 
   return (
