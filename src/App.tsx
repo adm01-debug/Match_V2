@@ -158,7 +158,9 @@ function App() {
                                   path="/security/roles"
                                   element={
                                     <ProtectedRoute requiredRoles={["admin"]}>
-                                      <RolesPage />
+                                      <Admin2FAGuard>
+                                        <RolesPage />
+                                      </Admin2FAGuard>
                                     </ProtectedRoute>
                                   }
                                 />
