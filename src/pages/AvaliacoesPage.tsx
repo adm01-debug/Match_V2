@@ -171,7 +171,7 @@ export default function AvaliacoesPage() {
                             </Badge>
                           </TableCell>
                           <TableCell className="text-muted-foreground">
-                            {new Date(avaliacao.created_at).toLocaleDateString('pt-BR')}
+                            {avaliacao.created_at ? new Date(avaliacao.created_at).toLocaleDateString('pt-BR') : '-'}
                           </TableCell>
                           <TableCell className="text-right">
                             <Button
