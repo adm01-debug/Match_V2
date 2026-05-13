@@ -20,6 +20,7 @@ import { ErrorBoundary } from "./components/ErrorBoundary";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { NewDeviceDetector } from "./components/auth/NewDeviceDetector";
 import { OnboardingProvider } from "./components/onboarding/OnboardingProvider";
+import { Admin2FAGuard } from "./components/auth/Admin2FAGuard";
 
 // Lazy loaded pages - Code splitting para melhor performance
 const Dashboard = lazy(() => import("./pages/Dashboard"));
