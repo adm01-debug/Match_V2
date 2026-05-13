@@ -189,7 +189,9 @@ export default function BehavioralAssessmentsPage() {
           </TabsContent>
 
           <TabsContent value="results" className="mt-6">
-            <BehavioralLeaderboardTab leaderboardUsers={leaderboardUsers} demoAchievements={demoAchievements} />
+            <Suspense fallback={<Skeleton className="h-[300px] w-full rounded-2xl" />}>
+              <BehavioralLeaderboardTab leaderboardUsers={leaderboardUsers} demoAchievements={demoAchievements} />
+            </Suspense>
           </TabsContent>
         </Tabs>
       </div>
