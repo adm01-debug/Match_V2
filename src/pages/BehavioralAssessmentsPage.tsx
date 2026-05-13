@@ -4,7 +4,7 @@ import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
-  Brain, BarChart3, Gamepad2, Award, Star, Trophy, Crown
+  Brain, BarChart3, Gamepad2, Award, Star, Crown
 } from 'lucide-react';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { BEHAVIORAL_TOOLS } from '@/types/behavioral';
