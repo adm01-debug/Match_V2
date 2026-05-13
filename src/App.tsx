@@ -188,7 +188,9 @@ function App() {
                                 {/* Diagnóstico - Apenas Admin */}
                                 <Route path="/diagnostico" element={
                                   <ProtectedRoute requiredRoles={["admin"]}>
-                                    <DiagnosticoPage />
+                                    <Admin2FAGuard>
+                                      <DiagnosticoPage />
+                                    </Admin2FAGuard>
                                   </ProtectedRoute>
                                 } />
                                 <Route path="/edge-functions-test" element={
