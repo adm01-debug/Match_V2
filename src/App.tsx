@@ -178,7 +178,9 @@ function App() {
                                   path="/security/rate-limit"
                                   element={
                                     <ProtectedRoute requiredRoles={["admin"]}>
-                                      <RateLimitDashboard />
+                                      <Admin2FAGuard>
+                                        <RateLimitDashboard />
+                                      </Admin2FAGuard>
                                     </ProtectedRoute>
                                   }
                                 />
