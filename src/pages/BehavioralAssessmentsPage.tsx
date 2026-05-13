@@ -75,7 +75,7 @@ export default function BehavioralAssessmentsPage() {
     completeAssessment: gamificationComplete,
   } = useBehavioralGamification();
 
-  const { xp: globalXP, streak, addXP, unlockAchievement } = useGamification();
+  const { xp: globalXP, streak, addXP } = useGamification();
   
   const [activeTab, setActiveTab] = useState('gamified');
   const [selectedTool, setSelectedTool] = useState<string | null>(null);
