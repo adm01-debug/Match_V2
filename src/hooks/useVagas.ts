@@ -83,6 +83,7 @@ export function useVagas() {
       const { data, error } = await supabase
         .from('vagas')
         .select('*')
+        .is('deleted_at', null)
         .order('data_criacao', { ascending: false });
 
       if (error) throw error;
