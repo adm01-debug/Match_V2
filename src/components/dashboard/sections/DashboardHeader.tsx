@@ -6,6 +6,8 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
+export { Tooltip, TooltipContent, TooltipTrigger };
+
 interface DashboardHeaderProps {
   resetTour: () => void;
 }
