@@ -112,7 +112,7 @@ export const SwipeValuesCard = memo(function SwipeValuesCard({
     }, 300);
   }, [currentCard, currentIndex, cards.length, liked, passed, superLiked, onComplete, onSwipe, triggerConfetti, x, y]);
 
-  const handleDragEnd = useCallback((_: any, info: PanInfo) => {
+  const handleDragEnd = useCallback((_: unknown, info: PanInfo) => {
     const { offset, velocity } = info;
     
     if (Math.abs(offset.x) > SWIPE_THRESHOLD || Math.abs(velocity.x) > 500) {
