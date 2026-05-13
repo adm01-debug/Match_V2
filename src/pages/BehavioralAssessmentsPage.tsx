@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Skeleton } from '@/components/ui/skeleton';
 import { 
   Brain, BarChart3, Gamepad2, Award, Star, Crown
 } from 'lucide-react';
@@ -35,8 +36,9 @@ import { CHALLENGE_PHASES } from '@/data/phaseChallengeData';
 // New Components
 import { BehavioralProgressHeader } from '@/components/behavioral/BehavioralProgressHeader';
 import { BehavioralToolsGrid } from '@/components/behavioral/BehavioralToolsGrid';
-import { BehavioralLeaderboardTab } from '@/components/behavioral/BehavioralLeaderboardTab';
-import { BehavioralGamifiedTab } from '@/components/behavioral/BehavioralGamifiedTab';
+
+const BehavioralLeaderboardTab = lazy(() => import('@/components/behavioral/BehavioralLeaderboardTab').then(m => ({ default: m.BehavioralLeaderboardTab })));
+const BehavioralGamifiedTab = lazy(() => import('@/components/behavioral/BehavioralGamifiedTab').then(m => ({ default: m.BehavioralGamifiedTab })));
 
 const LOCAL_TOOL_ICONS: Record<string, React.ReactNode> = {
   disc: <Brain className="h-6 w-6" />,
