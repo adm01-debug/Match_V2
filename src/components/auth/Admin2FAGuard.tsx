@@ -14,7 +14,7 @@ interface Admin2FAGuardProps {
  * Componente que obriga administradores a terem 2FA habilitado.
  */
 export function Admin2FAGuard({ children }: Admin2FAGuardProps) {
-  const { user, userRoles, loading: authLoading } = useAuth();
+  const { user, roles, loading: authLoading } = useAuth();
   const { isEnabled, isLoadingStatus } = use2FA();
   const navigate = useNavigate();
 
