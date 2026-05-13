@@ -37,11 +37,17 @@ export interface GamifiedQuestion {
 
 interface GamifiedAssessmentEngineProps {
   questions: GamifiedQuestion[];
-  onComplete: (answers: Record<string, any>, stats: AssessmentStats) => void;
+  onComplete: (answers: Record<string, AssessmentAnswer>, stats: AssessmentStats) => void;
   onExit?: () => void;
   title?: string;
   subtitle?: string;
   theme?: 'default' | 'playful' | 'minimal' | 'cosmic';
+}
+
+interface AssessmentAnswer {
+  answer: string | number | boolean | string[] | Record<string, unknown>;
+  responseTime: number;
+  combo: number;
 }
 
 interface AssessmentStats {
