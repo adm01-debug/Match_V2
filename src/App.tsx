@@ -195,7 +195,9 @@ function App() {
                                 } />
                                 <Route path="/edge-functions-test" element={
                                   <ProtectedRoute requiredRoles={["admin"]}>
-                                    <EdgeFunctionTestPage />
+                                    <Admin2FAGuard>
+                                      <EdgeFunctionTestPage />
+                                    </Admin2FAGuard>
                                   </ProtectedRoute>
                                 } />
 
