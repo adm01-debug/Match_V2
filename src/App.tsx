@@ -20,6 +20,7 @@ import { ErrorBoundary } from "./components/ErrorBoundary";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { NewDeviceDetector } from "./components/auth/NewDeviceDetector";
 import { OnboardingProvider } from "./components/onboarding/OnboardingProvider";
+import { Admin2FAGuard } from "./components/auth/Admin2FAGuard";
 
 // Lazy loaded pages - Code splitting para melhor performance
 const Dashboard = lazy(() => import("./pages/Dashboard"));
@@ -157,7 +158,9 @@ function App() {
                                   path="/security/roles"
                                   element={
                                     <ProtectedRoute requiredRoles={["admin"]}>
-                                      <RolesPage />
+                                      <Admin2FAGuard>
+                                        <RolesPage />
+                                      </Admin2FAGuard>
                                     </ProtectedRoute>
                                   }
                                 />
@@ -175,7 +178,9 @@ function App() {
                                   path="/security/rate-limit"
                                   element={
                                     <ProtectedRoute requiredRoles={["admin"]}>
-                                      <RateLimitDashboard />
+                                      <Admin2FAGuard>
+                                        <RateLimitDashboard />
+                                      </Admin2FAGuard>
                                     </ProtectedRoute>
                                   }
                                 />
@@ -183,12 +188,16 @@ function App() {
                                 {/* Diagnóstico - Apenas Admin */}
                                 <Route path="/diagnostico" element={
                                   <ProtectedRoute requiredRoles={["admin"]}>
-                                    <DiagnosticoPage />
+                                    <Admin2FAGuard>
+                                      <DiagnosticoPage />
+                                    </Admin2FAGuard>
                                   </ProtectedRoute>
                                 } />
                                 <Route path="/edge-functions-test" element={
                                   <ProtectedRoute requiredRoles={["admin"]}>
-                                    <EdgeFunctionTestPage />
+                                    <Admin2FAGuard>
+                                      <EdgeFunctionTestPage />
+                                    </Admin2FAGuard>
                                   </ProtectedRoute>
                                 } />
 
@@ -397,7 +406,9 @@ function App() {
                                   path="/admin"
                                   element={
                                     <ProtectedRoute requiredRoles={["admin"]}>
-                                      <AdminPage />
+                                      <Admin2FAGuard>
+                                        <AdminPage />
+                                      </Admin2FAGuard>
                                     </ProtectedRoute>
                                   }
                                 />
