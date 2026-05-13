@@ -158,23 +158,25 @@ export default function BehavioralAssessmentsPage() {
           </TabsList>
 
           <TabsContent value="gamified" className="mt-6">
-            <BehavioralGamifiedTab
-              onStartQuiz={() => setGamifiedMode('quiz')}
-              onStartSwipe={() => setGamifiedMode('swipe')}
-              onStartMinigame={() => setGamifiedMode('minigame')}
-              onStartPhases={() => setGamifiedMode('phases')}
-              leaderboardUsers={leaderboardUsers}
-              demoAchievements={demoAchievements}
-              totalBehavioralXP={totalBehavioralXP}
-              behavioralLevel={behavioralLevel}
-              nextBehavioralLevel={nextBehavioralLevel || null}
-              levelProgress={levelProgress}
-              completedCount={completedCount}
-              totalTools={totalTools}
-              unlockedCount={unlockedCount}
-              totalAchievements={totalAchievements}
-              achievementsWithStatus={achievementsWithStatus}
-            />
+            <Suspense fallback={<Skeleton className="h-[400px] w-full rounded-2xl" />}>
+              <BehavioralGamifiedTab
+                onStartQuiz={() => setGamifiedMode('quiz')}
+                onStartSwipe={() => setGamifiedMode('swipe')}
+                onStartMinigame={() => setGamifiedMode('minigame')}
+                onStartPhases={() => setGamifiedMode('phases')}
+                leaderboardUsers={leaderboardUsers}
+                demoAchievements={demoAchievements}
+                totalBehavioralXP={totalBehavioralXP}
+                behavioralLevel={behavioralLevel}
+                nextBehavioralLevel={nextBehavioralLevel || null}
+                levelProgress={levelProgress}
+                completedCount={completedCount}
+                totalTools={totalTools}
+                unlockedCount={unlockedCount}
+                totalAchievements={totalAchievements}
+                achievementsWithStatus={achievementsWithStatus}
+              />
+            </Suspense>
           </TabsContent>
 
           <TabsContent value="tools" className="mt-6">
