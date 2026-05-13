@@ -1,4 +1,4 @@
-import { memo, Suspense } from 'react';
+import { memo } from 'react';
 import { motion } from 'framer-motion';
 import { LayoutDashboard, Sparkles, Activity, Calendar, HelpCircle, RefreshCw } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
