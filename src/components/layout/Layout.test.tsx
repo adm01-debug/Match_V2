@@ -1,6 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render } from '@testing-library/react';
-import { axe, toHaveNoViolations } from 'vitest-axe';
+import { axe } from 'vitest-axe';
+import * as matchers from 'vitest-axe/matchers';
 import { Layout } from './Layout';
 import { BrowserRouter } from 'react-router-dom';
 import { NotificationProvider } from '@/contexts/NotificationContext';
