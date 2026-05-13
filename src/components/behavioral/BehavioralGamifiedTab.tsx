@@ -91,8 +91,10 @@ export function BehavioralGamifiedTab({
                   <Award className="h-5 w-5" />{phaseMode.btnText}
                 </Button>
               </CardContent>
-        </Card>
-      </motion.div>
+            </Card>
+          </motion.div>
+        );
+      })()}
 
       {/* Leaderboard & Achievements */}
       <div className="grid md:grid-cols-2 gap-6 mt-8">
