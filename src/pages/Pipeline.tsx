@@ -142,7 +142,8 @@ export default function Pipeline() {
           <motion.div variants={containerVariants} initial="hidden" animate="visible" className="flex gap-4 overflow-x-auto pb-6 min-h-[500px] scrollbar-thin">
             {etapasPipeline.map((etapa) => {
               const config = getEtapaConfig(etapa);
-              const colorScheme = etapaPremiumColors[etapa] || etapaPremiumColors['novo'];
+              const defaultColors = { gradient: "", border: "", icon: "", glow: "" };
+              const colorScheme = etapaPremiumColors[etapa] || etapaPremiumColors['novo'] || defaultColors;
               return (
                 <motion.div key={etapa} variants={columnVariants} className={cn("flex-shrink-0", isCompact ? "w-56" : "w-80")}>
                   <Card className={cn("h-full overflow-hidden bg-card/50 backdrop-blur-xl border", colorScheme.border, colorScheme.glow)}>
