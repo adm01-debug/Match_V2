@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { 
   ArrowLeft
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
 import Layout from '@/components/layout/Layout';
 import { CompanyValuesQuiz } from '@/components/match/CompanyValuesQuiz';
 import { CandidateValuesQuiz } from '@/components/match/CandidateValuesQuiz';
@@ -20,10 +21,10 @@ import {
 import confetti from 'canvas-confetti';
 
 // New Components
-import { DeuMatchHome } from '@/components/deu-match/DeuMatchHome';
-import { DeuMatchProfileResult } from '@/components/deu-match/DeuMatchProfileResult';
-import { DeuMatchesView } from '@/components/deu-match/DeuMatchesView';
-import { DeuMatchActionCards } from '@/components/deu-match/DeuMatchActionCards';
+const DeuMatchHome = lazy(() => import('@/components/deu-match/DeuMatchHome').then(m => ({ default: m.DeuMatchHome })));
+const DeuMatchProfileResult = lazy(() => import('@/components/deu-match/DeuMatchProfileResult').then(m => ({ default: m.DeuMatchProfileResult })));
+const DeuMatchesView = lazy(() => import('@/components/deu-match/DeuMatchesView').then(m => ({ default: m.DeuMatchesView })));
+const DeuMatchActionCards = lazy(() => import('@/components/deu-match/DeuMatchActionCards').then(m => ({ default: m.DeuMatchActionCards })));
 
 type PageView = 
   | 'home' 
