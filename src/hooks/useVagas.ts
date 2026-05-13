@@ -148,6 +148,7 @@ export function useVagasUrgentes() {
       const { data, error } = await supabase
         .from('vagas')
         .select('*')
+        .is('deleted_at', null)
         .in('prioridade', ['urgente', 'alta'])
         .in('status', ['publicada', 'em_selecao'])
         .order('prioridade')
