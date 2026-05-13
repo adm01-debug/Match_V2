@@ -52,9 +52,9 @@ export function BehavioralToolsGrid({
               <CardContent className="flex-1 flex flex-col justify-end">
                 <div className="space-y-4">
                   <div className="flex flex-wrap gap-1.5">
-                    {tool.tags?.slice(0, 3).map(tag => (
-                      <Badge key={tag} variant="outline" className="text-[10px] uppercase tracking-wider py-0 px-2 h-5">
-                        {tag}
+                    {tool.dimensions?.slice(0, 3).map(dim => (
+                      <Badge key={dim} variant="outline" className="text-[10px] uppercase tracking-wider py-0 px-2 h-5">
+                        {dim}
                       </Badge>
                     ))}
                   </div>
