@@ -132,7 +132,7 @@ export const GamifiedAssessmentEngine = memo(function GamifiedAssessmentEngine({
   }, []);
 
   // Handle answer selection
-  const handleAnswer = useCallback((questionId: string, answer: any, event?: React.MouseEvent) => {
+  const handleAnswer = useCallback((questionId: string, answer: AssessmentAnswer['answer'], event?: React.MouseEvent) => {
     const now = Date.now();
     const responseTime = now - questionStartTime;
     const isFastAnswer = responseTime < FAST_ANSWER_THRESHOLD;
