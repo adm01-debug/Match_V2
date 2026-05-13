@@ -102,7 +102,7 @@ export const GamifiedAssessmentEngine = memo(function GamifiedAssessmentEngine({
   const { addXP, level } = useGamification();
   
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [answers, setAnswers] = useState<Record<string, any>>({});
+  const [answers, setAnswers] = useState<Record<string, AssessmentAnswer>>({});
   const [phase, setPhase] = useState<'intro' | 'playing' | 'complete'>('intro');
   const [totalXP, setTotalXP] = useState(0);
   const [showXPGain, setShowXPGain] = useState<{ amount: number; x: number; y: number } | null>(null);
