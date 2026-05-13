@@ -44,6 +44,7 @@ export function useCandidatos(filters?: {
           *,
           match_scores(score_total)
         `)
+        .is('deleted_at', null)
         .order('created_at', { ascending: false });
 
       if (filters?.status) {
