@@ -1,8 +1,10 @@
+import { apiLogger } from './logger';
+
 // Slack Integration Service
 
 export const slackService = {
   async sendMessage(channel: string, message: string) {
-    console.log('[SlackService] Send to channel:', channel, message);
+    apiLogger.info('Send to channel', { channel, message });
     return { success: false, message: 'Slack not configured' };
   },
 
