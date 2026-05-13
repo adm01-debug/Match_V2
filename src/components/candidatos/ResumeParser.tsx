@@ -114,7 +114,7 @@ toast({
         p_habilidades: parsedData.habilidades,
         p_experiencias: parsedData.experiencias,
         p_formacao: parsedData.formacao,
-        p_arquivo_curriculo: fileName,
+        p_arquivo_curriculo: fileName || undefined,
         p_fonte: 'parser_curriculo',
         p_status: 'novo',
       });
