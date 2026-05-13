@@ -120,10 +120,17 @@ export default function BehavioralAssessmentsPage() {
   ];
 
   const demoAchievements: Achievement[] = achievementsWithStatus.slice(0, 5).map(a => ({
-    id: a.id, title: a.title, description: a.description, tier: a.tier, category: 'milestone', progress: a.isUnlocked ? 100 : 0, maxProgress: 100
+    id: a.id, 
+    title: a.title, 
+    description: a.description, 
+    tier: a.tier, 
+    category: 'milestone', 
+    progress: a.isUnlocked ? 100 : 0, 
+    maxProgress: 100,
+    icon: a.tier === 'diamond' ? Crown : a.tier === 'gold' ? Star : Award
   }));
 
-  if (gamifiedMode === 'quiz') return <Layout title="Quiz"><GamifiedAssessmentEngine questions={GAMIFIED_QUESTIONS} onComplete={(ans, stats) => { addXP(stats.totalXP, 'quiz'); setGamifiedMode(null); }} onExit={() => setGamifiedMode(null)} /></Layout>;
+  if (gamifiedMode === 'quiz') return <Layout title="Quiz"><GamifiedAssessmentEngine questions={GAMIFIED_QUESTIONS} onComplete={(_ans, stats) => { addXP(stats.totalXP, 'quiz'); setGamifiedMode(null); }} onExit={() => setGamifiedMode(null)} /></Layout>;
   if (gamifiedMode === 'swipe') return <Layout title="Swipe"><SwipeValuesCard cards={VALUE_CARDS} onComplete={(l) => { addXP(l.length * 10, 'swipe'); setGamifiedMode(null); }} /></Layout>;
   if (gamifiedMode === 'minigame') return <Layout title="Mini-Game"><PersonalityMiniGame games={PERSONALITY_MINI_GAMES} onComplete={(_, xp) => { addXP(xp, 'minigame'); setGamifiedMode(null); }} onExit={() => setGamifiedMode(null)} /></Layout>;
   if (gamifiedMode === 'phases') return <Layout title="Phases"><PhaseChallenge phases={CHALLENGE_PHASES} onComplete={(res) => { addXP(res.reduce((s, r) => s + r.xpEarned, 0), 'phases'); setGamifiedMode(null); }} onExit={() => setGamifiedMode(null)} /></Layout>;
@@ -158,7 +165,7 @@ export default function BehavioralAssessmentsPage() {
               demoAchievements={demoAchievements}
               totalBehavioralXP={totalBehavioralXP}
               behavioralLevel={behavioralLevel}
-              nextBehavioralLevel={nextBehavioralLevel}
+              nextBehavioralLevel={nextBehavioralLevel || null}
               levelProgress={levelProgress}
               completedCount={completedCount}
               totalTools={totalTools}
