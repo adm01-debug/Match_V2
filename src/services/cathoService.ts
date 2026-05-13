@@ -1,13 +1,15 @@
+import { apiLogger } from './logger';
+
 // Catho Integration Service
 
 export const cathoService = {
   async publishJob(jobData: Record<string, unknown>) {
-    console.log('[CathoService] Publishing job:', jobData);
+    apiLogger.info('Publishing job', { jobData });
     return { success: false, message: 'Catho API not configured' };
   },
 
   async importCandidates(jobId: string) {
-    console.log('[CathoService] Import candidates:', jobId);
+    apiLogger.info('Import candidates', { jobId });
     return [];
   },
 
