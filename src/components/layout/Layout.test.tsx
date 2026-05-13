@@ -7,7 +7,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { NotificationProvider } from '@/contexts/NotificationContext';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
-expect.extend(toHaveNoViolations);
+expect.extend(matchers);
 
 // Mock components that might be problematic in JSDOM or need complex contexts
 vi.mock('@/components/ui/sidebar', () => ({
