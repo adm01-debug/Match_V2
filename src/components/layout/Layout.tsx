@@ -225,7 +225,7 @@ export function Layout({ children, title }: LayoutProps) {
           </header>
 
           {/* Main Content with subtle background pattern */}
-          <main className="flex-1 overflow-auto pb-20 md:pb-0 relative">
+          <main id="main-content" className="flex-1 overflow-auto pb-20 md:pb-0 relative">
             {/* Subtle gradient mesh background */}
             <div className="absolute inset-0 gradient-mesh opacity-30 pointer-events-none" />
             
