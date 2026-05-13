@@ -1,49 +1,35 @@
+import { memo } from 'react';
 import { motion } from 'framer-motion';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Send, Eye, MoreHorizontal, Briefcase, Mail, DollarSign, Calendar } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { 
+  Briefcase, Mail, DollarSign, Calendar, Eye, Send, MoreHorizontal 
+} from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-interface Offer {
-  id: string;
-  candidatoNome: string;
-  candidatoEmail: string;
-  vagaTitulo: string;
-  salario: number;
-  dataInicio: Date;
-  beneficios: string[];
-  status: 'rascunho' | 'enviada' | 'visualizada' | 'aceita' | 'recusada' | 'expirada';
-  criadaEm: Date;
-  expiracaoEm?: Date;
-  assinadaEm?: Date;
-}
-
-const statusConfig: Record<string, { label: string; color: string; icon: React.ComponentType<{ className?: string }> }> = {
-  rascunho: { label: 'Rascunho', color: 'bg-gray-500', icon: Eye },
-  enviada: { label: 'Enviada', color: 'bg-blue-500', icon: Send },
-  visualizada: { label: 'Visualizada', color: 'bg-yellow-500', icon: Eye },
-  aceita: { label: 'Aceita', color: 'bg-green-500', icon: Eye },
-  recusada: { label: 'Recusada', color: 'bg-red-500', icon: Eye },
-  expirada: { label: 'Expirada', color: 'bg-orange-500', icon: Eye },
-};
-
 interface OfferCardProps {
-  offer: Offer;
+  offer: any;
   index: number;
-  onView: (offer: Offer) => void;
-  onSend: (offer: Offer) => void;
+  statusConfig: Record<string, any>;
+  onSelect: (offer: any) => void;
+  onSend: (offer: any) => void;
 }
 
-export function OfferCard({ offer, index, onView, onSend }: OfferCardProps) {
-  const config = statusConfig[offer.status] || { label: offer.status, color: 'bg-gray-500', icon: Eye };
+export const OfferCard = memo(function OfferCard({ 
+  offer, 
+  index, 
+  statusConfig, 
+  onSelect, 
+  onSend 
+}: OfferCardProps) {
+  const config = statusConfig[offer.status];
   const StatusIcon = config.icon;
-
+  
   return (
     <motion.div
-      key={offer.id}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
@@ -53,40 +39,89 @@ export function OfferCard({ offer, index, onView, onSend }: OfferCardProps) {
         <CardContent className="p-6">
           <div className="flex items-start justify-between">
             <div className="flex items-start gap-4">
-              <div className={cn("w-12 h-12 rounded-xl flex items-center justify-center text-white", config.color)}>
+              <div className={cn(
+                "w-12 h-12 rounded-xl flex items-center justify-center text-white",
+                config.color
+              )}>
                 <StatusIcon className="h-6 w-6" />
               </div>
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
                   <h3 className="font-semibold text-lg">{offer.candidatoNome}</h3>
-                  <Badge variant="outline" className={cn("text-xs",
+                  <Badge variant="outline" className={cn(
+                    "text-xs",
                     offer.status === 'aceita' && "bg-green-100 text-green-700 border-green-200",
                     offer.status === 'recusada' && "bg-red-100 text-red-700 border-red-200"
-                  )}>{config.label}</Badge>
+                  )}>
+                    {config.label}
+                  </Badge>
                 </div>
-                <p className="text-muted-foreground flex items-center gap-2"><Briefcase className="h-4 w-4" />{offer.vagaTitulo}</p>
+                <p className="text-muted-foreground flex items-center gap-2">
+                  <Briefcase className="h-4 w-4" />
+                  {offer.vagaTitulo}
+                </p>
                 <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                  <span className="flex items-center gap-1"><Mail className="h-3 w-3" />{offer.candidatoEmail}</span>
-                  <span className="flex items-center gap-1"><DollarSign className="h-3 w-3" />R$ {offer.salario.toLocaleString()}</span>
-                  <span className="flex items-center gap-1"><Calendar className="h-3 w-3" />Início: {format(offer.dataInicio, "dd/MM/yyyy")}</span>
+                  <span className="flex items-center gap-1">
+                    <Mail className="h-3 w-3" />
+                    {offer.candidatoEmail}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <DollarSign className="h-3 w-3" />
+                    R$ {offer.salario.toLocaleString()}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <Calendar className="h-3 w-3" />
+                    Início: {format(offer.dataInicio, "dd/MM/yyyy")}
+                  </span>
                 </div>
               </div>
             </div>
+
             <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm" onClick={() => onView(offer)}><Eye className="h-4 w-4 mr-1" />Visualizar</Button>
-              {offer.status === 'rascunho' && (<Button size="sm" onClick={() => onSend(offer)}><Send className="h-4 w-4 mr-1" />Enviar</Button>)}
-              <Button variant="ghost" size="icon"><MoreHorizontal className="h-4 w-4" /></Button>
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => onSelect(offer)}
+              >
+                <Eye className="h-4 w-4 mr-1" />
+                Visualizar
+              </Button>
+              {offer.status === 'rascunho' && (
+                <Button 
+                  size="sm"
+                  onClick={() => onSend(offer)}
+                >
+                  <Send className="h-4 w-4 mr-1" />
+                  Enviar
+                </Button>
+              )}
+              <Button variant="ghost" size="icon">
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
             </div>
           </div>
+
           <div className="mt-4 pt-4 border-t">
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
               <span>Criada em {format(offer.criadaEm, "dd/MM/yyyy 'às' HH:mm", { locale: ptBR })}</span>
-              {offer.expiracaoEm && (<><span>•</span><span>Expira em {format(offer.expiracaoEm, "dd/MM/yyyy")}</span></>)}
-              {offer.assinadaEm && (<><span>•</span><span className="text-green-600">Assinada em {format(offer.assinadaEm, "dd/MM/yyyy")}</span></>)}
+              {offer.expiracaoEm && (
+                <>
+                  <span>•</span>
+                  <span>Expira em {format(offer.expiracaoEm, "dd/MM/yyyy")}</span>
+                </>
+              )}
+              {offer.assinadaEm && (
+                <>
+                  <span>•</span>
+                  <span className="text-green-600">
+                    Assinada em {format(offer.assinadaEm, "dd/MM/yyyy")}
+                  </span>
+                </>
+              )}
             </div>
           </div>
         </CardContent>
       </Card>
     </motion.div>
   );
-}
+});
