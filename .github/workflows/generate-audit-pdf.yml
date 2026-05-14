@@ -1,0 +1,31 @@
+name: Generate Audit PDF
+
+on:
+  push:
+    paths:
+      - 'audit_report.md'
+  workflow_dispatch:
+
+jobs:
+  generate-pdf:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate PDF from Markdown
+        uses: baileyjm02/markdown-to-pdf@v1
+        with:
+          input_path: audit_report.md
+          output_dir: .
+          build_html: false
+
+      - name: Rename PDF
+        run: mv audit_report.pdf audit_report.pdf # Matches the expected name
+
+      - name: Commit and Push PDF
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add audit_report.pdf
+          git commit -m "docs: auto-generate audit_report.pdf" || echo "No changes to commit"
+          git push
