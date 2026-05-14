@@ -67,6 +67,7 @@ src/
 
 ## 📚 Documentação
 
+- [Auditoria Enterprise 10/10](docs/AUDITORIA_ENTERPRISE_PEOPLE_LOVERS.md)
 - [API Reference](docs/API_REFERENCE.md)
 - [Webhooks](docs/WEBHOOKS.md)
 - [SDK](docs/SDK.md)
