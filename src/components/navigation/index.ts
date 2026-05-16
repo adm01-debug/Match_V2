@@ -5,3 +5,4 @@
 
 export { BottomNavigation } from './BottomNavigation';
 export { SmartBreadcrumbs } from './SmartBreadcrumbs';
+export { BackButton } from './BackButton';
