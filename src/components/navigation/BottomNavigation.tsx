@@ -34,6 +34,16 @@ function BottomNavigationComponent() {
   const location = useLocation();
   const navigate = useNavigate();
 
+  const handleBack = () => {
+    if (window.history.length > 2) {
+      navigate(-1);
+    } else {
+      navigate('/');
+    }
+  };
+
+  const isHome = location.pathname === '/';
+
   const isActive = (path: string) => {
     if (path === '/') return location.pathname === '/';
     return location.pathname.startsWith(path);
