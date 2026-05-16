@@ -161,10 +161,16 @@ export function Layout({ children, title }: LayoutProps) {
         <AppSidebar />
         <SidebarInset className="flex flex-col flex-1">
           {/* Premium Header */}
-          <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b border-border/50 bg-card/80 backdrop-blur-xl px-6">
-            <SidebarTrigger className="text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors rounded-lg p-2">
-              <Menu className="h-5 w-5" />
-            </SidebarTrigger>
+          <header className="sticky top-0 z-10 flex h-16 items-center gap-3 border-b border-border/50 bg-card/80 backdrop-blur-xl px-4 md:px-6">
+            <div className="flex items-center gap-1 md:gap-3">
+              <SidebarTrigger className="text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors rounded-lg p-2">
+                <Menu className="h-5 w-5" />
+              </SidebarTrigger>
+              
+              <div className="hidden sm:block h-6 w-px bg-border/50 mx-1" />
+              
+              <BackButton />
+            </div>
             
             {title && (
               <motion.h1 
