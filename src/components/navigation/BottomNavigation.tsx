@@ -60,6 +60,20 @@ function BottomNavigationComponent() {
     >
       <div className="bg-background/95 backdrop-blur-lg border-t border-border shadow-lg">
         <div className="flex items-center justify-around px-2 py-1 safe-area-bottom">
+          {!isHome && (
+            <motion.button
+              onClick={handleBack}
+              whileTap={{ scale: 0.9 }}
+              className="flex flex-col items-center justify-center py-2 px-3 rounded-xl min-w-[50px] transition-colors text-muted-foreground hover:text-foreground"
+              aria-label="Voltar"
+            >
+              <div className="relative z-10">
+                <ChevronLeft className="h-5 w-5" />
+              </div>
+              <span className="text-[10px] font-medium mt-1 relative z-10">Voltar</span>
+            </motion.button>
+          )}
+
           {navItems.map((item) => {
             const active = isActive(item.path);
             const Icon = item.icon;
