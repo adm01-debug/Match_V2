@@ -16,6 +16,7 @@ import { OnboardingTour } from "@/components/onboarding/OnboardingTour";
 import { BottomNavigation } from "@/components/navigation/BottomNavigation";
 import { ThemeToggle } from "@/components/common/ThemeToggle";
 import { SmartBreadcrumbs } from "@/components/navigation/SmartBreadcrumbs";
+import { BackButton } from "@/components/navigation/BackButton";
 import { 
   KeyboardShortcutsOverlay, 
   useKeyboardShortcuts,
