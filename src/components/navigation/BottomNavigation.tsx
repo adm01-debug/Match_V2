@@ -12,6 +12,7 @@ import {
   Calendar, 
   Settings,
   Kanban,
+  ChevronLeft
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
