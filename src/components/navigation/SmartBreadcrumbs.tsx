@@ -302,17 +302,19 @@ export const SmartBreadcrumbs = memo(function SmartBreadcrumbs({
                     {/* Continue with current item */}
                     <BreadcrumbItem>
                       {isLast ? (
-                        <BreadcrumbPage className="flex items-center gap-1.5 font-medium">
-                          <Icon className="h-4 w-4" />
-                          {crumb.label}
+                        <BreadcrumbPage className="flex items-center gap-1.5 font-medium text-primary">
+                          <Icon className="h-4 w-4 animate-in fade-in zoom-in duration-300" />
+                          <span className="animate-in slide-in-from-left-1 duration-300">
+                            {crumb.label}
+                          </span>
                         </BreadcrumbPage>
                       ) : (
                         <BreadcrumbLink asChild>
                           <Link 
                             to={crumb.path}
-                            className="flex items-center gap-1.5 hover:text-primary transition-colors"
+                            className="flex items-center gap-1.5 hover:text-primary transition-all duration-200 hover:translate-x-0.5"
                           >
-                            <Icon className="h-4 w-4" />
+                            <Icon className="h-4 w-4 opacity-70" />
                             {crumb.label}
                           </Link>
                         </BreadcrumbLink>
@@ -339,17 +341,19 @@ export const SmartBreadcrumbs = memo(function SmartBreadcrumbs({
                   
                   <BreadcrumbItem>
                     {isLast ? (
-                      <BreadcrumbPage className="flex items-center gap-1.5 font-medium">
-                        <Icon className="h-4 w-4" />
-                        {crumb.label}
+                      <BreadcrumbPage className="flex items-center gap-1.5 font-medium text-primary">
+                        <Icon className="h-4 w-4 animate-in fade-in zoom-in duration-300" />
+                        <span className="animate-in slide-in-from-left-1 duration-300">
+                          {crumb.label}
+                        </span>
                       </BreadcrumbPage>
                     ) : (
                       <BreadcrumbLink asChild>
                         <Link 
                           to={crumb.path}
-                          className="flex items-center gap-1.5 hover:text-primary transition-colors"
+                          className="flex items-center gap-1.5 hover:text-primary transition-all duration-200 hover:translate-x-0.5"
                         >
-                          <Icon className="h-4 w-4" />
+                          <Icon className="h-4 w-4 opacity-70" />
                           {crumb.label}
                         </Link>
                       </BreadcrumbLink>
@@ -372,10 +376,11 @@ export const SmartBreadcrumbs = memo(function SmartBreadcrumbs({
                 key={action.path}
                 to={action.path}
                 className={cn(
-                  "flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium",
-                  "bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
+                  "flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium relative overflow-hidden group",
+                  "bg-primary/10 text-primary hover:bg-primary/20 transition-all duration-300 hover:shadow-sm"
                 )}
               >
+                <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-500" />
                 <ActionIcon className="h-3.5 w-3.5" />
                 {action.label}
               </Link>
