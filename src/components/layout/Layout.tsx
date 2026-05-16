@@ -131,6 +131,13 @@ export function Layout({ children, title }: LayoutProps) {
       category: 'Geral',
       action: () => navigate('/'),
     },
+    {
+      id: 'general-back',
+      keys: ['alt', 'ArrowLeft'],
+      description: 'Voltar para página anterior',
+      category: 'Geral',
+      action: () => navigate(-1),
+    },
   ], [navigate]);
 
   const { overlayOpen, closeOverlay, openOverlay } = useKeyboardShortcuts({ shortcuts });
