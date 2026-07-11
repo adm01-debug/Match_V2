@@ -59,7 +59,7 @@ export default function CandidatoPerfilPage() {
             <TabsTrigger value="candidaturas">Candidaturas ({candidato.candidaturas.length})</TabsTrigger>
             <TabsTrigger value="entrevistas">Entrevistas ({candidato.entrevistas.length})</TabsTrigger>
           </TabsList>
-          <TabsContent value="resumo" className="mt-4"><CandidateResumoTab habilidades={candidato.habilidades} experiencias={candidato.experiencias} formacoes={candidato.formacoes} /></TabsContent>
+          <TabsContent value="resumo" className="mt-4"><CandidateResumoTab habilidades={candidato.habilidades} experiencias={candidato.experiencias as Array<{cargo?: string; empresa?: string}>} formacoes={candidato.formacoes as Array<{curso?: string; instituicao?: string}>} /></TabsContent>
           <TabsContent value="candidaturas" className="mt-4">
             <Card><CardHeader><CardTitle>Candidaturas</CardTitle></CardHeader>
             <CardContent>{candidato.candidaturas.length > 0 ? (

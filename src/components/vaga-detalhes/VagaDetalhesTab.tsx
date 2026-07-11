@@ -37,7 +37,7 @@ export const VagaDetalhesTab = memo(function VagaDetalhesTab({ vaga }: VagaDetal
                 ? `R$ ${vaga.salarioMin.toLocaleString()} - R$ ${vaga.salarioMax.toLocaleString()}` : 'Não informado'}
             </p>
           </div>
-          {vaga.beneficios?.length > 0 && (
+          {vaga.beneficios && vaga.beneficios.length > 0 && (
             <>
               <Separator />
               <div><p className="text-sm text-muted-foreground mb-2">Benefícios</p>
