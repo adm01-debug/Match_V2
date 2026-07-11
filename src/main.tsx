@@ -60,3 +60,6 @@ createRoot(rootElement).render(
     <App />
   </StrictMode>
 );
+
+// Inicia coleta de Web Vitals após primeiro paint (não bloqueia render)
+void initWebVitals();
