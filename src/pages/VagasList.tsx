@@ -58,7 +58,7 @@ export default function VagasList() {
         <div className="flex gap-2">
           {["todas", "publicada", "aguardando_aprovacao", "encerrada"].map(t => (
             <Button key={t} variant={statusFilter === t ? "default" : "outline"} size="sm" onClick={() => { setStatusFilter(t); playClick(); }}>
-              {t} <Badge variant="secondary" className="ml-1">{(stats as any)[t] || 0}</Badge>
+              {t} <Badge variant="secondary" className="ml-1">{stats[t as keyof typeof stats] || 0}</Badge>
             </Button>
           ))}
         </div>

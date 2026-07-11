@@ -59,11 +59,11 @@ export default function CandidatoPerfilPage() {
             <TabsTrigger value="candidaturas">Candidaturas ({candidato.candidaturas.length})</TabsTrigger>
             <TabsTrigger value="entrevistas">Entrevistas ({candidato.entrevistas.length})</TabsTrigger>
           </TabsList>
-          <TabsContent value="resumo" className="mt-4"><CandidateResumoTab habilidades={candidato.habilidades} experiencias={candidato.experiencias} formacoes={candidato.formacoes} /></TabsContent>
+          <TabsContent value="resumo" className="mt-4"><CandidateResumoTab habilidades={candidato.habilidades} experiencias={candidato.experiencias as Array<{cargo?: string; empresa?: string}>} formacoes={candidato.formacoes as Array<{curso?: string; instituicao?: string}>} /></TabsContent>
           <TabsContent value="candidaturas" className="mt-4">
             <Card><CardHeader><CardTitle>Candidaturas</CardTitle></CardHeader>
             <CardContent>{candidato.candidaturas.length > 0 ? (
-              <div className="space-y-3">{candidato.candidaturas.map((c: any) => (
+              <div className="space-y-3">{candidato.candidaturas.map((c: { id: string; vaga_titulo: string; status: string }) => (
                 <div key={c.id} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg"><p className="font-medium">{c.vaga_titulo}</p><Badge variant="outline">{c.status}</Badge></div>
               ))}</div>
             ) : <p className="text-center py-8 text-muted-foreground">Nenhuma</p>}</CardContent></Card>
@@ -71,7 +71,7 @@ export default function CandidatoPerfilPage() {
           <TabsContent value="entrevistas" className="mt-4">
             <Card><CardHeader><CardTitle>Entrevistas</CardTitle></CardHeader>
             <CardContent>{candidato.entrevistas.length > 0 ? (
-              <div className="space-y-3">{candidato.entrevistas.map((e: any) => (
+              <div className="space-y-3">{candidato.entrevistas.map((e: { id: string; data: string; tipo: string; status: string }) => (
                 <div key={e.id} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg"><div><p className="font-medium">{format(new Date(e.data), 'dd/MM/yyyy', { locale: ptBR })}</p><p className="text-sm text-muted-foreground">{e.tipo}</p></div><Badge variant="outline">{e.status}</Badge></div>
               ))}</div>
             ) : <p className="text-center py-8 text-muted-foreground">Nenhuma</p>}</CardContent></Card>

@@ -12,7 +12,7 @@ interface PipelineHeaderProps {
   setSearchQuery: (query: string) => void;
   vagaSelecionada: string;
   setVagaSelecionada: (vagaId: string) => void;
-  vagasAtivas: any[];
+  vagasAtivas: Array<{ id: string; titulo: string }>;
   isCompact: boolean;
   setIsCompact: (compact: boolean) => void;
   isRefreshing: boolean;
