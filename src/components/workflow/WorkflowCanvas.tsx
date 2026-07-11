@@ -8,6 +8,7 @@ import {
   addEdge,
   type Connection,
   type Edge,
+  type Node as FlowNode,
   BackgroundVariant,
   Panel,
 } from '@xyflow/react';
@@ -37,8 +38,8 @@ export function WorkflowCanvas({ initialNodes = [], initialEdges = [], onSave }:
     webhook: WebhookNode,
   }), []);
 
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes as any[]);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges as any[]);
+  const [nodes, setNodes, onNodesChange] = useNodesState<FlowNode>(initialNodes as FlowNode[]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>(initialEdges as Edge[]);
   const [nodeCount, setNodeCount] = useState(initialNodes.length);
 
   const onConnect = useCallback((params: Connection) => {
@@ -47,13 +48,13 @@ export function WorkflowCanvas({ initialNodes = [], initialEdges = [], onSave }:
 
   const addNode = useCallback((type: string, label: string, description: string) => {
     const id = `${type}_${nodeCount + 1}`;
-    const newNode = {
+    const newNode: FlowNode = {
       id,
       type,
       position: { x: 250 + Math.random() * 100, y: 100 + nodeCount * 150 },
       data: { label, description },
     };
-    setNodes(nds => [...nds, newNode]);
+    setNodes((nds) => [...nds, newNode]);
     setNodeCount(c => c + 1);
   }, [nodeCount, setNodes]);
 

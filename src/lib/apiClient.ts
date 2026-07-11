@@ -5,13 +5,17 @@
 
 import { supabase } from '@/integrations/supabase/client';
 
+// Supabase exige nomes de tabela como literais tipados. Como este cliente
+// é genérico por design (recebe o nome em runtime), usamos `never` para
+// bypass do constraint de literal sem cair em `any`.
+type AnyTable = never;
+
 export const apiClient = {
   async get<T>(table: string, options?: { eq?: Record<string, unknown> }): Promise<T[]> {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let query = supabase.from(table as any).select('*');
+    let query = supabase.from(table as AnyTable).select('*');
     if (options?.eq) {
       Object.entries(options.eq).forEach(([key, value]) => {
-        query = query.eq(key, value);
+        query = query.eq(key, value as never);
       });
     }
     const { data, error } = await query;
@@ -20,27 +24,32 @@ export const apiClient = {
   },
 
   async create<T>(table: string, data: Partial<T>): Promise<T> {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data: result, error } = await supabase.from(table as any).insert(data as any).select().single();
+    const { data: result, error } = await supabase
+      .from(table as AnyTable)
+      .insert(data as never)
+      .select()
+      .single();
     if (error) throw error;
     return result as T;
   },
 
   async update<T>(table: string, id: string, data: Partial<T>): Promise<T> {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data: result, error } = await supabase.from(table as any).update(data as any).eq('id', id).select().single();
+    const { data: result, error } = await supabase
+      .from(table as AnyTable)
+      .update(data as never)
+      .eq('id', id)
+      .select()
+      .single();
     if (error) throw error;
     return result as T;
   },
 
   async delete(table: string, id: string): Promise<void> {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { error } = await supabase.from(table as any).delete().eq('id', id);
+    const { error } = await supabase.from(table as AnyTable).delete().eq('id', id);
     if (error) throw error;
   },
 
   async request<T>(options: { method: string; url: string; data?: unknown }): Promise<T> {
-    // Generic request handler for compatibility
     const urlParts = options.url.replace(/^\//, '').split('/');
     const table = urlParts[0] ?? '';
     if (options.method === 'GET') {
@@ -60,19 +69,17 @@ export const apiClient = {
   },
 };
 
-// Note: handleApiError is now centralized in errorHandler.ts
-
 export function createApiUrl(path: string, params?: Record<string, unknown>): string {
   const baseUrl = path.startsWith('/') ? path : `/${path}`;
   if (!params) return baseUrl;
-  
+
   const searchParams = new URLSearchParams();
   Object.entries(params).forEach(([key, value]) => {
     if (value !== undefined && value !== null) {
       searchParams.append(key, String(value));
     }
   });
-  
+
   const queryString = searchParams.toString();
   return queryString ? `${baseUrl}?${queryString}` : baseUrl;
 }

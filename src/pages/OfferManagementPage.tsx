@@ -19,22 +19,8 @@ import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import { OfferStats } from '@/components/offers/OfferStats';
 import { OfferFilters } from '@/components/offers/OfferFilters';
-import { OfferCard } from '@/components/offers/OfferCard';
+import { OfferCard, type Offer } from '@/components/offers/OfferCard';
 import { CreateOfferDialog } from '@/components/offers/CreateOfferDialog';
-
-interface Offer {
-  id: string;
-  candidatoNome: string;
-  candidatoEmail: string;
-  vagaTitulo: string;
-  salario: number;
-  dataInicio: Date;
-  beneficios: string[];
-  status: 'rascunho' | 'enviada' | 'visualizada' | 'aceita' | 'recusada' | 'expirada';
-  criadaEm: Date;
-  expiracaoEm?: Date;
-  assinadaEm?: Date;
-}
 
 const mockOffers: Offer[] = [
   { id: '1', candidatoNome: 'Ana Carolina Silva', candidatoEmail: 'ana.silva@email.com', vagaTitulo: 'Desenvolvedor Full Stack Senior', salario: 18000, dataInicio: new Date('2024-02-01'), beneficios: ['VR', 'VT', 'Plano de Saúde', 'PLR'], status: 'enviada', criadaEm: new Date(), expiracaoEm: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) },

@@ -2203,6 +2203,36 @@ export type Database = {
         }
         Relationships: []
       }
+      rate_limits: {
+        Row: {
+          count: number
+          created_at: string
+          id: string
+          key: string
+          route: string
+          updated_at: string
+          window_start: string
+        }
+        Insert: {
+          count?: number
+          created_at?: string
+          id?: string
+          key: string
+          route: string
+          updated_at?: string
+          window_start?: string
+        }
+        Update: {
+          count?: number
+          created_at?: string
+          id?: string
+          key?: string
+          route?: string
+          updated_at?: string
+          window_start?: string
+        }
+        Relationships: []
+      }
       regras_automacao: {
         Row: {
           acoes: Json
@@ -3148,6 +3178,15 @@ export type Database = {
         Returns: undefined
       }
       calculate_level_from_xp: { Args: { xp_amount: number }; Returns: number }
+      check_rate_limit: {
+        Args: {
+          p_key: string
+          p_max: number
+          p_route: string
+          p_window_seconds?: number
+        }
+        Returns: boolean
+      }
       cleanup_old_login_attempts: { Args: never; Returns: undefined }
       cleanup_old_logs: { Args: never; Returns: undefined }
       create_candidato_with_details: {

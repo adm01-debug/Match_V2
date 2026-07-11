@@ -38,10 +38,27 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
   useEffect(() => {
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
+      (event, session) => {
+        // Auto-logout defensivo: refresh falhou ou usuário deletado
+        if (event === 'TOKEN_REFRESHED' && !session) {
+          setSession(null);
+          setUser(null);
+          setRoles([]);
+          setLoading(false);
+          void supabase.auth.signOut();
+          return;
+        }
+        if (event === 'USER_UPDATED' && !session) {
+          setSession(null);
+          setUser(null);
+          setRoles([]);
+          setLoading(false);
+          return;
+        }
+
         setSession(session);
         setUser(session?.user ?? null);
-        
+
         if (session?.user) {
           setTimeout(() => {
             fetchUserRoles(session.user.id);
@@ -49,7 +66,7 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
         } else {
           setRoles([]);
         }
-        
+
         setLoading(false);
       }
     );

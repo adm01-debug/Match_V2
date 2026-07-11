@@ -13,6 +13,7 @@
 
 import { serve } from 'https://deno.land/std@0.208.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { enforceRateLimit } from "../_shared/rateLimit.ts";
 
 const WEBHOOK_SECRET = Deno.env.get('WEBHOOK_SIGNING_SECRET') ?? '';
 
@@ -74,6 +75,10 @@ serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
   }
+
+  const limited = await enforceRateLimit(req, { route: "webhook-handler", max: 30 });
+  if (limited) return limited;
+
 
   if (req.method !== 'POST') {
     return new Response(JSON.stringify({ error: 'Method not allowed' }), {
