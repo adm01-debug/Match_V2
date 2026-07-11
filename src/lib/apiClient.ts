@@ -15,7 +15,7 @@ export const apiClient = {
     let query = supabase.from(table as AnyTable).select('*');
     if (options?.eq) {
       Object.entries(options.eq).forEach(([key, value]) => {
-        query = query.eq(key, value);
+        query = query.eq(key, value as never);
       });
     }
     const { data, error } = await query;
