@@ -52,7 +52,7 @@ export function BehavioralResultsDashboard({
   const radarData = useMemo(
     () =>
       BEHAVIORAL_PILLARS.map((pilar) => ({
-        pilar: pilar.nome.split(' ')[0],
+        pilar: pilar.nome.split(' ')[0] ?? pilar.nome,
         fullName: pilar.nome,
         score: scores[pilar.id] || 0,
         empresa: companyProfile ? (companyProfile[pilar.id] || 5) * 10 : undefined,
