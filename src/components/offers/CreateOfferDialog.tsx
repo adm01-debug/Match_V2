@@ -8,12 +8,27 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Plus } from 'lucide-react';
 
+export interface NewOfferState {
+  candidatoNome: string;
+  candidatoEmail: string;
+  vagaTitulo: string;
+  salario: string;
+  dataInicio: string;
+  beneficios: string[];
+  template: string;
+}
+
+export interface OfferTemplateOption {
+  id: string;
+  nome: string;
+}
+
 interface CreateOfferDialogProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
-  newOffer: any;
-  setNewOffer: (offer: any) => void;
-  templates: any[];
+  newOffer: NewOfferState;
+  setNewOffer: React.Dispatch<React.SetStateAction<NewOfferState>>;
+  templates: OfferTemplateOption[];
   onCreate: () => void;
 }
 
