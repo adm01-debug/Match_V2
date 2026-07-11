@@ -5,7 +5,7 @@
  * extraído para um subcomponente dedicado em `./personality/*`.
  */
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Brain, Users, Compass, Shield, Sparkles, X } from 'lucide-react';
