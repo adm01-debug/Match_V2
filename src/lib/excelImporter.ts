@@ -1,3 +1,4 @@
+import { logger } from '@/services/logger';
 /**
  * Excel/CSV Export utilities
  * @module lib/excelImporter
@@ -18,7 +19,7 @@ export function exportToExcel<T extends Record<string, unknown>>(
   _sheetName: string = 'Dados'
 ): void {
   if (!data || data.length === 0) {
-    console.warn('[exportToExcel] No data to export');
+    logger.warn('[exportToExcel] No data to export');
     return;
   }
 

@@ -7,6 +7,7 @@ import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { Database } from '@/integrations/supabase/types';
+import { logger } from '@/services/logger';
 
 type ComunicacaoRow = Database['public']['Tables']['comunicacoes']['Row'];
 
@@ -25,7 +26,7 @@ async function enviarEmailReal(to: string, subject: string, html: string) {
     body: { to, subject, html },
   });
   if (error) {
-    console.warn('Envio real de email falhou (registrado mesmo assim):', error.message);
+    logger.warn('Envio real de email falhou (registrado mesmo assim):', error.message);
     return { sent: false, error: error.message };
   }
   return { sent: true, id: data?.id };

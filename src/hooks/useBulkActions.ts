@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import type { LucideIcon } from 'lucide-react';
+import { logger } from '@/services/logger';
 
 /**
  * Type for bulk action configuration
@@ -115,7 +116,7 @@ export function useBulkActions(options: BulkActionOptions = {}) {
       }
     },
     onError: (error) => {
-      console.error('[useBulkActions] Archive error:', error);
+      logger.error('[useBulkActions] Archive error:', error);
       toast({ 
         title: 'Erro', 
         description: 'Falha ao arquivar candidatos.',
@@ -163,7 +164,7 @@ export function useBulkActions(options: BulkActionOptions = {}) {
       }
     },
     onError: (error) => {
-      console.error('[useBulkActions] Delete error:', error);
+      logger.error('[useBulkActions] Delete error:', error);
       toast({ 
         title: 'Erro', 
         description: 'Falha ao excluir candidatos.',
@@ -215,7 +216,7 @@ export function useBulkActions(options: BulkActionOptions = {}) {
       }
     },
     onError: (error) => {
-      console.error('[useBulkActions] Move error:', error);
+      logger.error('[useBulkActions] Move error:', error);
       toast({ 
         title: 'Erro', 
         description: 'Falha ao mover candidatos.',
@@ -285,7 +286,7 @@ export function useBulkActions(options: BulkActionOptions = {}) {
       }
     },
     onError: (error) => {
-      console.error('[useBulkActions] Tags error:', error);
+      logger.error('[useBulkActions] Tags error:', error);
       toast({ 
         title: 'Erro', 
         description: 'Falha ao adicionar tags.',
@@ -343,7 +344,7 @@ export function useBulkActions(options: BulkActionOptions = {}) {
       });
     },
     onError: (error) => {
-      console.error('[useBulkActions] Remove tags error:', error);
+      logger.error('[useBulkActions] Remove tags error:', error);
       toast({ 
         title: 'Erro', 
         description: 'Falha ao remover tags.',

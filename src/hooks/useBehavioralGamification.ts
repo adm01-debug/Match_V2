@@ -13,6 +13,7 @@ import { useGamificationTriggers } from './useGamificationTriggers';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { 
+import { logger } from '@/services/logger';
   BEHAVIORAL_XP_REWARDS, 
   BEHAVIORAL_ACHIEVEMENTS,
   BEHAVIORAL_LEVELS,
@@ -92,7 +93,7 @@ export function useBehavioralGamification() {
           }
         }
       } catch (error) {
-        console.error('Error loading behavioral gamification state:', error);
+        logger.error('Error loading behavioral gamification state:', error);
       }
       setIsLoaded(true);
     };
@@ -107,7 +108,7 @@ export function useBehavioralGamification() {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
       } catch (error) {
-        console.error('Error saving behavioral gamification state:', error);
+        logger.error('Error saving behavioral gamification state:', error);
       }
       return updated;
     });

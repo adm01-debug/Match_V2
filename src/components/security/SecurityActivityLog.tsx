@@ -12,6 +12,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { supabase } from '@/integrations/supabase/client';
 import { formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { logger } from '@/services/logger';
 
 interface ActivityLog {
   id: string;
@@ -62,7 +63,7 @@ export function SecurityActivityLog() {
       if (error) throw error;
       setLogs(data || []);
     } catch (error) {
-      console.error('Error loading security logs:', error);
+      logger.error('Error loading security logs:', error);
     } finally {
       setIsLoading(false);
     }

@@ -12,6 +12,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Loader2, Phone, CheckCircle2, AlertTriangle, MessageSquare } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import { logger } from '@/services/logger';
 
 interface MFASMSSetupProps {
   onComplete?: () => void;
@@ -69,7 +70,7 @@ export function MFASMSSetup({ onComplete, onCancel }: MFASMSSetupProps) {
       setStep('verify');
     } catch (err) {
       setError('Erro ao enviar código. Tente novamente.');
-      console.error('[MFASMSSetup] Error sending code:', err);
+      logger.error('[MFASMSSetup] Error sending code:', err);
     } finally {
       setIsLoading(false);
     }
@@ -106,7 +107,7 @@ export function MFASMSSetup({ onComplete, onCancel }: MFASMSSetupProps) {
       onComplete?.();
     } catch (err) {
       setError('Código inválido. Tente novamente.');
-      console.error('[MFASMSSetup] Verification error:', err);
+      logger.error('[MFASMSSetup] Verification error:', err);
     } finally {
       setIsLoading(false);
     }

@@ -5,6 +5,7 @@
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useSoundPreferences } from './useSoundPreferences';
+import { logger } from '@/services/logger';
 
 const STORAGE_KEY = 'user-gamification';
 
@@ -100,7 +101,7 @@ export function useGamification() {
         setState({ ...defaultState, ...parsed });
       }
     } catch (error) {
-      console.error('Error loading gamification state:', error);
+      logger.error('Error loading gamification state:', error);
     }
     setIsLoaded(true);
   }, []);
@@ -112,7 +113,7 @@ export function useGamification() {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
       } catch (error) {
-        console.error('Error saving gamification state:', error);
+        logger.error('Error saving gamification state:', error);
       }
       return updated;
     });
@@ -179,7 +180,7 @@ export function useGamification() {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
       } catch (error) {
-        console.error('Error saving XP:', error);
+        logger.error('Error saving XP:', error);
       }
 
       return updated;
@@ -227,7 +228,7 @@ export function useGamification() {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
       } catch (error) {
-        console.error('Error saving streak:', error);
+        logger.error('Error saving streak:', error);
       }
 
       return updated;

@@ -3,6 +3,7 @@ import { useLocation, Link, useNavigate } from 'react-router-dom';
 import { useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Home, ArrowLeft, Search } from 'lucide-react';
+import { logger } from '@/services/logger';
 
 function NotFound() {
   usePageTitle('Página não encontrada');
@@ -12,7 +13,7 @@ function NotFound() {
   useEffect(() => {
     // Log 404 for analytics in development
     if (import.meta.env.DEV) {
-      console.warn(`[404] Route not found: ${location.pathname}`);
+      logger.warn(`[404] Route not found: ${location.pathname}`);
     }
   }, [location.pathname]);
 

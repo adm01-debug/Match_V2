@@ -5,6 +5,7 @@ import { use2FA } from '@/hooks/use2FA';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { ShieldAlert } from 'lucide-react';
+import { logger } from '@/services/logger';
 
 interface Admin2FAGuardProps {
   children: React.ReactNode;
@@ -24,7 +25,7 @@ export function Admin2FAGuard({ children }: Admin2FAGuardProps) {
   useEffect(() => {
     if (!loading && user && isAdmin && !isEnabled) {
       // Redirecionar para página de segurança se for admin e não tiver 2FA
-      console.warn('Admin sem 2FA detectado. Redirecionando...');
+      logger.warn('Admin sem 2FA detectado. Redirecionando...');
       navigate('/auth/2fa?required=true');
     }
   }, [loading, user, isAdmin, isEnabled, navigate]);

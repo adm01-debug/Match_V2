@@ -4,6 +4,7 @@
  */
 
 import { ReactNode, createContext, useContext } from 'react';
+import { logger } from '@/services/logger';
 
 interface AnalyticsContextType {
   trackEvent: (name: string, data?: Record<string, unknown>) => void;
@@ -20,14 +21,14 @@ export function AnalyticsProvider({ children }: AnalyticsProviderProps) {
   const trackEvent = (name: string, data?: Record<string, unknown>) => {
     // Integração com analytics pode ser adicionada aqui
     if (import.meta.env.DEV) {
-      console.debug('[Analytics] Event:', name, data);
+      logger.debug('[Analytics] Event:', name, data);
     }
   };
 
   const trackPageView = (path: string) => {
     // Integração com analytics pode ser adicionada aqui
     if (import.meta.env.DEV) {
-      console.debug('[Analytics] Page View:', path);
+      logger.debug('[Analytics] Page View:', path);
     }
   };
 

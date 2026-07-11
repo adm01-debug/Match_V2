@@ -7,6 +7,7 @@ import { memo, ReactNode, useState, useRef, useCallback } from 'react';
 import { motion, useMotionValue, useTransform, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { RefreshCw, ArrowDown, Check, Loader2 } from 'lucide-react';
+import { logger } from '@/services/logger';
 
 type RefreshState = 'idle' | 'pulling' | 'ready' | 'refreshing' | 'complete';
 
@@ -91,7 +92,7 @@ export const PullToRefresh = memo(function PullToRefresh({
         setState('complete');
         await new Promise(resolve => setTimeout(resolve, 500));
       } catch (error) {
-        console.error('Refresh failed:', error);
+        logger.error('Refresh failed:', error);
       } finally {
         y.set(0);
         setState('idle');

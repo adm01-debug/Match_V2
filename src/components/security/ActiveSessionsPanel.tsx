@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import {
+import { logger } from '@/services/logger';
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -108,7 +109,7 @@ export function ActiveSessionsPanel() {
 
       setSessions(sessionData);
     } catch (error) {
-      console.error('Error loading sessions:', error);
+      logger.error('Error loading sessions:', error);
       toast.error('Erro ao carregar sessões');
     } finally {
       setIsLoading(false);
@@ -121,7 +122,7 @@ export function ActiveSessionsPanel() {
       toast.success('Todas as outras sessões foram encerradas');
       loadSessions();
     } catch (error) {
-      console.error('Error terminating sessions:', error);
+      logger.error('Error terminating sessions:', error);
       toast.error('Erro ao encerrar sessões');
     }
   };

@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useToast } from '@/hooks/use-toast';
+import { logger } from '@/services/logger';
 
 export interface PushSubscriptionData { 
   endpoint: string; 
@@ -63,7 +64,7 @@ export function usePushNotifications(): UsePushNotificationsReturn {
             }
           }
         } catch (e) {
-          console.warn('[usePushNotifications] Error checking existing subscription:', e);
+          logger.warn('[usePushNotifications] Error checking existing subscription:', e);
         }
       }
     };
@@ -100,7 +101,7 @@ export function usePushNotifications(): UsePushNotificationsReturn {
         setIsSubscribed(false);
       }
     } catch (e) {
-      console.warn('[usePushNotifications] Error checking subscription:', e);
+      logger.warn('[usePushNotifications] Error checking subscription:', e);
     }
   }, [isSupported]);
 
@@ -159,7 +160,7 @@ export function usePushNotifications(): UsePushNotificationsReturn {
     const vapidKey = import.meta.env['VITE_VAPID_PUBLIC_KEY'] as string | undefined;
     if (!vapidKey) {
       setError('VAPID key não configurada');
-      console.error('[usePushNotifications] VITE_VAPID_PUBLIC_KEY not set');
+      logger.error('[usePushNotifications] VITE_VAPID_PUBLIC_KEY not set');
       toast({ 
         title: 'Erro de configuração', 
         description: 'Chave VAPID não configurada.', 
@@ -207,7 +208,7 @@ export function usePushNotifications(): UsePushNotificationsReturn {
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Erro desconhecido';
       setError(message);
-      console.error('[usePushNotifications] Subscribe error:', err);
+      logger.error('[usePushNotifications] Subscribe error:', err);
       toast({ 
         title: 'Erro', 
         description: 'Falha ao inscrever para notificações.', 
@@ -256,7 +257,7 @@ export function usePushNotifications(): UsePushNotificationsReturn {
 
   const showNotification = useCallback((title: string, options?: NotificationOptions): void => {
     if (permission !== 'granted') {
-      console.warn('[usePushNotifications] Permission not granted');
+      logger.warn('[usePushNotifications] Permission not granted');
       return;
     }
     
@@ -270,7 +271,7 @@ export function usePushNotifications(): UsePushNotificationsReturn {
       
       new Notification(title, defaultOptions);
     } catch (err) {
-      console.error('[usePushNotifications] Error showing notification:', err);
+      logger.error('[usePushNotifications] Error showing notification:', err);
     }
   }, [permission]);
 

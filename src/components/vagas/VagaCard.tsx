@@ -9,6 +9,7 @@ import { HighlightMatch, getMatchIndices } from '@/components/ui/highlight-match
 import { motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
 import {
+import { logger } from '@/services/logger';
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -110,7 +111,7 @@ function VagaCardComponent({ vaga, onDeleted, index = 0 }: VagaCardProps) {
       setShowDeleteDialog(false);
       onDeleted?.();
     } catch (error) {
-      console.error('[VagaCard] Delete error:', error);
+      logger.error('[VagaCard] Delete error:', error);
       toast.error("Erro ao excluir vaga. Tente novamente.");
     }
   }, [deleteVaga, vaga.id, onDeleted]);

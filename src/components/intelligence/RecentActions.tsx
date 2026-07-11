@@ -7,6 +7,7 @@ import { memo, useState, useEffect, useCallback, ReactNode } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { 
+import { logger } from '@/services/logger';
   Clock, 
   RotateCcw, 
   Trash2, 
@@ -311,7 +312,7 @@ export function useRecentActions({ maxActions = 50, persistKey }: UseRecentActio
           })) as RecentAction[]);
         }
       } catch (e) {
-        console.error('Failed to load recent actions:', e);
+        logger.error('Failed to load recent actions:', e);
       }
     }
   }, [persistKey]);
@@ -322,7 +323,7 @@ export function useRecentActions({ maxActions = 50, persistKey }: UseRecentActio
       try {
         localStorage.setItem(persistKey, JSON.stringify(actions));
       } catch (e) {
-        console.error('Failed to save recent actions:', e);
+        logger.error('Failed to save recent actions:', e);
       }
     }
   }, [actions, persistKey]);

@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from '@/services/logger';
 
 /**
  * Hook para verificar o status de uma feature flag.
@@ -17,7 +18,7 @@ export function useFeatureFlag(flagName: string) {
         .single();
 
       if (error) {
-        console.error(`Erro ao buscar feature flag ${flagName}:`, error);
+        logger.error(`Erro ao buscar feature flag ${flagName}:`, error);
         return { enabled: false };
       }
 
@@ -44,7 +45,7 @@ export function useFeatureFlags() {
         .select("name, enabled");
 
       if (error) {
-        console.error("Erro ao buscar feature flags:", error);
+        logger.error("Erro ao buscar feature flags:", error);
         return {};
       }
 

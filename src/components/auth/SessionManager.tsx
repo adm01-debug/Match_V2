@@ -4,6 +4,7 @@
  */
 import { useEffect, useCallback, useRef } from 'react';
 import {
+import { logger } from '@/services/logger';
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -55,10 +56,10 @@ export function SessionManager({ children }: SessionManagerProps) {
     try {
       const { error } = await supabase.auth.refreshSession();
       if (error) {
-        console.warn('[SessionManager] Failed to refresh session:', error.message);
+        logger.warn('[SessionManager] Failed to refresh session:', error.message);
       }
     } catch (err) {
-      console.error('[SessionManager] Session refresh error:', err);
+      logger.error('[SessionManager] Session refresh error:', err);
     }
   }, []);
 

@@ -7,6 +7,7 @@ import { memo, useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { 
+import { logger } from '@/services/logger';
   Search, 
   Clock, 
   TrendingUp, 
@@ -99,7 +100,7 @@ export const PredictiveSearch = memo(function PredictiveSearch({
           setResults(results);
           setSelectedIndex(-1);
         })
-        .catch(console.error)
+        .catch(logger.error)
         .finally(() => setIsLoading(false));
     } else {
       setResults([]);
@@ -348,7 +349,7 @@ export function useSearchHistory(key: string = 'search-history', maxItems: numbe
         setHistory(JSON.parse(stored));
       }
     } catch (e) {
-      console.error('Failed to load search history:', e);
+      logger.error('Failed to load search history:', e);
     }
   }, [key]);
 

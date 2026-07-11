@@ -11,6 +11,7 @@ import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
+import { logger } from '@/services/logger';
   usePersonalityAssessment, 
   type PersonalityFramework 
 } from '@/hooks/usePersonalityAssessment';
@@ -125,7 +126,7 @@ export function PersonalityAssessmentPlayer({
       toast.success('Teste de personalidade concluído!');
       onComplete?.(result);
     } catch (error) {
-      console.error('Erro ao submeter:', error);
+      logger.error('Erro ao submeter:', error);
       toast.error('Erro ao finalizar o teste');
     }
   };

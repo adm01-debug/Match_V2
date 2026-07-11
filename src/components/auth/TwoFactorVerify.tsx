@@ -7,6 +7,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { use2FA } from "@/hooks/use2FA";
 import { Shield, AlertTriangle, Loader2, KeyRound } from "lucide-react";
+import { logger } from '@/services/logger';
 
 export interface TwoFactorVerifyProps {
   onSuccess: () => void;
@@ -84,7 +85,7 @@ export function TwoFactorVerify({ onSuccess, onCancel, maxAttempts = 5 }: TwoFac
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Erro ao verificar código. Tente novamente.";
       setError(message);
-      console.error('[TwoFactorVerify] Verification error:', err);
+      logger.error('[TwoFactorVerify] Verification error:', err);
     } finally {
       setIsVerifying(false);
     }

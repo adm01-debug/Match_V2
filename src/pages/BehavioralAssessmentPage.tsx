@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
+import { logger } from '@/services/logger';
   ImmersiveScenarioPlayer,
   type ScenarioResponse 
 } from '@/components/assessments/ImmersiveScenarioPlayer';
@@ -279,7 +280,7 @@ export default function BehavioralAssessmentPage() {
           );
           setHasSavedResults(true);
         } catch (error) {
-          console.error('Erro ao salvar resultados:', error);
+          logger.error('Erro ao salvar resultados:', error);
         }
       };
       saveResults();

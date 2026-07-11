@@ -7,6 +7,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { toast } from 'sonner';
+import { logger } from '@/services/logger';
 
 // ============================================
 // TIPOS
@@ -54,7 +55,7 @@ export function useSavedFilters(entityType: string) {
         setFilters(JSON.parse(stored));
       }
     } catch (e) {
-      console.error('Error loading saved filters:', e);
+      logger.error('Error loading saved filters:', e);
     } finally {
       setIsLoading(false);
     }

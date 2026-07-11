@@ -4,6 +4,7 @@
  */
 import { useState } from 'react';
 import { 
+import { logger } from '@/services/logger';
   Shield, 
   Key, 
   Smartphone, 
@@ -65,7 +66,7 @@ export default function SecuritySettingsPage() {
       if (error) throw error;
       toast.success('Email de redefinição enviado! Verifique sua caixa de entrada.');
     } catch (error) {
-      console.error('Error requesting password reset:', error);
+      logger.error('Error requesting password reset:', error);
       toast.error('Erro ao solicitar redefinição de senha');
     } finally {
       setIsChangingPassword(false);

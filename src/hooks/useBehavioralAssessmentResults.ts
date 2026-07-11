@@ -17,6 +17,7 @@ import { toast } from 'sonner';
 import type { PredictiveFitAnalysis, AuthenticityMetrics } from '@/config/behavioralPillars';
 import type { ScenarioResponse } from '@/components/assessments/ImmersiveScenarioPlayer';
 import type { Json } from '@/integrations/supabase/types';
+import { logger } from '@/services/logger';
 
 export interface BehavioralAssessmentResult {
   id?: string;
@@ -219,7 +220,7 @@ export function useSaveBehavioralResult() {
       return data;
     },
     onError: (error) => {
-      console.error('Erro ao salvar resultado:', error);
+      logger.error('Erro ao salvar resultado:', error);
       toast.error('Erro ao salvar resultado da avaliação');
     },
   });
@@ -300,7 +301,7 @@ export function useSaveCompanyProfile() {
       toast.success('Perfil da empresa salvo com sucesso!');
     },
     onError: (error) => {
-      console.error('Erro ao salvar perfil:', error);
+      logger.error('Erro ao salvar perfil:', error);
       toast.error('Erro ao salvar perfil da empresa');
     },
   });

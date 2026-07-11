@@ -9,6 +9,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import type { BehavioralResult } from '@/types/behavioral';
 import type { Json } from '@/integrations/supabase/types';
+import { logger } from '@/services/logger';
 
 export interface BehavioralAssessmentRecord {
   id: string;
@@ -45,7 +46,7 @@ export function useCandidateBehavioralResults(candidatoId: string | undefined) {
         .order('created_at', { ascending: false });
 
       if (error) {
-        console.error('Error fetching behavioral results:', error);
+        logger.error('Error fetching behavioral results:', error);
         throw error;
       }
       return data as BehavioralAssessmentRecord[];
@@ -120,7 +121,7 @@ export function useSaveBehavioralResult() {
         .single();
 
       if (error) {
-        console.error('Error saving behavioral result:', error);
+        logger.error('Error saving behavioral result:', error);
         throw error;
       }
       return result;
@@ -141,7 +142,7 @@ export function useSaveBehavioralResult() {
       });
     },
     onError: (error) => {
-      console.error('Failed to save behavioral result:', error);
+      logger.error('Failed to save behavioral result:', error);
     },
   });
 }
