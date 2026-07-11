@@ -3,6 +3,7 @@
  * @module gamificationTriggers
  */
 
+import { logger } from '@/services/logger';
 import { supabase } from '@/integrations/supabase/client';
 
 export interface GamificationTriggerResult {
@@ -46,7 +47,7 @@ export async function awardXP(
 
     return { success: true, xpAwarded: amount };
   } catch (error) {
-    console.error('Error awarding XP:', error);
+    logger.error('Error awarding XP:', error);
     return { success: false, error: String(error) };
   }
 }
@@ -214,6 +215,6 @@ export async function checkMilestoneAchievements(userId: string): Promise<void> 
       }
     }
   } catch (error) {
-    console.error('Error checking milestone achievements:', error);
+    logger.error('Error checking milestone achievements:', error);
   }
 }

@@ -3,6 +3,7 @@
  * @module useGamificationSupabase
  */
 
+import { logger } from '@/services/logger';
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useSoundPreferences } from './useSoundPreferences';
@@ -59,7 +60,7 @@ export function useGamificationSupabase() {
         return { ...defaultState, ...parsed };
       }
     } catch (error) {
-      console.error('Error loading gamification from localStorage:', error);
+      logger.error('Error loading gamification from localStorage:', error);
     }
     return defaultState;
   }, []);
@@ -69,7 +70,7 @@ export function useGamificationSupabase() {
     try {
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(newState));
     } catch (error) {
-      console.error('Error saving gamification to localStorage:', error);
+      logger.error('Error saving gamification to localStorage:', error);
     }
   }, []);
 
@@ -146,7 +147,7 @@ export function useGamificationSupabase() {
         return defaultState;
       }
     } catch (error) {
-      console.error('Error loading gamification from Supabase:', error);
+      logger.error('Error loading gamification from Supabase:', error);
       // Fallback to localStorage
       return loadFromLocalStorage();
     }
@@ -230,7 +231,7 @@ export function useGamificationSupabase() {
           }
         }
       } catch (error) {
-        console.error('Error adding XP to Supabase:', error);
+        logger.error('Error adding XP to Supabase:', error);
         // Keep optimistic update on error
       }
     }
@@ -295,7 +296,7 @@ export function useGamificationSupabase() {
           }
         }
       } catch (error) {
-        console.error('Error updating streak in Supabase:', error);
+        logger.error('Error updating streak in Supabase:', error);
       }
     }
   }, [state.lastActiveDate, state.streak, state.longestStreak, user?.id, playSound, saveToLocalStorage]);
@@ -326,7 +327,7 @@ export function useGamificationSupabase() {
           throw error;
         }
       } catch (error) {
-        console.error('Error unlocking achievement in Supabase:', error);
+        logger.error('Error unlocking achievement in Supabase:', error);
       }
     }
   }, [state.achievements, user?.id, playSound]);
@@ -357,7 +358,7 @@ export function useGamificationSupabase() {
           throw error;
         }
       } catch (error) {
-        console.error('Error awarding badge in Supabase:', error);
+        logger.error('Error awarding badge in Supabase:', error);
       }
     }
   }, [state.badges, user?.id, playSound]);
@@ -402,7 +403,7 @@ export function useGamificationSupabase() {
           supabase.from('xp_transactions').delete().eq('user_id', user.id),
         ]);
       } catch (error) {
-        console.error('Error resetting progress in Supabase:', error);
+        logger.error('Error resetting progress in Supabase:', error);
       }
     }
   }, [user?.id]);

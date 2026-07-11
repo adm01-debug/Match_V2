@@ -1,3 +1,4 @@
+import { logger } from '@/services/logger';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
 import { useEffect, useCallback } from 'react';
@@ -12,7 +13,7 @@ function NotFound() {
   useEffect(() => {
     // Log 404 for analytics in development
     if (import.meta.env.DEV) {
-      console.warn(`[404] Route not found: ${location.pathname}`);
+      logger.warn(`[404] Route not found: ${location.pathname}`);
     }
   }, [location.pathname]);
 

@@ -2,6 +2,7 @@
  * @page SecuritySettingsPage
  * @description Página de configurações de segurança do usuário
  */
+import { logger } from '@/services/logger';
 import { useState } from 'react';
 import { 
   Shield, 
@@ -65,7 +66,7 @@ export default function SecuritySettingsPage() {
       if (error) throw error;
       toast.success('Email de redefinição enviado! Verifique sua caixa de entrada.');
     } catch (error) {
-      console.error('Error requesting password reset:', error);
+      logger.error('Error requesting password reset:', error);
       toast.error('Erro ao solicitar redefinição de senha');
     } finally {
       setIsChangingPassword(false);

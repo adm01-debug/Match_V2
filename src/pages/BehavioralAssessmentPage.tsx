@@ -3,6 +3,7 @@
  * Sistema completo de avaliação baseado nos 10 pilares do comportamento
  */
 
+import { logger } from '@/services/logger';
 import { useState, useMemo, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -279,7 +280,7 @@ export default function BehavioralAssessmentPage() {
           );
           setHasSavedResults(true);
         } catch (error) {
-          console.error('Erro ao salvar resultados:', error);
+          logger.error('Erro ao salvar resultados:', error);
         }
       };
       saveResults();

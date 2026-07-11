@@ -5,6 +5,7 @@
  * @description Gerencia filtros salvos por usuário e entidade (localStorage-based)
  */
 
+import { logger } from '@/services/logger';
 import { useState, useEffect, useCallback } from 'react';
 import { toast } from 'sonner';
 
@@ -54,7 +55,7 @@ export function useSavedFilters(entityType: string) {
         setFilters(JSON.parse(stored));
       }
     } catch (e) {
-      console.error('Error loading saved filters:', e);
+      logger.error('Error loading saved filters:', e);
     } finally {
       setIsLoading(false);
     }

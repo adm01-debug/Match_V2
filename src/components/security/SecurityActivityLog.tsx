@@ -2,6 +2,7 @@
  * @component SecurityActivityLog
  * @description Log de atividades de segurança (2FA, logins, etc)
  */
+import { logger } from '@/services/logger';
 import { useState, useEffect } from 'react';
 import { Shield, CheckCircle2, XCircle, Smartphone, Key, AlertTriangle, RefreshCw } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -62,7 +63,7 @@ export function SecurityActivityLog() {
       if (error) throw error;
       setLogs(data || []);
     } catch (error) {
-      console.error('Error loading security logs:', error);
+      logger.error('Error loading security logs:', error);
     } finally {
       setIsLoading(false);
     }

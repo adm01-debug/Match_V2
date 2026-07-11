@@ -3,6 +3,7 @@
  * @module VagaCard
  */
 
+import { logger } from '@/services/logger';
 import { memo, useState, useCallback, useMemo } from 'react';
 import { useItemMatches } from '@/contexts/FuzzySearchContext';
 import { HighlightMatch, getMatchIndices } from '@/components/ui/highlight-match';
@@ -110,7 +111,7 @@ function VagaCardComponent({ vaga, onDeleted, index = 0 }: VagaCardProps) {
       setShowDeleteDialog(false);
       onDeleted?.();
     } catch (error) {
-      console.error('[VagaCard] Delete error:', error);
+      logger.error('[VagaCard] Delete error:', error);
       toast.error("Erro ao excluir vaga. Tente novamente.");
     }
   }, [deleteVaga, vaga.id, onDeleted]);

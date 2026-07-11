@@ -1,3 +1,4 @@
+import { logger } from '@/services/logger';
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { generateDeviceFingerprint, getDeviceName, DeviceInfo } from '@/lib/deviceFingerprint';
@@ -49,7 +50,7 @@ export const useTrustedDevices = (): UseTrustedDevicesReturn => {
       if (error) throw error;
       setDevices(data || []);
     } catch (error) {
-      console.error('Error fetching trusted devices:', error);
+      logger.error('Error fetching trusted devices:', error);
     }
   }, [user?.id]);
 
@@ -86,7 +87,7 @@ export const useTrustedDevices = (): UseTrustedDevicesReturn => {
 
       return { isNew, deviceInfo };
     } catch (error) {
-      console.error('Error checking device:', error);
+      logger.error('Error checking device:', error);
       return { isNew: true, deviceInfo };
     }
   }, [user?.id]);
@@ -117,7 +118,7 @@ export const useTrustedDevices = (): UseTrustedDevicesReturn => {
       await fetchDevices();
       toast.success('Dispositivo adicionado como confiável');
     } catch (error) {
-      console.error('Error trusting device:', error);
+      logger.error('Error trusting device:', error);
       toast.error('Erro ao salvar dispositivo');
     }
   }, [user?.id, currentDevice, fetchDevices]);
@@ -145,7 +146,7 @@ export const useTrustedDevices = (): UseTrustedDevicesReturn => {
       
       toast.success('Dispositivo removido');
     } catch (error) {
-      console.error('Error removing device:', error);
+      logger.error('Error removing device:', error);
       toast.error('Erro ao remover dispositivo');
     }
   }, [user?.id, devices, currentDevice, fetchDevices]);
@@ -166,7 +167,7 @@ export const useTrustedDevices = (): UseTrustedDevicesReturn => {
       setIsNewDevice(true);
       toast.success('Todos os dispositivos foram removidos');
     } catch (error) {
-      console.error('Error removing all devices:', error);
+      logger.error('Error removing all devices:', error);
       toast.error('Erro ao remover dispositivos');
     }
   }, [user?.id]);

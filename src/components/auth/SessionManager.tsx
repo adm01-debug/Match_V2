@@ -2,6 +2,7 @@
  * @component SessionManager
  * @description Gerenciador de sessão com timeout de 24h e refresh automático
  */
+import { logger } from '@/services/logger';
 import { useEffect, useCallback, useRef } from 'react';
 import {
   AlertDialog,
@@ -55,10 +56,10 @@ export function SessionManager({ children }: SessionManagerProps) {
     try {
       const { error } = await supabase.auth.refreshSession();
       if (error) {
-        console.warn('[SessionManager] Failed to refresh session:', error.message);
+        logger.warn('[SessionManager] Failed to refresh session:', error.message);
       }
     } catch (err) {
-      console.error('[SessionManager] Session refresh error:', err);
+      logger.error('[SessionManager] Session refresh error:', err);
     }
   }, []);
 

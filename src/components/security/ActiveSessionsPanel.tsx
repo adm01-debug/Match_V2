@@ -2,6 +2,7 @@
  * @component ActiveSessionsPanel
  * @description Painel para visualizar e gerenciar sessões ativas do usuário
  */
+import { logger } from '@/services/logger';
 import { useState, useEffect } from 'react';
 import { Monitor, Smartphone, Tablet, MapPin, Clock, LogOut, AlertCircle } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -108,7 +109,7 @@ export function ActiveSessionsPanel() {
 
       setSessions(sessionData);
     } catch (error) {
-      console.error('Error loading sessions:', error);
+      logger.error('Error loading sessions:', error);
       toast.error('Erro ao carregar sessões');
     } finally {
       setIsLoading(false);
@@ -121,7 +122,7 @@ export function ActiveSessionsPanel() {
       toast.success('Todas as outras sessões foram encerradas');
       loadSessions();
     } catch (error) {
-      console.error('Error terminating sessions:', error);
+      logger.error('Error terminating sessions:', error);
       toast.error('Erro ao encerrar sessões');
     }
   };

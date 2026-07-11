@@ -10,6 +10,7 @@
  * - useBehavioralAssessmentResults.ts → tabela avaliacoes_comportamentais_resultados (pilares imersivos)
  */
 
+import { logger } from '@/services/logger';
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -219,7 +220,7 @@ export function useSaveBehavioralResult() {
       return data;
     },
     onError: (error) => {
-      console.error('Erro ao salvar resultado:', error);
+      logger.error('Erro ao salvar resultado:', error);
       toast.error('Erro ao salvar resultado da avaliação');
     },
   });
@@ -300,7 +301,7 @@ export function useSaveCompanyProfile() {
       toast.success('Perfil da empresa salvo com sucesso!');
     },
     onError: (error) => {
-      console.error('Erro ao salvar perfil:', error);
+      logger.error('Erro ao salvar perfil:', error);
       toast.error('Erro ao salvar perfil da empresa');
     },
   });

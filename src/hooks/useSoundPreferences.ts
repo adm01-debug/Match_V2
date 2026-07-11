@@ -3,6 +3,7 @@
  * @module useSoundPreferences
  */
 
+import { logger } from '@/services/logger';
 import { useState, useEffect, useCallback, useRef } from 'react';
 
 const STORAGE_KEY = 'sound-preferences';
@@ -151,7 +152,7 @@ export function useSoundPreferences() {
         setPreferences({ ...defaultPreferences, ...parsed });
       }
     } catch (error) {
-      console.error('Error loading sound preferences:', error);
+      logger.error('Error loading sound preferences:', error);
     }
     setIsLoaded(true);
   }, []);
@@ -163,7 +164,7 @@ export function useSoundPreferences() {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
       } catch (error) {
-        console.error('Error saving sound preferences:', error);
+        logger.error('Error saving sound preferences:', error);
       }
       return updated;
     });
@@ -193,7 +194,7 @@ export function useSoundPreferences() {
       }
       soundEffects[type](ctx, preferences.volume);
     } catch (error) {
-      console.error('Error playing sound:', error);
+      logger.error('Error playing sound:', error);
     }
   }, [preferences, getAudioContext]);
 
@@ -284,6 +285,6 @@ export function playSoundEffect(type: SoundType, volume: number = 0.5): void {
     
     soundEffects[type](standaloneAudioContext, prefs.volume ?? volume);
   } catch (error) {
-    console.error('Error playing sound effect:', error);
+    logger.error('Error playing sound effect:', error);
   }
 }

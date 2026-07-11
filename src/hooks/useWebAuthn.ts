@@ -2,6 +2,7 @@
  * @hook useWebAuthn
  * @description Hook para gerenciar autenticação WebAuthn/Passkeys
  */
+import { logger } from '@/services/logger';
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
@@ -80,7 +81,7 @@ export function useWebAuthn() {
       if (error) throw error;
       setCredentials(data || []);
     } catch (error) {
-      console.error('Erro ao buscar passkeys:', error);
+      logger.error('Erro ao buscar passkeys:', error);
     } finally {
       setLoading(false);
     }
@@ -185,7 +186,7 @@ export function useWebAuthn() {
       await fetchCredentials();
       return true;
     } catch (error: unknown) {
-      console.error('Erro ao registrar passkey:', error);
+      logger.error('Erro ao registrar passkey:', error);
       if (error instanceof Error && error.name === 'NotAllowedError') {
         toast.error('Registro cancelado pelo usuário');
       } else {
@@ -214,7 +215,7 @@ export function useWebAuthn() {
       await fetchCredentials();
       return true;
     } catch (error) {
-      console.error('Erro ao remover passkey:', error);
+      logger.error('Erro ao remover passkey:', error);
       toast.error('Erro ao remover passkey');
       return false;
     }
@@ -237,7 +238,7 @@ export function useWebAuthn() {
       await fetchCredentials();
       return true;
     } catch (error) {
-      console.error('Erro ao renomear passkey:', error);
+      logger.error('Erro ao renomear passkey:', error);
       toast.error('Erro ao renomear passkey');
       return false;
     }

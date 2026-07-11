@@ -6,6 +6,7 @@
  * Persiste dados localmente e sincroniza com Supabase quando autenticado.
  */
 
+import { logger } from '@/services/logger';
 import { useState, useCallback, useEffect, useMemo } from 'react';
 import { toast } from 'sonner';
 import { useGamification } from './useGamification';
@@ -92,7 +93,7 @@ export function useBehavioralGamification() {
           }
         }
       } catch (error) {
-        console.error('Error loading behavioral gamification state:', error);
+        logger.error('Error loading behavioral gamification state:', error);
       }
       setIsLoaded(true);
     };
@@ -107,7 +108,7 @@ export function useBehavioralGamification() {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
       } catch (error) {
-        console.error('Error saving behavioral gamification state:', error);
+        logger.error('Error saving behavioral gamification state:', error);
       }
       return updated;
     });

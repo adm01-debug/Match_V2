@@ -3,6 +3,7 @@
  * @description Hook para gerenciar comunicações com envio real de email
  */
 
+import { logger } from '@/services/logger';
 import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -25,7 +26,7 @@ async function enviarEmailReal(to: string, subject: string, html: string) {
     body: { to, subject, html },
   });
   if (error) {
-    console.warn('Envio real de email falhou (registrado mesmo assim):', error.message);
+    logger.warn('Envio real de email falhou (registrado mesmo assim):', error.message);
     return { sent: false, error: error.message };
   }
   return { sent: true, id: data?.id };

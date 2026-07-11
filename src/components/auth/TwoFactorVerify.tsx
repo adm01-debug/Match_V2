@@ -1,3 +1,4 @@
+import { logger } from '@/services/logger';
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -84,7 +85,7 @@ export function TwoFactorVerify({ onSuccess, onCancel, maxAttempts = 5 }: TwoFac
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Erro ao verificar código. Tente novamente.";
       setError(message);
-      console.error('[TwoFactorVerify] Verification error:', err);
+      logger.error('[TwoFactorVerify] Verification error:', err);
     } finally {
       setIsVerifying(false);
     }

@@ -1,3 +1,4 @@
+import { logger } from '@/services/logger';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -24,7 +25,7 @@ export function Admin2FAGuard({ children }: Admin2FAGuardProps) {
   useEffect(() => {
     if (!loading && user && isAdmin && !isEnabled) {
       // Redirecionar para página de segurança se for admin e não tiver 2FA
-      console.warn('Admin sem 2FA detectado. Redirecionando...');
+      logger.warn('Admin sem 2FA detectado. Redirecionando...');
       navigate('/auth/2fa?required=true');
     }
   }, [loading, user, isAdmin, isEnabled, navigate]);

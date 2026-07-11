@@ -3,6 +3,7 @@
  * @description Player completo para testes de personalidade (Big Five, MBTI, Eneagrama)
  */
 
+import { logger } from '@/services/logger';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -125,7 +126,7 @@ export function PersonalityAssessmentPlayer({
       toast.success('Teste de personalidade concluído!');
       onComplete?.(result);
     } catch (error) {
-      console.error('Erro ao submeter:', error);
+      logger.error('Erro ao submeter:', error);
       toast.error('Erro ao finalizar o teste');
     }
   };

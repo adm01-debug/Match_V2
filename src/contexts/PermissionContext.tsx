@@ -1,3 +1,4 @@
+import { logger } from '@/services/logger';
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
@@ -35,7 +36,7 @@ export function PermissionProvider({ children }: { children: React.ReactNode }) 
       if (error) throw error;
       setPermissions((data as Permission[]) || []);
     } catch (err) {
-      console.error('Error fetching permissions:', err);
+      logger.error('Error fetching permissions:', err);
       setPermissions([]);
     } finally {
       setLoading(false);

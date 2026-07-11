@@ -1,3 +1,4 @@
+import { logger } from '@/services/logger';
 import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -102,7 +103,7 @@ export function TwoFactorSetup({ onComplete, onCancel }: TwoFactorSetupProps) {
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Erro ao verificar código. Tente novamente.";
       setError(message);
-      console.error('[TwoFactorSetup] Verification error:', err);
+      logger.error('[TwoFactorSetup] Verification error:', err);
     } finally {
       setIsVerifying(false);
     }
@@ -115,7 +116,7 @@ export function TwoFactorSetup({ onComplete, onCancel }: TwoFactorSetupProps) {
         setCopiedSecret(true);
         toast({ title: "Copiado!", description: "Chave secreta copiada." });
       } catch (err) {
-        console.error('[TwoFactorSetup] Clipboard error:', err);
+        logger.error('[TwoFactorSetup] Clipboard error:', err);
         toast({ 
           title: "Erro", 
           description: "Não foi possível copiar. Selecione e copie manualmente.", 

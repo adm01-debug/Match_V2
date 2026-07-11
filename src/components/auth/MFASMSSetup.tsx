@@ -2,6 +2,7 @@
  * @component MFASMSSetup
  * @description Configuração de MFA via SMS
  */
+import { logger } from '@/services/logger';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -69,7 +70,7 @@ export function MFASMSSetup({ onComplete, onCancel }: MFASMSSetupProps) {
       setStep('verify');
     } catch (err) {
       setError('Erro ao enviar código. Tente novamente.');
-      console.error('[MFASMSSetup] Error sending code:', err);
+      logger.error('[MFASMSSetup] Error sending code:', err);
     } finally {
       setIsLoading(false);
     }
@@ -106,7 +107,7 @@ export function MFASMSSetup({ onComplete, onCancel }: MFASMSSetupProps) {
       onComplete?.();
     } catch (err) {
       setError('Código inválido. Tente novamente.');
-      console.error('[MFASMSSetup] Verification error:', err);
+      logger.error('[MFASMSSetup] Verification error:', err);
     } finally {
       setIsLoading(false);
     }

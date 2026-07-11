@@ -3,6 +3,7 @@
  * Shows user's recent actions with quick repeat functionality
  */
 
+import { logger } from '@/services/logger';
 import { memo, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -103,7 +104,7 @@ export const RecentActionsWidget = memo(function RecentActionsWidget({
           setActions(parsed.map(a => ({ ...a, timestamp: new Date(a.timestamp) })));
         }
       } catch (e) {
-        console.error('Failed to load recent actions:', e);
+        logger.error('Failed to load recent actions:', e);
       }
     }
 
@@ -113,7 +114,7 @@ export const RecentActionsWidget = memo(function RecentActionsWidget({
         setFavorites(JSON.parse(storedFavorites));
       }
     } catch (e) {
-      console.error('Failed to load favorites:', e);
+      logger.error('Failed to load favorites:', e);
     }
   }, [externalActions]);
 
@@ -346,7 +347,7 @@ export function useRecentActionsTracker() {
       
       localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
     } catch (e) {
-      console.error('Failed to save recent action:', e);
+      logger.error('Failed to save recent action:', e);
     }
   };
 
