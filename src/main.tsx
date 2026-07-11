@@ -2,6 +2,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
+import { initWebVitals } from './lib/webVitals';
 
 // Dev safety: if a Service Worker was previously registered, disable it in non-PROD
 // to avoid caching mismatched bundles that can cause React hook crashes.
