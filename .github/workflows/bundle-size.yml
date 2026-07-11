@@ -20,12 +20,23 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build and analyze
-        run: |
-          npm run build
-          echo "Bundle analysis complete"
+      - name: Build
+        run: npm run build
 
-      - name: Report size
+      - name: Enforce bundle budget (250 KB gzip main chunk)
+        run: |
+          set -euo pipefail
+          MAX_KB=250
+          MAIN=$(ls dist/assets/index-*.js | head -n1)
+          if [ -z "$MAIN" ]; then
+            echo "Main chunk não encontrado" >&2
+            exit 1
+          fi
+          SIZE_KB=$(gzip -c "$MAIN" | wc -c | awk '{ printf "%.1f", $1/1024 }')
+          echo "Main chunk gzip size: ${SIZE_KB} KB (budget ${MAX_KB} KB)"
+          awk -v s="$SIZE_KB" -v m="$MAX_KB" 'BEGIN { exit (s+0 > m+0) ? 1 : 0 }'
+
+      - name: Report all assets
         run: |
           du -sh dist/
           ls -lah dist/assets/
