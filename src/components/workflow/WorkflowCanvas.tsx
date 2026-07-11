@@ -37,8 +37,8 @@ export function WorkflowCanvas({ initialNodes = [], initialEdges = [], onSave }:
     webhook: WebhookNode,
   }), []);
 
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes as any[]);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges as any[]);
+  const [nodes, setNodes, onNodesChange] = useNodesState<Node>(initialNodes as Node[]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>(initialEdges as Edge[]);
   const [nodeCount, setNodeCount] = useState(initialNodes.length);
 
   const onConnect = useCallback((params: Connection) => {
