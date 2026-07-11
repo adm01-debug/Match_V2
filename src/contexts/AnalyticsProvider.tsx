@@ -3,8 +3,8 @@
  * @module contexts/AnalyticsProvider
  */
 
-import { ReactNode, createContext, useContext } from 'react';
 import { logger } from '@/services/logger';
+import { ReactNode, createContext, useContext } from 'react';
 
 interface AnalyticsContextType {
   trackEvent: (name: string, data?: Record<string, unknown>) => void;

@@ -3,11 +3,11 @@
  * @module PullToRefresh
  */
 
+import { logger } from '@/services/logger';
 import { memo, ReactNode, useState, useRef, useCallback } from 'react';
 import { motion, useMotionValue, useTransform, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { RefreshCw, ArrowDown, Check, Loader2 } from 'lucide-react';
-import { logger } from '@/services/logger';
 
 type RefreshState = 'idle' | 'pulling' | 'ready' | 'refreshing' | 'complete';
 

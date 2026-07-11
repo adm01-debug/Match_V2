@@ -2,9 +2,9 @@
  * @component SessionManager
  * @description Gerenciador de sessão com timeout de 24h e refresh automático
  */
+import { logger } from '@/services/logger';
 import { useEffect, useCallback, useRef } from 'react';
 import {
-import { logger } from '@/services/logger';
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,

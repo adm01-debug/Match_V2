@@ -10,6 +10,7 @@
  * - useBehavioralAssessmentResults.ts → tabela avaliacoes_comportamentais_resultados (pilares imersivos)
  */
 
+import { logger } from '@/services/logger';
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -17,7 +18,6 @@ import { toast } from 'sonner';
 import type { PredictiveFitAnalysis, AuthenticityMetrics } from '@/config/behavioralPillars';
 import type { ScenarioResponse } from '@/components/assessments/ImmersiveScenarioPlayer';
 import type { Json } from '@/integrations/supabase/types';
-import { logger } from '@/services/logger';
 
 export interface BehavioralAssessmentResult {
   id?: string;

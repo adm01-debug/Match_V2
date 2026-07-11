@@ -3,11 +3,11 @@
  * @description Hook para gerenciar comunicações com envio real de email
  */
 
+import { logger } from '@/services/logger';
 import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { Database } from '@/integrations/supabase/types';
-import { logger } from '@/services/logger';
 
 type ComunicacaoRow = Database['public']['Tables']['comunicacoes']['Row'];
 

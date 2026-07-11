@@ -2,9 +2,9 @@
  * @page SecuritySettingsPage
  * @description Página de configurações de segurança do usuário
  */
+import { logger } from '@/services/logger';
 import { useState } from 'react';
 import { 
-import { logger } from '@/services/logger';
   Shield, 
   Key, 
   Smartphone, 

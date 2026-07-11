@@ -3,6 +3,7 @@
  * Sistema completo de avaliação baseado nos 10 pilares do comportamento
  */
 
+import { logger } from '@/services/logger';
 import { useState, useMemo, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -13,7 +14,6 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
-import { logger } from '@/services/logger';
   ImmersiveScenarioPlayer,
   type ScenarioResponse 
 } from '@/components/assessments/ImmersiveScenarioPlayer';

@@ -1,9 +1,9 @@
+import { logger } from '@/services/logger';
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { generateDeviceFingerprint, getDeviceName, DeviceInfo } from '@/lib/deviceFingerprint';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
-import { logger } from '@/services/logger';
 
 interface TrustedDevice {
   id: string;

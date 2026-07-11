@@ -1,6 +1,6 @@
+import { logger } from '@/services/logger';
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { logger } from '@/services/logger';
 
 /**
  * Hook para verificar o status de uma feature flag.

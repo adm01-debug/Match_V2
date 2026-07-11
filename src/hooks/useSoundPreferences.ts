@@ -3,8 +3,8 @@
  * @module useSoundPreferences
  */
 
-import { useState, useEffect, useCallback, useRef } from 'react';
 import { logger } from '@/services/logger';
+import { useState, useEffect, useCallback, useRef } from 'react';
 
 const STORAGE_KEY = 'sound-preferences';
 

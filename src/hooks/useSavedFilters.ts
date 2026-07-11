@@ -5,9 +5,9 @@
  * @description Gerencia filtros salvos por usuário e entidade (localStorage-based)
  */
 
+import { logger } from '@/services/logger';
 import { useState, useEffect, useCallback } from 'react';
 import { toast } from 'sonner';
-import { logger } from '@/services/logger';
 
 // ============================================
 // TIPOS

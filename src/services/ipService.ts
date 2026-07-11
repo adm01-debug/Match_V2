@@ -4,9 +4,9 @@
  * @description Serviço para verificação e gerenciamento de IPs permitidos
  */
 
+import { logger } from '@/services/logger';
 import { supabase } from '@/integrations/supabase/client';
 import { 
-import { logger } from '@/services/logger';
   STATIC_ALLOWED_IPS, 
   DEVELOPMENT_IPS, 
   IP_SECURITY_CONFIG,

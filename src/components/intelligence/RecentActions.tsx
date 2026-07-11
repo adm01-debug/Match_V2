@@ -3,11 +3,11 @@
  * @module RecentActions
  */
 
+import { logger } from '@/services/logger';
 import { memo, useState, useEffect, useCallback, ReactNode } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { 
-import { logger } from '@/services/logger';
   Clock, 
   RotateCcw, 
   Trash2, 

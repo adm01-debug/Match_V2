@@ -1,3 +1,4 @@
+import { logger } from '@/services/logger';
 import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,7 +8,6 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { use2FA } from "@/hooks/use2FA";
 import { Shield, Copy, Download, CheckCircle2, AlertTriangle, Loader2 } from "lucide-react";
-import { logger } from '@/services/logger';
 
 interface TwoFactorSetupProps {
   onComplete?: () => void;

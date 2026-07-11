@@ -6,6 +6,7 @@
  * Persiste dados localmente e sincroniza com Supabase quando autenticado.
  */
 
+import { logger } from '@/services/logger';
 import { useState, useCallback, useEffect, useMemo } from 'react';
 import { toast } from 'sonner';
 import { useGamification } from './useGamification';
@@ -13,7 +14,6 @@ import { useGamificationTriggers } from './useGamificationTriggers';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { 
-import { logger } from '@/services/logger';
   BEHAVIORAL_XP_REWARDS, 
   BEHAVIORAL_ACHIEVEMENTS,
   BEHAVIORAL_LEVELS,

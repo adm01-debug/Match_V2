@@ -3,8 +3,8 @@
  * @module gamificationTriggers
  */
 
-import { supabase } from '@/integrations/supabase/client';
 import { logger } from '@/services/logger';
+import { supabase } from '@/integrations/supabase/client';
 
 export interface GamificationTriggerResult {
   success: boolean;

@@ -3,9 +3,9 @@
  * @module useGamification
  */
 
+import { logger } from '@/services/logger';
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useSoundPreferences } from './useSoundPreferences';
-import { logger } from '@/services/logger';
 
 const STORAGE_KEY = 'user-gamification';
 

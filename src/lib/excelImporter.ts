@@ -1,9 +1,9 @@
-import { logger } from '@/services/logger';
 /**
  * Excel/CSV Export utilities
  * @module lib/excelImporter
  */
 
+import { logger } from '@/services/logger';
 interface ExportColumn<T> {
   key: keyof T;
   label: string;

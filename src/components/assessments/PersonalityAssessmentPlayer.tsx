@@ -3,6 +3,7 @@
  * @description Player completo para testes de personalidade (Big Five, MBTI, Eneagrama)
  */
 
+import { logger } from '@/services/logger';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -11,7 +12,6 @@ import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
-import { logger } from '@/services/logger';
   usePersonalityAssessment, 
   type PersonalityFramework 
 } from '@/hooks/usePersonalityAssessment';

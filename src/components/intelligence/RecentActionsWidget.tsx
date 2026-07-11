@@ -3,11 +3,11 @@
  * Shows user's recent actions with quick repeat functionality
  */
 
+import { logger } from '@/services/logger';
 import { memo, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { logger } from '@/services/logger';
 
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";

@@ -2,11 +2,11 @@
  * @hook useWebAuthn
  * @description Hook para gerenciar autenticação WebAuthn/Passkeys
  */
+import { logger } from '@/services/logger';
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
-import { logger } from '@/services/logger';
 
 interface WebAuthnCredential {
   id: string;

@@ -5,11 +5,11 @@
  * Integra com a tabela behavioral_assessment_results no Supabase
  */
 
+import { logger } from '@/services/logger';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import type { BehavioralResult } from '@/types/behavioral';
 import type { Json } from '@/integrations/supabase/types';
-import { logger } from '@/services/logger';
 
 export interface BehavioralAssessmentRecord {
   id: string;

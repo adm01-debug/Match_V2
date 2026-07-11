@@ -1,6 +1,6 @@
+import { logger } from '@/services/logger';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useToast } from '@/hooks/use-toast';
-import { logger } from '@/services/logger';
 
 export interface PushSubscriptionData { 
   endpoint: string; 

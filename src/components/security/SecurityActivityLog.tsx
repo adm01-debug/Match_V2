@@ -2,6 +2,7 @@
  * @component SecurityActivityLog
  * @description Log de atividades de segurança (2FA, logins, etc)
  */
+import { logger } from '@/services/logger';
 import { useState, useEffect } from 'react';
 import { Shield, CheckCircle2, XCircle, Smartphone, Key, AlertTriangle, RefreshCw } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -12,7 +13,6 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { supabase } from '@/integrations/supabase/client';
 import { formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { logger } from '@/services/logger';
 
 interface ActivityLog {
   id: string;

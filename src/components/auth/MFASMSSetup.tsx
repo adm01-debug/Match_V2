@@ -2,6 +2,7 @@
  * @component MFASMSSetup
  * @description Configuração de MFA via SMS
  */
+import { logger } from '@/services/logger';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -12,7 +13,6 @@ import { useToast } from '@/hooks/use-toast';
 import { Loader2, Phone, CheckCircle2, AlertTriangle, MessageSquare } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
-import { logger } from '@/services/logger';
 
 interface MFASMSSetupProps {
   onComplete?: () => void;

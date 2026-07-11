@@ -1,3 +1,4 @@
+import { logger } from '@/services/logger';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -5,7 +6,6 @@ import { use2FA } from '@/hooks/use2FA';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { ShieldAlert } from 'lucide-react';
-import { logger } from '@/services/logger';
 
 interface Admin2FAGuardProps {
   children: React.ReactNode;

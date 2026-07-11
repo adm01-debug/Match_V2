@@ -2,6 +2,7 @@
  * @component ActiveSessionsPanel
  * @description Painel para visualizar e gerenciar sessões ativas do usuário
  */
+import { logger } from '@/services/logger';
 import { useState, useEffect } from 'react';
 import { Monitor, Smartphone, Tablet, MapPin, Clock, LogOut, AlertCircle } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -9,7 +10,6 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import {
-import { logger } from '@/services/logger';
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,

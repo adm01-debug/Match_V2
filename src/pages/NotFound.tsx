@@ -1,9 +1,9 @@
+import { logger } from '@/services/logger';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
 import { useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Home, ArrowLeft, Search } from 'lucide-react';
-import { logger } from '@/services/logger';
 
 function NotFound() {
   usePageTitle('Página não encontrada');

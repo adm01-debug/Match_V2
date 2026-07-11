@@ -3,11 +3,11 @@
  * @module PredictiveSearch
  */
 
+import { logger } from '@/services/logger';
 import { memo, useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { 
-import { logger } from '@/services/logger';
   Search, 
   Clock, 
   TrendingUp, 

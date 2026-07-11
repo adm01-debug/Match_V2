@@ -1,3 +1,4 @@
+import { logger } from '@/services/logger';
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,7 +8,6 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { use2FA } from "@/hooks/use2FA";
 import { Shield, AlertTriangle, Loader2, KeyRound } from "lucide-react";
-import { logger } from '@/services/logger';
 
 export interface TwoFactorVerifyProps {
   onSuccess: () => void;

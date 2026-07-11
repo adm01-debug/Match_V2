@@ -3,13 +3,13 @@
  * @module VagaCard
  */
 
+import { logger } from '@/services/logger';
 import { memo, useState, useCallback, useMemo } from 'react';
 import { useItemMatches } from '@/contexts/FuzzySearchContext';
 import { HighlightMatch, getMatchIndices } from '@/components/ui/highlight-match';
 import { motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
 import {
-import { logger } from '@/services/logger';
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,

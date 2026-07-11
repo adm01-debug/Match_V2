@@ -1,7 +1,7 @@
+import { logger } from '@/services/logger';
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
-import { logger } from '@/services/logger';
 
 interface Permission {
   module: string;
