@@ -20,8 +20,8 @@ export interface NotaCandidato {
   updated_at: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const db = supabase as any;
+
+const db = supabase;
 
 export function useNotasCandidato(candidatoId?: string) {
   const queryClient = useQueryClient();

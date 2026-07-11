@@ -31,8 +31,8 @@ interface EmailTemplateInput {
   ativo?: boolean;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const db = supabase as any;
+
+const db = supabase;
 
 export function useEmailTemplates(etapa?: string) {
   const queryClient = useQueryClient();
