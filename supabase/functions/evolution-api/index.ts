@@ -5,6 +5,7 @@
 
 import { serve } from 'https://deno.land/std@0.208.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { enforceRateLimit } from "../_shared/rateLimit.ts";
 
 const EVOLUTION_API_URL = (Deno.env.get('EVOLUTION_API_URL') || '').replace(/\/+$/, '');
 const EVOLUTION_API_KEY = Deno.env.get('EVOLUTION_API_KEY');
@@ -26,6 +27,9 @@ serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
+
+  const limited = await enforceRateLimit(req, { route: "evolution-api", max: 60 });
+  if (limited) return limited;
 
   try {
     // JWT auth
