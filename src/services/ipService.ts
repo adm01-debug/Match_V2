@@ -4,7 +4,7 @@
  * @description Serviço para verificação e gerenciamento de IPs permitidos
  */
 
-import { logger } from '@/services/logger';
+
 import { supabase } from '@/integrations/supabase/client';
 import { 
   STATIC_ALLOWED_IPS, 
