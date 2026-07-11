@@ -8,6 +8,7 @@ import {
   addEdge,
   type Connection,
   type Edge,
+  type Node as FlowNode,
   BackgroundVariant,
   Panel,
 } from '@xyflow/react';
