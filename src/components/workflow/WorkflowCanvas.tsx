@@ -48,13 +48,13 @@ export function WorkflowCanvas({ initialNodes = [], initialEdges = [], onSave }:
 
   const addNode = useCallback((type: string, label: string, description: string) => {
     const id = `${type}_${nodeCount + 1}`;
-    const newNode = {
+    const newNode: FlowNode = {
       id,
       type,
       position: { x: 250 + Math.random() * 100, y: 100 + nodeCount * 150 },
       data: { label, description },
     };
-    setNodes(nds => [...nds, newNode]);
+    setNodes((nds) => [...nds, newNode]);
     setNodeCount(c => c + 1);
   }, [nodeCount, setNodes]);
 
