@@ -155,9 +155,9 @@ export const LazyImage = memo(function LazyImage({
 });
 
 interface LazyComponentProps {
-  component: React.LazyExoticComponent<React.ComponentType<any>>;
+  component: React.LazyExoticComponent<React.ComponentType<Record<string, unknown>>>;
   fallback?: ReactNode;
-  props?: Record<string, any>;
+  props?: Record<string, unknown>;
 }
 
 export const LazyComponent = memo(function LazyComponent({

@@ -4,8 +4,19 @@ import { DollarSign } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 
+export interface VagaDetalhes {
+  modalidade?: string;
+  tipoContrato?: string;
+  salarioMin?: number | null;
+  salarioMax?: number | null;
+  salarioACombinar?: boolean;
+  beneficios?: string[];
+  descricaoEmpresa?: string;
+  responsabilidades?: string;
+}
+
 interface VagaDetalhesTabProps {
-  vaga: any;
+  vaga: VagaDetalhes;
 }
 
 export const VagaDetalhesTab = memo(function VagaDetalhesTab({ vaga }: VagaDetalhesTabProps) {

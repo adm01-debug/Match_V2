@@ -4,8 +4,19 @@ import { Briefcase, Users, Target, UserCheck } from 'lucide-react';
 import { KPICard } from "@/components/dashboard/KPICard";
 import { Skeleton } from '@/components/ui/skeleton';
 
+export interface DashboardKPIsData {
+  vagasAbertas: number;
+  vagasNovas: number;
+  candidatosTotal: number;
+  candidatosNovos: number;
+  emProcesso: number;
+  vagasEmProcesso: number;
+  contratadosMes: number;
+  metaContratacao: number;
+}
+
 interface DashboardKPIsProps {
-  kpis: any;
+  kpis: DashboardKPIsData;
 }
 
 export const DashboardKPIs = memo(function DashboardKPIs({ kpis }: DashboardKPIsProps) {

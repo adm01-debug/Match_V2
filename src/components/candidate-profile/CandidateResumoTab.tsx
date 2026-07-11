@@ -3,10 +3,19 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Building, GraduationCap } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
+export interface Experiencia {
+  cargo?: string;
+  empresa?: string;
+}
+export interface Formacao {
+  curso?: string;
+  instituicao?: string;
+}
+
 interface CandidateResumoTabProps {
   habilidades: string[];
-  experiencias: any[];
-  formacoes: any[];
+  experiencias: Experiencia[];
+  formacoes: Formacao[];
 }
 
 export const CandidateResumoTab = memo(function CandidateResumoTab({ 
