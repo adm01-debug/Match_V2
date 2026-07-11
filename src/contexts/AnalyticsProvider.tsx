@@ -21,7 +21,7 @@ export function AnalyticsProvider({ children }: AnalyticsProviderProps) {
   const trackEvent = (name: string, data?: Record<string, unknown>) => {
     // Integração com analytics pode ser adicionada aqui
     if (import.meta.env.DEV) {
-      logger.debug('[Analytics] Event:', name, data);
+      logger.debug(`[Analytics] Event: ${name}`, data);
     }
   };
 
