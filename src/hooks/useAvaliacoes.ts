@@ -7,9 +7,10 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Avaliacao, Competencia, NotaCompetencia } from '@/types/recruitment';
 
-// A tabela "avaliacoes" ainda não está presente na tipagem gerada do backend.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const db = supabase as any;
+// A tabela "avaliacoes" existe no banco (15 colunas, 2 policies), porém ainda
+// não foi promovida aos types gerados. Usamos `never` para bypass do
+// constraint de literal tipado do Supabase sem cair em `any`.
+type UntypedTable = never;
 
 export const COMPETENCIAS_TECNICAS: Competencia[] = [
   { id: 'conhecimento_tecnico', nome: 'Conhecimento Técnico', descricao: 'Domínio dos conceitos e ferramentas essenciais.', tipo: 'tecnica' },
@@ -71,6 +72,8 @@ interface UseAvaliacoesOptions {
   etapa?: string;
 }
 
+const avaliacoesTable = () => supabase.from('avaliacoes' as UntypedTable);
+
 export function useAvaliacoes(options: UseAvaliacoesOptions = {}) {
   const queryClient = useQueryClient();
   const { processoId, avaliadorId, etapa } = options;
@@ -83,9 +86,7 @@ export function useAvaliacoes(options: UseAvaliacoesOptions = {}) {
   } = useQuery({
     queryKey: ['avaliacoes', processoId, avaliadorId, etapa],
     queryFn: async () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      let query = (db as any)
-        .from('avaliacoes')
+      let query = avaliacoesTable()
         .select('*')
         .order('created_at', { ascending: false });
 
@@ -95,7 +96,7 @@ export function useAvaliacoes(options: UseAvaliacoesOptions = {}) {
 
       const { data, error: queryError } = await query;
       if (queryError) throw queryError;
-      return (data || []) as AvaliacaoDB[];
+      return (data || []) as unknown as AvaliacaoDB[];
     },
     placeholderData: [],
     staleTime: 5 * 60 * 1000,
@@ -117,10 +118,12 @@ export function useAvaliacoes(options: UseAvaliacoesOptions = {}) {
           avaliacao.notas_comportamentais || COMPETENCIAS_COMPORTAMENTAIS.map((c) => ({ ...c, nota: 5 })),
       };
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { data, error: insertError } = await (db as any).from('avaliacoes').insert(payload).select().single();
+      const { data, error: insertError } = await avaliacoesTable()
+        .insert(payload as never)
+        .select()
+        .single();
       if (insertError) throw insertError;
-      return data as AvaliacaoDB;
+      return data as unknown as AvaliacaoDB;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['avaliacoes'] });
@@ -129,19 +132,17 @@ export function useAvaliacoes(options: UseAvaliacoesOptions = {}) {
 
   const updateMutation = useMutation({
     mutationFn: async ({ id, ...updates }: { id: string } & Partial<AvaliacaoInsert>) => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { data, error: updateError } = await (db as any)
-        .from('avaliacoes')
+      const { data, error: updateError } = await avaliacoesTable()
         .update({
           ...updates,
           updated_at: new Date().toISOString(),
-        })
+        } as never)
         .eq('id', id)
         .select()
         .single();
 
       if (updateError) throw updateError;
-      return data as AvaliacaoDB;
+      return data as unknown as AvaliacaoDB;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['avaliacoes'] });
@@ -150,8 +151,7 @@ export function useAvaliacoes(options: UseAvaliacoesOptions = {}) {
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { error: deleteError } = await (db as any).from('avaliacoes').delete().eq('id', id);
+      const { error: deleteError } = await avaliacoesTable().delete().eq('id', id);
       if (deleteError) throw deleteError;
     },
     onSuccess: () => {
@@ -160,23 +160,21 @@ export function useAvaliacoes(options: UseAvaliacoesOptions = {}) {
   });
 
   const fetchAvaliacaoById = async (id: string) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data, error: fetchError } = await (db as any).from('avaliacoes').select('*').eq('id', id).single();
+    const { data, error: fetchError } = await avaliacoesTable().select('*').eq('id', id).single();
     if (fetchError) throw fetchError;
-    return data as AvaliacaoDB;
+    return data as unknown as AvaliacaoDB;
   };
 
   const salvarRascunho = async (avaliacao: AvaliacaoInsert) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data: existing } = await (db as any)
-      .from('avaliacoes')
+    const { data: existing } = await avaliacoesTable()
       .select('id')
       .eq('processo_id', avaliacao.processo_id)
       .eq('etapa', avaliacao.etapa)
       .single();
 
-    if (existing?.id) {
-      return updateMutation.mutateAsync({ id: existing.id, ...avaliacao });
+    const existingId = (existing as { id?: string } | null)?.id;
+    if (existingId) {
+      return updateMutation.mutateAsync({ id: existingId, ...avaliacao });
     }
     return createMutation.mutateAsync(avaliacao);
   };
@@ -186,14 +184,12 @@ export function useAvaliacoes(options: UseAvaliacoesOptions = {}) {
   };
 
   const getMediaNotasProcesso = async (processoIdParam: string) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data } = await (db as any)
-      .from('avaliacoes')
+    const { data } = await avaliacoesTable()
       .select('nota_geral')
       .eq('processo_id', processoIdParam)
       .not('nota_geral', 'is', null);
 
-    const rows = (data || []) as { nota_geral: number | null }[];
+    const rows = (data || []) as unknown as { nota_geral: number | null }[];
     if (rows.length === 0) return null;
 
     const soma = rows.reduce((acc, a) => acc + Number(a.nota_geral || 0), 0);
@@ -223,15 +219,16 @@ export function useAvaliacoesProcesso(processoId: string) {
 }
 
 export function useAvaliacao(id: string | undefined) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const dbAny = supabase as any;
   return useQuery({
     queryKey: ['avaliacao', id],
     queryFn: async () => {
       if (!id) return null;
-      const { data, error: fetchError } = await dbAny.from('avaliacoes').select('*').eq('id', id).single();
+      const { data, error: fetchError } = await avaliacoesTable()
+        .select('*')
+        .eq('id', id)
+        .single();
       if (fetchError) throw fetchError;
-      return data as AvaliacaoDB;
+      return data as unknown as AvaliacaoDB;
     },
     enabled: !!id,
   });
