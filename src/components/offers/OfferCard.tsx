@@ -10,12 +10,33 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
+import type { LucideIcon } from 'lucide-react';
+
+export interface OfferCardOffer {
+  id: string;
+  status: string;
+  candidato_nome?: string | null;
+  vaga_titulo?: string | null;
+  salario?: number | null;
+  data_envio?: string | null;
+  data_expiracao?: string | null;
+  email?: string | null;
+  [key: string]: unknown;
+}
+
+export interface OfferStatusConfigEntry {
+  label: string;
+  icon: LucideIcon;
+  color?: string;
+  variant?: string;
+}
+
 interface OfferCardProps {
-  offer: any;
+  offer: OfferCardOffer;
   index: number;
-  statusConfig: Record<string, any>;
-  onSelect: (offer: any) => void;
-  onSend: (offer: any) => void;
+  statusConfig: Record<string, OfferStatusConfigEntry>;
+  onSelect: (offer: OfferCardOffer) => void;
+  onSend: (offer: OfferCardOffer) => void;
 }
 
 export const OfferCard = memo(function OfferCard({ 
