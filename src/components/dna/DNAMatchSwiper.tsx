@@ -208,16 +208,16 @@ export const DNAMatchSwiper: React.FC<DNAMatchSwiperProps> = ({
                     className="overflow-hidden"
                   >
                     <div className="grid grid-cols-2 gap-4 mb-4">
-                      <div className="bg-green-500/10 rounded-lg p-3">
-                        <h4 className="text-sm font-semibold text-green-400 mb-2">Forças</h4>
+                      <div className="bg-success/10 rounded-lg p-3">
+                        <h4 className="text-sm font-semibold text-success mb-2">Forças</h4>
                         <ul className="text-sm space-y-1">
                           {currentMatch.strengths.slice(0, 3).map((s, i) => (
                             <li key={i} className="text-muted-foreground">• {s}</li>
                           ))}
                         </ul>
                       </div>
-                      <div className="bg-orange-500/10 rounded-lg p-3">
-                        <h4 className="text-sm font-semibold text-orange-400 mb-2">Desafios</h4>
+                      <div className="bg-warning/10 rounded-lg p-3">
+                        <h4 className="text-sm font-semibold text-warning mb-2">Desafios</h4>
                         <ul className="text-sm space-y-1">
                           {currentMatch.challenges.slice(0, 3).map((c, i) => (
                             <li key={i} className="text-muted-foreground">• {c}</li>
@@ -227,8 +227,8 @@ export const DNAMatchSwiper: React.FC<DNAMatchSwiperProps> = ({
                     </div>
                     
                     {/* Archetype Compatibility */}
-                    <div className="bg-purple-500/10 rounded-lg p-4">
-                      <h4 className="text-sm font-semibold text-purple-400 mb-2">
+                    <div className="bg-primary/10 rounded-lg p-4">
+                      <h4 className="text-sm font-semibold text-primary mb-2">
                         {userArchetype?.emoji} {userArchetype?.name} × {archetype?.emoji} {archetype?.name}
                       </h4>
                       <p className="text-sm text-muted-foreground">
