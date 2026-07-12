@@ -158,7 +158,7 @@ export const CrossFrameworkAnalysisView = memo(function CrossFrameworkAnalysisVi
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {extractedProfiles.discProfile && (
             <div className="p-3 rounded-lg bg-muted/50 text-center">
-              <Brain className="h-6 w-6 mx-auto mb-1 text-blue-500" />
+              <Brain className="h-6 w-6 mx-auto mb-1 text-info" />
               <div className="text-sm font-medium">DISC</div>
               <Badge className={DISC_PROFILES_INFO[extractedProfiles.discProfile]?.cor}>
                 {extractedProfiles.discProfile} - {DISC_PROFILES_INFO[extractedProfiles.discProfile]?.nome}
@@ -168,7 +168,7 @@ export const CrossFrameworkAnalysisView = memo(function CrossFrameworkAnalysisVi
           
           {extractedProfiles.generationType && (
             <div className="p-3 rounded-lg bg-muted/50 text-center">
-              <Users className="h-6 w-6 mx-auto mb-1 text-purple-500" />
+              <Users className="h-6 w-6 mx-auto mb-1 text-primary" />
               <div className="text-sm font-medium">Geração</div>
               <Badge className={GENERATIONS_INFO[extractedProfiles.generationType]?.cor}>
                 {GENERATIONS_INFO[extractedProfiles.generationType]?.nome}
@@ -178,7 +178,7 @@ export const CrossFrameworkAnalysisView = memo(function CrossFrameworkAnalysisVi
           
           {extractedProfiles.stressResponse && (
             <div className="p-3 rounded-lg bg-muted/50 text-center">
-              <Zap className="h-6 w-6 mx-auto mb-1 text-orange-500" />
+              <Zap className="h-6 w-6 mx-auto mb-1 text-warning" />
               <div className="text-sm font-medium">Sob Stress</div>
               <Badge variant="outline" className="capitalize">
                 {extractedProfiles.stressResponse}
@@ -188,7 +188,7 @@ export const CrossFrameworkAnalysisView = memo(function CrossFrameworkAnalysisVi
           
           {extractedProfiles.dominantBrain && (
             <div className="p-3 rounded-lg bg-muted/50 text-center">
-              <Lightbulb className="h-6 w-6 mx-auto mb-1 text-green-500" />
+              <Lightbulb className="h-6 w-6 mx-auto mb-1 text-success" />
               <div className="text-sm font-medium">Cérebro</div>
               <Badge className={TRIUNE_BRAIN_INFO[extractedProfiles.dominantBrain]?.cor}>
                 {TRIUNE_BRAIN_INFO[extractedProfiles.dominantBrain]?.nome}
@@ -205,9 +205,9 @@ export const CrossFrameworkAnalysisView = memo(function CrossFrameworkAnalysisVi
               Consistência do Perfil
             </span>
             <span className={`font-bold ${
-              analysis.overallConsistency >= 70 ? 'text-green-600' :
-              analysis.overallConsistency >= 50 ? 'text-yellow-600' :
-              'text-orange-600'
+              analysis.overallConsistency >= 70 ? 'text-success' :
+              analysis.overallConsistency >= 50 ? 'text-warning' :
+              'text-warning'
             }`}>
               {analysis.overallConsistency}%
             </span>
@@ -231,13 +231,13 @@ export const CrossFrameworkAnalysisView = memo(function CrossFrameworkAnalysisVi
           {analysis.synergies.length > 0 && (
             <div className="space-y-3">
               <h4 className="font-medium flex items-center gap-2">
-                <CheckCircle2 className="h-4 w-4 text-green-500" />
+                <CheckCircle2 className="h-4 w-4 text-success" />
                 Sinergias Identificadas
               </h4>
               <ul className="space-y-2">
                 {analysis.synergies.map((synergy, i) => (
                   <li key={i} className="text-sm text-muted-foreground flex items-start gap-2">
-                    <span className="text-green-500 shrink-0">✓</span>
+                    <span className="text-success shrink-0">✓</span>
                     {synergy}
                   </li>
                 ))}
@@ -249,13 +249,13 @@ export const CrossFrameworkAnalysisView = memo(function CrossFrameworkAnalysisVi
           {analysis.tensions.length > 0 && (
             <div className="space-y-3">
               <h4 className="font-medium flex items-center gap-2">
-                <AlertTriangle className="h-4 w-4 text-orange-500" />
+                <AlertTriangle className="h-4 w-4 text-warning" />
                 Tensões Potenciais
               </h4>
               <ul className="space-y-2">
                 {analysis.tensions.map((tension, i) => (
                   <li key={i} className="text-sm text-muted-foreground flex items-start gap-2">
-                    <span className="text-orange-500 shrink-0">⚠️</span>
+                    <span className="text-warning shrink-0">⚠️</span>
                     {tension}
                   </li>
                 ))}
@@ -268,7 +268,7 @@ export const CrossFrameworkAnalysisView = memo(function CrossFrameworkAnalysisVi
         {analysis.communicationStrategy && (
           <div className="space-y-2 pt-2 border-t">
             <h4 className="font-medium flex items-center gap-2">
-              <MessageCircle className="h-4 w-4 text-blue-500" />
+              <MessageCircle className="h-4 w-4 text-info" />
               Estratégia de Comunicação
             </h4>
             <p className="text-sm text-muted-foreground">
@@ -281,7 +281,7 @@ export const CrossFrameworkAnalysisView = memo(function CrossFrameworkAnalysisVi
         {analysis.recommendations.length > 0 && (
           <div className="space-y-3 pt-2 border-t">
             <h4 className="font-medium flex items-center gap-2">
-              <TrendingUp className="h-4 w-4 text-purple-500" />
+              <TrendingUp className="h-4 w-4 text-primary" />
               Recomendações de Gestão
             </h4>
             <div className="grid md:grid-cols-2 gap-2">
