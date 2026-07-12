@@ -123,13 +123,13 @@ export const DISCCompatibilityView = memo(function DISCCompatibilityView({
             <div className="grid md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <h4 className="font-medium flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4 text-green-500" />
+                  <CheckCircle2 className="h-4 w-4 text-success" />
                   Sinergias
                 </h4>
                 <ul className="text-sm text-muted-foreground space-y-1">
                   {compatibility.sinergias.map((s, i) => (
                     <li key={i} className="flex items-start gap-2">
-                      <span className="text-green-500">✓</span> {s}
+                      <span className="text-success">✓</span> {s}
                     </li>
                   ))}
                 </ul>
@@ -137,13 +137,13 @@ export const DISCCompatibilityView = memo(function DISCCompatibilityView({
 
               <div className="space-y-2">
                 <h4 className="font-medium flex items-center gap-2">
-                  <AlertTriangle className="h-4 w-4 text-orange-500" />
+                  <AlertTriangle className="h-4 w-4 text-warning" />
                   Potenciais Conflitos
                 </h4>
                 <ul className="text-sm text-muted-foreground space-y-1">
                   {compatibility.conflitos.map((c, i) => (
                     <li key={i} className="flex items-start gap-2">
-                      <span className="text-orange-500">⚠️</span> {c}
+                      <span className="text-warning">⚠️</span> {c}
                     </li>
                   ))}
                 </ul>
@@ -152,13 +152,13 @@ export const DISCCompatibilityView = memo(function DISCCompatibilityView({
 
             <div className="space-y-2 pt-2 border-t">
               <h4 className="font-medium flex items-center gap-2">
-                <MessageCircle className="h-4 w-4 text-blue-500" />
+                <MessageCircle className="h-4 w-4 text-info" />
                 Dicas de Comunicação
               </h4>
               <ul className="text-sm text-muted-foreground space-y-1">
                 {compatibility.dicasComunicacao.map((d, i) => (
                   <li key={i} className="flex items-start gap-2">
-                    <span className="text-blue-500">💬</span> {d}
+                    <span className="text-info">💬</span> {d}
                   </li>
                 ))}
               </ul>
@@ -166,7 +166,7 @@ export const DISCCompatibilityView = memo(function DISCCompatibilityView({
 
             <div className="space-y-2 pt-2 border-t">
               <h4 className="font-medium flex items-center gap-2">
-                <Briefcase className="h-4 w-4 text-purple-500" />
+                <Briefcase className="h-4 w-4 text-primary" />
                 Estilo de Trabalho Juntos
               </h4>
               <p className="text-sm text-muted-foreground italic">
