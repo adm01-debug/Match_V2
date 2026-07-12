@@ -96,22 +96,22 @@ export function MatchScoreCalculator({ candidatoId, candidatoNome, onScoreCalcul
   };
 
   const getScoreColor = (score: number) => {
-    if (score >= 80) return "text-green-600";
-    if (score >= 60) return "text-amber-600";
-    return "text-red-600";
+    if (score >= 80) return "text-success";
+    if (score >= 60) return "text-warning";
+    return "text-destructive";
   };
 
   const getScoreBg = (score: number) => {
-    if (score >= 80) return "bg-green-100";
-    if (score >= 60) return "bg-amber-100";
-    return "bg-red-100";
+    if (score >= 80) return "bg-success/15";
+    if (score >= 60) return "bg-warning/15";
+    return "bg-destructive/15";
   };
 
   const getRecomendacaoIcon = (recomendacao: string) => {
-    if (recomendacao.toLowerCase().includes('altamente')) return <Star className="h-5 w-5 text-green-500" />;
-    if (recomendacao.toLowerCase().includes('recomendado')) return <CheckCircle2 className="h-5 w-5 text-blue-500" />;
-    if (recomendacao.toLowerCase().includes('considera')) return <AlertCircle className="h-5 w-5 text-amber-500" />;
-    return <XCircle className="h-5 w-5 text-red-500" />;
+    if (recomendacao.toLowerCase().includes('altamente')) return <Star className="h-5 w-5 text-success" />;
+    if (recomendacao.toLowerCase().includes('recomendado')) return <CheckCircle2 className="h-5 w-5 text-info" />;
+    if (recomendacao.toLowerCase().includes('considera')) return <AlertCircle className="h-5 w-5 text-warning" />;
+    return <XCircle className="h-5 w-5 text-destructive" />;
   };
 
   if (loadingVagas) {
@@ -122,7 +122,7 @@ export function MatchScoreCalculator({ candidatoId, candidatoNome, onScoreCalcul
     <Card role="article" aria-label="Calculadora match">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Sparkles className="h-5 w-5 text-purple-500" />
+          <Sparkles className="h-5 w-5 text-primary" />
           Match Score AI
         </CardTitle>
         <CardDescription>
@@ -206,10 +206,10 @@ export function MatchScoreCalculator({ candidatoId, candidatoNome, onScoreCalcul
             <div className="space-y-3">
               {resultado.habilidadesMatch.length > 0 && (
                 <div>
-                  <p className="text-sm font-medium text-green-700 mb-1">✅ Habilidades Compatíveis</p>
+                  <p className="text-sm font-medium text-success mb-1">✅ Habilidades Compatíveis</p>
                   <div className="flex flex-wrap gap-1">
                     {resultado.habilidadesMatch.map((h, i) => (
-                      <Badge key={i} variant="outline" className="bg-green-50 text-green-700 border-green-200">{h}</Badge>
+                      <Badge key={i} variant="outline" className="bg-green-50 text-success border-green-200">{h}</Badge>
                     ))}
                   </div>
                 </div>
@@ -217,10 +217,10 @@ export function MatchScoreCalculator({ candidatoId, candidatoNome, onScoreCalcul
 
               {resultado.habilidadesFaltantes.length > 0 && (
                 <div>
-                  <p className="text-sm font-medium text-red-700 mb-1">❌ Habilidades Faltantes</p>
+                  <p className="text-sm font-medium text-destructive mb-1">❌ Habilidades Faltantes</p>
                   <div className="flex flex-wrap gap-1">
                     {resultado.habilidadesFaltantes.map((h, i) => (
-                      <Badge key={i} variant="outline" className="bg-red-50 text-red-700 border-red-200">{h}</Badge>
+                      <Badge key={i} variant="outline" className="bg-red-50 text-destructive border-red-200">{h}</Badge>
                     ))}
                   </div>
                 </div>
@@ -228,10 +228,10 @@ export function MatchScoreCalculator({ candidatoId, candidatoNome, onScoreCalcul
 
               {resultado.habilidadesExtras.length > 0 && (
                 <div>
-                  <p className="text-sm font-medium text-blue-700 mb-1">➕ Habilidades Extras</p>
+                  <p className="text-sm font-medium text-info mb-1">➕ Habilidades Extras</p>
                   <div className="flex flex-wrap gap-1">
                     {resultado.habilidadesExtras.map((h, i) => (
-                      <Badge key={i} variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">{h}</Badge>
+                      <Badge key={i} variant="outline" className="bg-blue-50 text-info border-blue-200">{h}</Badge>
                     ))}
                   </div>
                 </div>
@@ -253,7 +253,7 @@ export function MatchScoreCalculator({ candidatoId, candidatoNome, onScoreCalcul
             <div className="grid grid-cols-2 gap-4">
               {resultado.pontosFortes.length > 0 && (
                 <div>
-                  <p className="text-sm font-medium text-green-700 mb-1">💪 Pontos Fortes</p>
+                  <p className="text-sm font-medium text-success mb-1">💪 Pontos Fortes</p>
                   <ul className="text-sm space-y-1">
                     {resultado.pontosFortes.map((p, i) => (
                       <li key={i} className="text-muted-foreground">• {p}</li>
@@ -263,7 +263,7 @@ export function MatchScoreCalculator({ candidatoId, candidatoNome, onScoreCalcul
               )}
               {resultado.pontosAtencao.length > 0 && (
                 <div>
-                  <p className="text-sm font-medium text-amber-700 mb-1">⚠️ Pontos de Atenção</p>
+                  <p className="text-sm font-medium text-warning mb-1">⚠️ Pontos de Atenção</p>
                   <ul className="text-sm space-y-1">
                     {resultado.pontosAtencao.map((p, i) => (
                       <li key={i} className="text-muted-foreground">• {p}</li>
