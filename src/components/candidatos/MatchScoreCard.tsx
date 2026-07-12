@@ -50,48 +50,48 @@ interface RecomendacaoConfig {
 }
 
 function getScoreColor(score: number): string {
-  if (score >= 80) return 'text-green-500';
-  if (score >= 60) return 'text-yellow-500';
-  if (score >= 40) return 'text-orange-500';
-  return 'text-red-500';
+  if (score >= 80) return 'text-success';
+  if (score >= 60) return 'text-warning';
+  if (score >= 40) return 'text-warning';
+  return 'text-destructive';
 }
 
 function getScoreBorderColor(score: number): string {
-  if (score >= 80) return 'border-green-500';
-  if (score >= 60) return 'border-yellow-500';
-  if (score >= 40) return 'border-orange-500';
-  return 'border-red-500';
+  if (score >= 80) return 'border-success';
+  if (score >= 60) return 'border-warning';
+  if (score >= 40) return 'border-warning';
+  return 'border-destructive';
 }
 
 function getRecomendacaoConfig(recomendacao: string): RecomendacaoConfig {
   switch (recomendacao) {
     case 'forte':
-      return { 
-        label: 'Altamente Recomendado', 
-        color: 'bg-green-500', 
+      return {
+        label: 'Altamente Recomendado',
+        color: 'bg-success',
         icon: CheckCircle2,
-        textColor: 'text-green-700'
+        textColor: 'text-success',
       };
     case 'moderado':
-      return { 
-        label: 'Recomendado com Ressalvas', 
-        color: 'bg-yellow-500', 
+      return {
+        label: 'Recomendado com Ressalvas',
+        color: 'bg-warning',
         icon: AlertTriangle,
-        textColor: 'text-yellow-700'
+        textColor: 'text-warning',
       };
     case 'fraco':
-      return { 
-        label: 'Considerar Alternativas', 
-        color: 'bg-orange-500', 
+      return {
+        label: 'Considerar Alternativas',
+        color: 'bg-warning',
         icon: TrendingDown,
-        textColor: 'text-orange-700'
+        textColor: 'text-warning',
       };
     default:
-      return { 
-        label: 'Não Recomendado', 
-        color: 'bg-red-500', 
+      return {
+        label: 'Não Recomendado',
+        color: 'bg-destructive',
         icon: XCircle,
-        textColor: 'text-red-700'
+        textColor: 'text-destructive',
       };
   }
 }
@@ -219,16 +219,16 @@ function MatchScoreCardComponent({ matchResult, candidatoNome, vagaTitulo }: Mat
         <div className="space-y-3">
           {matchResult.habilidadesMatch.length > 0 && (
             <div role="group" aria-label="Habilidades compatíveis">
-              <p className="text-sm font-medium text-green-600 mb-2 flex items-center gap-1">
+              <p className="text-sm font-medium text-success mb-2 flex items-center gap-1">
                 <CheckCircle2 className="h-4 w-4" aria-hidden="true" />
                 Habilidades Compatíveis ({matchResult.habilidadesMatch.length})
               </p>
               <div className="flex flex-wrap gap-1">
                 {matchResult.habilidadesMatch.map((skill, i) => (
-                  <Badge 
-                    key={generateSkillKey(skill, i, 'match')} 
-                    variant="outline" 
-                    className="border-green-500 text-green-700 text-xs"
+                  <Badge
+                    key={generateSkillKey(skill, i, 'match')}
+                    variant="outline"
+                    className="border-success text-success text-xs"
                   >
                     {skill}
                   </Badge>
@@ -239,16 +239,16 @@ function MatchScoreCardComponent({ matchResult, candidatoNome, vagaTitulo }: Mat
 
           {matchResult.habilidadesFaltantes.length > 0 && (
             <div role="group" aria-label="Habilidades faltantes">
-              <p className="text-sm font-medium text-red-600 mb-2 flex items-center gap-1">
+              <p className="text-sm font-medium text-destructive mb-2 flex items-center gap-1">
                 <XCircle className="h-4 w-4" aria-hidden="true" />
                 Habilidades Faltantes ({matchResult.habilidadesFaltantes.length})
               </p>
               <div className="flex flex-wrap gap-1">
                 {matchResult.habilidadesFaltantes.map((skill, i) => (
-                  <Badge 
-                    key={generateSkillKey(skill, i, 'missing')} 
-                    variant="outline" 
-                    className="border-red-500 text-red-700 text-xs"
+                  <Badge
+                    key={generateSkillKey(skill, i, 'missing')}
+                    variant="outline"
+                    className="border-destructive text-destructive text-xs"
                   >
                     {skill}
                   </Badge>
@@ -259,16 +259,16 @@ function MatchScoreCardComponent({ matchResult, candidatoNome, vagaTitulo }: Mat
 
           {matchResult.habilidadesExtras.length > 0 && (
             <div role="group" aria-label="Habilidades extras">
-              <p className="text-sm font-medium text-blue-600 mb-2 flex items-center gap-1">
+              <p className="text-sm font-medium text-info mb-2 flex items-center gap-1">
                 <Award className="h-4 w-4" aria-hidden="true" />
                 Habilidades Extras ({matchResult.habilidadesExtras.length})
               </p>
               <div className="flex flex-wrap gap-1">
                 {matchResult.habilidadesExtras.map((skill, i) => (
-                  <Badge 
-                    key={generateSkillKey(skill, i, 'extra')} 
-                    variant="outline" 
-                    className="border-blue-500 text-blue-700 text-xs"
+                  <Badge
+                    key={generateSkillKey(skill, i, 'extra')}
+                    variant="outline"
+                    className="border-info text-info text-xs"
                   >
                     {skill}
                   </Badge>
@@ -281,16 +281,16 @@ function MatchScoreCardComponent({ matchResult, candidatoNome, vagaTitulo }: Mat
         {/* Pontos Fortes e Atenção */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {matchResult.pontosFortes.length > 0 && (
-            <div className="p-3 bg-green-50 dark:bg-green-950/20 rounded-lg">
-              <p className="text-sm font-medium text-green-700 dark:text-green-400 mb-2 flex items-center gap-1">
+            <div className="p-3 bg-success/10 rounded-lg">
+              <p className="text-sm font-medium text-success mb-2 flex items-center gap-1">
                 <TrendingUp className="h-4 w-4" aria-hidden="true" />
                 Pontos Fortes
               </p>
               <ul className="space-y-1" aria-label="Lista de pontos fortes">
                 {matchResult.pontosFortes.map((ponto, i) => (
-                  <li 
-                    key={`forte-${i}-${ponto.slice(0, 10)}`} 
-                    className="text-xs text-green-600 dark:text-green-300"
+                  <li
+                    key={`forte-${i}-${ponto.slice(0, 10)}`}
+                    className="text-xs text-success"
                   >
                     • {ponto}
                   </li>
@@ -300,16 +300,16 @@ function MatchScoreCardComponent({ matchResult, candidatoNome, vagaTitulo }: Mat
           )}
 
           {matchResult.pontosAtencao.length > 0 && (
-            <div className="p-3 bg-orange-50 dark:bg-orange-950/20 rounded-lg">
-              <p className="text-sm font-medium text-orange-700 dark:text-orange-400 mb-2 flex items-center gap-1">
+            <div className="p-3 bg-warning/10 rounded-lg">
+              <p className="text-sm font-medium text-warning mb-2 flex items-center gap-1">
                 <AlertTriangle className="h-4 w-4" aria-hidden="true" />
                 Pontos de Atenção
               </p>
               <ul className="space-y-1" aria-label="Lista de pontos de atenção">
                 {matchResult.pontosAtencao.map((ponto, i) => (
-                  <li 
-                    key={`atencao-${i}-${ponto.slice(0, 10)}`} 
-                    className="text-xs text-orange-600 dark:text-orange-300"
+                  <li
+                    key={`atencao-${i}-${ponto.slice(0, 10)}`}
+                    className="text-xs text-warning"
                   >
                     • {ponto}
                   </li>
