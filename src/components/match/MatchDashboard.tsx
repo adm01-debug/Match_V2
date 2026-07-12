@@ -30,37 +30,37 @@ const recomendacaoConfig = {
   match_perfeito: {
     label: 'Match Perfeito',
     emoji: '💜',
-    gradient: 'from-purple-500 to-pink-500',
-    bgClass: 'bg-purple-500/10',
-    textClass: 'text-purple-600 dark:text-purple-400'
+    gradient: 'from-primary to-accent',
+    bgClass: 'bg-primary/10',
+    textClass: 'text-primary'
   },
   match_forte: {
     label: 'Match Forte',
     emoji: '🔥',
-    gradient: 'from-orange-500 to-red-500',
-    bgClass: 'bg-orange-500/10',
-    textClass: 'text-orange-600 dark:text-orange-400'
+    gradient: 'from-warning to-destructive',
+    bgClass: 'bg-warning/10',
+    textClass: 'text-warning'
   },
   match_moderado: {
     label: 'Promissor',
     emoji: '✨',
-    gradient: 'from-blue-500 to-cyan-500',
-    bgClass: 'bg-blue-500/10',
-    textClass: 'text-blue-600 dark:text-blue-400'
+    gradient: 'from-info to-primary',
+    bgClass: 'bg-info/10',
+    textClass: 'text-info'
   },
   revisar: {
     label: 'Explorar',
     emoji: '🤔',
-    gradient: 'from-yellow-500 to-orange-500',
-    bgClass: 'bg-yellow-500/10',
-    textClass: 'text-yellow-600 dark:text-yellow-400'
+    gradient: 'from-warning to-accent',
+    bgClass: 'bg-warning/10',
+    textClass: 'text-warning'
   },
   nao_recomendado: {
     label: 'Baixa',
     emoji: '💭',
-    gradient: 'from-gray-400 to-gray-500',
-    bgClass: 'bg-gray-500/10',
-    textClass: 'text-gray-600 dark:text-gray-400'
+    gradient: 'from-muted to-muted-foreground',
+    bgClass: 'bg-muted',
+    textClass: 'text-muted-foreground'
   }
 };
 
