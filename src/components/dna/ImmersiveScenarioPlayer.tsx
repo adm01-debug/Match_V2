@@ -35,27 +35,27 @@ interface ImmersiveScenarioPlayerProps {
 
 const AMBIANCE_STYLES = {
   tense: {
-    bg: 'from-red-900/30 via-orange-900/20 to-slate-900',
+    bg: 'from-destructive/30 via-warning/20 to-background',
     icon: AlertTriangle,
-    iconColor: 'text-red-400',
+    iconColor: 'text-destructive',
     pulse: 'animate-pulse'
   },
   reflective: {
-    bg: 'from-blue-900/30 via-purple-900/20 to-slate-900',
+    bg: 'from-info/30 via-primary/20 to-background',
     icon: Lightbulb,
-    iconColor: 'text-blue-400',
+    iconColor: 'text-info',
     pulse: ''
   },
   dramatic: {
-    bg: 'from-purple-900/30 via-pink-900/20 to-slate-900',
+    bg: 'from-primary/30 via-accent/20 to-background',
     icon: Zap,
-    iconColor: 'text-purple-400',
+    iconColor: 'text-primary',
     pulse: 'animate-pulse'
   },
   celebratory: {
-    bg: 'from-green-900/30 via-cyan-900/20 to-slate-900',
+    bg: 'from-success/30 via-info/20 to-background',
     icon: Heart,
-    iconColor: 'text-green-400',
+    iconColor: 'text-success',
     pulse: ''
   }
 };
@@ -220,11 +220,11 @@ export const ImmersiveScenarioPlayer: React.FC<ImmersiveScenarioPlayerProps> = (
             >
               <div className="text-center">
                 <motion.div
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-500/20"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-success/20"
                   animate={{ scale: [1, 1.05, 1] }}
                   transition={{ duration: 1 }}
                 >
-                  <span className="text-green-400 font-medium">Decisão tomada!</span>
+                  <span className="text-success font-medium">Decisão tomada!</span>
                 </motion.div>
               </div>
 
@@ -235,8 +235,8 @@ export const ImmersiveScenarioPlayer: React.FC<ImmersiveScenarioPlayerProps> = (
                     <p className="text-white text-lg">{selectedChoice.text}</p>
                   </div>
 
-                  <div className="p-4 bg-purple-500/10 rounded-xl">
-                    <p className="text-purple-300 text-sm mb-2">Consequência:</p>
+                  <div className="p-4 bg-primary/10 rounded-xl">
+                    <p className="text-primary text-sm mb-2">Consequência:</p>
                     <p className="text-white text-lg">{selectedChoice.consequence}</p>
                   </div>
 
@@ -275,7 +275,7 @@ export const ImmersiveScenarioPlayer: React.FC<ImmersiveScenarioPlayerProps> = (
               <div className="flex justify-center">
                 <Button
                   onClick={handleContinue}
-                  className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 px-8"
+                  className="bg-gradient-to-r from-primary to-accent hover:opacity-90 px-8"
                   size="lg"
                 >
                   Continuar Jornada
