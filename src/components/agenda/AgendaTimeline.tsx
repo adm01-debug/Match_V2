@@ -306,11 +306,11 @@ export const AgendaTimeline = memo(({
         {events.length > 0 && (
           <div className="flex items-center gap-2">
             <Badge variant="outline" className="gap-1">
-              <CheckCircle2 className="h-3 w-3 text-green-500" />
+              <CheckCircle2 className="h-3 w-3 text-success" />
               {events.filter(e => e.status === 'confirmado').length} confirmadas
             </Badge>
             <Badge variant="outline" className="gap-1">
-              <AlertCircle className="h-3 w-3 text-amber-500" />
+              <AlertCircle className="h-3 w-3 text-warning" />
               {events.filter(e => e.status === 'agendado').length} pendentes
             </Badge>
           </div>
