@@ -45,33 +45,33 @@ interface SmartSuggestionsProps {
 const typeConfig = {
   action: {
     icon: <Zap className="h-4 w-4" />,
-    color: 'text-blue-500',
-    bgColor: 'bg-blue-500/10',
-    borderColor: 'border-blue-500/20',
+    color: 'text-info',
+    bgColor: 'bg-info/10',
+    borderColor: 'border-info/20',
   },
   insight: {
     icon: <Lightbulb className="h-4 w-4" />,
-    color: 'text-yellow-500',
-    bgColor: 'bg-yellow-500/10',
-    borderColor: 'border-yellow-500/20',
+    color: 'text-warning',
+    bgColor: 'bg-warning/10',
+    borderColor: 'border-warning/20',
   },
   optimization: {
     icon: <TrendingUp className="h-4 w-4" />,
-    color: 'text-green-500',
-    bgColor: 'bg-green-500/10',
-    borderColor: 'border-green-500/20',
+    color: 'text-success',
+    bgColor: 'bg-success/10',
+    borderColor: 'border-success/20',
   },
   reminder: {
     icon: <Clock className="h-4 w-4" />,
-    color: 'text-purple-500',
-    bgColor: 'bg-purple-500/10',
-    borderColor: 'border-purple-500/20',
+    color: 'text-primary',
+    bgColor: 'bg-primary/10',
+    borderColor: 'border-primary/20',
   },
 };
 
 const priorityConfig = {
   low: { label: 'Baixa', color: 'bg-muted text-muted-foreground' },
-  medium: { label: 'Média', color: 'bg-yellow-500/20 text-yellow-600' },
+  medium: { label: 'Média', color: 'bg-warning/20 text-warning' },
   high: { label: 'Alta', color: 'bg-destructive/20 text-destructive' },
 };
 
@@ -288,7 +288,7 @@ export const QuickSuggestion = memo(function QuickSuggestion({
   const variants = {
     default: 'bg-muted hover:bg-muted/80',
     primary: 'bg-primary/10 hover:bg-primary/20 text-primary',
-    success: 'bg-green-500/10 hover:bg-green-500/20 text-green-600',
+    success: 'bg-success/10 hover:bg-success/20 text-success',
   };
 
   return (
