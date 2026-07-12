@@ -17,9 +17,9 @@ const ROOT = join(__dirname, "..");
 // Arquivos e diretórios onde cores literais são legítimas.
 const ALLOWLIST: RegExp[] = [
   // Dados/config/tipos — cores como valores de dicionário
-  /\/data\//,
-  /\/types\//,
-  /\/config\//,
+  /(^|\/)data\//,
+  /(^|\/)types\//,
+  /(^|\/)config\//,
   /\/domain\/gamification\/constants/,
   /\/hooks\/useGamification\.ts$/,
   // Testes (inclusive este arquivo)
