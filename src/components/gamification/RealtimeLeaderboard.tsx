@@ -194,7 +194,7 @@ const LeaderboardRow = memo(({
             <Badge variant="secondary" className="text-xs">Você</Badge>
           )}
           {entry.streak >= 7 && (
-            <Badge variant="outline" className="gap-1 border-orange-500/50 text-orange-600">
+            <Badge variant="outline" className="gap-1 border-warning/50 text-warning">
               <Flame className="h-3 w-3" />
               {entry.streak}
             </Badge>
