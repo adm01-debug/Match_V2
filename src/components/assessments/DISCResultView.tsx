@@ -16,17 +16,17 @@ interface DISCResultViewProps {
 }
 
 const DISC_COLORS = {
-  D: 'bg-red-500',
-  I: 'bg-yellow-500',
-  S: 'bg-green-500',
-  C: 'bg-blue-500',
+  D: 'bg-destructive',
+  I: 'bg-warning',
+  S: 'bg-success',
+  C: 'bg-info',
 };
 
 const DISC_TEXT_COLORS = {
-  D: 'text-red-600',
-  I: 'text-yellow-600',
-  S: 'text-green-600',
-  C: 'text-blue-600',
+  D: 'text-destructive',
+  I: 'text-warning',
+  S: 'text-success',
+  C: 'text-info',
 };
 
 export function DISCResultView({ resultado, candidatoNome, showDetails = true }: DISCResultViewProps) {
@@ -47,7 +47,7 @@ export function DISCResultView({ resultado, candidatoNome, showDetails = true }:
         <CardHeader>
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-3">
-              <div className={`p-3 rounded-xl ${DISC_COLORS[resultado.perfilPrimario]} text-white`}>
+              <div className={`p-3 rounded-xl ${DISC_COLORS[resultado.perfilPrimario]} text-primary-foreground`}>
                 <Brain className="h-6 w-6" />
               </div>
               <div>
@@ -64,7 +64,7 @@ export function DISCResultView({ resultado, candidatoNome, showDetails = true }:
         <CardContent className="space-y-6">
           {/* Perfis */}
           <div className="flex flex-wrap gap-3">
-            <Badge className={`${DISC_COLORS[resultado.perfilPrimario]} text-white text-lg px-4 py-2`}>
+            <Badge className={`${DISC_COLORS[resultado.perfilPrimario]} text-primary-foreground text-lg px-4 py-2`}>
               {resultado.perfilPrimario} - {primaryProfile.nome}
               <span className="ml-2 opacity-75">(Primário)</span>
             </Badge>
@@ -104,7 +104,7 @@ export function DISCResultView({ resultado, candidatoNome, showDetails = true }:
           <Card>
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center gap-2 text-lg">
-                <CheckCircle2 className="h-5 w-5 text-green-500" />
+                <CheckCircle2 className="h-5 w-5 text-success" />
                 Pontos Fortes
               </CardTitle>
             </CardHeader>
@@ -112,13 +112,13 @@ export function DISCResultView({ resultado, candidatoNome, showDetails = true }:
               <ul className="space-y-2">
                 {resultado.pontosFortes.map((ponto, idx) => (
                   <li key={idx} className="flex items-center gap-2 text-sm">
-                    <div className="h-2 w-2 rounded-full bg-green-500" />
+                    <div className="h-2 w-2 rounded-full bg-success" />
                     {ponto}
                   </li>
                 ))}
                 {primaryProfile.pontosFortes.slice(0, 2).map((ponto, idx) => (
                   <li key={`profile-${idx}`} className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <div className="h-2 w-2 rounded-full bg-green-300" />
+                    <div className="h-2 w-2 rounded-full bg-success/50" />
                     {ponto}
                   </li>
                 ))}
@@ -130,7 +130,7 @@ export function DISCResultView({ resultado, candidatoNome, showDetails = true }:
           <Card>
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center gap-2 text-lg">
-                <TrendingUp className="h-5 w-5 text-blue-500" />
+                <TrendingUp className="h-5 w-5 text-info" />
                 Áreas de Desenvolvimento
               </CardTitle>
             </CardHeader>
@@ -138,13 +138,13 @@ export function DISCResultView({ resultado, candidatoNome, showDetails = true }:
               <ul className="space-y-2">
                 {resultado.areasDesenvolvimento.map((area, idx) => (
                   <li key={idx} className="flex items-center gap-2 text-sm">
-                    <div className="h-2 w-2 rounded-full bg-blue-500" />
+                    <div className="h-2 w-2 rounded-full bg-info" />
                     {area}
                   </li>
                 ))}
                 {primaryProfile.desafios.slice(0, 2).map((desafio, idx) => (
                   <li key={`desafio-${idx}`} className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <div className="h-2 w-2 rounded-full bg-orange-300" />
+                    <div className="h-2 w-2 rounded-full bg-warning/50" />
                     {desafio}
                   </li>
                 ))}
