@@ -35,27 +35,27 @@ interface ImmersiveScenarioPlayerProps {
 
 const AMBIANCE_STYLES = {
   tense: {
-    bg: 'from-red-900/30 via-orange-900/20 to-slate-900',
+    bg: 'from-destructive/30 via-warning/20 to-background',
     icon: AlertTriangle,
-    iconColor: 'text-red-400',
+    iconColor: 'text-destructive',
     pulse: 'animate-pulse'
   },
   reflective: {
-    bg: 'from-blue-900/30 via-purple-900/20 to-slate-900',
+    bg: 'from-info/30 via-primary/20 to-background',
     icon: Lightbulb,
-    iconColor: 'text-blue-400',
+    iconColor: 'text-info',
     pulse: ''
   },
   dramatic: {
-    bg: 'from-purple-900/30 via-pink-900/20 to-slate-900',
+    bg: 'from-primary/30 via-accent/20 to-background',
     icon: Zap,
-    iconColor: 'text-purple-400',
+    iconColor: 'text-primary',
     pulse: 'animate-pulse'
   },
   celebratory: {
-    bg: 'from-green-900/30 via-cyan-900/20 to-slate-900',
+    bg: 'from-success/30 via-info/20 to-background',
     icon: Heart,
-    iconColor: 'text-green-400',
+    iconColor: 'text-success',
     pulse: ''
   }
 };
