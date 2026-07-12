@@ -149,9 +149,9 @@ export function ResultadoProvaView({ prova, resultado, questoes, onVoltar }: Res
             if (stats.total === 0) return null;
             const percentual = (stats.corretas / stats.total) * 100;
             const colors = {
-              facil: { bg: 'bg-green-500', text: 'text-success', label: 'Fácil' },
+              facil: { bg: 'bg-success', text: 'text-success', label: 'Fácil' },
               medio: { bg: 'bg-warning', text: 'text-warning', label: 'Médio' },
-              dificil: { bg: 'bg-red-500', text: 'text-destructive', label: 'Difícil' }
+              dificil: { bg: 'bg-destructive', text: 'text-destructive', label: 'Difícil' }
             };
             const color = colors[dif as keyof typeof colors];
             
