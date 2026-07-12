@@ -71,22 +71,22 @@ const RankBadge = memo(({ rank }: { rank: number }) => {
         }}
         transition={{ duration: 2, repeat: Infinity }}
       >
-        <Crown className="h-6 w-6 text-yellow-500" />
+        <Crown className="h-6 w-6 text-warning" />
         <motion.div
           className="absolute inset-0"
           animate={{ opacity: [0.5, 1, 0.5] }}
           transition={{ duration: 1.5, repeat: Infinity }}
         >
-          <Sparkles className="h-6 w-6 text-yellow-400" />
+          <Sparkles className="h-6 w-6 text-warning" />
         </motion.div>
       </motion.div>
     );
   }
   if (rank === 2) {
-    return <Medal className="h-5 w-5 text-gray-400" />;
+    return <Medal className="h-5 w-5 text-muted-foreground" />;
   }
   if (rank === 3) {
-    return <Medal className="h-5 w-5 text-amber-600" />;
+    return <Medal className="h-5 w-5 text-warning/70" />;
   }
   return (
     <span className="text-sm font-bold text-muted-foreground w-6 text-center">
