@@ -281,7 +281,7 @@ export const StreakDisplay = memo(function StreakDisplay({
                 className={cn(
                   "absolute inset-y-0 left-0 rounded-full",
                   level === "inferno"
-                    ? "bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500"
+                    ? "bg-gradient-to-r from-destructive via-warning to-accent"
                     : colors.bg
                 )}
                 initial={{ width: 0 }}
