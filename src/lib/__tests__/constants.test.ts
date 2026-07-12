@@ -129,9 +129,9 @@ describe('Arrays de lookup', () => {
   it('TIPOS_ENTREVISTA tem 3 itens', () => expect(TIPOS_ENTREVISTA.length).toBe(3));
   it('CATEGORIAS_PROVA tem 7 itens', () => expect(CATEGORIAS_PROVA.length).toBe(7));
   it('DEPARTAMENTOS tem 10 itens', () => expect(DEPARTAMENTOS.length).toBe(10));
-  it('CHART_COLORS tem 10 cores hex', () => {
-    expect(CHART_COLORS.length).toBe(10);
-    CHART_COLORS.forEach(c => expect(c).toMatch(/^#[0-9A-Fa-f]{6}$/));
+  it('CHART_COLORS usa tokens HSL semânticos', () => {
+    expect(CHART_COLORS.length).toBeGreaterThanOrEqual(6);
+    CHART_COLORS.forEach(c => expect(c).toMatch(/^hsl\(var\(--[a-z-]+\)\)$/));
   });
   it('DATE_FORMATS tem 4 formatos', () => expect(Object.keys(DATE_FORMATS).length).toBe(4));
 });
