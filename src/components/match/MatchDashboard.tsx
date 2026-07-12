@@ -30,37 +30,37 @@ const recomendacaoConfig = {
   match_perfeito: {
     label: 'Match Perfeito',
     emoji: '💜',
-    gradient: 'from-purple-500 to-pink-500',
-    bgClass: 'bg-purple-500/10',
-    textClass: 'text-purple-600 dark:text-purple-400'
+    gradient: 'from-primary to-accent',
+    bgClass: 'bg-primary/10',
+    textClass: 'text-primary'
   },
   match_forte: {
     label: 'Match Forte',
     emoji: '🔥',
-    gradient: 'from-orange-500 to-red-500',
-    bgClass: 'bg-orange-500/10',
-    textClass: 'text-orange-600 dark:text-orange-400'
+    gradient: 'from-warning to-destructive',
+    bgClass: 'bg-warning/10',
+    textClass: 'text-warning'
   },
   match_moderado: {
     label: 'Promissor',
     emoji: '✨',
-    gradient: 'from-blue-500 to-cyan-500',
-    bgClass: 'bg-blue-500/10',
-    textClass: 'text-blue-600 dark:text-blue-400'
+    gradient: 'from-info to-primary',
+    bgClass: 'bg-info/10',
+    textClass: 'text-info'
   },
   revisar: {
     label: 'Explorar',
     emoji: '🤔',
-    gradient: 'from-yellow-500 to-orange-500',
-    bgClass: 'bg-yellow-500/10',
-    textClass: 'text-yellow-600 dark:text-yellow-400'
+    gradient: 'from-warning to-accent',
+    bgClass: 'bg-warning/10',
+    textClass: 'text-warning'
   },
   nao_recomendado: {
     label: 'Baixa',
     emoji: '💭',
-    gradient: 'from-gray-400 to-gray-500',
-    bgClass: 'bg-gray-500/10',
-    textClass: 'text-gray-600 dark:text-gray-400'
+    gradient: 'from-muted to-muted-foreground',
+    bgClass: 'bg-muted',
+    textClass: 'text-muted-foreground'
   }
 };
 
@@ -101,10 +101,10 @@ export function MatchDashboard({
     <div className="space-y-6">
       {/* Stats Header */}
       <div className="grid grid-cols-3 gap-4">
-        <Card className="p-4 bg-gradient-to-br from-purple-500/10 to-pink-500/10 border-purple-500/20">
+        <Card className="p-4 bg-gradient-to-br from-primary/10 to-accent/10 border-primary/20">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-purple-500/20 rounded-lg">
-              <Trophy className="h-5 w-5 text-purple-500" />
+            <div className="p-2 bg-primary/20 rounded-lg">
+              <Trophy className="h-5 w-5 text-primary" />
             </div>
             <div>
               <p className="text-2xl font-bold">{matchesPerfeitos}</p>
@@ -113,10 +113,10 @@ export function MatchDashboard({
           </div>
         </Card>
         
-        <Card className="p-4 bg-gradient-to-br from-orange-500/10 to-red-500/10 border-orange-500/20">
+        <Card className="p-4 bg-gradient-to-br from-warning/10 to-destructive/10 border-warning/20">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-orange-500/20 rounded-lg">
-              <Zap className="h-5 w-5 text-orange-500" />
+            <div className="p-2 bg-warning/20 rounded-lg">
+              <Zap className="h-5 w-5 text-warning" />
             </div>
             <div>
               <p className="text-2xl font-bold">{matchesFortes}</p>
@@ -125,10 +125,10 @@ export function MatchDashboard({
           </div>
         </Card>
         
-        <Card className="p-4 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border-blue-500/20">
+        <Card className="p-4 bg-gradient-to-br from-info/10 to-primary/10 border-info/20">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-blue-500/20 rounded-lg">
-              <Star className="h-5 w-5 text-blue-500" />
+            <div className="p-2 bg-info/20 rounded-lg">
+              <Star className="h-5 w-5 text-info" />
             </div>
             <div>
               <p className="text-2xl font-bold">{mediaScore}%</p>
@@ -174,7 +174,7 @@ export function MatchDashboard({
                             {config.emoji} {config.label}
                           </Badge>
                           {match.scoreTotal >= 80 && (
-                            <Sparkles className="h-4 w-4 text-yellow-500" />
+                            <Sparkles className="h-4 w-4 text-warning" />
                           )}
                         </div>
                         
@@ -195,7 +195,7 @@ export function MatchDashboard({
                         {/* Pontos de Atenção */}
                         {match.pontosAtencao.length > 0 && (
                           <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                            <AlertCircle className="h-3 w-3 text-orange-500" />
+                            <AlertCircle className="h-3 w-3 text-warning" />
                             <span>Atenção: {match.pontosAtencao.join(', ')}</span>
                           </div>
                         )}
@@ -225,7 +225,7 @@ export function MatchDashboard({
                       <div>
                         <Progress 
                           value={(match.matchesAltos.length / 20) * 100} 
-                          className="h-1.5 mb-1 [&>div]:bg-emerald-500"
+                          className="h-1.5 mb-1 [&>div]:bg-success"
                         />
                         <span className="text-muted-foreground">
                           {match.matchesAltos.length} altos
@@ -234,7 +234,7 @@ export function MatchDashboard({
                       <div>
                         <Progress 
                           value={(match.conflitos.length / 20) * 100} 
-                          className="h-1.5 mb-1 [&>div]:bg-orange-500"
+                          className="h-1.5 mb-1 [&>div]:bg-warning"
                         />
                         <span className="text-muted-foreground">
                           {match.conflitos.length} atenção
