@@ -109,7 +109,12 @@ export function MatchResultCard({
         particleCount: 100,
         spread: 70,
         origin: { y: 0.6 },
-        colors: ['#ec4899', '#a855f7', '#ef4444', '#f59e0b']
+        colors: [
+          cssVarHsl('--accent'),
+          cssVarHsl('--primary'),
+          cssVarHsl('--destructive'),
+          cssVarHsl('--warning'),
+        ],
       });
     }
     
