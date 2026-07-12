@@ -57,10 +57,10 @@ const iconMap = {
 };
 
 const difficultyColors = {
-  facil: 'bg-green-500',
-  medio: 'bg-yellow-500',
-  dificil: 'bg-orange-500',
-  expert: 'bg-red-500',
+  facil: 'bg-success',
+  medio: 'bg-warning',
+  dificil: 'bg-warning',
+  expert: 'bg-destructive',
 };
 
 const difficultyLabels = {
@@ -208,7 +208,7 @@ export const PhaseChallenge = memo(function PhaseChallenge({
                 transition={{ delay: index * 0.1 }}
                 className={cn(
                   "relative rounded-xl border-2 p-4 transition-all",
-                  isCompleted && "border-green-500 bg-green-500/5",
+                  isCompleted && "border-success bg-success/5",
                   !isCompleted && isUnlocked && "border-primary/50 hover:border-primary hover:shadow-lg cursor-pointer",
                   !isUnlocked && "border-muted opacity-60"
                 )}
@@ -218,7 +218,7 @@ export const PhaseChallenge = memo(function PhaseChallenge({
                   {/* Icon */}
                   <div className={cn(
                     "w-12 h-12 rounded-xl flex items-center justify-center",
-                    isCompleted && "bg-green-500 text-white",
+                    isCompleted && "bg-success text-success-foreground",
                     !isCompleted && isUnlocked && "bg-primary/10 text-primary",
                     !isUnlocked && "bg-muted text-muted-foreground"
                   )}>
@@ -243,7 +243,7 @@ export const PhaseChallenge = memo(function PhaseChallenge({
                     
                     {result && (
                       <div className="flex items-center gap-3 mt-2 text-sm">
-                        <span className="flex items-center gap-1 text-yellow-600">
+                        <span className="flex items-center gap-1 text-warning">
                           <Star className="h-4 w-4" />
                           {result.score}%
                         </span>
@@ -297,7 +297,7 @@ export const PhaseChallenge = memo(function PhaseChallenge({
           <motion.div
             animate={{ rotate: [0, 10, -10, 0] }}
             transition={{ duration: 0.5 }}
-            className="w-20 h-20 rounded-full bg-gradient-to-br from-yellow-400 to-amber-500 flex items-center justify-center mx-auto"
+            className="w-20 h-20 rounded-full bg-gradient-to-br from-warning to-warning/70 flex items-center justify-center mx-auto"
           >
             <Trophy className="h-10 w-10 text-white" />
           </motion.div>
@@ -312,12 +312,12 @@ export const PhaseChallenge = memo(function PhaseChallenge({
               <div className="text-2xl font-bold text-primary">{lastPhaseResult.score}%</div>
               <div className="text-xs text-muted-foreground">Precisão</div>
             </div>
-            <div className="p-3 rounded-lg bg-yellow-500/10">
-              <div className="text-2xl font-bold text-yellow-600">+{lastPhaseResult.xpEarned}</div>
+            <div className="p-3 rounded-lg bg-warning/10">
+              <div className="text-2xl font-bold text-warning">+{lastPhaseResult.xpEarned}</div>
               <div className="text-xs text-muted-foreground">XP</div>
             </div>
-            <div className="p-3 rounded-lg bg-blue-500/10">
-              <div className="text-2xl font-bold text-blue-600">{lastPhaseResult.timeSpent}s</div>
+            <div className="p-3 rounded-lg bg-info/10">
+              <div className="text-2xl font-bold text-info">{lastPhaseResult.timeSpent}s</div>
               <div className="text-xs text-muted-foreground">Tempo</div>
             </div>
           </div>
@@ -349,7 +349,7 @@ export const PhaseChallenge = memo(function PhaseChallenge({
           <div className="flex justify-between text-sm">
             <span>Pergunta {currentQuestionIndex + 1} de {currentPhase.questions.length}</span>
             <span className="flex items-center gap-1">
-              <Flame className="h-4 w-4 text-orange-500" />
+              <Flame className="h-4 w-4 text-warning" />
               {currentPhase.xpReward} XP
             </span>
           </div>
