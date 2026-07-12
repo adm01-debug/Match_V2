@@ -361,7 +361,7 @@ export const StreakCalendar = memo(function StreakCalendar({
             className={cn(
               "aspect-square rounded-sm",
               day.isActive
-                ? "bg-gradient-to-br from-orange-400 to-red-500"
+                ? "bg-gradient-to-br from-warning to-destructive"
                 : "bg-muted"
             )}
             initial={animated ? { scale: 0, opacity: 0 } : undefined}
