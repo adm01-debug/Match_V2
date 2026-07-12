@@ -220,11 +220,11 @@ export const ImmersiveScenarioPlayer: React.FC<ImmersiveScenarioPlayerProps> = (
             >
               <div className="text-center">
                 <motion.div
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-500/20"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-success/20"
                   animate={{ scale: [1, 1.05, 1] }}
                   transition={{ duration: 1 }}
                 >
-                  <span className="text-green-400 font-medium">Decisão tomada!</span>
+                  <span className="text-success font-medium">Decisão tomada!</span>
                 </motion.div>
               </div>
 
