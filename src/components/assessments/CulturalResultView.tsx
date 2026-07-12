@@ -87,13 +87,13 @@ export function CulturalResultView({ resultado, candidatoNome }: CulturalResultV
               className={`absolute inset-y-0 left-0 ${getFitBgColor(resultado.fitGeral)} rounded-full transition-all duration-700`}
               style={{ width: `${resultado.fitGeral}%` }}
             />
-            <div className="absolute inset-y-0 left-[60%] w-px bg-yellow-400 opacity-50" />
-            <div className="absolute inset-y-0 left-[80%] w-px bg-green-400 opacity-50" />
+            <div className="absolute inset-y-0 left-[60%] w-px bg-warning opacity-50" />
+            <div className="absolute inset-y-0 left-[80%] w-px bg-success opacity-50" />
           </div>
           <div className="flex justify-between text-xs text-muted-foreground mt-1">
             <span>0%</span>
-            <span className="text-yellow-600">60% Parcial</span>
-            <span className="text-green-600">80% Alto</span>
+            <span className="text-warning">60% Parcial</span>
+            <span className="text-success">80% Alto</span>
             <span>100%</span>
           </div>
         </CardContent>
