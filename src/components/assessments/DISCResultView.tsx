@@ -16,17 +16,17 @@ interface DISCResultViewProps {
 }
 
 const DISC_COLORS = {
-  D: 'bg-red-500',
-  I: 'bg-yellow-500',
-  S: 'bg-green-500',
-  C: 'bg-blue-500',
+  D: 'bg-destructive',
+  I: 'bg-warning',
+  S: 'bg-success',
+  C: 'bg-info',
 };
 
 const DISC_TEXT_COLORS = {
-  D: 'text-red-600',
-  I: 'text-yellow-600',
-  S: 'text-green-600',
-  C: 'text-blue-600',
+  D: 'text-destructive',
+  I: 'text-warning',
+  S: 'text-success',
+  C: 'text-info',
 };
 
 export function DISCResultView({ resultado, candidatoNome, showDetails = true }: DISCResultViewProps) {
