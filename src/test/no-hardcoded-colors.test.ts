@@ -60,6 +60,13 @@ const ALLOWLIST: RegExp[] = [
   /\/gamification\/XPToast\.tsx$/,
   /\/gamification\/StreakDisplay\.tsx$/,
   /\/dashboard\/EntrevistasChart\.tsx$/,
+  // UI primitives que expõem cores como prop / animação neutra
+  /\/components\/ui\/chart\.tsx$/,
+  /\/components\/ui\/confetti\.tsx$/,
+  /\/components\/ui\/animated-card\.tsx$/,
+  /\/components\/ui\/ripple-effect\.tsx$/,
+  // Publisher types — mapa de cores por job board (dado)
+  /\/vagas\/publisher\/types\.ts$/,
   // White label — cores customizáveis por tenant (default fallback)
   /\/hooks\/useWhiteLabel\.ts$/,
   // Entrevistas: cores para chart passadas como dado (poderiam ser tokens; migradas separadamente)
