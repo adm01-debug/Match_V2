@@ -41,7 +41,7 @@ export function GamifiedCompletePhase({
           animate={{ rotate: [0, 10, -10, 0] }}
           transition={{ duration: 0.5, repeat: 3 }}
         >
-          <div className="w-24 h-24 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center">
+          <div className="w-24 h-24 rounded-full bg-gradient-to-br from-warning to-warning/70 flex items-center justify-center">
             <Crown className="h-12 w-12 text-white" />
           </div>
         </motion.div>
@@ -50,24 +50,24 @@ export function GamifiedCompletePhase({
         <p className="text-muted-foreground mb-8">Você completou a avaliação!</p>
 
         <div className="grid grid-cols-2 gap-4 mb-8">
-          <div className="p-4 rounded-2xl bg-yellow-500/10 border border-yellow-500/20">
-            <Star className="h-8 w-8 text-yellow-500 mx-auto mb-2" />
-            <p className="text-2xl font-bold text-yellow-600">{totalXP}</p>
+          <div className="p-4 rounded-2xl bg-warning/10 border border-warning/20">
+            <Star className="h-8 w-8 text-warning mx-auto mb-2" />
+            <p className="text-2xl font-bold text-warning">{totalXP}</p>
             <p className="text-sm text-muted-foreground">XP Ganho</p>
           </div>
-          <div className="p-4 rounded-2xl bg-orange-500/10 border border-orange-500/20">
-            <Flame className="h-8 w-8 text-orange-500 mx-auto mb-2" />
-            <p className="text-2xl font-bold text-orange-600">x{combo.multiplier.toFixed(1)}</p>
+          <div className="p-4 rounded-2xl bg-warning/10 border border-warning/20">
+            <Flame className="h-8 w-8 text-warning mx-auto mb-2" />
+            <p className="text-2xl font-bold text-warning">x{combo.multiplier.toFixed(1)}</p>
             <p className="text-sm text-muted-foreground">Combo Máximo</p>
           </div>
-          <div className="p-4 rounded-2xl bg-blue-500/10 border border-blue-500/20">
-            <Zap className="h-8 w-8 text-blue-500 mx-auto mb-2" />
-            <p className="text-2xl font-bold text-blue-600">{fastAnswers}</p>
+          <div className="p-4 rounded-2xl bg-info/10 border border-info/20">
+            <Zap className="h-8 w-8 text-info mx-auto mb-2" />
+            <p className="text-2xl font-bold text-info">{fastAnswers}</p>
             <p className="text-sm text-muted-foreground">Respostas Rápidas</p>
           </div>
-          <div className="p-4 rounded-2xl bg-purple-500/10 border border-purple-500/20">
-            <Trophy className="h-8 w-8 text-purple-500 mx-auto mb-2" />
-            <p className="text-2xl font-bold text-purple-600">{earnedBadges.length}</p>
+          <div className="p-4 rounded-2xl bg-primary/10 border border-primary/20">
+            <Trophy className="h-8 w-8 text-primary mx-auto mb-2" />
+            <p className="text-2xl font-bold text-primary">{earnedBadges.length}</p>
             <p className="text-sm text-muted-foreground">Conquistas</p>
           </div>
         </div>
