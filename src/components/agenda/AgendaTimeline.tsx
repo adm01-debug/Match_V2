@@ -59,15 +59,15 @@ interface AgendaTimelineProps {
 const getStatusInfo = (status: AgendaEvent['status']) => {
   switch (status) {
     case 'confirmado':
-      return { icon: CheckCircle2, color: 'text-green-500', bg: 'bg-green-500/10', label: 'Confirmado' };
+      return { icon: CheckCircle2, color: 'text-success', bg: 'bg-success/10', label: 'Confirmado' };
     case 'em_andamento':
-      return { icon: Play, color: 'text-blue-500', bg: 'bg-blue-500/10', label: 'Em andamento' };
+      return { icon: Play, color: 'text-info', bg: 'bg-info/10', label: 'Em andamento' };
     case 'concluido':
       return { icon: CheckCircle2, color: 'text-muted-foreground', bg: 'bg-muted', label: 'Concluído' };
     case 'cancelado':
-      return { icon: XCircle, color: 'text-red-500', bg: 'bg-red-500/10', label: 'Cancelado' };
+      return { icon: XCircle, color: 'text-destructive', bg: 'bg-destructive/10', label: 'Cancelado' };
     default:
-      return { icon: AlertCircle, color: 'text-amber-500', bg: 'bg-amber-500/10', label: 'Agendado' };
+      return { icon: AlertCircle, color: 'text-warning', bg: 'bg-warning/10', label: 'Agendado' };
   }
 };
 
