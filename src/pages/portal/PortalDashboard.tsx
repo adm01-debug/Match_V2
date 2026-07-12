@@ -38,10 +38,10 @@ const etapasLabels: Record<string, string> = {
 };
 
 const statusColors: Record<string, string> = {
-  pendente: 'bg-yellow-500/10 text-yellow-600 border-yellow-500/20',
-  em_andamento: 'bg-blue-500/10 text-blue-600 border-blue-500/20',
-  aprovado: 'bg-green-500/10 text-green-600 border-green-500/20',
-  reprovado: 'bg-red-500/10 text-red-600 border-red-500/20',
+  pendente: 'bg-warning/10 text-warning border-warning/20',
+  em_andamento: 'bg-info/10 text-info border-info/20',
+  aprovado: 'bg-success/10 text-success border-success/20',
+  reprovado: 'bg-destructive/10 text-destructive border-destructive/20',
   desistencia: 'bg-gray-500/10 text-gray-600 border-gray-500/20'
 };
 
@@ -193,8 +193,8 @@ const PortalDashboard = () => {
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
-                <div className="p-3 bg-blue-500/10 rounded-lg">
-                  <Clock className="h-6 w-6 text-blue-600" />
+                <div className="p-3 bg-info/10 rounded-lg">
+                  <Clock className="h-6 w-6 text-info" />
                 </div>
                 <div>
                   <p className="text-2xl font-bold">{stats.emAndamento}</p>
@@ -207,8 +207,8 @@ const PortalDashboard = () => {
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
-                <div className="p-3 bg-green-500/10 rounded-lg">
-                  <CheckCircle2 className="h-6 w-6 text-green-600" />
+                <div className="p-3 bg-success/10 rounded-lg">
+                  <CheckCircle2 className="h-6 w-6 text-success" />
                 </div>
                 <div>
                   <p className="text-2xl font-bold">{stats.aprovadas}</p>
@@ -221,8 +221,8 @@ const PortalDashboard = () => {
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
-                <div className="p-3 bg-red-500/10 rounded-lg">
-                  <XCircle className="h-6 w-6 text-red-600" />
+                <div className="p-3 bg-destructive/10 rounded-lg">
+                  <XCircle className="h-6 w-6 text-destructive" />
                 </div>
                 <div>
                   <p className="text-2xl font-bold">{stats.reprovadas}</p>
