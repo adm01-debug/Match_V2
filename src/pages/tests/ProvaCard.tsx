@@ -11,7 +11,7 @@ import { iconeMap } from './iconMap';
 
 interface Props {
   prova: Prova;
-  getMatchIndices: (id: string, key: string) => number[][] | undefined;
+  getMatchIndices: (id: string, key: string) => readonly [number, number][] | undefined;
   onDuplicar: (id: string) => void;
   onExcluir: (id: string) => void;
 }
