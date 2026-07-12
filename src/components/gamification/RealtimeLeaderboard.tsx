@@ -273,8 +273,8 @@ export const RealtimeLeaderboard = memo(({
       <CardHeader className="pb-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-xl bg-gradient-to-br from-yellow-500 to-amber-600 shadow-lg shadow-yellow-500/20">
-              <Trophy className="h-5 w-5 text-white" />
+            <div className="p-2 rounded-xl bg-gradient-to-br from-warning to-warning/70 shadow-lg shadow-warning/20">
+              <Trophy className="h-5 w-5 text-warning-foreground" />
             </div>
             <div>
               <CardTitle className="text-xl">Ranking Global</CardTitle>
