@@ -29,9 +29,9 @@ const tipoLabels = {
 };
 
 const dificuldadeLabels = {
-  facil: { label: 'Fácil', color: 'bg-green-500' },
-  medio: { label: 'Médio', color: 'bg-yellow-500' },
-  dificil: { label: 'Difícil', color: 'bg-red-500' }
+  facil: { label: 'Fácil', color: 'bg-success' },
+  medio: { label: 'Médio', color: 'bg-warning' },
+  dificil: { label: 'Difícil', color: 'bg-destructive' }
 };
 
 export function QuestaoForm({ questao, onSave, onCancel }: QuestaoFormProps) {
@@ -148,8 +148,8 @@ export function QuestaoForm({ questao, onSave, onCancel }: QuestaoFormProps) {
                     className={cn(
                       "w-8 h-8 rounded-full border-2 flex items-center justify-center transition-colors shrink-0",
                       respostaCorreta === index 
-                        ? "border-green-500 bg-green-500 text-white" 
-                        : "border-muted-foreground/30 hover:border-green-500"
+                        ? "border-success bg-success text-success-foreground" 
+                        : "border-muted-foreground/30 hover:border-success"
                     )}
                   >
                     {respostaCorreta === index && <Check className="h-4 w-4" />}

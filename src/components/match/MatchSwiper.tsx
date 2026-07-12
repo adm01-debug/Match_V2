@@ -96,7 +96,7 @@ export function MatchSwiper({
     if (score >= 80) return 'from-success to-success/80';
     if (score >= 60) return 'from-warning to-warning/80';
     if (score >= 40) return 'from-warning to-destructive';
-    return 'from-gray-400 to-gray-500';
+    return 'from-muted to-muted-foreground';
   };
   
   if (!hasMoreCards) {

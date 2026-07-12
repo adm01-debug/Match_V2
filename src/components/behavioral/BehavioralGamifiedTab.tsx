@@ -159,7 +159,7 @@ export function BehavioralGamifiedTab({
                   <div className="flex flex-wrap gap-2">
                     {achievementsWithStatus.filter(a => a.isUnlocked).map((achievement) => (
                       <motion.div key={achievement.id} initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }}>
-                        <Badge className={`gap-1.5 py-1.5 px-3 ${achievement.tier === 'diamond' ? 'bg-gradient-to-r from-info to-info text-white border-0' : achievement.tier === 'gold' ? 'bg-gradient-to-r from-warning to-warning text-white border-0' : achievement.tier === 'silver' ? 'bg-gradient-to-r from-gray-400 to-gray-500 text-white border-0' : 'bg-gradient-to-r from-warning to-warning text-white border-0'}`}>
+                        <Badge className={`gap-1.5 py-1.5 px-3 ${achievement.tier === 'diamond' ? 'bg-gradient-to-r from-info to-info text-white border-0' : achievement.tier === 'gold' ? 'bg-gradient-to-r from-warning to-warning text-white border-0' : achievement.tier === 'silver' ? 'bg-gradient-to-r from-muted to-muted-foreground text-white border-0' : 'bg-gradient-to-r from-warning to-warning text-white border-0'}`}>
                           {achievement.tier === 'diamond' ? <Crown className="h-3.5 w-3.5" /> : achievement.tier === 'gold' ? <Star className="h-3.5 w-3.5" /> : <Award className="h-3.5 w-3.5" />}
                           {achievement.title}
                         </Badge>

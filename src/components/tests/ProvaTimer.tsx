@@ -42,8 +42,8 @@ export function ProvaTimer({ duracaoMinutos, onTimeUp, isPaused = false }: Prova
   return (
     <div data-testid="prova-timer" role="region" aria-label="Timer prova" className={cn(
       "flex items-center gap-2 px-4 py-2 rounded-lg font-mono text-lg transition-colors",
-      isUrgent && "bg-red-500/20 text-red-600 animate-pulse",
-      isWarning && "bg-yellow-500/20 text-yellow-600",
+      isUrgent && "bg-destructive/20 text-destructive animate-pulse",
+      isWarning && "bg-warning/20 text-warning",
       !isUrgent && !isWarning && "bg-muted"
     )}>
       {isUrgent ? (

@@ -6,7 +6,7 @@ import {
 } from 'recharts';
 import type { ChartType, ReportData } from '@/services/reportingService';
 
-const COLORS = ['#6366F1', '#8B5CF6', '#A855F7', '#D946EF', '#EC4899', '#F43F5E', '#22C55E', '#F59E0B', '#06B6D4'];
+import { CHART_COLORS as COLORS } from '@/lib/constants';
 
 interface ReportChartProps {
   data: ReportData;
