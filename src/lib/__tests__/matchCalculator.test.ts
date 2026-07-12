@@ -113,12 +113,12 @@ describe('getValorPorId', () => {
 });
 
 describe('getCorAlinhamento', () => {
-  it('retorna cores corretas para cada nível', () => {
-    expect(getCorAlinhamento('perfeito')).toBe('bg-green-500');
-    expect(getCorAlinhamento('alto')).toBe('bg-emerald-400');
-    expect(getCorAlinhamento('medio')).toBe('bg-yellow-400');
-    expect(getCorAlinhamento('baixo')).toBe('bg-orange-400');
-    expect(getCorAlinhamento('conflito')).toBe('bg-red-500');
+  it('retorna tokens semânticos para cada nível', () => {
+    expect(getCorAlinhamento('perfeito')).toBe('bg-success');
+    expect(getCorAlinhamento('alto')).toBe('bg-success/80');
+    expect(getCorAlinhamento('medio')).toBe('bg-warning');
+    expect(getCorAlinhamento('baixo')).toBe('bg-warning/70');
+    expect(getCorAlinhamento('conflito')).toBe('bg-destructive');
   });
 });
 
