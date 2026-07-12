@@ -99,22 +99,22 @@ export const DNAMatchSwiper: React.FC<DNAMatchSwiperProps> = ({
   const Icon = currentMatch.type === 'candidate' ? User : Building2;
 
   const getScoreColor = (score: number) => {
-    if (score >= 80) return 'from-green-500 to-emerald-500';
-    if (score >= 60) return 'from-yellow-500 to-orange-500';
-    if (score >= 40) return 'from-orange-500 to-red-500';
-    return 'from-red-500 to-red-600';
+    if (score >= 80) return 'from-success to-success/70';
+    if (score >= 60) return 'from-warning to-warning/70';
+    if (score >= 40) return 'from-warning to-destructive';
+    return 'from-destructive to-destructive/80';
   };
 
   const getChemistryBadge = () => {
     switch (chemistry) {
       case 'synergy':
-        return <Badge className="bg-green-500/20 text-green-400 border-green-500/30">💫 Sinergia Total</Badge>;
+        return <Badge className="bg-success/20 text-success border-success/30">💫 Sinergia Total</Badge>;
       case 'complementary':
-        return <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30">🤝 Complementares</Badge>;
+        return <Badge className="bg-info/20 text-info border-info/30">🤝 Complementares</Badge>;
       case 'tension':
-        return <Badge className="bg-orange-500/20 text-orange-400 border-orange-500/30">⚡ Tensão Criativa</Badge>;
+        return <Badge className="bg-warning/20 text-warning border-warning/30">⚡ Tensão Criativa</Badge>;
       default:
-        return <Badge className="bg-gray-500/20 text-gray-400 border-gray-500/30">⚖️ Neutro</Badge>;
+        return <Badge className="bg-muted text-muted-foreground border-border">⚖️ Neutro</Badge>;
     }
   };
 
