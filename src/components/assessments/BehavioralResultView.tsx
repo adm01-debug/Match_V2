@@ -121,17 +121,17 @@ const DIMENSION_LABELS: Record<string, Record<string, string>> = {
 };
 
 const getScoreColor = (score: number): string => {
-  if (score >= 80) return 'bg-green-500';
-  if (score >= 60) return 'bg-yellow-500';
-  if (score >= 40) return 'bg-orange-500';
-  return 'bg-red-500';
+  if (score >= 80) return 'bg-success';
+  if (score >= 60) return 'bg-warning';
+  if (score >= 40) return 'bg-warning/70';
+  return 'bg-destructive';
 };
 
 const getScoreTextColor = (score: number): string => {
-  if (score >= 80) return 'text-green-600';
-  if (score >= 60) return 'text-yellow-600';
-  if (score >= 40) return 'text-orange-600';
-  return 'text-red-600';
+  if (score >= 80) return 'text-success';
+  if (score >= 60) return 'text-warning';
+  if (score >= 40) return 'text-warning';
+  return 'text-destructive';
 };
 
 export function BehavioralResultView({ 
@@ -261,7 +261,7 @@ export function BehavioralResultView({
           <Card>
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center gap-2 text-lg">
-                <CheckCircle2 className="h-5 w-5 text-green-500" />
+                <CheckCircle2 className="h-5 w-5 text-success" />
                 Pontos Fortes
               </CardTitle>
             </CardHeader>
@@ -271,12 +271,12 @@ export function BehavioralResultView({
                   .filter(([, score]) => score >= 70)
                   .slice(0, 4)
                   .map(([dimension, score]) => (
-                    <li key={dimension} className="flex items-center justify-between p-2 bg-green-50 dark:bg-green-950/20 rounded-lg">
+                    <li key={dimension} className="flex items-center justify-between p-2 bg-success/10 rounded-lg">
                       <div className="flex items-center gap-2">
-                        <div className="h-2 w-2 rounded-full bg-green-500" />
+                        <div className="h-2 w-2 rounded-full bg-success" />
                         <span className="capitalize">{getDimensionLabel(dimension)}</span>
                       </div>
-                      <span className="font-semibold text-green-600">{score}%</span>
+                      <span className="font-semibold text-success">{score}%</span>
                     </li>
                   ))}
                 {sortedScores.filter(([, score]) => score >= 70).length === 0 && (
@@ -292,7 +292,7 @@ export function BehavioralResultView({
           <Card>
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center gap-2 text-lg">
-                <TrendingUp className="h-5 w-5 text-blue-500" />
+                <TrendingUp className="h-5 w-5 text-info" />
                 Áreas de Desenvolvimento
               </CardTitle>
             </CardHeader>
@@ -303,12 +303,12 @@ export function BehavioralResultView({
                   .reverse()
                   .slice(0, 4)
                   .map(([dimension, score]) => (
-                    <li key={dimension} className="flex items-center justify-between p-2 bg-blue-50 dark:bg-blue-950/20 rounded-lg">
+                    <li key={dimension} className="flex items-center justify-between p-2 bg-info/10 rounded-lg">
                       <div className="flex items-center gap-2">
-                        <div className="h-2 w-2 rounded-full bg-blue-500" />
+                        <div className="h-2 w-2 rounded-full bg-info" />
                         <span className="capitalize">{getDimensionLabel(dimension)}</span>
                       </div>
-                      <span className="font-semibold text-blue-600">{score}%</span>
+                      <span className="font-semibold text-info">{score}%</span>
                     </li>
                   ))}
                 {sortedScores.filter(([, score]) => score < 60).length === 0 && (
