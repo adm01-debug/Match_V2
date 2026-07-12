@@ -162,7 +162,7 @@ const RequirementsList = memo(({ requirements }: { requirements: Requirement[] }
         className={cn(
           'flex items-center gap-2 text-xs transition-colors',
           req.loading && 'text-muted-foreground',
-          !req.loading && req.met && !req.critical && 'text-green-600 dark:text-green-500',
+          !req.loading && req.met && !req.critical && 'text-success',
           !req.loading && !req.met && !req.critical && 'text-muted-foreground',
           !req.loading && req.critical && !req.met && 'text-destructive font-medium'
         )}
