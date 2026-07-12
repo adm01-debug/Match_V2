@@ -16,9 +16,9 @@ interface CulturalResultViewProps {
 
 const getStatusColor = (status: 'alto' | 'medio' | 'baixo') => {
   switch (status) {
-    case 'alto': return 'text-green-600 bg-green-100';
-    case 'medio': return 'text-yellow-600 bg-yellow-100';
-    case 'baixo': return 'text-red-600 bg-red-100';
+    case 'alto': return 'text-success bg-success/15';
+    case 'medio': return 'text-warning bg-warning/15';
+    case 'baixo': return 'text-destructive bg-destructive/15';
   }
 };
 
@@ -42,15 +42,15 @@ export function CulturalResultView({ resultado, candidatoNome }: CulturalResultV
   const sortedAlinhamentos = [...resultado.alinhamentos].sort((a, b) => b.score - a.score);
 
   const getFitColor = (fit: number) => {
-    if (fit >= 80) return 'text-green-600';
-    if (fit >= 60) return 'text-yellow-600';
-    return 'text-red-600';
+    if (fit >= 80) return 'text-success';
+    if (fit >= 60) return 'text-warning';
+    return 'text-destructive';
   };
 
   const getFitBgColor = (fit: number) => {
-    if (fit >= 80) return 'bg-green-500';
-    if (fit >= 60) return 'bg-yellow-500';
-    return 'bg-red-500';
+    if (fit >= 80) return 'bg-success';
+    if (fit >= 60) return 'bg-warning';
+    return 'bg-destructive';
   };
 
   return (
@@ -87,13 +87,13 @@ export function CulturalResultView({ resultado, candidatoNome }: CulturalResultV
               className={`absolute inset-y-0 left-0 ${getFitBgColor(resultado.fitGeral)} rounded-full transition-all duration-700`}
               style={{ width: `${resultado.fitGeral}%` }}
             />
-            <div className="absolute inset-y-0 left-[60%] w-px bg-yellow-400 opacity-50" />
-            <div className="absolute inset-y-0 left-[80%] w-px bg-green-400 opacity-50" />
+            <div className="absolute inset-y-0 left-[60%] w-px bg-warning opacity-50" />
+            <div className="absolute inset-y-0 left-[80%] w-px bg-success opacity-50" />
           </div>
           <div className="flex justify-between text-xs text-muted-foreground mt-1">
             <span>0%</span>
-            <span className="text-yellow-600">60% Parcial</span>
-            <span className="text-green-600">80% Alto</span>
+            <span className="text-warning">60% Parcial</span>
+            <span className="text-success">80% Alto</span>
             <span>100%</span>
           </div>
         </CardContent>
@@ -103,7 +103,7 @@ export function CulturalResultView({ resultado, candidatoNome }: CulturalResultV
       <Card>
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2 text-lg">
-            <Heart className="h-5 w-5 text-pink-500" />
+            <Heart className="h-5 w-5 text-primary" />
             Alinhamento por Valor
           </CardTitle>
         </CardHeader>
@@ -123,9 +123,9 @@ export function CulturalResultView({ resultado, candidatoNome }: CulturalResultV
               <Progress 
                 value={alinhamento.score} 
                 className={`h-2 ${
-                  alinhamento.status === 'alto' ? '[&>div]:bg-green-500' :
-                  alinhamento.status === 'medio' ? '[&>div]:bg-yellow-500' :
-                  '[&>div]:bg-red-500'
+                  alinhamento.status === 'alto' ? '[&>div]:bg-success' :
+                  alinhamento.status === 'medio' ? '[&>div]:bg-warning' :
+                  '[&>div]:bg-destructive'
                 }`}
               />
             </div>
@@ -144,10 +144,10 @@ export function CulturalResultView({ resultado, candidatoNome }: CulturalResultV
               {sortedAlinhamentos
                 .filter(a => a.status === 'alto')
                 .map((a, idx) => (
-                  <div key={idx} className="flex items-center gap-2 p-2 bg-green-50 rounded-lg dark:bg-green-950/20">
-                    <CheckCircle className="h-4 w-4 text-green-600" />
+                  <div key={idx} className="flex items-center gap-2 p-2 bg-success/10 rounded-lg">
+                    <CheckCircle className="h-4 w-4 text-success" />
                     <span className="capitalize">{a.valor}</span>
-                    <span className="ml-auto font-semibold text-green-600">{a.score}%</span>
+                    <span className="ml-auto font-semibold text-success">{a.score}%</span>
                   </div>
                 ))}
               {sortedAlinhamentos.filter(a => a.status === 'alto').length === 0 && (
@@ -168,10 +168,10 @@ export function CulturalResultView({ resultado, candidatoNome }: CulturalResultV
               {sortedAlinhamentos
                 .filter(a => a.status === 'baixo')
                 .map((a, idx) => (
-                  <div key={idx} className="flex items-center gap-2 p-2 bg-red-50 rounded-lg dark:bg-red-950/20">
-                    <XCircle className="h-4 w-4 text-red-600" />
+                  <div key={idx} className="flex items-center gap-2 p-2 bg-destructive/10 rounded-lg">
+                    <XCircle className="h-4 w-4 text-destructive" />
                     <span className="capitalize">{a.valor}</span>
-                    <span className="ml-auto font-semibold text-red-600">{a.score}%</span>
+                    <span className="ml-auto font-semibold text-destructive">{a.score}%</span>
                   </div>
                 ))}
               {sortedAlinhamentos.filter(a => a.status === 'baixo').length === 0 && (
