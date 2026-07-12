@@ -1,5 +1,6 @@
 // Configuração das etapas do pipeline
 // Este arquivo substitui @/data/pipelineData.ts com constantes puras (sem mock data)
+// Cores migradas para tokens semânticos do design system (respeita dark mode)
 
 import { EtapaProcesso } from '@/types/recruitment';
 
@@ -16,7 +17,7 @@ export const etapasConfig: EtapaConfig[] = [
   {
     id: 'novo',
     nome: 'Novos',
-    cor: 'bg-gray-500',
+    cor: 'bg-muted-foreground',
     descricao: 'Candidatos recém-inscritos aguardando triagem',
     ordem: 1,
     acoes: ['iniciar_triagem', 'rejeitar', 'agendar_contato'],
@@ -24,7 +25,7 @@ export const etapasConfig: EtapaConfig[] = [
   {
     id: 'em_triagem',
     nome: 'Em Triagem',
-    cor: 'bg-blue-500',
+    cor: 'bg-info',
     descricao: 'Análise inicial de currículo e requisitos',
     ordem: 2,
     acoes: ['aprovar_triagem', 'reprovar', 'solicitar_info'],
@@ -32,7 +33,7 @@ export const etapasConfig: EtapaConfig[] = [
   {
     id: 'pre_selecao',
     nome: 'Pré-Seleção',
-    cor: 'bg-indigo-500',
+    cor: 'bg-primary',
     descricao: 'Candidatos pré-selecionados para entrevistas',
     ordem: 3,
     acoes: ['agendar_entrevista_rh', 'enviar_teste', 'reprovar'],
@@ -40,7 +41,7 @@ export const etapasConfig: EtapaConfig[] = [
   {
     id: 'entrevista_rh',
     nome: 'Entrevista RH',
-    cor: 'bg-purple-500',
+    cor: 'bg-accent',
     descricao: 'Entrevista com Recursos Humanos',
     ordem: 4,
     acoes: ['aprovar', 'reprovar', 'reagendar', 'adicionar_feedback'],
@@ -48,7 +49,7 @@ export const etapasConfig: EtapaConfig[] = [
   {
     id: 'teste_tecnico',
     nome: 'Teste Técnico',
-    cor: 'bg-orange-500',
+    cor: 'bg-warning',
     descricao: 'Avaliação técnica ou prova',
     ordem: 5,
     acoes: ['aplicar_prova', 'registrar_resultado', 'reprovar'],
@@ -56,7 +57,7 @@ export const etapasConfig: EtapaConfig[] = [
   {
     id: 'entrevista_gestor',
     nome: 'Entrevista Gestor',
-    cor: 'bg-cyan-500',
+    cor: 'bg-info',
     descricao: 'Entrevista com gestor da área',
     ordem: 6,
     acoes: ['aprovar', 'reprovar', 'reagendar', 'adicionar_avaliacao'],
@@ -64,7 +65,7 @@ export const etapasConfig: EtapaConfig[] = [
   {
     id: 'entrevista_final',
     nome: 'Entrevista Final',
-    cor: 'bg-teal-500',
+    cor: 'bg-accent',
     descricao: 'Entrevista final com diretoria',
     ordem: 7,
     acoes: ['aprovar', 'reprovar', 'enviar_proposta'],
@@ -72,7 +73,7 @@ export const etapasConfig: EtapaConfig[] = [
   {
     id: 'aprovado',
     nome: 'Aprovados',
-    cor: 'bg-green-500',
+    cor: 'bg-success',
     descricao: 'Candidatos aprovados aguardando proposta',
     ordem: 8,
     acoes: ['enviar_proposta', 'mover_banco_talentos'],
@@ -80,7 +81,7 @@ export const etapasConfig: EtapaConfig[] = [
   {
     id: 'proposta_enviada',
     nome: 'Proposta Enviada',
-    cor: 'bg-emerald-500',
+    cor: 'bg-success',
     descricao: 'Proposta enviada ao candidato',
     ordem: 9,
     acoes: ['registrar_aceite', 'registrar_recusa', 'negociar'],
@@ -88,7 +89,7 @@ export const etapasConfig: EtapaConfig[] = [
   {
     id: 'contratado',
     nome: 'Contratados',
-    cor: 'bg-green-700',
+    cor: 'bg-success',
     descricao: 'Candidatos contratados',
     ordem: 10,
     acoes: ['iniciar_onboarding', 'gerar_documentos'],
@@ -96,7 +97,7 @@ export const etapasConfig: EtapaConfig[] = [
   {
     id: 'reprovado',
     nome: 'Reprovados',
-    cor: 'bg-red-500',
+    cor: 'bg-destructive',
     descricao: 'Candidatos não aprovados',
     ordem: 11,
     acoes: ['enviar_feedback', 'mover_banco_talentos'],
@@ -104,7 +105,7 @@ export const etapasConfig: EtapaConfig[] = [
   {
     id: 'banco_talentos',
     nome: 'Banco de Talentos',
-    cor: 'bg-amber-500',
+    cor: 'bg-warning',
     descricao: 'Candidatos para oportunidades futuras',
     ordem: 12,
     acoes: ['reativar_processo', 'enviar_comunicacao'],
@@ -138,81 +139,81 @@ export const etapasPipeline: EtapaProcesso[] = [
   'proposta_enviada',
 ];
 
-// Mapeamento de cores por status
+// Mapeamento de cores por status (tokens semânticos com opacidade)
 export const statusColors: Record<string, string> = {
-  em_andamento: 'bg-blue-100 text-blue-700',
-  aprovado: 'bg-green-100 text-green-700',
-  reprovado: 'bg-red-100 text-red-700',
-  desistente: 'bg-amber-100 text-amber-700',
-  contratado: 'bg-purple-100 text-purple-700',
+  em_andamento: 'bg-info/15 text-info',
+  aprovado: 'bg-success/15 text-success',
+  reprovado: 'bg-destructive/15 text-destructive',
+  desistente: 'bg-warning/15 text-warning',
+  contratado: 'bg-primary/15 text-primary',
 };
 
 export const etapaPremiumColors: Record<string, { gradient: string; border: string; icon: string; glow: string }> = {
-  novo: { 
-    gradient: "from-blue-500/20 via-blue-500/10 to-transparent", 
-    border: "border-blue-500/30 hover:border-blue-500/50",
-    icon: "bg-blue-500",
-    glow: "shadow-blue-500/20"
+  novo: {
+    gradient: 'from-info/20 via-info/10 to-transparent',
+    border: 'border-info/30 hover:border-info/50',
+    icon: 'bg-info',
+    glow: 'shadow-info/20',
   },
-  em_triagem: { 
-    gradient: "from-cyan-500/20 via-cyan-500/10 to-transparent", 
-    border: "border-cyan-500/30 hover:border-cyan-500/50",
-    icon: "bg-cyan-500",
-    glow: "shadow-cyan-500/20"
+  em_triagem: {
+    gradient: 'from-info/20 via-info/10 to-transparent',
+    border: 'border-info/30 hover:border-info/50',
+    icon: 'bg-info',
+    glow: 'shadow-info/20',
   },
-  pre_selecao: { 
-    gradient: "from-indigo-500/20 via-indigo-500/10 to-transparent", 
-    border: "border-indigo-500/30 hover:border-indigo-500/50",
-    icon: "bg-indigo-500",
-    glow: "shadow-indigo-500/20"
+  pre_selecao: {
+    gradient: 'from-primary/20 via-primary/10 to-transparent',
+    border: 'border-primary/30 hover:border-primary/50',
+    icon: 'bg-primary',
+    glow: 'shadow-primary/20',
   },
-  entrevista_rh: { 
-    gradient: "from-violet-500/20 via-violet-500/10 to-transparent", 
-    border: "border-violet-500/30 hover:border-violet-500/50",
-    icon: "bg-violet-500",
-    glow: "shadow-violet-500/20"
+  entrevista_rh: {
+    gradient: 'from-accent/20 via-accent/10 to-transparent',
+    border: 'border-accent/30 hover:border-accent/50',
+    icon: 'bg-accent',
+    glow: 'shadow-accent/20',
   },
-  teste_tecnico: { 
-    gradient: "from-orange-500/20 via-orange-500/10 to-transparent", 
-    border: "border-orange-500/30 hover:border-orange-500/50",
-    icon: "bg-orange-500",
-    glow: "shadow-orange-500/20"
+  teste_tecnico: {
+    gradient: 'from-warning/20 via-warning/10 to-transparent',
+    border: 'border-warning/30 hover:border-warning/50',
+    icon: 'bg-warning',
+    glow: 'shadow-warning/20',
   },
-  entrevista_gestor: { 
-    gradient: "from-cyan-500/20 via-cyan-500/10 to-transparent", 
-    border: "border-cyan-500/30 hover:border-cyan-500/50",
-    icon: "bg-cyan-500",
-    glow: "shadow-cyan-500/20"
+  entrevista_gestor: {
+    gradient: 'from-info/20 via-info/10 to-transparent',
+    border: 'border-info/30 hover:border-info/50',
+    icon: 'bg-info',
+    glow: 'shadow-info/20',
   },
-  entrevista_final: { 
-    gradient: "from-pink-500/20 via-pink-500/10 to-transparent", 
-    border: "border-pink-500/30 hover:border-pink-500/50",
-    icon: "bg-pink-500",
-    glow: "shadow-pink-500/20"
+  entrevista_final: {
+    gradient: 'from-accent/20 via-accent/10 to-transparent',
+    border: 'border-accent/30 hover:border-accent/50',
+    icon: 'bg-accent',
+    glow: 'shadow-accent/20',
   },
-  aprovado: { 
-    gradient: "from-emerald-500/20 via-emerald-500/10 to-transparent", 
-    border: "border-emerald-500/30 hover:border-emerald-500/50",
-    icon: "bg-emerald-500",
-    glow: "shadow-emerald-500/20"
+  aprovado: {
+    gradient: 'from-success/20 via-success/10 to-transparent',
+    border: 'border-success/30 hover:border-success/50',
+    icon: 'bg-success',
+    glow: 'shadow-success/20',
   },
-  proposta_enviada: { 
-    gradient: "from-amber-500/20 via-amber-500/10 to-transparent", 
-    border: "border-amber-500/30 hover:border-amber-500/50",
-    icon: "bg-amber-500",
-    glow: "shadow-amber-500/20"
+  proposta_enviada: {
+    gradient: 'from-warning/20 via-warning/10 to-transparent',
+    border: 'border-warning/30 hover:border-warning/50',
+    icon: 'bg-warning',
+    glow: 'shadow-warning/20',
   },
-  contratado: { 
-    gradient: "from-emerald-500/20 via-emerald-500/10 to-transparent", 
-    border: "border-emerald-500/30 hover:border-emerald-500/50",
-    icon: "bg-emerald-500",
-    glow: "shadow-emerald-500/20"
+  contratado: {
+    gradient: 'from-success/20 via-success/10 to-transparent',
+    border: 'border-success/30 hover:border-success/50',
+    icon: 'bg-success',
+    glow: 'shadow-success/20',
   },
-  reprovado: { 
-    gradient: "from-red-500/20 via-red-500/10 to-transparent", 
-    border: "border-red-500/30 hover:border-red-500/50",
-    icon: "bg-red-500",
-    glow: "shadow-red-500/20"
+  reprovado: {
+    gradient: 'from-destructive/20 via-destructive/10 to-transparent',
+    border: 'border-destructive/30 hover:border-destructive/50',
+    icon: 'bg-destructive',
+    glow: 'shadow-destructive/20',
   },
 };
 
