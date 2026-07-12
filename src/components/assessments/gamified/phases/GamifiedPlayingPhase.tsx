@@ -60,19 +60,19 @@ export function GamifiedPlayingPhase({
         </div>
 
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-yellow-500/10 border border-yellow-500/20">
-            <Star className="h-4 w-4 text-yellow-500" />
-            <span className="font-bold text-yellow-600">{totalXP} XP</span>
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-warning/10 border border-warning/20">
+            <Star className="h-4 w-4 text-warning" />
+            <span className="font-bold text-warning">{totalXP} XP</span>
           </div>
 
           {combo.count >= 2 && (
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/20"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-warning/10 border border-warning/20"
             >
-              <Flame className="h-4 w-4 text-orange-500" />
-              <span className="font-bold text-orange-600">x{combo.multiplier.toFixed(1)} Combo!</span>
+              <Flame className="h-4 w-4 text-warning" />
+              <span className="font-bold text-warning">x{combo.multiplier.toFixed(1)} Combo!</span>
             </motion.div>
           )}
 
@@ -126,8 +126,8 @@ export function GamifiedPlayingPhase({
                   'flex-1 p-8 rounded-3xl border-2 transition-all',
                   'hover:scale-105 active:scale-95',
                   index === 0
-                    ? 'hover:border-red-500 hover:bg-red-500/10'
-                    : 'hover:border-green-500 hover:bg-green-500/10'
+                    ? 'hover:border-destructive hover:bg-destructive/10'
+                    : 'hover:border-success hover:bg-success/10'
                 )}
               >
                 <div className="text-center">
@@ -163,10 +163,10 @@ export function GamifiedPlayingPhase({
 
         <div className="flex justify-center mt-8">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <Zap className="h-4 w-4 text-yellow-500" />
+            <Zap className="h-4 w-4 text-warning" />
             <span>+{currentQuestion.xpReward} XP base</span>
             {combo.multiplier > 1 && (
-              <span className="text-orange-500">(x{combo.multiplier.toFixed(1)})</span>
+              <span className="text-warning">(x{combo.multiplier.toFixed(1)})</span>
             )}
           </div>
         </div>
