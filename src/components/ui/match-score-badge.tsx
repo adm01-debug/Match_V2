@@ -20,35 +20,35 @@ function getScoreConfig(score: number) {
     return {
       label: "Excelente",
       icon: TrendingUp,
-      className: "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border-emerald-500/30",
-      progressColor: "bg-emerald-500",
-      starColor: "text-emerald-500",
+      className: "bg-success/15 text-success border-success/30",
+      progressColor: "bg-success",
+      starColor: "text-success",
     };
   }
   if (score >= 60) {
     return {
       label: "Bom",
       icon: TrendingUp,
-      className: "bg-amber-500/15 text-amber-700 dark:text-amber-400 border-amber-500/30",
-      progressColor: "bg-amber-500",
-      starColor: "text-amber-500",
+      className: "bg-warning/15 text-warning border-warning/30",
+      progressColor: "bg-warning",
+      starColor: "text-warning",
     };
   }
   if (score >= 40) {
     return {
       label: "Regular",
       icon: Minus,
-      className: "bg-orange-500/15 text-orange-700 dark:text-orange-400 border-orange-500/30",
-      progressColor: "bg-orange-500",
-      starColor: "text-orange-500",
+      className: "bg-warning/15 text-warning border-warning/30",
+      progressColor: "bg-warning",
+      starColor: "text-warning",
     };
   }
   return {
     label: "Baixo",
     icon: TrendingDown,
-    className: "bg-red-500/15 text-red-700 dark:text-red-400 border-red-500/30",
-    progressColor: "bg-red-500",
-    starColor: "text-red-500",
+    className: "bg-destructive/15 text-destructive border-destructive/30",
+    progressColor: "bg-destructive",
+    starColor: "text-destructive",
   };
 }
 
