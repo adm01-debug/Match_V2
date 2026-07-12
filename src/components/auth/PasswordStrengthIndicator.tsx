@@ -67,12 +67,12 @@ const calculateStrength = (password: string): StrengthResult => {
     return { score, level: 'weak', label: 'Fraca', color: 'bg-destructive', bgColor: 'bg-destructive/20' };
   }
   if (score <= 4) {
-    return { score, level: 'fair', label: 'Razoável', color: 'bg-yellow-500', bgColor: 'bg-yellow-500/20' };
+    return { score, level: 'fair', label: 'Razoável', color: 'bg-warning', bgColor: 'bg-warning/20' };
   }
   if (score <= 5) {
-    return { score, level: 'good', label: 'Boa', color: 'bg-blue-500', bgColor: 'bg-blue-500/20' };
+    return { score, level: 'good', label: 'Boa', color: 'bg-info', bgColor: 'bg-info/20' };
   }
-  return { score, level: 'strong', label: 'Forte', color: 'bg-green-500', bgColor: 'bg-green-500/20' };
+  return { score, level: 'strong', label: 'Forte', color: 'bg-success', bgColor: 'bg-success/20' };
 };
 
 /**
@@ -133,14 +133,14 @@ const StrengthBar = memo(({ strength }: { strength: StrengthResult }) => {
         <span className={cn(
           'text-xs font-medium',
           strength.level === 'weak' && 'text-destructive',
-          strength.level === 'fair' && 'text-yellow-600 dark:text-yellow-500',
-          strength.level === 'good' && 'text-blue-600 dark:text-blue-500',
-          strength.level === 'strong' && 'text-green-600 dark:text-green-500'
+          strength.level === 'fair' && 'text-warning',
+          strength.level === 'good' && 'text-info',
+          strength.level === 'strong' && 'text-success'
         )}>
           {strength.label}
         </span>
         {strength.level === 'strong' && (
-          <Check className="h-4 w-4 text-green-500" />
+          <Check className="h-4 w-4 text-success" />
         )}
         {strength.level === 'weak' && (
           <AlertTriangle className="h-4 w-4 text-destructive" />
@@ -162,7 +162,7 @@ const RequirementsList = memo(({ requirements }: { requirements: Requirement[] }
         className={cn(
           'flex items-center gap-2 text-xs transition-colors',
           req.loading && 'text-muted-foreground',
-          !req.loading && req.met && !req.critical && 'text-green-600 dark:text-green-500',
+          !req.loading && req.met && !req.critical && 'text-success',
           !req.loading && !req.met && !req.critical && 'text-muted-foreground',
           !req.loading && req.critical && !req.met && 'text-destructive font-medium'
         )}
