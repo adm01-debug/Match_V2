@@ -235,8 +235,8 @@ export const ImmersiveScenarioPlayer: React.FC<ImmersiveScenarioPlayerProps> = (
                     <p className="text-white text-lg">{selectedChoice.text}</p>
                   </div>
 
-                  <div className="p-4 bg-purple-500/10 rounded-xl">
-                    <p className="text-purple-300 text-sm mb-2">Consequência:</p>
+                  <div className="p-4 bg-primary/10 rounded-xl">
+                    <p className="text-primary text-sm mb-2">Consequência:</p>
                     <p className="text-white text-lg">{selectedChoice.consequence}</p>
                   </div>
 
