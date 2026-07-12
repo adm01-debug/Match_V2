@@ -164,7 +164,7 @@ function CandidateTimelineComponent({
                         )}
                         aria-hidden="true"
                       >
-                        <Icon className="h-3 w-3 text-white" />
+                        <Icon className="h-3 w-3 text-primary-foreground" />
                       </div>
                       
                       <div className="bg-muted/50 rounded-lg p-3">
