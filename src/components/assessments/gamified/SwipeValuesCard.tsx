@@ -156,7 +156,7 @@ export const SwipeValuesCard = memo(function SwipeValuesCard({
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
-            className="w-20 h-20 rounded-full bg-gradient-to-br from-green-400 to-emerald-500 flex items-center justify-center mx-auto mb-4"
+            className="w-20 h-20 rounded-full bg-gradient-to-br from-success to-success/80 flex items-center justify-center mx-auto mb-4"
           >
             <Heart className="h-10 w-10 text-white" />
           </motion.div>
@@ -177,7 +177,7 @@ export const SwipeValuesCard = memo(function SwipeValuesCard({
         <div className="flex items-center gap-4">
           <div className="flex-1 h-2 rounded-full bg-muted overflow-hidden">
             <motion.div 
-              className="h-full bg-gradient-to-r from-pink-500 to-rose-500"
+              className="h-full bg-gradient-to-r from-primary to-accent"
               initial={{ width: 0 }}
               animate={{ width: `${progress}%` }}
             />
@@ -261,8 +261,8 @@ export const SwipeValuesCard = memo(function SwipeValuesCard({
               style={{ opacity: likeIndicatorOpacity }}
               className="absolute top-8 left-8 -rotate-12"
             >
-              <div className="px-4 py-2 border-4 border-green-500 rounded-lg">
-                <span className="text-green-500 font-bold text-2xl">LIKE</span>
+              <div className="px-4 py-2 border-4 border-success rounded-lg">
+                <span className="text-success font-bold text-2xl">LIKE</span>
               </div>
             </motion.div>
 
@@ -271,8 +271,8 @@ export const SwipeValuesCard = memo(function SwipeValuesCard({
               style={{ opacity: nopeIndicatorOpacity }}
               className="absolute top-8 right-8 rotate-12"
             >
-              <div className="px-4 py-2 border-4 border-red-500 rounded-lg">
-                <span className="text-red-500 font-bold text-2xl">NOPE</span>
+              <div className="px-4 py-2 border-4 border-destructive rounded-lg">
+                <span className="text-destructive font-bold text-2xl">NOPE</span>
               </div>
             </motion.div>
 
@@ -281,8 +281,8 @@ export const SwipeValuesCard = memo(function SwipeValuesCard({
               style={{ opacity: superIndicatorOpacity }}
               className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
             >
-              <div className="px-4 py-2 border-4 border-yellow-400 rounded-lg bg-yellow-400/20 backdrop-blur-sm">
-                <span className="text-yellow-400 font-bold text-2xl flex items-center gap-2">
+              <div className="px-4 py-2 border-4 border-warning rounded-lg bg-warning/20 backdrop-blur-sm">
+                <span className="text-warning font-bold text-2xl flex items-center gap-2">
                   <Star className="h-6 w-6" /> SUPER
                 </span>
               </div>
@@ -308,30 +308,30 @@ export const SwipeValuesCard = memo(function SwipeValuesCard({
         <Button
           variant="outline"
           size="icon"
-          className="w-16 h-16 rounded-full border-2 border-red-500 hover:bg-red-500/10"
+          className="w-16 h-16 rounded-full border-2 border-destructive hover:bg-destructive/10"
           onClick={() => handleSwipe('left')}
         >
-          <X className="h-8 w-8 text-red-500" />
+          <X className="h-8 w-8 text-destructive" />
         </Button>
 
         {/* Super Like */}
         <Button
           variant="outline"
           size="icon"
-          className="w-14 h-14 rounded-full border-2 border-yellow-400 hover:bg-yellow-400/10"
+          className="w-14 h-14 rounded-full border-2 border-warning hover:bg-warning/10"
           onClick={() => handleSwipe('up')}
         >
-          <Star className="h-7 w-7 text-yellow-400" />
+          <Star className="h-7 w-7 text-warning" />
         </Button>
 
         {/* Like */}
         <Button
           variant="outline"
           size="icon"
-          className="w-16 h-16 rounded-full border-2 border-green-500 hover:bg-green-500/10"
+          className="w-16 h-16 rounded-full border-2 border-success hover:bg-success/10"
           onClick={() => handleSwipe('right')}
         >
-          <Heart className="h-8 w-8 text-green-500" />
+          <Heart className="h-8 w-8 text-success" />
         </Button>
 
         {/* Info */}
@@ -340,22 +340,22 @@ export const SwipeValuesCard = memo(function SwipeValuesCard({
           size="icon"
           className="w-12 h-12 rounded-full"
         >
-          <Sparkles className="h-5 w-5 text-purple-500" />
+          <Sparkles className="h-5 w-5 text-primary" />
         </Button>
       </div>
 
       {/* Stats */}
       <div className="flex items-center gap-6 mt-6 text-sm text-muted-foreground">
         <div className="flex items-center gap-1">
-          <Heart className="h-4 w-4 text-green-500" />
+          <Heart className="h-4 w-4 text-success" />
           <span>{liked.length}</span>
         </div>
         <div className="flex items-center gap-1">
-          <Star className="h-4 w-4 text-yellow-400" />
+          <Star className="h-4 w-4 text-warning" />
           <span>{superLiked.length}</span>
         </div>
         <div className="flex items-center gap-1">
-          <X className="h-4 w-4 text-red-500" />
+          <X className="h-4 w-4 text-destructive" />
           <span>{passed.length}</span>
         </div>
       </div>
