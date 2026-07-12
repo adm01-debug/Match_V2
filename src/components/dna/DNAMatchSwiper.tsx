@@ -140,7 +140,7 @@ export const DNAMatchSwiper: React.FC<DNAMatchSwiperProps> = ({
           <Card className="overflow-hidden relative">
             {/* Swipe Indicators */}
             <motion.div
-              className="absolute top-8 left-8 z-10 bg-red-500 text-white px-6 py-2 rounded-lg font-bold text-2xl -rotate-12"
+              className="absolute top-8 left-8 z-10 bg-destructive text-destructive-foreground px-6 py-2 rounded-lg font-bold text-2xl -rotate-12"
               initial={{ opacity: 0, scale: 0 }}
               animate={{ 
                 opacity: swipeDirection === 'left' ? 1 : 0,
@@ -150,7 +150,7 @@ export const DNAMatchSwiper: React.FC<DNAMatchSwiperProps> = ({
               NOPE
             </motion.div>
             <motion.div
-              className="absolute top-8 right-8 z-10 bg-green-500 text-white px-6 py-2 rounded-lg font-bold text-2xl rotate-12"
+              className="absolute top-8 right-8 z-10 bg-success text-success-foreground px-6 py-2 rounded-lg font-bold text-2xl rotate-12"
               initial={{ opacity: 0, scale: 0 }}
               animate={{ 
                 opacity: swipeDirection === 'right' ? 1 : 0,
