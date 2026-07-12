@@ -21,16 +21,19 @@ export function calculateGenerationalResult(
     const selectedGen = genMap[answerIndex];
     if (!selectedGen) return;
 
+    const add = (key: string, val: number) => {
+      generationScores[key] = (generationScores[key] ?? 0) + val;
+    };
     if (selectedGen === 'silent_boomer') {
-      generationScores.silent += 2;
-      generationScores.baby_boomer += 2;
+      add('silent', 2);
+      add('baby_boomer', 2);
     } else if (selectedGen === 'gen_x') {
-      generationScores.gen_x += 4;
+      add('gen_x', 4);
     } else if (selectedGen === 'millennial') {
-      generationScores.millennial += 4;
+      add('millennial', 4);
     } else if (selectedGen === 'gen_z') {
-      generationScores.gen_z += 3;
-      generationScores.gen_alpha += 1;
+      add('gen_z', 3);
+      add('gen_alpha', 1);
     }
   });
 
