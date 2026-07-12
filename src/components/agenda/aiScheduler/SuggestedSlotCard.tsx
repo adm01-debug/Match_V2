@@ -80,7 +80,7 @@ export function SuggestedSlotCard({ slot, index, isSelected, onSelect }: Props) 
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger>
-                <Badge variant="outline" className="bg-yellow-500/10 text-yellow-600 border-yellow-500/30">
+                <Badge variant="outline" className="bg-warning/10 text-warning border-warning/30">
                   <Clock className="h-3 w-3 mr-1" />
                   Atenção
                 </Badge>
