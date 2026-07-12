@@ -58,19 +58,19 @@ export function ResultadoProvaView({ prova, resultado, questoes, onVoltar }: Res
       {/* Header com resultado principal */}
       <Card role="article" aria-label="Resultado prova" className={cn(
         "border-2",
-        aprovado ? "border-green-500 bg-green-500/5" : "border-red-500 bg-red-500/5"
+        aprovado ? "border-success bg-success/5" : "border-destructive bg-destructive/5"
       )}>
         <CardContent className="p-8">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
             <div className="flex items-center gap-4">
               <div className={cn(
                 "w-20 h-20 rounded-full flex items-center justify-center",
-                aprovado ? "bg-green-500" : "bg-red-500"
+                aprovado ? "bg-success" : "bg-destructive"
               )}>
                 {aprovado ? (
-                  <Award className="h-10 w-10 text-white" />
+                  <Award className="h-10 w-10 text-primary-foreground" />
                 ) : (
-                  <XCircle className="h-10 w-10 text-white" />
+                  <XCircle className="h-10 w-10 text-primary-foreground" />
                 )}
               </div>
               <div>
@@ -113,22 +113,22 @@ export function ResultadoProvaView({ prova, resultado, questoes, onVoltar }: Res
         </Card>
         <Card>
           <CardContent className="p-4 text-center">
-            <CheckCircle className="h-6 w-6 mx-auto text-green-500 mb-2" />
-            <p className="text-2xl font-bold text-green-600">{questoesCorretas}</p>
+            <CheckCircle className="h-6 w-6 mx-auto text-success mb-2" />
+            <p className="text-2xl font-bold text-success">{questoesCorretas}</p>
             <p className="text-xs text-muted-foreground">Questões Corretas</p>
             <p className="text-xs text-muted-foreground">de {questoes.length}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4 text-center">
-            <XCircle className="h-6 w-6 mx-auto text-red-500 mb-2" />
-            <p className="text-2xl font-bold text-red-600">{questoesIncorretas}</p>
+            <XCircle className="h-6 w-6 mx-auto text-destructive mb-2" />
+            <p className="text-2xl font-bold text-destructive">{questoesIncorretas}</p>
             <p className="text-xs text-muted-foreground">Questões Incorretas</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4 text-center">
-            <Clock className="h-6 w-6 mx-auto text-blue-500 mb-2" />
+            <Clock className="h-6 w-6 mx-auto text-info mb-2" />
             <p className="text-2xl font-bold">{tempoFormatado}</p>
             <p className="text-xs text-muted-foreground">Tempo Utilizado</p>
             <p className="text-xs text-muted-foreground">de {prova.duracao}min</p>
@@ -149,9 +149,9 @@ export function ResultadoProvaView({ prova, resultado, questoes, onVoltar }: Res
             if (stats.total === 0) return null;
             const percentual = (stats.corretas / stats.total) * 100;
             const colors = {
-              facil: { bg: 'bg-green-500', text: 'text-green-600', label: 'Fácil' },
-              medio: { bg: 'bg-yellow-500', text: 'text-yellow-600', label: 'Médio' },
-              dificil: { bg: 'bg-red-500', text: 'text-red-600', label: 'Difícil' }
+              facil: { bg: 'bg-success', text: 'text-success', label: 'Fácil' },
+              medio: { bg: 'bg-warning', text: 'text-warning', label: 'Médio' },
+              dificil: { bg: 'bg-destructive', text: 'text-destructive', label: 'Difícil' }
             };
             const color = colors[dif as keyof typeof colors];
             
@@ -192,20 +192,20 @@ export function ResultadoProvaView({ prova, resultado, questoes, onVoltar }: Res
                 key={questao.id} 
                 className={cn(
                   "p-4 rounded-lg border",
-                  isDissertativa ? "bg-muted/30" : isCorreta ? "bg-green-500/5 border-green-500/30" : "bg-red-500/5 border-red-500/30"
+                  isDissertativa ? "bg-muted/30" : isCorreta ? "bg-success/5 border-success/30" : "bg-destructive/5 border-destructive/30"
                 )}
               >
                 <div className="flex items-start gap-3">
                   <div className={cn(
                     "w-8 h-8 rounded-full flex items-center justify-center shrink-0",
-                    isDissertativa ? "bg-muted" : isCorreta ? "bg-green-500" : "bg-red-500"
+                    isDissertativa ? "bg-muted" : isCorreta ? "bg-success" : "bg-destructive"
                   )}>
                     {isDissertativa ? (
                       <span className="text-xs font-bold">{index + 1}</span>
                     ) : isCorreta ? (
-                      <CheckCircle className="h-4 w-4 text-white" />
+                      <CheckCircle className="h-4 w-4 text-primary-foreground" />
                     ) : (
-                      <XCircle className="h-4 w-4 text-white" />
+                      <XCircle className="h-4 w-4 text-primary-foreground" />
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
@@ -215,7 +215,7 @@ export function ResultadoProvaView({ prova, resultado, questoes, onVoltar }: Res
                       <div className="space-y-1 text-sm">
                         <p className="text-muted-foreground">
                           Sua resposta: {' '}
-                          <span className={cn(isCorreta ? "text-green-600" : "text-red-600", "font-medium")}>
+                          <span className={cn(isCorreta ? "text-success" : "text-destructive", "font-medium")}>
                             {resposta?.resposta !== null && resposta !== undefined
                               ? String(questao.alternativas?.[resposta.resposta as number] || resposta.resposta)
                               : 'Não respondida'
@@ -223,7 +223,7 @@ export function ResultadoProvaView({ prova, resultado, questoes, onVoltar }: Res
                           </span>
                         </p>
                         {!isCorreta && questao.respostaCorreta !== undefined && (
-                          <p className="text-green-600">
+                          <p className="text-success">
                             Resposta correta: {questao.alternativas[questao.respostaCorreta as number]}
                           </p>
                         )}
