@@ -97,7 +97,7 @@ export const StreakDisplay = memo(function StreakDisplay({
       <motion.div
         className={cn(
           "relative overflow-hidden rounded-xl p-4",
-          "bg-gradient-to-r from-orange-500 via-red-500 to-pink-500",
+          "bg-gradient-to-r from-warning via-destructive to-primary",
           className
         )}
         initial={animated ? { y: -20, opacity: 0 } : undefined}
