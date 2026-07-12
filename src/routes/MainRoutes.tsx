@@ -1,5 +1,6 @@
 import { Route } from "react-router-dom";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
+import type { AppRole } from "@/contexts/AuthContext";
 import {
   Dashboard,
   VagasList,
@@ -30,7 +31,7 @@ import {
   TalentPoolPage,
 } from "./lazyPages";
 
-const guard = (el: React.ReactNode, roles?: string[]) => (
+const guard = (el: React.ReactNode, roles?: AppRole[]) => (
   <ProtectedRoute requiredRoles={roles}>{el}</ProtectedRoute>
 );
 
