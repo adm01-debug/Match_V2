@@ -39,21 +39,25 @@ export const DeuMatchActionCards: React.FC<DeuMatchActionCardsProps> = ({
     const placeholder = isEmpresa ? 'Qual é a sua empresa?' : 'Como você se chama?';
     const inputId = isEmpresa ? 'empresa-name' : 'candidato-name';
     const label = isEmpresa ? 'Nome da empresa' : 'Seu nome';
-    const borderColor = isEmpresa ? 'hover:border-indigo-500/50' : 'hover:border-pink-500/50';
-    const bgGradient = isEmpresa ? 'from-indigo-500/5 to-purple-500/5 group-hover:from-indigo-500/10 group-hover:to-purple-500/10' : 'from-pink-500/5 to-rose-500/5 group-hover:from-pink-500/10 group-hover:to-rose-500/10';
-    const iconGradient = isEmpresa ? 'from-indigo-500 to-purple-500' : 'from-pink-500 to-rose-500';
-    const btnGradient = isEmpresa ? 'from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700' : 'from-pink-600 to-rose-600 hover:from-pink-700 hover:to-rose-700';
+    const borderColor = isEmpresa ? 'hover:border-primary/50' : 'hover:border-accent/50';
+    const bgGradient = isEmpresa
+      ? 'from-primary/5 to-primary/10 group-hover:from-primary/10 group-hover:to-primary/20'
+      : 'from-accent/5 to-accent/10 group-hover:from-accent/10 group-hover:to-accent/20';
+    const iconGradient = isEmpresa ? 'from-primary to-primary/70' : 'from-accent to-accent/70';
+    const btnGradient = isEmpresa
+      ? 'from-primary to-primary/80 hover:opacity-90 text-primary-foreground'
+      : 'from-accent to-accent/80 hover:opacity-90 text-accent-foreground';
     const btnText = isEmpresa ? 'Definir Cultura' : 'Descobrir Valores';
     const completedText = isEmpresa ? 'Perfil definido!' : 'Valores descobertos!';
     const viewText = isEmpresa ? 'Ver Perfil' : 'Ver Valores';
     const features = isEmpresa ? [
-      { icon: Compass, color: 'text-indigo-500', text: '20 valores culturais para avaliar' },
-      { icon: Zap, color: 'text-purple-500', text: '~5 minutos para completar' },
-      { icon: Target, color: 'text-violet-500', text: 'Match preciso com candidatos' },
+      { icon: Compass, color: 'text-primary', text: '20 valores culturais para avaliar' },
+      { icon: Zap, color: 'text-primary', text: '~5 minutos para completar' },
+      { icon: Target, color: 'text-primary', text: 'Match preciso com candidatos' },
     ] : [
-      { icon: Sparkles, color: 'text-pink-500', text: 'Jornada de autoconhecimento' },
-      { icon: Brain, color: 'text-rose-500', text: 'Reflexões sobre seus valores' },
-      { icon: Heart, color: 'text-red-500', text: 'Match com empresas alinhadas' },
+      { icon: Sparkles, color: 'text-accent', text: 'Jornada de autoconhecimento' },
+      { icon: Brain, color: 'text-accent', text: 'Reflexões sobre seus valores' },
+      { icon: Heart, color: 'text-accent', text: 'Match com empresas alinhadas' },
     ];
 
     return (
