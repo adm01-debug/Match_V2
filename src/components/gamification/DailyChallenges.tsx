@@ -13,7 +13,7 @@ import { DailyChallengesHeader } from "./dailyChallenges/DailyChallengesHeader";
 import { useDailyChallenges } from "./dailyChallenges/useDailyChallenges";
 import type { DailyChallenge } from "./dailyChallenges/types";
 
-export type { DailyChallenge };
+export type { DailyChallenge, ChallengeType, ChallengeDifficulty } from "./dailyChallenges/types";
 
 interface DailyChallengesProps {
   className?: string;
