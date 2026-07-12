@@ -42,15 +42,15 @@ const EVENT_ICONS: Record<EventType, LucideIcon> = {
 };
 
 const EVENT_COLORS: Record<EventType, string> = {
-  applied: 'bg-blue-500',
-  stage_change: 'bg-purple-500',
-  interview: 'bg-orange-500',
-  email: 'bg-gray-500',
-  note: 'bg-yellow-500',
-  evaluation: 'bg-pink-500',
-  offer: 'bg-green-500',
-  rejected: 'bg-red-500',
-  hired: 'bg-emerald-500',
+  applied: 'bg-info',
+  stage_change: 'bg-accent',
+  interview: 'bg-warning',
+  email: 'bg-muted-foreground',
+  note: 'bg-warning',
+  evaluation: 'bg-accent',
+  offer: 'bg-success',
+  rejected: 'bg-destructive',
+  hired: 'bg-success',
 };
 
 const EVENT_LABELS: Record<EventType, string> = {
