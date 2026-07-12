@@ -213,12 +213,12 @@ export function MatchResultCard({
           {match.pontosFortes.length > 0 && (
             <div className="space-y-2">
               <p className="text-sm font-medium flex items-center gap-2">
-                <CheckCircle2 className="h-4 w-4 text-green-500" />
+                <CheckCircle2 className="h-4 w-4 text-success" />
                 Vocês combinam em:
               </p>
               <div className="flex flex-wrap gap-2">
                 {match.pontosFortes.slice(0, 3).map((ponto, i) => (
-                  <Badge key={i} variant="secondary" className="bg-green-500/10 text-green-700 dark:text-green-300">
+                  <Badge key={i} variant="secondary" className="bg-success/10 text-success">
                     {ponto}
                   </Badge>
                 ))}
