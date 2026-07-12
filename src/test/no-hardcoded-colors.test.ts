@@ -46,6 +46,20 @@ const ALLOWLIST: RegExp[] = [
   /personalityMiniGame\/usePersonalityMiniGame\.ts$/,
   // Cenário DNA imersivo — mapa de radar por pilar (dado, não estilo)
   /\/dna\/ImmersiveScenarioPlayer\.tsx$/,
+  // Achievement tiers / gamified engine — cores como dado de tier
+  /\/gamification\/achievements\/achievementTypes\.ts$/,
+  /\/assessments\/gamified\/engineConfig\.ts$/,
+  // Quiz de valores — escala Likert (dado)
+  /\/match\/candidateValuesQuiz\/constants\.tsx$/,
+  // Confetti/particle arrays (canvas-confetti API)
+  /\/match\/MatchSwiper\.tsx$/,
+  // Cores de marca de terceiros extras
+  /\/settings\/IndeedConnect\.tsx$/,
+  // Sombras universais rgba(0,0,0,x) — cor neutra do sistema
+  /\/onboarding\/OnboardingTour\.tsx$/,
+  /\/gamification\/XPToast\.tsx$/,
+  /\/gamification\/StreakDisplay\.tsx$/,
+  /\/dashboard\/EntrevistasChart\.tsx$/,
   // White label — cores customizáveis por tenant (default fallback)
   /\/hooks\/useWhiteLabel\.ts$/,
   // Entrevistas: cores para chart passadas como dado (poderiam ser tokens; migradas separadamente)
