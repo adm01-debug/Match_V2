@@ -253,7 +253,7 @@ export const StreakDisplay = memo(function StreakDisplay({
         {/* Stats row */}
         <div className="grid grid-cols-3 gap-3">
           <div className="p-3 rounded-lg bg-muted/50 text-center">
-            <Trophy className="w-4 h-4 mx-auto mb-1 text-yellow-500" />
+            <Trophy className="w-4 h-4 mx-auto mb-1 text-warning" />
             <p className="text-lg font-bold">{longestStreak}</p>
             <p className="text-xs text-muted-foreground">Recorde</p>
           </div>
