@@ -242,7 +242,7 @@ const TimelineEventCard = memo(({
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <div className="flex items-center gap-1 text-amber-500 animate-pulse">
+                    <div className="flex items-center gap-1 text-warning animate-pulse">
                       <Clock className="h-4 w-4" />
                       <span className="text-xs font-medium">{minutesUntilStart}min</span>
                     </div>
