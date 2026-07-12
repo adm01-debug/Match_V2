@@ -20,15 +20,15 @@ interface Props {
 }
 
 const getScoreColor = (score: number) => {
-  if (score >= 90) return 'text-green-500';
-  if (score >= 70) return 'text-yellow-500';
-  return 'text-orange-500';
+  if (score >= 90) return 'text-success';
+  if (score >= 70) return 'text-warning';
+  return 'text-warning';
 };
 
 const getScoreBg = (score: number) => {
-  if (score >= 90) return 'bg-green-500/10 border-green-500/20';
-  if (score >= 70) return 'bg-yellow-500/10 border-yellow-500/20';
-  return 'bg-orange-500/10 border-orange-500/20';
+  if (score >= 90) return 'bg-success/10 border-success/20';
+  if (score >= 70) return 'bg-warning/10 border-warning/20';
+  return 'bg-warning/10 border-warning/20';
 };
 
 export function SuggestedSlotCard({ slot, index, isSelected, onSelect }: Props) {
@@ -80,7 +80,7 @@ export function SuggestedSlotCard({ slot, index, isSelected, onSelect }: Props) 
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger>
-                <Badge variant="outline" className="bg-yellow-500/10 text-yellow-600 border-yellow-500/30">
+                <Badge variant="outline" className="bg-warning/10 text-warning border-warning/30">
                   <Clock className="h-3 w-3 mr-1" />
                   Atenção
                 </Badge>
@@ -100,7 +100,7 @@ export function SuggestedSlotCard({ slot, index, isSelected, onSelect }: Props) 
 
       {isTop && (
         <div className="absolute -top-2 -right-2">
-          <Badge className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white border-0">
+          <Badge className="bg-gradient-to-r from-warning to-warning/80 text-warning-foreground border-0">
             <Star className="h-3 w-3 mr-1" />
             Recomendado
           </Badge>
@@ -169,7 +169,7 @@ export function SuggestedSlotCard({ slot, index, isSelected, onSelect }: Props) 
           animate={{ opacity: 1, height: 'auto' }}
           className="mt-4 pt-4 border-t"
         >
-          <Button className="w-full bg-gradient-to-r from-primary to-purple-600">
+          <Button className="w-full bg-gradient-to-r from-primary to-accent">
             Confirmar este horário
             <ArrowRight className="h-4 w-4 ml-2" />
           </Button>
