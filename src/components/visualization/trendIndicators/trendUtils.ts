@@ -9,7 +9,7 @@ interface TrendInfo {
   percentChange: number;
   color: string;
   bgColor: string;
-  Icon: ComponentType<{ size?: number; className?: string }>;
+  Icon: LucideIcon;
 }
 
 export function getTrendInfo(
