@@ -100,7 +100,9 @@ function walk(dir: string, out: string[] = []): string[] {
 }
 
 function isAllowed(rel: string): boolean {
-  return ALLOWLIST.some((re) => re.test(rel));
+  // Normaliza com leading slash para casar patterns tipo /\/foo\//
+  const normalized = "/" + rel.replace(/\\/g, "/");
+  return ALLOWLIST.some((re) => re.test(normalized));
 }
 
 function stripCommentsAndStrings(src: string): string {
