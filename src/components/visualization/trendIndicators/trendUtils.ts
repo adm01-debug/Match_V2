@@ -1,5 +1,5 @@
-import { TrendingUp, TrendingDown, Minus, ArrowUp, ArrowDown, ArrowRight, ChevronUp, ChevronDown } from "lucide-react";
-import type { ComponentType } from "react";
+import { TrendingUp, TrendingDown, Minus, ArrowUp, ArrowDown, ArrowRight, ChevronUp, ChevronDown, type LucideIcon } from "lucide-react";
+
 
 export type TrendDirection = "up" | "down" | "neutral";
 
