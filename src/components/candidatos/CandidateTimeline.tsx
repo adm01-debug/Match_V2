@@ -42,15 +42,15 @@ const EVENT_ICONS: Record<EventType, LucideIcon> = {
 };
 
 const EVENT_COLORS: Record<EventType, string> = {
-  applied: 'bg-blue-500',
-  stage_change: 'bg-purple-500',
-  interview: 'bg-orange-500',
-  email: 'bg-gray-500',
-  note: 'bg-yellow-500',
-  evaluation: 'bg-pink-500',
-  offer: 'bg-green-500',
-  rejected: 'bg-red-500',
-  hired: 'bg-emerald-500',
+  applied: 'bg-info',
+  stage_change: 'bg-accent',
+  interview: 'bg-warning',
+  email: 'bg-muted-foreground',
+  note: 'bg-warning',
+  evaluation: 'bg-accent',
+  offer: 'bg-success',
+  rejected: 'bg-destructive',
+  hired: 'bg-success',
 };
 
 const EVENT_LABELS: Record<EventType, string> = {
@@ -145,7 +145,7 @@ function CandidateTimelineComponent({
               <div className="space-y-6">
                 {sortedEvents.map((event) => {
                   const Icon = EVENT_ICONS[event.type] ?? FileText;
-                  const color = EVENT_COLORS[event.type] ?? 'bg-gray-500';
+                  const color = EVENT_COLORS[event.type] ?? 'bg-muted-foreground';
                   const label = EVENT_LABELS[event.type] ?? event.type;
                   const formattedDate = formatEventDate(event.date);
                   const stageValue = event.metadata?.['stage'];
@@ -164,7 +164,7 @@ function CandidateTimelineComponent({
                         )}
                         aria-hidden="true"
                       >
-                        <Icon className="h-3 w-3 text-white" />
+                        <Icon className="h-3 w-3 text-primary-foreground" />
                       </div>
                       
                       <div className="bg-muted/50 rounded-lg p-3">
