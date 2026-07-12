@@ -27,7 +27,7 @@ export function AnalyticsFunnelTab({ data }: AnalyticsFunnelTabProps) {
             <BarChart data={data} layout="vertical">
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis type="number" /><YAxis dataKey="etapa" type="category" width={120} /><Tooltip /><Legend />
-              <Bar dataKey="quantidade" fill="#6366F1" name="Quantidade" radius={[0, 4, 4, 0]} />
+              <Bar dataKey="quantidade" fill="hsl(var(--primary))" name="Quantidade" radius={[0, 4, 4, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </CardContent>

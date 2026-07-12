@@ -22,9 +22,9 @@ interface QuestaoAplicacaoProps {
 }
 
 const dificuldadeConfig = {
-  facil: { label: 'Fácil', color: 'bg-green-500/10 text-green-600' },
-  medio: { label: 'Médio', color: 'bg-yellow-500/10 text-yellow-600' },
-  dificil: { label: 'Difícil', color: 'bg-red-500/10 text-red-600' }
+  facil: { label: 'Fácil', color: 'bg-success/10 text-success' },
+  medio: { label: 'Médio', color: 'bg-warning/10 text-warning' },
+  dificil: { label: 'Difícil', color: 'bg-destructive/10 text-destructive' }
 };
 
 export function QuestaoAplicacao({ 
@@ -41,7 +41,7 @@ export function QuestaoAplicacao({
   return (
     <Card role="article" aria-label="Aplicação questão" className={cn(
       "transition-all",
-      respondida && "ring-2 ring-green-500/30"
+      respondida && "ring-2 ring-success/30"
     )}>
       <CardContent className="p-6">
         {/* Header */}
@@ -65,7 +65,7 @@ export function QuestaoAplicacao({
             </div>
           </div>
           {respondida && (
-            <div className="flex items-center gap-1 text-green-600 text-sm">
+            <div className="flex items-center gap-1 text-success text-sm">
               <CheckCircle className="h-4 w-4" />
               Respondida
             </div>

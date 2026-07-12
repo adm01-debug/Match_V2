@@ -26,8 +26,8 @@ export const DeuMatchProfileResult: React.FC<DeuMatchProfileResultProps> = ({
     .filter(Boolean);
 
   const gradient = isEmpresa 
-    ? 'from-accent via-accent to-accent dark:from-slate-900 dark:via-accent/20 dark:to-slate-900'
-    : 'from-accent via-destructive to-warning dark:from-slate-900 dark:via-accent/20 dark:to-slate-900';
+    ? 'from-accent via-accent to-accent dark:from-background dark:via-accent/20 dark:to-background'
+    : 'from-accent via-destructive to-warning dark:from-background dark:via-accent/20 dark:to-background';
   const headerGradient = isEmpresa 
     ? 'from-accent to-accent' 
     : 'from-accent to-destructive';
