@@ -41,38 +41,48 @@ const recomendacaoConfig = {
   match_perfeito: {
     label: 'Match Perfeito!',
     emoji: '💜',
-    color: 'from-purple-500 to-pink-500',
+    color: 'from-primary to-accent',
     icon: Trophy,
     description: 'Vocês são feitos um para o outro!'
   },
   match_forte: {
     label: 'Match Forte',
     emoji: '🔥',
-    color: 'from-orange-500 to-red-500',
+    color: 'from-warning to-destructive',
     icon: Zap,
     description: 'Grande potencial de sucesso juntos'
   },
   match_moderado: {
     label: 'Match Promissor',
     emoji: '✨',
-    color: 'from-blue-500 to-cyan-500',
+    color: 'from-info to-primary',
     icon: Star,
     description: 'Há alinhamento em pontos importantes'
   },
   revisar: {
     label: 'Vale Explorar',
     emoji: '🤔',
-    color: 'from-yellow-500 to-orange-500',
+    color: 'from-warning to-warning/70',
     icon: TrendingUp,
     description: 'Alguns pontos precisam de atenção'
   },
   nao_recomendado: {
     label: 'Talvez Não',
     emoji: '💭',
-    color: 'from-gray-400 to-gray-500',
+    color: 'from-muted to-muted-foreground',
     icon: AlertCircle,
     description: 'Pode haver desalinhamento significativo'
   }
+};
+
+/**
+ * Lê uma variável CSS HSL semântica e converte em `hsl(...)` para bibliotecas
+ * externas (canvas-confetti) que não entendem tokens Tailwind.
+ */
+const cssVarHsl = (varName: string): string => {
+  if (typeof window === 'undefined') return 'hsl(0 0% 50%)';
+  const raw = getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+  return raw ? `hsl(${raw})` : 'hsl(0 0% 50%)';
 };
 
 export function MatchResultCard({
