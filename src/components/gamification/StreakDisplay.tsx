@@ -20,11 +20,11 @@ interface StreakDisplayProps {
 }
 
 const streakColors = {
-  cold: { bg: "bg-slate-500", text: "text-slate-500", glow: "slate" },
-  warming: { bg: "bg-orange-400", text: "text-orange-400", glow: "orange" },
-  hot: { bg: "bg-orange-500", text: "text-orange-500", glow: "orange" },
-  fire: { bg: "bg-red-500", text: "text-red-500", glow: "red" },
-  inferno: { bg: "bg-gradient-to-r from-red-500 via-orange-500 to-yellow-400", text: "text-orange-500", glow: "orange" },
+  cold: { bg: "bg-muted-foreground", text: "text-muted-foreground", glow: "muted" },
+  warming: { bg: "bg-warning", text: "text-warning", glow: "warning" },
+  hot: { bg: "bg-warning", text: "text-warning", glow: "warning" },
+  fire: { bg: "bg-destructive", text: "text-destructive", glow: "destructive" },
+  inferno: { bg: "bg-gradient-to-r from-destructive via-warning to-accent", text: "text-warning", glow: "warning" },
 };
 
 function getStreakLevel(streak: number) {
