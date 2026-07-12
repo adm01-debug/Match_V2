@@ -292,15 +292,15 @@ export function MatchResultCard({
               <Button
                 variant="outline"
                 size="lg"
-                className="flex-1 border-red-200 hover:bg-red-50 hover:border-red-300 dark:border-red-900 dark:hover:bg-red-950"
+                className="flex-1 border-destructive/20 hover:bg-destructive/10 hover:border-destructive/30"
                 onClick={handlePass}
               >
-                <X className="h-5 w-5 mr-2 text-red-500" />
+                <X className="h-5 w-5 mr-2 text-destructive" />
                 Passar
               </Button>
               <Button
                 size="lg"
-                className="flex-1 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600"
+                className="flex-1 bg-gradient-to-r from-accent to-primary hover:opacity-90"
                 onClick={handleLike}
               >
                 <Heart className="h-5 w-5 mr-2" />
