@@ -13,11 +13,11 @@ interface Props {
 
 export const DNAJourneyIntro: React.FC<Props> = ({ participantName, onStart, onCancel }) => (
   <motion.div
-    className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4"
+    className="min-h-screen bg-gradient-to-br from-background via-primary/20 to-background flex items-center justify-center p-4"
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
   >
-    <Card className="max-w-2xl w-full bg-black/40 backdrop-blur-xl border-purple-500/30 p-8">
+    <Card className="max-w-2xl w-full bg-card/60 backdrop-blur-xl border-primary/30 p-8">
       <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
@@ -28,22 +28,22 @@ export const DNAJourneyIntro: React.FC<Props> = ({ participantName, onStart, onC
           <motion.div
             animate={{ rotate: 360 }}
             transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-            className="absolute inset-0 bg-gradient-to-r from-purple-500 via-pink-500 to-cyan-500 rounded-full blur-xl opacity-50"
+            className="absolute inset-0 bg-gradient-to-r from-primary via-accent to-info rounded-full blur-xl opacity-50"
           />
-          <div className="relative bg-gradient-to-r from-purple-600 to-pink-600 p-6 rounded-full">
-            <Rocket className="w-12 h-12 text-white" />
+          <div className="relative bg-gradient-to-r from-primary to-accent p-6 rounded-full">
+            <Rocket className="w-12 h-12 text-primary-foreground" />
           </div>
         </div>
 
-        <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
+        <h1 className="text-4xl font-bold bg-gradient-to-r from-primary via-accent to-info bg-clip-text text-transparent">
           Jornada do DNA Comportamental
         </h1>
 
-        <p className="text-lg text-purple-200">
-          Olá, <span className="font-bold text-white">{participantName}</span>!
+        <p className="text-lg text-muted-foreground">
+          Olá, <span className="font-bold text-foreground">{participantName}</span>!
         </p>
 
-        <p className="text-purple-300 max-w-lg mx-auto">
+        <p className="text-muted-foreground max-w-lg mx-auto">
           Você está prestes a embarcar em uma experiência imersiva que vai revelar seu verdadeiro DNA
           comportamental através de cenários realistas, desafios estratégicos e reflexões profundas.
         </p>
@@ -67,17 +67,17 @@ export const DNAJourneyIntro: React.FC<Props> = ({ participantName, onStart, onC
                 {strand.id === 'values' && <Compass className="w-6 h-6" style={{ color: strand.color }} />}
                 {strand.id === 'adaptive' && <Zap className="w-6 h-6" style={{ color: strand.color }} />}
               </div>
-              <span className="text-xs text-purple-300">{strand.name}</span>
+              <span className="text-xs text-muted-foreground">{strand.name}</span>
             </motion.div>
           ))}
         </div>
 
-        <div className="bg-purple-900/30 rounded-xl p-4 text-left space-y-2">
-          <h3 className="font-semibold text-purple-200 flex items-center gap-2">
+        <div className="bg-primary/10 rounded-xl p-4 text-left space-y-2">
+          <h3 className="font-semibold text-foreground flex items-center gap-2">
             <Target className="w-5 h-5" />
             O que esperar:
           </h3>
-          <ul className="text-sm text-purple-300 space-y-1">
+          <ul className="text-sm text-muted-foreground space-y-1">
             <li>• 3 cenários imersivos de tomada de decisão</li>
             <li>• 4 mini-jogos comportamentais</li>
             <li>• Revelação do seu arquétipo único</li>
@@ -87,13 +87,13 @@ export const DNAJourneyIntro: React.FC<Props> = ({ participantName, onStart, onC
 
         <div className="flex gap-3 justify-center pt-4">
           {onCancel && (
-            <Button variant="ghost" onClick={onCancel} className="text-purple-300">
+            <Button variant="ghost" onClick={onCancel}>
               Cancelar
             </Button>
           )}
           <Button
             onClick={onStart}
-            className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 px-8"
+            className="bg-gradient-to-r from-primary to-accent hover:opacity-90 px-8"
           >
             <Play className="w-4 h-4 mr-2" />
             Iniciar Jornada
