@@ -42,7 +42,7 @@ export function GamifiedIntroPhase({
           transition={{ duration: 2, repeat: Infinity }}
         >
           <div className={cn('w-20 h-20 rounded-2xl flex items-center justify-center bg-gradient-to-br', styles.accent)}>
-            <Rocket className="h-10 w-10 text-white" />
+            <Rocket className="h-10 w-10 text-primary-foreground" />
           </div>
         </motion.div>
 
@@ -50,29 +50,29 @@ export function GamifiedIntroPhase({
         <p className="text-muted-foreground text-center mb-8">{subtitle}</p>
 
         <div className="grid grid-cols-2 gap-4 mb-8">
-          <div className="flex items-center gap-3 p-3 rounded-xl bg-yellow-500/10 border border-yellow-500/20">
-            <Zap className="h-5 w-5 text-yellow-500" />
+          <div className="flex items-center gap-3 p-3 rounded-xl bg-warning/10 border border-warning/20">
+            <Zap className="h-5 w-5 text-warning" />
             <div>
               <p className="text-sm font-medium">XP & Níveis</p>
               <p className="text-xs text-muted-foreground">Ganhe pontos</p>
             </div>
           </div>
-          <div className="flex items-center gap-3 p-3 rounded-xl bg-orange-500/10 border border-orange-500/20">
-            <Flame className="h-5 w-5 text-orange-500" />
+          <div className="flex items-center gap-3 p-3 rounded-xl bg-destructive/10 border border-destructive/20">
+            <Flame className="h-5 w-5 text-destructive" />
             <div>
               <p className="text-sm font-medium">Combos</p>
               <p className="text-xs text-muted-foreground">Multiplique!</p>
             </div>
           </div>
-          <div className="flex items-center gap-3 p-3 rounded-xl bg-purple-500/10 border border-purple-500/20">
-            <Trophy className="h-5 w-5 text-purple-500" />
+          <div className="flex items-center gap-3 p-3 rounded-xl bg-accent/10 border border-accent/20">
+            <Trophy className="h-5 w-5 text-accent" />
             <div>
               <p className="text-sm font-medium">Conquistas</p>
               <p className="text-xs text-muted-foreground">Desbloqueie</p>
             </div>
           </div>
-          <div className="flex items-center gap-3 p-3 rounded-xl bg-blue-500/10 border border-blue-500/20">
-            <Clock className="h-5 w-5 text-blue-500" />
+          <div className="flex items-center gap-3 p-3 rounded-xl bg-info/10 border border-info/20">
+            <Clock className="h-5 w-5 text-info" />
             <div>
               <p className="text-sm font-medium">Speed Bonus</p>
               <p className="text-xs text-muted-foreground">Seja rápido</p>
