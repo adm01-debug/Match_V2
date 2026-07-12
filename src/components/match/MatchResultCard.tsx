@@ -200,11 +200,11 @@ export function MatchResultCard({
           {/* Breakdown */}
           <div className="grid grid-cols-2 gap-3">
             <div className="p-3 rounded-lg bg-muted/50 text-center">
-              <p className="text-2xl font-bold text-green-500">{match.matchesPerfeitos.length + match.matchesAltos.length}</p>
+              <p className="text-2xl font-bold text-success">{match.matchesPerfeitos.length + match.matchesAltos.length}</p>
               <p className="text-xs text-muted-foreground">Valores Alinhados</p>
             </div>
             <div className="p-3 rounded-lg bg-muted/50 text-center">
-              <p className="text-2xl font-bold text-orange-500">{match.conflitos.length}</p>
+              <p className="text-2xl font-bold text-warning">{match.conflitos.length}</p>
               <p className="text-xs text-muted-foreground">Pontos de Atenção</p>
             </div>
           </div>
