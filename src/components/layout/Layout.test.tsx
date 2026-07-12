@@ -24,6 +24,11 @@ vi.mock('@/components/navigation/BottomNavigation', () => ({
   BottomNavigation: () => <footer>Bottom Nav</footer>,
 }));
 
+vi.mock('@/contexts/NotificationContext', () => ({
+  NotificationProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  useNotifications: () => ({ notifications: [], unreadCount: 0, markAsRead: vi.fn(), markAllAsRead: vi.fn() }),
+}));
+
 describe('Layout Accessibility', () => {
   const queryClient = new QueryClient({
     defaultOptions: {
