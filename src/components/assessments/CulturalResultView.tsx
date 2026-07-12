@@ -16,9 +16,9 @@ interface CulturalResultViewProps {
 
 const getStatusColor = (status: 'alto' | 'medio' | 'baixo') => {
   switch (status) {
-    case 'alto': return 'text-green-600 bg-green-100';
-    case 'medio': return 'text-yellow-600 bg-yellow-100';
-    case 'baixo': return 'text-red-600 bg-red-100';
+    case 'alto': return 'text-success bg-success/15';
+    case 'medio': return 'text-warning bg-warning/15';
+    case 'baixo': return 'text-destructive bg-destructive/15';
   }
 };
 
@@ -42,15 +42,15 @@ export function CulturalResultView({ resultado, candidatoNome }: CulturalResultV
   const sortedAlinhamentos = [...resultado.alinhamentos].sort((a, b) => b.score - a.score);
 
   const getFitColor = (fit: number) => {
-    if (fit >= 80) return 'text-green-600';
-    if (fit >= 60) return 'text-yellow-600';
-    return 'text-red-600';
+    if (fit >= 80) return 'text-success';
+    if (fit >= 60) return 'text-warning';
+    return 'text-destructive';
   };
 
   const getFitBgColor = (fit: number) => {
-    if (fit >= 80) return 'bg-green-500';
-    if (fit >= 60) return 'bg-yellow-500';
-    return 'bg-red-500';
+    if (fit >= 80) return 'bg-success';
+    if (fit >= 60) return 'bg-warning';
+    return 'bg-destructive';
   };
 
   return (
