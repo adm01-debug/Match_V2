@@ -140,3 +140,4 @@ export const RESULTS_ORIENTATION_SCENARIOS: ImmersiveScenario[] = [
       },
     ],
   },
+];
