@@ -25,13 +25,13 @@ interface TipoConfigItem {
 }
 
 const tipoConfig: Record<string, TipoConfigItem> = {
-  presencial: { icon: MapPin, label: 'Presencial', color: 'bg-blue-500/10 text-blue-600' },
-  online: { icon: Video, label: 'Online', color: 'bg-purple-500/10 text-purple-600' },
-  telefone: { icon: Phone, label: 'Telefone', color: 'bg-green-500/10 text-green-600' },
-  tecnica: { icon: Users, label: 'Técnica', color: 'bg-indigo-500/10 text-indigo-600' },
-  rh: { icon: Users, label: 'RH', color: 'bg-green-500/10 text-green-600' },
-  cultural: { icon: Users, label: 'Cultural', color: 'bg-pink-500/10 text-pink-600' },
-  final: { icon: Users, label: 'Final', color: 'bg-orange-500/10 text-orange-600' },
+  presencial: { icon: MapPin, label: 'Presencial', color: 'bg-info/10 text-info' },
+  online: { icon: Video, label: 'Online', color: 'bg-primary/10 text-primary' },
+  telefone: { icon: Phone, label: 'Telefone', color: 'bg-success/10 text-success' },
+  tecnica: { icon: Users, label: 'Técnica', color: 'bg-info/10 text-info' },
+  rh: { icon: Users, label: 'RH', color: 'bg-success/10 text-success' },
+  cultural: { icon: Users, label: 'Cultural', color: 'bg-primary/10 text-primary' },
+  final: { icon: Users, label: 'Final', color: 'bg-warning/10 text-warning' },
   triagem: { icon: Phone, label: 'Triagem', color: 'bg-gray-500/10 text-gray-600' },
 };
 
@@ -42,13 +42,13 @@ const defaultTipoConfig: TipoConfigItem = {
 };
 
 const statusColors: Record<string, string> = {
-  agendada: 'border-l-yellow-500 bg-yellow-500/5',
-  confirmada: 'border-l-green-500 bg-green-500/5',
+  agendada: 'border-l-warning bg-warning/5',
+  confirmada: 'border-l-success bg-success/5',
   realizada: 'border-l-muted-foreground bg-muted/20',
-  cancelada: 'border-l-red-500 bg-red-500/5',
-  reagendada: 'border-l-orange-500 bg-orange-500/5',
-  remarcada: 'border-l-orange-500 bg-orange-500/5',
-  no_show: 'border-l-red-500 bg-red-500/5',
+  cancelada: 'border-l-destructive bg-destructive/5',
+  reagendada: 'border-l-warning bg-warning/5',
+  remarcada: 'border-l-warning bg-warning/5',
+  no_show: 'border-l-destructive bg-destructive/5',
 };
 
 const defaultStatusColor = 'border-l-gray-500 bg-gray-500/5';
