@@ -34,9 +34,9 @@ const tipoLabels = {
 };
 
 const dificuldadeConfig = {
-  facil: { label: 'Fácil', color: 'bg-green-500/10 text-green-600 border-green-500/30' },
-  medio: { label: 'Médio', color: 'bg-yellow-500/10 text-yellow-600 border-yellow-500/30' },
-  dificil: { label: 'Difícil', color: 'bg-red-500/10 text-red-600 border-red-500/30' }
+  facil: { label: 'Fácil', color: 'bg-success/10 text-success border-success/30' },
+  medio: { label: 'Médio', color: 'bg-warning/10 text-warning border-warning/30' },
+  dificil: { label: 'Difícil', color: 'bg-destructive/10 text-destructive border-destructive/30' }
 };
 
 export function QuestaoCard({ questao, index, onEdit, onDelete, showAnswer = true }: QuestaoCardProps) {
@@ -85,18 +85,18 @@ export function QuestaoCard({ questao, index, onEdit, onDelete, showAnswer = tru
                       key={altIndex}
                       className={cn(
                         "flex items-center gap-2 text-sm py-1 px-2 rounded",
-                        isCorrect && "bg-green-500/10"
+                        isCorrect && "bg-success/10"
                       )}
                     >
                       <span className={cn(
                         "w-5 h-5 rounded-full border flex items-center justify-center text-xs shrink-0",
                         isCorrect 
-                          ? "border-green-500 bg-green-500 text-white" 
+                          ? "border-success bg-success text-success-foreground" 
                           : "border-muted-foreground/30"
                       )}>
                         {isCorrect ? <Check className="h-3 w-3" /> : String.fromCharCode(65 + altIndex)}
                       </span>
-                      <span className={cn(isCorrect && "font-medium text-green-600")}>
+                      <span className={cn(isCorrect && "font-medium text-success")}>
                         {alt}
                       </span>
                     </div>
