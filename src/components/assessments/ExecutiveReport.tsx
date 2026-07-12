@@ -45,11 +45,11 @@ interface ExecutiveReportProps {
 }
 
 const CLASSIFICACAO_CORES = {
-  excepcional: 'bg-green-500',
-  acima_media: 'bg-emerald-400',
-  adequado: 'bg-yellow-400',
-  abaixo_media: 'bg-orange-400',
-  nao_recomendado: 'bg-red-500'
+  excepcional: 'bg-success text-success-foreground',
+  acima_media: 'bg-success/70 text-success-foreground',
+  adequado: 'bg-warning text-warning-foreground',
+  abaixo_media: 'bg-warning/70 text-warning-foreground',
+  nao_recomendado: 'bg-destructive text-destructive-foreground'
 };
 
 const CLASSIFICACAO_LABELS = {
@@ -61,17 +61,17 @@ const CLASSIFICACAO_LABELS = {
 };
 
 const DECISAO_CONFIG = {
-  aprovar: { icon: CheckCircle, cor: 'text-green-600 bg-green-100', label: 'Aprovar' },
-  entrevistar: { icon: Clock, cor: 'text-blue-600 bg-blue-100', label: 'Entrevistar' },
-  reserva: { icon: Clock, cor: 'text-yellow-600 bg-yellow-100', label: 'Banco de Reserva' },
-  recusar: { icon: XCircle, cor: 'text-red-600 bg-red-100', label: 'Não Prosseguir' }
+  aprovar: { icon: CheckCircle, cor: 'text-success bg-success/15', label: 'Aprovar' },
+  entrevistar: { icon: Clock, cor: 'text-info bg-info/15', label: 'Entrevistar' },
+  reserva: { icon: Clock, cor: 'text-warning bg-warning/15', label: 'Banco de Reserva' },
+  recusar: { icon: XCircle, cor: 'text-destructive bg-destructive/15', label: 'Não Prosseguir' }
 };
 
 const DISC_COLORS = {
-  D: '#ef4444',
-  I: '#eab308',
-  S: '#22c55e',
-  C: '#3b82f6'
+  D: 'hsl(var(--destructive))',
+  I: 'hsl(var(--warning))',
+  S: 'hsl(var(--success))',
+  C: 'hsl(var(--info))'
 };
 
 export function ExecutiveReport({ 
@@ -201,7 +201,7 @@ export function ExecutiveReport({
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-base flex items-center gap-2">
-              <User className="h-4 w-4 text-blue-500" />
+              <User className="h-4 w-4 text-info" />
               {relatorio.secoes.perfilComportamental.titulo}
             </CardTitle>
           </CardHeader>
@@ -214,7 +214,7 @@ export function ExecutiveReport({
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-base flex items-center gap-2">
-              <ThumbsUp className="h-4 w-4 text-green-500" />
+              <ThumbsUp className="h-4 w-4 text-success" />
               {relatorio.secoes.pontosFortes.titulo}
             </CardTitle>
           </CardHeader>
@@ -227,7 +227,7 @@ export function ExecutiveReport({
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-base flex items-center gap-2">
-              <TrendingUp className="h-4 w-4 text-yellow-500" />
+              <TrendingUp className="h-4 w-4 text-warning" />
               {relatorio.secoes.areasDesenvolvimento.titulo}
             </CardTitle>
           </CardHeader>
@@ -240,7 +240,7 @@ export function ExecutiveReport({
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-base flex items-center gap-2">
-              <Heart className="h-4 w-4 text-pink-500" />
+              <Heart className="h-4 w-4 text-primary" />
               {relatorio.secoes.fitCultural.titulo}
             </CardTitle>
           </CardHeader>
@@ -256,10 +256,10 @@ export function ExecutiveReport({
       </div>
 
       {/* Riscos */}
-      <Card className={relatorio.secoes.riscos.conteudo.includes('Nenhum') ? 'border-green-200' : 'border-red-200'}>
+      <Card className={relatorio.secoes.riscos.conteudo.includes('Nenhum') ? 'border-success/30' : 'border-destructive/30'}>
         <CardHeader className="pb-2">
           <CardTitle className="text-base flex items-center gap-2">
-            <AlertTriangle className={`h-4 w-4 ${relatorio.secoes.riscos.conteudo.includes('Nenhum') ? 'text-green-500' : 'text-red-500'}`} />
+            <AlertTriangle className={`h-4 w-4 ${relatorio.secoes.riscos.conteudo.includes('Nenhum') ? 'text-success' : 'text-destructive'}`} />
             {relatorio.secoes.riscos.titulo}
           </CardTitle>
         </CardHeader>
@@ -340,7 +340,7 @@ export function ExecutiveReport({
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <CheckCircle className="h-5 w-5 text-emerald-500" />
+            <CheckCircle className="h-5 w-5 text-success" />
             {relatorio.secoes.recomendacaoFinal.titulo}
           </CardTitle>
         </CardHeader>
