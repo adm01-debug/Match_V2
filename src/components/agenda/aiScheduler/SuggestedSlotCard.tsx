@@ -169,7 +169,7 @@ export function SuggestedSlotCard({ slot, index, isSelected, onSelect }: Props) 
           animate={{ opacity: 1, height: 'auto' }}
           className="mt-4 pt-4 border-t"
         >
-          <Button className="w-full bg-gradient-to-r from-primary to-purple-600">
+          <Button className="w-full bg-gradient-to-r from-primary to-accent">
             Confirmar este horário
             <ArrowRight className="h-4 w-4 ml-2" />
           </Button>
