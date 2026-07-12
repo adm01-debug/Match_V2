@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { DailyChallengeCard } from "./dailyChallenges/DailyChallengeCard";
 import { DailyChallengesHeader } from "./dailyChallenges/DailyChallengesHeader";
 import { useDailyChallenges } from "./dailyChallenges/useDailyChallenges";
-import type { DailyChallenge } from "./dailyChallenges/types";
+import { useDailyChallenges } from "./dailyChallenges/useDailyChallenges";
 
 export type { DailyChallenge, ChallengeType, ChallengeDifficulty } from "./dailyChallenges/types";
 
