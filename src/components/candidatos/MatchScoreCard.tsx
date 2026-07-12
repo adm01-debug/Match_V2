@@ -50,48 +50,48 @@ interface RecomendacaoConfig {
 }
 
 function getScoreColor(score: number): string {
-  if (score >= 80) return 'text-green-500';
-  if (score >= 60) return 'text-yellow-500';
-  if (score >= 40) return 'text-orange-500';
-  return 'text-red-500';
+  if (score >= 80) return 'text-success';
+  if (score >= 60) return 'text-warning';
+  if (score >= 40) return 'text-warning';
+  return 'text-destructive';
 }
 
 function getScoreBorderColor(score: number): string {
-  if (score >= 80) return 'border-green-500';
-  if (score >= 60) return 'border-yellow-500';
-  if (score >= 40) return 'border-orange-500';
-  return 'border-red-500';
+  if (score >= 80) return 'border-success';
+  if (score >= 60) return 'border-warning';
+  if (score >= 40) return 'border-warning';
+  return 'border-destructive';
 }
 
 function getRecomendacaoConfig(recomendacao: string): RecomendacaoConfig {
   switch (recomendacao) {
     case 'forte':
-      return { 
-        label: 'Altamente Recomendado', 
-        color: 'bg-green-500', 
+      return {
+        label: 'Altamente Recomendado',
+        color: 'bg-success',
         icon: CheckCircle2,
-        textColor: 'text-green-700'
+        textColor: 'text-success',
       };
     case 'moderado':
-      return { 
-        label: 'Recomendado com Ressalvas', 
-        color: 'bg-yellow-500', 
+      return {
+        label: 'Recomendado com Ressalvas',
+        color: 'bg-warning',
         icon: AlertTriangle,
-        textColor: 'text-yellow-700'
+        textColor: 'text-warning',
       };
     case 'fraco':
-      return { 
-        label: 'Considerar Alternativas', 
-        color: 'bg-orange-500', 
+      return {
+        label: 'Considerar Alternativas',
+        color: 'bg-warning',
         icon: TrendingDown,
-        textColor: 'text-orange-700'
+        textColor: 'text-warning',
       };
     default:
-      return { 
-        label: 'Não Recomendado', 
-        color: 'bg-red-500', 
+      return {
+        label: 'Não Recomendado',
+        color: 'bg-destructive',
         icon: XCircle,
-        textColor: 'text-red-700'
+        textColor: 'text-destructive',
       };
   }
 }
