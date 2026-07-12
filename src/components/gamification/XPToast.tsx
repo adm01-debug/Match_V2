@@ -187,7 +187,7 @@ export const XPToast = memo(function XPToast({
 
             {/* Shine effect */}
             <motion.div
-              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent rounded-2xl"
+              className="absolute inset-0 bg-gradient-to-r from-transparent via-primary-foreground/30 to-transparent rounded-2xl"
               initial={{ x: "-100%" }}
               animate={{ x: "100%" }}
               transition={{ duration: 1, repeat: 2, repeatDelay: 0.5 }}
@@ -195,14 +195,14 @@ export const XPToast = memo(function XPToast({
 
             {/* Icon */}
             <motion.div
-              className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-white/20"
+              className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-primary-foreground/20"
               animate={{ 
                 rotate: [0, 10, -10, 0],
                 scale: [1, 1.1, 1],
               }}
               transition={{ duration: 0.6, repeat: 2 }}
             >
-              <Icon className="w-5 h-5 text-white" />
+              <Icon className="w-5 h-5 text-primary-foreground" />
             </motion.div>
 
             {/* Content */}
@@ -213,17 +213,17 @@ export const XPToast = memo(function XPToast({
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.1 }}
               >
-                <span className="text-2xl font-bold text-white">+</span>
+                <span className="text-2xl font-bold text-primary-foreground">+</span>
                 <motion.span
-                  className="text-2xl font-bold text-white tabular-nums"
+                  className="text-2xl font-bold text-primary-foreground tabular-nums"
                 >
                   {amount}
                 </motion.span>
-                <span className="text-lg font-semibold text-white/90">XP</span>
+                <span className="text-lg font-semibold text-primary-foreground/90">XP</span>
                 
                 {multiplier > 1 && (
                   <motion.span
-                    className="ml-2 px-2 py-0.5 text-xs font-bold bg-white/30 rounded-full text-white"
+                    className="ml-2 px-2 py-0.5 text-xs font-bold bg-primary-foreground/30 rounded-full text-primary-foreground"
                     initial={{ scale: 0, rotate: -10 }}
                     animate={{ scale: 1, rotate: 0 }}
                     transition={{ delay: 0.3, type: "spring" }}
@@ -235,7 +235,7 @@ export const XPToast = memo(function XPToast({
               
               {action && (
                 <motion.p
-                  className="text-xs text-white/80 font-medium"
+                  className="text-xs text-primary-foreground/80 font-medium"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.2 }}
