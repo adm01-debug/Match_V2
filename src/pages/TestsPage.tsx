@@ -1,55 +1,27 @@
 import { usePageTitle } from '@/hooks/usePageTitle';
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback } from 'react';
 import { useFuzzySearch, FUZZY_PRESETS } from '@/hooks/useFuzzySearch';
-import { HighlightMatch, getMatchIndices } from '@/components/ui/highlight-match';
-import { useNavigate } from "react-router-dom";
-import { Layout } from "@/components/layout/Layout";
-import { useProvas, useDeleteProva, useDuplicateProva } from "@/hooks/useProvas";
-import { categoriasInfo, niveisInfo, getCategoriaById, getNivelById } from "@/config/testsConfig";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { BehavioralToolsCard } from "@/components/assessments";
-import { Skeleton } from "@/components/ui/skeleton";
-import { useSoundEffects } from "@/hooks/useSoundEffects";
-import { enhancedToast } from "@/components/ui/enhanced-toast";
-import {
-  Search,
-  Plus,
-  FileText,
-  Users,
-  CheckCircle2,
-  BarChart3,
-  Filter,
-  RefreshCw,
-  Edit,
-  Copy,
-  Trash2,
-  Play,
-  Brain,
-  Code,
-  BookOpen,
-  Globe,
-  Table,
-  Heart,
-} from "lucide-react";
-import { cn } from "@/lib/utils";
-import { TestsEmptyState } from "@/components/empty-states";
-import type { Prova, NivelCargo } from "@/types/tests";
+import { getMatchIndices } from '@/components/ui/highlight-match';
+import { useNavigate } from 'react-router-dom';
+import { Layout } from '@/components/layout/Layout';
+import { useProvas, useDeleteProva, useDuplicateProva } from '@/hooks/useProvas';
+import { categoriasInfo } from '@/config/testsConfig';
 
-// Mapa de ícones
-const iconeMap: Record<string, React.ComponentType<{ className?: string }>> = {
-  Brain,
-  Code,
-  BookOpen,
-  Globe,
-  Table,
-  Users,
-  Heart,
-};
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { BehavioralToolsCard } from '@/components/assessments';
+import { Skeleton } from '@/components/ui/skeleton';
+import { useSoundEffects } from '@/hooks/useSoundEffects';
+import { enhancedToast } from '@/components/ui/enhanced-toast';
+import { Plus, FileText, RefreshCw } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { TestsEmptyState } from '@/components/empty-states';
+import type { NivelCargo } from '@/types/tests';
+import { iconeMap } from './tests/iconMap';
+import { TestsStats } from './tests/TestsStats';
+import { TestsFilters } from './tests/TestsFilters';
+import { ProvaCard } from './tests/ProvaCard';
 
 export default function TestsPage() {
   usePageTitle('Testes');
@@ -60,12 +32,11 @@ export default function TestsPage() {
   const deleteProvaMutation = useDeleteProva();
   const duplicarProvaMutation = useDuplicateProva();
 
-  const [searchQuery, setSearchQuery] = useState("");
-  const [filtroCategoria, setFiltroCategoria] = useState<string>("todas");
-  const [filtroNivel, setFiltroNivel] = useState<string>("todos");
-  const [activeTab, setActiveTab] = useState("provas");
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filtroCategoria, setFiltroCategoria] = useState<string>('todas');
+  const [filtroNivel, setFiltroNivel] = useState<string>('todos');
+  const [activeTab, setActiveTab] = useState('provas');
 
-  // Busca fuzzy com Fuse.js
   const { results: fuzzyResults, matchesMap } = useFuzzySearch(
     provas,
     [
@@ -75,59 +46,52 @@ export default function TestsPage() {
       { name: 'tags', weight: 0.5 },
     ],
     searchQuery,
-    { ...FUZZY_PRESETS.default }
+    { ...FUZZY_PRESETS.default },
   );
 
-  // Função para obter índices de match de uma prova
   const getProvaMatchIndices = useCallback((provaId: string, key: string) => {
     const matches = matchesMap.get(provaId);
     return getMatchIndices(matches, key);
   }, [matchesMap]);
 
-  // Filtrar provas
   const provasFiltradas = useMemo(() => {
     const baseProvas = searchQuery ? fuzzyResults : provas;
-    return baseProvas.filter(p => {
-      if (filtroCategoria !== "todas" && p.categoria !== filtroCategoria) return false;
-      // Filter by niveisAplicaveis array
-      if (filtroNivel !== "todos" && !p.niveisAplicaveis?.includes(filtroNivel as NivelCargo)) return false;
+    return baseProvas.filter((p) => {
+      if (filtroCategoria !== 'todas' && p.categoria !== filtroCategoria) return false;
+      if (filtroNivel !== 'todos' && !p.niveisAplicaveis?.includes(filtroNivel as NivelCargo)) return false;
       return true;
     });
   }, [provas, fuzzyResults, searchQuery, filtroCategoria, filtroNivel]);
 
-  // Estatísticas
-  const stats = useMemo(() => {
-    return {
-      totalProvas: provas.length,
-      totalQuestoes: provas.reduce((acc, p) => acc + (p.totalQuestoes || 0), 0),
-      totalAplicacoes: provas.reduce((acc, p) => acc + (p.aplicacoes || 0), 0),
-      mediaAprovacao: provas.length > 0
-        ? provas.reduce((acc, p) => acc + (p.mediaNotas || 0), 0) / provas.length
-        : 0,
-    };
-  }, [provas]);
+  const stats = useMemo(() => ({
+    totalProvas: provas.length,
+    totalQuestoes: provas.reduce((acc, p) => acc + (p.totalQuestoes || 0), 0),
+    totalAplicacoes: provas.reduce((acc, p) => acc + (p.aplicacoes || 0), 0),
+    mediaAprovacao: provas.length > 0
+      ? provas.reduce((acc, p) => acc + (p.mediaNotas || 0), 0) / provas.length
+      : 0,
+  }), [provas]);
 
-  // Handlers
   const handleDuplicar = async (id: string) => {
     try {
       await duplicarProvaMutation.mutateAsync(id);
       playPop();
-      enhancedToast.success("Prova duplicada com sucesso!");
+      enhancedToast.success('Prova duplicada com sucesso!');
     } catch {
       playError();
-      enhancedToast.error("Erro ao duplicar prova");
+      enhancedToast.error('Erro ao duplicar prova');
     }
   };
 
   const handleExcluir = async (id: string) => {
-    if (!confirm("Deseja excluir esta prova?")) return;
+    if (!confirm('Deseja excluir esta prova?')) return;
     try {
       await deleteProvaMutation.mutateAsync(id);
       playSuccess();
-      enhancedToast.info("Prova excluída");
+      enhancedToast.info('Prova excluída');
     } catch {
       playError();
-      enhancedToast.error("Erro ao excluir");
+      enhancedToast.error('Erro ao excluir');
     }
   };
 
@@ -136,99 +100,16 @@ export default function TestsPage() {
     playClick();
   };
 
-  // Render Card de Prova
-  const ProvaCard = ({ prova }: { prova: Prova }) => {
-    const categoria = getCategoriaById(prova.categoria);
-    const nivel = prova.niveisAplicaveis?.[0] ? getNivelById(prova.niveisAplicaveis[0]) : null;
-    const IconeCategoria = categoria ? iconeMap[categoria.icone] || FileText : FileText;
-
-    return (
-      <Card className="hover:shadow-md transition-shadow">
-        <CardHeader className="pb-2">
-          <div className="flex items-start justify-between">
-            <div className={cn("p-2 rounded-lg", categoria?.cor || "bg-muted")}>
-              <IconeCategoria className="h-5 w-5 text-primary-foreground" />
-            </div>
-            <Badge variant="outline">{nivel?.nome || 'Geral'}</Badge>
-          </div>
-          <CardTitle className="text-lg mt-2">
-            <HighlightMatch 
-              text={prova.titulo} 
-              indices={getProvaMatchIndices(prova.id, 'titulo')} 
-            />
-          </CardTitle>
-          <CardDescription className="line-clamp-2">
-            <HighlightMatch 
-              text={prova.descricao || ''} 
-              indices={getProvaMatchIndices(prova.id, 'descricao')} 
-            />
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-3 gap-4 text-sm">
-            <div className="text-center">
-              <p className="text-2xl font-bold">{prova.totalQuestoes}</p>
-              <p className="text-xs text-muted-foreground">Questões</p>
-            </div>
-            <div className="text-center">
-              <p className="text-2xl font-bold">{prova.duracao}</p>
-              <p className="text-xs text-muted-foreground">Minutos</p>
-            </div>
-            <div className="text-center">
-              <p className="text-2xl font-bold">{prova.notaMinima}%</p>
-              <p className="text-xs text-muted-foreground">Mínimo</p>
-            </div>
-          </div>
-
-          {(prova.aplicacoes || 0) > 0 && (
-            <div className="mt-4 p-3 bg-muted rounded-lg">
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-muted-foreground">Aplicações</span>
-                <span className="font-medium">{prova.aplicacoes}</span>
-              </div>
-              <div className="flex items-center justify-between text-sm mt-1">
-                <span className="text-muted-foreground">Média de notas</span>
-                <span className={cn(
-                  "font-medium",
-                  (prova.mediaNotas || 0) >= 70 ? "text-green-600" : "text-amber-600"
-                )}>
-                  {prova.mediaNotas?.toFixed(0) || 0}%
-                </span>
-              </div>
-            </div>
-          )}
-        </CardContent>
-        <CardFooter className="flex justify-between pt-0">
-          <div className="flex gap-1">
-            <Button size="sm" variant="ghost" onClick={() => navigate(`/testes/${prova.id}/editar`)}>
-              <Edit className="h-4 w-4" />
-            </Button>
-            <Button size="sm" variant="ghost" onClick={() => handleDuplicar(prova.id)}>
-              <Copy className="h-4 w-4" />
-            </Button>
-            <Button size="sm" variant="ghost" onClick={() => handleExcluir(prova.id)}>
-              <Trash2 className="h-4 w-4" />
-            </Button>
-          </div>
-          <Button size="sm" onClick={() => navigate(`/testes/${prova.id}/aplicar`)}>
-            <Play className="h-4 w-4 mr-1" />
-            Aplicar
-          </Button>
-        </CardFooter>
-      </Card>
-    );
-  };
-
   if (isLoading) {
     return (
       <Layout title="Provas">
         <div className="p-6 space-y-6">
           <Skeleton className="h-10 w-48" />
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            {[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-24" />)}
+            {[1, 2, 3, 4].map((i) => <Skeleton key={i} className="h-24" />)}
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {[1, 2, 3, 4, 5, 6].map(i => <Skeleton key={i} className="h-64" />)}
+            {[1, 2, 3, 4, 5, 6].map((i) => <Skeleton key={i} className="h-64" />)}
           </div>
         </div>
       </Layout>
@@ -238,7 +119,6 @@ export default function TestsPage() {
   return (
     <Layout title="Provas e Testes">
       <div className="p-6 space-y-6 animate-fade-in">
-        {/* Header */}
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold">Provas e Testes</h1>
@@ -248,98 +128,24 @@ export default function TestsPage() {
             <Button variant="outline" size="icon" onClick={() => refetch()}>
               <RefreshCw className="h-4 w-4" />
             </Button>
-            <Button onClick={() => navigate("/testes/nova")}>
+            <Button onClick={() => navigate('/testes/nova')}>
               <Plus className="h-4 w-4 mr-2" />
               Nova Prova
             </Button>
           </div>
         </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <Card>
-            <CardContent className="pt-4">
-              <div className="flex items-center gap-2">
-                <FileText className="h-5 w-5 text-blue-500" />
-                <div>
-                  <p className="text-2xl font-bold">{stats.totalProvas}</p>
-                  <p className="text-xs text-muted-foreground">Provas</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="pt-4">
-              <div className="flex items-center gap-2">
-                <CheckCircle2 className="h-5 w-5 text-green-500" />
-                <div>
-                  <p className="text-2xl font-bold">{stats.totalQuestoes}</p>
-                  <p className="text-xs text-muted-foreground">Questões</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="pt-4">
-              <div className="flex items-center gap-2">
-                <Users className="h-5 w-5 text-purple-500" />
-                <div>
-                  <p className="text-2xl font-bold">{stats.totalAplicacoes}</p>
-                  <p className="text-xs text-muted-foreground">Aplicações</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="pt-4">
-              <div className="flex items-center gap-2">
-                <BarChart3 className="h-5 w-5 text-amber-500" />
-                <div>
-                  <p className="text-2xl font-bold">{stats.mediaAprovacao.toFixed(0)}%</p>
-                  <p className="text-xs text-muted-foreground">Média Geral</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+        <TestsStats {...stats} />
 
-        {/* Filtros */}
-        <div className="flex flex-col md:flex-row gap-4">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Buscar prova..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10"
-            />
-          </div>
-          <Select value={filtroCategoria} onValueChange={setFiltroCategoria}>
-            <SelectTrigger className="w-48">
-              <Filter className="h-4 w-4 mr-2" />
-              <SelectValue placeholder="Categoria" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="todas">Todas Categorias</SelectItem>
-              {categoriasInfo.map(c => (
-                <SelectItem key={c.id} value={c.id}>{c.nome}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Select value={filtroNivel} onValueChange={setFiltroNivel}>
-            <SelectTrigger className="w-40">
-              <SelectValue placeholder="Nível" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="todos">Todos Níveis</SelectItem>
-              {niveisInfo.map(n => (
-                <SelectItem key={n.id} value={n.id}>{n.nome}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+        <TestsFilters
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
+          filtroCategoria={filtroCategoria}
+          onCategoriaChange={setFiltroCategoria}
+          filtroNivel={filtroNivel}
+          onNivelChange={setFiltroNivel}
+        />
 
-        {/* Tabs */}
         <Tabs value={activeTab} onValueChange={handleTabChange}>
           <TabsList>
             <TabsTrigger value="provas">Provas ({provasFiltradas.length})</TabsTrigger>
@@ -347,10 +153,9 @@ export default function TestsPage() {
             <TabsTrigger value="categorias">Por Categoria</TabsTrigger>
           </TabsList>
 
-          {/* Tab Provas */}
           <TabsContent value="provas" className="mt-4">
             {provasFiltradas.length === 0 ? (
-              <TestsEmptyState 
+              <TestsEmptyState
                 hasFilters={searchQuery !== '' || filtroCategoria !== 'todas' || filtroNivel !== 'todos'}
                 onClearFilters={() => {
                   setSearchQuery('');
@@ -361,40 +166,50 @@ export default function TestsPage() {
               />
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {provasFiltradas.map(prova => (
-                  <ProvaCard key={prova.id} prova={prova} />
+                {provasFiltradas.map((prova) => (
+                  <ProvaCard
+                    key={prova.id}
+                    prova={prova}
+                    getMatchIndices={getProvaMatchIndices}
+                    onDuplicar={handleDuplicar}
+                    onExcluir={handleExcluir}
+                  />
                 ))}
               </div>
             )}
           </TabsContent>
 
-          {/* Tab Comportamentais */}
           <TabsContent value="comportamentais" className="mt-4">
-            <BehavioralToolsCard 
+            <BehavioralToolsCard
               onStartAssessment={(assessmentId) => navigate(`/avaliacoes-comportamentais?tool=${assessmentId}`)}
               className="max-w-4xl"
             />
           </TabsContent>
 
-          {/* Tab Por Categoria */}
           <TabsContent value="categorias" className="mt-4 space-y-6">
-            {categoriasInfo.map(categoria => {
-              const provasCategoria = provas.filter(p => p.categoria === categoria.id);
+            {categoriasInfo.map((categoria) => {
+              const provasCategoria = provas.filter((p) => p.categoria === categoria.id);
               if (provasCategoria.length === 0) return null;
               const IconeCategoria = iconeMap[categoria.icone] || FileText;
 
               return (
                 <div role="main" key={categoria.id}>
                   <div className="flex items-center gap-2 mb-3">
-                    <div className={cn("p-2 rounded-lg", categoria.cor)}>
+                    <div className={cn('p-2 rounded-lg', categoria.cor)}>
                       <IconeCategoria className="h-5 w-5 text-primary-foreground" />
                     </div>
                     <h2 className="text-lg font-semibold">{categoria.nome}</h2>
                     <Badge variant="secondary">{provasCategoria.length}</Badge>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {provasCategoria.map(prova => (
-                      <ProvaCard key={prova.id} prova={prova} />
+                    {provasCategoria.map((prova) => (
+                      <ProvaCard
+                        key={prova.id}
+                        prova={prova}
+                        getMatchIndices={getProvaMatchIndices}
+                        onDuplicar={handleDuplicar}
+                        onExcluir={handleExcluir}
+                      />
                     ))}
                   </div>
                 </div>
