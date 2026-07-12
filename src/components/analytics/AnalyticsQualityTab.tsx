@@ -28,8 +28,8 @@ export function AnalyticsQualityTab({ data }: AnalyticsQualityTabProps) {
           <ResponsiveContainer width="100%" height="100%">
             <RadarChart data={data}>
               <PolarGrid /><PolarAngleAxis dataKey="metrica" /><PolarRadiusAxis angle={30} domain={[0, 100]} />
-              <Radar name="Realizado" dataKey="valor" stroke="#6366F1" fill="#6366F1" fillOpacity={0.5} />
-              <Radar name="Benchmark" dataKey="benchmark" stroke="#22C55E" fill="#22C55E" fillOpacity={0.2} />
+              <Radar name="Realizado" dataKey="valor" stroke="hsl(var(--primary))" fill="hsl(var(--primary))" fillOpacity={0.5} />
+              <Radar name="Benchmark" dataKey="benchmark" stroke="hsl(var(--success))" fill="hsl(var(--success))" fillOpacity={0.2} />
               <Legend /><Tooltip />
             </RadarChart>
           </ResponsiveContainer>

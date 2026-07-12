@@ -27,7 +27,7 @@ export function QRCodeGenerator({ secret, accountName, issuer = 'People Lovers',
     return `data:image/svg+xml,${encodeURIComponent(`
       <svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
         <rect width="100%" height="100%" fill="white"/>
-        <text x="50%" y="50%" text-anchor="middle" dy=".3em" font-size="12" fill="#666">
+        <text x="50%" y="50%" text-anchor="middle" dy=".3em" font-size="12" fill="currentColor" className="text-muted-foreground">
           QR Code
         </text>
       </svg>

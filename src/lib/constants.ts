@@ -158,19 +158,27 @@ export const DEPARTAMENTOS = [
   'Design',
 ] as const;
 
-// Cores para gráficos
+// Cores para gráficos — tokens semânticos (dark mode automático)
 export const CHART_COLORS = [
-  '#6366F1', // indigo
-  '#8B5CF6', // violet
-  '#A855F7', // purple
-  '#D946EF', // fuchsia
-  '#EC4899', // pink
-  '#F43F5E', // rose
-  '#22C55E', // green
-  '#EAB308', // yellow
-  '#F97316', // orange
-  '#14B8A6', // teal
+  'hsl(var(--primary))',
+  'hsl(var(--accent))',
+  'hsl(var(--info))',
+  'hsl(var(--success))',
+  'hsl(var(--warning))',
+  'hsl(var(--destructive))',
+  'hsl(var(--muted-foreground))',
+  'hsl(var(--secondary-foreground))',
 ];
+
+export const CHART_TOKEN = {
+  primary: 'hsl(var(--primary))',
+  accent: 'hsl(var(--accent))',
+  info: 'hsl(var(--info))',
+  success: 'hsl(var(--success))',
+  warning: 'hsl(var(--warning))',
+  destructive: 'hsl(var(--destructive))',
+  muted: 'hsl(var(--muted-foreground))',
+} as const;
 
 // Metas padrão
 export const METAS_PADRAO = {

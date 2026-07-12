@@ -5,7 +5,7 @@ import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Toolti
 import { Globe } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-const COLORS = ['#6366F1', '#8B5CF6', '#A855F7', '#D946EF', '#EC4899', '#F43F5E', '#22C55E', '#14B8A6'];
+const COLORS = ['hsl(var(--primary))', 'hsl(var(--accent))', 'hsl(var(--accent))', 'hsl(var(--accent))', 'hsl(var(--accent))', 'hsl(var(--destructive))', 'hsl(var(--success))', 'hsl(var(--info))'];
 
 interface SourceData {
   source: string;
@@ -87,7 +87,7 @@ export function AnalyticsSourcesTab({ data }: AnalyticsSourcesTabProps) {
               <BarChart data={data} layout="vertical">
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis type="number" unit="%" /><YAxis dataKey="source" type="category" width={80} /><Tooltip />
-                <Bar dataKey="taxaConversao" fill="#6366F1" radius={[0, 4, 4, 0]} name="Conversão" />
+                <Bar dataKey="taxaConversao" fill="hsl(var(--primary))" radius={[0, 4, 4, 0]} name="Conversão" />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
