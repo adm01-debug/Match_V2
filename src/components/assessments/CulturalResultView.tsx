@@ -168,10 +168,10 @@ export function CulturalResultView({ resultado, candidatoNome }: CulturalResultV
               {sortedAlinhamentos
                 .filter(a => a.status === 'baixo')
                 .map((a, idx) => (
-                  <div key={idx} className="flex items-center gap-2 p-2 bg-red-50 rounded-lg dark:bg-red-950/20">
-                    <XCircle className="h-4 w-4 text-red-600" />
+                  <div key={idx} className="flex items-center gap-2 p-2 bg-destructive/10 rounded-lg">
+                    <XCircle className="h-4 w-4 text-destructive" />
                     <span className="capitalize">{a.valor}</span>
-                    <span className="ml-auto font-semibold text-red-600">{a.score}%</span>
+                    <span className="ml-auto font-semibold text-destructive">{a.score}%</span>
                   </div>
                 ))}
               {sortedAlinhamentos.filter(a => a.status === 'baixo').length === 0 && (
