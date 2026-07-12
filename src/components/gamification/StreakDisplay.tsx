@@ -236,7 +236,7 @@ export const StreakDisplay = memo(function StreakDisplay({
             className={cn(
               "px-2 py-1 rounded-full text-xs font-medium text-white",
               level === "inferno" 
-                ? "bg-gradient-to-r from-red-500 to-orange-500"
+                ? "bg-gradient-to-r from-destructive to-warning"
                 : colors.bg
             )}
             animate={level === "inferno" ? { scale: [1, 1.05, 1] } : undefined}
