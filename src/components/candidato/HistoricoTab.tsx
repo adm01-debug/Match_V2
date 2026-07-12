@@ -30,17 +30,17 @@ export function HistoricoTab({ candidato }: HistoricoTabProps) {
       case 'candidatura':
         return 'bg-primary text-primary-foreground';
       case 'triagem':
-        return 'bg-blue-500 text-white';
+        return 'bg-info text-info-foreground';
       case 'entrevista':
-        return 'bg-purple-500 text-white';
+        return 'bg-accent text-accent-foreground';
       case 'teste':
-        return 'bg-pink-500 text-white';
+        return 'bg-accent text-accent-foreground';
       case 'avaliacao':
         return 'bg-success text-success-foreground';
       case 'mudanca_etapa':
         return 'bg-warning text-warning-foreground';
       case 'comunicacao':
-        return 'bg-cyan-500 text-white';
+        return 'bg-info text-info-foreground';
       default:
         return 'bg-muted text-muted-foreground';
     }
