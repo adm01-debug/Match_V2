@@ -103,7 +103,7 @@ export function CulturalResultView({ resultado, candidatoNome }: CulturalResultV
       <Card>
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2 text-lg">
-            <Heart className="h-5 w-5 text-pink-500" />
+            <Heart className="h-5 w-5 text-primary" />
             Alinhamento por Valor
           </CardTitle>
         </CardHeader>
