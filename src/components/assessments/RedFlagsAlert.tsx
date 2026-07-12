@@ -53,9 +53,9 @@ export function RedFlagsAlert({
 }: RedFlagsAlertProps) {
   if (redFlags.length === 0) {
     return (
-      <Card className="border-green-200 bg-green-50">
+      <Card className="border-success/30 bg-success/5">
         <CardContent className="py-4">
-          <div className="flex items-center gap-3 text-green-700">
+          <div className="flex items-center gap-3 text-success">
             <Shield className="h-5 w-5" />
             <span className="font-medium">
               Nenhum risco comportamental identificado para {candidatoNome}
@@ -81,13 +81,13 @@ export function RedFlagsAlert({
           </Badge>
         )}
         {altos.length > 0 && (
-          <Badge className="bg-orange-500 flex items-center gap-1">
+          <Badge className="bg-warning text-warning-foreground flex items-center gap-1">
             <AlertTriangle className="h-3 w-3" />
             {altos.length} alto(s)
           </Badge>
         )}
         {medios.length > 0 && (
-          <Badge className="bg-yellow-500 text-yellow-900 flex items-center gap-1">
+          <Badge className="bg-warning/70 text-warning-foreground flex items-center gap-1">
             <AlertCircle className="h-3 w-3" />
             {medios.length} médio(s)
           </Badge>
@@ -103,10 +103,10 @@ export function RedFlagsAlert({
   }
 
   return (
-    <Card className="border-red-200">
+    <Card className="border-destructive/30">
       <CardHeader className="pb-3">
         <CardTitle className="flex items-center justify-between text-lg">
-          <div className="flex items-center gap-2 text-red-700">
+          <div className="flex items-center gap-2 text-destructive">
             <AlertTriangle className="h-5 w-5" />
             Alertas de Risco - {candidatoNome}
           </div>
@@ -115,10 +115,10 @@ export function RedFlagsAlert({
               <Badge variant="destructive">{criticos.length} crítico</Badge>
             )}
             {altos.length > 0 && (
-              <Badge className="bg-orange-500">{altos.length} alto</Badge>
+              <Badge className="bg-warning text-warning-foreground">{altos.length} alto</Badge>
             )}
             {medios.length > 0 && (
-              <Badge className="bg-yellow-500 text-yellow-900">{medios.length} médio</Badge>
+              <Badge className="bg-warning/70 text-warning-foreground">{medios.length} médio</Badge>
             )}
             {baixos.length > 0 && (
               <Badge variant="secondary">{baixos.length} baixo</Badge>
@@ -191,12 +191,12 @@ export function RedFlagsAlert({
 
         {/* Resumo de ações */}
         {criticos.length > 0 && (
-          <div className="p-3 bg-red-100 border border-red-300 rounded-lg mt-4">
-            <div className="flex items-center gap-2 text-red-800 font-medium">
+          <div className="p-3 bg-destructive/10 border border-destructive/30 rounded-lg mt-4">
+            <div className="flex items-center gap-2 text-destructive font-medium">
               <AlertOctagon className="h-4 w-4" />
               Ação Requerida
             </div>
-            <p className="text-sm text-red-700 mt-1">
+            <p className="text-sm text-destructive mt-1">
               Existem {criticos.length} alerta(s) crítico(s) que devem ser avaliados antes de 
               prosseguir com este candidato. Recomenda-se aprofundar estes pontos em entrevista 
               comportamental estruturada.
