@@ -9,19 +9,19 @@ export interface ProfileAchievement {
 }
 
 export const TIER_GRADIENTS: Record<AchievementTier, string> = {
-  bronze: 'from-amber-600 to-orange-700',
-  silver: 'from-gray-300 to-gray-500',
-  gold: 'from-yellow-400 to-amber-500',
-  platinum: 'from-cyan-300 to-blue-400',
-  diamond: 'from-purple-400 to-pink-500',
+  bronze: 'from-warning to-warning/70',
+  silver: 'from-muted-foreground/60 to-muted-foreground',
+  gold: 'from-warning to-warning/80',
+  platinum: 'from-info/70 to-info',
+  diamond: 'from-accent to-accent/70',
 };
 
 export const TIER_TEXT: Record<AchievementTier, string> = {
-  diamond: 'text-purple-400',
-  platinum: 'text-cyan-400',
-  gold: 'text-yellow-500',
-  silver: 'text-gray-400',
-  bronze: 'text-amber-600',
+  diamond: 'text-accent',
+  platinum: 'text-info',
+  gold: 'text-warning',
+  silver: 'text-muted-foreground',
+  bronze: 'text-warning',
 };
 
 export const TIER_ORDER: Record<AchievementTier, number> = {
@@ -31,8 +31,8 @@ export const TIER_ORDER: Record<AchievementTier, number> = {
 export type StatColor = 'yellow' | 'primary' | 'orange' | 'purple';
 
 export const STAT_COLOR_CLASSES: Record<StatColor, { bg: string; border: string; iconBg: string; icon: string }> = {
-  yellow:  { bg: 'bg-yellow-500/10',    border: 'border-yellow-500/20',    iconBg: 'bg-yellow-500/20',    icon: 'text-yellow-500' },
-  primary: { bg: 'bg-primary/10',       border: 'border-primary/20',       iconBg: 'bg-primary/20',       icon: 'text-primary' },
-  orange:  { bg: 'bg-orange-500/10',    border: 'border-orange-500/20',    iconBg: 'bg-orange-500/20',    icon: 'text-orange-500' },
-  purple:  { bg: 'bg-purple-500/10',    border: 'border-purple-500/20',    iconBg: 'bg-purple-500/20',    icon: 'text-purple-500' },
+  yellow:  { bg: 'bg-warning/10',     border: 'border-warning/20',     iconBg: 'bg-warning/20',     icon: 'text-warning' },
+  primary: { bg: 'bg-primary/10',     border: 'border-primary/20',     iconBg: 'bg-primary/20',     icon: 'text-primary' },
+  orange:  { bg: 'bg-warning/10',     border: 'border-warning/20',     iconBg: 'bg-warning/20',     icon: 'text-warning' },
+  purple:  { bg: 'bg-accent/10',      border: 'border-accent/20',      iconBg: 'bg-accent/20',      icon: 'text-accent' },
 };
