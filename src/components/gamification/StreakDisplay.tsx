@@ -108,7 +108,7 @@ export const StreakDisplay = memo(function StreakDisplay({
           {[...Array(6)].map((_, i) => (
             <motion.div
               key={i}
-              className="absolute w-2 h-2 rounded-full bg-yellow-300/50"
+              className="absolute w-2 h-2 rounded-full bg-accent/50"
               style={{ left: `${(i * 20) + 10}%` }}
               animate={{
                 y: [0, -100],
