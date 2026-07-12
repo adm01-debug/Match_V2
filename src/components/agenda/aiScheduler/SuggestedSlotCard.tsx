@@ -20,15 +20,15 @@ interface Props {
 }
 
 const getScoreColor = (score: number) => {
-  if (score >= 90) return 'text-green-500';
-  if (score >= 70) return 'text-yellow-500';
-  return 'text-orange-500';
+  if (score >= 90) return 'text-success';
+  if (score >= 70) return 'text-warning';
+  return 'text-warning';
 };
 
 const getScoreBg = (score: number) => {
-  if (score >= 90) return 'bg-green-500/10 border-green-500/20';
-  if (score >= 70) return 'bg-yellow-500/10 border-yellow-500/20';
-  return 'bg-orange-500/10 border-orange-500/20';
+  if (score >= 90) return 'bg-success/10 border-success/20';
+  if (score >= 70) return 'bg-warning/10 border-warning/20';
+  return 'bg-warning/10 border-warning/20';
 };
 
 export function SuggestedSlotCard({ slot, index, isSelected, onSelect }: Props) {
