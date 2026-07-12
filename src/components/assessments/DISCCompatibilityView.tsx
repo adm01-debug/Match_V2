@@ -198,10 +198,10 @@ export const DISCCompatibilityView = memo(function DISCCompatibilityView({
                     <div 
                       key={`${p1}-${p2}`}
                       className={`rounded py-1 ${
-                        score >= 75 ? 'bg-green-100 text-green-700' :
-                        score >= 60 ? 'bg-yellow-100 text-yellow-700' :
-                        score >= 45 ? 'bg-orange-100 text-orange-700' :
-                        'bg-red-100 text-red-700'
+                        score >= 75 ? 'bg-success/15 text-success' :
+                        score >= 60 ? 'bg-warning/15 text-warning' :
+                        score >= 45 ? 'bg-warning/10 text-warning' :
+                        'bg-destructive/15 text-destructive'
                       }`}
                     >
                       {score}
