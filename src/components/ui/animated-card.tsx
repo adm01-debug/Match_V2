@@ -180,8 +180,8 @@ export function FloatingActionButton({
   const colors = {
     primary: "bg-primary text-primary-foreground hover:bg-primary/90 shadow-primary/25",
     secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/90",
-    success: "bg-green-500 text-white hover:bg-green-600 shadow-green-500/25",
-    warning: "bg-yellow-500 text-white hover:bg-yellow-600 shadow-yellow-500/25"
+    success: "bg-success text-white hover:bg-success shadow-success/25",
+    warning: "bg-warning text-white hover:bg-warning shadow-warning/25"
   };
 
   return (

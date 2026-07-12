@@ -200,25 +200,25 @@ export default function AnalyticsPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <Card><CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-blue-100 dark:bg-blue-900"><Users className="h-5 w-5 text-blue-600" /></div>
+              <div className="p-2 rounded-lg bg-info dark:bg-info"><Users className="h-5 w-5 text-info" /></div>
               <div><p className="text-sm text-muted-foreground">Total Processos</p><p className="text-2xl font-bold">{kpis.totalProcessos}</p></div>
             </div>
           </CardContent></Card>
           <Card><CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-green-100 dark:bg-green-900"><Award className="h-5 w-5 text-green-600" /></div>
+              <div className="p-2 rounded-lg bg-success dark:bg-success"><Award className="h-5 w-5 text-success" /></div>
               <div><p className="text-sm text-muted-foreground">Contratados</p><p className="text-2xl font-bold">{kpis.contratados}</p></div>
             </div>
           </CardContent></Card>
           <Card><CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-purple-100 dark:bg-purple-900"><Target className="h-5 w-5 text-purple-600" /></div>
+              <div className="p-2 rounded-lg bg-accent dark:bg-accent"><Target className="h-5 w-5 text-accent" /></div>
               <div><p className="text-sm text-muted-foreground">Taxa Conversão</p><p className="text-2xl font-bold">{kpis.taxaConversao}%</p></div>
             </div>
           </CardContent></Card>
           <Card><CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-orange-100 dark:bg-orange-900"><Clock className="h-5 w-5 text-orange-600" /></div>
+              <div className="p-2 rounded-lg bg-warning dark:bg-warning"><Clock className="h-5 w-5 text-warning" /></div>
               <div><p className="text-sm text-muted-foreground">Tempo Médio</p><p className="text-2xl font-bold">{kpis.tempoMedio} dias</p></div>
             </div>
           </CardContent></Card>

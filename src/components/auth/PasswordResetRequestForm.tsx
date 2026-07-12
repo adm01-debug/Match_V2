@@ -58,7 +58,7 @@ export const PasswordResetRequestForm = memo(({ onSuccess }: PasswordResetReques
       <Card className="max-w-md mx-auto">
         <CardContent className="pt-6">
           <div className="text-center space-y-4">
-            <CheckCircle className="h-12 w-12 text-green-500 mx-auto" />
+            <CheckCircle className="h-12 w-12 text-success mx-auto" />
             <h3 className="text-lg font-semibold">Solicitação Enviada</h3>
             <p className="text-muted-foreground">{result.message}</p>
             <Button variant="outline" onClick={() => setResult(null)}>

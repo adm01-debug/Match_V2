@@ -35,12 +35,12 @@ const templates = [
 ];
 
 const statusConfig = {
-  rascunho: { label: 'Rascunho', color: 'bg-gray-500', icon: FileText },
-  enviada: { label: 'Enviada', color: 'bg-blue-500', icon: Send },
-  visualizada: { label: 'Visualizada', color: 'bg-yellow-500', icon: Eye },
-  aceita: { label: 'Aceita', color: 'bg-green-500', icon: CheckCircle2 },
-  recusada: { label: 'Recusada', color: 'bg-red-500', icon: XCircle },
-  expirada: { label: 'Expirada', color: 'bg-orange-500', icon: Clock },
+  rascunho: { label: 'Rascunho', color: 'bg-muted-foreground', icon: FileText },
+  enviada: { label: 'Enviada', color: 'bg-info', icon: Send },
+  visualizada: { label: 'Visualizada', color: 'bg-warning', icon: Eye },
+  aceita: { label: 'Aceita', color: 'bg-success', icon: CheckCircle2 },
+  recusada: { label: 'Recusada', color: 'bg-destructive', icon: XCircle },
+  expirada: { label: 'Expirada', color: 'bg-warning', icon: Clock },
 };
 
 export default function OfferManagementPage() {
@@ -77,7 +77,7 @@ export default function OfferManagementPage() {
             <h1 className="text-2xl font-bold flex items-center gap-2"><FileSignature className="h-7 w-7 text-primary" />Gestão de Propostas</h1>
             <p className="text-muted-foreground">Crie, envie e acompanhe propostas de emprego</p>
           </div>
-          <Button onClick={() => setIsCreateOpen(true)} className="bg-gradient-to-r from-primary to-purple-600"><Plus className="h-4 w-4 mr-2" />Nova Proposta</Button>
+          <Button onClick={() => setIsCreateOpen(true)} className="bg-gradient-to-r from-primary to-accent"><Plus className="h-4 w-4 mr-2" />Nova Proposta</Button>
         </div>
 
         <OfferStats stats={stats} />

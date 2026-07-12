@@ -123,13 +123,13 @@ export function PasskeyManager() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="flex items-center gap-3 p-4 bg-amber-50 dark:bg-amber-950 rounded-lg border border-amber-200 dark:border-amber-800">
-            <AlertTriangle className="h-5 w-5 text-amber-600 flex-shrink-0" />
+          <div className="flex items-center gap-3 p-4 bg-warning dark:bg-warning rounded-lg border border-warning dark:border-warning">
+            <AlertTriangle className="h-5 w-5 text-warning flex-shrink-0" />
             <div>
-              <p className="font-medium text-amber-800 dark:text-amber-200">
+              <p className="font-medium text-warning dark:text-warning">
                 Não suportado neste dispositivo
               </p>
-              <p className="text-sm text-amber-700 dark:text-amber-300 mt-1">
+              <p className="text-sm text-warning dark:text-warning mt-1">
                 Seu navegador ou dispositivo não suporta autenticação por biometria. 
                 Tente usar um dispositivo com Touch ID, Face ID, Windows Hello ou sensor de impressão digital.
               </p>

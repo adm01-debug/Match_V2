@@ -111,21 +111,21 @@ export const TrustedDevicesManager = () => {
       <CardContent>
         {/* Current device status */}
         {currentDevice && (
-          <div className={`p-4 rounded-lg border mb-4 ${isCurrentDeviceTrusted ? 'bg-green-50 border-green-200 dark:bg-green-900/20 dark:border-green-800' : 'bg-amber-50 border-amber-200 dark:bg-amber-900/20 dark:border-amber-800'}`}>
+          <div className={`p-4 rounded-lg border mb-4 ${isCurrentDeviceTrusted ? 'bg-success border-success dark:bg-success/20 dark:border-success' : 'bg-warning border-warning dark:bg-warning/20 dark:border-warning'}`}>
             <div className="flex items-center gap-3">
-              <div className={`p-2 rounded-lg ${isCurrentDeviceTrusted ? 'bg-green-100 dark:bg-green-900/40' : 'bg-amber-100 dark:bg-amber-900/40'}`}>
+              <div className={`p-2 rounded-lg ${isCurrentDeviceTrusted ? 'bg-success dark:bg-success/40' : 'bg-warning dark:bg-warning/40'}`}>
                 {getDeviceIcon(currentDevice.device)}
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-2">
                   <span className="font-medium">Dispositivo atual</span>
                   {isCurrentDeviceTrusted ? (
-                    <Badge variant="default" className="bg-green-600">
+                    <Badge variant="default" className="bg-success">
                       <ShieldCheck className="h-3 w-3 mr-1" />
                       Confiável
                     </Badge>
                   ) : (
-                    <Badge variant="secondary" className="bg-amber-500 text-white">
+                    <Badge variant="secondary" className="bg-warning text-white">
                       <AlertTriangle className="h-3 w-3 mr-1" />
                       Não confiável
                     </Badge>

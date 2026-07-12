@@ -22,7 +22,7 @@ export function FloatingXPAnimation({ xpGain }: FloatingXPAnimationProps) {
             top: xpGain.y - 20,
             pointerEvents: 'none',
           }}
-          className="text-yellow-500 font-bold text-xl z-50"
+          className="text-warning font-bold text-xl z-50"
         >
           +{xpGain.amount} XP
         </motion.div>

@@ -58,9 +58,9 @@ interface PipelineColumnEnhancedProps {
 }
 
 const getScoreColor = (score: number) => {
-  if (score >= 80) return 'text-emerald-500 bg-emerald-500/10';
-  if (score >= 60) return 'text-amber-500 bg-amber-500/10';
-  return 'text-red-500 bg-red-500/10';
+  if (score >= 80) return 'text-success bg-success/10';
+  if (score >= 60) return 'text-warning bg-warning/10';
+  return 'text-destructive bg-destructive/10';
 };
 
 const CandidateCard = memo(({ 

@@ -47,9 +47,9 @@ export function BulkProgressModal({
 
   const getStatusIcon = (status: BulkOperationItem["status"]) => {
     switch (status) {
-      case "success": return <CheckCircle2 className="h-4 w-4 text-green-500" />;
-      case "error": return <XCircle className="h-4 w-4 text-red-500" />;
-      case "processing": return <Loader2 className="h-4 w-4 animate-spin text-blue-500" />;
+      case "success": return <CheckCircle2 className="h-4 w-4 text-success" />;
+      case "error": return <XCircle className="h-4 w-4 text-destructive" />;
+      case "processing": return <Loader2 className="h-4 w-4 animate-spin text-info" />;
       default: return <div className="h-4 w-4 rounded-full bg-muted" />;
     }
   };
@@ -72,7 +72,7 @@ export function BulkProgressModal({
 
           {isComplete && (
             <div className="flex gap-2">
-              <Badge variant="default" className="bg-green-500">
+              <Badge variant="default" className="bg-success">
                 <CheckCircle2 className="h-3 w-3 mr-1" />{successful} sucesso
               </Badge>
               {failed > 0 && (

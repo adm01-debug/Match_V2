@@ -94,9 +94,9 @@ export function MFAMethodSelector({ onComplete }: MFAMethodSelectorProps) {
 
       <CardContent className="space-y-4">
         {isEnabled && (
-          <div className="flex items-center gap-2 p-3 bg-green-50 dark:bg-green-950 rounded-lg border border-green-200 dark:border-green-800">
-            <CheckCircle2 className="h-5 w-5 text-green-600" />
-            <span className="text-sm text-green-700 dark:text-green-300">
+          <div className="flex items-center gap-2 p-3 bg-success dark:bg-success rounded-lg border border-success dark:border-success">
+            <CheckCircle2 className="h-5 w-5 text-success" />
+            <span className="text-sm text-success dark:text-success">
               2FA já está ativo na sua conta
             </span>
           </div>

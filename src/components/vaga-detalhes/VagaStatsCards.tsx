@@ -14,11 +14,11 @@ interface VagaStatsCardsProps {
 
 export const VagaStatsCards = memo(function VagaStatsCards({ stats, quantidade }: VagaStatsCardsProps) {
   const items = [
-    { label: "Candidatos", value: stats.total, icon: Users, color: "text-blue-500" },
-    { label: "Em Triagem", value: stats.emTriagem, icon: Clock, color: "text-amber-500" },
-    { label: "Em Entrevista", value: stats.emEntrevista, icon: Calendar, color: "text-purple-500" },
-    { label: "Aprovados", value: stats.aprovados, icon: CheckCircle2, color: "text-green-500" },
-    { label: "Vagas", value: quantidade, icon: Briefcase, color: "text-gray-500" },
+    { label: "Candidatos", value: stats.total, icon: Users, color: "text-info" },
+    { label: "Em Triagem", value: stats.emTriagem, icon: Clock, color: "text-warning" },
+    { label: "Em Entrevista", value: stats.emEntrevista, icon: Calendar, color: "text-accent" },
+    { label: "Aprovados", value: stats.aprovados, icon: CheckCircle2, color: "text-success" },
+    { label: "Vagas", value: quantidade, icon: Briefcase, color: "text-foreground" },
   ];
 
   return (

@@ -39,7 +39,7 @@ export function BehavioralProgressHeader({
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
           <Card className="bg-background/80 backdrop-blur">
             <CardContent className="p-4 flex items-center gap-3">
-              <Star className="h-8 w-8 text-yellow-500" />
+              <Star className="h-8 w-8 text-warning" />
               <div>
                 <div className="text-2xl font-bold">{totalBehavioralXP}</div>
                 <div className="text-sm text-muted-foreground">XP Total</div>
@@ -48,7 +48,7 @@ export function BehavioralProgressHeader({
           </Card>
           <Card className="bg-background/80 backdrop-blur">
             <CardContent className="p-4 flex items-center gap-3">
-              <Trophy className="h-8 w-8 text-purple-500" />
+              <Trophy className="h-8 w-8 text-accent" />
               <div>
                 <div className="text-2xl font-bold">{unlockedCount}</div>
                 <div className="text-sm text-muted-foreground">Conquistas</div>
@@ -57,7 +57,7 @@ export function BehavioralProgressHeader({
           </Card>
           <Card className="bg-background/80 backdrop-blur">
             <CardContent className="p-4 flex items-center gap-3">
-              <Flame className="h-8 w-8 text-orange-500" />
+              <Flame className="h-8 w-8 text-warning" />
               <div>
                 <div className="text-2xl font-bold">{dailyCombo}x</div>
                 <div className="text-sm text-muted-foreground">Combo</div>
@@ -66,7 +66,7 @@ export function BehavioralProgressHeader({
           </Card>
           <Card className="bg-background/80 backdrop-blur">
             <CardContent className="p-4 flex items-center gap-3">
-              <BarChart3 className="h-8 w-8 text-blue-500" />
+              <BarChart3 className="h-8 w-8 text-info" />
               <div>
                 <div className="text-2xl font-bold">{Math.round(progressPercentage)}%</div>
                 <div className="text-sm text-muted-foreground">Progresso</div>

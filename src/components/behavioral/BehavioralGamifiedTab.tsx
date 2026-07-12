@@ -32,9 +32,9 @@ export function BehavioralGamifiedTab({
 }: BehavioralGamifiedTabProps) {
   const gameModes = [
     { key: 'quiz', title: 'Quiz Interativo', desc: 'Responda perguntas de forma dinâmica com XP, combos e conquistas', icon: Brain, gradient: 'from-primary to-primary/70', borderColor: 'border-primary/20 hover:border-primary/50', badges: [{ icon: Star, text: 'XP & Níveis' }, { icon: Trophy, text: 'Conquistas' }, { icon: Flame, text: 'Combos' }], btnText: 'Começar Quiz', onClick: onStartQuiz },
-    { key: 'swipe', title: 'Swipe de Valores', desc: 'Deslize para a direita nos valores que combinam com você', icon: Heart, gradient: 'from-accent to-accent/70', borderColor: 'border-accent/20 hover:border-accent/50', badges: [{ text: '❤️ Like' }, { text: '❌ Pass' }, { text: '⭐ Super Like' }], btnText: 'Iniciar Swipe', btnClass: 'bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600', onClick: onStartSwipe },
+    { key: 'swipe', title: 'Swipe de Valores', desc: 'Deslize para a direita nos valores que combinam com você', icon: Heart, gradient: 'from-accent to-accent/70', borderColor: 'border-accent/20 hover:border-accent/50', badges: [{ text: '❤️ Like' }, { text: '❌ Pass' }, { text: '⭐ Super Like' }], btnText: 'Iniciar Swipe', btnClass: 'bg-gradient-to-r from-accent to-destructive hover:from-accent hover:to-destructive', onClick: onStartSwipe },
     { key: 'minigame', title: 'Mini-Games', desc: 'Jogos rápidos que revelam traços de personalidade', icon: Gamepad2, gradient: 'from-warning to-warning/70', borderColor: 'border-warning/20 hover:border-warning/50', badges: [{ text: '⚡ Rápido' }, { text: '🎯 Preciso' }, { text: '🧠 Intuitivo' }], btnText: 'Jogar Agora', btnClass: 'bg-gradient-to-r from-warning to-warning/80 hover:from-warning/90 hover:to-warning/70 text-warning-foreground', onClick: onStartMinigame },
-    { key: 'phases', title: 'Desafio por Fases', desc: 'Complete desafios progressivos para provar suas habilidades', icon: Award, gradient: 'from-secondary to-secondary/70', borderColor: 'border-secondary/20 hover:border-secondary/50', badges: [{ text: '🎯 5 Fases' }, { text: '⭐ +620 XP' }], btnText: 'Iniciar Jornada', btnClass: 'bg-gradient-to-r from-purple-500 to-violet-600 hover:from-purple-600 hover:to-violet-700', onClick: onStartPhases },
+    { key: 'phases', title: 'Desafio por Fases', desc: 'Complete desafios progressivos para provar suas habilidades', icon: Award, gradient: 'from-secondary to-secondary/70', borderColor: 'border-secondary/20 hover:border-secondary/50', badges: [{ text: '🎯 5 Fases' }, { text: '⭐ +620 XP' }], btnText: 'Iniciar Jornada', btnClass: 'bg-gradient-to-r from-accent to-accent hover:from-accent hover:to-accent', onClick: onStartPhases },
   ];
 
   return (
@@ -101,7 +101,7 @@ export function BehavioralGamifiedTab({
         <Leaderboard users={leaderboardUsers} currentUserId="current" title="Ranking da Semana" maxDisplay={5} />
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2"><Trophy className="h-5 w-5 text-yellow-500" />Conquistas</CardTitle>
+            <CardTitle className="flex items-center gap-2"><Trophy className="h-5 w-5 text-warning" />Conquistas</CardTitle>
           </CardHeader>
           <CardContent>
             <AchievementGrid achievements={demoAchievements} size="md" columns={5} />
@@ -111,7 +111,7 @@ export function BehavioralGamifiedTab({
 
       {/* XP Progress */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="mt-8">
-        <Card className="bg-gradient-to-r from-primary/5 via-primary/10 to-purple-500/10 overflow-hidden">
+        <Card className="bg-gradient-to-r from-primary/5 via-primary/10 to-accent/10 overflow-hidden">
           <CardContent className="py-6 relative">
             <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-primary/10 to-transparent rounded-full -translate-y-1/2 translate-x-1/2" />
             <div className="relative">
@@ -133,7 +133,7 @@ export function BehavioralGamifiedTab({
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="text-3xl font-bold bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent">{totalBehavioralXP} XP</div>
+                  <div className="text-3xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">{totalBehavioralXP} XP</div>
                   <p className="text-sm text-muted-foreground">Total acumulado</p>
                 </div>
               </div>
@@ -143,7 +143,7 @@ export function BehavioralGamifiedTab({
                   {nextBehavioralLevel ? (
                     <span className="font-medium">{nextBehavioralLevel.icon} {nextBehavioralLevel.title} <span className="text-muted-foreground ml-1">({nextBehavioralLevel.minAssessments - completedCount} restantes)</span></span>
                   ) : (
-                    <span className="font-medium text-yellow-500">Nível Máximo! 🎉</span>
+                    <span className="font-medium text-warning">Nível Máximo! 🎉</span>
                   )}
                 </div>
                 <div className="relative">
@@ -154,12 +154,12 @@ export function BehavioralGamifiedTab({
               {unlockedCount > 0 && (
                 <div className="mt-6 pt-4 border-t">
                   <h4 className="text-sm font-semibold flex items-center gap-2 mb-3">
-                    <Trophy className="h-4 w-4 text-yellow-500" />Conquistas Desbloqueadas ({unlockedCount}/{totalAchievements})
+                    <Trophy className="h-4 w-4 text-warning" />Conquistas Desbloqueadas ({unlockedCount}/{totalAchievements})
                   </h4>
                   <div className="flex flex-wrap gap-2">
                     {achievementsWithStatus.filter(a => a.isUnlocked).map((achievement) => (
                       <motion.div key={achievement.id} initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }}>
-                        <Badge className={`gap-1.5 py-1.5 px-3 ${achievement.tier === 'diamond' ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white border-0' : achievement.tier === 'gold' ? 'bg-gradient-to-r from-yellow-500 to-amber-500 text-white border-0' : achievement.tier === 'silver' ? 'bg-gradient-to-r from-gray-400 to-gray-500 text-white border-0' : 'bg-gradient-to-r from-amber-600 to-amber-700 text-white border-0'}`}>
+                        <Badge className={`gap-1.5 py-1.5 px-3 ${achievement.tier === 'diamond' ? 'bg-gradient-to-r from-info to-info text-white border-0' : achievement.tier === 'gold' ? 'bg-gradient-to-r from-warning to-warning text-white border-0' : achievement.tier === 'silver' ? 'bg-gradient-to-r from-gray-400 to-gray-500 text-white border-0' : 'bg-gradient-to-r from-warning to-warning text-white border-0'}`}>
                           {achievement.tier === 'diamond' ? <Crown className="h-3.5 w-3.5" /> : achievement.tier === 'gold' ? <Star className="h-3.5 w-3.5" /> : <Award className="h-3.5 w-3.5" />}
                           {achievement.title}
                         </Badge>

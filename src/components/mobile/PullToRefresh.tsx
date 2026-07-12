@@ -131,8 +131,8 @@ export const PullToRefresh = memo(function PullToRefresh({
       case 'complete':
         return (
           <>
-            <Check className="h-5 w-5 text-green-500" />
-            <span className="text-xs text-green-500 ml-2">{completeText}</span>
+            <Check className="h-5 w-5 text-success" />
+            <span className="text-xs text-success ml-2">{completeText}</span>
           </>
         );
       default:

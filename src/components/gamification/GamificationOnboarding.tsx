@@ -46,8 +46,8 @@ const onboardingSteps: OnboardingStep[] = [
     title: "Ganhe XP em Tudo!",
     description: "Cada ação conta! Adicionar candidatos, agendar entrevistas, fazer contratações... Tudo gera pontos de experiência.",
     icon: Zap,
-    color: "text-amber-500",
-    gradient: "from-amber-500/20 to-amber-500/5",
+    color: "text-warning",
+    gradient: "from-warning/20 to-warning/5",
     reward: 10,
     action: "Exemplo: +10 XP por cadastrar candidato",
   },
@@ -56,8 +56,8 @@ const onboardingSteps: OnboardingStep[] = [
     title: "Suba de Nível",
     description: "Quanto mais XP você ganha, mais rápido sobe de nível! Comece como Iniciante e chegue até Lenda do RH!",
     icon: Star,
-    color: "text-yellow-500",
-    gradient: "from-yellow-500/20 to-yellow-500/5",
+    color: "text-warning",
+    gradient: "from-warning/20 to-warning/5",
     action: "10 níveis para conquistar",
   },
   {
@@ -65,8 +65,8 @@ const onboardingSteps: OnboardingStep[] = [
     title: "Mantenha seu Streak 🔥",
     description: "Use o sistema diariamente para manter seu streak ativo! Bônus especiais para 7 dias e 30 dias consecutivos.",
     icon: Flame,
-    color: "text-orange-500",
-    gradient: "from-orange-500/20 to-orange-500/5",
+    color: "text-warning",
+    gradient: "from-warning/20 to-warning/5",
     reward: 100,
     action: "Streak de 7 dias = +100 XP bônus!",
   },
@@ -75,8 +75,8 @@ const onboardingSteps: OnboardingStep[] = [
     title: "Desbloqueie Conquistas",
     description: "Complete desafios especiais para desbloquear conquistas exclusivas! Bronze, Prata, Ouro, Platina e Diamante.",
     icon: Trophy,
-    color: "text-purple-500",
-    gradient: "from-purple-500/20 to-purple-500/5",
+    color: "text-accent",
+    gradient: "from-accent/20 to-accent/5",
     action: "8+ conquistas para desbloquear",
   },
   {
@@ -92,8 +92,8 @@ const onboardingSteps: OnboardingStep[] = [
     title: "Pronto para Começar?",
     description: "Seu primeiro XP te espera! Complete este tutorial e ganhe seu primeiro bônus!",
     icon: Gift,
-    color: "text-pink-500",
-    gradient: "from-pink-500/20 to-pink-500/5",
+    color: "text-accent",
+    gradient: "from-accent/20 to-accent/5",
     reward: 50,
     action: "🎁 Ganhe +50 XP agora!",
   },
@@ -322,7 +322,7 @@ export const GamificationOnboarding = memo(function GamificationOnboarding({
               }}
               transition={{ duration: 2, repeat: Infinity }}
             >
-              <Star className="w-4 h-4 text-yellow-500/30" />
+              <Star className="w-4 h-4 text-warning/30" />
             </motion.div>
           </div>
         </motion.div>

@@ -32,13 +32,13 @@ const tipoConfig: Record<string, TipoConfigItem> = {
   rh: { icon: Users, label: 'RH', color: 'bg-success/10 text-success' },
   cultural: { icon: Users, label: 'Cultural', color: 'bg-primary/10 text-primary' },
   final: { icon: Users, label: 'Final', color: 'bg-warning/10 text-warning' },
-  triagem: { icon: Phone, label: 'Triagem', color: 'bg-gray-500/10 text-gray-600' },
+  triagem: { icon: Phone, label: 'Triagem', color: 'bg-muted-foreground/10 text-foreground' },
 };
 
 const defaultTipoConfig: TipoConfigItem = {
   icon: HelpCircle,
   label: 'Outro',
-  color: 'bg-gray-500/10 text-gray-600',
+  color: 'bg-muted-foreground/10 text-foreground',
 };
 
 const statusColors: Record<string, string> = {
@@ -51,7 +51,7 @@ const statusColors: Record<string, string> = {
   no_show: 'border-l-destructive bg-destructive/5',
 };
 
-const defaultStatusColor = 'border-l-gray-500 bg-gray-500/5';
+const defaultStatusColor = 'border-l-gray-500 bg-muted-foreground/5';
 
 const hours = Array.from({ length: 12 }, (_, i) => i + 8); // 8:00 - 19:00
 

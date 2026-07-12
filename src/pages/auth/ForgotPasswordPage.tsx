@@ -62,7 +62,7 @@ export default function ForgotPasswordPage() {
           {success ? (
             <CardContent className="pt-6">
               <div className="text-center space-y-4">
-                <CheckCircle2 className="h-16 w-16 text-green-500 mx-auto" />
+                <CheckCircle2 className="h-16 w-16 text-success mx-auto" />
                 <h2 className="text-xl font-semibold">Email Enviado!</h2>
                 <p className="text-muted-foreground">
                   Se existe uma conta com o email <strong>{email}</strong>, 

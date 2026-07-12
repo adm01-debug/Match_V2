@@ -179,9 +179,9 @@ export default function RegisterPage() {
                   {passwordRequirements.map((req) => (
                     <div key={req.label} className="flex items-center gap-1 text-xs">
                       <CheckCircle2 
-                        className={`h-3 w-3 ${req.test(formData.password) ? 'text-green-500' : 'text-muted-foreground'}`} 
+                        className={`h-3 w-3 ${req.test(formData.password) ? 'text-success' : 'text-muted-foreground'}`} 
                       />
-                      <span className={req.test(formData.password) ? 'text-green-500' : 'text-muted-foreground'}>
+                      <span className={req.test(formData.password) ? 'text-success' : 'text-muted-foreground'}>
                         {req.label}
                       </span>
                     </div>

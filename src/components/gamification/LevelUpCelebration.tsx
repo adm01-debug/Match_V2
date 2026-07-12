@@ -20,15 +20,15 @@ interface LevelUpCelebrationProps {
 
 const levelColors: Record<number, string> = {
   1: 'from-slate-400 to-slate-600',
-  2: 'from-green-400 to-green-600',
-  3: 'from-blue-400 to-blue-600',
-  4: 'from-purple-400 to-purple-600',
-  5: 'from-amber-400 to-amber-600',
-  6: 'from-orange-400 to-orange-600',
-  7: 'from-red-400 to-red-600',
-  8: 'from-pink-400 to-pink-600',
-  9: 'from-violet-400 to-violet-600',
-  10: 'from-yellow-300 to-yellow-500',
+  2: 'from-success to-success',
+  3: 'from-info to-info',
+  4: 'from-accent to-accent',
+  5: 'from-warning to-warning',
+  6: 'from-warning to-warning',
+  7: 'from-destructive to-destructive',
+  8: 'from-accent to-accent',
+  9: 'from-accent to-accent',
+  10: 'from-warning to-warning',
 };
 
 export const LevelUpCelebration = memo(function LevelUpCelebration({
@@ -183,7 +183,7 @@ export const LevelUpCelebration = memo(function LevelUpCelebration({
                 animate={{ y: [0, -5, 0] }}
                 transition={{ duration: 0.5, repeat: Infinity }}
               >
-                <ArrowUp className="h-5 w-5 text-green-500" />
+                <ArrowUp className="h-5 w-5 text-success" />
               </motion.div>
               <span className="text-lg font-bold text-primary">{newLevel}</span>
             </motion.div>
@@ -196,11 +196,11 @@ export const LevelUpCelebration = memo(function LevelUpCelebration({
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.5 }}
               >
-                <Sparkles className="h-5 w-5 text-yellow-500" />
+                <Sparkles className="h-5 w-5 text-warning" />
                 <span className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
                   Level Up!
                 </span>
-                <Sparkles className="h-5 w-5 text-yellow-500" />
+                <Sparkles className="h-5 w-5 text-warning" />
               </motion.div>
 
               <motion.h2

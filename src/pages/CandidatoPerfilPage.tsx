@@ -49,8 +49,8 @@ export default function CandidatoPerfilPage() {
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <Card><CardContent className="pt-4 flex items-center gap-2"><Briefcase className="h-5 w-5 text-blue-500" /><div><p className="text-2xl font-bold">{candidato.candidaturas.length}</p><p className="text-xs text-muted-foreground">Candidaturas</p></div></CardContent></Card>
-          <Card><CardContent className="pt-4 flex items-center gap-2"><Calendar className="h-5 w-5 text-purple-500" /><div><p className="text-2xl font-bold">{candidato.entrevistas.length}</p><p className="text-xs text-muted-foreground">Entrevistas</p></div></CardContent></Card>
+          <Card><CardContent className="pt-4 flex items-center gap-2"><Briefcase className="h-5 w-5 text-info" /><div><p className="text-2xl font-bold">{candidato.candidaturas.length}</p><p className="text-xs text-muted-foreground">Candidaturas</p></div></CardContent></Card>
+          <Card><CardContent className="pt-4 flex items-center gap-2"><Calendar className="h-5 w-5 text-accent" /><div><p className="text-2xl font-bold">{candidato.entrevistas.length}</p><p className="text-xs text-muted-foreground">Entrevistas</p></div></CardContent></Card>
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab}>

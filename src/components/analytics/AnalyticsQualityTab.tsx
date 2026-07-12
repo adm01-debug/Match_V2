@@ -44,7 +44,7 @@ export function AnalyticsQualityTab({ data }: AnalyticsQualityTabProps) {
                 <span className="font-medium">{metrica.metrica}</span>
                 <div className="flex items-center gap-2">
                   <span className="text-lg font-bold">{metrica.valor}%</span>
-                  <Badge variant="secondary" className={cn("text-xs", metrica.valor >= metrica.benchmark ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700")}>
+                  <Badge variant="secondary" className={cn("text-xs", metrica.valor >= metrica.benchmark ? "bg-success text-success" : "bg-warning text-warning")}>
                     {metrica.valor >= metrica.benchmark ? <TrendingUp className="h-3 w-3 mr-1" /> : <TrendingDown className="h-3 w-3 mr-1" />}
                     vs {metrica.benchmark}%
                   </Badge>
@@ -52,7 +52,7 @@ export function AnalyticsQualityTab({ data }: AnalyticsQualityTabProps) {
               </div>
               <div className="relative">
                 <Progress value={metrica.valor} className="h-2" />
-                <div className="absolute top-0 h-2 w-0.5 bg-green-500" style={{ left: `${metrica.benchmark}%` }} />
+                <div className="absolute top-0 h-2 w-0.5 bg-success" style={{ left: `${metrica.benchmark}%` }} />
               </div>
             </motion.div>
           ))}

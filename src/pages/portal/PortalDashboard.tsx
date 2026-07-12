@@ -42,7 +42,7 @@ const statusColors: Record<string, string> = {
   em_andamento: 'bg-info/10 text-info border-info/20',
   aprovado: 'bg-success/10 text-success border-success/20',
   reprovado: 'bg-destructive/10 text-destructive border-destructive/20',
-  desistencia: 'bg-gray-500/10 text-gray-600 border-gray-500/20'
+  desistencia: 'bg-muted-foreground/10 text-foreground border-border/20'
 };
 
 interface Candidatura {

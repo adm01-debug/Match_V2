@@ -19,7 +19,7 @@ interface Props {
 export const ProfileHeader = ({ userName, userAvatar, level, xp, streak, unlocked, profileUrl, rank }: Props) => {
   return (
     <div className="relative">
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-purple-500/20 to-pink-500/20" />
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-accent/20 to-accent/20" />
       <motion.div
         className="absolute inset-0"
         animate={{
@@ -42,7 +42,7 @@ export const ProfileHeader = ({ userName, userAvatar, level, xp, streak, unlocke
               </AvatarFallback>
             </Avatar>
             <motion.div
-              className="absolute -bottom-2 -right-2 p-2 rounded-full bg-gradient-to-br from-yellow-500 to-amber-600 shadow-lg"
+              className="absolute -bottom-2 -right-2 p-2 rounded-full bg-gradient-to-br from-warning to-warning shadow-lg"
               animate={{ rotate: [0, 10, -10, 0] }}
               transition={{ duration: 2, repeat: Infinity }}
             >
@@ -53,7 +53,7 @@ export const ProfileHeader = ({ userName, userAvatar, level, xp, streak, unlocke
           <div className="flex-1 text-center sm:text-left">
             <div className="flex flex-col sm:flex-row items-center gap-2">
               <h2 className="text-2xl font-bold">{userName}</h2>
-              <Badge className="bg-gradient-to-r from-yellow-500 to-amber-500 text-primary-foreground border-0">
+              <Badge className="bg-gradient-to-r from-warning to-warning text-primary-foreground border-0">
                 Nível {level}
               </Badge>
             </div>
@@ -61,15 +61,15 @@ export const ProfileHeader = ({ userName, userAvatar, level, xp, streak, unlocke
 
             <div className="flex justify-center sm:justify-start gap-4 mt-3">
               <div className="flex items-center gap-1 text-sm">
-                <Star className="h-4 w-4 text-yellow-500" />
+                <Star className="h-4 w-4 text-warning" />
                 <span className="font-semibold">{xp.toLocaleString()} XP</span>
               </div>
               <div className="flex items-center gap-1 text-sm">
-                <Flame className="h-4 w-4 text-orange-500" />
+                <Flame className="h-4 w-4 text-warning" />
                 <span className="font-semibold">{streak} dias</span>
               </div>
               <div className="flex items-center gap-1 text-sm">
-                <Trophy className="h-4 w-4 text-amber-500" />
+                <Trophy className="h-4 w-4 text-warning" />
                 <span className="font-semibold">#{rank}</span>
               </div>
             </div>

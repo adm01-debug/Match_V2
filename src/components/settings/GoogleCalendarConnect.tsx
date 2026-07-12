@@ -68,7 +68,7 @@ export function GoogleCalendarConnect({ onConnect, onDisconnect }: GoogleCalenda
       <CardHeader>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-red-100 rounded-lg"><Calendar className="h-6 w-6 text-red-600" /></div>
+            <div className="p-2 bg-destructive rounded-lg"><Calendar className="h-6 w-6 text-destructive" /></div>
             <div>
               <CardTitle className="text-lg">Google Calendar</CardTitle>
               <CardDescription>Sincronize entrevistas com seu calendário</CardDescription>

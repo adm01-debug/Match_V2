@@ -222,8 +222,8 @@ export function FormProgressBar({
 }: FormProgressBarProps) {
   const colorClasses = {
     primary: 'bg-primary',
-    success: 'bg-green-500',
-    warning: 'bg-yellow-500'
+    success: 'bg-success',
+    warning: 'bg-warning'
   };
 
   return (

@@ -33,7 +33,7 @@ export function QuestionCard({ currentIndex, respostaAtual, onResposta, onPrevio
 
       <AnimatePresence mode="wait">
         <motion.div key={currentIndex} initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -50 }} transition={{ duration: 0.3 }}>
-          <Card className="border-2 border-pink-500/20">
+          <Card className="border-2 border-accent/20">
             <CardHeader className="text-center pb-4">
               <motion.div
                 initial={{ scale: 0, rotate: -10 }}
@@ -42,7 +42,7 @@ export function QuestionCard({ currentIndex, respostaAtual, onResposta, onPrevio
               >
                 {iconMap[valorAtual.icone] || <Sparkles className="h-6 w-6" />}
               </motion.div>
-              <Badge variant="outline" className="mx-auto mb-2 border-pink-500/30">{valorAtual.nome}</Badge>
+              <Badge variant="outline" className="mx-auto mb-2 border-accent/30">{valorAtual.nome}</Badge>
               <CardTitle className="text-xl leading-relaxed">{valorAtual.perguntaCandidato}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -56,8 +56,8 @@ export function QuestionCard({ currentIndex, respostaAtual, onResposta, onPrevio
                     className={cn(
                       'w-full p-4 rounded-xl border-2 transition-all flex items-center gap-4',
                       respostaAtual?.intensidade === item.valor
-                        ? `border-pink-500 bg-gradient-to-r ${item.color} text-white`
-                        : 'border-muted hover:border-pink-300'
+                        ? `border-accent bg-gradient-to-r ${item.color} text-white`
+                        : 'border-muted hover:border-accent'
                     )}
                   >
                     <span className="text-2xl">{item.emoji}</span>
@@ -71,7 +71,7 @@ export function QuestionCard({ currentIndex, respostaAtual, onResposta, onPrevio
                             i < item.valor
                               ? respostaAtual?.intensidade === item.valor
                                 ? 'fill-white text-white'
-                                : 'fill-pink-500 text-pink-500'
+                                : 'fill-accent text-accent'
                               : respostaAtual?.intensidade === item.valor
                                 ? 'text-white/30'
                                 : 'text-muted'
@@ -87,7 +87,7 @@ export function QuestionCard({ currentIndex, respostaAtual, onResposta, onPrevio
                   <ChevronLeft className="h-4 w-4 mr-1" />
                   Voltar
                 </Button>
-                <Button onClick={onNext} disabled={!respostaAtual} className="flex-1 bg-gradient-to-r from-pink-500 to-rose-500">
+                <Button onClick={onNext} disabled={!respostaAtual} className="flex-1 bg-gradient-to-r from-accent to-destructive">
                   {currentIndex === totalQuestoes - 1 ? 'Ver Resultado' : 'Próximo'}
                   <ChevronRight className="h-4 w-4 ml-1" />
                 </Button>

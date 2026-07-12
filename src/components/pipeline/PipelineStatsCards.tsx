@@ -17,9 +17,9 @@ interface PipelineStatsCardsProps {
 
 const statItems = [
   { label: "Total em Processo", key: 'total' as const, icon: Users, color: "from-primary/20 to-primary/5", iconColor: "text-primary" },
-  { label: "Em Andamento", key: 'emAndamento' as const, icon: TrendingUp, color: "from-blue-500/20 to-blue-500/5", iconColor: "text-blue-500" },
-  { label: "Contratados", key: 'contratados' as const, icon: CheckCircle2, color: "from-emerald-500/20 to-emerald-500/5", iconColor: "text-emerald-500" },
-  { label: "Reprovados", key: 'reprovados' as const, icon: XCircle, color: "from-red-500/20 to-red-500/5", iconColor: "text-red-500" },
+  { label: "Em Andamento", key: 'emAndamento' as const, icon: TrendingUp, color: "from-info/20 to-info/5", iconColor: "text-info" },
+  { label: "Contratados", key: 'contratados' as const, icon: CheckCircle2, color: "from-success/20 to-success/5", iconColor: "text-success" },
+  { label: "Reprovados", key: 'reprovados' as const, icon: XCircle, color: "from-destructive/20 to-destructive/5", iconColor: "text-destructive" },
 ] as const;
 
 export const PipelineStatsCards = memo(function PipelineStatsCards({ stats }: PipelineStatsCardsProps) {

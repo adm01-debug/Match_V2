@@ -26,11 +26,11 @@ export const DeuMatchesView: React.FC<DeuMatchesViewProps> = ({
 
   return (
     <Layout title="Seus Matches">
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-rose-50 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900 py-8">
+      <div className="min-h-screen bg-gradient-to-br from-accent via-accent to-destructive dark:from-slate-900 dark:via-accent/20 dark:to-slate-900 py-8">
         <div className="max-w-4xl mx-auto px-4">
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-accent to-accent bg-clip-text text-transparent">
                 Deu Match! 💜
               </h1>
               <p className="text-muted-foreground">

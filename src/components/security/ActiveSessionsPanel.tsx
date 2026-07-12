@@ -207,13 +207,13 @@ export function ActiveSessionsPanel() {
                   key={session.id}
                   className={`flex items-center gap-3 p-3 rounded-lg border ${
                     session.is_current 
-                      ? 'border-green-500 bg-green-50 dark:bg-green-900/20' 
+                      ? 'border-success bg-success dark:bg-success/20' 
                       : 'border-border'
                   }`}
                 >
                   <div className={`p-2 rounded-lg ${
                     session.is_current 
-                      ? 'bg-green-100 dark:bg-green-900/40' 
+                      ? 'bg-success dark:bg-success/40' 
                       : 'bg-muted'
                   }`}>
                     {getDeviceIcon(session.user_agent)}
@@ -224,7 +224,7 @@ export function ActiveSessionsPanel() {
                         {browser} em {os}
                       </span>
                       {session.is_current && (
-                        <Badge variant="default" className="bg-green-600 text-xs">
+                        <Badge variant="default" className="bg-success text-xs">
                           Sessão atual
                         </Badge>
                       )}

@@ -107,7 +107,7 @@ const IPCheckError = memo(({
   >
     <Card className="w-full max-w-md" role="status" aria-label="Verificando acesso" aria-live="polite">
       <CardHeader className="text-center">
-        <AlertTriangle className="w-12 h-12 mx-auto text-yellow-500" />
+        <AlertTriangle className="w-12 h-12 mx-auto text-warning" />
         <CardTitle className="mt-4">Erro na Verificação</CardTitle>
       </CardHeader>
       <CardContent className="text-center space-y-4">

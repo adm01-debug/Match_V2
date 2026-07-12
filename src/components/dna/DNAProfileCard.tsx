@@ -166,13 +166,13 @@ export const DNAProfileCard: React.FC<DNAProfileCardProps> = ({
       <div className="grid md:grid-cols-2 gap-6 p-6">
         <div>
           <div className="flex items-center gap-2 mb-3">
-            <Star className="w-5 h-5 text-green-500" />
+            <Star className="w-5 h-5 text-success" />
             <h3 className="font-semibold">Pontos Fortes</h3>
           </div>
           <ul className="space-y-2">
             {profile.strengths.map((strength, i) => (
               <li key={i} className="flex items-start gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-green-500 mt-2" />
+                <span className="w-1.5 h-1.5 rounded-full bg-success mt-2" />
                 <span className="text-sm">{strength}</span>
               </li>
             ))}
@@ -181,13 +181,13 @@ export const DNAProfileCard: React.FC<DNAProfileCardProps> = ({
 
         <div>
           <div className="flex items-center gap-2 mb-3">
-            <AlertTriangle className="w-5 h-5 text-orange-500" />
+            <AlertTriangle className="w-5 h-5 text-warning" />
             <h3 className="font-semibold">Desafios</h3>
           </div>
           <ul className="space-y-2">
             {profile.challenges.map((challenge, i) => (
               <li key={i} className="flex items-start gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-orange-500 mt-2" />
+                <span className="w-1.5 h-1.5 rounded-full bg-warning mt-2" />
                 <span className="text-sm">{challenge}</span>
               </li>
             ))}

@@ -65,10 +65,10 @@ const typeLabels: Record<SearchResultType, string> = {
 };
 
 const typeColors: Record<SearchResultType, string> = {
-  candidato: 'bg-blue-500/10 text-blue-600',
-  vaga: 'bg-green-500/10 text-green-600',
-  entrevista: 'bg-purple-500/10 text-purple-600',
-  documento: 'bg-orange-500/10 text-orange-600',
+  candidato: 'bg-info/10 text-info',
+  vaga: 'bg-success/10 text-success',
+  entrevista: 'bg-accent/10 text-accent',
+  documento: 'bg-warning/10 text-warning',
   acao: 'bg-primary/10 text-primary',
 };
 
@@ -308,7 +308,7 @@ export const PredictiveSearch = memo(function PredictiveSearch({
                           )}
                         </div>
                         {result.relevance && result.relevance > 0.8 && (
-                          <Sparkles className="h-4 w-4 text-yellow-500 shrink-0" />
+                          <Sparkles className="h-4 w-4 text-warning shrink-0" />
                         )}
                       </motion.button>
                     ))}

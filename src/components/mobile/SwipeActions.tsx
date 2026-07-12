@@ -31,8 +31,8 @@ const defaultLeftActions: SwipeAction[] = [
     id: 'star',
     icon: <Star className="h-5 w-5" />,
     label: 'Favoritar',
-    color: 'text-yellow-500',
-    bgColor: 'bg-yellow-500/20',
+    color: 'text-warning',
+    bgColor: 'bg-warning/20',
     onAction: () => {},
   },
 ];
@@ -272,7 +272,7 @@ export const SwipeableCard = memo(function SwipeableCard({
       </motion.div>
       
       <motion.div
-        className="absolute right-4 top-4 px-3 py-1 bg-green-500 text-white rounded-full text-sm font-medium z-20"
+        className="absolute right-4 top-4 px-3 py-1 bg-success text-white rounded-full text-sm font-medium z-20"
         style={{ opacity: rightOpacity }}
       >
         <Check className="h-4 w-4 inline mr-1" />

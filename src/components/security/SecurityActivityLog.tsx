@@ -135,8 +135,8 @@ export function SecurityActivityLog() {
                   >
                     <div className={`p-2 rounded-full ${
                       log.success 
-                        ? 'bg-green-100 text-green-600 dark:bg-green-900/40' 
-                        : 'bg-red-100 text-red-600 dark:bg-red-900/40'
+                        ? 'bg-success text-success dark:bg-success/40' 
+                        : 'bg-destructive text-destructive dark:bg-destructive/40'
                     }`}>
                       <ActionIcon className="h-4 w-4" />
                     </div>

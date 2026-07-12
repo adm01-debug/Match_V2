@@ -62,7 +62,7 @@ export const AchievementUnlock = memo(function AchievementUnlock({
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.5, type: "spring" }}
               >
-                <Crown className="w-8 h-8 text-yellow-400" />
+                <Crown className="w-8 h-8 text-warning" />
               </motion.div>
             )}
 

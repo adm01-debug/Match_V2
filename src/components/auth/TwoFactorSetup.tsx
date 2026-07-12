@@ -233,7 +233,7 @@ use um destes códigos para fazer login.
                     onClick={copySecret}
                     aria-label={copiedSecret ? "Copiado" : "Copiar chave secreta"}
                   >
-                    {copiedSecret ? <CheckCircle2 className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
+                    {copiedSecret ? <CheckCircle2 className="h-4 w-4 text-success" /> : <Copy className="h-4 w-4" />}
                   </Button>
                 </div>
               </div>
@@ -331,7 +331,7 @@ use um destes códigos para fazer login.
 
         {step === 'complete' && (
           <div className="text-center py-4">
-            <CheckCircle2 className="h-16 w-16 text-green-500 mx-auto mb-4" aria-hidden="true" />
+            <CheckCircle2 className="h-16 w-16 text-success mx-auto mb-4" aria-hidden="true" />
             <p className="text-lg font-medium">2FA Configurado com Sucesso!</p>
             <p className="text-sm text-muted-foreground mt-2">
               Sua conta agora está protegida com autenticação de dois fatores.

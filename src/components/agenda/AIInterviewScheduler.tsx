@@ -61,15 +61,15 @@ export function AIInterviewScheduler({
 
   return (
     <Card className="overflow-hidden">
-      <CardHeader className="bg-gradient-to-r from-primary/10 via-purple-500/10 to-pink-500/10">
+      <CardHeader className="bg-gradient-to-r from-primary/10 via-accent/10 to-accent/10">
         <div className="flex items-center gap-3">
-          <div className="p-2 rounded-xl bg-gradient-to-br from-primary to-purple-600 text-white">
+          <div className="p-2 rounded-xl bg-gradient-to-br from-primary to-accent text-white">
             <Brain className="h-5 w-5" />
           </div>
           <div>
             <CardTitle className="flex items-center gap-2">
               AI Interview Scheduler
-              <Badge variant="secondary" className="bg-gradient-to-r from-primary to-purple-600 text-white border-0">
+              <Badge variant="secondary" className="bg-gradient-to-r from-primary to-accent text-white border-0">
                 <Sparkles className="h-3 w-3 mr-1" />
                 Smart
               </Badge>
@@ -93,7 +93,7 @@ export function AIInterviewScheduler({
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 className="h-5 w-5 text-green-500" />
+                  <CheckCircle2 className="h-5 w-5 text-success" />
                   <span className="font-medium">
                     {suggestedSlots.length} horários encontrados
                   </span>

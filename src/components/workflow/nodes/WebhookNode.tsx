@@ -22,11 +22,11 @@ function WebhookNodeComponent({ data }: NodeProps) {
   const [enabled, setEnabled] = useState(nodeData.enabled !== false);
 
   return (
-    <Card className="w-[280px] border-2 border-cyan-500/50 bg-background shadow-lg">
-      <Handle type="target" position={Position.Top} className="w-3 h-3 !bg-cyan-500" />
+    <Card className="w-[280px] border-2 border-info/50 bg-background shadow-lg">
+      <Handle type="target" position={Position.Top} className="w-3 h-3 !bg-info" />
       <CardHeader className="p-3 pb-1">
         <CardTitle className="text-sm flex items-center gap-2">
-          <Globe className="h-4 w-4 text-cyan-500" />
+          <Globe className="h-4 w-4 text-info" />
           <span>{nodeData.label || 'Webhook'}</span>
           <Switch className="ml-auto" checked={enabled} onCheckedChange={setEnabled} />
         </CardTitle>
@@ -49,7 +49,7 @@ function WebhookNodeComponent({ data }: NodeProps) {
           <Input className="h-8 text-xs" placeholder="https://..." value={url} onChange={(e) => setUrl(e.target.value)} />
         </div>
       </CardContent>
-      <Handle type="source" position={Position.Bottom} className="w-3 h-3 !bg-cyan-500" />
+      <Handle type="source" position={Position.Bottom} className="w-3 h-3 !bg-info" />
     </Card>
   );
 }

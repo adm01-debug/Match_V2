@@ -112,7 +112,7 @@ export default function ResetPasswordPage() {
           {!isValidSession ? (
             <CardContent className="pt-6">
               <div className="text-center space-y-4">
-                <AlertTriangle className="h-16 w-16 text-yellow-500 mx-auto" />
+                <AlertTriangle className="h-16 w-16 text-warning mx-auto" />
                 <h2 className="text-xl font-semibold">Link Inválido ou Expirado</h2>
                 <p className="text-muted-foreground">
                   Este link de redefinição de senha não é válido ou já expirou.
@@ -127,7 +127,7 @@ export default function ResetPasswordPage() {
           ) : success ? (
             <CardContent className="pt-6">
               <div className="text-center space-y-4">
-                <CheckCircle2 className="h-16 w-16 text-green-500 mx-auto" />
+                <CheckCircle2 className="h-16 w-16 text-success mx-auto" />
                 <h2 className="text-xl font-semibold">Senha Redefinida!</h2>
                 <p className="text-muted-foreground">
                   Sua senha foi alterada com sucesso. Você será redirecionado para o login...
@@ -171,9 +171,9 @@ export default function ResetPasswordPage() {
                     {passwordRequirements.map((req) => (
                       <div key={req.label} className="flex items-center gap-1 text-xs">
                         <CheckCircle2 
-                          className={`h-3 w-3 ${req.test(formData.password) ? 'text-green-500' : 'text-muted-foreground'}`} 
+                          className={`h-3 w-3 ${req.test(formData.password) ? 'text-success' : 'text-muted-foreground'}`} 
                         />
-                        <span className={req.test(formData.password) ? 'text-green-500' : 'text-muted-foreground'}>
+                        <span className={req.test(formData.password) ? 'text-success' : 'text-muted-foreground'}>
                           {req.label}
                         </span>
                       </div>

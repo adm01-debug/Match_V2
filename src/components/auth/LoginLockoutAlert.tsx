@@ -39,22 +39,22 @@ export const LoginLockoutAlert = memo(({
       <Alert 
         variant="default" 
         className={cn(
-          'border-yellow-500/50 bg-yellow-500/10',
-          attemptsRemaining <= 2 && 'border-orange-500/50 bg-orange-500/10',
+          'border-warning/50 bg-warning/10',
+          attemptsRemaining <= 2 && 'border-warning/50 bg-warning/10',
           className
         )}
       >
         <AlertTriangle className={cn(
           'h-4 w-4',
-          attemptsRemaining <= 2 ? 'text-orange-500' : 'text-yellow-500'
+          attemptsRemaining <= 2 ? 'text-warning' : 'text-warning'
         )} />
         <AlertTitle className={cn(
-          attemptsRemaining <= 2 ? 'text-orange-600 dark:text-orange-400' : 'text-yellow-600 dark:text-yellow-400'
+          attemptsRemaining <= 2 ? 'text-warning dark:text-warning' : 'text-warning dark:text-warning'
         )}>
           Atenção
         </AlertTitle>
         <AlertDescription className={cn(
-          attemptsRemaining <= 2 ? 'text-orange-600/80 dark:text-orange-400/80' : 'text-yellow-600/80 dark:text-yellow-400/80'
+          attemptsRemaining <= 2 ? 'text-warning/80 dark:text-warning/80' : 'text-warning/80 dark:text-warning/80'
         )}>
           {attemptsRemaining === 1 
             ? 'Última tentativa antes do bloqueio temporário'

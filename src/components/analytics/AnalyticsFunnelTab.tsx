@@ -34,12 +34,12 @@ export function AnalyticsFunnelTab({ data }: AnalyticsFunnelTabProps) {
       </Card>
       <div className="grid grid-cols-1 md:grid-cols-7 gap-4">
         {data.map((etapa, index) => (
-          <Card key={etapa.etapa} className={cn(index === data.length - 1 && "border-green-200 bg-green-50 dark:bg-green-950/20")}>
+          <Card key={etapa.etapa} className={cn(index === data.length - 1 && "border-success bg-success dark:bg-success/20")}>
             <CardContent className="pt-4 text-center">
               <p className="text-2xl font-bold">{etapa.quantidade}</p>
               <p className="text-xs text-muted-foreground truncate">{etapa.etapa}</p>
               {index > 0 && (
-                <Badge variant="secondary" className={cn("mt-2 text-xs", etapa.conversao >= 60 ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700")}>{etapa.conversao}%</Badge>
+                <Badge variant="secondary" className={cn("mt-2 text-xs", etapa.conversao >= 60 ? "bg-success text-success" : "bg-warning text-warning")}>{etapa.conversao}%</Badge>
               )}
             </CardContent>
           </Card>

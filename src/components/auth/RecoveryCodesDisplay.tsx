@@ -77,10 +77,10 @@ export function RecoveryCodesDisplay({ codes, onConfirm }: RecoveryCodesDisplayP
           </Button>
         </div>
 
-        <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-3">
+        <div className="bg-warning dark:bg-warning/20 border border-warning dark:border-warning rounded-lg p-3">
           <div className="flex gap-2">
-            <AlertTriangle className="h-5 w-5 text-yellow-600 dark:text-yellow-500 flex-shrink-0" />
-            <div className="text-sm text-yellow-800 dark:text-yellow-200">
+            <AlertTriangle className="h-5 w-5 text-warning dark:text-warning flex-shrink-0" />
+            <div className="text-sm text-warning dark:text-warning">
               <p className="font-medium">Importante:</p>
               <ul className="list-disc list-inside mt-1 space-y-1">
                 <li>Cada código só pode ser usado uma vez</li>

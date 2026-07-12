@@ -27,10 +27,10 @@ interface DocumentosTabProps {
 }
 
 const tipoIcons: Record<string, ReactNode> = {
-  curriculo: <FileText className="h-5 w-5 text-blue-400" />,
-  certificado: <Award className="h-5 w-5 text-amber-400" />,
-  carta: <FileCheck className="h-5 w-5 text-emerald-400" />,
-  portfolio: <Folder className="h-5 w-5 text-purple-400" />,
+  curriculo: <FileText className="h-5 w-5 text-info" />,
+  certificado: <Award className="h-5 w-5 text-warning" />,
+  carta: <FileCheck className="h-5 w-5 text-success" />,
+  portfolio: <Folder className="h-5 w-5 text-accent" />,
   outro: <File className="h-5 w-5 text-muted-foreground" />,
 };
 

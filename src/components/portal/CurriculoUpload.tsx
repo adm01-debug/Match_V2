@@ -198,12 +198,12 @@ const CurriculoUpload: React.FC<CurriculoUploadProps> = ({
       <CardContent>
         {curriculoUrl && curriculoNome ? (
           <div data-testid="curriculo-upload" className="space-y-4">
-            <div className="flex items-center gap-3 p-4 bg-green-500/10 border border-green-500/20 rounded-lg">
+            <div className="flex items-center gap-3 p-4 bg-success/10 border border-success/20 rounded-lg">
               <div className="text-2xl">{getFileIcon(curriculoNome)}</div>
               <div className="flex-1 min-w-0">
                 <p className="font-medium truncate">{curriculoNome}</p>
                 <p className="text-sm text-muted-foreground flex items-center gap-1">
-                  <CheckCircle2 className="h-3 w-3 text-green-600" />
+                  <CheckCircle2 className="h-3 w-3 text-success" />
                   Currículo enviado
                 </p>
               </div>

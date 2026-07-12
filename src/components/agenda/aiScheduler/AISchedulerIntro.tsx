@@ -15,7 +15,7 @@ export function AISchedulerIntro({ candidatoNome, isAnalyzing, onAnalyze }: Prop
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
     >
-      <div className="mx-auto w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/20 to-purple-500/20 flex items-center justify-center mb-4">
+      <div className="mx-auto w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center mb-4">
         <Calendar className="h-8 w-8 text-primary" />
       </div>
       <h3 className="text-lg font-semibold mb-2">
@@ -27,7 +27,7 @@ export function AISchedulerIntro({ candidatoNome, isAnalyzing, onAnalyze }: Prop
       <Button
         onClick={onAnalyze}
         disabled={isAnalyzing}
-        className="bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90"
+        className="bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90"
       >
         {isAnalyzing ? (
           <>

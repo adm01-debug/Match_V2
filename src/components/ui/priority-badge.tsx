@@ -14,10 +14,10 @@ const priorityBadgeVariants = cva(
   {
     variants: {
       priority: {
-        urgente: "bg-red-500/20 text-red-700 dark:text-red-400 border border-red-500/30",
-        alta: "bg-orange-500/20 text-orange-700 dark:text-orange-400 border border-orange-500/30",
-        media: "bg-blue-500/20 text-blue-700 dark:text-blue-400 border border-blue-500/30",
-        baixa: "bg-slate-500/20 text-slate-700 dark:text-slate-400 border border-slate-500/30",
+        urgente: "bg-destructive/20 text-destructive dark:text-destructive border border-destructive/30",
+        alta: "bg-warning/20 text-warning dark:text-warning border border-warning/30",
+        media: "bg-info/20 text-info dark:text-info border border-info/30",
+        baixa: "bg-muted-foreground/20 text-foreground dark:text-muted-foreground border border-border/30",
       },
       size: {
         sm: "px-1.5 py-0 text-[10px]",

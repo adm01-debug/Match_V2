@@ -38,7 +38,7 @@ const etapaColors: Record<string, string> = {
   feedback_negativo: "bg-destructive/20 text-destructive",
   proposta: "bg-info/30 text-info",
   contratacao: "bg-success/30 text-success",
-  comunicacao: "bg-slate-500/20 text-slate-400",
+  comunicacao: "bg-muted-foreground/20 text-muted-foreground",
 };
 
 export function HistoricoComunicacoes({ candidatoId, className }: HistoricoComunicacoesProps) {
