@@ -65,13 +65,13 @@ export function PushNotificationSettings() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="flex items-center gap-3 p-4 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800">
-            <AlertTriangle className="h-5 w-5 text-amber-600" />
+          <div className="flex items-center gap-3 p-4 bg-warning/10 rounded-lg border border-warning/30">
+            <AlertTriangle className="h-5 w-5 text-warning" />
             <div>
-              <p className="font-medium text-amber-800 dark:text-amber-200">
+              <p className="font-medium text-warning">
                 Navegador não suportado
               </p>
-              <p className="text-sm text-amber-600 dark:text-amber-300">
+              <p className="text-sm text-warning">
                 Seu navegador não suporta notificações push. Tente usar Chrome, Firefox ou Edge.
               </p>
             </div>
@@ -111,9 +111,9 @@ export function PushNotificationSettings() {
         {/* Main Toggle */}
         <div className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
           <div className="flex items-center gap-3">
-            <div className={`p-2 rounded-lg ${isSubscribed ? 'bg-green-100 dark:bg-green-900/40' : 'bg-muted'}`}>
+            <div className={`p-2 rounded-lg ${isSubscribed ? 'bg-success/15' : 'bg-muted'}`}>
               {isSubscribed ? (
-                <BellRing className="h-5 w-5 text-green-600" />
+                <BellRing className="h-5 w-5 text-success" />
               ) : (
                 <BellOff className="h-5 w-5 text-muted-foreground" />
               )}
@@ -135,13 +135,13 @@ export function PushNotificationSettings() {
         </div>
 
         {permission === 'denied' && (
-          <div className="flex items-center gap-3 p-4 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800">
-            <AlertTriangle className="h-5 w-5 text-red-600" />
+          <div className="flex items-center gap-3 p-4 bg-destructive/10 rounded-lg border border-destructive/30">
+            <AlertTriangle className="h-5 w-5 text-destructive" />
             <div>
-              <p className="font-medium text-red-800 dark:text-red-200">
+              <p className="font-medium text-destructive">
                 Permissão bloqueada
               </p>
-              <p className="text-sm text-red-600 dark:text-red-300">
+              <p className="text-sm text-destructive">
                 As notificações foram bloqueadas. Altere nas configurações do navegador.
               </p>
             </div>
