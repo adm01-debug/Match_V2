@@ -30,57 +30,57 @@ const statusBadgeVariants = cva(
     variants: {
       variant: {
         // Pipeline / Processo Seletivo
-        novo: "bg-blue-500/15 text-blue-700 dark:text-blue-400",
-        triagem: "bg-violet-500/15 text-violet-700 dark:text-violet-400",
-        "em-triagem": "bg-violet-500/15 text-violet-700 dark:text-violet-400",
-        entrevista: "bg-amber-500/15 text-amber-700 dark:text-amber-400",
-        "entrevista-rh": "bg-amber-500/15 text-amber-700 dark:text-amber-400",
-        "entrevista-gestor": "bg-orange-500/15 text-orange-700 dark:text-orange-400",
-        "entrevista-final": "bg-pink-500/15 text-pink-700 dark:text-pink-400",
-        teste: "bg-pink-500/15 text-pink-700 dark:text-pink-400",
-        "teste-tecnico": "bg-pink-500/15 text-pink-700 dark:text-pink-400",
-        aprovado: "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400",
-        contratado: "bg-green-600/15 text-green-700 dark:text-green-400",
-        reprovado: "bg-red-500/15 text-red-700 dark:text-red-400",
-        
+        novo: "bg-info/15 text-info",
+        triagem: "bg-primary/15 text-primary",
+        "em-triagem": "bg-primary/15 text-primary",
+        entrevista: "bg-warning/15 text-warning",
+        "entrevista-rh": "bg-warning/15 text-warning",
+        "entrevista-gestor": "bg-warning/20 text-warning",
+        "entrevista-final": "bg-accent/20 text-accent-foreground",
+        teste: "bg-accent/20 text-accent-foreground",
+        "teste-tecnico": "bg-accent/20 text-accent-foreground",
+        aprovado: "bg-success/15 text-success",
+        contratado: "bg-success/20 text-success",
+        reprovado: "bg-destructive/15 text-destructive",
+
         // Status Geral
-        ativo: "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400",
-        inativo: "bg-gray-500/15 text-gray-700 dark:text-gray-400",
-        pendente: "bg-amber-500/15 text-amber-700 dark:text-amber-400",
-        concluido: "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400",
-        cancelado: "bg-red-500/15 text-red-700 dark:text-red-400",
-        arquivado: "bg-gray-500/15 text-gray-700 dark:text-gray-400",
-        
+        ativo: "bg-success/15 text-success",
+        inativo: "bg-muted text-muted-foreground",
+        pendente: "bg-warning/15 text-warning",
+        concluido: "bg-success/15 text-success",
+        cancelado: "bg-destructive/15 text-destructive",
+        arquivado: "bg-muted text-muted-foreground",
+
         // Vagas
-        rascunho: "bg-gray-500/15 text-gray-700 dark:text-gray-400",
-        publicada: "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400",
-        "aguardando-aprovacao": "bg-amber-500/15 text-amber-700 dark:text-amber-400",
-        encerrada: "bg-gray-500/15 text-gray-700 dark:text-gray-400",
-        pausada: "bg-amber-500/15 text-amber-700 dark:text-amber-400",
-        
+        rascunho: "bg-muted text-muted-foreground",
+        publicada: "bg-success/15 text-success",
+        "aguardando-aprovacao": "bg-warning/15 text-warning",
+        encerrada: "bg-muted text-muted-foreground",
+        pausada: "bg-warning/15 text-warning",
+
         // Entrevistas
-        agendada: "bg-blue-500/15 text-blue-700 dark:text-blue-400",
-        confirmada: "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400",
-        realizada: "bg-green-600/15 text-green-700 dark:text-green-400",
-        "nao-compareceu": "bg-red-500/15 text-red-700 dark:text-red-400",
-        reagendada: "bg-amber-500/15 text-amber-700 dark:text-amber-400",
-        
+        agendada: "bg-info/15 text-info",
+        confirmada: "bg-success/15 text-success",
+        realizada: "bg-success/20 text-success",
+        "nao-compareceu": "bg-destructive/15 text-destructive",
+        reagendada: "bg-warning/15 text-warning",
+
         // Candidatos
-        "banco-talentos": "bg-indigo-500/15 text-indigo-700 dark:text-indigo-400",
-        
+        "banco-talentos": "bg-primary/15 text-primary",
+
         // Prioridades
-        urgente: "bg-red-500/15 text-red-700 dark:text-red-400",
-        alta: "bg-orange-500/15 text-orange-700 dark:text-orange-400",
-        media: "bg-blue-500/15 text-blue-700 dark:text-blue-400",
-        baixa: "bg-gray-500/15 text-gray-700 dark:text-gray-400",
-        
+        urgente: "bg-destructive/15 text-destructive",
+        alta: "bg-warning/20 text-warning",
+        media: "bg-info/15 text-info",
+        baixa: "bg-muted text-muted-foreground",
+
         // Comunicação
-        enviado: "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400",
-        lido: "bg-blue-500/15 text-blue-700 dark:text-blue-400",
-        respondido: "bg-green-600/15 text-green-700 dark:text-green-400",
-        
+        enviado: "bg-success/15 text-success",
+        lido: "bg-info/15 text-info",
+        respondido: "bg-success/20 text-success",
+
         // Default/Fallback
-        default: "bg-gray-500/15 text-gray-700 dark:text-gray-400",
+        default: "bg-muted text-muted-foreground",
       },
       size: {
         sm: "px-2 py-0.5 text-[10px]",
