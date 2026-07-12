@@ -254,7 +254,7 @@ export const XPToast = memo(function XPToast({
               }}
               transition={{ duration: 2, repeat: Infinity }}
             >
-              <Star className="w-4 h-4 text-yellow-300 fill-yellow-300" />
+              <Star className="w-4 h-4 text-warning fill-warning" />
             </motion.div>
           </motion.div>
         </motion.div>
