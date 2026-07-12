@@ -165,7 +165,7 @@ function AlertasInteligentesComponent({ acoesPendentes, vagasUrgentes }: Alertas
               >
                 <Bell className="h-5 w-5 text-primary" />
                 <motion.span 
-                  className="absolute -top-1 -right-1 h-3.5 w-3.5 rounded-full bg-red-500 border-2 border-background flex items-center justify-center text-[9px] font-bold text-white"
+                  className="absolute -top-1 -right-1 h-3.5 w-3.5 rounded-full bg-destructive border-2 border-background flex items-center justify-center text-[9px] font-bold text-destructive-foreground"
                   animate={{ scale: [1, 1.2, 1] }}
                   transition={{ duration: 1, repeat: Infinity }}
                 >
