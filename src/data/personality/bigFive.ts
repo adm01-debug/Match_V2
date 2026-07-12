@@ -1,5 +1,5 @@
 import type { PersonalityQuestion } from '@/types/personality';
-import { LIKERT_5, LIKERT_7 } from './likert';
+import { LIKERT_5 } from './likert';
 
 export const BIG_FIVE_QUESTIONS: PersonalityQuestion[] = [
   // ABERTURA À EXPERIÊNCIA (18 questões)

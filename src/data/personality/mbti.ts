@@ -1,5 +1,5 @@
 import type { PersonalityQuestion } from '@/types/personality';
-import { LIKERT_5, LIKERT_7 } from './likert';
+import { LIKERT_7 } from './likert';
 
 export const MBTI_QUESTIONS: PersonalityQuestion[] = [
   // EXTROVERSÃO vs INTROVERSÃO (22 questões)
