@@ -157,13 +157,13 @@ export function MatchResultCard({
     >
       <Card className="overflow-hidden border-2 shadow-xl">
         {/* Header com Score */}
-        <div className={cn("bg-gradient-to-r p-6 text-white", config.color)}>
+        <div className={cn("bg-gradient-to-r p-6 text-primary-foreground", config.color)}>
           <div className="text-center space-y-3">
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ type: 'spring', delay: 0.2 }}
-              className="inline-flex items-center gap-2 bg-white/20 rounded-full px-4 py-2"
+              className="inline-flex items-center gap-2 bg-primary-foreground/20 rounded-full px-4 py-2"
             >
               <IconComponent className="h-5 w-5" />
               <span className="font-semibold">{config.label} {config.emoji}</span>
@@ -179,7 +179,7 @@ export function MatchResultCard({
               <div className="text-lg opacity-90">% compatibilidade</div>
             </motion.div>
             
-            <p className="text-white/80">{config.description}</p>
+            <p className="text-primary-foreground/80">{config.description}</p>
           </div>
         </div>
         
