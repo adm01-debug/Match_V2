@@ -134,11 +134,11 @@ function AlertasInteligentesComponent({ acoesPendentes, vagasUrgentes }: Alertas
           <CardContent className="flex flex-col items-center justify-center py-8 text-center">
             <motion.div 
               data-testid="alertas-inteligentes" 
-              className="p-3 rounded-full bg-emerald-500/10 mb-3"
+              className="p-3 rounded-full bg-success/10 mb-3"
               animate={{ scale: [1, 1.1, 1] }}
               transition={{ duration: 2, repeat: Infinity }}
             >
-              <Zap className="h-6 w-6 text-emerald-500" />
+              <Zap className="h-6 w-6 text-success" />
             </motion.div>
             <p className="font-medium text-foreground">Tudo em dia!</p>
             <p className="text-sm text-muted-foreground">Nenhum alerta no momento.</p>
