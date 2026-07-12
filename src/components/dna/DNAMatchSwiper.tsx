@@ -76,7 +76,7 @@ export const DNAMatchSwiper: React.FC<DNAMatchSwiperProps> = ({
   if (currentIndex >= potentialMatches.length) {
     return (
       <Card className="p-12 text-center">
-        <Sparkles className="w-16 h-16 mx-auto mb-4 text-purple-500" />
+        <Sparkles className="w-16 h-16 mx-auto mb-4 text-primary" />
         <h2 className="text-2xl font-bold mb-2">Você viu todos!</h2>
         <p className="text-muted-foreground mb-6">
           Não há mais perfis para analisar no momento.
