@@ -143,7 +143,7 @@ async function fetchVagasReport(_config: ReportConfig): Promise<ReportData> {
 
   return {
     labels: Object.keys(byDept),
-    datasets: [{ label: 'Vagas por Departamento', data: Object.values(byDept), color: '#6366F1' }],
+    datasets: [{ label: 'Vagas por Departamento', data: Object.values(byDept), color: 'hsl(var(--primary))' }],
     summary: {
       total: vagas?.length || 0,
       abertas: vagas?.filter(v => v.status === 'publicada').length || 0,
@@ -171,7 +171,7 @@ async function fetchCandidatosReport(_config: ReportConfig): Promise<ReportData>
 
   return {
     labels: Object.keys(byFonte),
-    datasets: [{ label: 'Candidatos por Fonte', data: Object.values(byFonte), color: '#8B5CF6' }],
+    datasets: [{ label: 'Candidatos por Fonte', data: Object.values(byFonte), color: 'hsl(var(--accent))' }],
     summary: {
       total: candidatos?.length || 0,
       novos: candidatos?.filter(c => c.status === 'novo').length || 0,
@@ -200,7 +200,7 @@ async function fetchFunilReport(_config: ReportConfig): Promise<ReportData> {
 
   return {
     labels: etapas,
-    datasets: [{ label: 'Candidatos por Etapa', data: etapas.map(e => byEtapa[e] ?? 0), color: '#22C55E' }],
+    datasets: [{ label: 'Candidatos por Etapa', data: etapas.map(e => byEtapa[e] ?? 0), color: 'hsl(var(--success))' }],
     summary: {
       total_processos: processos?.length || 0,
       ativos: processos?.filter(p => p.status === 'ativo').length || 0,
@@ -225,7 +225,7 @@ async function fetchEntrevistasReport(_config: ReportConfig): Promise<ReportData
 
   return {
     labels: Object.keys(byTipo),
-    datasets: [{ label: 'Entrevistas por Tipo', data: Object.values(byTipo), color: '#F59E0B' }],
+    datasets: [{ label: 'Entrevistas por Tipo', data: Object.values(byTipo), color: 'hsl(var(--warning))' }],
     summary: {
       total: entrevistas?.length || 0,
       realizadas: entrevistas?.filter(e => e.status === 'realizada').length || 0,
@@ -262,8 +262,8 @@ async function fetchSLAReport(_config: ReportConfig): Promise<ReportData> {
   return {
     labels: etapas,
     datasets: [
-      { label: 'Tempo Médio (dias)', data: tempoMedio, color: '#EF4444' },
-      { label: 'SLA Limite (dias)', data: etapas.map(e => SLA_LIMITS[e] ?? 0), color: '#22C55E' },
+      { label: 'Tempo Médio (dias)', data: tempoMedio, color: 'hsl(var(--destructive))' },
+      { label: 'SLA Limite (dias)', data: etapas.map(e => SLA_LIMITS[e] ?? 0), color: 'hsl(var(--success))' },
     ],
     summary: {
       em_risco: emRisco.length,

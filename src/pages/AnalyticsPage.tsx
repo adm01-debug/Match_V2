@@ -19,7 +19,7 @@ import {
 import { format, subMonths, startOfMonth, endOfMonth, differenceInDays } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
-const COLORS = ['#6366F1', '#8B5CF6', '#A855F7', '#D946EF', '#EC4899', '#F43F5E', '#22C55E'];
+const COLORS = ['hsl(var(--primary))', 'hsl(var(--accent))', 'hsl(var(--accent))', 'hsl(var(--accent))', 'hsl(var(--accent))', 'hsl(var(--destructive))', 'hsl(var(--success))'];
 const etapasOrdem = ['novo', 'em_triagem', 'pre_selecao', 'entrevista_rh', 'teste_tecnico', 'entrevista_gestor', 'entrevista_final', 'aprovado', 'contratado'];
 const etapasLabels: Record<string, string> = {
   novo: 'Candidaturas', em_triagem: 'Triagem', pre_selecao: 'Pré-seleção',
@@ -242,7 +242,7 @@ export default function AnalyticsPage() {
                     <XAxis type="number" />
                     <YAxis dataKey="name" type="category" width={100} />
                     <Tooltip />
-                    <Bar dataKey="value" fill="#6366F1" radius={[0, 4, 4, 0]}>
+                    <Bar dataKey="value" fill="hsl(var(--primary))" radius={[0, 4, 4, 0]}>
                       {funnelData.map((entry, index) => <Cell key={index} fill={entry.fill} />)}
                     </Bar>
                   </BarChart>
@@ -261,8 +261,8 @@ export default function AnalyticsPage() {
                     <YAxis />
                     <Tooltip />
                     <Legend />
-                    <Area type="monotone" dataKey="contratacoes" stroke="#22C55E" fill="#22C55E" fillOpacity={0.3} name="Contratações" />
-                    <Line type="monotone" dataKey="meta" stroke="#6366F1" strokeDasharray="5 5" name="Meta" />
+                    <Area type="monotone" dataKey="contratacoes" stroke="hsl(var(--success))" fill="hsl(var(--success))" fillOpacity={0.3} name="Contratações" />
+                    <Line type="monotone" dataKey="meta" stroke="hsl(var(--primary))" strokeDasharray="5 5" name="Meta" />
                   </AreaChart>
                 </ResponsiveContainer>
               </CardContent>
@@ -301,8 +301,8 @@ export default function AnalyticsPage() {
                     <YAxis />
                     <Tooltip />
                     <Legend />
-                    <Bar dataKey="preenchidas" fill="#22C55E" name="Preenchidas" />
-                    <Bar dataKey="abertas" fill="#6366F1" name="Abertas" />
+                    <Bar dataKey="preenchidas" fill="hsl(var(--success))" name="Preenchidas" />
+                    <Bar dataKey="abertas" fill="hsl(var(--primary))" name="Abertas" />
                   </BarChart>
                 </ResponsiveContainer>
               </CardContent>

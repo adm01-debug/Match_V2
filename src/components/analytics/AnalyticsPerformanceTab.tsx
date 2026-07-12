@@ -24,8 +24,8 @@ export function AnalyticsPerformanceTab({ timeToHireData, costPerHireData, depar
               <ComposedChart data={timeToHireData}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="mes" /><YAxis /><Tooltip /><Legend />
-                <Bar dataKey="tempo" fill="#6366F1" name="Tempo Real" radius={[4, 4, 0, 0]} />
-                <Line type="monotone" dataKey="meta" stroke="#22C55E" strokeDasharray="5 5" name="Meta" />
+                <Bar dataKey="tempo" fill="hsl(var(--primary))" name="Tempo Real" radius={[4, 4, 0, 0]} />
+                <Line type="monotone" dataKey="meta" stroke="hsl(var(--success))" strokeDasharray="5 5" name="Meta" />
               </ComposedChart>
             </ResponsiveContainer>
           </CardContent>
@@ -40,7 +40,7 @@ export function AnalyticsPerformanceTab({ timeToHireData, costPerHireData, depar
               <AreaChart data={costPerHireData}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="mes" /><YAxis /><Tooltip formatter={(value) => `R$ ${Number(value).toLocaleString()}`} /><Legend />
-                <Area type="monotone" dataKey="custo" stroke="#8B5CF6" fill="#8B5CF6" fillOpacity={0.3} name="Custo" />
+                <Area type="monotone" dataKey="custo" stroke="hsl(var(--accent))" fill="hsl(var(--accent))" fillOpacity={0.3} name="Custo" />
               </AreaChart>
             </ResponsiveContainer>
           </CardContent>
