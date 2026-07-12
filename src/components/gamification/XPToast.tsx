@@ -28,42 +28,42 @@ const variantConfig: Record<XPToastVariant, {
   scale: number;
 }> = {
   small: {
-    gradient: "from-emerald-500 to-green-600",
+    gradient: "from-success to-success/80",
     icon: Sparkles,
     particles: false,
     duration: 2000,
     scale: 0.9,
   },
   medium: {
-    gradient: "from-blue-500 to-indigo-600",
+    gradient: "from-info to-info/80",
     icon: Zap,
     particles: true,
     duration: 2500,
     scale: 1,
   },
   large: {
-    gradient: "from-purple-500 to-violet-600",
+    gradient: "from-accent to-accent/80",
     icon: Star,
     particles: true,
     duration: 3000,
     scale: 1.1,
   },
   bonus: {
-    gradient: "from-amber-500 to-orange-600",
+    gradient: "from-warning to-warning/80",
     icon: TrendingUp,
     particles: true,
     duration: 3500,
     scale: 1.15,
   },
   streak: {
-    gradient: "from-red-500 to-pink-600",
+    gradient: "from-destructive to-destructive/80",
     icon: Zap,
     particles: true,
     duration: 3000,
     scale: 1.1,
   },
   levelup: {
-    gradient: "from-yellow-400 via-amber-500 to-orange-600",
+    gradient: "from-warning via-warning/90 to-warning/70",
     icon: Star,
     particles: true,
     duration: 4000,
