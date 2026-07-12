@@ -150,8 +150,8 @@ const TimelineEventCard = memo(({
       <Card 
         className={cn(
           'cursor-pointer transition-all hover:shadow-md group',
-          isNow && 'ring-2 ring-blue-500 animate-pulse',
-          isStartingSoon && 'ring-2 ring-amber-500',
+          isNow && 'ring-2 ring-info animate-pulse',
+          isStartingSoon && 'ring-2 ring-warning',
           event.status === 'cancelado' && 'opacity-50'
         )}
         onClick={() => onEventClick?.(event)}
