@@ -248,44 +248,44 @@ export const DNAMatchSwiper: React.FC<DNAMatchSwiperProps> = ({
               <Button
                 variant="outline"
                 size="icon"
-                className="w-14 h-14 rounded-full border-2 border-gray-300 hover:border-gray-400 hover:bg-gray-100"
+                className="w-14 h-14 rounded-full border-2 border-border hover:border-muted-foreground/50 hover:bg-muted"
                 onClick={handleUndo}
                 disabled={history.length === 0}
               >
-                <RotateCcw className="w-6 h-6 text-gray-500" />
+                <RotateCcw className="w-6 h-6 text-muted-foreground" />
               </Button>
               
               <Button
                 variant="outline"
                 size="icon"
-                className="w-16 h-16 rounded-full border-2 border-red-400 hover:border-red-500 hover:bg-red-50"
+                className="w-16 h-16 rounded-full border-2 border-destructive/40 hover:border-destructive hover:bg-destructive/10"
                 onClick={() => handleSwipe('left')}
               >
-                <X className="w-8 h-8 text-red-500" />
+                <X className="w-8 h-8 text-destructive" />
               </Button>
               
               <Button
                 variant="outline"
                 size="icon"
-                className="w-12 h-12 rounded-full border-2 border-blue-400 hover:border-blue-500 hover:bg-blue-50"
+                className="w-12 h-12 rounded-full border-2 border-info/40 hover:border-info hover:bg-info/10"
                 onClick={() => setShowDetails(!showDetails)}
               >
-                <Info className="w-5 h-5 text-blue-500" />
+                <Info className="w-5 h-5 text-info" />
               </Button>
               
               <Button
                 variant="outline"
                 size="icon"
-                className="w-16 h-16 rounded-full border-2 border-green-400 hover:border-green-500 hover:bg-green-50"
+                className="w-16 h-16 rounded-full border-2 border-success/40 hover:border-success hover:bg-success/10"
                 onClick={() => handleSwipe('right')}
               >
-                <Heart className="w-8 h-8 text-green-500" />
+                <Heart className="w-8 h-8 text-success" />
               </Button>
               
               <Button
                 variant="outline"
                 size="icon"
-                className="w-14 h-14 rounded-full border-2 border-purple-400 hover:border-purple-500 hover:bg-purple-50"
+                className="w-14 h-14 rounded-full border-2 border-primary/40 hover:border-primary hover:bg-primary/10"
                 onClick={() => {
                   handleSwipe('right');
                   confetti({
@@ -295,7 +295,7 @@ export const DNAMatchSwiper: React.FC<DNAMatchSwiperProps> = ({
                   });
                 }}
               >
-                <Star className="w-6 h-6 text-purple-500" />
+                <Star className="w-6 h-6 text-primary" />
               </Button>
             </div>
           </Card>
