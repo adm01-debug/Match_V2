@@ -67,12 +67,12 @@ const calculateStrength = (password: string): StrengthResult => {
     return { score, level: 'weak', label: 'Fraca', color: 'bg-destructive', bgColor: 'bg-destructive/20' };
   }
   if (score <= 4) {
-    return { score, level: 'fair', label: 'Razoável', color: 'bg-yellow-500', bgColor: 'bg-yellow-500/20' };
+    return { score, level: 'fair', label: 'Razoável', color: 'bg-warning', bgColor: 'bg-warning/20' };
   }
   if (score <= 5) {
-    return { score, level: 'good', label: 'Boa', color: 'bg-blue-500', bgColor: 'bg-blue-500/20' };
+    return { score, level: 'good', label: 'Boa', color: 'bg-info', bgColor: 'bg-info/20' };
   }
-  return { score, level: 'strong', label: 'Forte', color: 'bg-green-500', bgColor: 'bg-green-500/20' };
+  return { score, level: 'strong', label: 'Forte', color: 'bg-success', bgColor: 'bg-success/20' };
 };
 
 /**
