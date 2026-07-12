@@ -145,7 +145,7 @@ function CandidateTimelineComponent({
               <div className="space-y-6">
                 {sortedEvents.map((event) => {
                   const Icon = EVENT_ICONS[event.type] ?? FileText;
-                  const color = EVENT_COLORS[event.type] ?? 'bg-gray-500';
+                  const color = EVENT_COLORS[event.type] ?? 'bg-muted-foreground';
                   const label = EVENT_LABELS[event.type] ?? event.type;
                   const formattedDate = formatEventDate(event.date);
                   const stageValue = event.metadata?.['stage'];
