@@ -45,26 +45,31 @@ const powerUpConfigs: Record<PowerUpType, {
   icon: typeof Zap;
   gradient: string;
   activeGlow: string;
+  fg: string;
 }> = {
   double_xp: {
     icon: Zap,
-    gradient: "from-yellow-500 to-amber-600",
-    activeGlow: "shadow-yellow-500/50",
+    gradient: "from-warning to-warning/80",
+    activeGlow: "shadow-warning/50",
+    fg: "text-warning-foreground",
   },
   streak_shield: {
     icon: Shield,
-    gradient: "from-blue-500 to-cyan-600",
-    activeGlow: "shadow-blue-500/50",
+    gradient: "from-info to-info/80",
+    activeGlow: "shadow-info/50",
+    fg: "text-info-foreground",
   },
   time_boost: {
     icon: Clock,
-    gradient: "from-purple-500 to-pink-600",
-    activeGlow: "shadow-purple-500/50",
+    gradient: "from-accent to-accent/80",
+    activeGlow: "shadow-accent/50",
+    fg: "text-accent-foreground",
   },
   bonus_multiplier: {
     icon: TrendingUp,
-    gradient: "from-emerald-500 to-teal-600",
-    activeGlow: "shadow-emerald-500/50",
+    gradient: "from-success to-success/80",
+    activeGlow: "shadow-success/50",
+    fg: "text-success-foreground",
   },
 };
 
@@ -76,7 +81,7 @@ const demoPowerUps: PowerUp[] = [
     name: "Dobro de XP",
     description: "Ganhe 2x XP em todas as ações",
     icon: Zap,
-    gradient: "from-yellow-500 to-amber-600",
+    gradient: powerUpConfigs.double_xp.gradient,
     duration: "1 hora",
     quantity: 2,
     isActive: false,
@@ -87,11 +92,11 @@ const demoPowerUps: PowerUp[] = [
     name: "Escudo de Streak",
     description: "Protege seu streak por 1 dia de inatividade",
     icon: Shield,
-    gradient: "from-blue-500 to-cyan-600",
+    gradient: powerUpConfigs.streak_shield.gradient,
     duration: "24 horas",
     quantity: 1,
     isActive: true,
-    expiresAt: new Date(Date.now() + 12 * 60 * 60 * 1000), // 12 hours from now
+    expiresAt: new Date(Date.now() + 12 * 60 * 60 * 1000),
   },
   {
     id: "time-boost-1",
@@ -99,7 +104,7 @@ const demoPowerUps: PowerUp[] = [
     name: "Turbo Tempo",
     description: "+30 segundos em jogos com timer",
     icon: Clock,
-    gradient: "from-purple-500 to-pink-600",
+    gradient: powerUpConfigs.time_boost.gradient,
     duration: "3 jogos",
     quantity: 3,
     isActive: false,
@@ -110,7 +115,7 @@ const demoPowerUps: PowerUp[] = [
     name: "Super Multiplicador",
     description: "1.5x em todos os multiplicadores de combo",
     icon: TrendingUp,
-    gradient: "from-emerald-500 to-teal-600",
+    gradient: powerUpConfigs.bonus_multiplier.gradient,
     duration: "30 min",
     quantity: 0,
     isActive: false,
@@ -130,10 +135,10 @@ const PowerUpCard = memo(function PowerUpCard({
   onActivate,
 }: PowerUpCardProps) {
   const Icon = powerUp.icon;
+  const config = powerUpConfigs[powerUp.type];
   const isLocked = powerUp.unlockLevel && currentLevel < powerUp.unlockLevel;
   const canActivate = powerUp.quantity > 0 && !powerUp.isActive && !isLocked;
   
-  // Calculate remaining time for active power-ups
   const remainingTime = powerUp.expiresAt 
     ? Math.max(0, powerUp.expiresAt.getTime() - Date.now())
     : 0;
@@ -146,7 +151,6 @@ const PowerUpCard = memo(function PowerUpCard({
         particleCount: 60,
         spread: 50,
         origin: { y: 0.7 },
-        colors: ['#FFD700', '#4ADE80', '#3B82F6'],
       });
       onActivate(powerUp.id);
     }
@@ -161,19 +165,17 @@ const PowerUpCard = memo(function PowerUpCard({
     >
       <Card className={cn(
         "relative overflow-hidden transition-all duration-300",
-        powerUp.isActive && `ring-2 ring-offset-2 ${powerUpConfigs[powerUp.type].activeGlow}`,
+        powerUp.isActive && `ring-2 ring-offset-2 ${config.activeGlow}`,
         isLocked && "opacity-50"
       )}>
-        {/* Active indicator */}
         {powerUp.isActive && (
           <motion.div
-            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"
+            className="absolute inset-0 bg-gradient-to-r from-transparent via-foreground/5 to-transparent"
             animate={{ x: ["-100%", "200%"] }}
             transition={{ duration: 2, repeat: Infinity }}
           />
         )}
 
-        {/* Lock overlay */}
         {isLocked && (
           <div className="absolute inset-0 bg-background/80 backdrop-blur-[1px] z-10 flex items-center justify-center">
             <div className="text-center">
@@ -185,7 +187,6 @@ const PowerUpCard = memo(function PowerUpCard({
 
         <CardContent className="p-4">
           <div className="flex items-center gap-3">
-            {/* Icon */}
             <motion.div
               className={cn(
                 "flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center",
@@ -198,10 +199,9 @@ const PowerUpCard = memo(function PowerUpCard({
               } : {}}
               transition={{ duration: 2, repeat: powerUp.isActive ? Infinity : 0 }}
             >
-              <Icon className="w-6 h-6 text-white" />
+              <Icon className={cn("w-6 h-6", config.fg)} />
             </motion.div>
 
-            {/* Content */}
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2">
                 <h4 className="font-semibold text-foreground">{powerUp.name}</h4>
@@ -235,7 +235,6 @@ const PowerUpCard = memo(function PowerUpCard({
                 )}
               </div>
 
-              {/* Active countdown */}
               {powerUp.isActive && powerUp.expiresAt && (
                 <div className="mt-2 flex items-center gap-1 text-xs text-success">
                   <Clock className="w-3 h-3" />
@@ -244,7 +243,6 @@ const PowerUpCard = memo(function PowerUpCard({
               )}
             </div>
 
-            {/* Action */}
             <div className="flex-shrink-0">
               {canActivate && (
                 <Button
@@ -252,7 +250,7 @@ const PowerUpCard = memo(function PowerUpCard({
                   onClick={handleActivate}
                   className={cn(
                     "font-medium",
-                    `bg-gradient-to-r ${powerUp.gradient} hover:opacity-90`
+                    `bg-gradient-to-r ${powerUp.gradient} ${config.fg} hover:opacity-90`
                   )}
                 >
                   <Rocket className="w-4 h-4 mr-1" />
@@ -268,7 +266,7 @@ const PowerUpCard = memo(function PowerUpCard({
                     animate={{ rotate: 360 }}
                     transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
                   >
-                    <Sparkles className="w-5 h-5 text-white" />
+                    <Sparkles className={cn("w-5 h-5", config.fg)} />
                   </motion.div>
                 </div>
               )}
@@ -293,14 +291,12 @@ export const PowerUps = memo(function PowerUps({
 }: PowerUpsProps) {
   const [powerUps, setPowerUps] = useState<PowerUp[]>(demoPowerUps);
 
-  // Active power-ups count
   const activePowerUps = powerUps.filter(p => p.isActive).length;
 
   const handleActivate = useCallback((id: string) => {
     setPowerUps(prev => prev.map(p => {
       if (p.id === id && p.quantity > 0) {
         const expiresAt = new Date();
-        // Set expiration based on type
         if (p.type === "double_xp") {
           expiresAt.setHours(expiresAt.getHours() + 1);
         } else if (p.type === "streak_shield") {
@@ -326,24 +322,24 @@ export const PowerUps = memo(function PowerUps({
 
   return (
     <Card className={cn("overflow-hidden", className)}>
-      <CardHeader className="bg-gradient-to-r from-yellow-500/10 via-amber-500/10 to-orange-500/10 border-b">
+      <CardHeader className="bg-gradient-to-r from-warning/10 via-warning/10 to-accent/10 border-b">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <motion.div 
-              className="p-2.5 rounded-xl bg-gradient-to-br from-yellow-500 to-amber-600 shadow-lg"
+              className="p-2.5 rounded-xl bg-gradient-to-br from-warning to-warning/80 shadow-lg"
               animate={{ 
                 rotate: [0, 10, -10, 0],
                 scale: [1, 1.05, 1],
               }}
               transition={{ duration: 2, repeat: Infinity }}
             >
-              <Zap className="w-5 h-5 text-white" />
+              <Zap className="w-5 h-5 text-warning-foreground" />
             </motion.div>
             <div>
               <CardTitle className="text-lg flex items-center gap-2">
                 Power-Ups
                 {activePowerUps > 0 && (
-                  <Badge className="bg-gradient-to-r from-success to-emerald-600 text-white border-0">
+                  <Badge className="bg-gradient-to-r from-success to-success/80 text-success-foreground border-0">
                     <Flame className="w-3 h-3 mr-1" />
                     {activePowerUps} ativo{activePowerUps > 1 ? 's' : ''}
                   </Badge>
@@ -374,10 +370,9 @@ export const PowerUps = memo(function PowerUps({
           ))}
         </AnimatePresence>
 
-        {/* Tip */}
         <div className="p-3 rounded-lg bg-muted/50 border border-border/50">
           <div className="flex items-start gap-2">
-            <Star className="w-4 h-4 text-amber-500 mt-0.5" />
+            <Star className="w-4 h-4 text-warning mt-0.5" />
             <div>
               <p className="text-sm font-medium">Dica do dia</p>
               <p className="text-xs text-muted-foreground">
