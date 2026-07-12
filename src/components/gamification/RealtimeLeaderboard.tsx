@@ -107,7 +107,7 @@ const RankChange = memo(({ current, previous }: { current: number; previous?: nu
   if (diff > 0) {
     return (
       <motion.div 
-        className="flex items-center gap-1 text-green-500"
+        className="flex items-center gap-1 text-success"
         initial={{ y: -10, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
       >
@@ -119,7 +119,7 @@ const RankChange = memo(({ current, previous }: { current: number; previous?: nu
   
   return (
     <motion.div 
-      className="flex items-center gap-1 text-red-500"
+      className="flex items-center gap-1 text-destructive"
       initial={{ y: 10, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
     >
