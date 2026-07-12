@@ -161,7 +161,7 @@ export const DNAMatchSwiper: React.FC<DNAMatchSwiperProps> = ({
             </motion.div>
 
             {/* Match Score Header */}
-            <div className={`bg-gradient-to-r ${getScoreColor(matchScore)} p-4 text-center text-white`}>
+            <div className={`bg-gradient-to-r ${getScoreColor(matchScore)} p-4 text-center text-primary-foreground`}>
               <div className="text-sm opacity-90 mb-1">Compatibilidade</div>
               <div className="text-4xl font-bold">{Math.round(matchScore)}%</div>
               {getChemistryBadge()}
