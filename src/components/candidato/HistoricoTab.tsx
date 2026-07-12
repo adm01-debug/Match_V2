@@ -142,8 +142,8 @@ export function HistoricoTab({ candidato }: HistoricoTabProps) {
               <p className="text-3xl font-bold text-primary">{historico.length}</p>
               <p className="text-sm text-muted-foreground">Total de Eventos</p>
             </div>
-            <div className="text-center p-4 bg-purple-500/5 rounded-lg">
-              <p className="text-3xl font-bold text-purple-500">
+            <div className="text-center p-4 bg-accent/5 rounded-lg">
+              <p className="text-3xl font-bold text-accent">
                 {historico.filter((e) => e.tipo === 'entrevista').length}
               </p>
               <p className="text-sm text-muted-foreground">Entrevistas</p>
@@ -154,8 +154,8 @@ export function HistoricoTab({ candidato }: HistoricoTabProps) {
               </p>
               <p className="text-sm text-muted-foreground">Avaliações</p>
             </div>
-            <div className="text-center p-4 bg-cyan-500/5 rounded-lg">
-              <p className="text-3xl font-bold text-cyan-500">
+            <div className="text-center p-4 bg-info/5 rounded-lg">
+              <p className="text-3xl font-bold text-info">
                 {historico.filter((e) => e.tipo === 'comunicacao').length}
               </p>
               <p className="text-sm text-muted-foreground">Comunicações</p>
