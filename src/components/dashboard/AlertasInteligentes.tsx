@@ -37,22 +37,22 @@ interface AlertasInteligentesProps {
 
 const tipoConfig = {
   urgente: {
-    color: 'text-red-600 dark:text-red-400',
-    bgColor: 'bg-red-500/10',
-    borderColor: 'border-red-500/30',
-    badgeClass: 'bg-red-500 text-white',
+    color: 'text-destructive',
+    bgColor: 'bg-destructive/10',
+    borderColor: 'border-destructive/30',
+    badgeClass: 'bg-destructive text-destructive-foreground',
   },
   atencao: {
-    color: 'text-amber-600 dark:text-amber-400',
-    bgColor: 'bg-amber-500/10',
-    borderColor: 'border-amber-500/30',
-    badgeClass: 'bg-amber-500 text-white',
+    color: 'text-warning',
+    bgColor: 'bg-warning/10',
+    borderColor: 'border-warning/30',
+    badgeClass: 'bg-warning text-warning-foreground',
   },
   info: {
-    color: 'text-blue-600 dark:text-blue-400',
-    bgColor: 'bg-blue-500/10',
-    borderColor: 'border-blue-500/30',
-    badgeClass: 'bg-blue-500 text-white',
+    color: 'text-info',
+    bgColor: 'bg-info/10',
+    borderColor: 'border-info/30',
+    badgeClass: 'bg-info text-info-foreground',
   },
 };
 
@@ -134,11 +134,11 @@ function AlertasInteligentesComponent({ acoesPendentes, vagasUrgentes }: Alertas
           <CardContent className="flex flex-col items-center justify-center py-8 text-center">
             <motion.div 
               data-testid="alertas-inteligentes" 
-              className="p-3 rounded-full bg-emerald-500/10 mb-3"
+              className="p-3 rounded-full bg-success/10 mb-3"
               animate={{ scale: [1, 1.1, 1] }}
               transition={{ duration: 2, repeat: Infinity }}
             >
-              <Zap className="h-6 w-6 text-emerald-500" />
+              <Zap className="h-6 w-6 text-success" />
             </motion.div>
             <p className="font-medium text-foreground">Tudo em dia!</p>
             <p className="text-sm text-muted-foreground">Nenhum alerta no momento.</p>
@@ -165,7 +165,7 @@ function AlertasInteligentesComponent({ acoesPendentes, vagasUrgentes }: Alertas
               >
                 <Bell className="h-5 w-5 text-primary" />
                 <motion.span 
-                  className="absolute -top-1 -right-1 h-3.5 w-3.5 rounded-full bg-red-500 border-2 border-background flex items-center justify-center text-[9px] font-bold text-white"
+                  className="absolute -top-1 -right-1 h-3.5 w-3.5 rounded-full bg-destructive border-2 border-background flex items-center justify-center text-[9px] font-bold text-destructive-foreground"
                   animate={{ scale: [1, 1.2, 1] }}
                   transition={{ duration: 1, repeat: Infinity }}
                 >
