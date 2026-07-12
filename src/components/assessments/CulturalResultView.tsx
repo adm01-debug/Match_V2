@@ -123,9 +123,9 @@ export function CulturalResultView({ resultado, candidatoNome }: CulturalResultV
               <Progress 
                 value={alinhamento.score} 
                 className={`h-2 ${
-                  alinhamento.status === 'alto' ? '[&>div]:bg-green-500' :
-                  alinhamento.status === 'medio' ? '[&>div]:bg-yellow-500' :
-                  '[&>div]:bg-red-500'
+                  alinhamento.status === 'alto' ? '[&>div]:bg-success' :
+                  alinhamento.status === 'medio' ? '[&>div]:bg-warning' :
+                  '[&>div]:bg-destructive'
                 }`}
               />
             </div>
