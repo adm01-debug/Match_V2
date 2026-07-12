@@ -29,11 +29,11 @@ export const NewDeviceAlert = ({
   const getDeviceIcon = () => {
     switch (deviceInfo.device) {
       case 'Mobile':
-        return <Smartphone className="h-12 w-12 text-amber-500" />;
+        return <Smartphone className="h-12 w-12 text-warning" />;
       case 'Tablet':
-        return <Tablet className="h-12 w-12 text-amber-500" />;
+        return <Tablet className="h-12 w-12 text-warning" />;
       default:
-        return <Monitor className="h-12 w-12 text-amber-500" />;
+        return <Monitor className="h-12 w-12 text-warning" />;
     }
   };
 
@@ -53,7 +53,7 @@ export const NewDeviceAlert = ({
           <div className="flex items-center justify-center mb-4">
             <div className="relative">
               {getDeviceIcon()}
-              <div className="absolute -top-1 -right-1 bg-amber-500 rounded-full p-1">
+              <div className="absolute -top-1 -right-1 bg-warning rounded-full p-1">
                 <AlertTriangle className="h-4 w-4 text-white" />
               </div>
             </div>

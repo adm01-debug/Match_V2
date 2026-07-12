@@ -30,14 +30,14 @@ const origemLabels: Record<FonteCandidato, string> = {
 };
 
 const origemColors: Record<FonteCandidato, string> = {
-  portal: "bg-blue-500/10 text-blue-600 border-blue-500/20",
-  linkedin: "bg-sky-500/10 text-sky-600 border-sky-500/20",
-  indeed: "bg-purple-500/10 text-purple-600 border-purple-500/20",
-  catho: "bg-orange-500/10 text-orange-600 border-orange-500/20",
-  infojobs: "bg-green-500/10 text-green-600 border-green-500/20",
-  indicacao: "bg-pink-500/10 text-pink-600 border-pink-500/20",
-  espontaneo: "bg-cyan-500/10 text-cyan-600 border-cyan-500/20",
-  outros: "bg-gray-500/10 text-gray-600 border-gray-500/20",
+  portal: "bg-info/10 text-info border-info/20",
+  linkedin: "bg-info/10 text-info border-info/20",
+  indeed: "bg-accent/10 text-accent border-accent/20",
+  catho: "bg-warning/10 text-warning border-warning/20",
+  infojobs: "bg-success/10 text-success border-success/20",
+  indicacao: "bg-accent/10 text-accent border-accent/20",
+  espontaneo: "bg-info/10 text-info border-info/20",
+  outros: "bg-muted-foreground/10 text-foreground border-border/20",
 };
 
 function getScoreColor(score: number): string {

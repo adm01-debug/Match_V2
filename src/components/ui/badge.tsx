@@ -24,11 +24,11 @@ const badgeVariants = cva(
         gradient:
           "border-transparent bg-gradient-to-r from-primary to-accent text-white",
         "gradient-success":
-          "border-transparent bg-gradient-to-r from-emerald-500 to-teal-500 text-white",
+          "border-transparent bg-gradient-to-r from-success to-success text-white",
         "gradient-warning":
-          "border-transparent bg-gradient-to-r from-amber-500 to-orange-500 text-white",
+          "border-transparent bg-gradient-to-r from-warning to-warning text-white",
         "gradient-danger":
-          "border-transparent bg-gradient-to-r from-red-500 to-rose-500 text-white",
+          "border-transparent bg-gradient-to-r from-destructive to-destructive text-white",
         // Glass variants
         glass:
           "border-white/20 bg-white/10 backdrop-blur-sm text-foreground",

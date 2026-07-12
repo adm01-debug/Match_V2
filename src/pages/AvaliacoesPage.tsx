@@ -78,9 +78,9 @@ export default function AvaliacoesPage() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {[
             { label: 'Total', value: stats.total, icon: ClipboardCheck },
-            { label: 'Aprovados', value: stats.aprovados, className: 'text-green-600' },
+            { label: 'Aprovados', value: stats.aprovados, className: 'text-success' },
             { label: 'Reprovados', value: stats.reprovados, className: 'text-destructive' },
-            { label: 'Pendentes', value: stats.pendentes, className: 'text-amber-600' },
+            { label: 'Pendentes', value: stats.pendentes, className: 'text-warning' },
           ].map((s) => (
             <Card key={s.label}>
               <CardContent className="p-4">

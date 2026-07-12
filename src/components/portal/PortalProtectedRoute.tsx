@@ -249,8 +249,8 @@ const PortalProtectedRoute: React.FC<PortalProtectedRouteProps> = ({ children })
           animate={{ opacity: 1, y: 0 }}
           className="flex flex-col items-center gap-4 p-8 max-w-md text-center"
         >
-          <div className="p-4 rounded-full bg-amber-100 dark:bg-amber-900/30">
-            <UserPlus className="h-8 w-8 text-amber-600" />
+          <div className="p-4 rounded-full bg-warning dark:bg-warning/30">
+            <UserPlus className="h-8 w-8 text-warning" />
           </div>
           <h2 className="text-xl font-semibold">Conta não configurada</h2>
           <p className="text-muted-foreground">

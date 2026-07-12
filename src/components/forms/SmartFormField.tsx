@@ -135,13 +135,13 @@ export const SmartFormField = forwardRef<HTMLInputElement, SmartFormFieldProps>(
       return <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />;
     }
     if (savedSuccessfully) {
-      return <Check className="h-4 w-4 text-green-500" />;
+      return <Check className="h-4 w-4 text-success" />;
     }
     if (validationState === 'validating') {
       return <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />;
     }
     if (validationState === 'valid' && isTouched) {
-      return <Check className="h-4 w-4 text-green-500" />;
+      return <Check className="h-4 w-4 text-success" />;
     }
     if (validationState === 'invalid' || error) {
       return <AlertCircle className="h-4 w-4 text-destructive" />;
@@ -215,7 +215,7 @@ export const SmartFormField = forwardRef<HTMLInputElement, SmartFormFieldProps>(
           className={cn(
             "transition-all duration-200",
             error && "border-destructive focus-visible:ring-destructive",
-            validationState === 'valid' && isTouched && "border-green-500 focus-visible:ring-green-500",
+            validationState === 'valid' && isTouched && "border-success focus-visible:ring-success",
             className
           )}
           {...props}

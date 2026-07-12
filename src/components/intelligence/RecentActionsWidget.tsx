@@ -286,7 +286,7 @@ export const RecentActionsWidget = memo(function RecentActionsWidget({
                         size="icon"
                         className={cn(
                           "h-8 w-8",
-                          favorites.includes(action.id) && "text-yellow-500"
+                          favorites.includes(action.id) && "text-warning"
                         )}
                         onClick={() => toggleFavorite(action.id)}
                       >

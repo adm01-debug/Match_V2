@@ -47,13 +47,13 @@ const etapas = [
 
 const getEtapaColor = (etapa: string) => {
   const colors: Record<string, string> = {
-    'candidatura': 'bg-blue-500/20 text-blue-700 dark:text-blue-400',
-    'entrevista_rh': 'bg-purple-500/20 text-purple-700 dark:text-purple-400',
-    'teste': 'bg-orange-500/20 text-orange-700 dark:text-orange-400',
-    'entrevista_gestor': 'bg-indigo-500/20 text-indigo-700 dark:text-indigo-400',
-    'proposta': 'bg-green-500/20 text-green-700 dark:text-green-400',
-    'feedback_positivo': 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-400',
-    'feedback_negativo': 'bg-red-500/20 text-red-700 dark:text-red-400',
+    'candidatura': 'bg-info/20 text-info dark:text-info',
+    'entrevista_rh': 'bg-accent/20 text-accent dark:text-accent',
+    'teste': 'bg-warning/20 text-warning dark:text-warning',
+    'entrevista_gestor': 'bg-accent/20 text-accent dark:text-accent',
+    'proposta': 'bg-success/20 text-success dark:text-success',
+    'feedback_positivo': 'bg-success/20 text-success dark:text-success',
+    'feedback_negativo': 'bg-destructive/20 text-destructive dark:text-destructive',
   };
   return colors[etapa] || 'bg-muted text-muted-foreground';
 };

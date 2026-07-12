@@ -31,9 +31,9 @@ interface InfoTooltipProps {
 }
 
 const variantConfig = {
-  info: { icon: Info, color: "text-blue-500", bg: "bg-blue-500/10" },
+  info: { icon: Info, color: "text-info", bg: "bg-info/10" },
   help: { icon: HelpCircle, color: "text-muted-foreground", bg: "bg-muted" },
-  tip: { icon: Lightbulb, color: "text-yellow-500", bg: "bg-yellow-500/10" },
+  tip: { icon: Lightbulb, color: "text-warning", bg: "bg-warning/10" },
   warning: { icon: AlertTriangle, color: "text-warning", bg: "bg-warning/10" },
   success: { icon: CheckCircle2, color: "text-success", bg: "bg-success/10" }
 };

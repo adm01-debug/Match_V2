@@ -75,12 +75,12 @@ export default function AdvancedAnalyticsPage() {
   }), []);
 
   const kpiItems = [
-    { icon: Clock, color: 'text-blue-500', label: 'Time to Hire', value: `${kpis.timeToHire.value} dias`, change: kpis.timeToHire.change, good: 'down' },
-    { icon: DollarSign, color: 'text-green-500', label: 'Cost per Hire', value: `R$ ${kpis.costPerHire.value.toLocaleString()}`, change: kpis.costPerHire.change, good: 'down' },
-    { icon: Target, color: 'text-purple-500', label: 'Offer Acceptance', value: `${kpis.offerAcceptance.value}%`, change: kpis.offerAcceptance.change, good: 'up' },
-    { icon: Award, color: 'text-yellow-500', label: 'Quality of Hire', value: `${kpis.qualityOfHire.value}%`, change: kpis.qualityOfHire.change, good: 'up' },
-    { icon: Globe, color: 'text-cyan-500', label: 'Source ROI', value: `${kpis.sourceROI.value}%`, change: kpis.sourceROI.change, good: 'up' },
-    { icon: Users, color: 'text-pink-500', label: 'Retenção 6 meses', value: `${kpis.retention6m.value}%`, change: kpis.retention6m.change, good: 'up' },
+    { icon: Clock, color: 'text-info', label: 'Time to Hire', value: `${kpis.timeToHire.value} dias`, change: kpis.timeToHire.change, good: 'down' },
+    { icon: DollarSign, color: 'text-success', label: 'Cost per Hire', value: `R$ ${kpis.costPerHire.value.toLocaleString()}`, change: kpis.costPerHire.change, good: 'down' },
+    { icon: Target, color: 'text-accent', label: 'Offer Acceptance', value: `${kpis.offerAcceptance.value}%`, change: kpis.offerAcceptance.change, good: 'up' },
+    { icon: Award, color: 'text-warning', label: 'Quality of Hire', value: `${kpis.qualityOfHire.value}%`, change: kpis.qualityOfHire.change, good: 'up' },
+    { icon: Globe, color: 'text-info', label: 'Source ROI', value: `${kpis.sourceROI.value}%`, change: kpis.sourceROI.change, good: 'up' },
+    { icon: Users, color: 'text-accent', label: 'Retenção 6 meses', value: `${kpis.retention6m.value}%`, change: kpis.retention6m.change, good: 'up' },
   ];
 
   return (
@@ -113,7 +113,7 @@ export default function AdvancedAnalyticsPage() {
                 <CardContent className="pt-4">
                   <div className="flex items-center justify-between mb-2">
                     <kpi.icon className={cn("h-5 w-5", kpi.color)} />
-                    <Badge variant="secondary" className={cn("text-xs", isPositive ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700")}>
+                    <Badge variant="secondary" className={cn("text-xs", isPositive ? "bg-success text-success" : "bg-destructive text-destructive")}>
                       {kpi.change < 0 ? <TrendingDown className="h-3 w-3 mr-1" /> : <TrendingUp className="h-3 w-3 mr-1" />}
                       {kpi.change}%
                     </Badge>

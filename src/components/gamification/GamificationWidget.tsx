@@ -91,7 +91,7 @@ export const GamificationWidget = memo(function GamificationWidget({
               animate={{ rotate: [0, 10, -10, 0] }}
               transition={{ duration: 2, repeat: Infinity }}
             >
-              <Trophy className="h-5 w-5 text-yellow-500" />
+              <Trophy className="h-5 w-5 text-warning" />
             </motion.div>
             Seu Progresso
           </CardTitle>
@@ -135,14 +135,14 @@ export const GamificationWidget = memo(function GamificationWidget({
         <div className="grid grid-cols-2 gap-3">
           {/* Streak */}
           <motion.div 
-            className="flex items-center gap-2 p-3 rounded-xl bg-gradient-to-br from-orange-500/10 to-red-500/5 border border-orange-500/20"
+            className="flex items-center gap-2 p-3 rounded-xl bg-gradient-to-br from-warning/10 to-destructive/5 border border-warning/20"
             whileHover={{ scale: 1.02 }}
           >
             <motion.div
               animate={streak >= 3 ? { scale: [1, 1.2, 1] } : {}}
               transition={{ duration: 1, repeat: Infinity }}
             >
-              <Flame className={cn("h-5 w-5", streak >= 7 ? "text-orange-500" : streak >= 3 ? "text-amber-500" : "text-muted-foreground")} />
+              <Flame className={cn("h-5 w-5", streak >= 7 ? "text-warning" : streak >= 3 ? "text-warning" : "text-muted-foreground")} />
             </motion.div>
             <div>
               <p className="text-lg font-bold">{streak}</p>

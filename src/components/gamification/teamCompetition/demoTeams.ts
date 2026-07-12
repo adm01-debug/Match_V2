@@ -3,7 +3,7 @@ import type { Team } from './types';
 export const generateDemoTeams = (currentTeamId?: string): Team[] => {
   const teams: Team[] = [
     {
-      id: 'team-rh', name: 'RH Champions', icon: '👥', color: 'from-blue-500 to-indigo-600',
+      id: 'team-rh', name: 'RH Champions', icon: '👥', color: 'from-info to-accent',
       members: [
         { id: 'm1', name: 'Ana Silva', xp: 4500, contributionPercent: 35 },
         { id: 'm2', name: 'Carlos Santos', xp: 3200, contributionPercent: 25 },
@@ -14,7 +14,7 @@ export const generateDemoTeams = (currentTeamId?: string): Team[] => {
       goalProgress: 12800, goalTarget: 15000,
     },
     {
-      id: 'team-tech', name: 'Tech Titans', icon: '💻', color: 'from-purple-500 to-pink-600',
+      id: 'team-tech', name: 'Tech Titans', icon: '💻', color: 'from-accent to-accent',
       members: [
         { id: 'm5', name: 'Ricardo Lima', xp: 4200, contributionPercent: 38 },
         { id: 'm6', name: 'Juliana Alves', xp: 3000, contributionPercent: 27 },
@@ -25,7 +25,7 @@ export const generateDemoTeams = (currentTeamId?: string): Team[] => {
       goalProgress: 11000, goalTarget: 15000,
     },
     {
-      id: 'team-sales', name: 'Sales Stars', icon: '⭐', color: 'from-amber-500 to-orange-600',
+      id: 'team-sales', name: 'Sales Stars', icon: '⭐', color: 'from-warning to-warning',
       members: [
         { id: 'm9', name: 'André Ferreira', xp: 3800, contributionPercent: 40 },
         { id: 'm10', name: 'Camila Rocha', xp: 2900, contributionPercent: 30 },
@@ -35,7 +35,7 @@ export const generateDemoTeams = (currentTeamId?: string): Team[] => {
       goalProgress: 9500, goalTarget: 15000,
     },
     {
-      id: 'team-marketing', name: 'Marketing Mavericks', icon: '🚀', color: 'from-emerald-500 to-teal-600',
+      id: 'team-marketing', name: 'Marketing Mavericks', icon: '🚀', color: 'from-success to-success',
       members: [
         { id: 'm12', name: 'Amanda Nascimento', xp: 3200, contributionPercent: 45 },
         { id: 'm13', name: 'Gabriel Santos', xp: 2500, contributionPercent: 35 },

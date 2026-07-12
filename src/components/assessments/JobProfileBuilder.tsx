@@ -287,12 +287,12 @@ export function JobProfileBuilder({
           
           {/* Dealbreakers Tab */}
           <TabsContent value="dealbreakers" className="space-y-6 mt-4">
-            <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
-              <div className="flex items-center gap-2 text-red-700 mb-2">
+            <div className="p-4 bg-destructive border border-destructive rounded-lg">
+              <div className="flex items-center gap-2 text-destructive mb-2">
                 <AlertTriangle className="h-4 w-4" />
                 <span className="font-medium">Critérios Eliminatórios</span>
               </div>
-              <p className="text-sm text-red-600">
+              <p className="text-sm text-destructive">
                 Perfis que violarem estes critérios serão automaticamente marcados como incompatíveis
               </p>
             </div>

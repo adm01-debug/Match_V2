@@ -66,8 +66,8 @@ export function JobPublisher({ vagaTitle, onPublish }: JobPublisherProps) {
     const result = results[boardId];
     if (!result) return null;
     return result.success 
-      ? <Check className="h-4 w-4 text-green-500" />
-      : <X className="h-4 w-4 text-red-500" />;
+      ? <Check className="h-4 w-4 text-success" />
+      : <X className="h-4 w-4 text-destructive" />;
   };
 
   return (
@@ -107,7 +107,7 @@ export function JobPublisher({ vagaTitle, onPublish }: JobPublisherProps) {
                   {getStatusIcon(board.id)}
                   {results[board.id]?.url && (
                     <a href={results[board.id]?.url} target="_blank" rel="noopener noreferrer">
-                      <ExternalLink className="h-4 w-4 text-blue-500" />
+                      <ExternalLink className="h-4 w-4 text-info" />
                     </a>
                   )}
                 </div>

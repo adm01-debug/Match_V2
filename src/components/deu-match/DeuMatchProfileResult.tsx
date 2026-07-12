@@ -26,19 +26,19 @@ export const DeuMatchProfileResult: React.FC<DeuMatchProfileResultProps> = ({
     .filter(Boolean);
 
   const gradient = isEmpresa 
-    ? 'from-indigo-50 via-purple-50 to-pink-50 dark:from-slate-900 dark:via-indigo-900/20 dark:to-slate-900'
-    : 'from-pink-50 via-rose-50 to-orange-50 dark:from-slate-900 dark:via-pink-900/20 dark:to-slate-900';
+    ? 'from-accent via-accent to-accent dark:from-slate-900 dark:via-accent/20 dark:to-slate-900'
+    : 'from-accent via-destructive to-warning dark:from-slate-900 dark:via-accent/20 dark:to-slate-900';
   const headerGradient = isEmpresa 
-    ? 'from-indigo-500 to-purple-500' 
-    : 'from-pink-500 to-rose-500';
+    ? 'from-accent to-accent' 
+    : 'from-accent to-destructive';
   const Icon = isEmpresa ? Building2 : User;
   const title = isEmpresa ? 'Perfil Cultural Definido!' : 'Valores Descobertos!';
   const sectionTitle = isEmpresa ? 'Seus 5 Valores Principais' : 'O Que Mais Importa Para Você';
   const SectionIcon = isEmpresa ? Trophy : Heart;
-  const sectionIconColor = isEmpresa ? 'text-yellow-500' : 'text-pink-500';
+  const sectionIconColor = isEmpresa ? 'text-warning' : 'text-accent';
   const matchButtonGradient = isEmpresa 
-    ? 'bg-gradient-to-r from-pink-500 to-rose-500' 
-    : 'bg-gradient-to-r from-purple-500 to-indigo-500';
+    ? 'bg-gradient-to-r from-accent to-destructive' 
+    : 'bg-gradient-to-r from-accent to-accent';
 
   return (
     <Layout title={isEmpresa ? "Perfil Cultural" : "Seus Valores"}>

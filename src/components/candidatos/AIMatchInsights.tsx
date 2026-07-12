@@ -26,9 +26,9 @@ interface AIMatchInsightsProps {
 type ScoreLevel = 'high' | 'medium' | 'low';
 
 const SCORE_CONFIG: Record<ScoreLevel, { color: string; badge: string; variant: 'default' | 'secondary' | 'destructive' }> = { 
-  high: { color: 'text-green-500', badge: 'Excelente', variant: 'default' }, 
-  medium: { color: 'text-yellow-500', badge: 'Bom', variant: 'secondary' }, 
-  low: { color: 'text-red-500', badge: 'Regular', variant: 'destructive' },
+  high: { color: 'text-success', badge: 'Excelente', variant: 'default' }, 
+  medium: { color: 'text-warning', badge: 'Bom', variant: 'secondary' }, 
+  low: { color: 'text-destructive', badge: 'Regular', variant: 'destructive' },
 };
 
 function getScoreLevel(score: number): ScoreLevel {
@@ -155,7 +155,7 @@ function AIMatchInsightsComponent({
                     {insight.highlights && insight.highlights.length > 0 && (
                       <div className="flex items-start gap-2 mt-2">
                         <CheckCircle 
-                          className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" 
+                          className="h-4 w-4 text-success mt-0.5 flex-shrink-0" 
                           aria-hidden="true"
                         />
                         <div className="text-sm" role="list" aria-label="Pontos fortes">
@@ -167,7 +167,7 @@ function AIMatchInsightsComponent({
                     {insight.concerns && insight.concerns.length > 0 && (
                       <div className="flex items-start gap-2 mt-1">
                         <AlertTriangle 
-                          className="h-4 w-4 text-yellow-500 mt-0.5 flex-shrink-0" 
+                          className="h-4 w-4 text-warning mt-0.5 flex-shrink-0" 
                           aria-hidden="true"
                         />
                         <div className="text-sm text-muted-foreground" role="list" aria-label="Pontos de atenção">
@@ -191,7 +191,7 @@ function AIMatchInsightsComponent({
         {hasRecommendations && (
           <div className="space-y-3" role="region" aria-label="Recomendações">
             <h4 className="font-medium flex items-center gap-2">
-              <Lightbulb className="h-4 w-4 text-yellow-500" aria-hidden="true" />
+              <Lightbulb className="h-4 w-4 text-warning" aria-hidden="true" />
               Recomendações
             </h4>
             <ul className="space-y-2" role="list">

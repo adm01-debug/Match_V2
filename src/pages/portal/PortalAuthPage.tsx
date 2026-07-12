@@ -129,9 +129,9 @@ const PortalAuthPage = () => {
                 exit={{ opacity: 0, y: -10, scale: 0.95 }}
                 transition={{ duration: 0.3, ease: "easeOut" }}
               >
-                <Alert className="mb-4 border-amber-500/50 bg-amber-50 dark:bg-amber-950/20">
-                  <ShieldAlert className="h-4 w-4 text-amber-600" />
-                  <AlertDescription className="text-amber-800 dark:text-amber-200">
+                <Alert className="mb-4 border-warning/50 bg-warning dark:bg-warning/20">
+                  <ShieldAlert className="h-4 w-4 text-warning" />
+                  <AlertDescription className="text-warning dark:text-warning">
                     Você precisa fazer login para acessar essa página.
                   </AlertDescription>
                 </Alert>

@@ -74,7 +74,7 @@ export const DNAHelix3D: React.FC<DNAHelix3DProps> = ({
       {/* Center Score */}
       <div className="absolute inset-0 flex items-center justify-center">
         <motion.div
-          className="bg-gradient-to-br from-purple-600 to-pink-600 rounded-full flex items-center justify-center shadow-xl"
+          className="bg-gradient-to-br from-accent to-accent rounded-full flex items-center justify-center shadow-xl"
           style={{ width: size === 'sm' ? 60 : size === 'md' ? 80 : 100, height: size === 'sm' ? 60 : size === 'md' ? 80 : 100 }}
           animate={animated ? { scale: [1, 1.05, 1] } : {}}
           transition={{ duration: 2, repeat: Infinity }}

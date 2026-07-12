@@ -107,7 +107,7 @@ export default function SecuritySettingsPage() {
   };
 
   const score = securityScore();
-  const scoreColor = score >= 80 ? 'text-green-600' : score >= 50 ? 'text-amber-600' : 'text-red-600';
+  const scoreColor = score >= 80 ? 'text-success' : score >= 50 ? 'text-warning' : 'text-destructive';
 
   return (
     <div className="container max-w-4xl py-8 space-y-8">
@@ -145,9 +145,9 @@ export default function SecuritySettingsPage() {
           <div className="mt-4 space-y-2">
             <div className="flex items-center gap-2 text-sm">
               {is2FAEnabled ? (
-                <CheckCircle2 className="h-4 w-4 text-green-600" />
+                <CheckCircle2 className="h-4 w-4 text-success" />
               ) : (
-                <AlertTriangle className="h-4 w-4 text-amber-600" />
+                <AlertTriangle className="h-4 w-4 text-warning" />
               )}
               <span>
                 {is2FAEnabled 
@@ -157,9 +157,9 @@ export default function SecuritySettingsPage() {
             </div>
             <div className="flex items-center gap-2 text-sm">
               {passkeys.length > 0 ? (
-                <CheckCircle2 className="h-4 w-4 text-green-600" />
+                <CheckCircle2 className="h-4 w-4 text-success" />
               ) : passkeysSupported ? (
-                <AlertTriangle className="h-4 w-4 text-amber-600" />
+                <AlertTriangle className="h-4 w-4 text-warning" />
               ) : (
                 <Fingerprint className="h-4 w-4 text-muted-foreground" />
               )}

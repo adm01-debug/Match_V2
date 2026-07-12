@@ -43,7 +43,7 @@ const XPGainIndicator = memo(function XPGainIndicator({
           }}
           className={cn(
             "absolute z-10 flex items-center gap-1 px-2 py-1 rounded-full",
-            "bg-gradient-to-r from-emerald-500 to-green-600 text-white",
+            "bg-gradient-to-r from-success to-success text-white",
             "text-xs font-bold shadow-lg",
             positionClasses[position]
           )}
@@ -131,8 +131,8 @@ export const InteractiveXPCard = memo(function InteractiveXPCard({
     success: "shadow-success/20",
     warning: "shadow-warning/20",
     destructive: "shadow-destructive/20",
-    amber: "shadow-amber-500/20",
-    purple: "shadow-purple-500/20",
+    amber: "shadow-warning/20",
+    purple: "shadow-accent/20",
   };
 
   return (
@@ -204,7 +204,7 @@ export const InteractiveXPCard = memo(function InteractiveXPCard({
             transition={{ duration: 0.8, delay: i * 0.05 }}
             className="absolute pointer-events-none"
           >
-            <Star className="w-3 h-3 text-yellow-500 fill-yellow-500" />
+            <Star className="w-3 h-3 text-warning fill-warning" />
           </motion.div>
         ))}
 
@@ -345,11 +345,11 @@ export const XPActionCard = memo(function XPActionCard({
               "w-10 h-10 rounded-xl flex items-center justify-center",
               isCompleted 
                 ? "bg-success/20" 
-                : "bg-amber-500/20"
+                : "bg-warning/20"
             )}>
               <Icon className={cn(
                 "w-5 h-5",
-                isCompleted ? "text-success" : "text-amber-500"
+                isCompleted ? "text-success" : "text-warning"
               )} />
             </div>
             <div>
@@ -362,7 +362,7 @@ export const XPActionCard = memo(function XPActionCard({
             "px-2 py-1 rounded-full text-xs font-bold flex items-center gap-1",
             isCompleted 
               ? "bg-success/20 text-success" 
-              : "bg-amber-500/20 text-amber-600"
+              : "bg-warning/20 text-warning"
           )}>
             <Zap className="w-3 h-3" />
             +{xpReward} XP
@@ -379,7 +379,7 @@ export const XPActionCard = memo(function XPActionCard({
             </div>
             <div className="h-1.5 bg-muted rounded-full overflow-hidden">
               <motion.div
-                className="h-full bg-gradient-to-r from-amber-500 to-orange-500 rounded-full"
+                className="h-full bg-gradient-to-r from-warning to-warning rounded-full"
                 initial={{ width: 0 }}
                 animate={{ width: `${(progress / maxProgress) * 100}%` }}
                 transition={{ duration: 0.5, ease: "easeOut" }}

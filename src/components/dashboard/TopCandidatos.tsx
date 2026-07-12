@@ -106,11 +106,11 @@ function TopCandidatosComponent({
           <div data-testid="top-candidatos" className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <motion.div 
-                className="p-1.5 rounded-lg bg-amber-500/10" 
+                className="p-1.5 rounded-lg bg-warning/10" 
                 aria-hidden="true"
                 whileHover={{ scale: 1.1, rotate: 10 }}
               >
-                <Trophy className="h-4 w-4 text-amber-500" />
+                <Trophy className="h-4 w-4 text-warning" />
               </motion.div>
               <CardTitle className="text-base font-semibold">Top Candidatos</CardTitle>
               <Badge variant="secondary" className="text-[10px] px-1.5 py-0">
@@ -165,7 +165,7 @@ function TopCandidatosComponent({
                       animate={{ rotate: [0, -10, 10, 0] }}
                       transition={{ duration: 0.5, delay: 0.5 }}
                     >
-                      <Star className="h-5 w-5 text-amber-500 fill-amber-500" aria-hidden="true" />
+                      <Star className="h-5 w-5 text-warning fill-warning" aria-hidden="true" />
                     </motion.div>
                   ) : (
                     <span className="text-sm font-bold text-muted-foreground">
@@ -177,7 +177,7 @@ function TopCandidatosComponent({
                 <Avatar className="h-9 w-9 shrink-0">
                   <AvatarFallback className={cn(
                     "text-xs font-medium",
-                    index === 0 ? "bg-amber-500/20 text-amber-700" : "bg-muted"
+                    index === 0 ? "bg-warning/20 text-warning" : "bg-muted"
                   )}>
                     {getInitials(candidato.nome)}
                   </AvatarFallback>

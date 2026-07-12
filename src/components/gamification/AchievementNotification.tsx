@@ -29,33 +29,33 @@ const tierStyles: Record<AchievementTier, {
   particles: string[];
 }> = {
   bronze: {
-    gradient: "from-amber-700 via-amber-600 to-amber-700",
-    glow: "shadow-amber-500/40",
-    text: "text-amber-100",
+    gradient: "from-warning via-warning to-warning",
+    glow: "shadow-warning/40",
+    text: "text-warning",
     particles: ["#CD7F32", "#B87333", "#DA9100"],
   },
   silver: {
     gradient: "from-slate-400 via-slate-300 to-slate-400",
     glow: "shadow-slate-300/40",
-    text: "text-slate-900",
+    text: "text-foreground",
     particles: ["#C0C0C0", "#A8A9AD", "#D3D3D3"],
   },
   gold: {
-    gradient: "from-yellow-500 via-amber-400 to-yellow-500",
-    glow: "shadow-yellow-400/50",
-    text: "text-yellow-900",
+    gradient: "from-warning via-warning to-warning",
+    glow: "shadow-warning/50",
+    text: "text-warning",
     particles: ["#FFD700", "#FFC107", "#FFB300"],
   },
   platinum: {
-    gradient: "from-cyan-400 via-teal-300 to-cyan-400",
-    glow: "shadow-cyan-300/50",
-    text: "text-cyan-900",
+    gradient: "from-info via-success to-info",
+    glow: "shadow-info/50",
+    text: "text-info",
     particles: ["#00CED1", "#20B2AA", "#40E0D0"],
   },
   diamond: {
-    gradient: "from-violet-500 via-purple-400 to-violet-500",
-    glow: "shadow-purple-400/60",
-    text: "text-purple-50",
+    gradient: "from-accent via-accent to-accent",
+    glow: "shadow-accent/60",
+    text: "text-accent",
     particles: ["#B9F2FF", "#E0E7FF", "#C4B5FD"],
   },
 };

@@ -51,12 +51,12 @@ export function AnalyticsSourcesTab({ data }: AnalyticsSourcesTabProps) {
                       <td className="text-right py-3 px-4">{source.candidatos}</td>
                       <td className="text-right py-3 px-4">{source.contratados}</td>
                       <td className="text-right py-3 px-4">
-                        <Badge variant="secondary" className={cn(source.taxaConversao >= 10 ? "bg-green-100 text-green-700" : source.taxaConversao >= 5 ? "bg-yellow-100 text-yellow-700" : "bg-orange-100 text-orange-700")}>{source.taxaConversao}%</Badge>
+                        <Badge variant="secondary" className={cn(source.taxaConversao >= 10 ? "bg-success text-success" : source.taxaConversao >= 5 ? "bg-warning text-warning" : "bg-warning text-warning")}>{source.taxaConversao}%</Badge>
                       </td>
                       <td className="text-right py-3 px-4">R$ {source.custo.toLocaleString()}</td>
                       <td className="text-right py-3 px-4">R$ {custoPorContratacao.toLocaleString()}</td>
                       <td className="text-right py-3 px-4">
-                        <span className={cn("font-medium", roi >= 100 ? "text-green-600" : "text-yellow-600")}>{roi.toFixed(0)}%</span>
+                        <span className={cn("font-medium", roi >= 100 ? "text-success" : "text-warning")}>{roi.toFixed(0)}%</span>
                       </td>
                     </motion.tr>
                   );

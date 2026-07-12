@@ -71,9 +71,9 @@ export function ConfirmDialog({
   const getIcon = () => {
     switch (variant) {
       case 'destructive':
-        return <Trash2 className="h-6 w-6 text-red-500" />;
+        return <Trash2 className="h-6 w-6 text-destructive" />;
       case 'warning':
-        return <AlertTriangle className="h-6 w-6 text-yellow-500" />;
+        return <AlertTriangle className="h-6 w-6 text-warning" />;
       default:
         return <Check className="h-6 w-6 text-primary" />;
     }
@@ -97,8 +97,8 @@ export function ConfirmDialog({
         <AlertDialogHeader>
           <div className="flex items-center gap-3">
             <div className={`p-2 rounded-full ${
-              variant === 'destructive' ? 'bg-red-100' :
-              variant === 'warning' ? 'bg-yellow-100' : 'bg-primary/10'
+              variant === 'destructive' ? 'bg-destructive' :
+              variant === 'warning' ? 'bg-warning' : 'bg-primary/10'
             }`}>
               {getIcon()}
             </div>
@@ -134,7 +134,7 @@ export function ConfirmDialog({
           <AlertDialogAction
             onClick={handleConfirm}
             disabled={isConfirmDisabled || loading}
-            className={getConfirmButtonVariant() === 'destructive' ? 'bg-red-600 hover:bg-red-700' : ''}
+            className={getConfirmButtonVariant() === 'destructive' ? 'bg-destructive hover:bg-destructive' : ''}
           >
             {loading ? (
               <span className="flex items-center">

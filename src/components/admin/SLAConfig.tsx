@@ -62,7 +62,7 @@ export function SLADashboard() {
             <span className="font-medium">{item.etapa}</span>
             <div className="flex gap-2">
               <Badge variant="secondary">{item.total} total</Badge>
-              {item.emRisco > 0 && <Badge variant="outline" className="text-yellow-600">{item.emRisco} em risco</Badge>}
+              {item.emRisco > 0 && <Badge variant="outline" className="text-warning">{item.emRisco} em risco</Badge>}
               {item.vencidos > 0 && <Badge variant="destructive">{item.vencidos} vencidos</Badge>}
             </div>
           </div>

@@ -80,8 +80,8 @@ export const OfferCard = memo(function OfferCard({
                   <h3 className="font-semibold text-lg">{offer.candidatoNome}</h3>
                   <Badge variant="outline" className={cn(
                     "text-xs",
-                    offer.status === 'aceita' && "bg-green-100 text-green-700 border-green-200",
-                    offer.status === 'recusada' && "bg-red-100 text-red-700 border-red-200"
+                    offer.status === 'aceita' && "bg-success text-success border-success",
+                    offer.status === 'recusada' && "bg-destructive text-destructive border-destructive"
                   )}>
                     {config.label}
                   </Badge>
@@ -143,7 +143,7 @@ export const OfferCard = memo(function OfferCard({
               {offer.assinadaEm && (
                 <>
                   <span>•</span>
-                  <span className="text-green-600">
+                  <span className="text-success">
                     Assinada em {format(offer.assinadaEm, "dd/MM/yyyy")}
                   </span>
                 </>

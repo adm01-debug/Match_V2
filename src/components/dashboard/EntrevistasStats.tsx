@@ -108,7 +108,7 @@ function EntrevistasStatsComponent() {
             </div>
             <div className="relative h-3 rounded-full overflow-hidden bg-muted/50">
               <motion.div
-                className="absolute inset-y-0 left-0 bg-gradient-to-r from-success to-emerald-400 rounded-full"
+                className="absolute inset-y-0 left-0 bg-gradient-to-r from-success to-success rounded-full"
                 initial={{ width: 0 }}
                 animate={{ width: `${stats.taxaAprovacao}%` }}
                 transition={{ duration: 0.8, ease: 'easeOut' }}
@@ -136,7 +136,7 @@ function EntrevistasStatsComponent() {
             </div>
             <div className="relative h-3 rounded-full overflow-hidden bg-muted/50">
               <motion.div
-                className="absolute inset-y-0 left-0 bg-gradient-to-r from-destructive to-rose-400 rounded-full"
+                className="absolute inset-y-0 left-0 bg-gradient-to-r from-destructive to-destructive rounded-full"
                 initial={{ width: 0 }}
                 animate={{ width: `${stats.taxaReprovacao}%` }}
                 transition={{ duration: 0.8, ease: 'easeOut', delay: 0.1 }}

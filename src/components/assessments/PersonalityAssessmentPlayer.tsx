@@ -43,19 +43,19 @@ const FRAMEWORK_INFO = {
     icon: Brain,
     label: 'Big Five (OCEAN)',
     description: 'Abertura, Conscienciosidade, Extroversão, Amabilidade, Neuroticismo',
-    color: 'text-blue-500',
+    color: 'text-info',
   },
   mbti: {
     icon: Users,
     label: 'MBTI (16 Tipos)',
     description: 'Descubra seu tipo de personalidade entre os 16 tipos',
-    color: 'text-purple-500',
+    color: 'text-accent',
   },
   enneagram: {
     icon: Compass,
     label: 'Eneagrama (9 Tipos)',
     description: 'Identifique seu tipo central, asas e padrões de integração',
-    color: 'text-amber-500',
+    color: 'text-warning',
   },
 };
 
@@ -202,7 +202,7 @@ export function PersonalityAssessmentPlayer({
                     <TabsTrigger key={fw} value={fw} className="gap-2">
                       <Icon className={`h-4 w-4 ${info.color}`} />
                       <span className="hidden sm:inline">{fw.toUpperCase()}</span>
-                      {isComplete && <CheckCircle2 className="h-3 w-3 text-green-500" />}
+                      {isComplete && <CheckCircle2 className="h-3 w-3 text-success" />}
                     </TabsTrigger>
                   );
                 })}

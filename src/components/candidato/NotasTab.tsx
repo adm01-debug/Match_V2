@@ -24,10 +24,10 @@ interface NotasTabProps {
 }
 
 const tipoColors: Record<string, string> = {
-  geral: "bg-slate-500/20 text-slate-400",
-  entrevista: "bg-blue-500/20 text-blue-400",
-  tecnico: "bg-purple-500/20 text-purple-400",
-  comportamental: "bg-amber-500/20 text-amber-400",
+  geral: "bg-muted-foreground/20 text-muted-foreground",
+  entrevista: "bg-info/20 text-info",
+  tecnico: "bg-accent/20 text-accent",
+  comportamental: "bg-warning/20 text-warning",
 };
 
 const tipoLabels: Record<string, string> = {

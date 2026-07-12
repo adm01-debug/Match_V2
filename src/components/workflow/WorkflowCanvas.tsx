@@ -86,19 +86,19 @@ export function WorkflowCanvas({ initialNodes = [], initialEdges = [], onSave }:
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start" className="w-56">
               <DropdownMenuItem onClick={() => addNode('trigger', 'Novo Gatilho', 'Configure o gatilho')}>
-                <Zap className="h-4 w-4 mr-2 text-green-500" /> Gatilho (Trigger)
+                <Zap className="h-4 w-4 mr-2 text-success" /> Gatilho (Trigger)
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => addNode('action', 'Nova Ação', 'Configure a ação')}>
-                <Play className="h-4 w-4 mr-2 text-blue-500" /> Ação (Action)
+                <Play className="h-4 w-4 mr-2 text-info" /> Ação (Action)
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => addNode('condition', 'Nova Condição', 'Configure a condição')}>
-                <GitBranch className="h-4 w-4 mr-2 text-amber-500" /> Condição (If/Else)
+                <GitBranch className="h-4 w-4 mr-2 text-warning" /> Condição (If/Else)
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => addNode('delay', 'Aguardar', 'Configure o atraso')}>
-                <Clock className="h-4 w-4 mr-2 text-purple-500" /> Atraso (Delay)
+                <Clock className="h-4 w-4 mr-2 text-accent" /> Atraso (Delay)
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => addNode('webhook', 'Webhook', 'Configure o webhook')}>
-                <Globe className="h-4 w-4 mr-2 text-cyan-500" /> Webhook
+                <Globe className="h-4 w-4 mr-2 text-info" /> Webhook
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

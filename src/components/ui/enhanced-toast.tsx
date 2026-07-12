@@ -148,7 +148,7 @@ export const enhancedToast = {
         animate={{ scale: 1, opacity: 1, rotateX: 0 }}
         exit={{ scale: 0.5, opacity: 0, rotateX: -90 }}
         transition={{ type: "spring", stiffness: 300, damping: 20 }}
-        className="flex items-center gap-4 p-4 rounded-xl bg-gradient-to-r from-yellow-500/20 to-amber-500/20 border border-yellow-500/30 shadow-lg"
+        className="flex items-center gap-4 p-4 rounded-xl bg-gradient-to-r from-warning/20 to-warning/20 border border-warning/30 shadow-lg"
       >
         <motion.div
           animate={{ 
@@ -160,7 +160,7 @@ export const enhancedToast = {
             rotateY: { duration: 1, delay: 0.3 }
           }}
         >
-          <Trophy className="h-8 w-8 text-yellow-500" />
+          <Trophy className="h-8 w-8 text-warning" />
         </motion.div>
         <div>
           <p className="font-bold text-foreground">{title}</p>

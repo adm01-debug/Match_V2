@@ -106,7 +106,7 @@ export function SavedFiltersDropdown({
                   onClick={() => onApplyFilter(filter.filters)}
                 >
                   {filter.is_default && (
-                    <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
+                    <Star className="h-3 w-3 fill-warning text-warning" />
                   )}
                   <span className="truncate">{filter.name}</span>
                 </button>
@@ -121,7 +121,7 @@ export function SavedFiltersDropdown({
                     }}
                     title="Definir como padrão"
                   >
-                    <Star className={`h-3 w-3 ${filter.is_default ? 'fill-yellow-400' : ''}`} />
+                    <Star className={`h-3 w-3 ${filter.is_default ? 'fill-warning' : ''}`} />
                   </Button>
                   <Button
                     variant="ghost"

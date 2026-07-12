@@ -17,15 +17,15 @@ import { VagaStatsCards } from '@/components/vaga-detalhes/VagaStatsCards';
 import { VagaDetalhesTab } from '@/components/vaga-detalhes/VagaDetalhesTab';
 
 const statusStyles: Record<string, { bg: string; text: string }> = {
-  rascunho: { bg: "bg-gray-100", text: "text-gray-700" },
-  publicada: { bg: "bg-green-100", text: "text-green-700" },
-  em_selecao: { bg: "bg-blue-100", text: "text-blue-700" },
-  pausada: { bg: "bg-amber-100", text: "text-amber-700" },
-  encerrada: { bg: "bg-red-100", text: "text-red-700" },
+  rascunho: { bg: "bg-muted", text: "text-foreground" },
+  publicada: { bg: "bg-success", text: "text-success" },
+  em_selecao: { bg: "bg-info", text: "text-info" },
+  pausada: { bg: "bg-warning", text: "text-warning" },
+  encerrada: { bg: "bg-destructive", text: "text-destructive" },
 };
 
 const prioridadeStyles: Record<string, string> = {
-  urgente: "bg-red-500", alta: "bg-orange-500", media: "bg-yellow-500", baixa: "bg-green-500",
+  urgente: "bg-destructive", alta: "bg-warning", media: "bg-warning", baixa: "bg-success",
 };
 
 export default function VagaDetalhes() {
@@ -80,7 +80,7 @@ export default function VagaDetalhes() {
             <CardContent>{processos.length === 0 ? <p className="text-center py-8">Nenhum candidato</p> : <div className="space-y-3">{processos.slice(0, 10).map(p => (
               <div key={p.id} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg hover:bg-muted cursor-pointer" onClick={() => navigate(`/candidato/${p.candidatoId}`)}>
                 <div className="flex items-center gap-3"><Avatar><AvatarImage src={p.candidatoFoto} /><AvatarFallback>{p.candidatoNome?.charAt(0)}</AvatarFallback></Avatar><div><p className="font-medium">{p.candidatoNome}</p></div></div>
-                <div className="flex items-center gap-4">{p.matchScore && <div className="flex items-center gap-1"><Star className="h-4 w-4 text-amber-500" /><span>{p.matchScore}%</span></div>}<Badge variant="outline">{p.etapaAtual}</Badge></div>
+                <div className="flex items-center gap-4">{p.matchScore && <div className="flex items-center gap-1"><Star className="h-4 w-4 text-warning" /><span>{p.matchScore}%</span></div>}<Badge variant="outline">{p.etapaAtual}</Badge></div>
               </div>
             ))}</div>}</CardContent></Card>
           </TabsContent>

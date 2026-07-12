@@ -15,15 +15,15 @@ export function ResultsScreen({ respostas, onComplete }: ResultsScreenProps) {
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="max-w-2xl mx-auto p-6">
-      <Card className="border-2 border-pink-500/20">
+      <Card className="border-2 border-accent/20">
         <CardHeader className="text-center">
           <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring' }} className="mx-auto mb-4">
             <div className="relative">
-              <div className="w-20 h-20 rounded-full bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center">
+              <div className="w-20 h-20 rounded-full bg-gradient-to-br from-accent to-destructive flex items-center justify-center">
                 <CheckCircle2 className="h-10 w-10 text-white" />
               </div>
-              <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.3 }} className="absolute -top-1 -right-1 bg-yellow-400 rounded-full p-1">
-                <Star className="h-4 w-4 text-yellow-900" />
+              <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.3 }} className="absolute -top-1 -right-1 bg-warning rounded-full p-1">
+                <Star className="h-4 w-4 text-warning" />
               </motion.div>
             </div>
           </motion.div>
@@ -63,7 +63,7 @@ export function ResultsScreen({ respostas, onComplete }: ResultsScreenProps) {
               🎯 Agora vamos encontrar empresas que compartilham esses valores com você!
             </p>
           </div>
-          <Button onClick={onComplete} className="w-full bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600" size="lg">
+          <Button onClick={onComplete} className="w-full bg-gradient-to-r from-accent to-destructive hover:from-accent hover:to-destructive" size="lg">
             <Heart className="h-5 w-5 mr-2" />
             Ver Meus Matches
           </Button>

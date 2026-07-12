@@ -257,7 +257,7 @@ export function MFASMSSetup({ onComplete, onCancel }: MFASMSSetupProps) {
 
         {step === 'complete' && (
           <div className="text-center py-4">
-            <CheckCircle2 className="h-16 w-16 text-green-500 mx-auto mb-4" />
+            <CheckCircle2 className="h-16 w-16 text-success mx-auto mb-4" />
             <p className="text-lg font-medium">SMS Verificado!</p>
             <p className="text-sm text-muted-foreground mt-2">
               Verificação por SMS configurada com sucesso.

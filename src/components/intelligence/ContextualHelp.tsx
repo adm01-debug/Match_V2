@@ -179,11 +179,11 @@ export const ContextualHelp = memo(function ContextualHelp({
                     >
                       <div className={cn(
                         'p-1.5 rounded',
-                        topic.type === 'tip' && 'bg-yellow-500/10 text-yellow-600',
-                        topic.type === 'guide' && 'bg-blue-500/10 text-blue-600',
-                        topic.type === 'video' && 'bg-red-500/10 text-red-600',
-                        topic.type === 'doc' && 'bg-green-500/10 text-green-600',
-                        topic.type === 'faq' && 'bg-purple-500/10 text-purple-600',
+                        topic.type === 'tip' && 'bg-warning/10 text-warning',
+                        topic.type === 'guide' && 'bg-info/10 text-info',
+                        topic.type === 'video' && 'bg-destructive/10 text-destructive',
+                        topic.type === 'doc' && 'bg-success/10 text-success',
+                        topic.type === 'faq' && 'bg-accent/10 text-accent',
                       )}>
                         {typeIcons[topic.type]}
                       </div>

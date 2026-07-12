@@ -17,12 +17,12 @@ interface Offer {
 }
 
 const statusConfig: Record<string, { label: string; color: string }> = {
-  rascunho: { label: 'Rascunho', color: 'bg-gray-500' },
-  enviada: { label: 'Enviada', color: 'bg-blue-500' },
-  visualizada: { label: 'Visualizada', color: 'bg-yellow-500' },
-  aceita: { label: 'Aceita', color: 'bg-green-500' },
-  recusada: { label: 'Recusada', color: 'bg-red-500' },
-  expirada: { label: 'Expirada', color: 'bg-orange-500' },
+  rascunho: { label: 'Rascunho', color: 'bg-muted-foreground' },
+  enviada: { label: 'Enviada', color: 'bg-info' },
+  visualizada: { label: 'Visualizada', color: 'bg-warning' },
+  aceita: { label: 'Aceita', color: 'bg-success' },
+  recusada: { label: 'Recusada', color: 'bg-destructive' },
+  expirada: { label: 'Expirada', color: 'bg-warning' },
 };
 
 interface OfferDetailDialogProps {

@@ -29,13 +29,13 @@ const tipoIcon: Record<string, typeof MapPin> = {
 };
 
 const statusColors: Record<string, string> = {
-  agendada: 'bg-yellow-500/20 border-yellow-500 text-yellow-700',
-  confirmada: 'bg-green-500/20 border-green-500 text-green-700',
+  agendada: 'bg-warning/20 border-warning text-warning',
+  confirmada: 'bg-success/20 border-success text-success',
   realizada: 'bg-muted border-muted-foreground/20 text-muted-foreground',
-  cancelada: 'bg-red-500/20 border-red-500 text-red-700',
-  reagendada: 'bg-orange-500/20 border-orange-500 text-orange-700',
-  remarcada: 'bg-yellow-500/20 border-yellow-500 text-yellow-700',
-  no_show: 'bg-red-500/20 border-red-500 text-red-700',
+  cancelada: 'bg-destructive/20 border-destructive text-destructive',
+  reagendada: 'bg-warning/20 border-warning text-warning',
+  remarcada: 'bg-warning/20 border-warning text-warning',
+  no_show: 'bg-destructive/20 border-destructive text-destructive',
 };
 
 const hours = Array.from({ length: 12 }, (_, i) => i + 8); // 8:00 - 19:00
@@ -124,7 +124,7 @@ export function WeekView({ currentDate, entrevistas, onSelectEntrevista, onSelec
                             key={entrevista.id}
                             className={cn(
                               "absolute left-0.5 right-0.5 rounded-md border-l-2 p-1 cursor-pointer hover:opacity-80 transition-opacity overflow-hidden",
-                              statusColors[entrevista.status] ?? 'bg-yellow-500/20 border-yellow-500 text-yellow-700'
+                              statusColors[entrevista.status] ?? 'bg-warning/20 border-warning text-warning'
                             )}
                             style={{
                               top: `${top}px`,

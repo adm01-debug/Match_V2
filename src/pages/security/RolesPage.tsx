@@ -33,9 +33,9 @@ const ROLE_LABELS: Record<AppRole, string> = {
 };
 
 const ROLE_COLORS: Record<AppRole, string> = {
-  admin: 'bg-red-500/10 text-red-500 border-red-500/20',
-  rh: 'bg-blue-500/10 text-blue-500 border-blue-500/20',
-  gestor: 'bg-green-500/10 text-green-500 border-green-500/20',
+  admin: 'bg-destructive/10 text-destructive border-destructive/20',
+  rh: 'bg-info/10 text-info border-info/20',
+  gestor: 'bg-success/10 text-success border-success/20',
 };
 
 export default function RolesPage() {
@@ -151,7 +151,7 @@ export default function RolesPage() {
         <div className="flex items-center justify-center min-h-[60vh]">
           <Card className="max-w-md">
             <CardContent className="pt-6 text-center">
-              <AlertTriangle className="h-12 w-12 text-yellow-500 mx-auto mb-4" />
+              <AlertTriangle className="h-12 w-12 text-warning mx-auto mb-4" />
               <h2 className="text-xl font-semibold mb-2">Acesso Negado</h2>
               <p className="text-muted-foreground">
                 Você não tem permissão para acessar esta página.
