@@ -71,22 +71,22 @@ const RankBadge = memo(({ rank }: { rank: number }) => {
         }}
         transition={{ duration: 2, repeat: Infinity }}
       >
-        <Crown className="h-6 w-6 text-yellow-500" />
+        <Crown className="h-6 w-6 text-warning" />
         <motion.div
           className="absolute inset-0"
           animate={{ opacity: [0.5, 1, 0.5] }}
           transition={{ duration: 1.5, repeat: Infinity }}
         >
-          <Sparkles className="h-6 w-6 text-yellow-400" />
+          <Sparkles className="h-6 w-6 text-warning" />
         </motion.div>
       </motion.div>
     );
   }
   if (rank === 2) {
-    return <Medal className="h-5 w-5 text-gray-400" />;
+    return <Medal className="h-5 w-5 text-muted-foreground" />;
   }
   if (rank === 3) {
-    return <Medal className="h-5 w-5 text-amber-600" />;
+    return <Medal className="h-5 w-5 text-warning/70" />;
   }
   return (
     <span className="text-sm font-bold text-muted-foreground w-6 text-center">
@@ -107,7 +107,7 @@ const RankChange = memo(({ current, previous }: { current: number; previous?: nu
   if (diff > 0) {
     return (
       <motion.div 
-        className="flex items-center gap-1 text-green-500"
+        className="flex items-center gap-1 text-success"
         initial={{ y: -10, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
       >
@@ -119,7 +119,7 @@ const RankChange = memo(({ current, previous }: { current: number; previous?: nu
   
   return (
     <motion.div 
-      className="flex items-center gap-1 text-red-500"
+      className="flex items-center gap-1 text-destructive"
       initial={{ y: 10, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
     >
@@ -160,9 +160,9 @@ const LeaderboardRow = memo(({
         <motion.div
           className={cn(
             "absolute inset-0 opacity-10",
-            entry.rank === 1 && "bg-gradient-to-r from-yellow-500 to-amber-500",
-            entry.rank === 2 && "bg-gradient-to-r from-gray-300 to-gray-400",
-            entry.rank === 3 && "bg-gradient-to-r from-amber-600 to-orange-600"
+            entry.rank === 1 && "bg-gradient-to-r from-warning to-warning/60",
+            entry.rank === 2 && "bg-gradient-to-r from-muted-foreground/40 to-muted-foreground/20",
+            entry.rank === 3 && "bg-gradient-to-r from-warning/70 to-accent/60"
           )}
           animate={{ opacity: [0.05, 0.15, 0.05] }}
           transition={{ duration: 2, repeat: Infinity }}
@@ -173,9 +173,9 @@ const LeaderboardRow = memo(({
 
       <Avatar className={cn(
         "h-10 w-10 border-2",
-        entry.rank === 1 && "border-yellow-500",
-        entry.rank === 2 && "border-gray-400",
-        entry.rank === 3 && "border-amber-600",
+        entry.rank === 1 && "border-warning",
+        entry.rank === 2 && "border-muted-foreground",
+        entry.rank === 3 && "border-warning/70",
         entry.rank > 3 && "border-border"
       )}>
         <AvatarImage src={entry.avatar} alt={entry.name} />
@@ -194,7 +194,7 @@ const LeaderboardRow = memo(({
             <Badge variant="secondary" className="text-xs">Você</Badge>
           )}
           {entry.streak >= 7 && (
-            <Badge variant="outline" className="gap-1 border-orange-500/50 text-orange-600">
+            <Badge variant="outline" className="gap-1 border-warning/50 text-warning">
               <Flame className="h-3 w-3" />
               {entry.streak}
             </Badge>
@@ -273,8 +273,8 @@ export const RealtimeLeaderboard = memo(({
       <CardHeader className="pb-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-xl bg-gradient-to-br from-yellow-500 to-amber-600 shadow-lg shadow-yellow-500/20">
-              <Trophy className="h-5 w-5 text-white" />
+            <div className="p-2 rounded-xl bg-gradient-to-br from-warning to-warning/70 shadow-lg shadow-warning/20">
+              <Trophy className="h-5 w-5 text-warning-foreground" />
             </div>
             <div>
               <CardTitle className="text-xl">Ranking Global</CardTitle>
