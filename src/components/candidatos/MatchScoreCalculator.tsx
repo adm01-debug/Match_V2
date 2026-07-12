@@ -209,7 +209,7 @@ export function MatchScoreCalculator({ candidatoId, candidatoNome, onScoreCalcul
                   <p className="text-sm font-medium text-success mb-1">✅ Habilidades Compatíveis</p>
                   <div className="flex flex-wrap gap-1">
                     {resultado.habilidadesMatch.map((h, i) => (
-                      <Badge key={i} variant="outline" className="bg-green-50 text-success border-green-200">{h}</Badge>
+                      <Badge key={i} variant="outline" className="bg-success/10 text-success border-success/30">{h}</Badge>
                     ))}
                   </div>
                 </div>
@@ -220,7 +220,7 @@ export function MatchScoreCalculator({ candidatoId, candidatoNome, onScoreCalcul
                   <p className="text-sm font-medium text-destructive mb-1">❌ Habilidades Faltantes</p>
                   <div className="flex flex-wrap gap-1">
                     {resultado.habilidadesFaltantes.map((h, i) => (
-                      <Badge key={i} variant="outline" className="bg-red-50 text-destructive border-red-200">{h}</Badge>
+                      <Badge key={i} variant="outline" className="bg-destructive/10 text-destructive border-destructive/30">{h}</Badge>
                     ))}
                   </div>
                 </div>
@@ -231,7 +231,7 @@ export function MatchScoreCalculator({ candidatoId, candidatoNome, onScoreCalcul
                   <p className="text-sm font-medium text-info mb-1">➕ Habilidades Extras</p>
                   <div className="flex flex-wrap gap-1">
                     {resultado.habilidadesExtras.map((h, i) => (
-                      <Badge key={i} variant="outline" className="bg-blue-50 text-info border-blue-200">{h}</Badge>
+                      <Badge key={i} variant="outline" className="bg-info/10 text-info border-info/30">{h}</Badge>
                     ))}
                   </div>
                 </div>
