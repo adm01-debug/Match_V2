@@ -20,11 +20,11 @@ interface StreakDisplayProps {
 }
 
 const streakColors = {
-  cold: { bg: "bg-slate-500", text: "text-slate-500", glow: "slate" },
-  warming: { bg: "bg-orange-400", text: "text-orange-400", glow: "orange" },
-  hot: { bg: "bg-orange-500", text: "text-orange-500", glow: "orange" },
-  fire: { bg: "bg-red-500", text: "text-red-500", glow: "red" },
-  inferno: { bg: "bg-gradient-to-r from-red-500 via-orange-500 to-yellow-400", text: "text-orange-500", glow: "orange" },
+  cold: { bg: "bg-muted-foreground", text: "text-muted-foreground", glow: "muted" },
+  warming: { bg: "bg-warning", text: "text-warning", glow: "warning" },
+  hot: { bg: "bg-warning", text: "text-warning", glow: "warning" },
+  fire: { bg: "bg-destructive", text: "text-destructive", glow: "destructive" },
+  inferno: { bg: "bg-gradient-to-r from-destructive via-warning to-accent", text: "text-warning", glow: "warning" },
 };
 
 function getStreakLevel(streak: number) {
@@ -72,8 +72,8 @@ export const StreakDisplay = memo(function StreakDisplay({
       <motion.div
         className={cn(
           "inline-flex items-center gap-2 px-3 py-1.5 rounded-full",
-          "bg-gradient-to-r from-orange-500/10 to-red-500/10",
-          "border border-orange-500/20",
+          "bg-gradient-to-r from-warning/10 to-destructive/10",
+          "border border-warning/20",
           className
         )}
         initial={animated ? { scale: 0.9, opacity: 0 } : undefined}
@@ -97,7 +97,7 @@ export const StreakDisplay = memo(function StreakDisplay({
       <motion.div
         className={cn(
           "relative overflow-hidden rounded-xl p-4",
-          "bg-gradient-to-r from-orange-500 via-red-500 to-pink-500",
+          "bg-gradient-to-r from-warning via-destructive to-primary",
           className
         )}
         initial={animated ? { y: -20, opacity: 0 } : undefined}
@@ -108,7 +108,7 @@ export const StreakDisplay = memo(function StreakDisplay({
           {[...Array(6)].map((_, i) => (
             <motion.div
               key={i}
-              className="absolute w-2 h-2 rounded-full bg-yellow-300/50"
+              className="absolute w-2 h-2 rounded-full bg-accent/50"
               style={{ left: `${(i * 20) + 10}%` }}
               animate={{
                 y: [0, -100],
@@ -185,7 +185,7 @@ export const StreakDisplay = memo(function StreakDisplay({
         <div className={cn(
           "absolute inset-0",
           level === "inferno" 
-            ? "bg-gradient-to-br from-red-500 via-orange-500 to-yellow-500" 
+            ? "bg-gradient-to-br from-destructive via-warning to-accent" 
             : colors.bg
         )} />
       </div>
@@ -198,7 +198,7 @@ export const StreakDisplay = memo(function StreakDisplay({
               className={cn(
                 "p-2.5 rounded-xl",
                 level === "inferno"
-                  ? "bg-gradient-to-br from-red-500/20 via-orange-500/20 to-yellow-500/20"
+                  ? "bg-gradient-to-br from-destructive/20 via-warning/20 to-accent/20"
                   : `${colors.bg}/10`
               )}
               animate={currentStreak > 0 ? { 
@@ -236,7 +236,7 @@ export const StreakDisplay = memo(function StreakDisplay({
             className={cn(
               "px-2 py-1 rounded-full text-xs font-medium text-white",
               level === "inferno" 
-                ? "bg-gradient-to-r from-red-500 to-orange-500"
+                ? "bg-gradient-to-r from-destructive to-warning"
                 : colors.bg
             )}
             animate={level === "inferno" ? { scale: [1, 1.05, 1] } : undefined}
@@ -253,7 +253,7 @@ export const StreakDisplay = memo(function StreakDisplay({
         {/* Stats row */}
         <div className="grid grid-cols-3 gap-3">
           <div className="p-3 rounded-lg bg-muted/50 text-center">
-            <Trophy className="w-4 h-4 mx-auto mb-1 text-yellow-500" />
+            <Trophy className="w-4 h-4 mx-auto mb-1 text-warning" />
             <p className="text-lg font-bold">{longestStreak}</p>
             <p className="text-xs text-muted-foreground">Recorde</p>
           </div>
@@ -281,7 +281,7 @@ export const StreakDisplay = memo(function StreakDisplay({
                 className={cn(
                   "absolute inset-y-0 left-0 rounded-full",
                   level === "inferno"
-                    ? "bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500"
+                    ? "bg-gradient-to-r from-destructive via-warning to-accent"
                     : colors.bg
                 )}
                 initial={{ width: 0 }}
@@ -361,7 +361,7 @@ export const StreakCalendar = memo(function StreakCalendar({
             className={cn(
               "aspect-square rounded-sm",
               day.isActive
-                ? "bg-gradient-to-br from-orange-400 to-red-500"
+                ? "bg-gradient-to-br from-warning to-destructive"
                 : "bg-muted"
             )}
             initial={animated ? { scale: 0, opacity: 0 } : undefined}
