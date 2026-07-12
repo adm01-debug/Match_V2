@@ -55,18 +55,18 @@ function getValorDimensao(candidato: CandidatoComparativo, key: string): number 
 
 function getComparisonIcon(valor: number | undefined, melhorValor: number): React.ReactNode {
   if (valor === undefined) return <Minus className="h-4 w-4 text-muted-foreground" />;
-  if (valor === melhorValor) return <Trophy className="h-4 w-4 text-yellow-500" />;
-  if (valor >= melhorValor - 10) return <ArrowUpRight className="h-4 w-4 text-emerald-500" />;
+  if (valor === melhorValor) return <Trophy className="h-4 w-4 text-warning" />;
+  if (valor >= melhorValor - 10) return <ArrowUpRight className="h-4 w-4 text-success" />;
   if (valor >= melhorValor - 25) return <Equal className="h-4 w-4 text-muted-foreground" />;
-  return <ArrowDownRight className="h-4 w-4 text-red-500" />;
+  return <ArrowDownRight className="h-4 w-4 text-destructive" />;
 }
 
 function getProgressColor(valor: number): string {
-  if (valor >= 80) return 'bg-green-500';
-  if (valor >= 60) return 'bg-emerald-400';
-  if (valor >= 40) return 'bg-yellow-400';
-  if (valor >= 20) return 'bg-orange-400';
-  return 'bg-red-500';
+  if (valor >= 80) return 'bg-success';
+  if (valor >= 60) return 'bg-success/70';
+  if (valor >= 40) return 'bg-warning';
+  if (valor >= 20) return 'bg-warning/70';
+  return 'bg-destructive';
 }
 
 export function CandidateComparison({ 
@@ -142,7 +142,7 @@ export function CandidateComparison({
                     <div 
                       key={r.id}
                       className={`flex items-center gap-2 px-3 py-2 rounded-lg ${
-                        idx === 0 ? 'bg-yellow-100 border border-yellow-300' : 'bg-background border'
+                        idx === 0 ? 'bg-warning/15 border border-warning/30' : 'bg-background border'
                       }`}
                     >
                       <span className="font-bold">{idx + 1}º</span>
@@ -208,7 +208,7 @@ export function CandidateComparison({
                           </div>
 
                           {candidato.redFlags && candidato.redFlags.length > 0 && (
-                            <div className="flex items-center gap-2 text-sm text-red-600">
+                            <div className="flex items-center gap-2 text-sm text-destructive">
                               <AlertTriangle className="h-4 w-4" />
                               <span>{candidato.redFlags.length} alerta(s)</span>
                             </div>
@@ -327,7 +327,7 @@ export function CandidateComparison({
                   </CardHeader>
                   <CardContent>
                     {(!candidato.redFlags || candidato.redFlags.length === 0) ? (
-                      <div className="flex items-center gap-2 text-green-600">
+                      <div className="flex items-center gap-2 text-success">
                         <CheckCircle2 className="h-5 w-5" />
                         <span>Nenhum risco identificado</span>
                       </div>
