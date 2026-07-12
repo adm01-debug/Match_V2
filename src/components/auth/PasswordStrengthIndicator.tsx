@@ -133,14 +133,14 @@ const StrengthBar = memo(({ strength }: { strength: StrengthResult }) => {
         <span className={cn(
           'text-xs font-medium',
           strength.level === 'weak' && 'text-destructive',
-          strength.level === 'fair' && 'text-yellow-600 dark:text-yellow-500',
-          strength.level === 'good' && 'text-blue-600 dark:text-blue-500',
-          strength.level === 'strong' && 'text-green-600 dark:text-green-500'
+          strength.level === 'fair' && 'text-warning',
+          strength.level === 'good' && 'text-info',
+          strength.level === 'strong' && 'text-success'
         )}>
           {strength.label}
         </span>
         {strength.level === 'strong' && (
-          <Check className="h-4 w-4 text-green-500" />
+          <Check className="h-4 w-4 text-success" />
         )}
         {strength.level === 'weak' && (
           <AlertTriangle className="h-4 w-4 text-destructive" />
