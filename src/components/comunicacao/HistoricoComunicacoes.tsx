@@ -29,15 +29,15 @@ interface HistoricoComunicacoesProps {
 }
 
 const etapaColors: Record<string, string> = {
-  candidatura_recebida: "bg-blue-500/20 text-blue-400",
-  triagem: "bg-purple-500/20 text-purple-400",
-  convite_entrevista_rh: "bg-amber-500/20 text-amber-400",
-  convite_entrevista_gestor: "bg-orange-500/20 text-orange-400",
-  convite_testes: "bg-pink-500/20 text-pink-400",
-  feedback_positivo: "bg-emerald-500/20 text-emerald-400",
-  feedback_negativo: "bg-red-500/20 text-red-400",
-  proposta: "bg-teal-500/20 text-teal-400",
-  contratacao: "bg-green-500/20 text-green-400",
+  candidatura_recebida: "bg-info/20 text-info",
+  triagem: "bg-primary/20 text-primary",
+  convite_entrevista_rh: "bg-warning/20 text-warning",
+  convite_entrevista_gestor: "bg-warning/30 text-warning",
+  convite_testes: "bg-accent/20 text-accent-foreground",
+  feedback_positivo: "bg-success/20 text-success",
+  feedback_negativo: "bg-destructive/20 text-destructive",
+  proposta: "bg-info/30 text-info",
+  contratacao: "bg-success/30 text-success",
   comunicacao: "bg-slate-500/20 text-slate-400",
 };
 
