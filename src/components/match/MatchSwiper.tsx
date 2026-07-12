@@ -93,9 +93,9 @@ export function MatchSwiper({
   };
   
   const getScoreGradient = (score: number) => {
-    if (score >= 80) return 'from-green-500 to-emerald-500';
-    if (score >= 60) return 'from-yellow-500 to-orange-500';
-    if (score >= 40) return 'from-orange-500 to-red-500';
+    if (score >= 80) return 'from-success to-success/80';
+    if (score >= 60) return 'from-warning to-warning/80';
+    if (score >= 40) return 'from-warning to-destructive';
     return 'from-gray-400 to-gray-500';
   };
   
@@ -187,7 +187,7 @@ export function MatchSwiper({
                   className="absolute top-1/2 left-4 -translate-y-1/2 z-20"
                   style={{ opacity: direction === 'left' ? 1 : 0 }}
                 >
-                  <div className="px-6 py-3 rounded-lg border-4 border-red-500 text-red-500 font-bold text-2xl rotate-[-20deg]">
+                  <div className="px-6 py-3 rounded-lg border-4 border-destructive text-destructive font-bold text-2xl rotate-[-20deg]">
                     NOPE
                   </div>
                 </motion.div>
@@ -196,7 +196,7 @@ export function MatchSwiper({
                   className="absolute top-1/2 right-4 -translate-y-1/2 z-20"
                   style={{ opacity: direction === 'right' ? 1 : 0 }}
                 >
-                  <div className="px-6 py-3 rounded-lg border-4 border-green-500 text-green-500 font-bold text-2xl rotate-[20deg]">
+                  <div className="px-6 py-3 rounded-lg border-4 border-success text-success font-bold text-2xl rotate-[20deg]">
                     MATCH!
                   </div>
                 </motion.div>
@@ -253,14 +253,14 @@ export function MatchSwiper({
                   {/* Matching Values */}
                   <div className="space-y-2">
                     <p className="text-sm font-medium flex items-center gap-2">
-                      <Star className="h-4 w-4 text-yellow-500" />
+                      <Star className="h-4 w-4 text-warning" />
                       Valores em Comum
                     </p>
                     <div className="flex flex-wrap gap-2">
                       {currentCard.valoresPrincipais.slice(0, 4).map((valor, i) => (
                         <Badge 
                           key={i} 
-                          className="bg-gradient-to-r from-pink-500/10 to-rose-500/10 text-pink-700 dark:text-pink-300 border-pink-200 dark:border-pink-800"
+                          className="bg-gradient-to-r from-primary/10 to-primary/20 text-primary border-primary/30"
                         >
                           {valor}
                         </Badge>
@@ -290,15 +290,15 @@ export function MatchSwiper({
         <Button
           variant="outline"
           size="icon"
-          className="h-16 w-16 rounded-full border-2 border-red-200 hover:bg-red-50 hover:border-red-300 dark:border-red-900 dark:hover:bg-red-950"
+          className="h-16 w-16 rounded-full border-2 border-destructive/30 hover:bg-destructive/10 hover:border-destructive/50"
           onClick={() => handleSwipe('left')}
         >
-          <X className="h-8 w-8 text-red-500" />
+          <X className="h-8 w-8 text-destructive" />
         </Button>
         
         <Button
           size="icon"
-          className="h-20 w-20 rounded-full bg-gradient-to-br from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 shadow-lg"
+          className="h-20 w-20 rounded-full bg-gradient-to-br from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg"
           onClick={() => handleSwipe('right')}
         >
           <Heart className="h-10 w-10" />
@@ -307,9 +307,9 @@ export function MatchSwiper({
         <Button
           variant="outline"
           size="icon"
-          className="h-12 w-12 rounded-full border-2 border-blue-200 hover:bg-blue-50 hover:border-blue-300 dark:border-blue-900 dark:hover:bg-blue-950"
+          className="h-12 w-12 rounded-full border-2 border-info/30 hover:bg-info/10 hover:border-info/50"
         >
-          <Info className="h-5 w-5 text-blue-500" />
+          <Info className="h-5 w-5 text-info" />
         </Button>
       </div>
       
