@@ -59,15 +59,15 @@ interface AgendaTimelineProps {
 const getStatusInfo = (status: AgendaEvent['status']) => {
   switch (status) {
     case 'confirmado':
-      return { icon: CheckCircle2, color: 'text-green-500', bg: 'bg-green-500/10', label: 'Confirmado' };
+      return { icon: CheckCircle2, color: 'text-success', bg: 'bg-success/10', label: 'Confirmado' };
     case 'em_andamento':
-      return { icon: Play, color: 'text-blue-500', bg: 'bg-blue-500/10', label: 'Em andamento' };
+      return { icon: Play, color: 'text-info', bg: 'bg-info/10', label: 'Em andamento' };
     case 'concluido':
       return { icon: CheckCircle2, color: 'text-muted-foreground', bg: 'bg-muted', label: 'Concluído' };
     case 'cancelado':
-      return { icon: XCircle, color: 'text-red-500', bg: 'bg-red-500/10', label: 'Cancelado' };
+      return { icon: XCircle, color: 'text-destructive', bg: 'bg-destructive/10', label: 'Cancelado' };
     default:
-      return { icon: AlertCircle, color: 'text-amber-500', bg: 'bg-amber-500/10', label: 'Agendado' };
+      return { icon: AlertCircle, color: 'text-warning', bg: 'bg-warning/10', label: 'Agendado' };
   }
 };
 
@@ -150,8 +150,8 @@ const TimelineEventCard = memo(({
       <Card 
         className={cn(
           'cursor-pointer transition-all hover:shadow-md group',
-          isNow && 'ring-2 ring-blue-500 animate-pulse',
-          isStartingSoon && 'ring-2 ring-amber-500',
+          isNow && 'ring-2 ring-info animate-pulse',
+          isStartingSoon && 'ring-2 ring-warning',
           event.status === 'cancelado' && 'opacity-50'
         )}
         onClick={() => onEventClick?.(event)}
@@ -242,7 +242,7 @@ const TimelineEventCard = memo(({
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <div className="flex items-center gap-1 text-amber-500 animate-pulse">
+                    <div className="flex items-center gap-1 text-warning animate-pulse">
                       <Clock className="h-4 w-4" />
                       <span className="text-xs font-medium">{minutesUntilStart}min</span>
                     </div>
@@ -306,11 +306,11 @@ export const AgendaTimeline = memo(({
         {events.length > 0 && (
           <div className="flex items-center gap-2">
             <Badge variant="outline" className="gap-1">
-              <CheckCircle2 className="h-3 w-3 text-green-500" />
+              <CheckCircle2 className="h-3 w-3 text-success" />
               {events.filter(e => e.status === 'confirmado').length} confirmadas
             </Badge>
             <Badge variant="outline" className="gap-1">
-              <AlertCircle className="h-3 w-3 text-amber-500" />
+              <AlertCircle className="h-3 w-3 text-warning" />
               {events.filter(e => e.status === 'agendado').length} pendentes
             </Badge>
           </div>
