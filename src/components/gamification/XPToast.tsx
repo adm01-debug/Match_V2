@@ -121,7 +121,6 @@ export const XPToast = memo(function XPToast({
       particleCount: 20,
       spread: 45,
       origin: { y: 0.3, x: 0.5 },
-      colors: ['#10B981', '#3B82F6', '#8B5CF6', '#F59E0B'],
       scalar: 0.6,
       gravity: 1.5,
     });
