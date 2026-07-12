@@ -28,42 +28,42 @@ const variantConfig: Record<XPToastVariant, {
   scale: number;
 }> = {
   small: {
-    gradient: "from-emerald-500 to-green-600",
+    gradient: "from-success to-success/80",
     icon: Sparkles,
     particles: false,
     duration: 2000,
     scale: 0.9,
   },
   medium: {
-    gradient: "from-blue-500 to-indigo-600",
+    gradient: "from-info to-info/80",
     icon: Zap,
     particles: true,
     duration: 2500,
     scale: 1,
   },
   large: {
-    gradient: "from-purple-500 to-violet-600",
+    gradient: "from-accent to-accent/80",
     icon: Star,
     particles: true,
     duration: 3000,
     scale: 1.1,
   },
   bonus: {
-    gradient: "from-amber-500 to-orange-600",
+    gradient: "from-warning to-warning/80",
     icon: TrendingUp,
     particles: true,
     duration: 3500,
     scale: 1.15,
   },
   streak: {
-    gradient: "from-red-500 to-pink-600",
+    gradient: "from-destructive to-destructive/80",
     icon: Zap,
     particles: true,
     duration: 3000,
     scale: 1.1,
   },
   levelup: {
-    gradient: "from-yellow-400 via-amber-500 to-orange-600",
+    gradient: "from-warning via-warning/90 to-warning/70",
     icon: Star,
     particles: true,
     duration: 4000,
@@ -121,7 +121,6 @@ export const XPToast = memo(function XPToast({
       particleCount: 20,
       spread: 45,
       origin: { y: 0.3, x: 0.5 },
-      colors: ['#10B981', '#3B82F6', '#8B5CF6', '#F59E0B'],
       scalar: 0.6,
       gravity: 1.5,
     });
@@ -181,14 +180,14 @@ export const XPToast = memo(function XPToast({
                 <FloatingParticle
                   key={i}
                   delay={i * 0.1}
-                  color={i % 2 === 0 ? "bg-white/80" : "bg-yellow-300/80"}
+                  color={i % 2 === 0 ? "bg-background/80" : "bg-warning/80"}
                 />
               ))}
             </div>
 
             {/* Shine effect */}
             <motion.div
-              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent rounded-2xl"
+              className="absolute inset-0 bg-gradient-to-r from-transparent via-primary-foreground/30 to-transparent rounded-2xl"
               initial={{ x: "-100%" }}
               animate={{ x: "100%" }}
               transition={{ duration: 1, repeat: 2, repeatDelay: 0.5 }}
@@ -196,14 +195,14 @@ export const XPToast = memo(function XPToast({
 
             {/* Icon */}
             <motion.div
-              className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-white/20"
+              className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-primary-foreground/20"
               animate={{ 
                 rotate: [0, 10, -10, 0],
                 scale: [1, 1.1, 1],
               }}
               transition={{ duration: 0.6, repeat: 2 }}
             >
-              <Icon className="w-5 h-5 text-white" />
+              <Icon className="w-5 h-5 text-primary-foreground" />
             </motion.div>
 
             {/* Content */}
@@ -214,17 +213,17 @@ export const XPToast = memo(function XPToast({
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.1 }}
               >
-                <span className="text-2xl font-bold text-white">+</span>
+                <span className="text-2xl font-bold text-primary-foreground">+</span>
                 <motion.span
-                  className="text-2xl font-bold text-white tabular-nums"
+                  className="text-2xl font-bold text-primary-foreground tabular-nums"
                 >
                   {amount}
                 </motion.span>
-                <span className="text-lg font-semibold text-white/90">XP</span>
+                <span className="text-lg font-semibold text-primary-foreground/90">XP</span>
                 
                 {multiplier > 1 && (
                   <motion.span
-                    className="ml-2 px-2 py-0.5 text-xs font-bold bg-white/30 rounded-full text-white"
+                    className="ml-2 px-2 py-0.5 text-xs font-bold bg-primary-foreground/30 rounded-full text-primary-foreground"
                     initial={{ scale: 0, rotate: -10 }}
                     animate={{ scale: 1, rotate: 0 }}
                     transition={{ delay: 0.3, type: "spring" }}
@@ -236,7 +235,7 @@ export const XPToast = memo(function XPToast({
               
               {action && (
                 <motion.p
-                  className="text-xs text-white/80 font-medium"
+                  className="text-xs text-primary-foreground/80 font-medium"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.2 }}
@@ -255,7 +254,7 @@ export const XPToast = memo(function XPToast({
               }}
               transition={{ duration: 2, repeat: Infinity }}
             >
-              <Star className="w-4 h-4 text-yellow-300 fill-yellow-300" />
+              <Star className="w-4 h-4 text-warning fill-warning" />
             </motion.div>
           </motion.div>
         </motion.div>
