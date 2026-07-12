@@ -100,7 +100,7 @@ export function SuggestedSlotCard({ slot, index, isSelected, onSelect }: Props) 
 
       {isTop && (
         <div className="absolute -top-2 -right-2">
-          <Badge className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white border-0">
+          <Badge className="bg-gradient-to-r from-warning to-warning/80 text-warning-foreground border-0">
             <Star className="h-3 w-3 mr-1" />
             Recomendado
           </Badge>
