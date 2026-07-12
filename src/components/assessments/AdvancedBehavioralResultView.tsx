@@ -79,7 +79,7 @@ export const GenerationalResultView = memo(function GenerationalResultView({
 
           <div className="space-y-2">
             <h4 className="font-medium flex items-center gap-2">
-              <Heart className="h-4 w-4 text-red-500" />
+              <Heart className="h-4 w-4 text-destructive" />
               Motivadores
             </h4>
             <div className="flex flex-wrap gap-1">
@@ -91,7 +91,7 @@ export const GenerationalResultView = memo(function GenerationalResultView({
 
           <div className="space-y-2">
             <h4 className="font-medium flex items-center gap-2">
-              <MessageCircle className="h-4 w-4 text-blue-500" />
+              <MessageCircle className="h-4 w-4 text-info" />
               Comunicação Preferida
             </h4>
             <ul className="text-sm text-muted-foreground space-y-1">
@@ -103,7 +103,7 @@ export const GenerationalResultView = memo(function GenerationalResultView({
 
           <div className="space-y-2">
             <h4 className="font-medium flex items-center gap-2">
-              <TrendingUp className="h-4 w-4 text-green-500" />
+              <TrendingUp className="h-4 w-4 text-success" />
               Como Gerenciar
             </h4>
             <ul className="text-sm text-muted-foreground space-y-1">
@@ -140,10 +140,10 @@ export const StressProfileResultView = memo(function StressProfileResultView({
   if (!info) return null;
 
   const responseColors = {
-    fight: 'bg-red-500',
-    flight: 'bg-yellow-500',
-    freeze: 'bg-blue-500',
-    fawn: 'bg-green-500'
+    fight: 'bg-destructive',
+    flight: 'bg-warning',
+    freeze: 'bg-info',
+    fawn: 'bg-success'
   };
 
   const responseNames = {
@@ -171,13 +171,13 @@ export const StressProfileResultView = memo(function StressProfileResultView({
         <div className="grid md:grid-cols-2 gap-4">
           <div className="space-y-2">
             <h4 className="font-medium flex items-center gap-2">
-              <AlertTriangle className="h-4 w-4 text-orange-500" />
+              <AlertTriangle className="h-4 w-4 text-warning" />
               Gatilhos de Stress
             </h4>
             <ul className="text-sm text-muted-foreground space-y-1">
               {info.gatilhos.map((g, i) => (
                 <li key={i} className="flex items-start gap-2">
-                  <span className="text-orange-500">⚡</span> {g}
+                  <span className="text-warning">⚡</span> {g}
                 </li>
               ))}
             </ul>
@@ -185,13 +185,13 @@ export const StressProfileResultView = memo(function StressProfileResultView({
 
           <div className="space-y-2">
             <h4 className="font-medium flex items-center gap-2">
-              <AlertTriangle className="h-4 w-4 text-red-500" />
+              <AlertTriangle className="h-4 w-4 text-destructive" />
               Comportamentos sob Pressão
             </h4>
             <ul className="text-sm text-muted-foreground space-y-1">
               {info.comportamentos.map((c, i) => (
                 <li key={i} className="flex items-start gap-2">
-                  <span className="text-red-500">⚠️</span> {c}
+                  <span className="text-destructive">⚠️</span> {c}
                 </li>
               ))}
             </ul>
@@ -199,13 +199,13 @@ export const StressProfileResultView = memo(function StressProfileResultView({
 
           <div className="space-y-2">
             <h4 className="font-medium flex items-center gap-2">
-              <Clock className="h-4 w-4 text-yellow-500" />
+              <Clock className="h-4 w-4 text-warning" />
               Sinais de Alerta
             </h4>
             <ul className="text-sm text-muted-foreground space-y-1">
               {info.sinaisAlerta.map((s, i) => (
                 <li key={i} className="flex items-start gap-2">
-                  <span className="text-yellow-500">🔔</span> {s}
+                  <span className="text-warning">🔔</span> {s}
                 </li>
               ))}
             </ul>
@@ -213,13 +213,13 @@ export const StressProfileResultView = memo(function StressProfileResultView({
 
           <div className="space-y-2">
             <h4 className="font-medium flex items-center gap-2">
-              <Shield className="h-4 w-4 text-green-500" />
+              <Shield className="h-4 w-4 text-success" />
               Como Apoiar
             </h4>
             <ul className="text-sm text-muted-foreground space-y-1">
               {info.comoApoiar.map((a, i) => (
                 <li key={i} className="flex items-start gap-2">
-                  <span className="text-green-500">✓</span> {a}
+                  <span className="text-success">✓</span> {a}
                 </li>
               ))}
             </ul>
@@ -235,7 +235,7 @@ export const StressProfileResultView = memo(function StressProfileResultView({
 
         <div className="space-y-2">
           <h4 className="font-medium flex items-center gap-2">
-            <Heart className="h-4 w-4 text-pink-500" />
+            <Heart className="h-4 w-4 text-primary" />
             Estratégias de Recuperação
           </h4>
           <div className="flex flex-wrap gap-2">
@@ -289,7 +289,7 @@ export const TriuneBrainResultView = memo(function TriuneBrainResultView({
           <div className="space-y-1">
             <div className="flex justify-between text-sm">
               <span className="flex items-center gap-2">
-                <Shield className="h-4 w-4 text-red-600" />
+                <Shield className="h-4 w-4 text-destructive" />
                 Reptiliano (Segurança)
               </span>
               <span>{getPercentage(reptiliano)}%</span>
@@ -300,7 +300,7 @@ export const TriuneBrainResultView = memo(function TriuneBrainResultView({
           <div className="space-y-1">
             <div className="flex justify-between text-sm">
               <span className="flex items-center gap-2">
-                <Heart className="h-4 w-4 text-orange-600" />
+                <Heart className="h-4 w-4 text-warning" />
                 Límbico (Emoção)
               </span>
               <span>{getPercentage(limbico)}%</span>
@@ -311,7 +311,7 @@ export const TriuneBrainResultView = memo(function TriuneBrainResultView({
           <div className="space-y-1">
             <div className="flex justify-between text-sm">
               <span className="flex items-center gap-2">
-                <Lightbulb className="h-4 w-4 text-blue-600" />
+                <Lightbulb className="h-4 w-4 text-info" />
                 Neocórtex (Lógica)
               </span>
               <span>{getPercentage(neocortex)}%</span>
@@ -341,7 +341,7 @@ export const TriuneBrainResultView = memo(function TriuneBrainResultView({
 
           <div className="space-y-2">
             <h4 className="font-medium flex items-center gap-2">
-              <Zap className="h-4 w-4 text-yellow-500" />
+              <Zap className="h-4 w-4 text-warning" />
               Gatilhos Efetivos
             </h4>
             <div className="flex flex-wrap gap-1">
@@ -354,7 +354,7 @@ export const TriuneBrainResultView = memo(function TriuneBrainResultView({
 
         <div className="space-y-2">
           <h4 className="font-medium flex items-center gap-2">
-            <MessageCircle className="h-4 w-4 text-blue-500" />
+            <MessageCircle className="h-4 w-4 text-info" />
             Como Comunicar
           </h4>
           <ul className="text-sm text-muted-foreground space-y-1">
@@ -369,7 +369,7 @@ export const TriuneBrainResultView = memo(function TriuneBrainResultView({
           <ul className="text-sm text-muted-foreground space-y-1">
             {info.abordagemVenda.map((a, i) => (
               <li key={i} className="flex items-start gap-2">
-                <span className="text-green-500">✓</span> {a}
+                <span className="text-success">✓</span> {a}
               </li>
             ))}
           </ul>
