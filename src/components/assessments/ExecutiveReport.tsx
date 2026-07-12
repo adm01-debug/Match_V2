@@ -201,7 +201,7 @@ export function ExecutiveReport({
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-base flex items-center gap-2">
-              <User className="h-4 w-4 text-blue-500" />
+              <User className="h-4 w-4 text-info" />
               {relatorio.secoes.perfilComportamental.titulo}
             </CardTitle>
           </CardHeader>
@@ -214,7 +214,7 @@ export function ExecutiveReport({
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-base flex items-center gap-2">
-              <ThumbsUp className="h-4 w-4 text-green-500" />
+              <ThumbsUp className="h-4 w-4 text-success" />
               {relatorio.secoes.pontosFortes.titulo}
             </CardTitle>
           </CardHeader>
@@ -227,7 +227,7 @@ export function ExecutiveReport({
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-base flex items-center gap-2">
-              <TrendingUp className="h-4 w-4 text-yellow-500" />
+              <TrendingUp className="h-4 w-4 text-warning" />
               {relatorio.secoes.areasDesenvolvimento.titulo}
             </CardTitle>
           </CardHeader>
@@ -240,7 +240,7 @@ export function ExecutiveReport({
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-base flex items-center gap-2">
-              <Heart className="h-4 w-4 text-pink-500" />
+              <Heart className="h-4 w-4 text-primary" />
               {relatorio.secoes.fitCultural.titulo}
             </CardTitle>
           </CardHeader>
@@ -256,10 +256,10 @@ export function ExecutiveReport({
       </div>
 
       {/* Riscos */}
-      <Card className={relatorio.secoes.riscos.conteudo.includes('Nenhum') ? 'border-green-200' : 'border-red-200'}>
+      <Card className={relatorio.secoes.riscos.conteudo.includes('Nenhum') ? 'border-success/30' : 'border-destructive/30'}>
         <CardHeader className="pb-2">
           <CardTitle className="text-base flex items-center gap-2">
-            <AlertTriangle className={`h-4 w-4 ${relatorio.secoes.riscos.conteudo.includes('Nenhum') ? 'text-green-500' : 'text-red-500'}`} />
+            <AlertTriangle className={`h-4 w-4 ${relatorio.secoes.riscos.conteudo.includes('Nenhum') ? 'text-success' : 'text-destructive'}`} />
             {relatorio.secoes.riscos.titulo}
           </CardTitle>
         </CardHeader>
@@ -340,7 +340,7 @@ export function ExecutiveReport({
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <CheckCircle className="h-5 w-5 text-emerald-500" />
+            <CheckCircle className="h-5 w-5 text-success" />
             {relatorio.secoes.recomendacaoFinal.titulo}
           </CardTitle>
         </CardHeader>
