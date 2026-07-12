@@ -102,7 +102,7 @@ export default function RateLimitDashboard() {
         <div className="flex items-center justify-center min-h-[60vh]">
           <Card className="max-w-md">
             <CardContent className="pt-6 text-center">
-              <AlertTriangle className="h-12 w-12 text-yellow-500 mx-auto mb-4" />
+              <AlertTriangle className="h-12 w-12 text-warning mx-auto mb-4" />
               <h2 className="text-xl font-semibold mb-2">Acesso Negado</h2>
               <p className="text-muted-foreground">
                 Você não tem permissão para acessar esta página.
@@ -145,8 +145,8 @@ export default function RateLimitDashboard() {
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
-                <div className="p-3 rounded-lg bg-blue-500/10">
-                  <Activity className="h-6 w-6 text-blue-500" />
+                <div className="p-3 rounded-lg bg-info/10">
+                  <Activity className="h-6 w-6 text-info" />
                 </div>
                 <div>
                   <p className="text-2xl font-bold">{stats.totalRequests.toLocaleString()}</p>
@@ -158,8 +158,8 @@ export default function RateLimitDashboard() {
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
-                <div className="p-3 rounded-lg bg-red-500/10">
-                  <Ban className="h-6 w-6 text-red-500" />
+                <div className="p-3 rounded-lg bg-destructive/10">
+                  <Ban className="h-6 w-6 text-destructive" />
                 </div>
                 <div>
                   <p className="text-2xl font-bold">{stats.blockedRequests}</p>
@@ -171,8 +171,8 @@ export default function RateLimitDashboard() {
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
-                <div className="p-3 rounded-lg bg-green-500/10">
-                  <CheckCircle className="h-6 w-6 text-green-500" />
+                <div className="p-3 rounded-lg bg-success/10">
+                  <CheckCircle className="h-6 w-6 text-success" />
                 </div>
                 <div>
                   <p className="text-2xl font-bold">{stats.uniqueIPs}</p>
@@ -184,8 +184,8 @@ export default function RateLimitDashboard() {
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
-                <div className="p-3 rounded-lg bg-yellow-500/10">
-                  <AlertTriangle className="h-6 w-6 text-yellow-500" />
+                <div className="p-3 rounded-lg bg-warning/10">
+                  <AlertTriangle className="h-6 w-6 text-warning" />
                 </div>
                 <div>
                   <p className="text-2xl font-bold">{stats.deniedAccess}</p>
