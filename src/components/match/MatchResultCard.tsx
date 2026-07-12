@@ -317,7 +317,7 @@ export function MatchResultCard({
             >
               {liked ? (
                 <div className="space-y-2">
-                  <div className="inline-flex items-center gap-2 text-pink-500">
+                  <div className="inline-flex items-center gap-2 text-accent">
                     <Heart className="h-6 w-6 fill-current" />
                     <span className="text-xl font-bold">Você deu Match!</span>
                   </div>
