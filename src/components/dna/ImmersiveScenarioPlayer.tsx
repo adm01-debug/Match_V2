@@ -275,7 +275,7 @@ export const ImmersiveScenarioPlayer: React.FC<ImmersiveScenarioPlayerProps> = (
               <div className="flex justify-center">
                 <Button
                   onClick={handleContinue}
-                  className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 px-8"
+                  className="bg-gradient-to-r from-primary to-accent hover:opacity-90 px-8"
                   size="lg"
                 >
                   Continuar Jornada
