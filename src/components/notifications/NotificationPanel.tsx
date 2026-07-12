@@ -27,21 +27,21 @@ interface NotificationPanelProps {
 const getNotificationIcon = (type: NotificationType) => {
   switch (type) {
     case 'high_match':
-      return <Star className="h-4 w-4 text-yellow-500" />;
+      return <Star className="h-4 w-4 text-warning" />;
     case 'stage_change':
       return <ArrowRight className="h-4 w-4 text-primary" />;
     case 'new_candidate':
-      return <Users className="h-4 w-4 text-blue-500" />;
+      return <Users className="h-4 w-4 text-info" />;
     case 'urgent':
       return <Bell className="h-4 w-4 text-destructive" />;
     case 'interview_scheduled':
-      return <Calendar className="h-4 w-4 text-green-500" />;
+      return <Calendar className="h-4 w-4 text-success" />;
     case 'interview_updated':
-      return <RefreshCw className="h-4 w-4 text-orange-500" />;
+      return <RefreshCw className="h-4 w-4 text-warning" />;
     case 'success':
-      return <CheckCheck className="h-4 w-4 text-green-500" />;
+      return <CheckCheck className="h-4 w-4 text-success" />;
     case 'warning':
-      return <Bell className="h-4 w-4 text-yellow-500" />;
+      return <Bell className="h-4 w-4 text-warning" />;
     case 'error':
       return <Bell className="h-4 w-4 text-destructive" />;
     default:
@@ -52,20 +52,20 @@ const getNotificationIcon = (type: NotificationType) => {
 const getNotificationColor = (type: NotificationType) => {
   switch (type) {
     case 'high_match':
-      return 'bg-yellow-500/10 border-yellow-500/20';
+      return 'bg-warning/10 border-warning/20';
     case 'stage_change':
       return 'bg-primary/10 border-primary/20';
     case 'new_candidate':
-      return 'bg-blue-500/10 border-blue-500/20';
+      return 'bg-info/10 border-info/20';
     case 'urgent':
     case 'error':
       return 'bg-destructive/10 border-destructive/20';
     case 'interview_scheduled':
     case 'success':
-      return 'bg-green-500/10 border-green-500/20';
+      return 'bg-success/10 border-success/20';
     case 'interview_updated':
     case 'warning':
-      return 'bg-orange-500/10 border-orange-500/20';
+      return 'bg-warning/10 border-warning/20';
     default:
       return 'bg-muted border-border';
   }
@@ -95,7 +95,7 @@ function NotificationPanelComponent({
           <span 
             className={cn(
               "absolute bottom-0 right-0 h-2 w-2 rounded-full border border-background",
-              isConnected ? "bg-green-500" : "bg-muted-foreground"
+              isConnected ? "bg-success" : "bg-muted-foreground"
             )}
             title={isConnected ? "Conectado em tempo real" : "Desconectado"}
           />
@@ -119,7 +119,7 @@ function NotificationPanelComponent({
               size="icon"
               className={cn(
                 "h-8 w-8",
-                isConnected ? "text-green-500" : "text-muted-foreground"
+                isConnected ? "text-success" : "text-muted-foreground"
               )}
               onClick={onReconnect}
               title={isConnected ? "Conectado" : "Clique para reconectar"}
@@ -219,9 +219,9 @@ function NotificationPanelComponent({
                             className={cn(
                               'text-xs',
                               notification.matchScore >= 80
-                                ? 'bg-green-500/10 text-green-600 border-green-500/20'
+                                ? 'bg-success/10 text-success border-success/20'
                                 : notification.matchScore >= 60
-                                ? 'bg-yellow-500/10 text-yellow-600 border-yellow-500/20'
+                                ? 'bg-warning/10 text-warning border-warning/20'
                                 : 'bg-muted'
                             )}
                           >
@@ -242,7 +242,7 @@ function NotificationPanelComponent({
             <p className="text-xs text-center text-muted-foreground">
               {isConnected ? (
                 <span className="flex items-center justify-center gap-1">
-                  <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-success" />
                   Atualizações em tempo real ativas
                 </span>
               ) : (
