@@ -180,7 +180,7 @@ export const XPToast = memo(function XPToast({
                 <FloatingParticle
                   key={i}
                   delay={i * 0.1}
-                  color={i % 2 === 0 ? "bg-white/80" : "bg-yellow-300/80"}
+                  color={i % 2 === 0 ? "bg-background/80" : "bg-warning/80"}
                 />
               ))}
             </div>
