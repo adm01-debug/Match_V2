@@ -160,9 +160,9 @@ const LeaderboardRow = memo(({
         <motion.div
           className={cn(
             "absolute inset-0 opacity-10",
-            entry.rank === 1 && "bg-gradient-to-r from-yellow-500 to-amber-500",
-            entry.rank === 2 && "bg-gradient-to-r from-gray-300 to-gray-400",
-            entry.rank === 3 && "bg-gradient-to-r from-amber-600 to-orange-600"
+            entry.rank === 1 && "bg-gradient-to-r from-warning to-warning/60",
+            entry.rank === 2 && "bg-gradient-to-r from-muted-foreground/40 to-muted-foreground/20",
+            entry.rank === 3 && "bg-gradient-to-r from-warning/70 to-accent/60"
           )}
           animate={{ opacity: [0.05, 0.15, 0.05] }}
           transition={{ duration: 2, repeat: Infinity }}
@@ -173,9 +173,9 @@ const LeaderboardRow = memo(({
 
       <Avatar className={cn(
         "h-10 w-10 border-2",
-        entry.rank === 1 && "border-yellow-500",
-        entry.rank === 2 && "border-gray-400",
-        entry.rank === 3 && "border-amber-600",
+        entry.rank === 1 && "border-warning",
+        entry.rank === 2 && "border-muted-foreground",
+        entry.rank === 3 && "border-warning/70",
         entry.rank > 3 && "border-border"
       )}>
         <AvatarImage src={entry.avatar} alt={entry.name} />
