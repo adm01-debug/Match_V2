@@ -41,38 +41,48 @@ const recomendacaoConfig = {
   match_perfeito: {
     label: 'Match Perfeito!',
     emoji: '💜',
-    color: 'from-purple-500 to-pink-500',
+    color: 'from-primary to-accent',
     icon: Trophy,
     description: 'Vocês são feitos um para o outro!'
   },
   match_forte: {
     label: 'Match Forte',
     emoji: '🔥',
-    color: 'from-orange-500 to-red-500',
+    color: 'from-warning to-destructive',
     icon: Zap,
     description: 'Grande potencial de sucesso juntos'
   },
   match_moderado: {
     label: 'Match Promissor',
     emoji: '✨',
-    color: 'from-blue-500 to-cyan-500',
+    color: 'from-info to-primary',
     icon: Star,
     description: 'Há alinhamento em pontos importantes'
   },
   revisar: {
     label: 'Vale Explorar',
     emoji: '🤔',
-    color: 'from-yellow-500 to-orange-500',
+    color: 'from-warning to-warning/70',
     icon: TrendingUp,
     description: 'Alguns pontos precisam de atenção'
   },
   nao_recomendado: {
     label: 'Talvez Não',
     emoji: '💭',
-    color: 'from-gray-400 to-gray-500',
+    color: 'from-muted to-muted-foreground',
     icon: AlertCircle,
     description: 'Pode haver desalinhamento significativo'
   }
+};
+
+/**
+ * Lê uma variável CSS HSL semântica e converte em `hsl(...)` para bibliotecas
+ * externas (canvas-confetti) que não entendem tokens Tailwind.
+ */
+const cssVarHsl = (varName: string): string => {
+  if (typeof window === 'undefined') return 'hsl(0 0% 50%)';
+  const raw = getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+  return raw ? `hsl(${raw})` : 'hsl(0 0% 50%)';
 };
 
 export function MatchResultCard({
@@ -99,7 +109,12 @@ export function MatchResultCard({
         particleCount: 100,
         spread: 70,
         origin: { y: 0.6 },
-        colors: ['#ec4899', '#a855f7', '#ef4444', '#f59e0b']
+        colors: [
+          cssVarHsl('--accent'),
+          cssVarHsl('--primary'),
+          cssVarHsl('--destructive'),
+          cssVarHsl('--warning'),
+        ],
       });
     }
     
@@ -142,13 +157,13 @@ export function MatchResultCard({
     >
       <Card className="overflow-hidden border-2 shadow-xl">
         {/* Header com Score */}
-        <div className={cn("bg-gradient-to-r p-6 text-white", config.color)}>
+        <div className={cn("bg-gradient-to-r p-6 text-primary-foreground", config.color)}>
           <div className="text-center space-y-3">
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ type: 'spring', delay: 0.2 }}
-              className="inline-flex items-center gap-2 bg-white/20 rounded-full px-4 py-2"
+              className="inline-flex items-center gap-2 bg-primary-foreground/20 rounded-full px-4 py-2"
             >
               <IconComponent className="h-5 w-5" />
               <span className="font-semibold">{config.label} {config.emoji}</span>
@@ -164,7 +179,7 @@ export function MatchResultCard({
               <div className="text-lg opacity-90">% compatibilidade</div>
             </motion.div>
             
-            <p className="text-white/80">{config.description}</p>
+            <p className="text-primary-foreground/80">{config.description}</p>
           </div>
         </div>
         
@@ -185,11 +200,11 @@ export function MatchResultCard({
           {/* Breakdown */}
           <div className="grid grid-cols-2 gap-3">
             <div className="p-3 rounded-lg bg-muted/50 text-center">
-              <p className="text-2xl font-bold text-green-500">{match.matchesPerfeitos.length + match.matchesAltos.length}</p>
+              <p className="text-2xl font-bold text-success">{match.matchesPerfeitos.length + match.matchesAltos.length}</p>
               <p className="text-xs text-muted-foreground">Valores Alinhados</p>
             </div>
             <div className="p-3 rounded-lg bg-muted/50 text-center">
-              <p className="text-2xl font-bold text-orange-500">{match.conflitos.length}</p>
+              <p className="text-2xl font-bold text-warning">{match.conflitos.length}</p>
               <p className="text-xs text-muted-foreground">Pontos de Atenção</p>
             </div>
           </div>
@@ -198,12 +213,12 @@ export function MatchResultCard({
           {match.pontosFortes.length > 0 && (
             <div className="space-y-2">
               <p className="text-sm font-medium flex items-center gap-2">
-                <CheckCircle2 className="h-4 w-4 text-green-500" />
+                <CheckCircle2 className="h-4 w-4 text-success" />
                 Vocês combinam em:
               </p>
               <div className="flex flex-wrap gap-2">
                 {match.pontosFortes.slice(0, 3).map((ponto, i) => (
-                  <Badge key={i} variant="secondary" className="bg-green-500/10 text-green-700 dark:text-green-300">
+                  <Badge key={i} variant="secondary" className="bg-success/10 text-success">
                     {ponto}
                   </Badge>
                 ))}
@@ -241,7 +256,7 @@ export function MatchResultCard({
                 {/* Matches Perfeitos */}
                 {match.matchesPerfeitos.length > 0 && (
                   <div className="space-y-2">
-                    <p className="text-sm font-medium text-green-600">💚 Alinhamento Perfeito</p>
+                    <p className="text-sm font-medium text-success">💚 Alinhamento Perfeito</p>
                     {match.matchesPerfeitos.map(renderAlinhamentoItem)}
                   </div>
                 )}
@@ -249,7 +264,7 @@ export function MatchResultCard({
                 {/* Matches Altos */}
                 {match.matchesAltos.length > 0 && (
                   <div className="space-y-2">
-                    <p className="text-sm font-medium text-emerald-600">💪 Alinhamento Alto</p>
+                    <p className="text-sm font-medium text-success">💪 Alinhamento Alto</p>
                     {match.matchesAltos.map(renderAlinhamentoItem)}
                   </div>
                 )}
@@ -257,7 +272,7 @@ export function MatchResultCard({
                 {/* Conflitos */}
                 {match.conflitos.length > 0 && (
                   <div className="space-y-2">
-                    <p className="text-sm font-medium text-orange-600">⚠️ Pontos de Atenção</p>
+                    <p className="text-sm font-medium text-warning">⚠️ Pontos de Atenção</p>
                     {match.conflitos.map(renderAlinhamentoItem)}
                   </div>
                 )}
@@ -277,15 +292,15 @@ export function MatchResultCard({
               <Button
                 variant="outline"
                 size="lg"
-                className="flex-1 border-red-200 hover:bg-red-50 hover:border-red-300 dark:border-red-900 dark:hover:bg-red-950"
+                className="flex-1 border-destructive/20 hover:bg-destructive/10 hover:border-destructive/30"
                 onClick={handlePass}
               >
-                <X className="h-5 w-5 mr-2 text-red-500" />
+                <X className="h-5 w-5 mr-2 text-destructive" />
                 Passar
               </Button>
               <Button
                 size="lg"
-                className="flex-1 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600"
+                className="flex-1 bg-gradient-to-r from-accent to-primary hover:opacity-90"
                 onClick={handleLike}
               >
                 <Heart className="h-5 w-5 mr-2" />
@@ -302,7 +317,7 @@ export function MatchResultCard({
             >
               {liked ? (
                 <div className="space-y-2">
-                  <div className="inline-flex items-center gap-2 text-pink-500">
+                  <div className="inline-flex items-center gap-2 text-accent">
                     <Heart className="h-6 w-6 fill-current" />
                     <span className="text-xl font-bold">Você deu Match!</span>
                   </div>
