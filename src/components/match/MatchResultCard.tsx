@@ -256,7 +256,7 @@ export function MatchResultCard({
                 {/* Matches Perfeitos */}
                 {match.matchesPerfeitos.length > 0 && (
                   <div className="space-y-2">
-                    <p className="text-sm font-medium text-green-600">💚 Alinhamento Perfeito</p>
+                    <p className="text-sm font-medium text-success">💚 Alinhamento Perfeito</p>
                     {match.matchesPerfeitos.map(renderAlinhamentoItem)}
                   </div>
                 )}
@@ -264,7 +264,7 @@ export function MatchResultCard({
                 {/* Matches Altos */}
                 {match.matchesAltos.length > 0 && (
                   <div className="space-y-2">
-                    <p className="text-sm font-medium text-emerald-600">💪 Alinhamento Alto</p>
+                    <p className="text-sm font-medium text-success">💪 Alinhamento Alto</p>
                     {match.matchesAltos.map(renderAlinhamentoItem)}
                   </div>
                 )}
@@ -272,7 +272,7 @@ export function MatchResultCard({
                 {/* Conflitos */}
                 {match.conflitos.length > 0 && (
                   <div className="space-y-2">
-                    <p className="text-sm font-medium text-orange-600">⚠️ Pontos de Atenção</p>
+                    <p className="text-sm font-medium text-warning">⚠️ Pontos de Atenção</p>
                     {match.conflitos.map(renderAlinhamentoItem)}
                   </div>
                 )}
