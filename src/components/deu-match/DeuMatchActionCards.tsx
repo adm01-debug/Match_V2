@@ -71,7 +71,7 @@ export const DeuMatchActionCards: React.FC<DeuMatchActionCardsProps> = ({
           <div className="relative p-8 space-y-6">
             <div className="flex items-center gap-4">
               <div className={`p-4 bg-gradient-to-br ${iconGradient} rounded-2xl`}>
-                <Icon className="w-8 h-8 text-white" />
+                <Icon className="w-8 h-8 text-primary-foreground" />
               </div>
               <div>
                 <h2 className="text-2xl font-bold">{title}</h2>
