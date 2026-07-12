@@ -40,3 +40,19 @@ global.IntersectionObserver = class IntersectionObserver {
   disconnect() {}
   takeRecords(): IntersectionObserverEntry[] { return []; }
 } as unknown as typeof globalThis.IntersectionObserver;
+
+// Radix UI polyfills for jsdom (Select, Popover, DropdownMenu use PointerEvents)
+if (typeof Element !== 'undefined') {
+  if (!Element.prototype.hasPointerCapture) {
+    Element.prototype.hasPointerCapture = () => false;
+  }
+  if (!Element.prototype.setPointerCapture) {
+    Element.prototype.setPointerCapture = () => {};
+  }
+  if (!Element.prototype.releasePointerCapture) {
+    Element.prototype.releasePointerCapture = () => {};
+  }
+  if (!Element.prototype.scrollIntoView) {
+    Element.prototype.scrollIntoView = () => {};
+  }
+}
