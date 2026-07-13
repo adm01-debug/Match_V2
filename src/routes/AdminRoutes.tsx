@@ -9,6 +9,7 @@ import {
   EdgeFunctionTestPage,
   AdminPage,
   DeadLetterQueuePage,
+  AuditLogPage,
 } from "./lazyPages";
 
 export const adminRoutes = (
@@ -77,6 +78,16 @@ export const adminRoutes = (
         <ProtectedRoute requiredRoles={["admin"]}>
           <Admin2FAGuard>
             <DeadLetterQueuePage />
+          </Admin2FAGuard>
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path="/admin/audit-log"
+      element={
+        <ProtectedRoute requiredRoles={["admin"]}>
+          <Admin2FAGuard>
+            <AuditLogPage />
           </Admin2FAGuard>
         </ProtectedRoute>
       }

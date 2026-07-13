@@ -14,6 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_audit_log: {
+        Row: {
+          action: string
+          actor_email: string | null
+          actor_id: string | null
+          created_at: string
+          id: string
+          ip_address: string | null
+          metadata: Json | null
+          target_id: string | null
+          target_type: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          action: string
+          actor_email?: string | null
+          actor_id?: string | null
+          created_at?: string
+          id?: string
+          ip_address?: string | null
+          metadata?: Json | null
+          target_id?: string | null
+          target_type?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          action?: string
+          actor_email?: string | null
+          actor_id?: string | null
+          created_at?: string
+          id?: string
+          ip_address?: string | null
+          metadata?: Json | null
+          target_id?: string | null
+          target_type?: string | null
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
       ai_cache: {
         Row: {
           cache_key: string
@@ -3297,6 +3336,32 @@ export type Database = {
           total_success: number
         }[]
       }
+      admin_list_audit_log: {
+        Args: {
+          p_action?: string
+          p_actor?: string
+          p_limit?: number
+          p_offset?: number
+        }
+        Returns: {
+          action: string
+          actor_email: string | null
+          actor_id: string | null
+          created_at: string
+          id: string
+          ip_address: string | null
+          metadata: Json | null
+          target_id: string | null
+          target_type: string | null
+          user_agent: string | null
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "admin_audit_log"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
       admin_list_communication_retries: {
         Args: { p_limit?: number; p_offset?: number; p_status?: string }
         Returns: {
@@ -3460,6 +3525,15 @@ export type Database = {
       }
       is_hr_staff: { Args: { _user_id: string }; Returns: boolean }
       is_not_deleted: { Args: { deleted_at: string }; Returns: boolean }
+      log_admin_action: {
+        Args: {
+          p_action: string
+          p_metadata?: Json
+          p_target_id?: string
+          p_target_type?: string
+        }
+        Returns: string
+      }
       mark_retry_result: {
         Args: { p_error?: string; p_id: string; p_success: boolean }
         Returns: undefined
