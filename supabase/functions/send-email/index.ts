@@ -82,8 +82,17 @@ serve(async (req) => {
       );
     }
 
-    const resendBreaker = getBreaker("resend-api");
+    const resendBreaker = getBreaker("resend-api", {
+      onStateChange: (name, from, to) =>
+        recordIntegrationEvent({
+          integration: name,
+          event_type:
+            to === "open" ? "breaker_open" : to === "half-open" ? "breaker_half_open" : "breaker_close",
+          metadata: { from, to },
+        }),
+    });
     let response: Response;
+    const startedAt = Date.now();
     try {
       response = await resendBreaker.execute(() =>
         retryWithBackoff(
@@ -110,6 +119,12 @@ serve(async (req) => {
         )
       );
     } catch (breakerErr) {
+      recordIntegrationEvent({
+        integration: "resend-api",
+        event_type: "failure",
+        error: String(breakerErr),
+        latency_ms: Date.now() - startedAt,
+      });
       // Circuit breaker open ou falha após retries → enfileira para retentativa assíncrona
       await enqueueRetry({
         channel: "email",
