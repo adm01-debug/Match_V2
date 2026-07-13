@@ -279,6 +279,7 @@ ${fileContent}`;
     return new Response(
       JSON.stringify({ 
         success: true,
+        cached,
         data: normalizedData,
         fileName,
       }),
