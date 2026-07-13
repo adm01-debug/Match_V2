@@ -71,5 +71,15 @@ export const adminRoutes = (
         </ProtectedRoute>
       }
     />
+    <Route
+      path="/admin/dlq"
+      element={
+        <ProtectedRoute requiredRoles={["admin"]}>
+          <Admin2FAGuard>
+            <DeadLetterQueuePage />
+          </Admin2FAGuard>
+        </ProtectedRoute>
+      }
+    />
   </>
 );
