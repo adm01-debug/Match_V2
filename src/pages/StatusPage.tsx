@@ -83,10 +83,6 @@ export default function StatusPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <Helmet>
-        <title>Status do Sistema | People Lovers</title>
-        <meta name="description" content="Status em tempo real dos serviços da plataforma People Lovers." />
-      </Helmet>
 
       <main className="container max-w-4xl mx-auto px-4 py-12">
         <header className="mb-8 flex items-center gap-3">
