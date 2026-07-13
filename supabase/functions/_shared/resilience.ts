@@ -151,6 +151,7 @@ export function getBreaker(name: string, opts?: CircuitBreakerOptions): CircuitB
       failureThreshold: opts?.failureThreshold ?? 5,
       cooldownMs: opts?.cooldownMs ?? 30_000,
       halfOpenMaxCalls: opts?.halfOpenMaxCalls ?? 1,
+      onStateChange: opts?.onStateChange,
     });
     registry.set(name, b);
   }
