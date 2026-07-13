@@ -72,6 +72,7 @@ export default function StatusPage() {
   };
 
   useEffect(() => {
+    document.title = "Status do Sistema | People Lovers";
     fetchHealth();
     const id = setInterval(fetchHealth, 30_000);
     return () => clearInterval(id);
