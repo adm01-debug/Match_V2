@@ -99,30 +99,52 @@ serve(async (req) => {
 
     const instanceName = EVOLUTION_INSTANCE || 'default';
     const evolutionBreaker = getBreaker("evolution-api");
-    const response = await evolutionBreaker.execute(() =>
-      retryWithBackoff(
-        () => fetch(`${EVOLUTION_API_URL}/message/sendText/${instanceName}`, {
-          method: 'POST',
-          headers: {
-            'apikey': EVOLUTION_API_KEY,
-            'Content-Type': 'application/json',
+    let response: Response;
+    try {
+      response = await evolutionBreaker.execute(() =>
+        retryWithBackoff(
+          () => fetch(`${EVOLUTION_API_URL}/message/sendText/${instanceName}`, {
+            method: 'POST',
+            headers: {
+              'apikey': EVOLUTION_API_KEY,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload),
+          }),
+          {
+            retries: 3,
+            onRetry: (err, attempt, delay) =>
+              console.warn(`[send-whatsapp] retry ${attempt} em ${delay}ms:`, err),
           },
-          body: JSON.stringify(payload),
-        }),
-        {
-          retries: 3,
-          onRetry: (err, attempt, delay) =>
-            console.warn(`[send-whatsapp] retry ${attempt} em ${delay}ms:`, err),
-        },
-      )
-    );
+        )
+      );
+    } catch (breakerErr) {
+      await enqueueRetry({
+        channel: "whatsapp",
+        recipient: formattedPhone,
+        payload: { number: formattedPhone, text: message, instance: instanceName },
+        error: String(breakerErr),
+        dedupKey: `wa:${formattedPhone}:${userId}:${message.slice(0,64)}`,
+      });
+      return new Response(
+        JSON.stringify({ queued: true, message: 'Serviço indisponível, envio agendado para retentativa' }),
+        { status: 202, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
 
     const data = await response.json();
 
     if (!response.ok) {
       console.error('WhatsApp API error:', data);
+      await enqueueRetry({
+        channel: "whatsapp",
+        recipient: formattedPhone,
+        payload: { number: formattedPhone, text: message, instance: instanceName },
+        error: JSON.stringify(data),
+        dedupKey: `wa:${formattedPhone}:${userId}:${message.slice(0,64)}`,
+      });
       return new Response(
-        JSON.stringify({ error: 'Failed to send message', details: data }),
+        JSON.stringify({ error: 'Failed to send message', details: data, queued: true }),
         { status: response.status, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
