@@ -82,5 +82,15 @@ export const adminRoutes = (
         </ProtectedRoute>
       }
     />
+    <Route
+      path="/admin/audit-log"
+      element={
+        <ProtectedRoute requiredRoles={["admin"]}>
+          <Admin2FAGuard>
+            <AuditLogPage />
+          </Admin2FAGuard>
+        </ProtectedRoute>
+      }
+    />
   </>
 );
