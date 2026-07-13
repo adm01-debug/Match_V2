@@ -139,6 +139,63 @@ export default function DeadLetterQueuePage() {
         ))}
       </div>
 
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between pb-3">
+          <CardTitle className="flex items-center gap-2 text-lg">
+            <Activity className="h-5 w-5" aria-hidden />
+            Saúde das integrações (últimos 60 min)
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          {healthQuery.isLoading ? (
+            <Skeleton className="h-20 w-full" />
+          ) : healthQuery.data && healthQuery.data.length > 0 ? (
+            <ul className="grid gap-3 md:grid-cols-2">
+              {healthQuery.data.map((h) => {
+                const stateVariant: "default" | "secondary" | "destructive" =
+                  h.last_state === "breaker_open"
+                    ? "destructive"
+                    : h.last_state === "breaker_half_open"
+                      ? "secondary"
+                      : "default";
+                const stateLabel =
+                  h.last_state === "breaker_open"
+                    ? "OPEN"
+                    : h.last_state === "breaker_half_open"
+                      ? "HALF-OPEN"
+                      : "CLOSED";
+                return (
+                  <li
+                    key={h.integration}
+                    className="rounded-lg border p-3 space-y-1"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="font-medium">{h.integration}</span>
+                      <Badge variant={stateVariant}>{stateLabel}</Badge>
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      ✅ {h.total_success} sucessos · ❌ {h.total_failure} falhas ·{" "}
+                      🔓 {h.breaker_opens} aberturas
+                      {h.avg_latency_ms !== null && ` · ⏱ ${h.avg_latency_ms}ms`}
+                    </p>
+                    {h.last_error && (
+                      <p className="line-clamp-2 text-xs text-destructive">
+                        Último erro: {h.last_error}
+                      </p>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          ) : (
+            <p className="text-sm text-muted-foreground">
+              Nenhum evento registrado nos últimos 60 minutos.
+            </p>
+          )}
+        </CardContent>
+      </Card>
+
+
       <Tabs value={activeStatus} onValueChange={(v) => setActiveStatus(v as RetryStatus)}>
         <TabsList>
           <TabsTrigger value="dead">Falhados</TabsTrigger>
