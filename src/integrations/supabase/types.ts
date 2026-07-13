@@ -1474,6 +1474,36 @@ export type Database = {
           },
         ]
       }
+      integration_health_events: {
+        Row: {
+          created_at: string
+          error: string | null
+          event_type: string
+          id: string
+          integration: string
+          latency_ms: number | null
+          metadata: Json | null
+        }
+        Insert: {
+          created_at?: string
+          error?: string | null
+          event_type: string
+          id?: string
+          integration: string
+          latency_ms?: number | null
+          metadata?: Json | null
+        }
+        Update: {
+          created_at?: string
+          error?: string | null
+          event_type?: string
+          id?: string
+          integration?: string
+          latency_ms?: number | null
+          metadata?: Json | null
+        }
+        Relationships: []
+      }
       ip_access_logs: {
         Row: {
           action: string
@@ -3254,6 +3284,19 @@ export type Database = {
           total: number
         }[]
       }
+      admin_integration_health_summary: {
+        Args: { p_window_minutes?: number }
+        Returns: {
+          avg_latency_ms: number
+          breaker_opens: number
+          integration: string
+          last_error: string
+          last_event_at: string
+          last_state: string
+          total_failure: number
+          total_success: number
+        }[]
+      }
       admin_list_communication_retries: {
         Args: { p_limit?: number; p_offset?: number; p_status?: string }
         Returns: {
@@ -3342,6 +3385,7 @@ export type Database = {
         }
       }
       cleanup_expired_ai_cache: { Args: never; Returns: undefined }
+      cleanup_old_integration_events: { Args: never; Returns: undefined }
       cleanup_old_login_attempts: { Args: never; Returns: undefined }
       cleanup_old_logs: { Args: never; Returns: undefined }
       create_candidato_with_details: {
