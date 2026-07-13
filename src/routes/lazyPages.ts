@@ -54,3 +54,4 @@ export const SecuritySettingsPage = lazy(() => import("@/pages/settings/Security
 
 // Admin pages
 export const DeadLetterQueuePage = lazy(() => import("@/pages/admin/DeadLetterQueuePage"));
+export const AuditLogPage = lazy(() => import("@/pages/admin/AuditLogPage"));
