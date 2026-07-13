@@ -97,14 +97,24 @@ serve(async (req) => {
     };
 
     const instanceName = EVOLUTION_INSTANCE || 'default';
-    const response = await fetch(`${EVOLUTION_API_URL}/message/sendText/${instanceName}`, {
-      method: 'POST',
-      headers: {
-        'apikey': EVOLUTION_API_KEY,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload),
-    });
+    const evolutionBreaker = getBreaker("evolution-api");
+    const response = await evolutionBreaker.execute(() =>
+      retryWithBackoff(
+        () => fetch(`${EVOLUTION_API_URL}/message/sendText/${instanceName}`, {
+          method: 'POST',
+          headers: {
+            'apikey': EVOLUTION_API_KEY,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+        }),
+        {
+          retries: 3,
+          onRetry: (err, attempt, delay) =>
+            console.warn(`[send-whatsapp] retry ${attempt} em ${delay}ms:`, err),
+        },
+      )
+    );
 
     const data = await response.json();
 
