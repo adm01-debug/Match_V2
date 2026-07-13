@@ -64,6 +64,9 @@ describe('Layout Accessibility', () => {
     );
 
     const results = await axe(container);
+    if (results.violations.length > 0) {
+      console.log(JSON.stringify(results.violations.map(v => ({ id: v.id, impact: v.impact, help: v.help, nodes: v.nodes.map(n => n.html) })), null, 2));
+    }
     expect(results.violations).toHaveLength(0);
   });
 });
