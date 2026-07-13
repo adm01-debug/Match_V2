@@ -809,6 +809,51 @@ export type Database = {
           },
         ]
       }
+      communication_retry_queue: {
+        Row: {
+          attempts: number
+          channel: string
+          created_at: string
+          dedup_key: string | null
+          id: string
+          last_error: string | null
+          max_attempts: number
+          next_retry_at: string
+          payload: Json
+          recipient: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          attempts?: number
+          channel: string
+          created_at?: string
+          dedup_key?: string | null
+          id?: string
+          last_error?: string | null
+          max_attempts?: number
+          next_retry_at?: string
+          payload: Json
+          recipient: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          attempts?: number
+          channel?: string
+          created_at?: string
+          dedup_key?: string | null
+          id?: string
+          last_error?: string | null
+          max_attempts?: number
+          next_retry_at?: string
+          payload?: Json
+          recipient?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       comparativos_candidatos: {
         Row: {
           candidatos_ids: string[]
@@ -3220,6 +3265,29 @@ export type Database = {
         }
         Returns: boolean
       }
+      claim_communication_retry_batch: {
+        Args: { p_limit?: number }
+        Returns: {
+          attempts: number
+          channel: string
+          created_at: string
+          dedup_key: string | null
+          id: string
+          last_error: string | null
+          max_attempts: number
+          next_retry_at: string
+          payload: Json
+          recipient: string
+          status: string
+          updated_at: string
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "communication_retry_queue"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
       cleanup_expired_ai_cache: { Args: never; Returns: undefined }
       cleanup_old_login_attempts: { Args: never; Returns: undefined }
       cleanup_old_logs: { Args: never; Returns: undefined }
@@ -3259,6 +3327,17 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      enqueue_communication_retry: {
+        Args: {
+          p_channel: string
+          p_dedup_key?: string
+          p_error?: string
+          p_max_attempts?: number
+          p_payload: Json
+          p_recipient: string
+        }
+        Returns: string
+      }
       get_user_permissions: {
         Args: { _user_id: string }
         Returns: {
@@ -3284,6 +3363,10 @@ export type Database = {
       }
       is_hr_staff: { Args: { _user_id: string }; Returns: boolean }
       is_not_deleted: { Args: { deleted_at: string }; Returns: boolean }
+      mark_retry_result: {
+        Args: { p_error?: string; p_id: string; p_success: boolean }
+        Returns: undefined
+      }
       safe_update_gamification: {
         Args: { p_last_active_date?: string; p_streak?: number }
         Returns: undefined
