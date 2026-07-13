@@ -227,48 +227,50 @@ ${fileContent}`;
       }),
     });
 
-    if (!response.ok) {
-      return new Response(
-        JSON.stringify({ 
-          error: 'Erro no serviço de IA',
-          details: `Status: ${response.status}` 
-        }),
-        { status: 502, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
+    const { value: parsedData, cached } = await withCache<ParsedResume>(
+      "parse-resume",
+      CACHE_VERSION,
+      { fileContent }, // hash do texto bruto do currículo
+      async () => {
+        const response = await fetch('https://ai-gateway.lovable.dev/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${LOVABLE_API_KEY}`,
+          },
+          body: JSON.stringify({
+            model: 'gemini-2.5-flash',
+            messages: [
+              { role: 'system', content: 'Você é um especialista em análise de currículos. Extraia informações de forma precisa e estruturada. Sempre retorne JSON válido sem markdown.' },
+              { role: 'user', content: prompt },
+            ],
+            max_tokens: 4096,
+            temperature: 0.1,
+          }),
+        });
 
-    const aiResponse = await response.json();
-    const content = aiResponse.choices?.[0]?.message?.content;
+        if (!response.ok) throw new Error(`AI gateway error ${response.status}`);
+        const aiResponse = await response.json();
+        const content = aiResponse.choices?.[0]?.message?.content;
+        if (!content) throw new Error('Resposta vazia da IA');
 
-    if (!content) {
-      return new Response(
-        JSON.stringify({ 
-          error: 'Resposta vazia da IA',
-          details: 'Nenhum conteúdo retornado' 
-        }),
-        { status: 502, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
+        let jsonContent = content.trim();
+        if (jsonContent.startsWith('```json')) jsonContent = jsonContent.slice(7);
+        if (jsonContent.startsWith('```')) jsonContent = jsonContent.slice(3);
+        if (jsonContent.endsWith('```')) jsonContent = jsonContent.slice(0, -3);
+        jsonContent = jsonContent.trim();
 
-    let jsonContent = content.trim();
-    if (jsonContent.startsWith('```json')) jsonContent = jsonContent.slice(7);
-    if (jsonContent.startsWith('```')) jsonContent = jsonContent.slice(3);
-    if (jsonContent.endsWith('```')) jsonContent = jsonContent.slice(0, -3);
-    jsonContent = jsonContent.trim();
+        const parsed = JSON.parse(jsonContent) as ParsedResume;
+        if (!parsed.nome || !parsed.email) {
+          throw new Error('Dados incompletos: nome e email são obrigatórios');
+        }
+        return parsed;
+      },
+      30,
+    );
 
-    let parsedData: ParsedResume;
-    
-    try {
-      parsedData = JSON.parse(jsonContent);
-    } catch {
-      return new Response(
-        JSON.stringify({ 
-          error: 'Erro ao processar resposta',
-          details: 'Resposta da IA não é JSON válido' 
-        }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
+    console.log(`parse-resume cache ${cached ? 'HIT' : 'MISS'} for user=${userId}`);
+
 
     if (!parsedData.nome || !parsedData.email) {
       return new Response(
