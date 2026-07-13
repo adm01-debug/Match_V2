@@ -99,8 +99,17 @@ serve(async (req) => {
     };
 
     const instanceName = EVOLUTION_INSTANCE || 'default';
-    const evolutionBreaker = getBreaker("evolution-api");
+    const evolutionBreaker = getBreaker("evolution-api", {
+      onStateChange: (name, from, to) =>
+        recordIntegrationEvent({
+          integration: name,
+          event_type:
+            to === "open" ? "breaker_open" : to === "half-open" ? "breaker_half_open" : "breaker_close",
+          metadata: { from, to },
+        }),
+    });
     let response: Response;
+    const startedAt = Date.now();
     try {
       response = await evolutionBreaker.execute(() =>
         retryWithBackoff(
@@ -120,6 +129,12 @@ serve(async (req) => {
         )
       );
     } catch (breakerErr) {
+      recordIntegrationEvent({
+        integration: "evolution-api",
+        event_type: "failure",
+        error: String(breakerErr),
+        latency_ms: Date.now() - startedAt,
+      });
       await enqueueRetry({
         channel: "whatsapp",
         recipient: formattedPhone,
@@ -137,6 +152,12 @@ serve(async (req) => {
 
     if (!response.ok) {
       console.error('WhatsApp API error:', data);
+      recordIntegrationEvent({
+        integration: "evolution-api",
+        event_type: "failure",
+        error: JSON.stringify(data).slice(0, 500),
+        latency_ms: Date.now() - startedAt,
+      });
       await enqueueRetry({
         channel: "whatsapp",
         recipient: formattedPhone,
@@ -150,6 +171,11 @@ serve(async (req) => {
       );
     }
 
+    recordIntegrationEvent({
+      integration: "evolution-api",
+      event_type: "success",
+      latency_ms: Date.now() - startedAt,
+    });
     console.log(`WhatsApp message sent successfully by user ${userId} to ${to}`);
     return new Response(
       JSON.stringify({ success: true, data }),
