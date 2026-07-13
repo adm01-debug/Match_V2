@@ -82,37 +82,61 @@ serve(async (req) => {
     }
 
     const resendBreaker = getBreaker("resend-api");
-    const response = await resendBreaker.execute(() =>
-      retryWithBackoff(
-        () => fetch('https://api.resend.com/emails', {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${RESEND_API_KEY}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            from: FROM_EMAIL,
-            to: [to],
-            subject,
-            html,
-            reply_to: replyTo,
+    let response: Response;
+    try {
+      response = await resendBreaker.execute(() =>
+        retryWithBackoff(
+          () => fetch('https://api.resend.com/emails', {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${RESEND_API_KEY}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              from: FROM_EMAIL,
+              to: [to],
+              subject,
+              html,
+              reply_to: replyTo,
+            }),
           }),
-        }),
-        {
-          retries: 3,
-          shouldRetry: (_err, _attempt) => true,
-          onRetry: (err, attempt, delay) =>
-            console.warn(`[send-email] retry ${attempt} em ${delay}ms:`, err),
-        },
-      )
-    );
+          {
+            retries: 3,
+            shouldRetry: (_err, _attempt) => true,
+            onRetry: (err, attempt, delay) =>
+              console.warn(`[send-email] retry ${attempt} em ${delay}ms:`, err),
+          },
+        )
+      );
+    } catch (breakerErr) {
+      // Circuit breaker open ou falha após retries → enfileira para retentativa assíncrona
+      await enqueueRetry({
+        channel: "email",
+        recipient: to,
+        payload: { to, subject, html, replyTo, from: FROM_EMAIL },
+        error: String(breakerErr),
+        dedupKey: `email:${to}:${subject}:${userId}`,
+      });
+      return new Response(
+        JSON.stringify({ queued: true, message: 'Serviço indisponível, envio agendado para retentativa' }),
+        { status: 202, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
 
     const data = await response.json();
 
     if (!response.ok) {
       console.error('Resend API error:', data);
+      // Falha lógica da API → também enfileira
+      await enqueueRetry({
+        channel: "email",
+        recipient: to,
+        payload: { to, subject, html, replyTo, from: FROM_EMAIL },
+        error: JSON.stringify(data),
+        dedupKey: `email:${to}:${subject}:${userId}`,
+      });
       return new Response(
-        JSON.stringify({ error: 'Failed to send email', details: data }),
+        JSON.stringify({ error: 'Failed to send email', details: data, queued: true }),
         { status: response.status, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
