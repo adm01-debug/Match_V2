@@ -120,6 +120,12 @@ export default function RolesPage() {
         .eq('user_id', userId)
         .eq('role', role);
       if (error) throw error;
+      await supabase.rpc('log_admin_action', {
+        p_action: 'remove_user_role',
+        p_target_type: 'user_roles',
+        p_target_id: userId,
+        p_metadata: { role },
+      });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['users-with-roles'] });
