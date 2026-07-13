@@ -8,6 +8,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { enforceRateLimit } from "../_shared/rateLimit.ts";
 import { getBreaker, retryWithBackoff } from "../_shared/resilience.ts";
 import { enqueueRetry } from "../_shared/retryQueue.ts";
+import { recordIntegrationEvent } from "../_shared/metrics.ts";
 
 const EVOLUTION_API_URL = (Deno.env.get('EVOLUTION_API_URL') || '').replace(/\/+$/, '');
 const EVOLUTION_API_KEY = Deno.env.get('EVOLUTION_API_KEY');
