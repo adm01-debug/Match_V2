@@ -220,6 +220,7 @@ Retorne APENAS um JSON válido (sem markdown) com esta estrutura:
         candidatoId,
         vagaId,
         vagaTitulo: vaga.titulo,
+        cached,
         ...matchResult,
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
