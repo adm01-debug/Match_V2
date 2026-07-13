@@ -65,6 +65,7 @@ export interface CircuitBreakerOptions {
   failureThreshold?: number; // falhas consecutivas antes de abrir
   cooldownMs?: number; // tempo em open antes de tentar half-open
   halfOpenMaxCalls?: number; // chamadas de teste em half-open
+  onStateChange?: (name: string, from: State, to: State) => void;
 }
 
 export class CircuitBreaker {
@@ -75,16 +76,29 @@ export class CircuitBreaker {
 
   constructor(
     public readonly name: string,
-    private readonly opts: Required<CircuitBreakerOptions> = {
+    private readonly opts: Required<Omit<CircuitBreakerOptions, "onStateChange">> & {
+      onStateChange?: (name: string, from: State, to: State) => void;
+    } = {
       failureThreshold: 5,
       cooldownMs: 30_000,
       halfOpenMaxCalls: 1,
     },
   ) {}
 
+  private transition(to: State) {
+    const from = this.state;
+    if (from === to) return;
+    this.state = to;
+    try {
+      this.opts.onStateChange?.(this.name, from, to);
+    } catch {
+      /* observer não deve quebrar o breaker */
+    }
+  }
+
   getState(): State {
     if (this.state === "open" && Date.now() - this.openedAt >= this.opts.cooldownMs) {
-      this.state = "half-open";
+      this.transition("half-open");
       this.halfOpenInFlight = 0;
     }
     return this.state;
@@ -115,15 +129,15 @@ export class CircuitBreaker {
   private onSuccess() {
     this.failures = 0;
     this.halfOpenInFlight = 0;
-    this.state = "closed";
+    this.transition("closed");
   }
 
   private onFailure() {
     this.failures++;
     this.halfOpenInFlight = Math.max(0, this.halfOpenInFlight - 1);
     if (this.failures >= this.opts.failureThreshold) {
-      this.state = "open";
       this.openedAt = Date.now();
+      this.transition("open");
     }
   }
 }
