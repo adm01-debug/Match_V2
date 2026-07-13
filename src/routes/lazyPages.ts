@@ -51,3 +51,6 @@ export const TwoFactorAuthPage = lazy(() => import("@/pages/auth/TwoFactorAuthPa
 export const RolesPage = lazy(() => import("@/pages/security/RolesPage"));
 export const RateLimitDashboard = lazy(() => import("@/pages/security/RateLimitDashboard"));
 export const SecuritySettingsPage = lazy(() => import("@/pages/settings/SecuritySettingsPage"));
+
+// Admin pages
+export const DeadLetterQueuePage = lazy(() => import("@/pages/admin/DeadLetterQueuePage"));
