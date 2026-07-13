@@ -204,28 +204,6 @@ Retorne APENAS o JSON, sem markdown, sem explicações.
 Currículo:
 ${fileContent}`;
 
-    const response = await fetch('https://ai-gateway.lovable.dev/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${LOVABLE_API_KEY}`,
-      },
-      body: JSON.stringify({
-        model: 'gemini-2.5-flash',
-        messages: [
-          {
-            role: 'system',
-            content: 'Você é um especialista em análise de currículos. Extraia informações de forma precisa e estruturada. Sempre retorne JSON válido sem markdown.'
-          },
-          {
-            role: 'user',
-            content: prompt
-          }
-        ],
-        max_tokens: 4096,
-        temperature: 0.1,
-      }),
-    });
 
     const { value: parsedData, cached } = await withCache<ParsedResume>(
       "parse-resume",
