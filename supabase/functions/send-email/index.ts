@@ -143,6 +143,12 @@ serve(async (req) => {
 
     if (!response.ok) {
       console.error('Resend API error:', data);
+      recordIntegrationEvent({
+        integration: "resend-api",
+        event_type: "failure",
+        error: JSON.stringify(data).slice(0, 500),
+        latency_ms: Date.now() - startedAt,
+      });
       // Falha lógica da API → também enfileira
       await enqueueRetry({
         channel: "email",
@@ -157,6 +163,11 @@ serve(async (req) => {
       );
     }
 
+    recordIntegrationEvent({
+      integration: "resend-api",
+      event_type: "success",
+      latency_ms: Date.now() - startedAt,
+    });
     console.log(`Email sent successfully by user ${userId} to ${to}`);
     return new Response(
       JSON.stringify({ success: true, id: data.id }),
