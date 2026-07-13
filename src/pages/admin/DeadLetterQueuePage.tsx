@@ -81,6 +81,27 @@ export default function DeadLetterQueuePage() {
     onError: (err: Error) => toast.error(`Falha ao reenfileirar: ${err.message}`),
   });
 
+  const healthQuery = useQuery({
+    queryKey: ["dlq-health"],
+    queryFn: async () => {
+      const { data, error } = await supabase.rpc("admin_integration_health_summary", {
+        p_window_minutes: 60,
+      });
+      if (error) throw error;
+      return (data ?? []) as Array<{
+        integration: string;
+        total_success: number;
+        total_failure: number;
+        breaker_opens: number;
+        last_state: string;
+        last_error: string | null;
+        last_event_at: string;
+        avg_latency_ms: number | null;
+      }>;
+    },
+    refetchInterval: 15000,
+  });
+
   const statsByStatus = new Map(
     (statsQuery.data ?? []).map((s) => [s.status, Number(s.total)]),
   );
