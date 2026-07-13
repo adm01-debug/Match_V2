@@ -164,7 +164,7 @@ export function Layout({ children, title }: LayoutProps) {
       {/* Onboarding Tour for new users */}
       <OnboardingTour />
       
-      <div role="region" aria-label="Layout principal" className="min-h-screen flex w-full bg-background">
+      <div className="min-h-screen flex w-full bg-background">
         <AppSidebar />
         <SidebarInset className="flex flex-col flex-1">
           {/* Premium Header */}
