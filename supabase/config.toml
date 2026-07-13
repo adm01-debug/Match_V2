@@ -1,1 +1,4 @@
 project_id = "syinhicmyrsdeaeyayjs"
+
+[functions.health]
+verify_jwt = false
