@@ -6,6 +6,7 @@
 import { serve } from 'https://deno.land/std@0.208.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { enforceRateLimit } from "../_shared/rateLimit.ts";
+import { getBreaker, retryWithBackoff } from "../_shared/resilience.ts";
 
 const EVOLUTION_API_URL = (Deno.env.get('EVOLUTION_API_URL') || '').replace(/\/+$/, '');
 const EVOLUTION_API_KEY = Deno.env.get('EVOLUTION_API_KEY');
@@ -96,14 +97,24 @@ serve(async (req) => {
     };
 
     const instanceName = EVOLUTION_INSTANCE || 'default';
-    const response = await fetch(`${EVOLUTION_API_URL}/message/sendText/${instanceName}`, {
-      method: 'POST',
-      headers: {
-        'apikey': EVOLUTION_API_KEY,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload),
-    });
+    const evolutionBreaker = getBreaker("evolution-api");
+    const response = await evolutionBreaker.execute(() =>
+      retryWithBackoff(
+        () => fetch(`${EVOLUTION_API_URL}/message/sendText/${instanceName}`, {
+          method: 'POST',
+          headers: {
+            'apikey': EVOLUTION_API_KEY,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+        }),
+        {
+          retries: 3,
+          onRetry: (err, attempt, delay) =>
+            console.warn(`[send-whatsapp] retry ${attempt} em ${delay}ms:`, err),
+        },
+      )
+    );
 
     const data = await response.json();
 

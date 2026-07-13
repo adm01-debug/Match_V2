@@ -6,6 +6,7 @@
 import { serve } from 'https://deno.land/std@0.208.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { enforceRateLimit } from "../_shared/rateLimit.ts";
+import { getBreaker, retryWithBackoff } from "../_shared/resilience.ts";
 
 const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY');
 const FROM_EMAIL = Deno.env.get('FROM_EMAIL') || 'noreply@match-ats.com';
@@ -79,20 +80,31 @@ serve(async (req) => {
       );
     }
 
-    const response = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${RESEND_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        from: FROM_EMAIL,
-        to: [to],
-        subject,
-        html,
-        reply_to: replyTo,
-      }),
-    });
+    const resendBreaker = getBreaker("resend-api");
+    const response = await resendBreaker.execute(() =>
+      retryWithBackoff(
+        () => fetch('https://api.resend.com/emails', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${RESEND_API_KEY}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            from: FROM_EMAIL,
+            to: [to],
+            subject,
+            html,
+            reply_to: replyTo,
+          }),
+        }),
+        {
+          retries: 3,
+          shouldRetry: (_err, _attempt) => true,
+          onRetry: (err, attempt, delay) =>
+            console.warn(`[send-email] retry ${attempt} em ${delay}ms:`, err),
+        },
+      )
+    );
 
     const data = await response.json();
 
