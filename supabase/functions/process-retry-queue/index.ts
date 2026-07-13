@@ -12,7 +12,7 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-const WORKER_SECRET = Deno.env.get("WEBHOOK_SIGNING_SECRET") ?? "";
+const WORKER_SECRET = Deno.env.get("SUPABASE_ANON_KEY") ?? "";
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 const FROM_EMAIL = Deno.env.get("FROM_EMAIL") || "noreply@match-ats.com";
 const EVOLUTION_API_URL = (Deno.env.get("EVOLUTION_API_URL") || "").replace(/\/+$/, "");
