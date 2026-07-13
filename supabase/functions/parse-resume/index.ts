@@ -6,6 +6,9 @@
 import { serve } from 'https://deno.land/std@0.208.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { enforceRateLimit } from "../_shared/rateLimit.ts";
+import { withCache } from "../_shared/aiCache.ts";
+
+const CACHE_VERSION = "gemini-2.5-flash:v1";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
