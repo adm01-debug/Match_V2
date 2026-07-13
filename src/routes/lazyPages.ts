@@ -33,6 +33,7 @@ export const WorkflowEditorPage = lazy(() => import("@/pages/WorkflowEditorPage"
 export const DeuMatchPage = lazy(() => import("@/pages/DeuMatchPage"));
 export const TalentPoolPage = lazy(() => import("@/pages/TalentPoolPage"));
 export const NotFound = lazy(() => import("@/pages/NotFound"));
+export const StatusPage = lazy(() => import("@/pages/StatusPage"));
 
 // Portal pages
 export const PortalAuthPage = lazy(() => import("@/pages/portal/PortalAuthPage"));
