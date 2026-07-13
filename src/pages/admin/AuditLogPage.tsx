@@ -27,8 +27,8 @@ export default function AuditLogPage() {
     queryKey: ["admin-audit-log", filter],
     queryFn: async () => {
       const { data, error } = await supabase.rpc("admin_list_audit_log", {
-        p_action: filter.trim() || null,
-        p_actor: null,
+        p_action: filter.trim() || undefined,
+        p_actor: undefined,
         p_limit: 200,
         p_offset: 0,
       });
