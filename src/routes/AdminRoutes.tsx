@@ -8,6 +8,7 @@ import {
   DiagnosticoPage,
   EdgeFunctionTestPage,
   AdminPage,
+  DeadLetterQueuePage,
 } from "./lazyPages";
 
 export const adminRoutes = (
