@@ -3367,6 +3367,10 @@ export type Database = {
         Args: { p_error?: string; p_id: string; p_success: boolean }
         Returns: undefined
       }
+      recover_stuck_communication_retries: {
+        Args: { p_timeout_minutes?: number }
+        Returns: number
+      }
       safe_update_gamification: {
         Args: { p_last_active_date?: string; p_streak?: number }
         Returns: undefined
