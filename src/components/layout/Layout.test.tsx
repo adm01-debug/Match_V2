@@ -6,6 +6,7 @@ import { Layout } from './Layout';
 import { BrowserRouter } from 'react-router-dom';
 import { NotificationProvider } from '@/contexts/NotificationContext';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { TooltipProvider } from '@/components/ui/tooltip';
 
 expect.extend(matchers);
 
