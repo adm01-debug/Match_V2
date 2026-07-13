@@ -8,6 +8,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { enforceRateLimit } from "../_shared/rateLimit.ts";
 import { getBreaker, retryWithBackoff } from "../_shared/resilience.ts";
 import { enqueueRetry } from "../_shared/retryQueue.ts";
+import { recordIntegrationEvent } from "../_shared/metrics.ts";
 
 const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY');
 const FROM_EMAIL = Deno.env.get('FROM_EMAIL') || 'noreply@match-ats.com';
