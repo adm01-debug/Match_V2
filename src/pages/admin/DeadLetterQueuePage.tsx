@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
-import { RefreshCw, RotateCcw, Mail, MessageSquare, AlertCircle } from "lucide-react";
+import { RefreshCw, RotateCcw, Mail, MessageSquare, AlertCircle, Activity } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
@@ -81,6 +81,27 @@ export default function DeadLetterQueuePage() {
     onError: (err: Error) => toast.error(`Falha ao reenfileirar: ${err.message}`),
   });
 
+  const healthQuery = useQuery({
+    queryKey: ["dlq-health"],
+    queryFn: async () => {
+      const { data, error } = await supabase.rpc("admin_integration_health_summary", {
+        p_window_minutes: 60,
+      });
+      if (error) throw error;
+      return (data ?? []) as Array<{
+        integration: string;
+        total_success: number;
+        total_failure: number;
+        breaker_opens: number;
+        last_state: string;
+        last_error: string | null;
+        last_event_at: string;
+        avg_latency_ms: number | null;
+      }>;
+    },
+    refetchInterval: 15000,
+  });
+
   const statsByStatus = new Map(
     (statsQuery.data ?? []).map((s) => [s.status, Number(s.total)]),
   );
@@ -117,6 +138,63 @@ export default function DeadLetterQueuePage() {
           </Card>
         ))}
       </div>
+
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between pb-3">
+          <CardTitle className="flex items-center gap-2 text-lg">
+            <Activity className="h-5 w-5" aria-hidden />
+            Saúde das integrações (últimos 60 min)
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          {healthQuery.isLoading ? (
+            <Skeleton className="h-20 w-full" />
+          ) : healthQuery.data && healthQuery.data.length > 0 ? (
+            <ul className="grid gap-3 md:grid-cols-2">
+              {healthQuery.data.map((h) => {
+                const stateVariant: "default" | "secondary" | "destructive" =
+                  h.last_state === "breaker_open"
+                    ? "destructive"
+                    : h.last_state === "breaker_half_open"
+                      ? "secondary"
+                      : "default";
+                const stateLabel =
+                  h.last_state === "breaker_open"
+                    ? "OPEN"
+                    : h.last_state === "breaker_half_open"
+                      ? "HALF-OPEN"
+                      : "CLOSED";
+                return (
+                  <li
+                    key={h.integration}
+                    className="rounded-lg border p-3 space-y-1"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="font-medium">{h.integration}</span>
+                      <Badge variant={stateVariant}>{stateLabel}</Badge>
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      ✅ {h.total_success} sucessos · ❌ {h.total_failure} falhas ·{" "}
+                      🔓 {h.breaker_opens} aberturas
+                      {h.avg_latency_ms !== null && ` · ⏱ ${h.avg_latency_ms}ms`}
+                    </p>
+                    {h.last_error && (
+                      <p className="line-clamp-2 text-xs text-destructive">
+                        Último erro: {h.last_error}
+                      </p>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          ) : (
+            <p className="text-sm text-muted-foreground">
+              Nenhum evento registrado nos últimos 60 minutos.
+            </p>
+          )}
+        </CardContent>
+      </Card>
+
 
       <Tabs value={activeStatus} onValueChange={(v) => setActiveStatus(v as RetryStatus)}>
         <TabsList>

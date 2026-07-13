@@ -8,6 +8,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { enforceRateLimit } from "../_shared/rateLimit.ts";
 import { getBreaker, retryWithBackoff } from "../_shared/resilience.ts";
 import { enqueueRetry } from "../_shared/retryQueue.ts";
+import { recordIntegrationEvent } from "../_shared/metrics.ts";
 
 const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY');
 const FROM_EMAIL = Deno.env.get('FROM_EMAIL') || 'noreply@match-ats.com';
@@ -81,8 +82,17 @@ serve(async (req) => {
       );
     }
 
-    const resendBreaker = getBreaker("resend-api");
+    const resendBreaker = getBreaker("resend-api", {
+      onStateChange: (name, from, to) =>
+        recordIntegrationEvent({
+          integration: name,
+          event_type:
+            to === "open" ? "breaker_open" : to === "half-open" ? "breaker_half_open" : "breaker_close",
+          metadata: { from, to },
+        }),
+    });
     let response: Response;
+    const startedAt = Date.now();
     try {
       response = await resendBreaker.execute(() =>
         retryWithBackoff(
@@ -109,6 +119,12 @@ serve(async (req) => {
         )
       );
     } catch (breakerErr) {
+      recordIntegrationEvent({
+        integration: "resend-api",
+        event_type: "failure",
+        error: String(breakerErr),
+        latency_ms: Date.now() - startedAt,
+      });
       // Circuit breaker open ou falha após retries → enfileira para retentativa assíncrona
       await enqueueRetry({
         channel: "email",
@@ -127,6 +143,12 @@ serve(async (req) => {
 
     if (!response.ok) {
       console.error('Resend API error:', data);
+      recordIntegrationEvent({
+        integration: "resend-api",
+        event_type: "failure",
+        error: JSON.stringify(data).slice(0, 500),
+        latency_ms: Date.now() - startedAt,
+      });
       // Falha lógica da API → também enfileira
       await enqueueRetry({
         channel: "email",
@@ -141,6 +163,11 @@ serve(async (req) => {
       );
     }
 
+    recordIntegrationEvent({
+      integration: "resend-api",
+      event_type: "success",
+      latency_ms: Date.now() - startedAt,
+    });
     console.log(`Email sent successfully by user ${userId} to ${to}`);
     return new Response(
       JSON.stringify({ success: true, id: data.id }),
