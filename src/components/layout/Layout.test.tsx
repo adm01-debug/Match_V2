@@ -51,13 +51,15 @@ describe('Layout Accessibility', () => {
   it('should have no accessibility violations', async () => {
     const { container } = render(
       <QueryClientProvider client={queryClient}>
-        <NotificationProvider>
-          <BrowserRouter>
-            <Layout title="Test Page">
-              <div>Main Content</div>
-            </Layout>
-          </BrowserRouter>
-        </NotificationProvider>
+        <TooltipProvider>
+          <NotificationProvider>
+            <BrowserRouter>
+              <Layout title="Test Page">
+                <div>Main Content</div>
+              </Layout>
+            </BrowserRouter>
+          </NotificationProvider>
+        </TooltipProvider>
       </QueryClientProvider>
     );
 
