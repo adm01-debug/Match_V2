@@ -80,20 +80,31 @@ serve(async (req) => {
       );
     }
 
-    const response = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${RESEND_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        from: FROM_EMAIL,
-        to: [to],
-        subject,
-        html,
-        reply_to: replyTo,
-      }),
-    });
+    const resendBreaker = getBreaker("resend-api");
+    const response = await resendBreaker.execute(() =>
+      retryWithBackoff(
+        () => fetch('https://api.resend.com/emails', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${RESEND_API_KEY}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            from: FROM_EMAIL,
+            to: [to],
+            subject,
+            html,
+            reply_to: replyTo,
+          }),
+        }),
+        {
+          retries: 3,
+          shouldRetry: (_err, _attempt) => true,
+          onRetry: (err, attempt, delay) =>
+            console.warn(`[send-email] retry ${attempt} em ${delay}ms:`, err),
+        },
+      )
+    );
 
     const data = await response.json();
 
