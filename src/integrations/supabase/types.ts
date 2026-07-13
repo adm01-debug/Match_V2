@@ -3247,6 +3247,59 @@ export type Database = {
           new_xp: number
         }[]
       }
+      admin_communication_retry_stats: {
+        Args: never
+        Returns: {
+          status: string
+          total: number
+        }[]
+      }
+      admin_list_communication_retries: {
+        Args: { p_limit?: number; p_offset?: number; p_status?: string }
+        Returns: {
+          attempts: number
+          channel: string
+          created_at: string
+          dedup_key: string | null
+          id: string
+          last_error: string | null
+          max_attempts: number
+          next_retry_at: string
+          payload: Json
+          recipient: string
+          status: string
+          updated_at: string
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "communication_retry_queue"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
+      admin_requeue_communication_retry: {
+        Args: { p_id: string }
+        Returns: {
+          attempts: number
+          channel: string
+          created_at: string
+          dedup_key: string | null
+          id: string
+          last_error: string | null
+          max_attempts: number
+          next_retry_at: string
+          payload: Json
+          recipient: string
+          status: string
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "communication_retry_queue"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       apply_for_job: {
         Args: { p_candidato_id: string; p_notas?: string; p_vaga_id: string }
         Returns: Json
