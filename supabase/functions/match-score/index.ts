@@ -6,6 +6,9 @@
 import { serve } from 'https://deno.land/std@0.208.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { enforceRateLimit } from "../_shared/rateLimit.ts";
+import { withCache } from "../_shared/aiCache.ts";
+
+const CACHE_VERSION = "gemini-2.5-flash:v1";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -136,79 +139,80 @@ Retorne APENAS um JSON válido (sem markdown) com esta estrutura:
   "pontosAtencao": ["até 3 pontos de atenção"]
 }`;
 
-    const response = await fetch('https://ai-gateway.lovable.dev/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${LOVABLE_API_KEY}`,
+    // Cache key: hash estável dos campos relevantes de candidato + vaga
+    const cacheKeyPayload = {
+      candidato: {
+        habilidades: (candidato.habilidades || []).slice().sort(),
+        formacao: candidato.formacao || [],
+        experiencias: candidato.experiencias || [],
       },
-      body: JSON.stringify({
-        model: 'gemini-2.5-flash',
-        messages: [
-          {
-            role: 'system',
-            content: 'Você é um especialista em recrutamento e seleção. Analise a compatibilidade entre candidatos e vagas de forma objetiva e precisa. Sempre retorne JSON válido sem markdown.'
+      vaga: {
+        titulo: vaga.titulo,
+        requisitos: vaga.requisitos_obrigatorios || "",
+        departamento: vaga.departamento || "",
+      },
+    };
+
+    const { value: matchResult, cached } = await withCache<MatchResult>(
+      "match-score",
+      CACHE_VERSION,
+      cacheKeyPayload,
+      async () => {
+        const response = await fetch('https://ai-gateway.lovable.dev/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${LOVABLE_API_KEY}`,
           },
-          {
-            role: 'user',
-            content: prompt
-          }
-        ],
-        max_tokens: 2048,
-        temperature: 0.2,
-      }),
-    });
+          body: JSON.stringify({
+            model: 'gemini-2.5-flash',
+            messages: [
+              { role: 'system', content: 'Você é um especialista em recrutamento e seleção. Analise a compatibilidade entre candidatos e vagas de forma objetiva e precisa. Sempre retorne JSON válido sem markdown.' },
+              { role: 'user', content: prompt },
+            ],
+            max_tokens: 2048,
+            temperature: 0.2,
+          }),
+        });
 
-    if (!response.ok) {
-      return new Response(
-        JSON.stringify({ error: 'Erro no serviço de IA', status: response.status }),
-        { status: 502, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
+        if (!response.ok) {
+          throw new Error(`AI gateway error ${response.status}`);
+        }
 
-    const aiResponse = await response.json();
-    const content = aiResponse.choices?.[0]?.message?.content;
+        const aiResponse = await response.json();
+        const content = aiResponse.choices?.[0]?.message?.content;
+        if (!content) throw new Error('Resposta vazia da IA');
 
-    if (!content) {
-      return new Response(
-        JSON.stringify({ error: 'Resposta vazia da IA' }),
-        { status: 502, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
+        let jsonContent = content.trim();
+        if (jsonContent.startsWith('```json')) jsonContent = jsonContent.slice(7);
+        if (jsonContent.startsWith('```')) jsonContent = jsonContent.slice(3);
+        if (jsonContent.endsWith('```')) jsonContent = jsonContent.slice(0, -3);
+        jsonContent = jsonContent.trim();
 
-    let jsonContent = content.trim();
-    if (jsonContent.startsWith('```json')) jsonContent = jsonContent.slice(7);
-    if (jsonContent.startsWith('```')) jsonContent = jsonContent.slice(3);
-    if (jsonContent.endsWith('```')) jsonContent = jsonContent.slice(0, -3);
-    jsonContent = jsonContent.trim();
+        let parsed: MatchResult;
+        try {
+          parsed = JSON.parse(jsonContent);
+        } catch {
+          parsed = {
+            scoreTotal: 50, scoreHabilidades: 50, scoreExperiencia: 50, scoreFormacao: 50,
+            habilidadesMatch: [], habilidadesFaltantes: [],
+            habilidadesExtras: (candidato.habilidades || []).map((h: string) => h.toLowerCase()),
+            analise: 'Análise calculada automaticamente.', recomendacao: 'Considerar',
+            pontosFortes: [], pontosAtencao: [],
+          };
+        }
 
-    let matchResult: MatchResult;
-    
-    try {
-      matchResult = JSON.parse(jsonContent);
-    } catch {
-      const habilidadesCandidato = (candidato.habilidades || []).map((h: string) => h.toLowerCase());
-      const scoreBasico = 50;
+        parsed.scoreTotal = Math.max(0, Math.min(100, parsed.scoreTotal));
+        parsed.scoreHabilidades = Math.max(0, Math.min(100, parsed.scoreHabilidades));
+        parsed.scoreExperiencia = Math.max(0, Math.min(100, parsed.scoreExperiencia));
+        parsed.scoreFormacao = Math.max(0, Math.min(100, parsed.scoreFormacao));
+        return parsed;
+      },
+      30,
+    );
 
-      matchResult = {
-        scoreTotal: scoreBasico,
-        scoreHabilidades: scoreBasico,
-        scoreExperiencia: 50,
-        scoreFormacao: 50,
-        habilidadesMatch: [],
-        habilidadesFaltantes: [],
-        habilidadesExtras: habilidadesCandidato,
-        analise: 'Análise calculada automaticamente.',
-        recomendacao: 'Considerar',
-        pontosFortes: [],
-        pontosAtencao: [],
-      };
-    }
+    console.log(`match-score cache ${cached ? 'HIT' : 'MISS'} for candidato=${candidatoId} vaga=${vagaId}`);
 
-    matchResult.scoreTotal = Math.max(0, Math.min(100, matchResult.scoreTotal));
-    matchResult.scoreHabilidades = Math.max(0, Math.min(100, matchResult.scoreHabilidades));
-    matchResult.scoreExperiencia = Math.max(0, Math.min(100, matchResult.scoreExperiencia));
-    matchResult.scoreFormacao = Math.max(0, Math.min(100, matchResult.scoreFormacao));
 
     return new Response(
       JSON.stringify({
@@ -216,6 +220,7 @@ Retorne APENAS um JSON válido (sem markdown) com esta estrutura:
         candidatoId,
         vagaId,
         vagaTitulo: vaga.titulo,
+        cached,
         ...matchResult,
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }

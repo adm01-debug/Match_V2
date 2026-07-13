@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      ai_cache: {
+        Row: {
+          cache_key: string
+          created_at: string
+          expires_at: string
+          hit_count: number
+          id: string
+          operation: string
+          result: Json
+          version: string
+        }
+        Insert: {
+          cache_key: string
+          created_at?: string
+          expires_at?: string
+          hit_count?: number
+          id?: string
+          operation: string
+          result: Json
+          version?: string
+        }
+        Update: {
+          cache_key?: string
+          created_at?: string
+          expires_at?: string
+          hit_count?: number
+          id?: string
+          operation?: string
+          result?: Json
+          version?: string
+        }
+        Relationships: []
+      }
       allowed_countries: {
         Row: {
           added_by: string | null
@@ -3187,6 +3220,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      cleanup_expired_ai_cache: { Args: never; Returns: undefined }
       cleanup_old_login_attempts: { Args: never; Returns: undefined }
       cleanup_old_logs: { Args: never; Returns: undefined }
       create_candidato_with_details: {

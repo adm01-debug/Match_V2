@@ -6,6 +6,9 @@
 import { serve } from 'https://deno.land/std@0.208.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { enforceRateLimit } from "../_shared/rateLimit.ts";
+import { withCache } from "../_shared/aiCache.ts";
+
+const CACHE_VERSION = "gemini-2.5-flash:v1";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -201,71 +204,51 @@ Retorne APENAS o JSON, sem markdown, sem explicações.
 Currículo:
 ${fileContent}`;
 
-    const response = await fetch('https://ai-gateway.lovable.dev/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${LOVABLE_API_KEY}`,
-      },
-      body: JSON.stringify({
-        model: 'gemini-2.5-flash',
-        messages: [
-          {
-            role: 'system',
-            content: 'Você é um especialista em análise de currículos. Extraia informações de forma precisa e estruturada. Sempre retorne JSON válido sem markdown.'
+
+    const { value: parsedData, cached } = await withCache<ParsedResume>(
+      "parse-resume",
+      CACHE_VERSION,
+      { fileContent }, // hash do texto bruto do currículo
+      async () => {
+        const response = await fetch('https://ai-gateway.lovable.dev/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${LOVABLE_API_KEY}`,
           },
-          {
-            role: 'user',
-            content: prompt
-          }
-        ],
-        max_tokens: 4096,
-        temperature: 0.1,
-      }),
-    });
+          body: JSON.stringify({
+            model: 'gemini-2.5-flash',
+            messages: [
+              { role: 'system', content: 'Você é um especialista em análise de currículos. Extraia informações de forma precisa e estruturada. Sempre retorne JSON válido sem markdown.' },
+              { role: 'user', content: prompt },
+            ],
+            max_tokens: 4096,
+            temperature: 0.1,
+          }),
+        });
 
-    if (!response.ok) {
-      return new Response(
-        JSON.stringify({ 
-          error: 'Erro no serviço de IA',
-          details: `Status: ${response.status}` 
-        }),
-        { status: 502, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
+        if (!response.ok) throw new Error(`AI gateway error ${response.status}`);
+        const aiResponse = await response.json();
+        const content = aiResponse.choices?.[0]?.message?.content;
+        if (!content) throw new Error('Resposta vazia da IA');
 
-    const aiResponse = await response.json();
-    const content = aiResponse.choices?.[0]?.message?.content;
+        let jsonContent = content.trim();
+        if (jsonContent.startsWith('```json')) jsonContent = jsonContent.slice(7);
+        if (jsonContent.startsWith('```')) jsonContent = jsonContent.slice(3);
+        if (jsonContent.endsWith('```')) jsonContent = jsonContent.slice(0, -3);
+        jsonContent = jsonContent.trim();
 
-    if (!content) {
-      return new Response(
-        JSON.stringify({ 
-          error: 'Resposta vazia da IA',
-          details: 'Nenhum conteúdo retornado' 
-        }),
-        { status: 502, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
+        const parsed = JSON.parse(jsonContent) as ParsedResume;
+        if (!parsed.nome || !parsed.email) {
+          throw new Error('Dados incompletos: nome e email são obrigatórios');
+        }
+        return parsed;
+      },
+      30,
+    );
 
-    let jsonContent = content.trim();
-    if (jsonContent.startsWith('```json')) jsonContent = jsonContent.slice(7);
-    if (jsonContent.startsWith('```')) jsonContent = jsonContent.slice(3);
-    if (jsonContent.endsWith('```')) jsonContent = jsonContent.slice(0, -3);
-    jsonContent = jsonContent.trim();
+    console.log(`parse-resume cache ${cached ? 'HIT' : 'MISS'} for user=${userId}`);
 
-    let parsedData: ParsedResume;
-    
-    try {
-      parsedData = JSON.parse(jsonContent);
-    } catch {
-      return new Response(
-        JSON.stringify({ 
-          error: 'Erro ao processar resposta',
-          details: 'Resposta da IA não é JSON válido' 
-        }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
 
     if (!parsedData.nome || !parsedData.email) {
       return new Response(
@@ -296,6 +279,7 @@ ${fileContent}`;
     return new Response(
       JSON.stringify({ 
         success: true,
+        cached,
         data: normalizedData,
         fileName,
       }),
