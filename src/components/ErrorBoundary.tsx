@@ -30,8 +30,12 @@ export class ErrorBoundary extends Component<Props, State> {
     return { hasError: true, error };
   }
 
-  override componentDidCatch(_error: Error, errorInfo: ErrorInfo) {
+  override componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     this.setState({ errorInfo });
+    logger.error('React ErrorBoundary caught error', error, 'ErrorBoundary');
+    if (isSentryEnabled()) {
+      captureException(error, { componentStack: errorInfo.componentStack });
+    }
   }
 
   private handleReset = () => {
