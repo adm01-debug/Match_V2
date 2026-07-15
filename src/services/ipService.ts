@@ -6,6 +6,7 @@
 
 
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/services/logger';
 import { 
   STATIC_ALLOWED_IPS, 
   DEVELOPMENT_IPS, 
