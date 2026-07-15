@@ -2,8 +2,16 @@ import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { CheckCircle2, AlertTriangle, XCircle, RefreshCw, Activity } from "lucide-react";
+import { CheckCircle2, AlertTriangle, XCircle, RefreshCw, Activity, Mail } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/integrations/supabase/client";
+
+interface EmailSla {
+  sent: number;
+  delivered: number;
+  bounced: number;
+  delivery_rate: number;
+}
 
 type Status = "ok" | "degraded" | "down";
 
