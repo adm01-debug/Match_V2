@@ -18,6 +18,7 @@ import { ErrorBoundary } from "./components/ErrorBoundary";
 import { NewDeviceDetector } from "./components/auth/NewDeviceDetector";
 import { OnboardingProvider } from "./components/onboarding/OnboardingProvider";
 import { AppRoutes } from "./routes/AppRoutes";
+import { SentryRouteBreadcrumbs } from "./components/common/SentryRouteBreadcrumbs";
 
 const PageLoader = () => (
   <div className="min-h-screen flex items-center justify-center">
@@ -45,6 +46,7 @@ function App() {
         <TooltipProvider>
           <BrowserRouter>
             <AnalyticsProvider>
+              <SentryRouteBreadcrumbs />
               <AuthProvider>
                 <CandidatoAuthProvider>
                   <NotificationProvider>
