@@ -60,17 +60,29 @@ const checkLabels: Record<string, string> = {
 
 export default function StatusPage() {
   const [data, setData] = useState<HealthResponse | null>(null);
+  const [sla, setSla] = useState<EmailSla | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [lastFetched, setLastFetched] = useState<Date | null>(null);
 
-  const fetchHealth = async () => {
+  const fetchAll = async () => {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch(HEALTH_URL, { cache: "no-store" });
-      const json = (await res.json()) as HealthResponse;
-      setData(json);
+      const [healthRes, slaRes] = await Promise.all([
+        fetch(HEALTH_URL, { cache: "no-store" }).then((r) => r.json() as Promise<HealthResponse>),
+        supabase.rpc("public_email_delivery_sla", { p_window_minutes: 60 }),
+      ]);
+      setData(healthRes);
+      if (!slaRes.error && Array.isArray(slaRes.data) && slaRes.data[0]) {
+        const row = slaRes.data[0] as { sent: number; delivered: number; bounced: number; delivery_rate: number };
+        setSla({
+          sent: Number(row.sent),
+          delivered: Number(row.delivered),
+          bounced: Number(row.bounced),
+          delivery_rate: Number(row.delivery_rate),
+        });
+      }
       setLastFetched(new Date());
     } catch (e) {
       setError((e as Error).message);
@@ -81,10 +93,11 @@ export default function StatusPage() {
 
   useEffect(() => {
     document.title = "Status do Sistema | People Lovers";
-    fetchHealth();
-    const id = setInterval(fetchHealth, 30_000);
+    fetchAll();
+    const id = setInterval(fetchAll, 30_000);
     return () => clearInterval(id);
   }, []);
+
 
   const overall = data?.status ?? "degraded";
   const meta = statusMeta[overall];
