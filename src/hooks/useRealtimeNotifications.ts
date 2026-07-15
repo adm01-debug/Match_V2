@@ -6,6 +6,7 @@ import { useEffect, useState, useCallback, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { RealtimeChannel } from '@supabase/supabase-js';
 import { useAuth } from '@/contexts/AuthContext';
+import { logger } from '@/services/logger';
 
 export type NotificationType =
   | 'high_match'
@@ -110,7 +111,7 @@ export function useRealtimeNotifications(options: UseRealtimeNotificationsOption
         .limit(50);
 
       if (error) {
-        // Error fetching notifications - silent
+        logger.error('[useRealtimeNotifications] fetch failed', { error: error.message });
         return;
       }
 
@@ -148,7 +149,7 @@ export function useRealtimeNotifications(options: UseRealtimeNotificationsOption
       });
 
       if (error) {
-        // Error persisting notification - silent
+        logger.error('[useRealtimeNotifications] persist failed', { error: error.message });
       }
     }
   }, [user?.id]);
@@ -166,7 +167,7 @@ export function useRealtimeNotifications(options: UseRealtimeNotificationsOption
       .eq('id', id);
 
     if (error) {
-      // Error marking notification as read - silent
+      logger.error('[useRealtimeNotifications] markAsRead failed', { error: error.message, id });
     }
   }, []);
 
@@ -182,7 +183,7 @@ export function useRealtimeNotifications(options: UseRealtimeNotificationsOption
         .eq('read', false);
 
       if (error) {
-        // Error marking all as read - silent
+        logger.error('[useRealtimeNotifications] markAllAsRead failed', { error: error.message });
       }
     }
   }, [user?.id]);
@@ -198,7 +199,7 @@ export function useRealtimeNotifications(options: UseRealtimeNotificationsOption
         .eq('user_id', user.id);
 
       if (error) {
-        // Error clearing notifications - silent
+        logger.error('[useRealtimeNotifications] clearAll failed', { error: error.message });
       }
     }
   }, [user?.id]);
