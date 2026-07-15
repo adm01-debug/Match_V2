@@ -6,6 +6,7 @@ import { useEffect, useState, useCallback, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { RealtimeChannel } from '@supabase/supabase-js';
 import { useAuth } from '@/contexts/AuthContext';
+import { logger } from '@/services/logger';
 
 export type NotificationType =
   | 'high_match'
