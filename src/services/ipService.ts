@@ -165,14 +165,17 @@ export const logBlockedAttempt = async (
   _reason: string
 ): Promise<void> => {
   try {
-    await supabase.from('ip_access_logs').insert({
+    const { error } = await supabase.from('ip_access_logs').insert({
       ip_address: ip,
       action: 'BLOCKED',
       allowed: false,
       user_agent: navigator.userAgent,
     });
+    if (error) {
+      logger.error('[ipService] Falha ao registrar tentativa bloqueada', { error: error.message, ip });
+    }
   } catch (error) {
-    // logger.error('Erro ao registrar tentativa bloqueada:', error);
+    logger.error('[ipService] Exceção ao registrar tentativa bloqueada', { error, ip });
   }
 };
 
