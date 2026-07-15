@@ -149,7 +149,7 @@ export function useRealtimeNotifications(options: UseRealtimeNotificationsOption
       });
 
       if (error) {
-        // Error persisting notification - silent
+        logger.error('[useRealtimeNotifications] persist failed', { error: error.message });
       }
     }
   }, [user?.id]);
@@ -167,7 +167,7 @@ export function useRealtimeNotifications(options: UseRealtimeNotificationsOption
       .eq('id', id);
 
     if (error) {
-      // Error marking notification as read - silent
+      logger.error('[useRealtimeNotifications] markAsRead failed', { error: error.message, id });
     }
   }, []);
 
@@ -183,7 +183,7 @@ export function useRealtimeNotifications(options: UseRealtimeNotificationsOption
         .eq('read', false);
 
       if (error) {
-        // Error marking all as read - silent
+        logger.error('[useRealtimeNotifications] markAllAsRead failed', { error: error.message });
       }
     }
   }, [user?.id]);
