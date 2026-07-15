@@ -111,7 +111,7 @@ export function useRealtimeNotifications(options: UseRealtimeNotificationsOption
         .limit(50);
 
       if (error) {
-        // Error fetching notifications - silent
+        logger.error('[useRealtimeNotifications] fetch failed', { error: error.message });
         return;
       }
 
