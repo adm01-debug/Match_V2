@@ -125,12 +125,43 @@ export default function StatusPage() {
                 )}
               </div>
             </div>
-            <Button variant="outline" size="sm" onClick={fetchHealth} disabled={loading}>
+            <Button variant="outline" size="sm" onClick={fetchAll} disabled={loading}>
               <RefreshCw className={cn("h-4 w-4 mr-2", loading && "animate-spin")} />
               Atualizar
             </Button>
           </CardHeader>
         </Card>
+
+        {sla && (
+          <Card className="mb-6">
+            <CardHeader>
+              <CardTitle className="text-lg flex items-center gap-2">
+                <Mail className="h-4 w-4 text-primary" aria-hidden />
+                SLA de entrega de emails (últimos 60 min)
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div>
+                <div className="text-xs text-muted-foreground">Enviados</div>
+                <div className="text-2xl font-semibold">{sla.sent}</div>
+              </div>
+              <div>
+                <div className="text-xs text-muted-foreground">Entregues</div>
+                <div className="text-2xl font-semibold text-success">{sla.delivered}</div>
+              </div>
+              <div>
+                <div className="text-xs text-muted-foreground">Bounces</div>
+                <div className={cn("text-2xl font-semibold", sla.bounced > 0 ? "text-destructive" : "")}>{sla.bounced}</div>
+              </div>
+              <div>
+                <div className="text-xs text-muted-foreground">Taxa de entrega</div>
+                <div className={cn("text-2xl font-semibold", sla.delivery_rate >= 95 ? "text-success" : sla.delivery_rate >= 80 ? "text-warning" : "text-destructive")}>
+                  {sla.delivery_rate}%
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {error && (
           <Card className="mb-6 border-destructive/50">
