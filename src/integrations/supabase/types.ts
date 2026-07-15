@@ -3323,6 +3323,19 @@ export type Database = {
           total: number
         }[]
       }
+      admin_email_delivery_sla: {
+        Args: { p_window_minutes?: number }
+        Returns: {
+          bounce_rate: number
+          delivery_rate: number
+          total_bounced: number
+          total_clicked: number
+          total_complained: number
+          total_delivered: number
+          total_opened: number
+          total_sent: number
+        }[]
+      }
       admin_integration_health_summary: {
         Args: { p_window_minutes?: number }
         Returns: {
@@ -3537,6 +3550,15 @@ export type Database = {
       mark_retry_result: {
         Args: { p_error?: string; p_id: string; p_success: boolean }
         Returns: undefined
+      }
+      public_email_delivery_sla: {
+        Args: { p_window_minutes?: number }
+        Returns: {
+          bounced: number
+          delivered: number
+          delivery_rate: number
+          sent: number
+        }[]
       }
       recover_stuck_communication_retries: {
         Args: { p_timeout_minutes?: number }
