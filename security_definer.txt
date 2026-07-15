@@ -1,0 +1,323 @@
+supabase/migrations/20260108121051_1fefec8c-d1e9-4a6d-a875-6dabd41a784d.sql:SECURITY DEFINER
+supabase/migrations/20260108121051_1fefec8c-d1e9-4a6d-a875-6dabd41a784d.sql-SET search_path = public
+supabase/migrations/20260108121051_1fefec8c-d1e9-4a6d-a875-6dabd41a784d.sql-AS $$
+supabase/migrations/20260108121051_1fefec8c-d1e9-4a6d-a875-6dabd41a784d.sql-  SELECT EXISTS (
+supabase/migrations/20260108121051_1fefec8c-d1e9-4a6d-a875-6dabd41a784d.sql-    SELECT 1
+supabase/migrations/20260108121051_1fefec8c-d1e9-4a6d-a875-6dabd41a784d.sql-    FROM public.user_roles
+--
+supabase/migrations/20260315120152_ffcb825c-94af-478e-9a70-896ca734b034.sql:-- Security definer function for gamification
+supabase/migrations/20260315120152_ffcb825c-94af-478e-9a70-896ca734b034.sql-CREATE OR REPLACE FUNCTION public.safe_update_gamification(
+supabase/migrations/20260315120152_ffcb825c-94af-478e-9a70-896ca734b034.sql-  p_streak integer DEFAULT NULL,
+supabase/migrations/20260315120152_ffcb825c-94af-478e-9a70-896ca734b034.sql-  p_last_active_date date DEFAULT NULL
+supabase/migrations/20260315120152_ffcb825c-94af-478e-9a70-896ca734b034.sql-)
+supabase/migrations/20260315120152_ffcb825c-94af-478e-9a70-896ca734b034.sql-RETURNS void
+--
+supabase/migrations/20260315120152_ffcb825c-94af-478e-9a70-896ca734b034.sql:SECURITY DEFINER
+supabase/migrations/20260315120152_ffcb825c-94af-478e-9a70-896ca734b034.sql-SET search_path = public
+supabase/migrations/20260315120152_ffcb825c-94af-478e-9a70-896ca734b034.sql-AS $$
+supabase/migrations/20260315120152_ffcb825c-94af-478e-9a70-896ca734b034.sql-BEGIN
+supabase/migrations/20260315120152_ffcb825c-94af-478e-9a70-896ca734b034.sql-  UPDATE user_gamification
+supabase/migrations/20260315120152_ffcb825c-94af-478e-9a70-896ca734b034.sql-  SET 
+--
+supabase/migrations/20260315120152_ffcb825c-94af-478e-9a70-896ca734b034.sql:-- Security definer for XP award
+supabase/migrations/20260315120152_ffcb825c-94af-478e-9a70-896ca734b034.sql-CREATE OR REPLACE FUNCTION public.award_xp(
+supabase/migrations/20260315120152_ffcb825c-94af-478e-9a70-896ca734b034.sql-  p_action text,
+supabase/migrations/20260315120152_ffcb825c-94af-478e-9a70-896ca734b034.sql-  p_amount integer,
+supabase/migrations/20260315120152_ffcb825c-94af-478e-9a70-896ca734b034.sql-  p_description text DEFAULT NULL
+supabase/migrations/20260315120152_ffcb825c-94af-478e-9a70-896ca734b034.sql-)
+--
+supabase/migrations/20260315120152_ffcb825c-94af-478e-9a70-896ca734b034.sql:SECURITY DEFINER
+supabase/migrations/20260315120152_ffcb825c-94af-478e-9a70-896ca734b034.sql-SET search_path = public
+supabase/migrations/20260315120152_ffcb825c-94af-478e-9a70-896ca734b034.sql-AS $$
+supabase/migrations/20260315120152_ffcb825c-94af-478e-9a70-896ca734b034.sql-BEGIN
+supabase/migrations/20260315120152_ffcb825c-94af-478e-9a70-896ca734b034.sql-  IF p_amount > 100 OR p_amount < 0 THEN
+supabase/migrations/20260315120152_ffcb825c-94af-478e-9a70-896ca734b034.sql-    RAISE EXCEPTION 'Invalid XP amount';
+--
+supabase/migrations/20260513183337_078c6924-8c72-4764-ba73-f14d967387e9.sql:SECURITY DEFINER
+supabase/migrations/20260513183337_078c6924-8c72-4764-ba73-f14d967387e9.sql-SET search_path = public
+supabase/migrations/20260513183337_078c6924-8c72-4764-ba73-f14d967387e9.sql-AS $$
+supabase/migrations/20260513183337_078c6924-8c72-4764-ba73-f14d967387e9.sql-DECLARE
+supabase/migrations/20260513183337_078c6924-8c72-4764-ba73-f14d967387e9.sql-    v_candidatura_id UUID;
+supabase/migrations/20260513183337_078c6924-8c72-4764-ba73-f14d967387e9.sql-    v_vaga_titulo TEXT;
+--
+supabase/migrations/20251226000019_audit_trail.sql:$$ LANGUAGE plpgsql SECURITY DEFINER;
+supabase/migrations/20251226000019_audit_trail.sql-
+supabase/migrations/20251226000019_audit_trail.sql--- Apply audit triggers to critical tables
+supabase/migrations/20251226000019_audit_trail.sql-DO $$
+supabase/migrations/20251226000019_audit_trail.sql-DECLARE
+supabase/migrations/20251226000019_audit_trail.sql-  tables TEXT[] := ARRAY['candidatos', 'vagas', 'candidaturas', 'entrevistas', 'avaliacoes'];
+--
+supabase/migrations/20251216174624_339fe9d1-99a0-4eee-9bd0-ea420a18b148.sql:-- Create security definer function to check roles
+supabase/migrations/20251216174624_339fe9d1-99a0-4eee-9bd0-ea420a18b148.sql-CREATE OR REPLACE FUNCTION public.has_role(_user_id UUID, _role app_role)
+supabase/migrations/20251216174624_339fe9d1-99a0-4eee-9bd0-ea420a18b148.sql-RETURNS BOOLEAN
+supabase/migrations/20251216174624_339fe9d1-99a0-4eee-9bd0-ea420a18b148.sql-LANGUAGE sql
+supabase/migrations/20251216174624_339fe9d1-99a0-4eee-9bd0-ea420a18b148.sql-STABLE
+supabase/migrations/20251216174624_339fe9d1-99a0-4eee-9bd0-ea420a18b148.sql:SECURITY DEFINER
+supabase/migrations/20251216174624_339fe9d1-99a0-4eee-9bd0-ea420a18b148.sql-SET search_path = public
+supabase/migrations/20251216174624_339fe9d1-99a0-4eee-9bd0-ea420a18b148.sql-AS $$
+supabase/migrations/20251216174624_339fe9d1-99a0-4eee-9bd0-ea420a18b148.sql-  SELECT EXISTS (
+supabase/migrations/20251216174624_339fe9d1-99a0-4eee-9bd0-ea420a18b148.sql-    SELECT 1
+supabase/migrations/20251216174624_339fe9d1-99a0-4eee-9bd0-ea420a18b148.sql-    FROM public.user_roles
+--
+supabase/migrations/20251216174624_339fe9d1-99a0-4eee-9bd0-ea420a18b148.sql:SECURITY DEFINER
+supabase/migrations/20251216174624_339fe9d1-99a0-4eee-9bd0-ea420a18b148.sql-SET search_path = public
+supabase/migrations/20251216174624_339fe9d1-99a0-4eee-9bd0-ea420a18b148.sql-AS $$
+supabase/migrations/20251216174624_339fe9d1-99a0-4eee-9bd0-ea420a18b148.sql-  SELECT COALESCE(array_agg(role), ARRAY[]::app_role[])
+supabase/migrations/20251216174624_339fe9d1-99a0-4eee-9bd0-ea420a18b148.sql-  FROM public.user_roles
+supabase/migrations/20251216174624_339fe9d1-99a0-4eee-9bd0-ea420a18b148.sql-  WHERE user_id = _user_id
+--
+supabase/migrations/20251216174624_339fe9d1-99a0-4eee-9bd0-ea420a18b148.sql:SECURITY DEFINER
+supabase/migrations/20251216174624_339fe9d1-99a0-4eee-9bd0-ea420a18b148.sql-SET search_path = public
+supabase/migrations/20251216174624_339fe9d1-99a0-4eee-9bd0-ea420a18b148.sql-AS $$
+supabase/migrations/20251216174624_339fe9d1-99a0-4eee-9bd0-ea420a18b148.sql-BEGIN
+supabase/migrations/20251216174624_339fe9d1-99a0-4eee-9bd0-ea420a18b148.sql-  INSERT INTO public.profiles (user_id, nome, email)
+supabase/migrations/20251216174624_339fe9d1-99a0-4eee-9bd0-ea420a18b148.sql-  VALUES (
+--
+supabase/migrations/20251226000021_audit_trail.sql:$$ LANGUAGE plpgsql SECURITY DEFINER;
+supabase/migrations/20251226000021_audit_trail.sql-
+supabase/migrations/20251226000021_audit_trail.sql--- Trigger function for automatic audit logging
+supabase/migrations/20251226000021_audit_trail.sql-CREATE OR REPLACE FUNCTION audit_trigger_func() RETURNS TRIGGER AS $$
+supabase/migrations/20251226000021_audit_trail.sql-BEGIN
+supabase/migrations/20251226000021_audit_trail.sql-  IF TG_OP = 'INSERT' THEN
+--
+supabase/migrations/20251226000021_audit_trail.sql:$$ LANGUAGE plpgsql SECURITY DEFINER;
+supabase/migrations/20251226000021_audit_trail.sql-
+supabase/migrations/20251226000021_audit_trail.sql--- Apply triggers to critical tables (uncomment as needed)
+supabase/migrations/20251226000021_audit_trail.sql--- CREATE TRIGGER audit_candidatos AFTER INSERT OR UPDATE OR DELETE ON public.candidatos FOR EACH ROW EXECUTE FUNCTION audit_trigger_func();
+supabase/migrations/20251226000021_audit_trail.sql--- CREATE TRIGGER audit_vagas AFTER INSERT OR UPDATE OR DELETE ON public.vagas FOR EACH ROW EXECUTE FUNCTION audit_trigger_func();
+--
+supabase/migrations/20251231132406_8fe32def-ce57-4d0b-84fc-16f62c76ef85.sql:SECURITY DEFINER
+supabase/migrations/20251231132406_8fe32def-ce57-4d0b-84fc-16f62c76ef85.sql-SET search_path = public
+supabase/migrations/20251231132406_8fe32def-ce57-4d0b-84fc-16f62c76ef85.sql-AS $$
+supabase/migrations/20251231132406_8fe32def-ce57-4d0b-84fc-16f62c76ef85.sql-BEGIN
+supabase/migrations/20251231132406_8fe32def-ce57-4d0b-84fc-16f62c76ef85.sql-  DELETE FROM public.login_attempts 
+supabase/migrations/20251231132406_8fe32def-ce57-4d0b-84fc-16f62c76ef85.sql-  WHERE last_attempt_at < now() - interval '24 hours'
+--
+supabase/migrations/20251216172405_3c349b0f-3a10-4fde-a282-0a918c9a6d1f.sql:SECURITY DEFINER
+supabase/migrations/20251216172405_3c349b0f-3a10-4fde-a282-0a918c9a6d1f.sql-SET search_path = public;
+--
+supabase/migrations/20260713124627_e0d102d4-2c2f-4462-ad19-58b2f9959fe9.sql:SECURITY DEFINER
+supabase/migrations/20260713124627_e0d102d4-2c2f-4462-ad19-58b2f9959fe9.sql-SET search_path = public
+supabase/migrations/20260713124627_e0d102d4-2c2f-4462-ad19-58b2f9959fe9.sql-AS $$
+supabase/migrations/20260713124627_e0d102d4-2c2f-4462-ad19-58b2f9959fe9.sql-DECLARE
+supabase/migrations/20260713124627_e0d102d4-2c2f-4462-ad19-58b2f9959fe9.sql-  v_id UUID;
+supabase/migrations/20260713124627_e0d102d4-2c2f-4462-ad19-58b2f9959fe9.sql-  v_email TEXT;
+--
+supabase/migrations/20260713124627_e0d102d4-2c2f-4462-ad19-58b2f9959fe9.sql:SECURITY DEFINER
+supabase/migrations/20260713124627_e0d102d4-2c2f-4462-ad19-58b2f9959fe9.sql-SET search_path = public
+supabase/migrations/20260713124627_e0d102d4-2c2f-4462-ad19-58b2f9959fe9.sql-AS $$
+supabase/migrations/20260713124627_e0d102d4-2c2f-4462-ad19-58b2f9959fe9.sql-BEGIN
+supabase/migrations/20260713124627_e0d102d4-2c2f-4462-ad19-58b2f9959fe9.sql-  IF NOT public.has_role(auth.uid(), 'admin') THEN
+supabase/migrations/20260713124627_e0d102d4-2c2f-4462-ad19-58b2f9959fe9.sql-    RAISE EXCEPTION 'forbidden' USING ERRCODE = '42501';
+--
+supabase/migrations/20260713124627_e0d102d4-2c2f-4462-ad19-58b2f9959fe9.sql:SECURITY DEFINER
+supabase/migrations/20260713124627_e0d102d4-2c2f-4462-ad19-58b2f9959fe9.sql-SET search_path TO 'public'
+supabase/migrations/20260713124627_e0d102d4-2c2f-4462-ad19-58b2f9959fe9.sql-AS $function$
+supabase/migrations/20260713124627_e0d102d4-2c2f-4462-ad19-58b2f9959fe9.sql-DECLARE
+supabase/migrations/20260713124627_e0d102d4-2c2f-4462-ad19-58b2f9959fe9.sql-  v_row public.communication_retry_queue;
+supabase/migrations/20260713124627_e0d102d4-2c2f-4462-ad19-58b2f9959fe9.sql-BEGIN
+--
+supabase/migrations/20260715141111_76a89cc9-6130-49cf-9c71-b1dcb4fba012.sql:LANGUAGE plpgsql STABLE SECURITY DEFINER SET search_path TO 'public'
+supabase/migrations/20260715141111_76a89cc9-6130-49cf-9c71-b1dcb4fba012.sql-AS $$
+supabase/migrations/20260715141111_76a89cc9-6130-49cf-9c71-b1dcb4fba012.sql-BEGIN
+supabase/migrations/20260715141111_76a89cc9-6130-49cf-9c71-b1dcb4fba012.sql-  IF NOT public.has_role(auth.uid(), 'admin') THEN
+supabase/migrations/20260715141111_76a89cc9-6130-49cf-9c71-b1dcb4fba012.sql-    RAISE EXCEPTION 'forbidden' USING ERRCODE = '42501';
+supabase/migrations/20260715141111_76a89cc9-6130-49cf-9c71-b1dcb4fba012.sql-  END IF;
+--
+supabase/migrations/20260715141111_76a89cc9-6130-49cf-9c71-b1dcb4fba012.sql:LANGUAGE plpgsql STABLE SECURITY DEFINER SET search_path TO 'public'
+supabase/migrations/20260715141111_76a89cc9-6130-49cf-9c71-b1dcb4fba012.sql-AS $$
+supabase/migrations/20260715141111_76a89cc9-6130-49cf-9c71-b1dcb4fba012.sql-BEGIN
+supabase/migrations/20260715141111_76a89cc9-6130-49cf-9c71-b1dcb4fba012.sql-  RETURN QUERY
+supabase/migrations/20260715141111_76a89cc9-6130-49cf-9c71-b1dcb4fba012.sql-  WITH w AS (
+supabase/migrations/20260715141111_76a89cc9-6130-49cf-9c71-b1dcb4fba012.sql-    SELECT event_type FROM public.integration_health_events
+--
+supabase/migrations/20251226000017_rbac.sql:$$ LANGUAGE plpgsql SECURITY DEFINER;
+supabase/migrations/20251226000017_rbac.sql-
+supabase/migrations/20251226000017_rbac.sql-GRANT ALL ON public.roles TO authenticated;
+supabase/migrations/20251226000017_rbac.sql-GRANT ALL ON public.permissions TO authenticated;
+supabase/migrations/20251226000017_rbac.sql-GRANT ALL ON public.role_permissions TO authenticated;
+supabase/migrations/20251226000017_rbac.sql-GRANT ALL ON public.user_roles TO authenticated;
+--
+supabase/migrations/20260713124101_225da807-6e73-4a99-b812-7d6ecdf6b3cb.sql:STABLE SECURITY DEFINER
+supabase/migrations/20260713124101_225da807-6e73-4a99-b812-7d6ecdf6b3cb.sql-SET search_path TO 'public'
+supabase/migrations/20260713124101_225da807-6e73-4a99-b812-7d6ecdf6b3cb.sql-AS $$
+supabase/migrations/20260713124101_225da807-6e73-4a99-b812-7d6ecdf6b3cb.sql-BEGIN
+supabase/migrations/20260713124101_225da807-6e73-4a99-b812-7d6ecdf6b3cb.sql-  IF NOT public.has_role(auth.uid(), 'admin') THEN
+supabase/migrations/20260713124101_225da807-6e73-4a99-b812-7d6ecdf6b3cb.sql-    RAISE EXCEPTION 'forbidden' USING ERRCODE = '42501';
+--
+supabase/migrations/20260713124101_225da807-6e73-4a99-b812-7d6ecdf6b3cb.sql:SECURITY DEFINER
+supabase/migrations/20260713124101_225da807-6e73-4a99-b812-7d6ecdf6b3cb.sql-SET search_path TO 'public'
+supabase/migrations/20260713124101_225da807-6e73-4a99-b812-7d6ecdf6b3cb.sql-AS $$
+supabase/migrations/20260713124101_225da807-6e73-4a99-b812-7d6ecdf6b3cb.sql-DECLARE
+supabase/migrations/20260713124101_225da807-6e73-4a99-b812-7d6ecdf6b3cb.sql-  v_row public.communication_retry_queue;
+supabase/migrations/20260713124101_225da807-6e73-4a99-b812-7d6ecdf6b3cb.sql-BEGIN
+--
+supabase/migrations/20260713124101_225da807-6e73-4a99-b812-7d6ecdf6b3cb.sql:STABLE SECURITY DEFINER
+supabase/migrations/20260713124101_225da807-6e73-4a99-b812-7d6ecdf6b3cb.sql-SET search_path TO 'public'
+supabase/migrations/20260713124101_225da807-6e73-4a99-b812-7d6ecdf6b3cb.sql-AS $$
+supabase/migrations/20260713124101_225da807-6e73-4a99-b812-7d6ecdf6b3cb.sql-BEGIN
+supabase/migrations/20260713124101_225da807-6e73-4a99-b812-7d6ecdf6b3cb.sql-  IF NOT public.has_role(auth.uid(), 'admin') THEN
+supabase/migrations/20260713124101_225da807-6e73-4a99-b812-7d6ecdf6b3cb.sql-    RAISE EXCEPTION 'forbidden' USING ERRCODE = '42501';
+--
+supabase/migrations/20260713124254_47a40955-6466-46f0-b73e-7e1c0d25c73e.sql:STABLE SECURITY DEFINER
+supabase/migrations/20260713124254_47a40955-6466-46f0-b73e-7e1c0d25c73e.sql-SET search_path TO 'public'
+supabase/migrations/20260713124254_47a40955-6466-46f0-b73e-7e1c0d25c73e.sql-AS $$
+supabase/migrations/20260713124254_47a40955-6466-46f0-b73e-7e1c0d25c73e.sql-BEGIN
+supabase/migrations/20260713124254_47a40955-6466-46f0-b73e-7e1c0d25c73e.sql-  IF NOT public.has_role(auth.uid(), 'admin') THEN
+supabase/migrations/20260713124254_47a40955-6466-46f0-b73e-7e1c0d25c73e.sql-    RAISE EXCEPTION 'forbidden' USING ERRCODE = '42501';
+--
+supabase/migrations/20260713124254_47a40955-6466-46f0-b73e-7e1c0d25c73e.sql:SECURITY DEFINER
+supabase/migrations/20260713124254_47a40955-6466-46f0-b73e-7e1c0d25c73e.sql-SET search_path TO 'public'
+supabase/migrations/20260713124254_47a40955-6466-46f0-b73e-7e1c0d25c73e.sql-AS $$
+supabase/migrations/20260713124254_47a40955-6466-46f0-b73e-7e1c0d25c73e.sql-BEGIN
+supabase/migrations/20260713124254_47a40955-6466-46f0-b73e-7e1c0d25c73e.sql-  DELETE FROM public.integration_health_events
+supabase/migrations/20260713124254_47a40955-6466-46f0-b73e-7e1c0d25c73e.sql-  WHERE created_at < now() - interval '30 days';
+--
+supabase/migrations/20260713123954_5a6241d1-e0c1-4771-9126-cd0a17df65eb.sql:SECURITY DEFINER
+supabase/migrations/20260713123954_5a6241d1-e0c1-4771-9126-cd0a17df65eb.sql-SET search_path TO 'public'
+supabase/migrations/20260713123954_5a6241d1-e0c1-4771-9126-cd0a17df65eb.sql-AS $function$
+supabase/migrations/20260713123954_5a6241d1-e0c1-4771-9126-cd0a17df65eb.sql-DECLARE
+supabase/migrations/20260713123954_5a6241d1-e0c1-4771-9126-cd0a17df65eb.sql-  v_count integer;
+supabase/migrations/20260713123954_5a6241d1-e0c1-4771-9126-cd0a17df65eb.sql-BEGIN
+--
+supabase/migrations/20251220143907_6a7c4f61-4075-4d5d-a769-6e21f68e087c.sql:SECURITY DEFINER SET search_path = public
+supabase/migrations/20251220143907_6a7c4f61-4075-4d5d-a769-6e21f68e087c.sql-AS $$
+supabase/migrations/20251220143907_6a7c4f61-4075-4d5d-a769-6e21f68e087c.sql-BEGIN
+supabase/migrations/20251220143907_6a7c4f61-4075-4d5d-a769-6e21f68e087c.sql-  -- Only create candidatos_auth if user is registering as candidate
+supabase/migrations/20251220143907_6a7c4f61-4075-4d5d-a769-6e21f68e087c.sql-  IF NEW.raw_user_meta_data ->> 'user_type' = 'candidato' THEN
+supabase/migrations/20251220143907_6a7c4f61-4075-4d5d-a769-6e21f68e087c.sql-    INSERT INTO public.candidatos_auth (user_id, nome, email, telefone)
+--
+supabase/migrations/20260513181256_66f93d2c-2d96-402f-b578-8cf79225db50.sql:SECURITY DEFINER
+supabase/migrations/20260513181256_66f93d2c-2d96-402f-b578-8cf79225db50.sql-SET search_path = public
+supabase/migrations/20260513181256_66f93d2c-2d96-402f-b578-8cf79225db50.sql-AS $$
+supabase/migrations/20260513181256_66f93d2c-2d96-402f-b578-8cf79225db50.sql-DECLARE
+supabase/migrations/20260513181256_66f93d2c-2d96-402f-b578-8cf79225db50.sql-    v_candidato public.candidatos;
+supabase/migrations/20260513181256_66f93d2c-2d96-402f-b578-8cf79225db50.sql-BEGIN
+--
+supabase/migrations/20251231115857_057d443b-736d-4406-8ad8-623188db8aef.sql:SECURITY DEFINER
+supabase/migrations/20251231115857_057d443b-736d-4406-8ad8-623188db8aef.sql-SET search_path = public
+supabase/migrations/20251231115857_057d443b-736d-4406-8ad8-623188db8aef.sql-AS $$
+supabase/migrations/20251231115857_057d443b-736d-4406-8ad8-623188db8aef.sql-BEGIN
+supabase/migrations/20251231115857_057d443b-736d-4406-8ad8-623188db8aef.sql-  -- Limpa rate limit logs com mais de 30 dias
+supabase/migrations/20251231115857_057d443b-736d-4406-8ad8-623188db8aef.sql-  DELETE FROM public.rate_limit_logs WHERE created_at < now() - interval '30 days';
+--
+supabase/migrations/20260713105846_1b5fdb73-316d-4070-8961-75f03e1d0e5f.sql:SECURITY DEFINER
+supabase/migrations/20260713105846_1b5fdb73-316d-4070-8961-75f03e1d0e5f.sql-SET search_path = public
+supabase/migrations/20260713105846_1b5fdb73-316d-4070-8961-75f03e1d0e5f.sql-AS $$
+supabase/migrations/20260713105846_1b5fdb73-316d-4070-8961-75f03e1d0e5f.sql-DECLARE
+supabase/migrations/20260713105846_1b5fdb73-316d-4070-8961-75f03e1d0e5f.sql-  v_id UUID;
+supabase/migrations/20260713105846_1b5fdb73-316d-4070-8961-75f03e1d0e5f.sql-BEGIN
+--
+supabase/migrations/20260713105846_1b5fdb73-316d-4070-8961-75f03e1d0e5f.sql:SECURITY DEFINER
+supabase/migrations/20260713105846_1b5fdb73-316d-4070-8961-75f03e1d0e5f.sql-SET search_path = public
+supabase/migrations/20260713105846_1b5fdb73-316d-4070-8961-75f03e1d0e5f.sql-AS $$
+supabase/migrations/20260713105846_1b5fdb73-316d-4070-8961-75f03e1d0e5f.sql-BEGIN
+supabase/migrations/20260713105846_1b5fdb73-316d-4070-8961-75f03e1d0e5f.sql-  RETURN QUERY
+supabase/migrations/20260713105846_1b5fdb73-316d-4070-8961-75f03e1d0e5f.sql-  UPDATE public.communication_retry_queue q
+--
+supabase/migrations/20260713105846_1b5fdb73-316d-4070-8961-75f03e1d0e5f.sql:SECURITY DEFINER
+supabase/migrations/20260713105846_1b5fdb73-316d-4070-8961-75f03e1d0e5f.sql-SET search_path = public
+supabase/migrations/20260713105846_1b5fdb73-316d-4070-8961-75f03e1d0e5f.sql-AS $$
+supabase/migrations/20260713105846_1b5fdb73-316d-4070-8961-75f03e1d0e5f.sql-DECLARE
+supabase/migrations/20260713105846_1b5fdb73-316d-4070-8961-75f03e1d0e5f.sql-  v_row public.communication_retry_queue;
+supabase/migrations/20260713105846_1b5fdb73-316d-4070-8961-75f03e1d0e5f.sql-  v_backoff_seconds INTEGER;
+--
+supabase/migrations/20260513181230_e820f0ee-ee0e-403f-858d-b0b04a88c4f3.sql:$$ LANGUAGE plpgsql SECURITY DEFINER;
+supabase/migrations/20260513181230_e820f0ee-ee0e-403f-858d-b0b04a88c4f3.sql-
+supabase/migrations/20260513181230_e820f0ee-ee0e-403f-858d-b0b04a88c4f3.sql--- Garantir que a função seja acessível por usuários autenticados
+supabase/migrations/20260513181230_e820f0ee-ee0e-403f-858d-b0b04a88c4f3.sql-GRANT EXECUTE ON FUNCTION public.create_candidato_with_details(TEXT, TEXT, TEXT, TEXT, TEXT[], JSONB, JSONB, TEXT, TEXT, TEXT) TO authenticated;
+--
+supabase/migrations/20260711164752_0c09d686-0d45-4c1c-88d9-2bb84a3225d3.sql:SECURITY DEFINER
+supabase/migrations/20260711164752_0c09d686-0d45-4c1c-88d9-2bb84a3225d3.sql-SET search_path = public
+supabase/migrations/20260711164752_0c09d686-0d45-4c1c-88d9-2bb84a3225d3.sql-AS $$
+supabase/migrations/20260711164752_0c09d686-0d45-4c1c-88d9-2bb84a3225d3.sql-DECLARE
+supabase/migrations/20260711164752_0c09d686-0d45-4c1c-88d9-2bb84a3225d3.sql-  v_window timestamptz := date_trunc('second', now()) - make_interval(secs => (extract(epoch from now())::int % p_window_seconds));
+supabase/migrations/20260711164752_0c09d686-0d45-4c1c-88d9-2bb84a3225d3.sql-  v_count integer;
+--
+supabase/migrations/20260315121923_33a091ed-6f4c-455e-8f29-bed34201a472.sql:RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER SET search_path = public AS $$
+supabase/migrations/20260315121923_33a091ed-6f4c-455e-8f29-bed34201a472.sql-BEGIN
+supabase/migrations/20260315121923_33a091ed-6f4c-455e-8f29-bed34201a472.sql-  IF OLD.etapa_atual IS DISTINCT FROM NEW.etapa_atual THEN
+supabase/migrations/20260315121923_33a091ed-6f4c-455e-8f29-bed34201a472.sql-    INSERT INTO public.historico_etapas (processo_id, etapa_anterior, etapa_nova)
+supabase/migrations/20260315121923_33a091ed-6f4c-455e-8f29-bed34201a472.sql-    VALUES (NEW.id, OLD.etapa_atual, NEW.etapa_atual);
+supabase/migrations/20260315121923_33a091ed-6f4c-455e-8f29-bed34201a472.sql-  END IF;
+--
+supabase/migrations/20260113161245_f9e43dae-a22a-444e-9d53-dd802f99be88.sql:SECURITY DEFINER
+supabase/migrations/20260113161245_f9e43dae-a22a-444e-9d53-dd802f99be88.sql-SET search_path = public
+supabase/migrations/20260113161245_f9e43dae-a22a-444e-9d53-dd802f99be88.sql-AS $$
+supabase/migrations/20260113161245_f9e43dae-a22a-444e-9d53-dd802f99be88.sql-BEGIN
+supabase/migrations/20260113161245_f9e43dae-a22a-444e-9d53-dd802f99be88.sql-  IF xp_amount >= 5500 THEN RETURN 10;
+supabase/migrations/20260113161245_f9e43dae-a22a-444e-9d53-dd802f99be88.sql-  ELSIF xp_amount >= 4000 THEN RETURN 9;
+--
+supabase/migrations/20260113161245_f9e43dae-a22a-444e-9d53-dd802f99be88.sql:SECURITY DEFINER
+supabase/migrations/20260113161245_f9e43dae-a22a-444e-9d53-dd802f99be88.sql-SET search_path = public
+supabase/migrations/20260113161245_f9e43dae-a22a-444e-9d53-dd802f99be88.sql-AS $$
+supabase/migrations/20260113161245_f9e43dae-a22a-444e-9d53-dd802f99be88.sql-DECLARE
+supabase/migrations/20260113161245_f9e43dae-a22a-444e-9d53-dd802f99be88.sql-  v_current_xp INTEGER;
+supabase/migrations/20260113161245_f9e43dae-a22a-444e-9d53-dd802f99be88.sql-  v_current_level INTEGER;
+--
+supabase/migrations/20260113161245_f9e43dae-a22a-444e-9d53-dd802f99be88.sql:SECURITY DEFINER
+supabase/migrations/20260113161245_f9e43dae-a22a-444e-9d53-dd802f99be88.sql-SET search_path = public
+supabase/migrations/20260113161245_f9e43dae-a22a-444e-9d53-dd802f99be88.sql-AS $$
+supabase/migrations/20260113161245_f9e43dae-a22a-444e-9d53-dd802f99be88.sql-DECLARE
+supabase/migrations/20260113161245_f9e43dae-a22a-444e-9d53-dd802f99be88.sql-  v_last_active DATE;
+supabase/migrations/20260113161245_f9e43dae-a22a-444e-9d53-dd802f99be88.sql-  v_today DATE := CURRENT_DATE;
+--
+supabase/migrations/20251231125759_eaf65333-0e8a-4f7d-98ca-9437ac699022.sql:-- Create function to check user permission (security definer to avoid RLS recursion)
+supabase/migrations/20251231125759_eaf65333-0e8a-4f7d-98ca-9437ac699022.sql-CREATE OR REPLACE FUNCTION public.has_permission(_user_id uuid, _module text, _action text)
+supabase/migrations/20251231125759_eaf65333-0e8a-4f7d-98ca-9437ac699022.sql-RETURNS boolean
+supabase/migrations/20251231125759_eaf65333-0e8a-4f7d-98ca-9437ac699022.sql-LANGUAGE sql
+supabase/migrations/20251231125759_eaf65333-0e8a-4f7d-98ca-9437ac699022.sql-STABLE
+supabase/migrations/20251231125759_eaf65333-0e8a-4f7d-98ca-9437ac699022.sql:SECURITY DEFINER
+supabase/migrations/20251231125759_eaf65333-0e8a-4f7d-98ca-9437ac699022.sql-SET search_path = public
+supabase/migrations/20251231125759_eaf65333-0e8a-4f7d-98ca-9437ac699022.sql-AS $$
+supabase/migrations/20251231125759_eaf65333-0e8a-4f7d-98ca-9437ac699022.sql-  SELECT EXISTS (
+supabase/migrations/20251231125759_eaf65333-0e8a-4f7d-98ca-9437ac699022.sql-    SELECT 1 
+supabase/migrations/20251231125759_eaf65333-0e8a-4f7d-98ca-9437ac699022.sql-    FROM public.user_roles ur
+--
+supabase/migrations/20251231125759_eaf65333-0e8a-4f7d-98ca-9437ac699022.sql:SECURITY DEFINER
+supabase/migrations/20251231125759_eaf65333-0e8a-4f7d-98ca-9437ac699022.sql-SET search_path = public
+supabase/migrations/20251231125759_eaf65333-0e8a-4f7d-98ca-9437ac699022.sql-AS $$
+supabase/migrations/20251231125759_eaf65333-0e8a-4f7d-98ca-9437ac699022.sql-  SELECT DISTINCT p.module, p.action, p.name
+supabase/migrations/20251231125759_eaf65333-0e8a-4f7d-98ca-9437ac699022.sql-  FROM public.user_roles ur
+supabase/migrations/20251231125759_eaf65333-0e8a-4f7d-98ca-9437ac699022.sql-  JOIN public.role_permissions rp ON rp.role = ur.role
+--
+supabase/migrations/20251226000013_multi_tenant.sql:$$ LANGUAGE plpgsql SECURITY DEFINER;
+--
+supabase/migrations/20260315122914_59e1b154-21d2-4c20-a0b1-3456e5f06d71.sql:SECURITY DEFINER
+supabase/migrations/20260315122914_59e1b154-21d2-4c20-a0b1-3456e5f06d71.sql-SET search_path TO 'public'
+supabase/migrations/20260315122914_59e1b154-21d2-4c20-a0b1-3456e5f06d71.sql-AS $$
+supabase/migrations/20260315122914_59e1b154-21d2-4c20-a0b1-3456e5f06d71.sql-DECLARE
+supabase/migrations/20260315122914_59e1b154-21d2-4c20-a0b1-3456e5f06d71.sql-  v_candidato_auth_id uuid;
+supabase/migrations/20260315122914_59e1b154-21d2-4c20-a0b1-3456e5f06d71.sql-BEGIN
+--
+supabase/migrations/20260713105519_a04bcdf9-04aa-42ac-a95d-bcaf4e7ffcc6.sql:SECURITY DEFINER
+supabase/migrations/20260713105519_a04bcdf9-04aa-42ac-a95d-bcaf4e7ffcc6.sql-SET search_path = public
+supabase/migrations/20260713105519_a04bcdf9-04aa-42ac-a95d-bcaf4e7ffcc6.sql-AS $$
+supabase/migrations/20260713105519_a04bcdf9-04aa-42ac-a95d-bcaf4e7ffcc6.sql-BEGIN
+supabase/migrations/20260713105519_a04bcdf9-04aa-42ac-a95d-bcaf4e7ffcc6.sql-  DELETE FROM public.ai_cache WHERE expires_at < now();
+supabase/migrations/20260713105519_a04bcdf9-04aa-42ac-a95d-bcaf4e7ffcc6.sql-END;
+--
+supabase/migrations/20251216223301_evolve_data_model.sql:SECURITY DEFINER
+supabase/migrations/20251216223301_evolve_data_model.sql-SET search_path = public
+supabase/migrations/20251216223301_evolve_data_model.sql-AS $$
+supabase/migrations/20251216223301_evolve_data_model.sql-BEGIN
+supabase/migrations/20251216223301_evolve_data_model.sql-  UPDATE public.vagas
+supabase/migrations/20251216223301_evolve_data_model.sql-  SET 
+--
+supabase/migrations/20251216223301_evolve_data_model.sql:SECURITY DEFINER
+supabase/migrations/20251216223301_evolve_data_model.sql-SET search_path = public
+supabase/migrations/20251216223301_evolve_data_model.sql-AS $$
+supabase/migrations/20251216223301_evolve_data_model.sql-BEGIN
+supabase/migrations/20251216223301_evolve_data_model.sql-  IF OLD.etapa_atual IS DISTINCT FROM NEW.etapa_atual THEN
+supabase/migrations/20251216223301_evolve_data_model.sql-    INSERT INTO public.historico_etapas (processo_id, etapa_anterior, etapa_nova)
+--
+supabase/migrations/20260713102017_4b1f4aa9-eaaf-4db7-9499-2be53622b019.sql:-- Hardening: revoke EXECUTE from PUBLIC/anon on SECURITY DEFINER functions.
+supabase/migrations/20260713102017_4b1f4aa9-eaaf-4db7-9499-2be53622b019.sql--- Grant EXECUTE to authenticated only where the function is legitimately called by end users.
+supabase/migrations/20260713102017_4b1f4aa9-eaaf-4db7-9499-2be53622b019.sql--- Service-role always retains EXECUTE (bypasses privilege checks).
+supabase/migrations/20260713102017_4b1f4aa9-eaaf-4db7-9499-2be53622b019.sql-
+supabase/migrations/20260713102017_4b1f4aa9-eaaf-4db7-9499-2be53622b019.sql:-- 1) Revoke public/anon access on all SECURITY DEFINER functions
+supabase/migrations/20260713102017_4b1f4aa9-eaaf-4db7-9499-2be53622b019.sql-REVOKE EXECUTE ON FUNCTION public.is_hr_staff(uuid) FROM PUBLIC, anon;
+supabase/migrations/20260713102017_4b1f4aa9-eaaf-4db7-9499-2be53622b019.sql-REVOKE EXECUTE ON FUNCTION public.has_role(uuid, app_role) FROM PUBLIC, anon;
+supabase/migrations/20260713102017_4b1f4aa9-eaaf-4db7-9499-2be53622b019.sql-REVOKE EXECUTE ON FUNCTION public.has_permission(uuid, text, text) FROM PUBLIC, anon;
+supabase/migrations/20260713102017_4b1f4aa9-eaaf-4db7-9499-2be53622b019.sql-REVOKE EXECUTE ON FUNCTION public.get_user_roles(uuid) FROM PUBLIC, anon;
+supabase/migrations/20260713102017_4b1f4aa9-eaaf-4db7-9499-2be53622b019.sql-REVOKE EXECUTE ON FUNCTION public.get_user_permissions(uuid) FROM PUBLIC, anon;

@@ -1,0 +1,130 @@
+supabase/migrations/20251226000021_audit_trail.sql:CREATE TABLE IF NOT EXISTS public.audit_logs (
+supabase/migrations/20251216183434_6e109167-6486-4237-853c-6196b29499b0.sql:CREATE TABLE public.comunicacoes (
+supabase/migrations/20251226000019_audit_trail.sql:CREATE TABLE IF NOT EXISTS public.audit_logs (
+supabase/migrations/20251221121240_create_avaliacoes_table.sql:CREATE TABLE IF NOT EXISTS public.avaliacoes (
+supabase/migrations/20251231132406_8fe32def-ce57-4d0b-84fc-16f62c76ef85.sql:-- Create table for tracking login attempts
+supabase/migrations/20251231132406_8fe32def-ce57-4d0b-84fc-16f62c76ef85.sql:CREATE TABLE public.login_attempts (
+supabase/migrations/20260513184124_0f73e1b0-05d4-49ae-b8e9-440b09cebe20.sql:CREATE TABLE public.departamentos (
+supabase/migrations/20251226000020_multi_tenant.sql:CREATE TABLE IF NOT EXISTS public.tenants (
+supabase/migrations/20251226000020_multi_tenant.sql:CREATE TABLE IF NOT EXISTS public.tenant_members (
+supabase/migrations/20251226000020_multi_tenant.sql:CREATE TABLE IF NOT EXISTS public.tenant_invitations (
+supabase/migrations/20260713124627_e0d102d4-2c2f-4462-ad19-58b2f9959fe9.sql:CREATE TABLE IF NOT EXISTS public.admin_audit_log (
+supabase/migrations/20251216174624_339fe9d1-99a0-4eee-9bd0-ea420a18b148.sql:CREATE TABLE public.profiles (
+supabase/migrations/20251216174624_339fe9d1-99a0-4eee-9bd0-ea420a18b148.sql:CREATE TABLE public.user_roles (
+supabase/migrations/20260513183102_ae5d84a8-506e-4ced-87f1-32f8209451ed.sql:CREATE TABLE public.feature_flags (
+supabase/migrations/20260713124254_47a40955-6466-46f0-b73e-7e1c0d25c73e.sql:CREATE TABLE public.integration_health_events (
+supabase/migrations/20260315115256_9a1fb85e-ca21-4d5d-b5be-f9e6886b87e3.sql:CREATE TABLE IF NOT EXISTS public.avaliacoes (
+supabase/migrations/20251220150055_6f818f9b-7349-45cc-8deb-f45a38ac3884.sql:CREATE TABLE public.indicacoes (
+supabase/migrations/20251226000018_talent_pool.sql:CREATE TABLE IF NOT EXISTS public.talent_pools (
+supabase/migrations/20251226000018_talent_pool.sql:CREATE TABLE IF NOT EXISTS public.talent_pool_members (
+supabase/migrations/20251226000018_talent_pool.sql:CREATE TABLE IF NOT EXISTS public.candidate_tags (
+supabase/migrations/20251226000018_talent_pool.sql:CREATE TABLE IF NOT EXISTS public.candidate_tag_assignments (
+supabase/migrations/20251220151127_0c0cc236-5bf1-4a1b-9c00-679c4df28409.sql:CREATE TABLE public.provas (
+supabase/migrations/20251220151127_0c0cc236-5bf1-4a1b-9c00-679c4df28409.sql:CREATE TABLE public.questoes (
+supabase/migrations/20251220151127_0c0cc236-5bf1-4a1b-9c00-679c4df28409.sql:CREATE TABLE public.baterias_provas (
+supabase/migrations/20251220151127_0c0cc236-5bf1-4a1b-9c00-679c4df28409.sql:CREATE TABLE public.bateria_provas_rel (
+supabase/migrations/20251220151127_0c0cc236-5bf1-4a1b-9c00-679c4df28409.sql:CREATE TABLE public.resultados_provas (
+supabase/migrations/20251226000016_workflows.sql:CREATE TABLE IF NOT EXISTS public.workflows (
+supabase/migrations/20251226000016_workflows.sql:CREATE TABLE IF NOT EXISTS public.workflow_stages (
+supabase/migrations/20251226000016_workflows.sql:CREATE TABLE IF NOT EXISTS public.workflow_transitions (
+supabase/migrations/20251226000016_workflows.sql:CREATE TABLE IF NOT EXISTS public.workflow_actions (
+supabase/migrations/20251231131318_f6d12d40-2989-455f-9bbb-0c7987c9325c.sql:-- Create table for password reset requests requiring approval
+supabase/migrations/20251231131318_f6d12d40-2989-455f-9bbb-0c7987c9325c.sql:CREATE TABLE public.password_reset_requests (
+supabase/migrations/20251226000017_rbac.sql:CREATE TABLE IF NOT EXISTS public.roles (
+supabase/migrations/20251226000017_rbac.sql:CREATE TABLE IF NOT EXISTS public.permissions (
+supabase/migrations/20251226000017_rbac.sql:CREATE TABLE IF NOT EXISTS public.role_permissions (
+supabase/migrations/20251226000017_rbac.sql:CREATE TABLE IF NOT EXISTS public.user_roles (
+supabase/migrations/20250102000000_match_production.sql:CREATE TABLE IF NOT EXISTS public.vagas (
+supabase/migrations/20250102000000_match_production.sql:CREATE TABLE IF NOT EXISTS public.candidatos (
+supabase/migrations/20250102000000_match_production.sql:CREATE TABLE IF NOT EXISTS public.entrevistas (
+supabase/migrations/20250102000000_match_production.sql:CREATE TABLE IF NOT EXISTS public.email_templates (
+supabase/migrations/20250102000000_match_production.sql:CREATE TABLE IF NOT EXISTS public.workflows (
+supabase/migrations/20250102000000_match_production.sql:CREATE TABLE IF NOT EXISTS public.workflow_etapas (
+supabase/migrations/20251231130917_55076466-f640-44ea-bbf5-6c756364b825.sql:-- Create table for allowed countries (whitelist)
+supabase/migrations/20251231130917_55076466-f640-44ea-bbf5-6c756364b825.sql:CREATE TABLE public.allowed_countries (
+supabase/migrations/20251231130917_55076466-f640-44ea-bbf5-6c756364b825.sql:CREATE TABLE public.geo_access_logs (
+supabase/migrations/20251226000015_rbac.sql:CREATE TABLE IF NOT EXISTS public.roles (
+supabase/migrations/20251226000015_rbac.sql:CREATE TABLE IF NOT EXISTS public.permissions (
+supabase/migrations/20251226000015_rbac.sql:CREATE TABLE IF NOT EXISTS public.role_permissions (
+supabase/migrations/20251226000015_rbac.sql:CREATE TABLE IF NOT EXISTS public.user_roles (
+supabase/migrations/20241231000001_entity_versions.sql:CREATE TABLE IF NOT EXISTS public.entity_versions (
+supabase/migrations/20251220143907_6a7c4f61-4075-4d5d-a769-6e21f68e087c.sql:CREATE TABLE public.candidatos_auth (
+supabase/migrations/20251220143907_6a7c4f61-4075-4d5d-a769-6e21f68e087c.sql:CREATE TABLE public.candidaturas (
+supabase/migrations/20251231124517_267dcbae-1e21-4c71-b7b8-86b09270009f.sql:-- Create table for WebAuthn credentials (passkeys)
+supabase/migrations/20251231124517_267dcbae-1e21-4c71-b7b8-86b09270009f.sql:CREATE TABLE public.webauthn_credentials (
+supabase/migrations/20251220134226_30c08747-ba59-46f1-b399-2539807ba259.sql:CREATE TABLE public.processos_seletivos (
+supabase/migrations/20251229012400_4f151d32-d507-4a3b-be43-8964264f7434.sql:CREATE TABLE public.notifications (
+supabase/migrations/20251220132952_b5b8e801-a9c5-49b6-a85f-371946802ca8.sql:CREATE TABLE public.vagas (
+supabase/migrations/20251231115857_057d443b-736d-4406-8ad8-623188db8aef.sql:CREATE TABLE IF NOT EXISTS public.user_2fa (
+supabase/migrations/20251231115857_057d443b-736d-4406-8ad8-623188db8aef.sql:CREATE TABLE IF NOT EXISTS public.user_2fa_logs (
+supabase/migrations/20251231115857_057d443b-736d-4406-8ad8-623188db8aef.sql:CREATE TABLE IF NOT EXISTS public.rate_limit_logs (
+supabase/migrations/20251231115857_057d443b-736d-4406-8ad8-623188db8aef.sql:CREATE TABLE IF NOT EXISTS public.blocked_ips (
+supabase/migrations/20251231115857_057d443b-736d-4406-8ad8-623188db8aef.sql:CREATE TABLE IF NOT EXISTS public.allowed_ips (
+supabase/migrations/20251231115857_057d443b-736d-4406-8ad8-623188db8aef.sql:CREATE TABLE IF NOT EXISTS public.ip_access_logs (
+supabase/migrations/20251231115857_057d443b-736d-4406-8ad8-623188db8aef.sql:CREATE TABLE IF NOT EXISTS public.permissions (
+supabase/migrations/20251231115857_057d443b-736d-4406-8ad8-623188db8aef.sql:CREATE TABLE IF NOT EXISTS public.role_permissions (
+supabase/migrations/20251231115857_057d443b-736d-4406-8ad8-623188db8aef.sql:CREATE TABLE IF NOT EXISTS public.password_reset_tokens (
+supabase/migrations/20251231115857_057d443b-736d-4406-8ad8-623188db8aef.sql:CREATE TABLE IF NOT EXISTS public.trusted_devices (
+supabase/migrations/20251216172358_c1bf7099-9577-4ae6-bdd4-af116bbeae3f.sql:CREATE TABLE public.candidatos (
+supabase/migrations/20251216172358_c1bf7099-9577-4ae6-bdd4-af116bbeae3f.sql:CREATE TABLE public.match_scores (
+supabase/migrations/20260713105846_1b5fdb73-316d-4070-8961-75f03e1d0e5f.sql:CREATE TABLE public.communication_retry_queue (
+supabase/migrations/20260113111342_0d023228-f946-4042-8916-095c7798d6c8.sql:CREATE TABLE public.avaliacoes_comportamentais_resultados (
+supabase/migrations/20260113111342_0d023228-f946-4042-8916-095c7798d6c8.sql:CREATE TABLE public.perfis_comportamentais_empresa (
+supabase/migrations/20251226000024_rbac.sql:CREATE TABLE IF NOT EXISTS public.roles (
+supabase/migrations/20251226000024_rbac.sql:CREATE TABLE IF NOT EXISTS public.permissions (
+supabase/migrations/20251226000024_rbac.sql:CREATE TABLE IF NOT EXISTS public.role_permissions (
+supabase/migrations/20251226000024_rbac.sql:CREATE TABLE IF NOT EXISTS public.user_roles (
+supabase/migrations/20260112211403_abc82836-8321-4994-b0b4-fef753fbfe44.sql:CREATE TABLE public.behavioral_assessment_results (
+supabase/migrations/20260713105519_a04bcdf9-04aa-42ac-a95d-bcaf4e7ffcc6.sql:CREATE TABLE public.ai_cache (
+supabase/migrations/20251226000013_multi_tenant.sql:CREATE TABLE IF NOT EXISTS public.tenants (
+supabase/migrations/20251226000013_multi_tenant.sql:CREATE TABLE IF NOT EXISTS public.tenant_members (
+supabase/migrations/20251226000013_multi_tenant.sql:CREATE TABLE IF NOT EXISTS public.tenant_invites (
+supabase/migrations/20251226000014_workflows.sql:CREATE TABLE IF NOT EXISTS public.workflows (
+supabase/migrations/20251226000014_workflows.sql:CREATE TABLE IF NOT EXISTS public.workflow_stages (
+supabase/migrations/20251226000014_workflows.sql:CREATE TABLE IF NOT EXISTS public.workflow_transitions (
+supabase/migrations/20251226000014_workflows.sql:CREATE TABLE IF NOT EXISTS public.workflow_actions (
+supabase/migrations/20241225_ip_whitelist.sql:CREATE TABLE IF NOT EXISTS public.allowed_ips (
+supabase/migrations/20241225_ip_whitelist.sql:CREATE TABLE IF NOT EXISTS public.ip_access_logs (
+supabase/migrations/20260111121452_45cff62b-dbb5-4fb8-bad4-3c92e8af4976.sql:CREATE TABLE public.valores_culturais (
+supabase/migrations/20260111121452_45cff62b-dbb5-4fb8-bad4-3c92e8af4976.sql:CREATE TABLE public.competencias (
+supabase/migrations/20260111121452_45cff62b-dbb5-4fb8-bad4-3c92e8af4976.sql:CREATE TABLE public.perfis_cargo (
+supabase/migrations/20260111121452_45cff62b-dbb5-4fb8-bad4-3c92e8af4976.sql:CREATE TABLE public.criterios_selecao (
+supabase/migrations/20260111121452_45cff62b-dbb5-4fb8-bad4-3c92e8af4976.sql:CREATE TABLE public.perfil_valores (
+supabase/migrations/20260111121452_45cff62b-dbb5-4fb8-bad4-3c92e8af4976.sql:CREATE TABLE public.assessments (
+supabase/migrations/20260111121452_45cff62b-dbb5-4fb8-bad4-3c92e8af4976.sql:CREATE TABLE public.assessment_questoes (
+supabase/migrations/20260111121452_45cff62b-dbb5-4fb8-bad4-3c92e8af4976.sql:CREATE TABLE public.assessment_respostas (
+supabase/migrations/20260111121452_45cff62b-dbb5-4fb8-bad4-3c92e8af4976.sql:CREATE TABLE public.templates_entrevista (
+supabase/migrations/20260111121452_45cff62b-dbb5-4fb8-bad4-3c92e8af4976.sql:CREATE TABLE public.template_perguntas (
+supabase/migrations/20260111121452_45cff62b-dbb5-4fb8-bad4-3c92e8af4976.sql:CREATE TABLE public.entrevista_respostas (
+supabase/migrations/20260111121452_45cff62b-dbb5-4fb8-bad4-3c92e8af4976.sql:CREATE TABLE public.scorecards (
+supabase/migrations/20260111121452_45cff62b-dbb5-4fb8-bad4-3c92e8af4976.sql:CREATE TABLE public.scorecard_competencias (
+supabase/migrations/20260111121452_45cff62b-dbb5-4fb8-bad4-3c92e8af4976.sql:CREATE TABLE public.regras_automacao (
+supabase/migrations/20260111121452_45cff62b-dbb5-4fb8-bad4-3c92e8af4976.sql:CREATE TABLE public.regras_log (
+supabase/migrations/20260111121452_45cff62b-dbb5-4fb8-bad4-3c92e8af4976.sql:CREATE TABLE public.comparativos_candidatos (
+supabase/migrations/20260711164752_0c09d686-0d45-4c1c-88d9-2bb84a3225d3.sql:CREATE TABLE IF NOT EXISTS public.rate_limits (
+supabase/migrations/20260711164526_16902f97-b898-49fd-a62e-952e2fd37ce2.sql:CREATE TABLE IF NOT EXISTS public.web_vitals (
+supabase/migrations/20241231000000_saved_filters.sql:CREATE TABLE IF NOT EXISTS public.saved_filters (
+supabase/migrations/20251226000022_scorecards.sql:CREATE TABLE IF NOT EXISTS public.scorecard_templates (
+supabase/migrations/20251226000022_scorecards.sql:CREATE TABLE IF NOT EXISTS public.scorecards (
+supabase/migrations/20260315121923_33a091ed-6f4c-455e-8f29-bed34201a472.sql:CREATE TABLE public.email_templates (
+supabase/migrations/20260315121923_33a091ed-6f4c-455e-8f29-bed34201a472.sql:CREATE TABLE public.documentos_candidatos (
+supabase/migrations/20260315121923_33a091ed-6f4c-455e-8f29-bed34201a472.sql:CREATE TABLE public.notas_candidatos (
+supabase/migrations/20260315121923_33a091ed-6f4c-455e-8f29-bed34201a472.sql:CREATE TABLE public.historico_etapas (
+supabase/migrations/20251226000011_lgpd_compliance.sql:CREATE TABLE IF NOT EXISTS public.user_consents (
+supabase/migrations/20251226000011_lgpd_compliance.sql:CREATE TABLE IF NOT EXISTS public.data_deletion_requests (
+supabase/migrations/20251226000011_lgpd_compliance.sql:CREATE TABLE IF NOT EXISTS public.data_access_logs (
+supabase/migrations/20251226000010_add_2fa_support.sql:CREATE TABLE IF NOT EXISTS public.user_2fa (
+supabase/migrations/20251226000010_add_2fa_support.sql:CREATE TABLE IF NOT EXISTS public.user_2fa_logs (
+supabase/migrations/20251220131302_03080c3b-2737-4b1c-acfd-6d1fa3e91281.sql:CREATE TABLE public.entrevistas (
+supabase/migrations/20260315122914_59e1b154-21d2-4c20-a0b1-3456e5f06d71.sql:CREATE TABLE IF NOT EXISTS public.notificacoes_candidato (
+supabase/migrations/20260113161245_f9e43dae-a22a-444e-9d53-dd802f99be88.sql:CREATE TABLE public.user_gamification (
+supabase/migrations/20260113161245_f9e43dae-a22a-444e-9d53-dd802f99be88.sql:CREATE TABLE public.user_achievements (
+supabase/migrations/20260113161245_f9e43dae-a22a-444e-9d53-dd802f99be88.sql:CREATE TABLE public.xp_transactions (
+supabase/migrations/20260113161245_f9e43dae-a22a-444e-9d53-dd802f99be88.sql:CREATE TABLE public.user_badges (
+supabase/migrations/20251216223301_evolve_data_model.sql:CREATE TABLE public.vagas (
+supabase/migrations/20251216223301_evolve_data_model.sql:CREATE TABLE public.processos_seletivos (
+supabase/migrations/20251216223301_evolve_data_model.sql:CREATE TABLE public.entrevistas (
+supabase/migrations/20251216223301_evolve_data_model.sql:CREATE TABLE public.avaliacoes (
+supabase/migrations/20251216223301_evolve_data_model.sql:CREATE TABLE public.provas (
+supabase/migrations/20251216223301_evolve_data_model.sql:CREATE TABLE public.resultados_provas (
+supabase/migrations/20251216223301_evolve_data_model.sql:CREATE TABLE public.historico_etapas (
