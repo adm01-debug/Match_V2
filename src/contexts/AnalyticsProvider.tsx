@@ -11,7 +11,12 @@ interface AnalyticsContextType {
   trackPageView: (path: string) => void;
 }
 
-const AnalyticsContext = createContext<AnalyticsContextType | undefined>(undefined);
+const noopAnalytics: AnalyticsContextType = {
+  trackEvent: () => {},
+  trackPageView: () => {},
+};
+
+const AnalyticsContext = createContext<AnalyticsContextType>(noopAnalytics);
 
 interface AnalyticsProviderProps {
   children: ReactNode;
@@ -40,11 +45,7 @@ export function AnalyticsProvider({ children }: AnalyticsProviderProps) {
 }
 
 export function useAnalyticsContext() {
-  const context = useContext(AnalyticsContext);
-  if (!context) {
-    throw new Error('useAnalyticsContext must be used within AnalyticsProvider');
-  }
-  return context;
+  return useContext(AnalyticsContext);
 }
 
 export default AnalyticsProvider;

@@ -3,12 +3,14 @@ import { portalRoutes } from "./PortalRoutes";
 import { authRoutes } from "./AuthRoutes";
 import { adminRoutes } from "./AdminRoutes";
 import { mainRoutes } from "./MainRoutes";
-import { NotFound, StatusPage } from "./lazyPages";
+import { NotFound, StatusPage, TermosPage, PrivacidadePage } from "./lazyPages";
 
 export function AppRoutes() {
   return (
     <Routes>
       <Route path="/status" element={<StatusPage />} />
+      <Route path="/termos" element={<TermosPage />} />
+      <Route path="/privacidade" element={<PrivacidadePage />} />
       {portalRoutes}
       {authRoutes}
       {adminRoutes}

@@ -215,9 +215,9 @@ export default function RegisterPage() {
                 />
                 <label htmlFor="terms" className="text-sm text-muted-foreground leading-tight cursor-pointer">
                   Eu aceito os{' '}
-                  <Link to="/termos" className="text-primary hover:underline">Termos de Uso</Link>
+                  <a href="/termos" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Termos de Uso</a>
                   {' '}e a{' '}
-                  <Link to="/privacidade" className="text-primary hover:underline">Política de Privacidade</Link>
+                  <a href="/privacidade" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Política de Privacidade</a>
                 </label>
               </div>
               {errors['acceptTerms'] && <p className="text-sm text-destructive">{errors['acceptTerms']}</p>}

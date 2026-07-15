@@ -4,6 +4,7 @@
  */
 
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -34,6 +35,8 @@ export default function DiagnosticoPage() {
   const [isRunning, setIsRunning] = useState(false);
   const { user, session } = useAuth();
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
 
   const runDiagnostics = async () => {
     setIsRunning(true);
@@ -330,10 +333,10 @@ export default function DiagnosticoPage() {
 
         {/* Actions */}
         <div className="flex gap-2">
-          <Button variant="outline" onClick={() => window.location.href = '/'}>
+          <Button variant="outline" onClick={() => navigate('/')}>
             Voltar ao Início
           </Button>
-          <Button variant="outline" onClick={() => window.location.href = '/auth'}>
+          <Button variant="outline" onClick={() => navigate('/auth')}>
             Ir para Login
           </Button>
         </div>

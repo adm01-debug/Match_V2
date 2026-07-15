@@ -45,7 +45,10 @@ export function useNotasCandidato(candidatoId?: string) {
   const createMutation = useMutation({
     mutationFn: async (input: { candidatoId: string; conteudo: string; tipo?: string; processoId?: string; privada?: boolean }) => {
       const { data: { user } } = await supabase.auth.getUser();
-      const { data: profile } = await supabase.from('profiles').select('nome').eq('user_id', user?.id || '').single();
+      if (!user) throw new Error('Usuário não autenticado');
+      const { data: profile, error: profileError } = await supabase
+        .from('profiles').select('nome').eq('user_id', user.id).maybeSingle();
+      if (profileError) throw profileError;
 
       const { data, error } = await db.from('notas_candidatos').insert({
         candidato_id: input.candidatoId,
