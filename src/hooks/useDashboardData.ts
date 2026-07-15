@@ -29,49 +29,28 @@ export function useDashboardData() {
     refetchOnWindowFocus: false,
     queryFn: async (): Promise<KPIData> => {
       const inicioMes = startOfMonth(new Date()).toISOString();
-      
-      const { count: vagasAbertas } = await supabase
-        .from('vagas')
-        .select('*', { count: 'exact', head: true })
-        .eq('status', 'publicada');
 
-      const { count: vagasNovas } = await supabase
-        .from('vagas')
-        .select('*', { count: 'exact', head: true })
-        .gte('created_at', inicioMes);
+      const [
+        { count: vagasAbertas },
+        { count: vagasNovas },
+        { count: candidatosTotal },
+        { count: candidatosNovos },
+        { count: emProcesso },
+        { data: vagasEmProcessoData },
+        { count: contratadosMes },
+        { data: contratados },
+      ] = await Promise.all([
+        supabase.from('vagas').select('*', { count: 'exact', head: true }).eq('status', 'publicada'),
+        supabase.from('vagas').select('*', { count: 'exact', head: true }).gte('created_at', inicioMes),
+        supabase.from('candidatos').select('*', { count: 'exact', head: true }),
+        supabase.from('candidatos').select('*', { count: 'exact', head: true }).gte('created_at', inicioMes),
+        supabase.from('processos_seletivos').select('*', { count: 'exact', head: true }).eq('status', 'em_andamento'),
+        supabase.from('processos_seletivos').select('vaga_id').eq('status', 'em_andamento'),
+        supabase.from('processos_seletivos').select('*', { count: 'exact', head: true }).eq('status', 'contratado').gte('updated_at', inicioMes),
+        supabase.from('processos_seletivos').select('data_inscricao, updated_at').eq('status', 'contratado').limit(50),
+      ]);
 
-      const { count: candidatosTotal } = await supabase
-        .from('candidatos')
-        .select('*', { count: 'exact', head: true });
-
-      const { count: candidatosNovos } = await supabase
-        .from('candidatos')
-        .select('*', { count: 'exact', head: true })
-        .gte('created_at', inicioMes);
-
-      const { count: emProcesso } = await supabase
-        .from('processos_seletivos')
-        .select('*', { count: 'exact', head: true })
-        .eq('status', 'em_andamento');
-
-      const { data: vagasEmProcessoData } = await supabase
-        .from('processos_seletivos')
-        .select('vaga_id')
-        .eq('status', 'em_andamento');
-      
       const vagasUnicas = new Set(vagasEmProcessoData?.map(p => p.vaga_id).filter(Boolean));
-
-      const { count: contratadosMes } = await supabase
-        .from('processos_seletivos')
-        .select('*', { count: 'exact', head: true })
-        .eq('status', 'contratado')
-        .gte('updated_at', inicioMes);
-
-      const { data: contratados } = await supabase
-        .from('processos_seletivos')
-        .select('data_inscricao, updated_at')
-        .eq('status', 'contratado')
-        .limit(50);
 
       let tempoMedio = 0;
       if (contratados && contratados.length > 0) {

@@ -176,20 +176,22 @@ export async function checkMilestoneAchievements(userId: string): Promise<void> 
 
     // First hire
     if (hiresCount && hiresCount >= 1 && !unlockedIds.has('primeiraContratacao')) {
-      await supabase.from('user_achievements').insert({
+      const { error: e1 } = await supabase.from('user_achievements').insert({
         user_id: userId,
         achievement_id: 'primeiraContratacao',
       });
-      await awardXP(userId, 200, 'primeiraContratacao', 'Primeira contratação realizada!');
+      if (e1) logger.error('[gamification] insert primeiraContratacao failed', e1);
+      else await awardXP(userId, 200, 'primeiraContratacao', 'Primeira contratação realizada!');
     }
 
     // 10 hires
     if (hiresCount && hiresCount >= 10 && !unlockedIds.has('dezContratacoes')) {
-      await supabase.from('user_achievements').insert({
+      const { error: e2 } = await supabase.from('user_achievements').insert({
         user_id: userId,
         achievement_id: 'dezContratacoes',
       });
-      await awardXP(userId, 500, 'dezContratacoes', '10 contratações alcançadas!');
+      if (e2) logger.error('[gamification] insert dezContratacoes failed', e2);
+      else await awardXP(userId, 500, 'dezContratacoes', '10 contratações alcançadas!');
     }
 
     // Check streak milestones
@@ -201,17 +203,19 @@ export async function checkMilestoneAchievements(userId: string): Promise<void> 
 
     if (gamData) {
       if (gamData.streak >= 7 && !unlockedIds.has('streakSemanal')) {
-        await supabase.from('user_achievements').insert({
+        const { error: e3 } = await supabase.from('user_achievements').insert({
           user_id: userId,
           achievement_id: 'streakSemanal',
         });
+        if (e3) logger.error('[gamification] insert streakSemanal failed', e3);
       }
 
       if (gamData.streak >= 30 && !unlockedIds.has('streakMensal')) {
-        await supabase.from('user_achievements').insert({
+        const { error: e4 } = await supabase.from('user_achievements').insert({
           user_id: userId,
           achievement_id: 'streakMensal',
         });
+        if (e4) logger.error('[gamification] insert streakMensal failed', e4);
       }
     }
   } catch (error) {
