@@ -368,6 +368,10 @@ export function useRealtimeNotifications(options: UseRealtimeNotificationsOption
   useEffect(() => { setupRef.current = setupSubscriptions; }, [setupSubscriptions]);
 
   const cleanup = useCallback(() => {
+    if (reconnectTimerRef.current) {
+      clearTimeout(reconnectTimerRef.current);
+      reconnectTimerRef.current = null;
+    }
     channelsRef.current.forEach((channel) => {
       supabase.removeChannel(channel);
     });
