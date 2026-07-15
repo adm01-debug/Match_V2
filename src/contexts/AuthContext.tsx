@@ -80,6 +80,7 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
       setUser(session?.user ?? null);
       
       if (session?.user) {
+        setSentryUser({ id: session.user.id, email: session.user.email ?? undefined });
         fetchUserRoles(session.user.id);
       }
       
