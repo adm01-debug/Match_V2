@@ -4,6 +4,7 @@
  */
 
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -34,6 +35,8 @@ export default function DiagnosticoPage() {
   const [isRunning, setIsRunning] = useState(false);
   const { user, session } = useAuth();
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
 
   const runDiagnostics = async () => {
     setIsRunning(true);
