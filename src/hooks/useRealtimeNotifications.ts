@@ -199,7 +199,7 @@ export function useRealtimeNotifications(options: UseRealtimeNotificationsOption
         .eq('user_id', user.id);
 
       if (error) {
-        // Error clearing notifications - silent
+        logger.error('[useRealtimeNotifications] clearAll failed', { error: error.message });
       }
     }
   }, [user?.id]);
