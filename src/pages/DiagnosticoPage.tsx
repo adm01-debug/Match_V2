@@ -330,10 +330,10 @@ export default function DiagnosticoPage() {
 
         {/* Actions */}
         <div className="flex gap-2">
-          <Button variant="outline" onClick={() => window.location.href = '/'}>
+          <Button variant="outline" onClick={() => navigate('/')}>
             Voltar ao Início
           </Button>
-          <Button variant="outline" onClick={() => window.location.href = '/auth'}>
+          <Button variant="outline" onClick={() => navigate('/auth')}>
             Ir para Login
           </Button>
         </div>
