@@ -8,13 +8,13 @@ let initialized = false;
 
 export function initSentry(): void {
   if (initialized) return;
-  const dsn = import.meta.env.VITE_SENTRY_DSN as string | undefined;
+  const dsn = import.meta.env['VITE_SENTRY_DSN'] as string | undefined;
   if (!dsn) return; // Sentry desativado quando DSN não configurado
 
   Sentry.init({
     dsn,
     environment: import.meta.env.MODE,
-    release: (import.meta.env.VITE_APP_VERSION as string | undefined) ?? 'dev',
+    release: (import.meta.env['VITE_APP_VERSION'] as string | undefined) ?? 'dev',
     tracesSampleRate: import.meta.env.PROD ? 0.1 : 1.0,
     replaysSessionSampleRate: 0,
     replaysOnErrorSampleRate: import.meta.env.PROD ? 0.1 : 0,
