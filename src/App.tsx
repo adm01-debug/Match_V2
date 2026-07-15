@@ -46,6 +46,7 @@ function App() {
         <TooltipProvider>
           <BrowserRouter>
             <AnalyticsProvider>
+              <SentryRouteBreadcrumbs />
               <AuthProvider>
                 <CandidatoAuthProvider>
                   <NotificationProvider>
