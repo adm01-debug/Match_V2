@@ -8,6 +8,29 @@ import { initSentry } from './lib/sentry';
 // Inicializa Sentry o mais cedo possível para capturar erros de boot
 initSentry();
 
+// A25 — captura global de erros fora do ciclo React
+// Encaminha para logger (que já reenvia para Sentry quando habilitado)
+if (typeof window !== 'undefined') {
+  window.addEventListener('unhandledrejection', (event) => {
+    const reason = event.reason;
+    const err = reason instanceof Error ? reason : new Error(
+      typeof reason === 'string' ? reason : JSON.stringify(reason ?? 'unknown')
+    );
+    void import('./services/logger').then(({ logger }) => {
+      logger.error('Unhandled promise rejection', err, 'GlobalHandler');
+    }).catch(() => undefined);
+  });
+
+  window.addEventListener('error', (event) => {
+    // Ignora erros de recursos (img/script) — só interessam runtime errors
+    if (!(event.error instanceof Error) && !event.message) return;
+    const err = event.error instanceof Error ? event.error : new Error(event.message);
+    void import('./services/logger').then(({ logger }) => {
+      logger.error('Uncaught window error', err, 'GlobalHandler');
+    }).catch(() => undefined);
+  });
+}
+
 // Dev safety: if a Service Worker was previously registered, disable it in non-PROD
 // to avoid caching mismatched bundles that can cause React hook crashes.
 if (!import.meta.env.PROD && 'serviceWorker' in navigator) {
