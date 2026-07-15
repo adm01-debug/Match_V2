@@ -207,9 +207,47 @@ export function useRealtimeNotifications(options: UseRealtimeNotificationsOption
   // Calculate unread count
   const unreadCount = notifications.filter(n => !n.read).length;
 
+  // Reconnect controls
+  const reconnectAttemptsRef = useRef(0);
+  const reconnectTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const setupRef = useRef<(() => void) | null>(null);
+
+  const scheduleReconnect = useCallback((channelName: string) => {
+    if (reconnectTimerRef.current) return; // already scheduled
+    const attempt = reconnectAttemptsRef.current + 1;
+    reconnectAttemptsRef.current = attempt;
+    // Exponential backoff with jitter: 1s, 2s, 4s, 8s, ... max 60s
+    const base = Math.min(60_000, 1_000 * Math.pow(2, attempt - 1));
+    const jitter = Math.floor(Math.random() * 500);
+    const delay = base + jitter;
+    logger.warn('[useRealtimeNotifications] scheduling reconnect', { channelName, attempt, delayMs: delay });
+    reconnectTimerRef.current = setTimeout(() => {
+      reconnectTimerRef.current = null;
+      setupRef.current?.();
+    }, delay);
+  }, []);
+
+  const handleStatus = useCallback((channelName: string, status: string) => {
+    if (status === 'SUBSCRIBED') {
+      reconnectAttemptsRef.current = 0;
+      setIsConnected(true);
+      logger.info('[useRealtimeNotifications] channel subscribed', { channelName });
+      return;
+    }
+    if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT' || status === 'CLOSED') {
+      setIsConnected(false);
+      logger.error('[useRealtimeNotifications] channel unhealthy', { channelName, status });
+      scheduleReconnect(channelName);
+    }
+  }, [scheduleReconnect]);
+
   // Setup realtime subscriptions
   const setupSubscriptions = useCallback(() => {
     if (!user?.id) return;
+
+    // Cleanup previous channels before re-subscribing (idempotent)
+    channelsRef.current.forEach((ch) => { supabase.removeChannel(ch); });
+    channelsRef.current = [];
 
     const channels: RealtimeChannel[] = [];
 
@@ -218,29 +256,24 @@ export function useRealtimeNotifications(options: UseRealtimeNotificationsOption
       .channel('notifications-realtime')
       .on(
         'postgres_changes',
-        { 
-          event: 'INSERT', 
-          schema: 'public', 
+        {
+          event: 'INSERT',
+          schema: 'public',
           table: 'notifications',
           filter: `user_id=eq.${user.id}`
         },
         (payload) => {
           const dbNotif = payload.new as DatabaseNotification;
           const notification = mapDbToNotification(dbNotif);
-          
-          // Add to local state if not already present
           setNotifications(prev => {
             if (prev.some(n => n.id === notification.id)) return prev;
             return [notification, ...prev].slice(0, 50);
           });
         }
       )
-      .subscribe((status) => {
-        setIsConnected(status === 'SUBSCRIBED');
-      });
+      .subscribe((status) => handleStatus('notifications-realtime', status));
     channels.push(notificationsChannel);
 
-    // Match Scores - notifica quando candidato tem match alto
     if (enableMatchScores) {
       const matchChannel = supabase
         .channel('match-scores-realtime')
@@ -257,18 +290,16 @@ export function useRealtimeNotifications(options: UseRealtimeNotificationsOption
             }, true);
           }
         })
-        .subscribe();
+        .subscribe((status) => handleStatus('match-scores-realtime', status));
       channels.push(matchChannel);
     }
 
-    // Vagas - notifica mudanças relevantes
     if (enableVagas) {
       const vagasChannel = supabase
         .channel('vagas-realtime')
         .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'vagas' }, (payload) => {
           const vaga = payload.new as VagaPayload;
           const oldVaga = payload.old as VagaPayload;
-
           if (oldVaga?.status !== vaga?.status && vaga?.status === 'publicada') {
             addNotification({
               type: 'urgent',
@@ -278,18 +309,16 @@ export function useRealtimeNotifications(options: UseRealtimeNotificationsOption
             }, true);
           }
         })
-        .subscribe();
+        .subscribe((status) => handleStatus('vagas-realtime', status));
       channels.push(vagasChannel);
     }
 
-    // Processos seletivos - mudança de etapa
     if (enableProcessos) {
       const processosChannel = supabase
         .channel('processos-realtime')
         .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'processos_seletivos' }, (payload) => {
           const processo = payload.new as ProcessoPayload;
           const oldProcesso = payload.old as ProcessoPayload;
-
           if (oldProcesso?.etapa_atual !== processo?.etapa_atual) {
             addNotification({
               type: 'stage_change',
@@ -299,17 +328,15 @@ export function useRealtimeNotifications(options: UseRealtimeNotificationsOption
             }, true);
           }
         })
-        .subscribe();
+        .subscribe((status) => handleStatus('processos-realtime', status));
       channels.push(processosChannel);
     }
 
-    // Entrevistas - agendamento/atualização
     if (enableEntrevistas) {
       const entrevistasChannel = supabase
         .channel('entrevistas-realtime')
         .on('postgres_changes', { event: '*', schema: 'public', table: 'entrevistas' }, (payload) => {
           const entrevista = payload.new as EntrevistaPayload;
-
           if (payload.eventType === 'INSERT') {
             addNotification({
               type: 'interview_scheduled',
@@ -318,7 +345,6 @@ export function useRealtimeNotifications(options: UseRealtimeNotificationsOption
               link: '/agenda',
             }, true);
           }
-
           if (payload.eventType === 'UPDATE') {
             const oldEntrevista = payload.old as EntrevistaPayload;
             if (oldEntrevista?.status !== entrevista?.status) {
@@ -331,12 +357,15 @@ export function useRealtimeNotifications(options: UseRealtimeNotificationsOption
             }
           }
         })
-        .subscribe();
+        .subscribe((status) => handleStatus('entrevistas-realtime', status));
       channels.push(entrevistasChannel);
     }
 
     channelsRef.current = channels;
-  }, [user?.id, enableMatchScores, enableVagas, enableProcessos, enableEntrevistas, addNotification]);
+  }, [user?.id, enableMatchScores, enableVagas, enableProcessos, enableEntrevistas, addNotification, handleStatus]);
+
+  // Keep a ref to the latest setup for use inside the reconnect timer
+  useEffect(() => { setupRef.current = setupSubscriptions; }, [setupSubscriptions]);
 
   const cleanup = useCallback(() => {
     channelsRef.current.forEach((channel) => {
