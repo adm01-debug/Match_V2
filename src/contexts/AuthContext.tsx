@@ -6,6 +6,7 @@
 import { createContext, useContext, useEffect, useState, type ReactNode, type FC } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
+import { setUser as setSentryUser } from '@/lib/sentry';
 
 export type AppRole = 'admin' | 'rh' | 'gestor';
 
@@ -60,10 +61,12 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
         setUser(session?.user ?? null);
 
         if (session?.user) {
+          setSentryUser({ id: session.user.id, email: session.user.email ?? undefined });
           setTimeout(() => {
             fetchUserRoles(session.user.id);
           }, 0);
         } else {
+          setSentryUser(null);
           setRoles([]);
         }
 
@@ -77,6 +80,7 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
       setUser(session?.user ?? null);
       
       if (session?.user) {
+        setSentryUser({ id: session.user.id, email: session.user.email ?? undefined });
         fetchUserRoles(session.user.id);
       }
       
@@ -112,6 +116,7 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
   const signOut = async () => {
     await supabase.auth.signOut();
+    setSentryUser(null);
     setRoles([]);
   };
 
