@@ -3,6 +3,10 @@ import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
 import { initWebVitals } from './lib/webVitals';
+import { initSentry } from './lib/sentry';
+
+// Inicializa Sentry o mais cedo possível para capturar erros de boot
+initSentry();
 
 // Dev safety: if a Service Worker was previously registered, disable it in non-PROD
 // to avoid caching mismatched bundles that can cause React hook crashes.

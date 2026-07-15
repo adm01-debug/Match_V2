@@ -104,6 +104,21 @@ class Logger {
         this.flush();
       }
     }
+
+    // Encaminhar erros/warnings para Sentry (no-op se DSN ausente)
+    if (level === 'error' || level === 'warn') {
+      // Import dinâmico para não criar ciclo e permitir tree-shaking
+      import('@/lib/sentry').then(({ captureException, captureMessage, isSentryEnabled }) => {
+        if (!isSentryEnabled()) return;
+        if (data instanceof Error) {
+          captureException(data, { message, context });
+        } else if (level === 'error') {
+          captureException(new Error(message), { data, context });
+        } else {
+          captureMessage(message, 'warning');
+        }
+      }).catch(() => { /* ignore */ });
+    }
   }
 
   private async flush(): Promise<void> {
