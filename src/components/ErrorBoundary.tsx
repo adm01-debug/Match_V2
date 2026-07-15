@@ -7,6 +7,8 @@ import { Component, ErrorInfo, ReactNode } from 'react';
 import { AlertTriangle, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { captureException, isSentryEnabled } from '@/lib/sentry';
+import { logger } from '@/services/logger';
 
 interface Props {
   children: ReactNode;
