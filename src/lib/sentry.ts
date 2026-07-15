@@ -48,4 +48,20 @@ export function setUser(user: { id: string; email?: string } | null): void {
   Sentry.setUser(user);
 }
 
+export function addBreadcrumb(breadcrumb: {
+  category?: string;
+  message?: string;
+  level?: 'info' | 'warning' | 'error' | 'debug';
+  data?: Record<string, unknown>;
+}): void {
+  if (!initialized) return;
+  Sentry.addBreadcrumb({
+    category: breadcrumb.category ?? 'app',
+    message: breadcrumb.message,
+    level: breadcrumb.level ?? 'info',
+    data: breadcrumb.data,
+    timestamp: Date.now() / 1000,
+  });
+}
+
 export const isSentryEnabled = (): boolean => initialized;
