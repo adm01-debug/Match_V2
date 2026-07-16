@@ -40,6 +40,12 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
+        addBreadcrumb({
+          category: 'auth',
+          message: `auth event: ${event}`,
+          level: 'info',
+          data: { hasSession: Boolean(session), userId: session?.user?.id },
+        });
         // Auto-logout defensivo: refresh falhou ou usuário deletado
         if (event === 'TOKEN_REFRESHED' && !session) {
           setSession(null);
