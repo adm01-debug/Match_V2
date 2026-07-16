@@ -4,9 +4,12 @@ import App from './App.tsx';
 import './index.css';
 import { initWebVitals } from './lib/webVitals';
 import { initSentry } from './lib/sentry';
+import { installSupabaseFetchBreadcrumbs } from './lib/sentrySupabaseBreadcrumbs';
 
 // Inicializa Sentry o mais cedo possível para capturar erros de boot
 initSentry();
+// A27 — instrumenta chamadas Supabase (auth/rest/storage/functions) com breadcrumbs
+installSupabaseFetchBreadcrumbs();
 
 // A25 — captura global de erros fora do ciclo React
 // Encaminha para logger (que já reenvia para Sentry quando habilitado)
