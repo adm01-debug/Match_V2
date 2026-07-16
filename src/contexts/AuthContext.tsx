@@ -6,7 +6,7 @@
 import { createContext, useContext, useEffect, useState, type ReactNode, type FC } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
-import { setUser as setSentryUser } from '@/lib/sentry';
+import { setUser as setSentryUser, addBreadcrumb } from '@/lib/sentry';
 
 export type AppRole = 'admin' | 'rh' | 'gestor';
 
