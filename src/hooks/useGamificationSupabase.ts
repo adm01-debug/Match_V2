@@ -6,6 +6,7 @@
 import { logger } from '@/services/logger';
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { tracedRpc } from '@/lib/sentryRpc';
 import { useSoundPreferences } from './useSoundPreferences';
 import { useAuth } from '@/contexts/AuthContext';
 import { levels, xpRewards } from '@/domain/gamification/constants';
