@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { CheckCircle2, AlertTriangle, XCircle, RefreshCw, Activity, Mail } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
+import { tracedRpc } from "@/lib/sentryRpc";
 
 interface EmailSla {
   sent: number;
