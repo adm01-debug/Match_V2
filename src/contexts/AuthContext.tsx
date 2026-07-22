@@ -7,6 +7,7 @@ import { createContext, useContext, useEffect, useState, type ReactNode, type FC
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { setUser as setSentryUser, addBreadcrumb } from '@/lib/sentry';
+import { tracedRpc } from '@/lib/sentryRpc';
 
 export type AppRole = 'admin' | 'rh' | 'gestor';
 
