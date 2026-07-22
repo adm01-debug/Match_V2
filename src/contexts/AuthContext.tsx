@@ -7,6 +7,7 @@ import { createContext, useContext, useEffect, useState, type ReactNode, type FC
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { setUser as setSentryUser, addBreadcrumb } from '@/lib/sentry';
+import { tracedRpc } from '@/lib/sentryRpc';
 
 export type AppRole = 'admin' | 'rh' | 'gestor';
 
@@ -30,7 +31,7 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [roles, setRoles] = useState<AppRole[]>([]);
 
   const fetchUserRoles = async (userId: string) => {
-    const { data, error } = await supabase.rpc('get_user_roles', { _user_id: userId });
+    const { data, error } = await tracedRpc('get_user_roles', async () => await supabase.rpc('get_user_roles', { _user_id: userId }));
     if (!error && data) {
       setRoles(data as AppRole[]);
     }

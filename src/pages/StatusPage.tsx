@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { CheckCircle2, AlertTriangle, XCircle, RefreshCw, Activity, Mail } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
+import { tracedRpc } from "@/lib/sentryRpc";
 
 interface EmailSla {
   sent: number;
@@ -71,7 +72,7 @@ export default function StatusPage() {
     try {
       const [healthRes, slaRes] = await Promise.all([
         fetch(HEALTH_URL, { cache: "no-store" }).then((r) => r.json() as Promise<HealthResponse>),
-        supabase.rpc("public_email_delivery_sla", { p_window_minutes: 60 }),
+        tracedRpc("public_email_delivery_sla", async () => await supabase.rpc("public_email_delivery_sla", { p_window_minutes: 60 })),
       ]);
       setData(healthRes);
       if (!slaRes.error && Array.isArray(slaRes.data) && slaRes.data[0]) {

@@ -6,6 +6,7 @@
 import { logger } from '@/services/logger';
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { tracedRpc } from '@/lib/sentryRpc';
 import { useSoundPreferences } from './useSoundPreferences';
 import { useAuth } from '@/contexts/AuthContext';
 import { levels, xpRewards } from '@/domain/gamification/constants';
@@ -77,13 +78,13 @@ export function useGamificationSupabase() {
 
       if (user?.id) {
         try {
-          const { data, error } = await supabase.rpc('add_user_xp', {
+          const { data, error } = await tracedRpc('add_user_xp', async () => await supabase.rpc('add_user_xp', {
             p_user_id: user.id,
             p_amount: amount,
             p_action: action,
             p_description: description ?? undefined,
             p_multiplier: multiplier,
-          });
+          }));
           if (error) throw error;
           if (data && data[0]) {
             const result = data[0];
@@ -131,7 +132,7 @@ export function useGamificationSupabase() {
 
     if (user?.id) {
       try {
-        const { data, error } = await supabase.rpc('update_user_streak', { p_user_id: user.id });
+        const { data, error } = await tracedRpc('update_user_streak', async () => await supabase.rpc('update_user_streak', { p_user_id: user.id }));
         if (error) throw error;
         if (data && data[0]) {
           const result = data[0];

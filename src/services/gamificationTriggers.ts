@@ -5,6 +5,7 @@
 
 import { logger } from '@/services/logger';
 import { supabase } from '@/integrations/supabase/client';
+import { tracedRpc } from '@/lib/sentryRpc';
 
 export interface GamificationTriggerResult {
   success: boolean;
@@ -26,13 +27,13 @@ export async function awardXP(
   multiplier: number = 1
 ): Promise<GamificationTriggerResult> {
   try {
-    const { data, error } = await supabase.rpc('add_user_xp', {
+    const { data, error } = await tracedRpc('add_user_xp', async () => await supabase.rpc('add_user_xp', {
       p_user_id: userId,
       p_amount: amount,
       p_action: action,
       p_description: description ?? undefined,
       p_multiplier: multiplier,
-    });
+    }));
 
     if (error) throw error;
 
