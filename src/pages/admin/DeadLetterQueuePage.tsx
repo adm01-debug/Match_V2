@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { tracedRpc } from "@/lib/sentryRpc";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -84,9 +85,9 @@ export default function DeadLetterQueuePage() {
   const healthQuery = useQuery({
     queryKey: ["dlq-health"],
     queryFn: async () => {
-      const { data, error } = await supabase.rpc("admin_integration_health_summary", {
+      const { data, error } = await tracedRpc("admin_integration_health_summary", async () => await supabase.rpc("admin_integration_health_summary", {
         p_window_minutes: 60,
-      });
+      }));
       if (error) throw error;
       return (data ?? []) as Array<{
         integration: string;
