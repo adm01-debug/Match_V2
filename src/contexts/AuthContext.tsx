@@ -31,7 +31,7 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [roles, setRoles] = useState<AppRole[]>([]);
 
   const fetchUserRoles = async (userId: string) => {
-    const { data, error } = await tracedRpc('get_user_roles', () => supabase.rpc('get_user_roles', { _user_id: userId }));
+    const { data, error } = await tracedRpc('get_user_roles', async () => await supabase.rpc('get_user_roles', { _user_id: userId }));
     if (!error && data) {
       setRoles(data as AppRole[]);
     }
