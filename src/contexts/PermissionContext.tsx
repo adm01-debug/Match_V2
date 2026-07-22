@@ -33,7 +33,7 @@ export function PermissionProvider({ children }: { children: React.ReactNode }) 
     }
     try {
       setLoading(true);
-      const { data, error } = await supabase.rpc('get_user_permissions', { _user_id: user.id });
+      const { data, error } = await tracedRpc('get_user_permissions', async () => await supabase.rpc('get_user_permissions', { _user_id: user.id }));
       if (error) throw error;
       setPermissions((data as Permission[]) || []);
     } catch (err) {
