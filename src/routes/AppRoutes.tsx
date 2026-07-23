@@ -3,7 +3,7 @@ import { portalRoutes } from "./PortalRoutes";
 import { authRoutes } from "./AuthRoutes";
 import { adminRoutes } from "./AdminRoutes";
 import { mainRoutes } from "./MainRoutes";
-import { NotFound, StatusPage, TermosPage, PrivacidadePage } from "./lazyPages";
+import { NotFound, StatusPage, TermosPage, PrivacidadePage, CarreirasPage } from "./lazyPages";
 
 export function AppRoutes() {
   return (
@@ -11,6 +11,8 @@ export function AppRoutes() {
       <Route path="/status" element={<StatusPage />} />
       <Route path="/termos" element={<TermosPage />} />
       <Route path="/privacidade" element={<PrivacidadePage />} />
+      <Route path="/carreiras" element={<CarreirasPage />} />
+      <Route path="/carreiras/:slug" element={<CarreirasPage />} />
       {portalRoutes}
       {authRoutes}
       {adminRoutes}
