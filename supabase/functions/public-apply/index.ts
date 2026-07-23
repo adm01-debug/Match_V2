@@ -112,6 +112,14 @@ serve(async (req) => {
       }
       knockoutFailed = evalRes.reprovadas.length > 0;
     }
+    // Short-circuit: se reprovou nos knockouts, não criamos usuário nem candidatura
+    if (knockoutFailed) {
+      return json(200, {
+        ok: false,
+        error: 'knockout_failed',
+        message: 'Infelizmente você não atende aos requisitos eliminatórios desta vaga.',
+      });
+    }
 
 
     const emailLower = email.trim().toLowerCase();
