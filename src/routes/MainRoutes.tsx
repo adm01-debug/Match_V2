@@ -43,6 +43,7 @@ export const mainRoutes = (
     <Route path="/vagas/nova" element={guard(<VagaForm />)} />
     <Route path="/vagas/:id" element={guard(<VagaDetalhes />)} />
     <Route path="/vagas/:id/editar" element={guard(<VagaForm />)} />
+    <Route path="/vagas/:vagaId/ranking" element={guard(<RankingVagaPage />, ["admin", "rh", "gestor"])} />
     <Route path="/pipeline" element={guard(<Pipeline />)} />
     <Route path="/avaliacao/:processoId" element={guard(<AvaliacaoForm />)} />
     <Route path="/testes" element={guard(<TestsPage />)} />
