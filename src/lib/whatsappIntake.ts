@@ -23,7 +23,7 @@ export function buildWhatsappApplyUrl(params: {
   const template =
     params.mensagemTemplate?.trim() ||
     'Olá! Tenho interesse na vaga {{vaga}} e gostaria de me candidatar.';
-  const msg = template.replaceAll('{{vaga}}', params.vagaTitulo);
+  const msg = template.split('{{vaga}}').join(params.vagaTitulo);
   const origem = params.origem ? `\n\n(via ${params.origem})` : '';
   return `https://wa.me/${numero}?text=${encodeURIComponent(msg + origem)}`;
 }
