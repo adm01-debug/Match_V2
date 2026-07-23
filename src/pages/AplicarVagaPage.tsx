@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { Loader2, ArrowLeft, CheckCircle2, MapPin, Building2, Briefcase } from 'lucide-react';
+import { Loader2, ArrowLeft, CheckCircle2, MapPin, Building2, Briefcase, XCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -10,6 +10,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
+import { KnockoutQuestionsForm } from '@/components/carreiras/KnockoutQuestionsForm';
+import { evaluateKnockouts, type KnockoutAnswer, type KnockoutQuestion } from '@/types/knockout';
 
 interface Vaga {
   id: string;
@@ -22,6 +24,7 @@ interface Vaga {
   descricao_empresa: string | null;
   responsabilidades: string | null;
   requisitos_obrigatorios: string | null;
+  perguntas_triagem: KnockoutQuestion[] | null;
   status: string;
 }
 
@@ -44,8 +47,10 @@ export default function AplicarVagaPage() {
   const [linkedin, setLinkedin] = useState('');
   const [carta, setCarta] = useState('');
   const [curriculo, setCurriculo] = useState<File | null>(null);
+  const [knockoutAnswers, setKnockoutAnswers] = useState<Record<string, KnockoutAnswer>>({});
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState<null | { magic: boolean; msg: string }>(null);
+  const [rejected, setRejected] = useState<string | null>(null);
 
   const { data: vaga, isLoading } = useQuery({
     queryKey: ['aplicar-vaga', vagaId],
