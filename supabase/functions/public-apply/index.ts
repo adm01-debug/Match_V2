@@ -12,6 +12,7 @@
 import { serve } from 'https://deno.land/std@0.208.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { enforceRateLimit } from '../_shared/rateLimit.ts';
+import { evaluateKnockouts, type KnockoutAnswer, type KnockoutQuestion } from '../_shared/knockout.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -26,9 +27,10 @@ interface ApplyPayload {
   telefone?: string;
   linkedin_url?: string;
   carta_apresentacao?: string;
-  curriculo_base64?: string; // data URL ou base64 puro
+  curriculo_base64?: string;
   curriculo_nome?: string;
-  redirect_to?: string; // URL para retorno após magic link
+  knockout_answers?: Record<string, KnockoutAnswer>;
+  redirect_to?: string;
 }
 
 function json(status: number, body: unknown): Response {
@@ -69,7 +71,7 @@ serve(async (req) => {
   }
 
   const { vaga_id, nome, email, telefone, linkedin_url, carta_apresentacao,
-    curriculo_base64, curriculo_nome, redirect_to } = payload;
+    curriculo_base64, curriculo_nome, knockout_answers, redirect_to } = payload;
 
   if (!vaga_id || !isUuid(vaga_id)) return json(400, { error: 'invalid_vaga_id' });
   if (!nome || nome.trim().length < 2) return json(400, { error: 'invalid_nome' });
@@ -83,16 +85,42 @@ serve(async (req) => {
   const admin = createClient(SUPABASE_URL, SERVICE_ROLE, { auth: { persistSession: false } });
 
   try {
-    // 1. Verificar vaga publicada
+    // 1. Verificar vaga publicada + carregar knockout questions
     const { data: vaga, error: vagaErr } = await admin
       .from('vagas')
-      .select('id, titulo, status, deleted_at')
+      .select('id, titulo, status, deleted_at, perguntas_triagem')
       .eq('id', vaga_id)
       .maybeSingle();
     if (vagaErr) throw vagaErr;
     if (!vaga || vaga.deleted_at || vaga.status !== 'publicada') {
       return json(404, { error: 'vaga_indisponivel' });
     }
+
+    // 1b. Validação server-side dos knockouts (fonte da verdade)
+    const questions: KnockoutQuestion[] = Array.isArray(vaga.perguntas_triagem)
+      ? (vaga.perguntas_triagem as KnockoutQuestion[])
+      : [];
+    let knockoutFailed = false;
+    if (questions.length) {
+      const evalRes = evaluateKnockouts(questions, knockout_answers ?? {});
+      if (evalRes.faltantes.length) {
+        return json(400, {
+          error: 'knockout_missing',
+          message: 'Responda todas as perguntas obrigatórias.',
+          faltantes: evalRes.faltantes,
+        });
+      }
+      knockoutFailed = evalRes.reprovadas.length > 0;
+    }
+    // Short-circuit: se reprovou nos knockouts, não criamos usuário nem candidatura
+    if (knockoutFailed) {
+      return json(200, {
+        ok: false,
+        error: 'knockout_failed',
+        message: 'Infelizmente você não atende aos requisitos eliminatórios desta vaga.',
+      });
+    }
+
 
     const emailLower = email.trim().toLowerCase();
 

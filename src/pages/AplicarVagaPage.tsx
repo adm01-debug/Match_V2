@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { Loader2, ArrowLeft, CheckCircle2, MapPin, Building2, Briefcase } from 'lucide-react';
+import { Loader2, ArrowLeft, CheckCircle2, MapPin, Building2, Briefcase, XCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -10,6 +10,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
+import { KnockoutQuestionsForm } from '@/components/carreiras/KnockoutQuestionsForm';
+import { evaluateKnockouts, type KnockoutAnswer, type KnockoutQuestion } from '@/types/knockout';
 
 interface Vaga {
   id: string;
@@ -22,6 +24,7 @@ interface Vaga {
   descricao_empresa: string | null;
   responsabilidades: string | null;
   requisitos_obrigatorios: string | null;
+  perguntas_triagem: KnockoutQuestion[] | null;
   status: string;
 }
 
@@ -44,22 +47,28 @@ export default function AplicarVagaPage() {
   const [linkedin, setLinkedin] = useState('');
   const [carta, setCarta] = useState('');
   const [curriculo, setCurriculo] = useState<File | null>(null);
+  const [knockoutAnswers, setKnockoutAnswers] = useState<Record<string, KnockoutAnswer>>({});
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState<null | { magic: boolean; msg: string }>(null);
+  const [rejected, setRejected] = useState<string | null>(null);
 
   const { data: vaga, isLoading } = useQuery({
     queryKey: ['aplicar-vaga', vagaId],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('vagas')
-        .select('id,titulo,departamento,cidade,estado,modalidade,tipo_contrato,descricao_empresa,responsabilidades,requisitos_obrigatorios,status')
+        .select('id,titulo,departamento,cidade,estado,modalidade,tipo_contrato,descricao_empresa,responsabilidades,requisitos_obrigatorios,perguntas_triagem,status')
         .eq('id', vagaId)
         .maybeSingle();
       if (error) throw error;
-      return data as Vaga | null;
+      return data as unknown as Vaga | null;
     },
     enabled: !!vagaId,
   });
+
+  const knockoutQuestions: KnockoutQuestion[] = Array.isArray(vaga?.perguntas_triagem)
+    ? (vaga!.perguntas_triagem as KnockoutQuestion[])
+    : [];
 
   useEffect(() => {
     if (vaga) document.title = `Candidatar-se: ${vaga.titulo}`;
@@ -77,6 +86,15 @@ export default function AplicarVagaPage() {
       return;
     }
 
+    // Validação client-side dos knockouts (dupla checagem no server)
+    if (knockoutQuestions.length) {
+      const evalRes = evaluateKnockouts(knockoutQuestions, knockoutAnswers);
+      if (evalRes.faltantes.length) {
+        toast.error('Responda todas as perguntas obrigatórias');
+        return;
+      }
+    }
+
     setSubmitting(true);
     try {
       const curriculo_base64 = curriculo ? await fileToBase64(curriculo) : undefined;
@@ -90,10 +108,15 @@ export default function AplicarVagaPage() {
           carta_apresentacao: carta.trim() || undefined,
           curriculo_base64,
           curriculo_nome: curriculo?.name,
+          knockout_answers: knockoutQuestions.length ? knockoutAnswers : undefined,
           redirect_to: `${window.location.origin}/portal`,
         },
       });
       if (error) throw error;
+      if (data?.error === 'knockout_failed') {
+        setRejected(data?.message ?? 'Infelizmente você não atende aos requisitos eliminatórios desta vaga.');
+        return;
+      }
       if (data?.error) throw new Error(data.message || data.error);
 
       setSuccess({
@@ -123,6 +146,23 @@ export default function AplicarVagaPage() {
         <h1 className="text-2xl font-bold">Vaga indisponível</h1>
         <p className="text-muted-foreground">Esta vaga foi encerrada ou não existe.</p>
         <Button onClick={() => navigate(-1)}>Voltar</Button>
+      </div>
+    );
+  }
+
+  if (rejected) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center p-4">
+        <Card className="max-w-lg w-full">
+          <CardContent className="p-8 text-center flex flex-col items-center gap-4">
+            <XCircle className="h-16 w-16 text-destructive" />
+            <h1 className="text-2xl font-bold">Candidatura não aprovada</h1>
+            <p className="text-muted-foreground">{rejected}</p>
+            <Button asChild variant="outline">
+              <Link to="/carreiras">Ver outras vagas</Link>
+            </Button>
+          </CardContent>
+        </Card>
       </div>
     );
   }
@@ -253,6 +293,13 @@ export default function AplicarVagaPage() {
                       placeholder="Conte por que você é a pessoa certa para esta vaga…"
                     />
                   </div>
+
+                  <KnockoutQuestionsForm
+                    questions={knockoutQuestions}
+                    answers={knockoutAnswers}
+                    onChange={(id, v) => setKnockoutAnswers((prev) => ({ ...prev, [id]: v }))}
+                  />
+
 
                   <Button type="submit" size="lg" className="w-full" disabled={submitting}>
                     {submitting ? (
