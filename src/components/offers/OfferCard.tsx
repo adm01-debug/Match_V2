@@ -18,7 +18,8 @@ export type OfferStatus =
   | 'visualizada'
   | 'aceita'
   | 'recusada'
-  | 'expirada';
+  | 'expirada'
+  | 'cancelada';
 
 export interface Offer {
   id: string;
