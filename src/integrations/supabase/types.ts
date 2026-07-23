@@ -1190,6 +1190,66 @@ export type Database = {
         }
         Relationships: []
       }
+      empresa_branding: {
+        Row: {
+          ativo: boolean
+          cor_primaria: string | null
+          cor_secundaria: string | null
+          created_at: string
+          hero_image_url: string | null
+          id: string
+          instagram: string | null
+          linkedin: string | null
+          logo_url: string | null
+          nome: string
+          seo_description: string | null
+          seo_title: string | null
+          slug: string
+          sobre: string | null
+          tagline: string | null
+          updated_at: string
+          website: string | null
+        }
+        Insert: {
+          ativo?: boolean
+          cor_primaria?: string | null
+          cor_secundaria?: string | null
+          created_at?: string
+          hero_image_url?: string | null
+          id?: string
+          instagram?: string | null
+          linkedin?: string | null
+          logo_url?: string | null
+          nome: string
+          seo_description?: string | null
+          seo_title?: string | null
+          slug: string
+          sobre?: string | null
+          tagline?: string | null
+          updated_at?: string
+          website?: string | null
+        }
+        Update: {
+          ativo?: boolean
+          cor_primaria?: string | null
+          cor_secundaria?: string | null
+          created_at?: string
+          hero_image_url?: string | null
+          id?: string
+          instagram?: string | null
+          linkedin?: string | null
+          logo_url?: string | null
+          nome?: string
+          seo_description?: string | null
+          seo_title?: string | null
+          slug?: string
+          sobre?: string | null
+          tagline?: string | null
+          updated_at?: string
+          website?: string | null
+        }
+        Relationships: []
+      }
       entrevista_respostas: {
         Row: {
           avaliador_id: string | null
