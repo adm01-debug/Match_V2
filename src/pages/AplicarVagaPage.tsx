@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { Loader2, ArrowLeft, CheckCircle2, MapPin, Building2, Briefcase, XCircle } from 'lucide-react';
+import { Loader2, ArrowLeft, CheckCircle2, MapPin, Building2, Briefcase, XCircle, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -12,6 +12,7 @@ import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { KnockoutQuestionsForm } from '@/components/carreiras/KnockoutQuestionsForm';
 import { evaluateKnockouts, type KnockoutAnswer, type KnockoutQuestion } from '@/types/knockout';
+import { buildWhatsappApplyUrl } from '@/lib/whatsappIntake';
 
 interface Vaga {
   id: string;
@@ -65,6 +66,29 @@ export default function AplicarVagaPage() {
     },
     enabled: !!vagaId,
   });
+
+  const { data: branding } = useQuery({
+    queryKey: ['empresa-branding-default'],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from('empresa_branding')
+        .select('whatsapp_recrutamento,whatsapp_mensagem_padrao,nome')
+        .eq('ativo', true)
+        .order('created_at', { ascending: true })
+        .limit(1)
+        .maybeSingle();
+      return data;
+    },
+  });
+
+  const whatsappUrl = vaga && branding?.whatsapp_recrutamento
+    ? buildWhatsappApplyUrl({
+        numero: branding.whatsapp_recrutamento,
+        vagaTitulo: vaga.titulo,
+        mensagemTemplate: branding.whatsapp_mensagem_padrao,
+        origem: 'Página de Carreiras',
+      })
+    : null;
 
   const knockoutQuestions: KnockoutQuestion[] = Array.isArray(vaga?.perguntas_triagem)
     ? (vaga!.perguntas_triagem as KnockoutQuestion[])
@@ -253,6 +277,28 @@ export default function AplicarVagaPage() {
                 </p>
               </CardHeader>
               <CardContent>
+                {whatsappUrl && (
+                  <div className="mb-6 rounded-lg border border-dashed p-4 bg-muted/30">
+                    <p className="text-sm font-medium mb-2 flex items-center gap-2">
+                      <MessageCircle className="h-4 w-4 text-primary" />
+                      Prefere falar pelo WhatsApp?
+                    </p>
+                    <p className="text-xs text-muted-foreground mb-3">
+                      Envie sua candidatura diretamente ao nosso recrutamento com uma mensagem pré-preenchida.
+                    </p>
+                    <Button
+                      asChild
+                      type="button"
+                      variant="outline"
+                      className="w-full sm:w-auto border-green-600 text-green-700 hover:bg-green-50 dark:text-green-400 dark:hover:bg-green-950"
+                    >
+                      <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
+                        <MessageCircle className="h-4 w-4 mr-2" />
+                        Candidatar via WhatsApp
+                      </a>
+                    </Button>
+                  </div>
+                )}
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>

@@ -1209,6 +1209,8 @@ export type Database = {
           tagline: string | null
           updated_at: string
           website: string | null
+          whatsapp_mensagem_padrao: string | null
+          whatsapp_recrutamento: string | null
         }
         Insert: {
           ativo?: boolean
@@ -1228,6 +1230,8 @@ export type Database = {
           tagline?: string | null
           updated_at?: string
           website?: string | null
+          whatsapp_mensagem_padrao?: string | null
+          whatsapp_recrutamento?: string | null
         }
         Update: {
           ativo?: boolean
@@ -1247,6 +1251,8 @@ export type Database = {
           tagline?: string | null
           updated_at?: string
           website?: string | null
+          whatsapp_mensagem_padrao?: string | null
+          whatsapp_recrutamento?: string | null
         }
         Relationships: []
       }
