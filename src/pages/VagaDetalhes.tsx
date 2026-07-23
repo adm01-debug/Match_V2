@@ -11,7 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Progress } from "@/components/ui/progress";
-import { ArrowLeft, Edit, Send, MapPin, AlertCircle, Star, Building, ExternalLink } from "lucide-react";
+import { ArrowLeft, Edit, Send, MapPin, AlertCircle, Star, Building, ExternalLink, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { VagaStatsCards } from '@/components/vaga-detalhes/VagaStatsCards';
 import { VagaDetalhesTab } from '@/components/vaga-detalhes/VagaDetalhesTab';
@@ -63,6 +63,7 @@ export default function VagaDetalhes() {
             </div>
           </div>
           <div className="flex gap-2">
+            <Button variant="outline" onClick={() => navigate(`/vagas/${id}/ranking`)}><Sparkles className="h-4 w-4 mr-2" />Ranking IA</Button>
             <Button variant="outline" onClick={() => navigate(`/vagas/${id}/editar`)}><Edit className="h-4 w-4 mr-2" />Editar</Button>
             {vaga.status === 'rascunho' && <Button onClick={() => updateVagaMutation.mutate({ id: id!, status: 'publicada' })}><Send className="h-4 w-4 mr-2" />Publicar</Button>}
           </div>
