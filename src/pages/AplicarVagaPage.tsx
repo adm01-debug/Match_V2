@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { Loader2, ArrowLeft, CheckCircle2, MapPin, Building2, Briefcase, XCircle } from 'lucide-react';
+import { Loader2, ArrowLeft, CheckCircle2, MapPin, Building2, Briefcase, XCircle, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -12,6 +12,7 @@ import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { KnockoutQuestionsForm } from '@/components/carreiras/KnockoutQuestionsForm';
 import { evaluateKnockouts, type KnockoutAnswer, type KnockoutQuestion } from '@/types/knockout';
+import { buildWhatsappApplyUrl } from '@/lib/whatsappIntake';
 
 interface Vaga {
   id: string;
@@ -65,6 +66,29 @@ export default function AplicarVagaPage() {
     },
     enabled: !!vagaId,
   });
+
+  const { data: branding } = useQuery({
+    queryKey: ['empresa-branding-default'],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from('empresa_branding')
+        .select('whatsapp_recrutamento,whatsapp_mensagem_padrao,nome')
+        .eq('ativo', true)
+        .order('created_at', { ascending: true })
+        .limit(1)
+        .maybeSingle();
+      return data;
+    },
+  });
+
+  const whatsappUrl = vaga && branding?.whatsapp_recrutamento
+    ? buildWhatsappApplyUrl({
+        numero: branding.whatsapp_recrutamento,
+        vagaTitulo: vaga.titulo,
+        mensagemTemplate: branding.whatsapp_mensagem_padrao,
+        origem: 'Página de Carreiras',
+      })
+    : null;
 
   const knockoutQuestions: KnockoutQuestion[] = Array.isArray(vaga?.perguntas_triagem)
     ? (vaga!.perguntas_triagem as KnockoutQuestion[])
