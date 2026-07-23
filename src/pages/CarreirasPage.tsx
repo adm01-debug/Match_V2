@@ -234,7 +234,7 @@ export default function CarreirasPage() {
                   </div>
                   <div className="mt-auto pt-4">
                     <Button asChild className="w-full" style={{ backgroundColor: 'var(--brand-primary)' }}>
-                      <Link to={`/portal?vaga=${v.id}`}>Candidatar-se</Link>
+                      <Link to={`/carreiras/vaga/${v.id}`}>Candidatar-se</Link>
                     </Button>
                   </div>
                 </CardContent>
