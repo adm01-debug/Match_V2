@@ -294,6 +294,13 @@ export default function AplicarVagaPage() {
                     />
                   </div>
 
+                  <KnockoutQuestionsForm
+                    questions={knockoutQuestions}
+                    answers={knockoutAnswers}
+                    onChange={(id, v) => setKnockoutAnswers((prev) => ({ ...prev, [id]: v }))}
+                  />
+
+
                   <Button type="submit" size="lg" className="w-full" disabled={submitting}>
                     {submitting ? (
                       <><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Enviando…</>
