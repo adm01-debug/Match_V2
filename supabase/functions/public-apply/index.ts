@@ -12,6 +12,7 @@
 import { serve } from 'https://deno.land/std@0.208.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { enforceRateLimit } from '../_shared/rateLimit.ts';
+import { evaluateKnockouts, type KnockoutAnswer, type KnockoutQuestion } from '../_shared/knockout.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -26,9 +27,10 @@ interface ApplyPayload {
   telefone?: string;
   linkedin_url?: string;
   carta_apresentacao?: string;
-  curriculo_base64?: string; // data URL ou base64 puro
+  curriculo_base64?: string;
   curriculo_nome?: string;
-  redirect_to?: string; // URL para retorno após magic link
+  knockout_answers?: Record<string, KnockoutAnswer>;
+  redirect_to?: string;
 }
 
 function json(status: number, body: unknown): Response {
@@ -69,7 +71,7 @@ serve(async (req) => {
   }
 
   const { vaga_id, nome, email, telefone, linkedin_url, carta_apresentacao,
-    curriculo_base64, curriculo_nome, redirect_to } = payload;
+    curriculo_base64, curriculo_nome, knockout_answers, redirect_to } = payload;
 
   if (!vaga_id || !isUuid(vaga_id)) return json(400, { error: 'invalid_vaga_id' });
   if (!nome || nome.trim().length < 2) return json(400, { error: 'invalid_nome' });
