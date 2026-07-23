@@ -2379,6 +2379,152 @@ export type Database = {
           },
         ]
       }
+      propostas: {
+        Row: {
+          access_token: string
+          assinada_em: string | null
+          assinatura_hash: string | null
+          assinatura_ip: string | null
+          assinatura_user_agent: string | null
+          beneficios: Json
+          candidato_email: string
+          candidato_id: string | null
+          candidato_nome: string
+          clausulas: string | null
+          created_at: string
+          criado_por: string | null
+          data_inicio: string
+          enviada_em: string | null
+          expira_em: string | null
+          id: string
+          metadata: Json
+          moeda: string
+          motivo_recusa: string | null
+          recusada_em: string | null
+          salario: number
+          status: string
+          updated_at: string
+          vaga_id: string | null
+          vaga_titulo: string
+          visualizada_em: string | null
+        }
+        Insert: {
+          access_token?: string
+          assinada_em?: string | null
+          assinatura_hash?: string | null
+          assinatura_ip?: string | null
+          assinatura_user_agent?: string | null
+          beneficios?: Json
+          candidato_email: string
+          candidato_id?: string | null
+          candidato_nome: string
+          clausulas?: string | null
+          created_at?: string
+          criado_por?: string | null
+          data_inicio: string
+          enviada_em?: string | null
+          expira_em?: string | null
+          id?: string
+          metadata?: Json
+          moeda?: string
+          motivo_recusa?: string | null
+          recusada_em?: string | null
+          salario: number
+          status?: string
+          updated_at?: string
+          vaga_id?: string | null
+          vaga_titulo: string
+          visualizada_em?: string | null
+        }
+        Update: {
+          access_token?: string
+          assinada_em?: string | null
+          assinatura_hash?: string | null
+          assinatura_ip?: string | null
+          assinatura_user_agent?: string | null
+          beneficios?: Json
+          candidato_email?: string
+          candidato_id?: string | null
+          candidato_nome?: string
+          clausulas?: string | null
+          created_at?: string
+          criado_por?: string | null
+          data_inicio?: string
+          enviada_em?: string | null
+          expira_em?: string | null
+          id?: string
+          metadata?: Json
+          moeda?: string
+          motivo_recusa?: string | null
+          recusada_em?: string | null
+          salario?: number
+          status?: string
+          updated_at?: string
+          vaga_id?: string | null
+          vaga_titulo?: string
+          visualizada_em?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "propostas_candidato_id_fkey"
+            columns: ["candidato_id"]
+            isOneToOne: false
+            referencedRelation: "candidatos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "propostas_vaga_id_fkey"
+            columns: ["vaga_id"]
+            isOneToOne: false
+            referencedRelation: "vagas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      propostas_eventos: {
+        Row: {
+          ator_email: string | null
+          ator_id: string | null
+          created_at: string
+          evento: string
+          id: string
+          ip: string | null
+          metadata: Json
+          proposta_id: string
+          user_agent: string | null
+        }
+        Insert: {
+          ator_email?: string | null
+          ator_id?: string | null
+          created_at?: string
+          evento: string
+          id?: string
+          ip?: string | null
+          metadata?: Json
+          proposta_id: string
+          user_agent?: string | null
+        }
+        Update: {
+          ator_email?: string | null
+          ator_id?: string | null
+          created_at?: string
+          evento?: string
+          id?: string
+          ip?: string | null
+          metadata?: Json
+          proposta_id?: string
+          user_agent?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "propostas_eventos_proposta_id_fkey"
+            columns: ["proposta_id"]
+            isOneToOne: false
+            referencedRelation: "propostas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       provas: {
         Row: {
           aplicacoes: number
@@ -3709,6 +3855,17 @@ export type Database = {
         Args: { p_candidato_id: string; p_notas?: string; p_vaga_id: string }
         Returns: Json
       }
+      assinar_proposta: {
+        Args: {
+          p_aceitar: boolean
+          p_assinatura_nome?: string
+          p_ip?: string
+          p_motivo_recusa?: string
+          p_token: string
+          p_user_agent?: string
+        }
+        Returns: Json
+      }
       award_xp: {
         Args: { p_action: string; p_amount: number; p_description?: string }
         Returns: undefined
@@ -3796,6 +3953,23 @@ export type Database = {
           p_recipient: string
         }
         Returns: string
+      }
+      get_proposta_by_token: {
+        Args: { p_token: string }
+        Returns: {
+          assinada_em: string
+          beneficios: Json
+          candidato_email: string
+          candidato_nome: string
+          clausulas: string
+          data_inicio: string
+          expira_em: string
+          id: string
+          moeda: string
+          salario: number
+          status: string
+          vaga_titulo: string
+        }[]
       }
       get_user_permissions: {
         Args: { _user_id: string }
