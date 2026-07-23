@@ -150,6 +150,23 @@ export default function AplicarVagaPage() {
     );
   }
 
+  if (rejected) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center p-4">
+        <Card className="max-w-lg w-full">
+          <CardContent className="p-8 text-center flex flex-col items-center gap-4">
+            <XCircle className="h-16 w-16 text-destructive" />
+            <h1 className="text-2xl font-bold">Candidatura não aprovada</h1>
+            <p className="text-muted-foreground">{rejected}</p>
+            <Button asChild variant="outline">
+              <Link to="/carreiras">Ver outras vagas</Link>
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   if (success) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center p-4">
