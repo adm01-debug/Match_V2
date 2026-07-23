@@ -37,6 +37,7 @@ export const StatusPage = lazy(() => import("@/pages/StatusPage"));
 export const TermosPage = lazy(() => import("@/pages/public/TermosPage"));
 export const PrivacidadePage = lazy(() => import("@/pages/public/PrivacidadePage"));
 export const CarreirasPage = lazy(() => import("@/pages/CarreirasPage"));
+export const AplicarVagaPage = lazy(() => import("@/pages/AplicarVagaPage"));
 
 // Portal pages
 export const PortalAuthPage = lazy(() => import("@/pages/portal/PortalAuthPage"));
