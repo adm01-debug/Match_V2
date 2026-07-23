@@ -1339,6 +1339,7 @@ export type Database = {
           local: string | null
           observacoes: string | null
           status: string
+          template_id: string | null
           tipo: string
           updated_at: string
           vaga_id: string
@@ -1368,6 +1369,7 @@ export type Database = {
           local?: string | null
           observacoes?: string | null
           status?: string
+          template_id?: string | null
           tipo: string
           updated_at?: string
           vaga_id: string
@@ -1397,6 +1399,7 @@ export type Database = {
           local?: string | null
           observacoes?: string | null
           status?: string
+          template_id?: string | null
           tipo?: string
           updated_at?: string
           vaga_id?: string
@@ -1408,6 +1411,13 @@ export type Database = {
             columns: ["candidato_id"]
             isOneToOne: false
             referencedRelation: "candidatos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "entrevistas_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "templates_entrevista"
             referencedColumns: ["id"]
           },
           {
@@ -3186,6 +3196,54 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      vaga_interview_kits: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          etapa: string | null
+          id: string
+          ordem: number
+          template_id: string
+          updated_at: string
+          vaga_id: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          etapa?: string | null
+          id?: string
+          ordem?: number
+          template_id: string
+          updated_at?: string
+          vaga_id: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          etapa?: string | null
+          id?: string
+          ordem?: number
+          template_id?: string
+          updated_at?: string
+          vaga_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vaga_interview_kits_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "templates_entrevista"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vaga_interview_kits_vaga_id_fkey"
+            columns: ["vaga_id"]
+            isOneToOne: false
+            referencedRelation: "vagas"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       vagas: {
         Row: {
