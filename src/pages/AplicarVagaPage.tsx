@@ -57,14 +57,18 @@ export default function AplicarVagaPage() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('vagas')
-        .select('id,titulo,departamento,cidade,estado,modalidade,tipo_contrato,descricao_empresa,responsabilidades,requisitos_obrigatorios,status')
+        .select('id,titulo,departamento,cidade,estado,modalidade,tipo_contrato,descricao_empresa,responsabilidades,requisitos_obrigatorios,perguntas_triagem,status')
         .eq('id', vagaId)
         .maybeSingle();
       if (error) throw error;
-      return data as Vaga | null;
+      return data as unknown as Vaga | null;
     },
     enabled: !!vagaId,
   });
+
+  const knockoutQuestions: KnockoutQuestion[] = Array.isArray(vaga?.perguntas_triagem)
+    ? (vaga!.perguntas_triagem as KnockoutQuestion[])
+    : [];
 
   useEffect(() => {
     if (vaga) document.title = `Candidatar-se: ${vaga.titulo}`;
