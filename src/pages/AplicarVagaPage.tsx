@@ -277,6 +277,28 @@ export default function AplicarVagaPage() {
                 </p>
               </CardHeader>
               <CardContent>
+                {whatsappUrl && (
+                  <div className="mb-6 rounded-lg border border-dashed p-4 bg-muted/30">
+                    <p className="text-sm font-medium mb-2 flex items-center gap-2">
+                      <MessageCircle className="h-4 w-4 text-primary" />
+                      Prefere falar pelo WhatsApp?
+                    </p>
+                    <p className="text-xs text-muted-foreground mb-3">
+                      Envie sua candidatura diretamente ao nosso recrutamento com uma mensagem pré-preenchida.
+                    </p>
+                    <Button
+                      asChild
+                      type="button"
+                      variant="outline"
+                      className="w-full sm:w-auto border-green-600 text-green-700 hover:bg-green-50 dark:text-green-400 dark:hover:bg-green-950"
+                    >
+                      <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
+                        <MessageCircle className="h-4 w-4 mr-2" />
+                        Candidatar via WhatsApp
+                      </a>
+                    </Button>
+                  </div>
+                )}
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
