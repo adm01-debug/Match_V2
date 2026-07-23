@@ -2996,6 +2996,79 @@ export type Database = {
         }
         Relationships: []
       }
+      triagem_ia: {
+        Row: {
+          cache_hit: boolean
+          candidato_auth_id: string
+          candidatura_id: string
+          created_at: string
+          id: string
+          match_habilidades: Json
+          modelo: string
+          pontos_fortes: string[]
+          recomendacao: string
+          red_flags: string[]
+          resumo: string
+          score: number
+          updated_at: string
+          vaga_id: string
+        }
+        Insert: {
+          cache_hit?: boolean
+          candidato_auth_id: string
+          candidatura_id: string
+          created_at?: string
+          id?: string
+          match_habilidades?: Json
+          modelo: string
+          pontos_fortes?: string[]
+          recomendacao: string
+          red_flags?: string[]
+          resumo: string
+          score: number
+          updated_at?: string
+          vaga_id: string
+        }
+        Update: {
+          cache_hit?: boolean
+          candidato_auth_id?: string
+          candidatura_id?: string
+          created_at?: string
+          id?: string
+          match_habilidades?: Json
+          modelo?: string
+          pontos_fortes?: string[]
+          recomendacao?: string
+          red_flags?: string[]
+          resumo?: string
+          score?: number
+          updated_at?: string
+          vaga_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "triagem_ia_candidato_auth_id_fkey"
+            columns: ["candidato_auth_id"]
+            isOneToOne: false
+            referencedRelation: "candidatos_auth"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "triagem_ia_candidatura_id_fkey"
+            columns: ["candidatura_id"]
+            isOneToOne: true
+            referencedRelation: "candidaturas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "triagem_ia_vaga_id_fkey"
+            columns: ["vaga_id"]
+            isOneToOne: false
+            referencedRelation: "vagas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       trusted_devices: {
         Row: {
           created_at: string
