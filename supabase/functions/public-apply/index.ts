@@ -85,16 +85,34 @@ serve(async (req) => {
   const admin = createClient(SUPABASE_URL, SERVICE_ROLE, { auth: { persistSession: false } });
 
   try {
-    // 1. Verificar vaga publicada
+    // 1. Verificar vaga publicada + carregar knockout questions
     const { data: vaga, error: vagaErr } = await admin
       .from('vagas')
-      .select('id, titulo, status, deleted_at')
+      .select('id, titulo, status, deleted_at, perguntas_triagem')
       .eq('id', vaga_id)
       .maybeSingle();
     if (vagaErr) throw vagaErr;
     if (!vaga || vaga.deleted_at || vaga.status !== 'publicada') {
       return json(404, { error: 'vaga_indisponivel' });
     }
+
+    // 1b. Validação server-side dos knockouts (fonte da verdade)
+    const questions: KnockoutQuestion[] = Array.isArray(vaga.perguntas_triagem)
+      ? (vaga.perguntas_triagem as KnockoutQuestion[])
+      : [];
+    let knockoutFailed = false;
+    if (questions.length) {
+      const evalRes = evaluateKnockouts(questions, knockout_answers ?? {});
+      if (evalRes.faltantes.length) {
+        return json(400, {
+          error: 'knockout_missing',
+          message: 'Responda todas as perguntas obrigatórias.',
+          faltantes: evalRes.faltantes,
+        });
+      }
+      knockoutFailed = evalRes.reprovadas.length > 0;
+    }
+
 
     const emailLower = email.trim().toLowerCase();
 
