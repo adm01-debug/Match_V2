@@ -29,6 +29,7 @@ import {
   WorkflowEditorPage,
   DeuMatchPage,
   TalentPoolPage,
+  RankingVagaPage,
 } from "./lazyPages";
 
 const guard = (el: React.ReactNode, roles?: AppRole[]) => (
