@@ -11,7 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Progress } from "@/components/ui/progress";
-import { ArrowLeft, Edit, Send, MapPin, AlertCircle, Star, Building, ExternalLink } from "lucide-react";
+import { ArrowLeft, Edit, Send, MapPin, AlertCircle, Star, Building, ExternalLink, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { VagaStatsCards } from '@/components/vaga-detalhes/VagaStatsCards';
 import { VagaDetalhesTab } from '@/components/vaga-detalhes/VagaDetalhesTab';
