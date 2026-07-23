@@ -86,6 +86,15 @@ export default function AplicarVagaPage() {
       return;
     }
 
+    // Validação client-side dos knockouts (dupla checagem no server)
+    if (knockoutQuestions.length) {
+      const evalRes = evaluateKnockouts(knockoutQuestions, knockoutAnswers);
+      if (evalRes.faltantes.length) {
+        toast.error('Responda todas as perguntas obrigatórias');
+        return;
+      }
+    }
+
     setSubmitting(true);
     try {
       const curriculo_base64 = curriculo ? await fileToBase64(curriculo) : undefined;
@@ -99,10 +108,15 @@ export default function AplicarVagaPage() {
           carta_apresentacao: carta.trim() || undefined,
           curriculo_base64,
           curriculo_nome: curriculo?.name,
+          knockout_answers: knockoutQuestions.length ? knockoutAnswers : undefined,
           redirect_to: `${window.location.origin}/portal`,
         },
       });
       if (error) throw error;
+      if (data?.error === 'knockout_failed') {
+        setRejected(data?.message ?? 'Infelizmente você não atende aos requisitos eliminatórios desta vaga.');
+        return;
+      }
       if (data?.error) throw new Error(data.message || data.error);
 
       setSuccess({
