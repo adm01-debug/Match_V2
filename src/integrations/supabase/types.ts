@@ -1520,6 +1520,93 @@ export type Database = {
           },
         ]
       }
+      hunter_leads: {
+        Row: {
+          avatar_url: string | null
+          candidato_id: string | null
+          captured_at: string
+          created_at: string
+          current_company: string | null
+          current_title: string | null
+          email: string | null
+          full_name: string
+          headline: string | null
+          id: string
+          location: string | null
+          notes: string | null
+          phone: string | null
+          profile_hash: string
+          profile_url: string
+          raw_data: Json
+          recrutador_id: string
+          source: string
+          status: string
+          updated_at: string
+          vaga_id: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          candidato_id?: string | null
+          captured_at?: string
+          created_at?: string
+          current_company?: string | null
+          current_title?: string | null
+          email?: string | null
+          full_name: string
+          headline?: string | null
+          id?: string
+          location?: string | null
+          notes?: string | null
+          phone?: string | null
+          profile_hash: string
+          profile_url: string
+          raw_data?: Json
+          recrutador_id: string
+          source?: string
+          status?: string
+          updated_at?: string
+          vaga_id?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          candidato_id?: string | null
+          captured_at?: string
+          created_at?: string
+          current_company?: string | null
+          current_title?: string | null
+          email?: string | null
+          full_name?: string
+          headline?: string | null
+          id?: string
+          location?: string | null
+          notes?: string | null
+          phone?: string | null
+          profile_hash?: string
+          profile_url?: string
+          raw_data?: Json
+          recrutador_id?: string
+          source?: string
+          status?: string
+          updated_at?: string
+          vaga_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hunter_leads_candidato_id_fkey"
+            columns: ["candidato_id"]
+            isOneToOne: false
+            referencedRelation: "candidatos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hunter_leads_vaga_id_fkey"
+            columns: ["vaga_id"]
+            isOneToOne: false
+            referencedRelation: "vagas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       indicacoes: {
         Row: {
           bonus: number | null
