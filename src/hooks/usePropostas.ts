@@ -90,11 +90,57 @@ export function usePropostas() {
 
   const enviar = useMutation({
     mutationFn: async (id: string) => {
+      const { data: prop, error: fetchErr } = await supabase
+        .from('propostas')
+        .select('*')
+        .eq('id', id)
+        .single();
+      if (fetchErr) throw fetchErr;
+      const proposta = prop as unknown as Proposta;
+
       const { error } = await supabase
         .from('propostas')
         .update({ status: 'enviada', enviada_em: new Date().toISOString() })
         .eq('id', id);
       if (error) throw error;
+
+      const link = buildSignatureUrl(proposta.access_token);
+      const salarioFmt = new Intl.NumberFormat('pt-BR', {
+        style: 'currency',
+        currency: proposta.moeda || 'BRL',
+      }).format(Number(proposta.salario ?? 0));
+
+      const html = `
+        <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:24px;color:#1a1a1a;">
+          <h2 style="color:#0f172a;">Olá, ${proposta.candidato_nome}!</h2>
+          <p>Temos o prazer de apresentar uma <strong>proposta de trabalho</strong> para a vaga
+             <strong>${proposta.vaga_titulo}</strong>.</p>
+          <ul style="line-height:1.8;">
+            <li><strong>Salário:</strong> ${salarioFmt}</li>
+            <li><strong>Data de início:</strong> ${new Date(proposta.data_inicio).toLocaleDateString('pt-BR')}</li>
+            ${proposta.expira_em ? `<li><strong>Válida até:</strong> ${new Date(proposta.expira_em).toLocaleDateString('pt-BR')}</li>` : ''}
+          </ul>
+          <p>Para revisar e assinar eletronicamente, clique no botão abaixo:</p>
+          <p style="text-align:center;margin:32px 0;">
+            <a href="${link}" style="background:#0f172a;color:#fff;padding:14px 28px;text-decoration:none;border-radius:8px;display:inline-block;font-weight:600;">
+              Revisar e assinar proposta
+            </a>
+          </p>
+          <p style="font-size:12px;color:#64748b;">Se o botão não funcionar, copie e cole este link no navegador:<br/>${link}</p>
+        </div>
+      `;
+
+      const { error: mailErr } = await supabase.functions.invoke('send-email', {
+        body: {
+          to: proposta.candidato_email,
+          subject: `Proposta de trabalho — ${proposta.vaga_titulo}`,
+          html,
+        },
+      });
+      if (mailErr) {
+        logger.warn('Proposta marcada como enviada, mas envio de email falhou', mailErr);
+        toast.warning('Proposta enviada, mas email falhou. Copie o link manualmente.');
+      }
       return id;
     },
     onSuccess: () => {
