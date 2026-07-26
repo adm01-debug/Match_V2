@@ -16,6 +16,8 @@ import { AnalyticsPerformanceTab } from '@/components/analytics/AnalyticsPerform
 import { AnalyticsSourcesTab } from '@/components/analytics/AnalyticsSourcesTab';
 import { AnalyticsFunnelTab } from '@/components/analytics/AnalyticsFunnelTab';
 import { AnalyticsQualityTab } from '@/components/analytics/AnalyticsQualityTab';
+import { FunnelSlaTab } from '@/components/analytics/FunnelSlaTab';
+
 import { useAdvancedAnalytics, type AnalyticsPeriodo } from '@/hooks/useAdvancedAnalytics';
 import { Skeleton } from '@/components/ui/skeleton';
 
