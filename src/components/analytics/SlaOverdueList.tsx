@@ -273,7 +273,7 @@ export function SlaOverdueList({ slaHoras = 48 }: SlaOverdueListProps) {
           )}
 
 
-          {data?.map((linha) => (
+          {linhas.map((linha) => (
             <div
               key={linha.candidatura_id}
               className="flex items-center justify-between gap-3 rounded-lg border border-border p-3"
