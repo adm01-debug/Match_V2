@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState, lazy, Suspense } from 'react';
+import { useCallback, useEffect, useMemo, useState, lazy, Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { usePageTitle } from '@/hooks/usePageTitle';
