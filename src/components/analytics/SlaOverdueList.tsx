@@ -21,6 +21,7 @@ import {
   useRegisterFirstResponseBatch,
 } from "@/hooks/useRegisterFirstResponse";
 import { buildCsv, downloadCsv, type CsvColumn } from "@/lib/csvExport";
+import { SlaNoteTemplates } from "@/components/analytics/SlaNoteTemplates";
 
 
 
@@ -187,6 +188,12 @@ export function SlaOverdueList({ slaHoras = 48 }: SlaOverdueListProps) {
                   <label htmlFor="sla-nota-lote" className="text-xs text-muted-foreground">
                     Nota do contato (opcional) — fica no histórico de cada candidatura
                   </label>
+                  <SlaNoteTemplates
+                    value={nota}
+                    onChange={setNota}
+                    maxLength={NOTA_MAX_CHARS}
+                    disabled={registrarLote.isPending}
+                  />
                   <Textarea
                     id="sla-nota-lote"
                     value={nota}
