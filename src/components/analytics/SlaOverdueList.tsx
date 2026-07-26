@@ -30,6 +30,7 @@ import {
 } from "@/hooks/useRegisterFirstResponse";
 import { buildCsv, downloadCsv, type CsvColumn } from "@/lib/csvExport";
 import { SlaNoteTemplates } from "@/components/analytics/SlaNoteTemplates";
+import { SlaTimelineButton } from "@/components/analytics/SlaTimelineButton";
 import { SlaRegisterContactButton } from "@/components/analytics/SlaRegisterContactButton";
 
 
