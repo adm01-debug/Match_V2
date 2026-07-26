@@ -9,15 +9,17 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Sheet } from '@/components/ui/sheet';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Users, UserPlus, Clock, UserCheck, UserX, Search, SlidersHorizontal, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Users, UserPlus, Clock, UserCheck, UserX, Search, SlidersHorizontal, ChevronLeft, ChevronRight, Download, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 import { useCandidatosData } from '@/hooks/useCandidatosData';
 import { useTalentSearch, TALENT_PAGE_SIZE } from '@/hooks/useTalentSearch';
+import { useTalentExport } from '@/hooks/useTalentExport';
 import { TalentAdvancedFilters } from '@/components/candidatos/TalentAdvancedFilters';
 import { CandidatosList } from '@/components/candidatos/CandidatosList';
 import { CandidatoDetailSheet } from '@/components/candidatos/CandidatoDetailSheet';
 import { Candidato, MatchScore } from '@/types/candidate';
+
 
 const CandidatosChartsSection = lazy(() =>
   import('@/components/candidatos/CandidatosChartsSection').then((m) => ({ default: m.CandidatosChartsSection }))
@@ -66,6 +68,8 @@ export default function CandidatosPage() {
   const [termoLocal, setTermoLocal] = useState('');
   const [showFilters, setShowFilters] = useState(false);
   const [selectedCandidato, setSelectedCandidato] = useState<Candidato | null>(null);
+  const { exportCsv, isExporting, progress } = useTalentExport();
+
 
   /** Debounce evita uma ida ao banco por tecla digitada. */
   const termoDebounced = useDebounce(termoLocal, 350);
@@ -214,7 +218,22 @@ export default function CandidatosPage() {
             <SlidersHorizontal className="h-4 w-4 mr-2" aria-hidden="true" />
             Filtros{activeFiltersCount > 0 ? ` (${activeFiltersCount})` : ''}
           </Button>
+          <Button
+            variant="outline"
+            onClick={() => exportCsv(filters, total)}
+            disabled={isExporting || total === 0}
+            aria-busy={isExporting}
+            aria-label="Exportar resultados da busca em CSV"
+          >
+            {isExporting ? (
+              <Loader2 className="h-4 w-4 mr-2 animate-spin" aria-hidden="true" />
+            ) : (
+              <Download className="h-4 w-4 mr-2" aria-hidden="true" />
+            )}
+            {isExporting ? `Exportando… ${progress}%` : 'Exportar CSV'}
+          </Button>
         </div>
+
 
         {showFilters && (
           <div id="painel-filtros-talentos">
