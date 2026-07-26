@@ -43,16 +43,52 @@ const COLUNAS_CSV: readonly CsvColumn<SlaOverdueRow>[] = [
 
 export function SlaOverdueList({ slaHoras = 48 }: SlaOverdueListProps) {
   const [aberto, setAberto] = useState(false);
+  const [selecionados, setSelecionados] = useState<ReadonlySet<string>>(new Set());
   const { data, isLoading, error } = useSlaOverdueList({ slaHoras, enabled: aberto });
   const registrar = useRegisterFirstResponse();
+  const registrarLote = useRegisterFirstResponseBatch();
 
   const podeExportar = !isLoading && !error && (data?.length ?? 0) > 0;
+
+  // A lista é revalidada após cada registro: IDs selecionados que já saíram da
+  // fila não podem sobreviver na seleção, senão o lote tentaria reprocessá-los.
+  const idsVisiveis = useMemo(
+    () => new Set((data ?? []).map((l) => l.candidatura_id)),
+    [data],
+  );
+  const idsSelecionados = useMemo(
+    () => [...selecionados].filter((id) => idsVisiveis.has(id)),
+    [selecionados, idsVisiveis],
+  );
+
+  const alternarSelecao = (id: string) => {
+    setSelecionados((atual) => {
+      const proximo = new Set(atual);
+      if (proximo.has(id)) proximo.delete(id);
+      else proximo.add(id);
+      return proximo;
+    });
+  };
+
+  const alternarTodos = () => {
+    setSelecionados((atual) =>
+      atual.size >= idsVisiveis.size ? new Set<string>() : new Set(idsVisiveis),
+    );
+  };
+
+  const registrarSelecionados = () => {
+    if (idsSelecionados.length === 0) return;
+    registrarLote.mutate(idsSelecionados, {
+      onSettled: () => setSelecionados(new Set()),
+    });
+  };
 
   const exportar = () => {
     if (!data || data.length === 0) return;
     const hoje = new Date().toISOString().slice(0, 10);
     downloadCsv(buildCsv(data, COLUNAS_CSV), `sla-atrasadas-${slaHoras}h-${hoje}`);
   };
+
 
 
   return (
