@@ -25,6 +25,7 @@ import {
   type SenioridadeNivel,
 } from "@/types/techProfile";
 import type { SearchOrder, TalentSearchFilters } from "@/hooks/useTalentSearch";
+import { TalentSkillsFilter } from "@/components/candidatos/TalentSkillsFilter";
 
 export interface TalentAdvancedFiltersProps {
   filters: TalentSearchFilters;
