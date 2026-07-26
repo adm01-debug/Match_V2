@@ -46,6 +46,8 @@ export function useRegisterFirstResponse() {
       toast.success("Contato registrado — candidatura saiu da fila de atraso.");
       queryClient.invalidateQueries({ queryKey: ["sla-overdue"] });
       queryClient.invalidateQueries({ queryKey: ["funnel-sla"] });
+      // A timeline recém-alimentada pelo contato precisa refletir a nota.
+      queryClient.invalidateQueries({ queryKey: ["candidatura-timeline"] });
     },
     onError: (error: Error) => {
       toast.error(mensagemDeErro(error.message ?? ""));
@@ -132,6 +134,8 @@ export function useRegisterFirstResponseBatch() {
       }
       queryClient.invalidateQueries({ queryKey: ["sla-overdue"] });
       queryClient.invalidateQueries({ queryKey: ["funnel-sla"] });
+      // A timeline recém-alimentada pelo contato precisa refletir a nota.
+      queryClient.invalidateQueries({ queryKey: ["candidatura-timeline"] });
     },
     onError: () => {
       toast.error("Não foi possível registrar os contatos em lote.");
