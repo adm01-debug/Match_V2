@@ -84,13 +84,16 @@ export default function AdvancedAnalyticsPage() {
             <TabsTrigger value="performance"><Activity className="h-4 w-4 mr-2" />Performance</TabsTrigger>
             <TabsTrigger value="sources"><Globe className="h-4 w-4 mr-2" />Fontes</TabsTrigger>
             <TabsTrigger value="funnel"><Target className="h-4 w-4 mr-2" />Funil</TabsTrigger>
+            <TabsTrigger value="sla"><Clock className="h-4 w-4 mr-2" />SLA de Resposta</TabsTrigger>
             <TabsTrigger value="quality"><Award className="h-4 w-4 mr-2" />Qualidade</TabsTrigger>
           </TabsList>
           <TabsContent value="performance"><AnalyticsPerformanceTab timeToHireData={data?.timeToHireData ?? []} costPerHireData={data?.costPerHireData ?? []} departmentData={data?.departmentPerformanceData ?? []} /></TabsContent>
           <TabsContent value="sources"><AnalyticsSourcesTab data={data?.sourceEffectivenessData ?? []} /></TabsContent>
           <TabsContent value="funnel"><AnalyticsFunnelTab data={data?.conversionFunnelData ?? []} /></TabsContent>
+          <TabsContent value="sla"><FunnelSlaTab /></TabsContent>
           <TabsContent value="quality"><AnalyticsQualityTab data={data?.qualityOfHireData ?? []} /></TabsContent>
         </Tabs>
+
       </div>
     </Layout>
   );
