@@ -89,10 +89,17 @@ export function SlaOverdueList({ slaHoras = 48 }: SlaOverdueListProps) {
 
   const registrarSelecionados = () => {
     if (idsSelecionados.length === 0) return;
-    registrarLote.mutate(idsSelecionados, {
-      onSettled: () => setSelecionados(new Set()),
-    });
+    registrarLote.mutate(
+      { ids: idsSelecionados, nota },
+      {
+        onSettled: () => {
+          setSelecionados(new Set());
+          setNota("");
+        },
+      },
+    );
   };
+
 
   const exportar = () => {
     if (!data || data.length === 0) return;
