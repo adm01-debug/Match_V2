@@ -6,14 +6,15 @@
  * agregado por vaga.
  */
 import { useState } from "react";
-import { AlertTriangle, CheckCircle2, ChevronDown, ChevronUp, Mail } from "lucide-react";
+import { AlertTriangle, CheckCircle2, ChevronDown, ChevronUp, Download, Mail } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useSlaOverdueList } from "@/hooks/useSlaOverdueList";
+import { useSlaOverdueList, type SlaOverdueRow } from "@/hooks/useSlaOverdueList";
 import { useRegisterFirstResponse } from "@/hooks/useRegisterFirstResponse";
+import { buildCsv, downloadCsv, type CsvColumn } from "@/lib/csvExport";
 
 interface SlaOverdueListProps {
   readonly slaHoras?: number;
@@ -24,10 +25,35 @@ function formatarEspera(horas: number): string {
   return `${Math.floor(horas / 24)} dias`;
 }
 
+/**
+ * Colunas do export: o recrutador leva a fila para fora do sistema (planilha,
+ * reunião de squad) sem perder o dado acionável — quem, para qual vaga, há
+ * quanto tempo e desde quando.
+ */
+const COLUNAS_CSV: readonly CsvColumn<SlaOverdueRow>[] = [
+  { header: "Candidato", value: (r) => r.candidato_nome },
+  { header: "E-mail", value: (r) => r.candidato_email },
+  { header: "Vaga", value: (r) => r.vaga_titulo },
+  {
+    header: "Candidatura em",
+    value: (r) => new Date(r.data_candidatura).toLocaleString("pt-BR"),
+  },
+  { header: "Horas esperando", value: (r) => r.horas_esperando },
+];
+
 export function SlaOverdueList({ slaHoras = 48 }: SlaOverdueListProps) {
   const [aberto, setAberto] = useState(false);
   const { data, isLoading, error } = useSlaOverdueList({ slaHoras, enabled: aberto });
   const registrar = useRegisterFirstResponse();
+
+  const podeExportar = !isLoading && !error && (data?.length ?? 0) > 0;
+
+  const exportar = () => {
+    if (!data || data.length === 0) return;
+    const hoje = new Date().toISOString().slice(0, 10);
+    downloadCsv(buildCsv(data, COLUNAS_CSV), `sla-atrasadas-${slaHoras}h-${hoje}`);
+  };
+
 
   return (
     <Card>
