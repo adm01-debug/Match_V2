@@ -7,7 +7,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import type { TechProfile } from "@/types/techProfile";
-import { logger } from "@/lib/logger";
+import { logger } from "@/services/logger";
 
 const TECH_COLUMNS =
   "senioridade, nivel_ingles, pretensao_salarial, pretensao_moeda, regime, modalidade, disponibilidade_dias, aberto_a_oportunidades";
