@@ -4238,6 +4238,11 @@ export type Database = {
         }
         Returns: string
       }
+      finish_cognitive_session: {
+        Args: { p_session_id: string }
+        Returns: Json
+      }
+      get_cognitive_result: { Args: { p_session_id: string }; Returns: Json }
       get_cognitive_session_items: {
         Args: { p_session_id: string }
         Returns: {
@@ -4371,6 +4376,25 @@ export type Database = {
       }
       show_limit: { Args: never; Returns: number }
       show_trgm: { Args: { "": string }; Returns: string[] }
+      start_cognitive_session: {
+        Args: {
+          p_candidato_id?: string
+          p_dominios?: Database["public"]["Enums"]["cognitive_domain"][]
+          p_itens_por_dominio?: number
+          p_tempo_limite_seg?: number
+          p_vaga_id?: string
+        }
+        Returns: string
+      }
+      submit_cognitive_response: {
+        Args: {
+          p_item_id: string
+          p_resposta: string
+          p_session_id: string
+          p_tempo_gasto_seg?: number
+        }
+        Returns: undefined
+      }
       update_user_streak: {
         Args: { p_user_id: string }
         Returns: {
