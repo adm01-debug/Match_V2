@@ -4310,6 +4310,18 @@ export type Database = {
           vaga_titulo: string
         }[]
       }
+      hr_sla_overdue_list: {
+        Args: { p_limit?: number; p_sla_horas?: number }
+        Returns: {
+          candidato_email: string
+          candidato_nome: string
+          candidatura_id: string
+          data_candidatura: string
+          horas_esperando: number
+          vaga_id: string
+          vaga_titulo: string
+        }[]
+      }
       is_hr_staff: { Args: { _user_id: string }; Returns: boolean }
       is_not_deleted: { Args: { deleted_at: string }; Returns: boolean }
       log_admin_action: {
