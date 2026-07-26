@@ -37,7 +37,7 @@ export function useRegisterFirstResponse() {
     mutationFn: async ({ candidaturaId, nota }: RegisterFirstResponseInput) => {
       const { data, error } = await supabase.rpc("hr_register_first_response", {
         p_candidatura_id: candidaturaId,
-        p_nota: nota ?? null,
+        p_nota: nota ?? undefined,
       });
       if (error) throw error;
       return data as string;
