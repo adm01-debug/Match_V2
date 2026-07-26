@@ -79,7 +79,15 @@ export function SlaOverdueList({ slaHoras = 48 }: SlaOverdueListProps) {
   const [selecionados, setSelecionados] = useState<ReadonlySet<string>>(new Set());
   const [nota, setNota] = useState("");
   const [vagaFiltro, setVagaFiltro] = useState<string>(TODAS_AS_VAGAS);
-  const [ordem, setOrdem] = useState<OrdemFila>("espera_desc");
+  // A ordenação é preferência de trabalho do recrutador e persiste; o filtro
+  // por vaga é contextual da sessão e deliberadamente NÃO persiste, para não
+  // esconder atrasos de outras vagas na próxima visita.
+  const [ordem, setOrdem] = useLocalStorageState<OrdemFila>(
+    "sla:ordem-fila",
+    "espera_desc",
+    (v): v is OrdemFila => typeof v === "string" && v in ROTULOS_ORDEM,
+  );
+
 
   const { data, isLoading, error } = useSlaOverdueList({ slaHoras, enabled: aberto });
 
