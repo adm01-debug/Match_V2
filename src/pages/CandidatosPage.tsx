@@ -9,15 +9,17 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Sheet } from '@/components/ui/sheet';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Users, UserPlus, Clock, UserCheck, UserX, Search, SlidersHorizontal, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Users, UserPlus, Clock, UserCheck, UserX, Search, SlidersHorizontal, ChevronLeft, ChevronRight, Download, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 import { useCandidatosData } from '@/hooks/useCandidatosData';
 import { useTalentSearch, TALENT_PAGE_SIZE } from '@/hooks/useTalentSearch';
+import { useTalentExport } from '@/hooks/useTalentExport';
 import { TalentAdvancedFilters } from '@/components/candidatos/TalentAdvancedFilters';
 import { CandidatosList } from '@/components/candidatos/CandidatosList';
 import { CandidatoDetailSheet } from '@/components/candidatos/CandidatoDetailSheet';
 import { Candidato, MatchScore } from '@/types/candidate';
+
 
 const CandidatosChartsSection = lazy(() =>
   import('@/components/candidatos/CandidatosChartsSection').then((m) => ({ default: m.CandidatosChartsSection }))
