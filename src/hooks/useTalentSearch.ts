@@ -86,9 +86,17 @@ export interface TalentSearchRow {
   total_count: number;
 }
 
-/** Arrays vazios viram NULL: no SQL, NULL significa "sem filtro". */
-function nullIfEmpty<T>(arr: T[]): T[] | null {
-  return arr.length > 0 ? arr : null;
+/**
+ * A assinatura gerada da RPC usa parâmetros opcionais (`undefined`),
+ * então omitir é o equivalente a NULL no SQL — que significa
+ * "sem filtro". Convertemos `null`/vazio para `undefined` aqui.
+ */
+function orUndefined<T>(value: T | null): T | undefined {
+  return value === null ? undefined : value;
+}
+
+function nullIfEmpty<T>(arr: T[]): T[] | undefined {
+  return arr.length > 0 ? arr : undefined;
 }
 
 export function countActiveFilters(f: TalentSearchFilters): number {
