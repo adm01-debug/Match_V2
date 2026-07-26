@@ -68,6 +68,8 @@ export function SlaOverdueList({ slaHoras = 48 }: SlaOverdueListProps) {
   const [selecionados, setSelecionados] = useState<ReadonlySet<string>>(new Set());
   const [nota, setNota] = useState("");
   const [vagaFiltro, setVagaFiltro] = useState<string>(TODAS_AS_VAGAS);
+  const [ordem, setOrdem] = useState<OrdemFila>("espera_desc");
+
   const { data, isLoading, error } = useSlaOverdueList({ slaHoras, enabled: aberto });
 
   const registrarLote = useRegisterFirstResponseBatch();
