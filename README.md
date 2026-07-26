@@ -67,6 +67,11 @@ src/
 
 ## 📚 Documentação
 
+### 🔎 Acesso rápido
+- 🏁 [Benchmark GeekHunter — análise em 20 etapas](docs/BENCHMARK_GEEKHUNTER.md)
+- 🗺️ [Plano de Melhorias — 50 etapas](docs/PLANO_MELHORIAS_50_ETAPAS.md)
+
+### Demais documentos
 - [Auditoria Enterprise 10/10 (Markdown)](audit_report.md)
 - [Auditoria Enterprise 10/10 (PDF)](audit_report.pdf)
 - [API Reference](docs/API_REFERENCE.md)
