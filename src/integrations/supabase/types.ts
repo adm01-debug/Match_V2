@@ -683,51 +683,120 @@ export type Database = {
         }
         Relationships: []
       }
+      candidato_skills: {
+        Row: {
+          anos_experiencia: number | null
+          candidato_id: string
+          created_at: string
+          id: string
+          nivel: number | null
+          skill_id: string
+          updated_at: string
+        }
+        Insert: {
+          anos_experiencia?: number | null
+          candidato_id: string
+          created_at?: string
+          id?: string
+          nivel?: number | null
+          skill_id: string
+          updated_at?: string
+        }
+        Update: {
+          anos_experiencia?: number | null
+          candidato_id?: string
+          created_at?: string
+          id?: string
+          nivel?: number | null
+          skill_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "candidato_skills_candidato_id_fkey"
+            columns: ["candidato_id"]
+            isOneToOne: false
+            referencedRelation: "candidatos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "candidato_skills_skill_id_fkey"
+            columns: ["skill_id"]
+            isOneToOne: false
+            referencedRelation: "skills"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       candidatos: {
         Row: {
+          aberto_a_oportunidades: boolean
           arquivo_curriculo: string | null
           created_at: string | null
           deleted_at: string | null
+          disponibilidade_dias: number | null
           email: string
           experiencias: Json | null
           fonte: string | null
           formacao: Json | null
           habilidades: string[] | null
           id: string
+          modalidade: Database["public"]["Enums"]["modalidade_trabalho"] | null
+          nivel_ingles: Database["public"]["Enums"]["nivel_idioma"] | null
           nome: string
+          pretensao_moeda: string
+          pretensao_salarial: number | null
+          regime: Database["public"]["Enums"]["regime_contratacao"] | null
           resumo: string | null
+          senioridade: Database["public"]["Enums"]["senioridade_nivel"] | null
           status: string | null
           telefone: string | null
           updated_at: string | null
         }
         Insert: {
+          aberto_a_oportunidades?: boolean
           arquivo_curriculo?: string | null
           created_at?: string | null
           deleted_at?: string | null
+          disponibilidade_dias?: number | null
           email: string
           experiencias?: Json | null
           fonte?: string | null
           formacao?: Json | null
           habilidades?: string[] | null
           id?: string
+          modalidade?: Database["public"]["Enums"]["modalidade_trabalho"] | null
+          nivel_ingles?: Database["public"]["Enums"]["nivel_idioma"] | null
           nome: string
+          pretensao_moeda?: string
+          pretensao_salarial?: number | null
+          regime?: Database["public"]["Enums"]["regime_contratacao"] | null
           resumo?: string | null
+          senioridade?: Database["public"]["Enums"]["senioridade_nivel"] | null
           status?: string | null
           telefone?: string | null
           updated_at?: string | null
         }
         Update: {
+          aberto_a_oportunidades?: boolean
           arquivo_curriculo?: string | null
           created_at?: string | null
           deleted_at?: string | null
+          disponibilidade_dias?: number | null
           email?: string
           experiencias?: Json | null
           fonte?: string | null
           formacao?: Json | null
           habilidades?: string[] | null
           id?: string
+          modalidade?: Database["public"]["Enums"]["modalidade_trabalho"] | null
+          nivel_ingles?: Database["public"]["Enums"]["nivel_idioma"] | null
           nome?: string
+          pretensao_moeda?: string
+          pretensao_salarial?: number | null
+          regime?: Database["public"]["Enums"]["regime_contratacao"] | null
           resumo?: string | null
+          senioridade?: Database["public"]["Enums"]["senioridade_nivel"] | null
           status?: string | null
           telefone?: string | null
           updated_at?: string | null
@@ -3046,6 +3115,36 @@ export type Database = {
           },
         ]
       }
+      skills: {
+        Row: {
+          aliases: string[]
+          categoria: string
+          created_at: string
+          id: string
+          nome: string
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          aliases?: string[]
+          categoria: string
+          created_at?: string
+          id?: string
+          nome: string
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          aliases?: string[]
+          categoria?: string
+          created_at?: string
+          id?: string
+          nome?: string
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       template_perguntas: {
         Row: {
           competencia_id: string | null
@@ -3921,17 +4020,25 @@ export type Database = {
           p_telefone?: string
         }
         Returns: {
+          aberto_a_oportunidades: boolean
           arquivo_curriculo: string | null
           created_at: string | null
           deleted_at: string | null
+          disponibilidade_dias: number | null
           email: string
           experiencias: Json | null
           fonte: string | null
           formacao: Json | null
           habilidades: string[] | null
           id: string
+          modalidade: Database["public"]["Enums"]["modalidade_trabalho"] | null
+          nivel_ingles: Database["public"]["Enums"]["nivel_idioma"] | null
           nome: string
+          pretensao_moeda: string
+          pretensao_salarial: number | null
+          regime: Database["public"]["Enums"]["regime_contratacao"] | null
           resumo: string | null
+          senioridade: Database["public"]["Enums"]["senioridade_nivel"] | null
           status: string | null
           telefone: string | null
           updated_at: string | null
@@ -4036,6 +4143,23 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "rh" | "gestor"
+      modalidade_trabalho: "remoto" | "hibrido" | "presencial"
+      nivel_idioma:
+        | "nenhum"
+        | "basico"
+        | "intermediario"
+        | "avancado"
+        | "fluente"
+        | "nativo"
+      regime_contratacao: "clt" | "pj" | "ambos"
+      senioridade_nivel:
+        | "estagio"
+        | "junior"
+        | "pleno"
+        | "senior"
+        | "staff"
+        | "principal"
+        | "lead"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -4164,6 +4288,25 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "rh", "gestor"],
+      modalidade_trabalho: ["remoto", "hibrido", "presencial"],
+      nivel_idioma: [
+        "nenhum",
+        "basico",
+        "intermediario",
+        "avancado",
+        "fluente",
+        "nativo",
+      ],
+      regime_contratacao: ["clt", "pj", "ambos"],
+      senioridade_nivel: [
+        "estagio",
+        "junior",
+        "pleno",
+        "senior",
+        "staff",
+        "principal",
+        "lead",
+      ],
     },
   },
 } as const
