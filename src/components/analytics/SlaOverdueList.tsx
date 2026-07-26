@@ -26,9 +26,13 @@ import { SlaRegisterContactButton } from "@/components/analytics/SlaRegisterCont
 
 
 
+/** Sentinela do filtro: Radix Select não aceita item com valor vazio. */
+const TODAS_AS_VAGAS = "__todas__";
+
 interface SlaOverdueListProps {
   readonly slaHoras?: number;
 }
+
 
 function formatarEspera(horas: number): string {
   if (horas < 48) return `${Math.round(horas)}h`;
