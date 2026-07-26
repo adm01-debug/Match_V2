@@ -1,10 +1,11 @@
+import { useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { 
   Briefcase, Mail, Phone, GraduationCap, Target, 
-  ChevronRight, Trash2, MessageSquare, Sparkles
+  ChevronRight, Trash2, MessageSquare, Sparkles, ArrowDownWideNarrow
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Candidato, MatchScore, getStatusConfig, getScoreColor } from '@/types/candidate';
@@ -15,6 +16,7 @@ import { FuseMatch } from '@/hooks/useFuzzySearch';
 import { TechProfileBadges } from '@/components/candidatos/TechProfileBadges';
 import { PotentialIndexBadge } from '@/components/candidatos/PotentialIndexBadge';
 import { usePotentialIndexBatch } from '@/hooks/usePotentialIndexBatch';
+
 
 interface CandidatosListProps {
   candidatos: Candidato[];
@@ -51,9 +53,25 @@ export function CandidatosList({
   onSelect,
   onDelete
 }: CandidatosListProps) {
-  // Hook chamado antes de qualquer return: a ordem dos hooks precisa ser estável.
+  // Hooks antes de qualquer return: a ordem dos hooks precisa ser estável.
   // Uma única consulta em lote alimenta todos os cards (evita N+1 no cliente).
   const { data: indicesPotencial } = usePotentialIndexBatch(candidatos.map((c) => c.id));
+  const [ordenarPorPotencial, setOrdenarPorPotencial] = useState(false);
+
+  // Ordenação é derivada — nunca replicada em estado. Candidatos sem sinal
+  // coletado vão para o fim da lista em vez de serem tratados como zero,
+  // porque "não medido" é diferente de "medido e baixo".
+  const candidatosOrdenados = useMemo(() => {
+    if (!ordenarPorPotencial) return candidatos;
+    return [...candidatos].sort((a, b) => {
+      const sa = indicesPotencial?.[a.id]?.score;
+      const sb = indicesPotencial?.[b.id]?.score;
+      if (sa == null && sb == null) return 0;
+      if (sa == null) return 1;
+      if (sb == null) return -1;
+      return sb - sa;
+    });
+  }, [candidatos, indicesPotencial, ordenarPorPotencial]);
 
   if (isLoading) {
     return (
@@ -74,6 +92,20 @@ export function CandidatosList({
   }
 
   return (
+    <div className="space-y-4">
+      <div className="flex justify-end">
+        <Button
+          variant={ordenarPorPotencial ? 'default' : 'outline'}
+          size="sm"
+          className="rounded-xl gap-2"
+          aria-pressed={ordenarPorPotencial}
+          onClick={() => setOrdenarPorPotencial((v) => !v)}
+        >
+          <ArrowDownWideNarrow className="h-4 w-4" />
+          Ordenar por Potencial
+        </Button>
+      </div>
+
     <motion.div 
       variants={containerVariants}
       initial="hidden"
@@ -81,7 +113,8 @@ export function CandidatosList({
       className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
     >
       <AnimatePresence mode="popLayout">
-        {candidatos.map((c) => {
+        {candidatosOrdenados.map((c) => {
+
           const status = getStatusConfig(c.status);
           const bestScore = getBestMatchScore(c.id);
           const matches = getMatchesForCandidate(c.id);
@@ -224,5 +257,7 @@ export function CandidatosList({
         })}
       </AnimatePresence>
     </motion.div>
+    </div>
   );
+
 }
