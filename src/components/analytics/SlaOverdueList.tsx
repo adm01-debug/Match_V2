@@ -63,19 +63,28 @@ export function SlaOverdueList({ slaHoras = 48 }: SlaOverdueListProps) {
             <AlertTriangle className="h-5 w-5 text-destructive" aria-hidden="true" />
             Fila nominal fora do prazo
           </span>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setAberto((v) => !v)}
-            aria-expanded={aberto}
-          >
-            {aberto ? "Ocultar" : "Ver lista"}
-            {aberto ? (
-              <ChevronUp className="ml-1 h-4 w-4" aria-hidden="true" />
-            ) : (
-              <ChevronDown className="ml-1 h-4 w-4" aria-hidden="true" />
+          <span className="flex items-center gap-1">
+            {aberto && podeExportar && (
+              <Button variant="outline" size="sm" onClick={exportar}>
+                <Download className="mr-1 h-4 w-4" aria-hidden="true" />
+                Exportar CSV
+              </Button>
             )}
-          </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setAberto((v) => !v)}
+              aria-expanded={aberto}
+            >
+              {aberto ? "Ocultar" : "Ver lista"}
+              {aberto ? (
+                <ChevronUp className="ml-1 h-4 w-4" aria-hidden="true" />
+              ) : (
+                <ChevronDown className="ml-1 h-4 w-4" aria-hidden="true" />
+              )}
+            </Button>
+          </span>
+
         </CardTitle>
       </CardHeader>
 
