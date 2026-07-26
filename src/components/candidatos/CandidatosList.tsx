@@ -257,5 +257,7 @@ export function CandidatosList({
         })}
       </AnimatePresence>
     </motion.div>
+    </div>
   );
+
 }
