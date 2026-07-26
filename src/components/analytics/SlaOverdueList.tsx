@@ -17,11 +17,12 @@ import { useSlaOverdueList, type SlaOverdueRow } from "@/hooks/useSlaOverdueList
 import { Textarea } from "@/components/ui/textarea";
 import {
   NOTA_MAX_CHARS,
-  useRegisterFirstResponse,
   useRegisterFirstResponseBatch,
 } from "@/hooks/useRegisterFirstResponse";
 import { buildCsv, downloadCsv, type CsvColumn } from "@/lib/csvExport";
 import { SlaNoteTemplates } from "@/components/analytics/SlaNoteTemplates";
+import { SlaRegisterContactButton } from "@/components/analytics/SlaRegisterContactButton";
+
 
 
 
