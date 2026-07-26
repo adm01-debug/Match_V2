@@ -4297,6 +4297,19 @@ export type Database = {
         }
         Returns: boolean
       }
+      hr_funnel_sla: {
+        Args: { p_dias?: number; p_sla_horas?: number }
+        Returns: {
+          aguardando_agora: number
+          com_primeira_resposta: number
+          dentro_do_sla: number
+          horas_medias_primeira_resposta: number
+          percentual_sla: number
+          total_candidaturas: number
+          vaga_id: string
+          vaga_titulo: string
+        }[]
+      }
       is_hr_staff: { Args: { _user_id: string }; Returns: boolean }
       is_not_deleted: { Args: { deleted_at: string }; Returns: boolean }
       log_admin_action: {
