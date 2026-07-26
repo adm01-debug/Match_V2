@@ -120,6 +120,26 @@ export const CandidatoDetailSheet = memo(function CandidatoDetailSheet({
           </div>
         )}
 
+        {/* Perfil técnico estruturado */}
+        <div>
+          <h4 className="text-sm font-medium mb-3 flex items-center gap-2">
+            <Cpu className="h-4 w-4 text-primary" />
+            Perfil Técnico
+          </h4>
+          <CandidatoTechProfileForm candidatoId={candidato.id} />
+        </div>
+
+        {/* Competências da taxonomia */}
+        <div>
+          <h4 className="text-sm font-medium mb-3 flex items-center gap-2">
+            <Sparkles className="h-4 w-4 text-primary" />
+            Competências Estruturadas
+          </h4>
+          <CandidatoSkillsEditor candidatoId={candidato.id} />
+        </div>
+
+
+
         {/* Experience */}
         {candidato.experiencias && candidato.experiencias.length > 0 && (
           <div>
