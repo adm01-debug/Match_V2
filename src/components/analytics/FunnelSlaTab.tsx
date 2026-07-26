@@ -6,6 +6,7 @@
  * candidaturas que já estouraram o prazo e continuam sem retorno. É o número
  * acionável; o percentual histórico é apenas diagnóstico.
  */
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -13,8 +14,7 @@ import { AlertTriangle, Timer } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useFunnelSla } from "@/hooks/useFunnelSla";
 import { SlaOverdueList } from "@/components/analytics/SlaOverdueList";
-
-const SLA_HORAS = 48;
+import { SlaConfigBar } from "@/components/analytics/SlaConfigBar";
 
 function corDoSla(percentual: number | null): string {
   if (percentual === null) return "text-muted-foreground";
@@ -24,11 +24,24 @@ function corDoSla(percentual: number | null): string {
 }
 
 export function FunnelSlaTab() {
-  const { data, isLoading, error } = useFunnelSla({ dias: 30, slaHoras: SLA_HORAS });
+  const [dias, setDias] = useState(30);
+  const [slaHoras, setSlaHoras] = useState(48);
+  const { data, isLoading, error } = useFunnelSla({ dias, slaHoras });
+
+  const controles = (
+    <SlaConfigBar
+      dias={dias}
+      slaHoras={slaHoras}
+      onDiasChange={setDias}
+      onSlaHorasChange={setSlaHoras}
+    />
+  );
+
 
   if (isLoading) {
     return (
       <div className="space-y-3">
+        {controles}
         {[1, 2, 3].map((i) => (
           <Skeleton key={i} className="h-20 w-full" />
         ))}
@@ -38,21 +51,27 @@ export function FunnelSlaTab() {
 
   if (error) {
     return (
-      <Card>
-        <CardContent className="py-8 text-center text-sm text-muted-foreground">
-          Não foi possível carregar o SLA de resposta.
-        </CardContent>
-      </Card>
+      <div className="space-y-4">
+        {controles}
+        <Card>
+          <CardContent className="py-8 text-center text-sm text-muted-foreground">
+            Não foi possível carregar o SLA de resposta.
+          </CardContent>
+        </Card>
+      </div>
     );
   }
 
   if (!data || data.length === 0) {
     return (
-      <Card>
-        <CardContent className="py-8 text-center text-sm text-muted-foreground">
-          Nenhuma candidatura nos últimos 30 dias.
-        </CardContent>
-      </Card>
+      <div className="space-y-4">
+        {controles}
+        <Card>
+          <CardContent className="py-8 text-center text-sm text-muted-foreground">
+            Nenhuma candidatura nos últimos {dias} dias.
+          </CardContent>
+        </Card>
+      </div>
     );
   }
 
@@ -60,11 +79,12 @@ export function FunnelSlaTab() {
 
   return (
     <div className="space-y-4">
+      {controles}
       <Card>
         <CardHeader className="pb-2">
           <CardTitle className="flex items-center gap-2 text-base">
             <Timer className="h-5 w-5 text-primary" />
-            SLA de primeira resposta ({SLA_HORAS}h) — últimos 30 dias
+            SLA de primeira resposta ({slaHoras}h) — últimos {dias} dias
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -81,7 +101,8 @@ export function FunnelSlaTab() {
         </CardContent>
       </Card>
 
-      {atrasadasTotal > 0 && <SlaOverdueList slaHoras={SLA_HORAS} />}
+      {atrasadasTotal > 0 && <SlaOverdueList slaHoras={slaHoras} />}
+
 
 
 
