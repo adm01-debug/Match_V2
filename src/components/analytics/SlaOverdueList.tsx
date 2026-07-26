@@ -17,11 +17,12 @@ import { useSlaOverdueList, type SlaOverdueRow } from "@/hooks/useSlaOverdueList
 import { Textarea } from "@/components/ui/textarea";
 import {
   NOTA_MAX_CHARS,
-  useRegisterFirstResponse,
   useRegisterFirstResponseBatch,
 } from "@/hooks/useRegisterFirstResponse";
 import { buildCsv, downloadCsv, type CsvColumn } from "@/lib/csvExport";
 import { SlaNoteTemplates } from "@/components/analytics/SlaNoteTemplates";
+import { SlaRegisterContactButton } from "@/components/analytics/SlaRegisterContactButton";
+
 
 
 
@@ -57,7 +58,7 @@ export function SlaOverdueList({ slaHoras = 48 }: SlaOverdueListProps) {
   const { data, isLoading, error } = useSlaOverdueList({ slaHoras, enabled: aberto });
 
 
-  const registrar = useRegisterFirstResponse();
+  
   const registrarLote = useRegisterFirstResponseBatch();
 
   const podeExportar = !isLoading && !error && (data?.length ?? 0) > 0;
@@ -238,15 +239,11 @@ export function SlaOverdueList({ slaHoras = 48 }: SlaOverdueListProps) {
                     </a>
                   </Button>
                 )}
-                <Button
-                  size="sm"
-                  variant="outline"
-                  disabled={registrar.isPending}
-                  onClick={() => registrar.mutate({ candidaturaId: linha.candidatura_id })}
-                >
-                  <CheckCircle2 className="mr-1 h-4 w-4" aria-hidden="true" />
-                  Registrar contato
-                </Button>
+                <SlaRegisterContactButton
+                  candidaturaId={linha.candidatura_id}
+                  candidatoNome={linha.candidato_nome}
+                />
+
               </div>
 
             </div>
