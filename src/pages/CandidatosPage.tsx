@@ -68,11 +68,12 @@ export default function CandidatosPage() {
   const [selectedCandidato, setSelectedCandidato] = useState<Candidato | null>(null);
 
   /** Debounce evita uma ida ao banco por tecla digitada. */
-  useDebounce(
-    termoLocal,
-    350,
-    useCallback((value: string) => patchFilters({ termo: value }), [patchFilters])
-  );
+  const termoDebounced = useDebounce(termoLocal, 350);
+  useEffect(() => {
+    // Só emite patch quando o valor estabilizado difere do filtro vigente,
+    // evitando reset de paginação em re-renders sem mudança real.
+    if (termoDebounced !== filters.termo) patchFilters({ termo: termoDebounced });
+  }, [termoDebounced, filters.termo, patchFilters]);
 
   const getBestMatchScore = useCallback(
     (candidatoId: string): MatchScore | null => {
