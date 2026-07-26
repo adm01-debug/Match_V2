@@ -1,10 +1,11 @@
+import { useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { 
   Briefcase, Mail, Phone, GraduationCap, Target, 
-  ChevronRight, Trash2, MessageSquare, Sparkles
+  ChevronRight, Trash2, MessageSquare, Sparkles, ArrowDownWideNarrow
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Candidato, MatchScore, getStatusConfig, getScoreColor } from '@/types/candidate';
@@ -15,6 +16,7 @@ import { FuseMatch } from '@/hooks/useFuzzySearch';
 import { TechProfileBadges } from '@/components/candidatos/TechProfileBadges';
 import { PotentialIndexBadge } from '@/components/candidatos/PotentialIndexBadge';
 import { usePotentialIndexBatch } from '@/hooks/usePotentialIndexBatch';
+
 
 interface CandidatosListProps {
   candidatos: Candidato[];
