@@ -7,6 +7,7 @@ import { Users, Mail, Phone, Target, Sparkles, Briefcase, GraduationCap, Message
 import { cn } from '@/lib/utils';
 import { ComunicacaoHistorico } from '@/components/candidatos/ComunicacaoHistorico';
 import { CandidatoTechProfileForm } from '@/components/candidatos/CandidatoTechProfileForm';
+import { PotentialIndexCard } from '@/components/candidatos/PotentialIndexCard';
 import { CandidatoSkillsEditor } from '@/components/candidatos/CandidatoSkillsEditor';
 import { useNavigate } from 'react-router-dom';
 import { Candidato, MatchScore, statusOptions, getStatusConfig, getScoreColor } from '@/types/candidate';
@@ -128,6 +129,11 @@ export const CandidatoDetailSheet = memo(function CandidatoDetailSheet({
           </h4>
           <CandidatoTechProfileForm candidatoId={candidato.id} />
         </div>
+
+        {/* Índice de Potencial (cognitivo + comportamental + fit cultural) */}
+        <PotentialIndexCard candidatoId={candidato.id} />
+
+
 
         {/* Competências da taxonomia */}
         <div>
