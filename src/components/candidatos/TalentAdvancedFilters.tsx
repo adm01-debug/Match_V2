@@ -25,6 +25,7 @@ import {
   type SenioridadeNivel,
 } from "@/types/techProfile";
 import type { SearchOrder, TalentSearchFilters } from "@/hooks/useTalentSearch";
+import { TalentSkillsFilter } from "@/components/candidatos/TalentSkillsFilter";
 
 export interface TalentAdvancedFiltersProps {
   filters: TalentSearchFilters;
@@ -227,7 +228,20 @@ export const TalentAdvancedFilters = memo(function TalentAdvancedFilters({
         </div>
       </div>
 
+      <TalentSkillsFilter
+        selectedIds={filters.skillIds}
+        onChange={(skillIds) =>
+          onChange({
+            skillIds,
+            // Sem competências selecionadas, o modo "todas" perde sentido:
+            // zeramos para não deixar um filtro invisível ativo.
+            ...(skillIds.length === 0 ? { skillsMatchAll: false } : {}),
+          })
+        }
+      />
+
       <div className="flex flex-wrap items-center gap-6">
+
         <div className="flex items-center gap-2">
           <Switch
             id="filtro-aberto"
