@@ -13,6 +13,8 @@ import { CandidatosEmptyState } from '@/components/empty-states';
 import { SkeletonCard } from '@/components/ui/premium-skeleton';
 import { FuseMatch } from '@/hooks/useFuzzySearch';
 import { TechProfileBadges } from '@/components/candidatos/TechProfileBadges';
+import { PotentialIndexBadge } from '@/components/candidatos/PotentialIndexBadge';
+import { usePotentialIndexBatch } from '@/hooks/usePotentialIndexBatch';
 
 interface CandidatosListProps {
   candidatos: Candidato[];
@@ -49,6 +51,10 @@ export function CandidatosList({
   onSelect,
   onDelete
 }: CandidatosListProps) {
+  // Hook chamado antes de qualquer return: a ordem dos hooks precisa ser estável.
+  // Uma única consulta em lote alimenta todos os cards (evita N+1 no cliente).
+  const { data: indicesPotencial } = usePotentialIndexBatch(candidatos.map((c) => c.id));
+
   if (isLoading) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -160,8 +166,9 @@ export function CandidatosList({
                         </div>
                       </div>
 
-                      {/* Match Score & Tags */}
+                      {/* Match Score, Índice de Potencial & Tags */}
                       <div className="pt-2 flex flex-wrap gap-2">
+                        <PotentialIndexBadge indice={indicesPotencial?.[c.id]} />
                         {bestScore ? (
                           <Badge variant="outline" className={cn("gap-1.5 py-1 px-3 border-2 font-bold", getScoreColor(bestScore.score_total))}>
                             <Target className="h-3.5 w-3.5" />
