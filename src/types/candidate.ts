@@ -1,3 +1,10 @@
+import type {
+  ModalidadeTrabalho,
+  NivelIdioma,
+  RegimeContratacao,
+  SenioridadeNivel,
+} from '@/types/techProfile';
+
 export interface Experiencia {
   cargo: string;
   empresa: string;
@@ -23,6 +30,16 @@ export interface Candidato {
   arquivo_curriculo: string | null;
   created_at: string | null;
   updated_at?: string | null;
+  /** Colunas do perfil técnico (Onda 1). Opcionais: registros antigos
+   *  e projeções parciais podem não trazê-las. */
+  senioridade?: SenioridadeNivel | null;
+  nivel_ingles?: NivelIdioma | null;
+  pretensao_salarial?: number | null;
+  pretensao_moeda?: string | null;
+  regime?: RegimeContratacao | null;
+  modalidade?: ModalidadeTrabalho | null;
+  disponibilidade_dias?: number | null;
+  aberto_a_oportunidades?: boolean | null;
 }
 
 export interface MatchScore {

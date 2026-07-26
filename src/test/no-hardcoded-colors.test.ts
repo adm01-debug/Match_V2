@@ -31,8 +31,13 @@ const ALLOWLIST: RegExp[] = [
   /\/settings\/(TeamsConnect|SlackConnect|OutlookCalendarConnect|LinkedInConnect|JobBoardConnects)\.tsx$/,
   /\/candidatos\/LinkedInImportDialog\.tsx$/,
   /\/pages\/auth\/LoginPage\.tsx$/, // logo do Google
-  // Templates de e-mail (hex obrigatório em MJML/HTML de e-mail)
+  // Templates de e-mail (hex obrigatório: clientes de e-mail não
+  // suportam CSS custom properties nem classes utilitárias)
   /\/hooks\/useComunicacoes\.ts$/,
+  /\/hooks\/usePropostas\.ts$/,
+  // Página de carreiras: fallback de cor de marca definida pelo tenant
+  // no branding da empresa — é dado configurável, não estilo fixo.
+  /\/pages\/CarreirasPage\.tsx$/,
   // Canvas fingerprint — hash estável
   /\/lib\/deviceFingerprint\.ts$/,
   // Libs de confetti/partículas (arrays de hex são API pública)

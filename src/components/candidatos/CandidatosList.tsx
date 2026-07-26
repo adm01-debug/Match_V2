@@ -12,6 +12,7 @@ import { HighlightMatch } from '@/components/ui/highlight-match';
 import { CandidatosEmptyState } from '@/components/empty-states';
 import { SkeletonCard } from '@/components/ui/premium-skeleton';
 import { FuseMatch } from '@/hooks/useFuzzySearch';
+import { TechProfileBadges } from '@/components/candidatos/TechProfileBadges';
 
 interface CandidatosListProps {
   candidatos: Candidato[];
@@ -179,6 +180,20 @@ export function CandidatosList({
                           </Badge>
                         ))}
                       </div>
+
+                      {/* Perfil técnico estruturado — só renderiza se houver dados */}
+                      <TechProfileBadges
+                        compact
+                        senioridade={c.senioridade}
+                        nivelIngles={c.nivel_ingles}
+                        pretensaoSalarial={c.pretensao_salarial}
+                        pretensaoMoeda={c.pretensao_moeda}
+                        regime={c.regime}
+                        modalidade={c.modalidade}
+                        disponibilidadeDias={c.disponibilidade_dias}
+                        abertoAOportunidades={c.aberto_a_oportunidades}
+                      />
+
 
                       <div className="pt-4 flex gap-2">
                         <Button 
