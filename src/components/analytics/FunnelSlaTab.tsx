@@ -80,6 +80,10 @@ export function FunnelSlaTab() {
         </CardContent>
       </Card>
 
+      {atrasadasTotal > 0 && <SlaOverdueList slaHoras={SLA_HORAS} />}
+
+
+
       <div className="space-y-2">
         {data.map((linha) => (
           <Card key={linha.vaga_id}>
