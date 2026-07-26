@@ -58,6 +58,7 @@ function DashboardContent() {
       <div className="relative p-6 space-y-8">
         <DashboardHeader resetTour={resetTour} />
         <DashboardKPIs kpis={kpis} />
+        <SlaAlertBanner />
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           <div className="lg:col-span-8"><Suspense fallback={<Skeleton className="h-[420px]" />}><FunilChart data={funilData} /></Suspense></div>
