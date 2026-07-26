@@ -13,7 +13,9 @@ import { HiringManagerStats } from '@/components/hiring-manager/HiringManagerSta
 import { HiringManagerVagas } from '@/components/hiring-manager/HiringManagerVagas';
 import { HiringManagerCandidates } from '@/components/hiring-manager/HiringManagerCandidates';
 import { HiringManagerSidebar } from '@/components/hiring-manager/HiringManagerSidebar';
-import { mockVagas, mockCandidatos, mockEntrevistas } from '@/components/hiring-manager/hiringManagerMockData';
+import { Skeleton } from '@/components/ui/skeleton';
+import { METAS_PADRAO } from '@/lib/constants';
+import { useHiringManagerData } from '@/hooks/useHiringManagerData';
 
 export default function HiringManagerPortalPage() {
   usePageTitle('Portal do Gestor');
@@ -22,20 +24,25 @@ export default function HiringManagerPortalPage() {
 
   const gestorNome = (user?.user_metadata?.['nome'] as string) || 'Gestor';
 
+  const { data, isLoading } = useHiringManagerData();
+  const vagas = data?.vagas ?? [];
+  const candidatos = data?.candidatos ?? [];
+  const entrevistas = data?.entrevistas ?? [];
+
   const stats = useMemo(() => ({
-    totalVagas: mockVagas.length,
-    vagasUrgentes: mockVagas.filter(v => v.urgente).length,
-    totalCandidatos: mockCandidatos.length,
-    pendentesAvaliacao: mockCandidatos.filter(c => c.avaliacao === 'pendente').length,
-    entrevistasHoje: mockEntrevistas.filter(e =>
+    totalVagas: vagas.length,
+    vagasUrgentes: vagas.filter(v => v.urgente).length,
+    totalCandidatos: candidatos.length,
+    pendentesAvaliacao: candidatos.filter(c => c.avaliacao === 'pendente').length,
+    entrevistasHoje: entrevistas.filter(e =>
       format(e.data, 'yyyy-MM-dd') === format(new Date(), 'yyyy-MM-dd'),
     ).length,
-    tempoMedioContratacao: 25,
-  }), []);
+    tempoMedioContratacao: METAS_PADRAO.tempoMedioContratacao,
+  }), [vagas, candidatos, entrevistas]);
 
   const filteredCandidatos = selectedVaga === 'all'
-    ? mockCandidatos
-    : mockCandidatos.filter(c => c.vaga === selectedVaga);
+    ? candidatos
+    : candidatos.filter(c => c.vaga === selectedVaga);
 
   return (
     <Layout title="Portal do Gestor">
@@ -58,7 +65,7 @@ export default function HiringManagerPortalPage() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Todas as vagas</SelectItem>
-                {mockVagas.map(v => (
+                {vagas.map(v => (
                   <SelectItem key={v.id} value={v.titulo}>{v.titulo}</SelectItem>
                 ))}
               </SelectContent>
@@ -66,15 +73,24 @@ export default function HiringManagerPortalPage() {
           </div>
         </div>
 
-        <HiringManagerStats stats={stats} />
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 space-y-6">
-            <HiringManagerVagas vagas={mockVagas} />
-            <HiringManagerCandidates candidatos={filteredCandidatos} />
+        {isLoading ? (
+          <div className="space-y-6">
+            <Skeleton className="h-28 w-full" />
+            <Skeleton className="h-96 w-full" />
           </div>
-          <HiringManagerSidebar entrevistas={mockEntrevistas} />
-        </div>
+        ) : (
+          <>
+            <HiringManagerStats stats={stats} />
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="lg:col-span-2 space-y-6">
+                <HiringManagerVagas vagas={vagas} />
+                <HiringManagerCandidates candidatos={filteredCandidatos} />
+              </div>
+              <HiringManagerSidebar entrevistas={entrevistas} />
+            </div>
+          </>
+        )}
       </div>
     </Layout>
   );
