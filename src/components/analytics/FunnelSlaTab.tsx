@@ -6,6 +6,7 @@
  * candidaturas que já estouraram o prazo e continuam sem retorno. É o número
  * acionável; o percentual histórico é apenas diagnóstico.
  */
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -13,8 +14,7 @@ import { AlertTriangle, Timer } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useFunnelSla } from "@/hooks/useFunnelSla";
 import { SlaOverdueList } from "@/components/analytics/SlaOverdueList";
-
-const SLA_HORAS = 48;
+import { SlaConfigBar } from "@/components/analytics/SlaConfigBar";
 
 function corDoSla(percentual: number | null): string {
   if (percentual === null) return "text-muted-foreground";
@@ -24,7 +24,19 @@ function corDoSla(percentual: number | null): string {
 }
 
 export function FunnelSlaTab() {
-  const { data, isLoading, error } = useFunnelSla({ dias: 30, slaHoras: SLA_HORAS });
+  const [dias, setDias] = useState(30);
+  const [slaHoras, setSlaHoras] = useState(48);
+  const { data, isLoading, error } = useFunnelSla({ dias, slaHoras });
+
+  const controles = (
+    <SlaConfigBar
+      dias={dias}
+      slaHoras={slaHoras}
+      onDiasChange={setDias}
+      onSlaHorasChange={setSlaHoras}
+    />
+  );
+
 
   if (isLoading) {
     return (
