@@ -4133,6 +4133,53 @@ export type Database = {
         Args: { p_last_active_date?: string; p_streak?: number }
         Returns: undefined
       }
+      search_candidatos: {
+        Args: {
+          p_aberto_a_oportunidades?: boolean
+          p_disponibilidade_max?: number
+          p_incluir_removidos?: boolean
+          p_limit?: number
+          p_modalidade?: string[]
+          p_nivel_ingles_min?: string
+          p_offset?: number
+          p_order_by?: string
+          p_pretensao_max?: number
+          p_pretensao_min?: number
+          p_regime?: string[]
+          p_senioridade?: string[]
+          p_skill_ids?: string[]
+          p_skills_match_all?: boolean
+          p_status?: string[]
+          p_termo?: string
+        }
+        Returns: {
+          aberto_a_oportunidades: boolean
+          arquivo_curriculo: string
+          created_at: string
+          disponibilidade_dias: number
+          email: string
+          experiencias: Json
+          fonte: string
+          formacao: Json
+          habilidades: string[]
+          id: string
+          modalidade: Database["public"]["Enums"]["modalidade_trabalho"]
+          nivel_ingles: Database["public"]["Enums"]["nivel_idioma"]
+          nome: string
+          pretensao_moeda: string
+          pretensao_salarial: number
+          regime: Database["public"]["Enums"]["regime_contratacao"]
+          resumo: string
+          senioridade: Database["public"]["Enums"]["senioridade_nivel"]
+          skills_match: number
+          status: string
+          telefone: string
+          total_count: number
+          updated_at: string
+        }[]
+      }
+      show_limit: { Args: never; Returns: number }
+      show_trgm: { Args: { "": string }; Returns: string[] }
       update_user_streak: {
         Args: { p_user_id: string }
         Returns: {
