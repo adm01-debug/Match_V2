@@ -37,6 +37,17 @@ import { SlaRegisterContactButton } from "@/components/analytics/SlaRegisterCont
 /** Sentinela do filtro: Radix Select não aceita item com valor vazio. */
 const TODAS_AS_VAGAS = "__todas__";
 
+/** Ordenações suportadas na fila nominal. */
+type OrdemFila = "espera_desc" | "espera_asc" | "nome" | "vaga";
+
+const ROTULOS_ORDEM: Readonly<Record<OrdemFila, string>> = {
+  espera_desc: "Espera (maior primeiro)",
+  espera_asc: "Espera (menor primeiro)",
+  nome: "Nome do candidato",
+  vaga: "Vaga",
+};
+
+
 interface SlaOverdueListProps {
   readonly slaHoras?: number;
 }
