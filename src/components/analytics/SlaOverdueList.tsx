@@ -6,13 +6,14 @@
  * agregado por vaga.
  */
 import { useState } from "react";
-import { AlertTriangle, ChevronDown, ChevronUp, Mail } from "lucide-react";
+import { AlertTriangle, CheckCircle2, ChevronDown, ChevronUp, Mail } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useSlaOverdueList } from "@/hooks/useSlaOverdueList";
+import { useRegisterFirstResponse } from "@/hooks/useRegisterFirstResponse";
 
 interface SlaOverdueListProps {
   readonly slaHoras?: number;
