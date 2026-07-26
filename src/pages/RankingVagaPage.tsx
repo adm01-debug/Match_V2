@@ -17,15 +17,19 @@ import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 
 function recomendacaoBadge(rec?: string | null) {
-  if (rec === "aprovar") return <Badge className="bg-emerald-600 hover:bg-emerald-700">Aprovar</Badge>;
-  if (rec === "revisar") return <Badge className="bg-amber-500 hover:bg-amber-600">Revisar</Badge>;
+  if (rec === "aprovar") {
+    return <Badge className="bg-success text-success-foreground hover:bg-success/90">Aprovar</Badge>;
+  }
+  if (rec === "revisar") {
+    return <Badge className="bg-warning text-warning-foreground hover:bg-warning/90">Revisar</Badge>;
+  }
   if (rec === "reprovar") return <Badge variant="destructive">Reprovar</Badge>;
   return <Badge variant="outline">Sem triagem</Badge>;
 }
 
 function scoreColor(score: number) {
-  if (score >= 80) return "text-emerald-600";
-  if (score >= 60) return "text-amber-600";
+  if (score >= 80) return "text-success";
+  if (score >= 60) return "text-warning";
   return "text-destructive";
 }
 
