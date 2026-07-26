@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DashboardHeader } from '@/components/dashboard/sections/DashboardHeader';
 import { DashboardKPIs } from '@/components/dashboard/sections/DashboardKPIs';
+import { SlaAlertBanner } from '@/components/dashboard/SlaAlertBanner';
 
 function DashboardErrorFallback({ error, resetErrorBoundary }: { error: Error; resetErrorBoundary: () => void }) {
   return (
@@ -58,6 +59,7 @@ function DashboardContent() {
       <div className="relative p-6 space-y-8">
         <DashboardHeader resetTour={resetTour} />
         <DashboardKPIs kpis={kpis} />
+        <SlaAlertBanner />
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           <div className="lg:col-span-8"><Suspense fallback={<Skeleton className="h-[420px]" />}><FunilChart data={funilData} /></Suspense></div>
