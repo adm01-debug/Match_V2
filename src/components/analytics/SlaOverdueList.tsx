@@ -52,7 +52,8 @@ const COLUNAS_CSV: readonly CsvColumn<SlaOverdueRow>[] = [
 export function SlaOverdueList({ slaHoras = 48 }: SlaOverdueListProps) {
   const [aberto, setAberto] = useState(false);
   const [selecionados, setSelecionados] = useState<ReadonlySet<string>>(new Set());
-  const { data, isLoading, error } = useSlaOverdueList({ slaHoras, enabled: aberto });
+  const [nota, setNota] = useState("");
+
   const registrar = useRegisterFirstResponse();
   const registrarLote = useRegisterFirstResponseBatch();
 
