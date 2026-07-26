@@ -56,10 +56,25 @@ export function useRegisterFirstResponse() {
 /** Quantas chamadas simultâneas ao banco por lote. */
 const CONCORRENCIA = 4;
 
+/** Limite defensivo da nota — o histórico é para rastro, não para redação. */
+export const NOTA_MAX_CHARS = 500;
+
 export interface RegisterBatchResult {
   readonly sucesso: number;
   readonly falha: number;
   readonly primeiroErro: string | null;
+}
+
+export interface RegisterBatchInput {
+  readonly ids: readonly string[];
+  readonly nota?: string;
+}
+
+/** Normaliza a nota: string vazia/whitespace equivale a "sem nota". */
+export function normalizarNota(nota?: string): string | undefined {
+  const limpa = nota?.trim();
+  if (!limpa) return undefined;
+  return limpa.slice(0, NOTA_MAX_CHARS);
 }
 
 /**
@@ -74,7 +89,8 @@ export function useRegisterFirstResponseBatch() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (ids: readonly string[]): Promise<RegisterBatchResult> => {
+    mutationFn: async ({ ids, nota }: RegisterBatchInput): Promise<RegisterBatchResult> => {
+      const notaFinal = normalizarNota(nota);
       let sucesso = 0;
       let falha = 0;
       let primeiroErro: string | null = null;
@@ -85,9 +101,11 @@ export function useRegisterFirstResponseBatch() {
           bloco.map(async (candidaturaId) => {
             const { error } = await supabase.rpc("hr_register_first_response", {
               p_candidatura_id: candidaturaId,
+              p_nota: notaFinal,
             });
             if (error) throw error;
           }),
+
         );
 
         for (const r of resultados) {
