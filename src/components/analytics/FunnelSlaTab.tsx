@@ -12,6 +12,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { AlertTriangle, Timer } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useFunnelSla } from "@/hooks/useFunnelSla";
+import { SlaOverdueList } from "@/components/analytics/SlaOverdueList";
 
 const SLA_HORAS = 48;
 
@@ -79,6 +80,10 @@ export function FunnelSlaTab() {
           </p>
         </CardContent>
       </Card>
+
+      {atrasadasTotal > 0 && <SlaOverdueList slaHoras={SLA_HORAS} />}
+
+
 
       <div className="space-y-2">
         {data.map((linha) => (
