@@ -41,6 +41,7 @@ export function FunnelSlaTab() {
   if (isLoading) {
     return (
       <div className="space-y-3">
+        {controles}
         {[1, 2, 3].map((i) => (
           <Skeleton key={i} className="h-20 w-full" />
         ))}
@@ -50,21 +51,27 @@ export function FunnelSlaTab() {
 
   if (error) {
     return (
-      <Card>
-        <CardContent className="py-8 text-center text-sm text-muted-foreground">
-          Não foi possível carregar o SLA de resposta.
-        </CardContent>
-      </Card>
+      <div className="space-y-4">
+        {controles}
+        <Card>
+          <CardContent className="py-8 text-center text-sm text-muted-foreground">
+            Não foi possível carregar o SLA de resposta.
+          </CardContent>
+        </Card>
+      </div>
     );
   }
 
   if (!data || data.length === 0) {
     return (
-      <Card>
-        <CardContent className="py-8 text-center text-sm text-muted-foreground">
-          Nenhuma candidatura nos últimos 30 dias.
-        </CardContent>
-      </Card>
+      <div className="space-y-4">
+        {controles}
+        <Card>
+          <CardContent className="py-8 text-center text-sm text-muted-foreground">
+            Nenhuma candidatura nos últimos {dias} dias.
+          </CardContent>
+        </Card>
+      </div>
     );
   }
 
@@ -72,11 +79,12 @@ export function FunnelSlaTab() {
 
   return (
     <div className="space-y-4">
+      {controles}
       <Card>
         <CardHeader className="pb-2">
           <CardTitle className="flex items-center gap-2 text-base">
             <Timer className="h-5 w-5 text-primary" />
-            SLA de primeira resposta ({SLA_HORAS}h) — últimos 30 dias
+            SLA de primeira resposta ({slaHoras}h) — últimos {dias} dias
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -93,7 +101,8 @@ export function FunnelSlaTab() {
         </CardContent>
       </Card>
 
-      {atrasadasTotal > 0 && <SlaOverdueList slaHoras={SLA_HORAS} />}
+      {atrasadasTotal > 0 && <SlaOverdueList slaHoras={slaHoras} />}
+
 
 
 
