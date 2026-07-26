@@ -290,7 +290,7 @@ export default function AplicarVagaPage() {
                       asChild
                       type="button"
                       variant="outline"
-                      className="w-full sm:w-auto border-green-600 text-green-700 hover:bg-green-50 dark:text-green-400 dark:hover:bg-green-950"
+                      className="w-full sm:w-auto border-success text-success hover:bg-success/10"
                     >
                       <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
                         <MessageCircle className="h-4 w-4 mr-2" />
