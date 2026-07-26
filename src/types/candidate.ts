@@ -1,3 +1,10 @@
+import type {
+  ModalidadeTrabalho,
+  NivelIdioma,
+  RegimeContratacao,
+  SenioridadeNivel,
+} from '@/types/techProfile';
+
 export interface Experiencia {
   cargo: string;
   empresa: string;
