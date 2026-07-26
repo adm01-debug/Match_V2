@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/select";
 
 import { useSlaOverdueList, type SlaOverdueRow } from "@/hooks/useSlaOverdueList";
+import { useLocalStorageState } from "@/hooks/useLocalStorageState";
 import { Textarea } from "@/components/ui/textarea";
 import {
   NOTA_MAX_CHARS,
