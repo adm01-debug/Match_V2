@@ -46,7 +46,7 @@ export function SlaAlertBanner() {
           {resumo.vagasAfetadas > resumo.topo.length ? " e outras" : ""}.
         </p>
         <Button asChild size="sm" variant="outline">
-          <Link to="/analytics-avancado">
+          <Link to="/analytics">
             Ver fila de atrasadas
             <ArrowRight className="ml-2 h-4 w-4" aria-hidden="true" />
           </Link>
