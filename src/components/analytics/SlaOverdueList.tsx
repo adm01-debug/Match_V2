@@ -6,13 +6,14 @@
  * agregado por vaga.
  */
 import { useState } from "react";
-import { AlertTriangle, ChevronDown, ChevronUp, Mail } from "lucide-react";
+import { AlertTriangle, CheckCircle2, ChevronDown, ChevronUp, Mail } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useSlaOverdueList } from "@/hooks/useSlaOverdueList";
+import { useRegisterFirstResponse } from "@/hooks/useRegisterFirstResponse";
 
 interface SlaOverdueListProps {
   readonly slaHoras?: number;
@@ -26,6 +27,7 @@ function formatarEspera(horas: number): string {
 export function SlaOverdueList({ slaHoras = 48 }: SlaOverdueListProps) {
   const [aberto, setAberto] = useState(false);
   const { data, isLoading, error } = useSlaOverdueList({ slaHoras, enabled: aberto });
+  const registrar = useRegisterFirstResponse();
 
   return (
     <Card>
@@ -85,7 +87,17 @@ export function SlaOverdueList({ slaHoras = 48 }: SlaOverdueListProps) {
                     </a>
                   </Button>
                 )}
+                <Button
+                  size="sm"
+                  variant="outline"
+                  disabled={registrar.isPending}
+                  onClick={() => registrar.mutate({ candidaturaId: linha.candidatura_id })}
+                >
+                  <CheckCircle2 className="mr-1 h-4 w-4" aria-hidden="true" />
+                  Registrar contato
+                </Button>
               </div>
+
             </div>
           ))}
         </CardContent>

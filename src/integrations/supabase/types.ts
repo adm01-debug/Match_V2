@@ -4310,6 +4310,10 @@ export type Database = {
           vaga_titulo: string
         }[]
       }
+      hr_register_first_response: {
+        Args: { p_candidatura_id: string; p_nota?: string }
+        Returns: string
+      }
       hr_sla_overdue_list: {
         Args: { p_limit?: number; p_sla_horas?: number }
         Returns: {
