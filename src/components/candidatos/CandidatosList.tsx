@@ -12,6 +12,7 @@ import { HighlightMatch } from '@/components/ui/highlight-match';
 import { CandidatosEmptyState } from '@/components/empty-states';
 import { SkeletonCard } from '@/components/ui/premium-skeleton';
 import { FuseMatch } from '@/hooks/useFuzzySearch';
+import { TechProfileBadges } from '@/components/candidatos/TechProfileBadges';
 
 interface CandidatosListProps {
   candidatos: Candidato[];
