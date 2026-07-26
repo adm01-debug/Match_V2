@@ -3,9 +3,11 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
-import { Users, Mail, Phone, Target, Sparkles, Briefcase, GraduationCap, MessageSquare, Trash2 } from 'lucide-react';
+import { Users, Mail, Phone, Target, Sparkles, Briefcase, GraduationCap, MessageSquare, Trash2, Cpu } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ComunicacaoHistorico } from '@/components/candidatos/ComunicacaoHistorico';
+import { CandidatoTechProfileForm } from '@/components/candidatos/CandidatoTechProfileForm';
+import { CandidatoSkillsEditor } from '@/components/candidatos/CandidatoSkillsEditor';
 import { useNavigate } from 'react-router-dom';
 import { Candidato, MatchScore, statusOptions, getStatusConfig, getScoreColor } from '@/types/candidate';
 
