@@ -52,3 +52,72 @@ export function useRegisterFirstResponse() {
     },
   });
 }
+
+/** Quantas chamadas simultâneas ao banco por lote. */
+const CONCORRENCIA = 4;
+
+export interface RegisterBatchResult {
+  readonly sucesso: number;
+  readonly falha: number;
+  readonly primeiroErro: string | null;
+}
+
+/**
+ * Registra contato em lote.
+ *
+ * Por que não um único RPC com array: a operação precisa ser parcialmente
+ * tolerante — uma candidatura sem processo vinculado não pode abortar as
+ * outras 19. Aqui cada item falha isoladamente e o usuário recebe o placar.
+ * A concorrência é limitada para não abrir dezenas de conexões simultâneas.
+ */
+export function useRegisterFirstResponseBatch() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (ids: readonly string[]): Promise<RegisterBatchResult> => {
+      let sucesso = 0;
+      let falha = 0;
+      let primeiroErro: string | null = null;
+
+      for (let i = 0; i < ids.length; i += CONCORRENCIA) {
+        const bloco = ids.slice(i, i + CONCORRENCIA);
+        const resultados = await Promise.allSettled(
+          bloco.map(async (candidaturaId) => {
+            const { error } = await supabase.rpc("hr_register_first_response", {
+              p_candidatura_id: candidaturaId,
+            });
+            if (error) throw error;
+          }),
+        );
+
+        for (const r of resultados) {
+          if (r.status === "fulfilled") {
+            sucesso += 1;
+          } else {
+            falha += 1;
+            if (primeiroErro === null) {
+              const motivo = r.reason as { message?: string } | undefined;
+              primeiroErro = mensagemDeErro(motivo?.message ?? "");
+            }
+          }
+        }
+      }
+
+      return { sucesso, falha, primeiroErro };
+    },
+    onSuccess: ({ sucesso, falha, primeiroErro }) => {
+      if (sucesso > 0) {
+        toast.success(`${sucesso} contato(s) registrado(s).`);
+      }
+      if (falha > 0) {
+        toast.error(`${falha} falharam. ${primeiroErro ?? ""}`.trim());
+      }
+      queryClient.invalidateQueries({ queryKey: ["sla-overdue"] });
+      queryClient.invalidateQueries({ queryKey: ["funnel-sla"] });
+    },
+    onError: () => {
+      toast.error("Não foi possível registrar os contatos em lote.");
+    },
+  });
+}
+
