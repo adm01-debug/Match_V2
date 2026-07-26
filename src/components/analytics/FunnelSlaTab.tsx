@@ -6,15 +6,19 @@
  * candidaturas que já estouraram o prazo e continuam sem retorno. É o número
  * acionável; o percentual histórico é apenas diagnóstico.
  */
-import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AlertTriangle, Timer } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useFunnelSla } from "@/hooks/useFunnelSla";
+import { useLocalStorageState } from "@/hooks/useLocalStorageState";
 import { SlaOverdueList } from "@/components/analytics/SlaOverdueList";
-import { SlaConfigBar } from "@/components/analytics/SlaConfigBar";
+import {
+  SlaConfigBar,
+  JANELAS_DIAS,
+  LIMITES_SLA_HORAS,
+} from "@/components/analytics/SlaConfigBar";
 
 function corDoSla(percentual: number | null): string {
   if (percentual === null) return "text-muted-foreground";
@@ -23,10 +27,21 @@ function corDoSla(percentual: number | null): string {
   return "text-destructive";
 }
 
+/**
+ * Só aceitamos valores da lista oferecida na UI. Persistência é conveniência,
+ * não um canal para injetar parâmetros arbitrários na RPC.
+ */
+const ehJanelaValida = (v: unknown): v is number =>
+  typeof v === "number" && (JANELAS_DIAS as readonly number[]).includes(v);
+
+const ehLimiteValido = (v: unknown): v is number =>
+  typeof v === "number" && (LIMITES_SLA_HORAS as readonly number[]).includes(v);
+
 export function FunnelSlaTab() {
-  const [dias, setDias] = useState(30);
-  const [slaHoras, setSlaHoras] = useState(48);
+  const [dias, setDias] = useLocalStorageState("sla:janela-dias", 30, ehJanelaValida);
+  const [slaHoras, setSlaHoras] = useLocalStorageState("sla:limite-horas", 48, ehLimiteValido);
   const { data, isLoading, error } = useFunnelSla({ dias, slaHoras });
+
 
   const controles = (
     <SlaConfigBar

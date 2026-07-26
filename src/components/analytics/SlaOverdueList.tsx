@@ -5,16 +5,21 @@
  * Só busca dados quando aberto (`enabled`), para não onerar quem apenas olha o
  * agregado por vaga.
  */
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { AlertTriangle, CheckCircle2, ChevronDown, ChevronUp, Download, Mail } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useSlaOverdueList, type SlaOverdueRow } from "@/hooks/useSlaOverdueList";
-import { useRegisterFirstResponse } from "@/hooks/useRegisterFirstResponse";
+import {
+  useRegisterFirstResponse,
+  useRegisterFirstResponseBatch,
+} from "@/hooks/useRegisterFirstResponse";
 import { buildCsv, downloadCsv, type CsvColumn } from "@/lib/csvExport";
+
 
 interface SlaOverdueListProps {
   readonly slaHoras?: number;
@@ -43,16 +48,52 @@ const COLUNAS_CSV: readonly CsvColumn<SlaOverdueRow>[] = [
 
 export function SlaOverdueList({ slaHoras = 48 }: SlaOverdueListProps) {
   const [aberto, setAberto] = useState(false);
+  const [selecionados, setSelecionados] = useState<ReadonlySet<string>>(new Set());
   const { data, isLoading, error } = useSlaOverdueList({ slaHoras, enabled: aberto });
   const registrar = useRegisterFirstResponse();
+  const registrarLote = useRegisterFirstResponseBatch();
 
   const podeExportar = !isLoading && !error && (data?.length ?? 0) > 0;
+
+  // A lista é revalidada após cada registro: IDs selecionados que já saíram da
+  // fila não podem sobreviver na seleção, senão o lote tentaria reprocessá-los.
+  const idsVisiveis = useMemo(
+    () => new Set((data ?? []).map((l) => l.candidatura_id)),
+    [data],
+  );
+  const idsSelecionados = useMemo(
+    () => [...selecionados].filter((id) => idsVisiveis.has(id)),
+    [selecionados, idsVisiveis],
+  );
+
+  const alternarSelecao = (id: string) => {
+    setSelecionados((atual) => {
+      const proximo = new Set(atual);
+      if (proximo.has(id)) proximo.delete(id);
+      else proximo.add(id);
+      return proximo;
+    });
+  };
+
+  const alternarTodos = () => {
+    setSelecionados((atual) =>
+      atual.size >= idsVisiveis.size ? new Set<string>() : new Set(idsVisiveis),
+    );
+  };
+
+  const registrarSelecionados = () => {
+    if (idsSelecionados.length === 0) return;
+    registrarLote.mutate(idsSelecionados, {
+      onSettled: () => setSelecionados(new Set()),
+    });
+  };
 
   const exportar = () => {
     if (!data || data.length === 0) return;
     const hoje = new Date().toISOString().slice(0, 10);
     downloadCsv(buildCsv(data, COLUNAS_CSV), `sla-atrasadas-${slaHoras}h-${hoje}`);
   };
+
 
 
   return (
@@ -104,15 +145,48 @@ export function SlaOverdueList({ slaHoras = 48 }: SlaOverdueListProps) {
             </p>
           )}
 
+          {podeExportar && (
+            <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg bg-muted/50 p-2">
+              <label className="flex items-center gap-2 text-sm">
+                <Checkbox
+                  checked={idsVisiveis.size > 0 && idsSelecionados.length === idsVisiveis.size}
+                  onCheckedChange={alternarTodos}
+                  aria-label="Selecionar todas as candidaturas atrasadas"
+                />
+                {idsSelecionados.length > 0
+                  ? `${idsSelecionados.length} selecionada(s)`
+                  : "Selecionar todas"}
+              </label>
+              <Button
+                size="sm"
+                disabled={idsSelecionados.length === 0 || registrarLote.isPending}
+                onClick={registrarSelecionados}
+              >
+                <CheckCircle2 className="mr-1 h-4 w-4" aria-hidden="true" />
+                {registrarLote.isPending
+                  ? "Registrando..."
+                  : `Registrar contato em lote${idsSelecionados.length > 0 ? ` (${idsSelecionados.length})` : ""}`}
+              </Button>
+            </div>
+          )}
+
           {data?.map((linha) => (
             <div
               key={linha.candidatura_id}
               className="flex items-center justify-between gap-3 rounded-lg border border-border p-3"
             >
-              <div className="min-w-0">
-                <p className="truncate text-sm font-medium">{linha.candidato_nome}</p>
-                <p className="truncate text-xs text-muted-foreground">{linha.vaga_titulo}</p>
+              <div className="flex min-w-0 items-center gap-3">
+                <Checkbox
+                  checked={selecionados.has(linha.candidatura_id)}
+                  onCheckedChange={() => alternarSelecao(linha.candidatura_id)}
+                  aria-label={`Selecionar ${linha.candidato_nome}`}
+                />
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-medium">{linha.candidato_nome}</p>
+                  <p className="truncate text-xs text-muted-foreground">{linha.vaga_titulo}</p>
+                </div>
               </div>
+
               <div className="flex shrink-0 items-center gap-2">
                 <Badge variant="destructive">{formatarEspera(linha.horas_esperando)}</Badge>
                 {linha.candidato_email && (
