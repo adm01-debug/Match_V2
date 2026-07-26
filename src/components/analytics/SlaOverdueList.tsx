@@ -363,10 +363,15 @@ export function SlaOverdueList({ slaHoras = 48 }: SlaOverdueListProps) {
                     </a>
                   </Button>
                 )}
+                <SlaTimelineButton
+                  candidaturaId={linha.candidatura_id}
+                  candidatoNome={linha.candidato_nome}
+                />
                 <SlaRegisterContactButton
                   candidaturaId={linha.candidatura_id}
                   candidatoNome={linha.candidato_nome}
                 />
+
 
               </div>
 
