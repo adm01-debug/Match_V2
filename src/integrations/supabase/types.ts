@@ -917,6 +917,183 @@ export type Database = {
           },
         ]
       }
+      cognitive_items: {
+        Row: {
+          alternativas: Json
+          ativo: boolean
+          contexto: string | null
+          created_at: string
+          deleted_at: string | null
+          dificuldade: number
+          dominio: Database["public"]["Enums"]["cognitive_domain"]
+          enunciado: string
+          explicacao: string | null
+          id: string
+          resposta_correta: string
+          tags: string[]
+          tempo_sugerido_seg: number
+          updated_at: string
+        }
+        Insert: {
+          alternativas: Json
+          ativo?: boolean
+          contexto?: string | null
+          created_at?: string
+          deleted_at?: string | null
+          dificuldade?: number
+          dominio: Database["public"]["Enums"]["cognitive_domain"]
+          enunciado: string
+          explicacao?: string | null
+          id?: string
+          resposta_correta: string
+          tags?: string[]
+          tempo_sugerido_seg?: number
+          updated_at?: string
+        }
+        Update: {
+          alternativas?: Json
+          ativo?: boolean
+          contexto?: string | null
+          created_at?: string
+          deleted_at?: string | null
+          dificuldade?: number
+          dominio?: Database["public"]["Enums"]["cognitive_domain"]
+          enunciado?: string
+          explicacao?: string | null
+          id?: string
+          resposta_correta?: string
+          tags?: string[]
+          tempo_sugerido_seg?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      cognitive_responses: {
+        Row: {
+          correta: boolean | null
+          created_at: string
+          id: string
+          item_id: string
+          ordem: number
+          respondida_em: string | null
+          resposta: string | null
+          session_id: string
+          tempo_gasto_seg: number | null
+          updated_at: string
+        }
+        Insert: {
+          correta?: boolean | null
+          created_at?: string
+          id?: string
+          item_id: string
+          ordem?: number
+          respondida_em?: string | null
+          resposta?: string | null
+          session_id: string
+          tempo_gasto_seg?: number | null
+          updated_at?: string
+        }
+        Update: {
+          correta?: boolean | null
+          created_at?: string
+          id?: string
+          item_id?: string
+          ordem?: number
+          respondida_em?: string | null
+          resposta?: string | null
+          session_id?: string
+          tempo_gasto_seg?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cognitive_responses_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "cognitive_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cognitive_responses_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "cognitive_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      cognitive_sessions: {
+        Row: {
+          candidato_id: string | null
+          created_at: string
+          deleted_at: string | null
+          dominios: Database["public"]["Enums"]["cognitive_domain"][]
+          finalizada_em: string | null
+          id: string
+          iniciada_em: string
+          score_bruto: number | null
+          score_normalizado: number | null
+          scores_por_dominio: Json
+          status: Database["public"]["Enums"]["cognitive_session_status"]
+          tempo_limite_seg: number
+          total_itens: number
+          updated_at: string
+          user_id: string | null
+          vaga_id: string | null
+        }
+        Insert: {
+          candidato_id?: string | null
+          created_at?: string
+          deleted_at?: string | null
+          dominios?: Database["public"]["Enums"]["cognitive_domain"][]
+          finalizada_em?: string | null
+          id?: string
+          iniciada_em?: string
+          score_bruto?: number | null
+          score_normalizado?: number | null
+          scores_por_dominio?: Json
+          status?: Database["public"]["Enums"]["cognitive_session_status"]
+          tempo_limite_seg?: number
+          total_itens?: number
+          updated_at?: string
+          user_id?: string | null
+          vaga_id?: string | null
+        }
+        Update: {
+          candidato_id?: string | null
+          created_at?: string
+          deleted_at?: string | null
+          dominios?: Database["public"]["Enums"]["cognitive_domain"][]
+          finalizada_em?: string | null
+          id?: string
+          iniciada_em?: string
+          score_bruto?: number | null
+          score_normalizado?: number | null
+          scores_por_dominio?: Json
+          status?: Database["public"]["Enums"]["cognitive_session_status"]
+          tempo_limite_seg?: number
+          total_itens?: number
+          updated_at?: string
+          user_id?: string | null
+          vaga_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cognitive_sessions_candidato_id_fkey"
+            columns: ["candidato_id"]
+            isOneToOne: false
+            referencedRelation: "candidatos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cognitive_sessions_vaga_id_fkey"
+            columns: ["vaga_id"]
+            isOneToOne: false
+            referencedRelation: "vagas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       communication_retry_queue: {
         Row: {
           attempts: number
@@ -4061,6 +4238,25 @@ export type Database = {
         }
         Returns: string
       }
+      finish_cognitive_session: {
+        Args: { p_session_id: string }
+        Returns: Json
+      }
+      get_cognitive_result: { Args: { p_session_id: string }; Returns: Json }
+      get_cognitive_session_items: {
+        Args: { p_session_id: string }
+        Returns: {
+          alternativas: Json
+          contexto: string
+          dificuldade: number
+          dominio: Database["public"]["Enums"]["cognitive_domain"]
+          enunciado: string
+          item_id: string
+          ordem: number
+          resposta: string
+          tempo_sugerido_seg: number
+        }[]
+      }
       get_proposta_by_token: {
         Args: { p_token: string }
         Returns: {
@@ -4180,6 +4376,25 @@ export type Database = {
       }
       show_limit: { Args: never; Returns: number }
       show_trgm: { Args: { "": string }; Returns: string[] }
+      start_cognitive_session: {
+        Args: {
+          p_candidato_id?: string
+          p_dominios?: Database["public"]["Enums"]["cognitive_domain"][]
+          p_itens_por_dominio?: number
+          p_tempo_limite_seg?: number
+          p_vaga_id?: string
+        }
+        Returns: string
+      }
+      submit_cognitive_response: {
+        Args: {
+          p_item_id: string
+          p_resposta: string
+          p_session_id: string
+          p_tempo_gasto_seg?: number
+        }
+        Returns: undefined
+      }
       update_user_streak: {
         Args: { p_user_id: string }
         Returns: {
@@ -4190,6 +4405,12 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "rh" | "gestor"
+      cognitive_domain: "logico" | "numerico" | "verbal" | "atencao"
+      cognitive_session_status:
+        | "em_andamento"
+        | "concluida"
+        | "expirada"
+        | "cancelada"
       modalidade_trabalho: "remoto" | "hibrido" | "presencial"
       nivel_idioma:
         | "nenhum"
@@ -4335,6 +4556,13 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "rh", "gestor"],
+      cognitive_domain: ["logico", "numerico", "verbal", "atencao"],
+      cognitive_session_status: [
+        "em_andamento",
+        "concluida",
+        "expirada",
+        "cancelada",
+      ],
       modalidade_trabalho: ["remoto", "hibrido", "presencial"],
       nivel_idioma: [
         "nenhum",
