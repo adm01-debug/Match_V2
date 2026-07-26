@@ -129,6 +129,11 @@ export const CandidatoDetailSheet = memo(function CandidatoDetailSheet({
           <CandidatoTechProfileForm candidatoId={candidato.id} />
         </div>
 
+        {/* Índice de Potencial (cognitivo + comportamental + fit cultural) */}
+        <PotentialIndexCard candidatoId={candidato.id} />
+
+
+
         {/* Competências da taxonomia */}
         <div>
           <h4 className="text-sm font-medium mb-3 flex items-center gap-2">
