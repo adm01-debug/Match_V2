@@ -68,6 +68,8 @@ export default function CandidatosPage() {
   const [termoLocal, setTermoLocal] = useState('');
   const [showFilters, setShowFilters] = useState(false);
   const [selectedCandidato, setSelectedCandidato] = useState<Candidato | null>(null);
+  const { exportCsv, isExporting, progress } = useTalentExport();
+
 
   /** Debounce evita uma ida ao banco por tecla digitada. */
   const termoDebounced = useDebounce(termoLocal, 350);
