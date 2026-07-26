@@ -13,6 +13,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
 import { useSlaOverdueList, type SlaOverdueRow } from "@/hooks/useSlaOverdueList";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -26,9 +34,13 @@ import { SlaRegisterContactButton } from "@/components/analytics/SlaRegisterCont
 
 
 
+/** Sentinela do filtro: Radix Select não aceita item com valor vazio. */
+const TODAS_AS_VAGAS = "__todas__";
+
 interface SlaOverdueListProps {
   readonly slaHoras?: number;
 }
+
 
 function formatarEspera(horas: number): string {
   if (horas < 48) return `${Math.round(horas)}h`;
@@ -55,19 +67,43 @@ export function SlaOverdueList({ slaHoras = 48 }: SlaOverdueListProps) {
   const [aberto, setAberto] = useState(false);
   const [selecionados, setSelecionados] = useState<ReadonlySet<string>>(new Set());
   const [nota, setNota] = useState("");
+  const [vagaFiltro, setVagaFiltro] = useState<string>(TODAS_AS_VAGAS);
   const { data, isLoading, error } = useSlaOverdueList({ slaHoras, enabled: aberto });
 
-
-  
   const registrarLote = useRegisterFirstResponseBatch();
 
-  const podeExportar = !isLoading && !error && (data?.length ?? 0) > 0;
+  // Opções derivadas dos próprios dados: nunca oferecemos uma vaga que já saiu
+  // da fila, evitando filtros que resultam em lista vazia sem explicação.
+  const vagas = useMemo(() => {
+    const mapa = new Map<string, string>();
+    for (const linha of data ?? []) mapa.set(linha.vaga_id, linha.vaga_titulo);
+    return [...mapa.entries()]
+      .map(([id, titulo]) => ({ id, titulo }))
+      .sort((a, b) => a.titulo.localeCompare(b.titulo, "pt-BR"));
+  }, [data]);
+
+  // Se a vaga selecionada desaparece da fila (todos foram respondidos), o filtro
+  // volta sozinho para "todas" em vez de mostrar uma lista vazia enganosa.
+  const filtroEfetivo =
+    vagaFiltro !== TODAS_AS_VAGAS && !vagas.some((v) => v.id === vagaFiltro)
+      ? TODAS_AS_VAGAS
+      : vagaFiltro;
+
+  const linhas = useMemo(
+    () =>
+      filtroEfetivo === TODAS_AS_VAGAS
+        ? (data ?? [])
+        : (data ?? []).filter((l) => l.vaga_id === filtroEfetivo),
+    [data, filtroEfetivo],
+  );
+
+  const podeExportar = !isLoading && !error && linhas.length > 0;
 
   // A lista é revalidada após cada registro: IDs selecionados que já saíram da
-  // fila não podem sobreviver na seleção, senão o lote tentaria reprocessá-los.
+  // fila (ou foram filtrados) não podem sobreviver na seleção.
   const idsVisiveis = useMemo(
-    () => new Set((data ?? []).map((l) => l.candidatura_id)),
-    [data],
+    () => new Set(linhas.map((l) => l.candidatura_id)),
+    [linhas],
   );
   const idsSelecionados = useMemo(
     () => [...selecionados].filter((id) => idsVisiveis.has(id)),
@@ -102,12 +138,12 @@ export function SlaOverdueList({ slaHoras = 48 }: SlaOverdueListProps) {
     );
   };
 
-
   const exportar = () => {
-    if (!data || data.length === 0) return;
+    if (linhas.length === 0) return;
     const hoje = new Date().toISOString().slice(0, 10);
-    downloadCsv(buildCsv(data, COLUNAS_CSV), `sla-atrasadas-${slaHoras}h-${hoje}`);
+    downloadCsv(buildCsv(linhas, COLUNAS_CSV), `sla-atrasadas-${slaHoras}h-${hoje}`);
   };
+
 
 
 
@@ -159,6 +195,30 @@ export function SlaOverdueList({ slaHoras = 48 }: SlaOverdueListProps) {
               Nenhuma candidatura sem resposta além do prazo. 🎉
             </p>
           )}
+
+          {!isLoading && !error && vagas.length > 1 && (
+            <div className="flex items-center gap-2">
+              <label htmlFor="sla-filtro-vaga" className="text-xs text-muted-foreground">
+                Vaga
+              </label>
+              <Select value={filtroEfetivo} onValueChange={setVagaFiltro}>
+                <SelectTrigger id="sla-filtro-vaga" className="h-8 w-full max-w-xs text-sm">
+                  <SelectValue placeholder="Todas as vagas" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value={TODAS_AS_VAGAS}>
+                    Todas as vagas ({data?.length ?? 0})
+                  </SelectItem>
+                  {vagas.map((v) => (
+                    <SelectItem key={v.id} value={v.id}>
+                      {v.titulo}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
+
 
           {podeExportar && (
             <div className="space-y-2 rounded-lg bg-muted/50 p-2">
@@ -213,7 +273,7 @@ export function SlaOverdueList({ slaHoras = 48 }: SlaOverdueListProps) {
           )}
 
 
-          {data?.map((linha) => (
+          {linhas.map((linha) => (
             <div
               key={linha.candidatura_id}
               className="flex items-center justify-between gap-3 rounded-lg border border-border p-3"
