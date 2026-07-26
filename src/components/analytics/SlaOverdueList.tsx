@@ -228,28 +228,51 @@ export function SlaOverdueList({ slaHoras = 48 }: SlaOverdueListProps) {
             </p>
           )}
 
-          {!isLoading && !error && vagas.length > 1 && (
-            <div className="flex items-center gap-2">
-              <label htmlFor="sla-filtro-vaga" className="text-xs text-muted-foreground">
-                Vaga
-              </label>
-              <Select value={filtroEfetivo} onValueChange={setVagaFiltro}>
-                <SelectTrigger id="sla-filtro-vaga" className="h-8 w-full max-w-xs text-sm">
-                  <SelectValue placeholder="Todas as vagas" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value={TODAS_AS_VAGAS}>
-                    Todas as vagas ({data?.length ?? 0})
-                  </SelectItem>
-                  {vagas.map((v) => (
-                    <SelectItem key={v.id} value={v.id}>
-                      {v.titulo}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+          {!isLoading && !error && (data?.length ?? 0) > 1 && (
+            <div className="flex flex-wrap items-center gap-3">
+              {vagas.length > 1 && (
+                <div className="flex items-center gap-2">
+                  <label htmlFor="sla-filtro-vaga" className="text-xs text-muted-foreground">
+                    Vaga
+                  </label>
+                  <Select value={filtroEfetivo} onValueChange={setVagaFiltro}>
+                    <SelectTrigger id="sla-filtro-vaga" className="h-8 w-56 text-sm">
+                      <SelectValue placeholder="Todas as vagas" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value={TODAS_AS_VAGAS}>
+                        Todas as vagas ({data?.length ?? 0})
+                      </SelectItem>
+                      {vagas.map((v) => (
+                        <SelectItem key={v.id} value={v.id}>
+                          {v.titulo}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
+
+              <div className="flex items-center gap-2">
+                <label htmlFor="sla-ordem" className="text-xs text-muted-foreground">
+                  Ordenar por
+                </label>
+                <Select value={ordem} onValueChange={(v) => setOrdem(v as OrdemFila)}>
+                  <SelectTrigger id="sla-ordem" className="h-8 w-56 text-sm">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {(Object.keys(ROTULOS_ORDEM) as OrdemFila[]).map((chave) => (
+                      <SelectItem key={chave} value={chave}>
+                        {ROTULOS_ORDEM[chave]}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
           )}
+
 
 
           {podeExportar && (
