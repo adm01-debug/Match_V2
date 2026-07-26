@@ -4297,6 +4297,18 @@ export type Database = {
         }
         Returns: boolean
       }
+      hr_candidatura_timeline: {
+        Args: { p_candidatura_id: string; p_limit?: number }
+        Returns: {
+          created_at: string
+          etapa_anterior: string
+          etapa_nova: string
+          evento_id: string
+          motivo: string
+          responsavel_id: string
+          responsavel_nome: string
+        }[]
+      }
       hr_funnel_sla: {
         Args: { p_dias?: number; p_sla_horas?: number }
         Returns: {
