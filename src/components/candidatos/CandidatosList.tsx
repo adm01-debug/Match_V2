@@ -180,6 +180,20 @@ export function CandidatosList({
                         ))}
                       </div>
 
+                      {/* Perfil técnico estruturado — só renderiza se houver dados */}
+                      <TechProfileBadges
+                        compact
+                        senioridade={c.senioridade}
+                        nivelIngles={c.nivel_ingles}
+                        pretensaoSalarial={c.pretensao_salarial}
+                        pretensaoMoeda={c.pretensao_moeda}
+                        regime={c.regime}
+                        modalidade={c.modalidade}
+                        disponibilidadeDias={c.disponibilidade_dias}
+                        abertoAOportunidades={c.aberto_a_oportunidades}
+                      />
+
+
                       <div className="pt-4 flex gap-2">
                         <Button 
                           className="w-full h-10 rounded-xl group/btn" 
