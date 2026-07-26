@@ -89,13 +89,32 @@ export function SlaOverdueList({ slaHoras = 48 }: SlaOverdueListProps) {
       ? TODAS_AS_VAGAS
       : vagaFiltro;
 
-  const linhas = useMemo(
-    () =>
+  const linhas = useMemo(() => {
+    const base =
       filtroEfetivo === TODAS_AS_VAGAS
         ? (data ?? [])
-        : (data ?? []).filter((l) => l.vaga_id === filtroEfetivo),
-    [data, filtroEfetivo],
-  );
+        : (data ?? []).filter((l) => l.vaga_id === filtroEfetivo);
+
+    // Cópia antes de ordenar: os dados vêm do cache do React Query e mutá-los
+    // in-place quebraria a igualdade referencial esperada pelo cache.
+    const copia = [...base];
+    switch (ordem) {
+      case "espera_asc":
+        return copia.sort((a, b) => a.horas_esperando - b.horas_esperando);
+      case "nome":
+        return copia.sort((a, b) => a.candidato_nome.localeCompare(b.candidato_nome, "pt-BR"));
+      case "vaga":
+        return copia.sort(
+          (a, b) =>
+            a.vaga_titulo.localeCompare(b.vaga_titulo, "pt-BR") ||
+            b.horas_esperando - a.horas_esperando,
+        );
+      case "espera_desc":
+      default:
+        return copia.sort((a, b) => b.horas_esperando - a.horas_esperando);
+    }
+  }, [data, filtroEfetivo, ordem]);
+
 
   const podeExportar = !isLoading && !error && linhas.length > 0;
 
