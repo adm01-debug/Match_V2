@@ -37,6 +37,17 @@ import { SlaRegisterContactButton } from "@/components/analytics/SlaRegisterCont
 /** Sentinela do filtro: Radix Select não aceita item com valor vazio. */
 const TODAS_AS_VAGAS = "__todas__";
 
+/** Ordenações suportadas na fila nominal. */
+type OrdemFila = "espera_desc" | "espera_asc" | "nome" | "vaga";
+
+const ROTULOS_ORDEM: Readonly<Record<OrdemFila, string>> = {
+  espera_desc: "Espera (maior primeiro)",
+  espera_asc: "Espera (menor primeiro)",
+  nome: "Nome do candidato",
+  vaga: "Vaga",
+};
+
+
 interface SlaOverdueListProps {
   readonly slaHoras?: number;
 }
@@ -68,6 +79,8 @@ export function SlaOverdueList({ slaHoras = 48 }: SlaOverdueListProps) {
   const [selecionados, setSelecionados] = useState<ReadonlySet<string>>(new Set());
   const [nota, setNota] = useState("");
   const [vagaFiltro, setVagaFiltro] = useState<string>(TODAS_AS_VAGAS);
+  const [ordem, setOrdem] = useState<OrdemFila>("espera_desc");
+
   const { data, isLoading, error } = useSlaOverdueList({ slaHoras, enabled: aberto });
 
   const registrarLote = useRegisterFirstResponseBatch();
@@ -89,13 +102,32 @@ export function SlaOverdueList({ slaHoras = 48 }: SlaOverdueListProps) {
       ? TODAS_AS_VAGAS
       : vagaFiltro;
 
-  const linhas = useMemo(
-    () =>
+  const linhas = useMemo(() => {
+    const base =
       filtroEfetivo === TODAS_AS_VAGAS
         ? (data ?? [])
-        : (data ?? []).filter((l) => l.vaga_id === filtroEfetivo),
-    [data, filtroEfetivo],
-  );
+        : (data ?? []).filter((l) => l.vaga_id === filtroEfetivo);
+
+    // Cópia antes de ordenar: os dados vêm do cache do React Query e mutá-los
+    // in-place quebraria a igualdade referencial esperada pelo cache.
+    const copia = [...base];
+    switch (ordem) {
+      case "espera_asc":
+        return copia.sort((a, b) => a.horas_esperando - b.horas_esperando);
+      case "nome":
+        return copia.sort((a, b) => a.candidato_nome.localeCompare(b.candidato_nome, "pt-BR"));
+      case "vaga":
+        return copia.sort(
+          (a, b) =>
+            a.vaga_titulo.localeCompare(b.vaga_titulo, "pt-BR") ||
+            b.horas_esperando - a.horas_esperando,
+        );
+      case "espera_desc":
+      default:
+        return copia.sort((a, b) => b.horas_esperando - a.horas_esperando);
+    }
+  }, [data, filtroEfetivo, ordem]);
+
 
   const podeExportar = !isLoading && !error && linhas.length > 0;
 
@@ -196,28 +228,51 @@ export function SlaOverdueList({ slaHoras = 48 }: SlaOverdueListProps) {
             </p>
           )}
 
-          {!isLoading && !error && vagas.length > 1 && (
-            <div className="flex items-center gap-2">
-              <label htmlFor="sla-filtro-vaga" className="text-xs text-muted-foreground">
-                Vaga
-              </label>
-              <Select value={filtroEfetivo} onValueChange={setVagaFiltro}>
-                <SelectTrigger id="sla-filtro-vaga" className="h-8 w-full max-w-xs text-sm">
-                  <SelectValue placeholder="Todas as vagas" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value={TODAS_AS_VAGAS}>
-                    Todas as vagas ({data?.length ?? 0})
-                  </SelectItem>
-                  {vagas.map((v) => (
-                    <SelectItem key={v.id} value={v.id}>
-                      {v.titulo}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+          {!isLoading && !error && (data?.length ?? 0) > 1 && (
+            <div className="flex flex-wrap items-center gap-3">
+              {vagas.length > 1 && (
+                <div className="flex items-center gap-2">
+                  <label htmlFor="sla-filtro-vaga" className="text-xs text-muted-foreground">
+                    Vaga
+                  </label>
+                  <Select value={filtroEfetivo} onValueChange={setVagaFiltro}>
+                    <SelectTrigger id="sla-filtro-vaga" className="h-8 w-56 text-sm">
+                      <SelectValue placeholder="Todas as vagas" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value={TODAS_AS_VAGAS}>
+                        Todas as vagas ({data?.length ?? 0})
+                      </SelectItem>
+                      {vagas.map((v) => (
+                        <SelectItem key={v.id} value={v.id}>
+                          {v.titulo}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
+
+              <div className="flex items-center gap-2">
+                <label htmlFor="sla-ordem" className="text-xs text-muted-foreground">
+                  Ordenar por
+                </label>
+                <Select value={ordem} onValueChange={(v) => setOrdem(v as OrdemFila)}>
+                  <SelectTrigger id="sla-ordem" className="h-8 w-56 text-sm">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {(Object.keys(ROTULOS_ORDEM) as OrdemFila[]).map((chave) => (
+                      <SelectItem key={chave} value={chave}>
+                        {ROTULOS_ORDEM[chave]}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
           )}
+
 
 
           {podeExportar && (
