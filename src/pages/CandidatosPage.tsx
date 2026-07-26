@@ -218,7 +218,22 @@ export default function CandidatosPage() {
             <SlidersHorizontal className="h-4 w-4 mr-2" aria-hidden="true" />
             Filtros{activeFiltersCount > 0 ? ` (${activeFiltersCount})` : ''}
           </Button>
+          <Button
+            variant="outline"
+            onClick={() => exportCsv(filters, total)}
+            disabled={isExporting || total === 0}
+            aria-busy={isExporting}
+            aria-label="Exportar resultados da busca em CSV"
+          >
+            {isExporting ? (
+              <Loader2 className="h-4 w-4 mr-2 animate-spin" aria-hidden="true" />
+            ) : (
+              <Download className="h-4 w-4 mr-2" aria-hidden="true" />
+            )}
+            {isExporting ? `Exportando… ${progress}%` : 'Exportar CSV'}
+          </Button>
         </div>
+
 
         {showFilters && (
           <div id="painel-filtros-talentos">
