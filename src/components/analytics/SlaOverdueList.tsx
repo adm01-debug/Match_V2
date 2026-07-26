@@ -14,11 +14,14 @@ import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useSlaOverdueList, type SlaOverdueRow } from "@/hooks/useSlaOverdueList";
+import { Textarea } from "@/components/ui/textarea";
 import {
+  NOTA_MAX_CHARS,
   useRegisterFirstResponse,
   useRegisterFirstResponseBatch,
 } from "@/hooks/useRegisterFirstResponse";
 import { buildCsv, downloadCsv, type CsvColumn } from "@/lib/csvExport";
+
 
 
 interface SlaOverdueListProps {
