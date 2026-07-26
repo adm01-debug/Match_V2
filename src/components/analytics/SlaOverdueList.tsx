@@ -5,16 +5,21 @@
  * Só busca dados quando aberto (`enabled`), para não onerar quem apenas olha o
  * agregado por vaga.
  */
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { AlertTriangle, CheckCircle2, ChevronDown, ChevronUp, Download, Mail } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useSlaOverdueList, type SlaOverdueRow } from "@/hooks/useSlaOverdueList";
-import { useRegisterFirstResponse } from "@/hooks/useRegisterFirstResponse";
+import {
+  useRegisterFirstResponse,
+  useRegisterFirstResponseBatch,
+} from "@/hooks/useRegisterFirstResponse";
 import { buildCsv, downloadCsv, type CsvColumn } from "@/lib/csvExport";
+
 
 interface SlaOverdueListProps {
   readonly slaHoras?: number;
