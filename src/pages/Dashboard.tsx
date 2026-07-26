@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DashboardHeader } from '@/components/dashboard/sections/DashboardHeader';
 import { DashboardKPIs } from '@/components/dashboard/sections/DashboardKPIs';
+import { SlaAlertBanner } from '@/components/dashboard/SlaAlertBanner';
 
 function DashboardErrorFallback({ error, resetErrorBoundary }: { error: Error; resetErrorBoundary: () => void }) {
   return (
