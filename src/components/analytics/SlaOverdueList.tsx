@@ -55,19 +55,43 @@ export function SlaOverdueList({ slaHoras = 48 }: SlaOverdueListProps) {
   const [aberto, setAberto] = useState(false);
   const [selecionados, setSelecionados] = useState<ReadonlySet<string>>(new Set());
   const [nota, setNota] = useState("");
+  const [vagaFiltro, setVagaFiltro] = useState<string>(TODAS_AS_VAGAS);
   const { data, isLoading, error } = useSlaOverdueList({ slaHoras, enabled: aberto });
 
-
-  
   const registrarLote = useRegisterFirstResponseBatch();
 
-  const podeExportar = !isLoading && !error && (data?.length ?? 0) > 0;
+  // Opções derivadas dos próprios dados: nunca oferecemos uma vaga que já saiu
+  // da fila, evitando filtros que resultam em lista vazia sem explicação.
+  const vagas = useMemo(() => {
+    const mapa = new Map<string, string>();
+    for (const linha of data ?? []) mapa.set(linha.vaga_id, linha.vaga_titulo);
+    return [...mapa.entries()]
+      .map(([id, titulo]) => ({ id, titulo }))
+      .sort((a, b) => a.titulo.localeCompare(b.titulo, "pt-BR"));
+  }, [data]);
+
+  // Se a vaga selecionada desaparece da fila (todos foram respondidos), o filtro
+  // volta sozinho para "todas" em vez de mostrar uma lista vazia enganosa.
+  const filtroEfetivo =
+    vagaFiltro !== TODAS_AS_VAGAS && !vagas.some((v) => v.id === vagaFiltro)
+      ? TODAS_AS_VAGAS
+      : vagaFiltro;
+
+  const linhas = useMemo(
+    () =>
+      filtroEfetivo === TODAS_AS_VAGAS
+        ? (data ?? [])
+        : (data ?? []).filter((l) => l.vaga_id === filtroEfetivo),
+    [data, filtroEfetivo],
+  );
+
+  const podeExportar = !isLoading && !error && linhas.length > 0;
 
   // A lista é revalidada após cada registro: IDs selecionados que já saíram da
-  // fila não podem sobreviver na seleção, senão o lote tentaria reprocessá-los.
+  // fila (ou foram filtrados) não podem sobreviver na seleção.
   const idsVisiveis = useMemo(
-    () => new Set((data ?? []).map((l) => l.candidatura_id)),
-    [data],
+    () => new Set(linhas.map((l) => l.candidatura_id)),
+    [linhas],
   );
   const idsSelecionados = useMemo(
     () => [...selecionados].filter((id) => idsVisiveis.has(id)),
@@ -102,12 +126,12 @@ export function SlaOverdueList({ slaHoras = 48 }: SlaOverdueListProps) {
     );
   };
 
-
   const exportar = () => {
-    if (!data || data.length === 0) return;
+    if (linhas.length === 0) return;
     const hoje = new Date().toISOString().slice(0, 10);
-    downloadCsv(buildCsv(data, COLUNAS_CSV), `sla-atrasadas-${slaHoras}h-${hoje}`);
+    downloadCsv(buildCsv(linhas, COLUNAS_CSV), `sla-atrasadas-${slaHoras}h-${hoje}`);
   };
+
 
 
 
