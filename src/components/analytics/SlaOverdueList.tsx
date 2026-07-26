@@ -27,6 +27,7 @@ function formatarEspera(horas: number): string {
 export function SlaOverdueList({ slaHoras = 48 }: SlaOverdueListProps) {
   const [aberto, setAberto] = useState(false);
   const { data, isLoading, error } = useSlaOverdueList({ slaHoras, enabled: aberto });
+  const registrar = useRegisterFirstResponse();
 
   return (
     <Card>
