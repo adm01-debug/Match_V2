@@ -3,9 +3,11 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
-import { Users, Mail, Phone, Target, Sparkles, Briefcase, GraduationCap, MessageSquare, Trash2 } from 'lucide-react';
+import { Users, Mail, Phone, Target, Sparkles, Briefcase, GraduationCap, MessageSquare, Trash2, Cpu } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ComunicacaoHistorico } from '@/components/candidatos/ComunicacaoHistorico';
+import { CandidatoTechProfileForm } from '@/components/candidatos/CandidatoTechProfileForm';
+import { CandidatoSkillsEditor } from '@/components/candidatos/CandidatoSkillsEditor';
 import { useNavigate } from 'react-router-dom';
 import { Candidato, MatchScore, statusOptions, getStatusConfig, getScoreColor } from '@/types/candidate';
 
@@ -117,6 +119,26 @@ export const CandidatoDetailSheet = memo(function CandidatoDetailSheet({
             </div>
           </div>
         )}
+
+        {/* Perfil técnico estruturado */}
+        <div>
+          <h4 className="text-sm font-medium mb-3 flex items-center gap-2">
+            <Cpu className="h-4 w-4 text-primary" />
+            Perfil Técnico
+          </h4>
+          <CandidatoTechProfileForm candidatoId={candidato.id} />
+        </div>
+
+        {/* Competências da taxonomia */}
+        <div>
+          <h4 className="text-sm font-medium mb-3 flex items-center gap-2">
+            <Sparkles className="h-4 w-4 text-primary" />
+            Competências Estruturadas
+          </h4>
+          <CandidatoSkillsEditor candidatoId={candidato.id} />
+        </div>
+
+
 
         {/* Experience */}
         {candidato.experiencias && candidato.experiencias.length > 0 && (
