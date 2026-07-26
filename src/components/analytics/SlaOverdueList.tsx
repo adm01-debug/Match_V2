@@ -58,7 +58,7 @@ export function SlaOverdueList({ slaHoras = 48 }: SlaOverdueListProps) {
   const { data, isLoading, error } = useSlaOverdueList({ slaHoras, enabled: aberto });
 
 
-  const registrar = useRegisterFirstResponse();
+  
   const registrarLote = useRegisterFirstResponseBatch();
 
   const podeExportar = !isLoading && !error && (data?.length ?? 0) > 0;
