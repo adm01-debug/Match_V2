@@ -159,29 +159,51 @@ export function SlaOverdueList({ slaHoras = 48 }: SlaOverdueListProps) {
           )}
 
           {podeExportar && (
-            <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg bg-muted/50 p-2">
-              <label className="flex items-center gap-2 text-sm">
-                <Checkbox
-                  checked={idsVisiveis.size > 0 && idsSelecionados.length === idsVisiveis.size}
-                  onCheckedChange={alternarTodos}
-                  aria-label="Selecionar todas as candidaturas atrasadas"
-                />
-                {idsSelecionados.length > 0
-                  ? `${idsSelecionados.length} selecionada(s)`
-                  : "Selecionar todas"}
-              </label>
-              <Button
-                size="sm"
-                disabled={idsSelecionados.length === 0 || registrarLote.isPending}
-                onClick={registrarSelecionados}
-              >
-                <CheckCircle2 className="mr-1 h-4 w-4" aria-hidden="true" />
-                {registrarLote.isPending
-                  ? "Registrando..."
-                  : `Registrar contato em lote${idsSelecionados.length > 0 ? ` (${idsSelecionados.length})` : ""}`}
-              </Button>
+            <div className="space-y-2 rounded-lg bg-muted/50 p-2">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <label className="flex items-center gap-2 text-sm">
+                  <Checkbox
+                    checked={idsVisiveis.size > 0 && idsSelecionados.length === idsVisiveis.size}
+                    onCheckedChange={alternarTodos}
+                    aria-label="Selecionar todas as candidaturas atrasadas"
+                  />
+                  {idsSelecionados.length > 0
+                    ? `${idsSelecionados.length} selecionada(s)`
+                    : "Selecionar todas"}
+                </label>
+                <Button
+                  size="sm"
+                  disabled={idsSelecionados.length === 0 || registrarLote.isPending}
+                  onClick={registrarSelecionados}
+                >
+                  <CheckCircle2 className="mr-1 h-4 w-4" aria-hidden="true" />
+                  {registrarLote.isPending
+                    ? "Registrando..."
+                    : `Registrar contato em lote${idsSelecionados.length > 0 ? ` (${idsSelecionados.length})` : ""}`}
+                </Button>
+              </div>
+              {idsSelecionados.length > 0 && (
+                <div className="space-y-1">
+                  <label htmlFor="sla-nota-lote" className="text-xs text-muted-foreground">
+                    Nota do contato (opcional) — fica no histórico de cada candidatura
+                  </label>
+                  <Textarea
+                    id="sla-nota-lote"
+                    value={nota}
+                    maxLength={NOTA_MAX_CHARS}
+                    rows={2}
+                    disabled={registrarLote.isPending}
+                    placeholder="Ex.: retorno por e-mail com alinhamento de expectativas"
+                    onChange={(e) => setNota(e.target.value)}
+                  />
+                  <p className="text-right text-xs text-muted-foreground">
+                    {nota.length}/{NOTA_MAX_CHARS}
+                  </p>
+                </div>
+              )}
             </div>
           )}
+
 
           {data?.map((linha) => (
             <div
