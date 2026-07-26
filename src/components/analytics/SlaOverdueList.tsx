@@ -238,15 +238,11 @@ export function SlaOverdueList({ slaHoras = 48 }: SlaOverdueListProps) {
                     </a>
                   </Button>
                 )}
-                <Button
-                  size="sm"
-                  variant="outline"
-                  disabled={registrar.isPending}
-                  onClick={() => registrar.mutate({ candidaturaId: linha.candidatura_id })}
-                >
-                  <CheckCircle2 className="mr-1 h-4 w-4" aria-hidden="true" />
-                  Registrar contato
-                </Button>
+                <SlaRegisterContactButton
+                  candidaturaId={linha.candidatura_id}
+                  candidatoNome={linha.candidato_nome}
+                />
+
               </div>
 
             </div>
