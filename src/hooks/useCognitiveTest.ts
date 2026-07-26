@@ -71,32 +71,36 @@ function mapPorDominio(bruto: unknown): CognitiveResult["porDominio"] {
     if (typeof valor !== "object" || valor === null) continue;
     const v = valor as Record<string, unknown>;
     saida[chave] = {
-      itens: Number(v.itens ?? 0),
-      acertos: Number(v.acertos ?? 0),
-      percentual: Number(v.percentual ?? 0),
-      tempoMedioSeg: Number(v.tempo_medio_seg ?? 0),
+      itens: Number(v["itens"] ?? 0),
+      acertos: Number(v["acertos"] ?? 0),
+      percentual: Number(v["percentual"] ?? 0),
+      tempoMedioSeg: Number(v["tempo_medio_seg"] ?? 0),
     };
   }
   return saida as CognitiveResult["porDominio"];
+}
+
+/** Converte um campo numérico opcional preservando a distinção entre 0 e ausente. */
+function numeroOuNulo(valor: unknown): number | null {
+  if (valor === null || valor === undefined) return null;
+  const convertido = Number(valor);
+  return Number.isFinite(convertido) ? convertido : null;
 }
 
 function mapResult(bruto: unknown): CognitiveResult | null {
   if (typeof bruto !== "object" || bruto === null) return null;
   const r = bruto as Record<string, unknown>;
   return {
-    sessionId: String(r.session_id ?? ""),
-    status: (r.status as CognitiveSessionStatus) ?? "em_andamento",
-    scoreBruto: r.score_bruto === null || r.score_bruto === undefined ? null : Number(r.score_bruto),
-    totalItens: Number(r.total_itens ?? 0),
-    scoreNormalizado:
-      r.score_normalizado === null || r.score_normalizado === undefined
-        ? null
-        : Number(r.score_normalizado),
-    porDominio: mapPorDominio(r.por_dominio),
-    percentil: r.percentil === null || r.percentil === undefined ? null : Number(r.percentil),
-    amostraNormativa: Number(r.amostra_normativa ?? 0),
-    iniciadaEm: (r.iniciada_em as string | null) ?? null,
-    finalizadaEm: (r.finalizada_em as string | null) ?? null,
+    sessionId: String(r["session_id"] ?? ""),
+    status: (r["status"] as CognitiveSessionStatus | undefined) ?? "em_andamento",
+    scoreBruto: numeroOuNulo(r["score_bruto"]),
+    totalItens: Number(r["total_itens"] ?? 0),
+    scoreNormalizado: numeroOuNulo(r["score_normalizado"]),
+    porDominio: mapPorDominio(r["por_dominio"]),
+    percentil: numeroOuNulo(r["percentil"]),
+    amostraNormativa: Number(r["amostra_normativa"] ?? 0),
+    iniciadaEm: (r["iniciada_em"] as string | null | undefined) ?? null,
+    finalizadaEm: (r["finalizada_em"] as string | null | undefined) ?? null,
   };
 }
 
