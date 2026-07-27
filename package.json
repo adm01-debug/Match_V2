@@ -116,7 +116,7 @@
     "@commitlint/cli": "^19.6.1",
     "@commitlint/config-conventional": "^19.6.0",
     "@eslint/js": "^9.32.0",
-    "@faker-js/faker": "^9.3.0",
+    "@faker-js/faker": "^10.4.0",
     "@playwright/test": "1.57.0",
     "@sentry/react": "^8.43.0",
     "@storybook/addon-a11y": "^8.4.7",
