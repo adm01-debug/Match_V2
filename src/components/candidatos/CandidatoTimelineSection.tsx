@@ -27,12 +27,13 @@ export function CandidatoTimelineSection({ email }: CandidatoTimelineSectionProp
   // A seleção acompanha os dados: se a lista mudar, o id antigo pode não
   // existir mais e deixaria a timeline consultando um registro inválido.
   useEffect(() => {
-    if (candidaturas.length === 0) {
+    const primeira = candidaturas[0];
+    if (!primeira) {
       setSelecionada("");
       return;
     }
     if (!candidaturas.some((c) => c.id === selecionada)) {
-      setSelecionada(candidaturas[0].id);
+      setSelecionada(primeira.id);
     }
   }, [candidaturas, selecionada]);
 
