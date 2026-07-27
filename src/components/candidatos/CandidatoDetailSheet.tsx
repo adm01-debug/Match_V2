@@ -183,6 +183,9 @@ export const CandidatoDetailSheet = memo(function CandidatoDetailSheet({
           </div>
         )}
 
+        {/* Timeline de etapas e contatos */}
+        <CandidatoTimelineSection email={candidato.email} />
+
         {/* Communication History */}
         <div>
           <h4 className="text-sm font-medium mb-3 flex items-center gap-2">
