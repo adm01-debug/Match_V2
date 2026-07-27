@@ -9,6 +9,7 @@ import { ComunicacaoHistorico } from '@/components/candidatos/ComunicacaoHistori
 import { CandidatoTechProfileForm } from '@/components/candidatos/CandidatoTechProfileForm';
 import { PotentialIndexCard } from '@/components/candidatos/PotentialIndexCard';
 import { CandidatoSkillsEditor } from '@/components/candidatos/CandidatoSkillsEditor';
+import { CandidatoTimelineSection } from '@/components/candidatos/CandidatoTimelineSection';
 import { useNavigate } from 'react-router-dom';
 import { Candidato, MatchScore, statusOptions, getStatusConfig, getScoreColor } from '@/types/candidate';
 
