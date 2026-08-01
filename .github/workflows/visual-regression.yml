@@ -15,6 +15,6 @@ jobs:
           node-version: 20
           cache: 'npm'
       - run: npm ci
-      - uses: chromaui/action@v1
+      - uses: chromaui/action@v18
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
