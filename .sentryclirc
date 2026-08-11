@@ -1,0 +1,7 @@
+[defaults]
+org=match-ats
+project=match-frontend
+
+[auth]
+# Token should be set via SENTRY_AUTH_TOKEN env variable
+# token=your-auth-token-here

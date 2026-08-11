@@ -1,0 +1,16 @@
+supabase/functions/webhook-handler/index.ts
+supabase/functions/github-api/index.ts
+supabase/functions/send-whatsapp/index.ts
+supabase/functions/send-email/index.ts
+supabase/functions/geo-check/index.ts
+supabase/functions/cultural-fit/index.ts
+supabase/functions/password-reset-approval/index.ts
+supabase/functions/parse-resume/index.ts
+supabase/functions/evolution-health/index.ts
+supabase/functions/behavioral-analysis/index.ts
+supabase/functions/evolution-api/index.ts
+supabase/functions/match-score/index.ts
+supabase/functions/new-device-alert/index.ts
+supabase/functions/ai-assistant/index.ts
+supabase/functions/ip-guard/index.ts
+supabase/functions/interview-reminders/index.ts

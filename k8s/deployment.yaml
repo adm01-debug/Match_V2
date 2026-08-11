@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: match-ats
+  labels:
+    app: match-ats
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: match-ats
+  template:
+    metadata:
+      labels:
+        app: match-ats
+    spec:
+      containers:
+      - name: match-ats
+        image: match-ats:latest
+        ports:
+        - containerPort: 80
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5

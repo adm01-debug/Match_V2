@@ -1,0 +1,75 @@
+# PR Labeler Configuration
+# Automatically labels PRs based on changed files
+
+# Documentation
+documentation:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'docs/**/*'
+      - '*.md'
+      - '.storybook/**/*'
+
+# Tests
+tests:
+  - changed-files:
+    - any-glob-to-any-file:
+      - '**/*.test.ts'
+      - '**/*.test.tsx'
+      - '**/*.spec.ts'
+      - 'e2e/**/*'
+
+# Components
+components:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'src/components/**/*'
+
+# Hooks
+hooks:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'src/hooks/**/*'
+
+# Pages
+pages:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'src/pages/**/*'
+
+# API/Services
+api:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'src/services/**/*'
+      - 'supabase/**/*'
+
+# Configuration
+config:
+  - changed-files:
+    - any-glob-to-any-file:
+      - '*.config.*'
+      - '.github/**/*'
+      - 'package.json'
+      - 'tsconfig.json'
+
+# Styles
+styles:
+  - changed-files:
+    - any-glob-to-any-file:
+      - '**/*.css'
+      - 'tailwind.config.*'
+
+# CI/CD
+ci:
+  - changed-files:
+    - any-glob-to-any-file:
+      - '.github/workflows/**/*'
+      - 'Dockerfile*'
+      - 'k8s/**/*'
+
+# Dependencies
+dependencies:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'package.json'
+      - 'package-lock.json'

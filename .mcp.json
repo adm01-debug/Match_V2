@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "supabase-match-v2": {
+      "type": "http",
+      "url": "https://supabase-match-v2-mcp.adm01.workers.dev/a653b539c29cf456e599471afe7e120ccb81c671/mcp"
+    }
+  }
+}

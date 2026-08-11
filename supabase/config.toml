@@ -1,0 +1,19 @@
+project_id = "syinhicmyrsdeaeyayjs"
+
+[functions.health]
+verify_jwt = false
+
+[functions.resend-webhook]
+verify_jwt = false
+
+[functions.proactive-alerts]
+verify_jwt = false
+
+[functions.public-apply]
+verify_jwt = false
+
+[functions.sign-proposal]
+verify_jwt = false
+
+[functions.migrate-helper]
+verify_jwt = false

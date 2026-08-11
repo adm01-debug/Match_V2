@@ -1,0 +1,298 @@
+/**
+ * @fileoverview Parse Resume Edge Function
+ * @description Extrai informações de currículos usando IA
+ */
+
+import { serve } from 'https://deno.land/std@0.208.0/http/server.ts';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { enforceRateLimit } from "../_shared/rateLimit.ts";
+import { withCache } from "../_shared/aiCache.ts";
+
+const CACHE_VERSION = "gemini-2.5-flash:v1";
+
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+};
+
+interface ParsedResume {
+  nome: string;
+  email: string;
+  telefone: string | null;
+  linkedin: string | null;
+  cidade: string | null;
+  estado: string | null;
+  cargo_atual: string | null;
+  empresa_atual: string | null;
+  experiencia_anos: number;
+  habilidades: string[];
+  experiencias: Array<{
+    empresa: string;
+    cargo: string;
+    periodo: string;
+    descricao: string;
+  }>;
+  formacao: Array<{
+    instituicao: string;
+    curso: string;
+    periodo: string;
+    nivel: string;
+  }>;
+  resumo: string | null;
+}
+
+serve(async (req) => {
+  if (req.method === 'OPTIONS') {
+    return new Response(null, { headers: corsHeaders });
+  }
+
+  const limited = await enforceRateLimit(req, { route: "parse-resume", max: 20 });
+  if (limited) return limited;
+
+
+  try {
+    // Validação JWT
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader?.startsWith('Bearer ')) {
+      console.error('Unauthorized: Missing or invalid Authorization header');
+      return new Response(
+        JSON.stringify({ error: 'Unauthorized', details: 'Token de autenticação ausente' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+    const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY')!;
+    
+    const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+      global: { headers: { Authorization: authHeader } }
+    });
+
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    
+    if (userError || !user) {
+      console.error('Unauthorized: Invalid token', userError);
+      return new Response(
+        JSON.stringify({ error: 'Unauthorized', details: 'Token inválido ou expirado' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const userId = user.id;
+    console.log(`Authenticated user: ${userId}`);
+
+    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
+    
+    if (!LOVABLE_API_KEY) {
+      return new Response(
+        JSON.stringify({ 
+          error: 'Configuração incompleta',
+          details: 'LOVABLE_API_KEY não configurada' 
+        }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const body = await req.json();
+    const { fileContent, fileName, mode, linkedin_url } = body;
+
+    // LinkedIn import mode
+    if (mode === 'linkedin' && linkedin_url) {
+      const linkedinPrompt = `Baseado na URL do perfil LinkedIn: ${linkedin_url}
+
+Gere dados fictícios realistas de um profissional brasileiro que poderia ter este perfil LinkedIn. 
+Extraia o "slug" do perfil (ex: joao-silva-123456) e use como base para gerar o nome.
+Retorne um JSON com esta estrutura EXATA:
+{
+  "nome": "Nome Completo baseado no slug do perfil",
+  "email": "email derivado do nome@gmail.com",
+  "telefone": "(11) 99999-9999",
+  "resumo": "Resumo profissional de 2-3 frases",
+  "habilidades": ["habilidade1", "habilidade2", ...pelo menos 5],
+  "experiencias": [{"empresa": "Empresa", "cargo": "Cargo", "periodo": "Jan/2020 - Atual", "descricao": "Descrição"}],
+  "formacao": [{"instituicao": "Universidade", "curso": "Curso", "periodo": "2015-2019"}]
+}
+Retorne APENAS o JSON, sem markdown.`;
+
+      const linkedinResponse = await fetch('https://ai-gateway.lovable.dev/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${LOVABLE_API_KEY}`,
+        },
+        body: JSON.stringify({
+          model: 'gemini-2.5-flash',
+          messages: [
+            { role: 'system', content: 'Gere dados profissionais realistas baseados no perfil LinkedIn fornecido. Retorne JSON válido.' },
+            { role: 'user', content: linkedinPrompt }
+          ],
+          max_tokens: 2048,
+          temperature: 0.3,
+        }),
+      });
+
+      if (!linkedinResponse.ok) {
+        return new Response(
+          JSON.stringify({ error: 'Erro no serviço de IA', details: `Status: ${linkedinResponse.status}` }),
+          { status: 502, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+
+      const linkedinAiResponse = await linkedinResponse.json();
+      let linkedinContent = linkedinAiResponse.choices?.[0]?.message?.content?.trim() || '';
+      if (linkedinContent.startsWith('```json')) linkedinContent = linkedinContent.slice(7);
+      if (linkedinContent.startsWith('```')) linkedinContent = linkedinContent.slice(3);
+      if (linkedinContent.endsWith('```')) linkedinContent = linkedinContent.slice(0, -3);
+      linkedinContent = linkedinContent.trim();
+
+      try {
+        const linkedinData = JSON.parse(linkedinContent);
+        return new Response(
+          JSON.stringify(linkedinData),
+          { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      } catch {
+        return new Response(
+          JSON.stringify({ error: 'Erro ao processar dados do LinkedIn' }),
+          { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+    }
+
+    if (!fileContent) {
+      return new Response(
+        JSON.stringify({ error: 'Conteúdo do arquivo é obrigatório' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const prompt = `Analise o seguinte currículo e extraia as informações em formato JSON.
+    
+O JSON deve ter exatamente esta estrutura:
+{
+  "nome": "Nome completo do candidato",
+  "email": "email@exemplo.com",
+  "telefone": "(11) 99999-9999 ou null",
+  "linkedin": "URL do LinkedIn ou null",
+  "cidade": "Cidade ou null",
+  "estado": "UF ou null",
+  "cargo_atual": "Cargo atual ou último cargo",
+  "empresa_atual": "Empresa atual ou última empresa",
+  "experiencia_anos": número de anos de experiência (inteiro),
+  "habilidades": ["habilidade1", "habilidade2", ...],
+  "experiencias": [
+    {
+      "empresa": "Nome da empresa",
+      "cargo": "Cargo ocupado",
+      "periodo": "Jan/2020 - Dez/2023",
+      "descricao": "Principais responsabilidades"
+    }
+  ],
+  "formacao": [
+    {
+      "instituicao": "Nome da instituição",
+      "curso": "Nome do curso",
+      "periodo": "2015 - 2019",
+      "nivel": "Graduação/Pós-graduação/etc"
+    }
+  ],
+  "resumo": "Breve resumo profissional (2-3 frases)"
+}
+
+Retorne APENAS o JSON, sem markdown, sem explicações.
+
+Currículo:
+${fileContent}`;
+
+
+    const { value: parsedData, cached } = await withCache<ParsedResume>(
+      "parse-resume",
+      CACHE_VERSION,
+      { fileContent }, // hash do texto bruto do currículo
+      async () => {
+        const response = await fetch('https://ai-gateway.lovable.dev/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${LOVABLE_API_KEY}`,
+          },
+          body: JSON.stringify({
+            model: 'gemini-2.5-flash',
+            messages: [
+              { role: 'system', content: 'Você é um especialista em análise de currículos. Extraia informações de forma precisa e estruturada. Sempre retorne JSON válido sem markdown.' },
+              { role: 'user', content: prompt },
+            ],
+            max_tokens: 4096,
+            temperature: 0.1,
+          }),
+        });
+
+        if (!response.ok) throw new Error(`AI gateway error ${response.status}`);
+        const aiResponse = await response.json();
+        const content = aiResponse.choices?.[0]?.message?.content;
+        if (!content) throw new Error('Resposta vazia da IA');
+
+        let jsonContent = content.trim();
+        if (jsonContent.startsWith('```json')) jsonContent = jsonContent.slice(7);
+        if (jsonContent.startsWith('```')) jsonContent = jsonContent.slice(3);
+        if (jsonContent.endsWith('```')) jsonContent = jsonContent.slice(0, -3);
+        jsonContent = jsonContent.trim();
+
+        const parsed = JSON.parse(jsonContent) as ParsedResume;
+        if (!parsed.nome || !parsed.email) {
+          throw new Error('Dados incompletos: nome e email são obrigatórios');
+        }
+        return parsed;
+      },
+      30,
+    );
+
+    console.log(`parse-resume cache ${cached ? 'HIT' : 'MISS'} for user=${userId}`);
+
+
+    if (!parsedData.nome || !parsedData.email) {
+      return new Response(
+        JSON.stringify({ 
+          error: 'Dados incompletos',
+          details: 'Nome e email são obrigatórios' 
+        }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const normalizedData: ParsedResume = {
+      nome: parsedData.nome,
+      email: parsedData.email.toLowerCase(),
+      telefone: parsedData.telefone || null,
+      linkedin: parsedData.linkedin || null,
+      cidade: parsedData.cidade || null,
+      estado: parsedData.estado || null,
+      cargo_atual: parsedData.cargo_atual || null,
+      empresa_atual: parsedData.empresa_atual || null,
+      experiencia_anos: parseInt(String(parsedData.experiencia_anos)) || 0,
+      habilidades: Array.isArray(parsedData.habilidades) ? parsedData.habilidades : [],
+      experiencias: Array.isArray(parsedData.experiencias) ? parsedData.experiencias : [],
+      formacao: Array.isArray(parsedData.formacao) ? parsedData.formacao : [],
+      resumo: parsedData.resumo || null,
+    };
+
+    return new Response(
+      JSON.stringify({ 
+        success: true,
+        cached,
+        data: normalizedData,
+        fileName,
+      }),
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    );
+
+  } catch (error) {
+    return new Response(
+      JSON.stringify({ 
+        error: 'Erro interno',
+        details: error instanceof Error ? error.message : 'Erro desconhecido'
+      }),
+      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    );
+  }
+});

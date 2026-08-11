@@ -1,0 +1,24 @@
+name: Sentry DSN Gate
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  sentry-dsn-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verificar presença de VITE_SENTRY_DSN em produção
+        env:
+          VITE_SENTRY_DSN: ${{ secrets.VITE_SENTRY_DSN }}
+        run: |
+          if [ -z "$VITE_SENTRY_DSN" ]; then
+            echo "::error::VITE_SENTRY_DSN ausente. Configure o secret antes de fazer merge em main."
+            exit 1
+          fi
+          echo "Sentry DSN configurado."

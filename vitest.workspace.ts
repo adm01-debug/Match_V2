@@ -1,0 +1,20 @@
+import { defineWorkspace } from 'vitest/config';
+
+export default defineWorkspace([
+  {
+    extends: './vitest.config.ts',
+    test: {
+      name: 'unit',
+      include: ['src/**/*.test.{ts,tsx}'],
+      environment: 'jsdom',
+    },
+  },
+  {
+    extends: './vitest.config.ts',
+    test: {
+      name: 'integration',
+      include: ['src/**/*.integration.test.{ts,tsx}'],
+      environment: 'jsdom',
+    },
+  },
+]);
