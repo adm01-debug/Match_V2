@@ -49,10 +49,10 @@ class Logger {
 
   constructor() {
     const isDev = import.meta.env.DEV || import.meta.env['MODE'] === 'development';
-    
+
     this.config = {
       enabled: true,
-      minLevel: isDev ? 'debug' : 'warn',
+      minLevel: isDev ? 'warn' : 'warn',
       sendToServer: !isDev,
       serverEndpoint: '/api/logs',
     };

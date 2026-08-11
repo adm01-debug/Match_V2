@@ -49,7 +49,20 @@ export function LoginForm({ onLogin, onDemoLogin, onCreateDemo, isLoading }: Log
           <Label htmlFor="login-email">Email</Label>
           <div className="relative group">
             <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
-            <Input id="login-email" type="email" placeholder="seu@email.com" className="pl-10 h-11 border-border focus:border-primary focus:ring-primary/20" value={loginData.email} onChange={(e) => setLoginData({ ...loginData, email: e.target.value })} />
+            <Input
+              id="login-email"
+              type="email"
+              placeholder="seu@email.com"
+              autoComplete="off"
+              autoCorrect="off"
+              autoCapitalize="off"
+              spellCheck={false}
+              data-form-type="other"
+              data-lpignore="true"
+              className="pl-10 h-11 border-border focus:border-primary focus:ring-primary/20"
+              value={loginData.email}
+              onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
+            />
           </div>
           {errors['email'] && <motion.p initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} className="text-sm text-destructive">{errors['email']}</motion.p>}
         </div>
@@ -57,7 +70,20 @@ export function LoginForm({ onLogin, onDemoLogin, onCreateDemo, isLoading }: Log
           <Label htmlFor="login-password">Senha</Label>
           <div className="relative group">
             <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
-            <Input id="login-password" type="password" placeholder="••••••••" className="pl-10 h-11 border-border focus:border-primary focus:ring-primary/20" value={loginData.password} onChange={(e) => setLoginData({ ...loginData, password: e.target.value })} />
+            <Input
+              id="login-password"
+              type="password"
+              placeholder="••••••••"
+              autoComplete="new-password"
+              autoCorrect="off"
+              autoCapitalize="off"
+              spellCheck={false}
+              data-form-type="other"
+              data-lpignore="true"
+              className="pl-10 h-11 border-border focus:border-primary focus:ring-primary/20"
+              value={loginData.password}
+              onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
+            />
           </div>
           {errors['password'] && <motion.p initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} className="text-sm text-destructive">{errors['password']}</motion.p>}
         </div>

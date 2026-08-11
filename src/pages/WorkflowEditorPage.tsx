@@ -9,22 +9,27 @@ import { Switch } from '@/components/ui/switch';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { PlusCircle, Settings, Trash2, GitBranch } from 'lucide-react';
+import { PlusCircle, Settings, Trash2, GitBranch, Sparkles } from 'lucide-react';
 import { useWorkflow } from '@/hooks/useWorkflow';
+import { useRegrasAutomacao } from '@/hooks/useRegrasAutomacao';
 import { WorkflowCanvas } from '@/components/workflow/WorkflowCanvas';
 import { useToast } from '@/hooks/use-toast';
 
 export default function WorkflowEditorPage() {
   usePageTitle('Workflows');
   const { toast } = useToast();
-  const { workflows, createWorkflow, updateWorkflow, deleteWorkflow, toggleActive } = useWorkflow();
+  const { workflows: localWorkflows, createWorkflow, updateWorkflow, deleteWorkflow, toggleActive } = useWorkflow();
+  const { workflows: dbWorkflows } = useRegrasAutomacao();
+
+  const workflows = [...dbWorkflows, ...localWorkflows];
+  const isFromDb = (id: string) => dbWorkflows.some(w => w.id === id);
   
   const [editingId, setEditingId] = useState<string | null>(null);
   const [newName, setNewName] = useState('');
   const [newDescription, setNewDescription] = useState('');
   const [showCreate, setShowCreate] = useState(false);
 
-  const editingWorkflow = workflows.find(w => w.id === editingId);
+  const editingWorkflow = editingId ? workflows.find(w => w.id === editingId) : undefined;
 
   const handleCreate = () => {
     if (!newName.trim()) return;
@@ -132,40 +137,63 @@ export default function WorkflowEditorPage() {
               </Card>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {workflows.map(workflow => (
-                  <Card key={workflow.id} className="hover:shadow-md transition-shadow">
-                    <CardHeader className="pb-3">
-                      <div className="flex items-center justify-between">
-                        <CardTitle className="text-base">{workflow.name}</CardTitle>
-                        <Switch
-                          checked={workflow.active}
-                          onCheckedChange={() => toggleActive(workflow.id)}
-                        />
-                      </div>
-                      {workflow.description && (
-                        <CardDescription>{workflow.description}</CardDescription>
-                      )}
-                    </CardHeader>
-                    <CardContent>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <Badge variant="outline">{(workflow.nodes as unknown[]).length} nós</Badge>
-                          <Badge variant={workflow.active ? 'default' : 'secondary'}>
-                            {workflow.active ? 'Ativo' : 'Inativo'}
-                          </Badge>
+                {workflows.map(workflow => {
+                  const fromDb = isFromDb(workflow.id);
+                  return (
+                    <Card key={workflow.id} className="hover:shadow-md transition-shadow">
+                      <CardHeader className="pb-3">
+                        <div className="flex items-center justify-between gap-2">
+                          <CardTitle className="text-base flex items-center gap-2">
+                            {workflow.name}
+                            {fromDb && (
+                              <Badge variant="outline" className="text-xs">
+                                <Sparkles className="h-3 w-3 mr-1" /> Sistema
+                              </Badge>
+                            )}
+                          </CardTitle>
+                          <Switch
+                            checked={workflow.active}
+                            disabled={fromDb}
+                            onCheckedChange={() => toggleActive(workflow.id)}
+                          />
                         </div>
-                        <div className="flex gap-1">
-                          <Button variant="ghost" size="icon" onClick={() => setEditingId(workflow.id)}>
-                            <Settings className="h-4 w-4" />
-                          </Button>
-                          <Button variant="ghost" size="icon" onClick={() => deleteWorkflow(workflow.id)}>
-                            <Trash2 className="h-4 w-4 text-destructive" />
-                          </Button>
+                        {workflow.description && (
+                          <CardDescription>{workflow.description}</CardDescription>
+                        )}
+                      </CardHeader>
+                      <CardContent>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <Badge variant="outline">{(workflow.nodes as unknown[]).length} nós</Badge>
+                            <Badge variant={workflow.active ? 'default' : 'secondary'}>
+                              {workflow.active ? 'Ativo' : 'Inativo'}
+                            </Badge>
+                          </div>
+                          <div className="flex gap-1">
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              disabled={fromDb}
+                              onClick={() => setEditingId(workflow.id)}
+                              title={fromDb ? 'Workflows do sistema são somente leitura' : 'Editar'}
+                            >
+                              <Settings className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              disabled={fromDb}
+                              onClick={() => deleteWorkflow(workflow.id)}
+                              title={fromDb ? 'Workflows do sistema são somente leitura' : 'Excluir'}
+                            >
+                              <Trash2 className="h-4 w-4 text-destructive" />
+                            </Button>
+                          </div>
                         </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
+                      </CardContent>
+                    </Card>
+                  );
+                })}
               </div>
             )}
           </div>

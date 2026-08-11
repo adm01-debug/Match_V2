@@ -114,12 +114,17 @@ export default function LoginPage() {
                     className="pl-10"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    autoComplete="email"
+                    autoComplete="off"
+                    autoCorrect="off"
+                    autoCapitalize="off"
+                    spellCheck={false}
+                    data-form-type="other"
+                    data-lpignore="true"
                   />
                 </div>
                 {errors['email'] && <p className="text-sm text-destructive">{errors['email']}</p>}
               </div>
-              
+
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <Label htmlFor="password">Senha</Label>
@@ -136,7 +141,12 @@ export default function LoginPage() {
                     className="pl-10"
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                    autoComplete="current-password"
+                    autoComplete="new-password"
+                    autoCorrect="off"
+                    autoCapitalize="off"
+                    spellCheck={false}
+                    data-form-type="other"
+                    data-lpignore="true"
                   />
                 </div>
                 {errors['password'] && <p className="text-sm text-destructive">{errors['password']}</p>}

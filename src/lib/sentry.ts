@@ -9,7 +9,8 @@ let initialized = false;
 export function initSentry(): void {
   if (initialized) return;
   const dsn = import.meta.env['VITE_SENTRY_DSN'] as string | undefined;
-  if (!dsn) return; // Sentry desativado quando DSN não configurado
+  // Sentry desativado quando DSN não configurado ou ainda é placeholder
+  if (!dsn || dsn.includes('your-sentry-dsn')) return;
 
   Sentry.init({
     dsn,

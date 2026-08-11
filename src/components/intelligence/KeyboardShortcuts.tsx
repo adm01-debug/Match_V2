@@ -269,6 +269,19 @@ export function useKeyboardShortcuts({ shortcuts, enabled = true }: UseKeyboardS
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (!enabled) return;
 
+    // Não disparar atalhos quando o usuário está digitando em inputs
+    const target = e.target as HTMLElement | null;
+    const isInputField =
+      target?.tagName === 'INPUT' ||
+      target?.tagName === 'TEXTAREA' ||
+      target?.tagName === 'SELECT' ||
+      target?.isContentEditable === true;
+
+    // Permitir apenas Escape e ? em campos de input
+    if (isInputField && !['Escape', '?'].includes(e.key)) {
+      return;
+    }
+
     // Toggle overlay with ?
     if (e.key === '?' && !e.ctrlKey && !e.metaKey) {
       e.preventDefault();
@@ -277,6 +290,8 @@ export function useKeyboardShortcuts({ shortcuts, enabled = true }: UseKeyboardS
     }
 
     // Check for matching shortcuts
+    if (!e.key) return;
+
     shortcuts.forEach((shortcut) => {
       const keys = shortcut.keys.map(k => k.toLowerCase());
       const pressedKeys: string[] = [];
