@@ -1,4 +1,4 @@
-## 0.1.0 (2026-08-02)
+## 0.1.0 (2026-08-11)
 
 
 ### Features
@@ -276,6 +276,7 @@
 * lib index ([1ef7d00](https://github.com/adm01-debug/match-v2/commit/1ef7d0074a80c8ad242a74fd365ba4576a0f9f1f))
 * **meetings:** add Zoom/Meet service [12/67] ([fe65384](https://github.com/adm01-debug/match-v2/commit/fe65384b8b8a73463f4ae26cd3b63f27c509ac52))
 * melhorar loading state com Skeleton no CandidatosPage.tsx ([8fec599](https://github.com/adm01-debug/match-v2/commit/8fec5996b13808db46ae53ab5ebd31036b4e7df1))
+* Migração Banco Lovable para Supabase Match - V2 ([d545e2c](https://github.com/adm01-debug/match-v2/commit/d545e2cb4dfacd375d577bb052fa9d21c97483c1))
 * migrar mock para produção - useATSData ([6c5d43b](https://github.com/adm01-debug/match-v2/commit/6c5d43b3954a07289f726bc154fc88e02f866dec))
 * migration produção - ATS tables ([482bdfd](https://github.com/adm01-debug/match-v2/commit/482bdfdf01a5b0b3d33bd8c1c5275d1ec5fec0d6))
 * **multi-tenant:** add multi-tenant migration [v11 31/67] ([7267d54](https://github.com/adm01-debug/match-v2/commit/7267d54c03ffb45bf4d4030cb25c13a85fafd916))
