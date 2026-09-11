@@ -1,68 +1,14 @@
-name: Install mcp_exec on ORIGEM (audit tooling, run-once)
+# Workflow removido — diagnóstico concluído.
+# db.syinhicmyrsdeaeyayjs.supabase.co resolve apenas para IPv6 (2600:1f14:b9e::)
+# e o pooler Supabase Cloud não serve esse tenant (projeto na org Lovable, não na conta do cliente).
+# Para instalar mcp_exec na ORIGEM, use o SQL Editor do Lovable Studio:
+# https://lovable.dev → projeto Match_V2 → Supabase → SQL Editor
 
+name: _removed_install-mcp-exec
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - '.github/workflows/install-mcp-exec.yml'
-
 jobs:
-  install:
+  noop:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
     steps:
-      - name: Install postgresql-client
-        run: sudo apt-get install -y --quiet postgresql-client
-
-      - name: Debug DNS + connectivity
-        env:
-          PGPASSWORD: "uTUg2HHbDHD4goQxM-nH6Rx0vSXjvt8u"
-        run: |
-          echo "=== DNS lookup ==="
-          getent ahosts db.syinhicmyrsdeaeyayjs.supabase.co || true
-          getent ahostsv4 db.syinhicmyrsdeaeyayjs.supabase.co || echo "No IPv4 for direct host"
-          getent ahosts aws-0-sa-east-1.pooler.supabase.com || true
-          echo "=== Test pooler ==="
-          PGPASSWORD="uTUg2HHbDHD4goQxM-nH6Rx0vSXjvt8u" psql \
-            -h aws-0-sa-east-1.pooler.supabase.com \
-            -p 6543 \
-            -U postgres.syinhicmyrsdeaeyayjs \
-            -d postgres \
-            --no-password \
-            -c "SELECT version()" 2>&1 || echo "pooler 6543 failed"
-          PGPASSWORD="uTUg2HHbDHD4goQxM-nH6Rx0vSXjvt8u" psql \
-            -h aws-0-sa-east-1.pooler.supabase.com \
-            -p 5432 \
-            -U postgres.syinhicmyrsdeaeyayjs \
-            -d postgres \
-            --no-password \
-            -c "SELECT version()" 2>&1 || echo "pooler 5432 failed"
-
-      - name: Try other pooler regions
-        run: |
-          for REGION in us-east-1 us-west-1 eu-central-1 ap-southeast-1; do
-            POOLER="aws-0-$REGION.pooler.supabase.com"
-            echo "Testing $POOLER..."
-            PGPASSWORD="uTUg2HHbDHD4goQxM-nH6Rx0vSXjvt8u" timeout 5 psql \
-              -h $POOLER -p 5432 \
-              -U postgres.syinhicmyrsdeaeyayjs \
-              -d postgres --no-password \
-              -c "SELECT 1" 2>&1 | head -2 || true
-          done
-
-      - name: Install mcp_exec via direct IPv4 forced
-        env:
-          PGPASSWORD: "uTUg2HHbDHD4goQxM-nH6Rx0vSXjvt8u"
-        run: |
-          # Try to get IPv4 via any means
-          IPV4=$(dig +short A db.syinhicmyrsdeaeyayjs.supabase.co | head -1)
-          echo "IPv4 from dig A: $IPV4"
-          if [ -n "$IPV4" ] && [ "$IPV4" != "" ]; then
-            PGPASSWORD="uTUg2HHbDHD4goQxM-nH6Rx0vSXjvt8u" PGHOSTADDR="$IPV4" psql \
-              -h db.syinhicmyrsdeaeyayjs.supabase.co \
-              -p 5432 -U postgres -d postgres \
-              -c "SELECT version()" 2>&1
-          else
-            echo "No IPv4 found - all paths exhausted"
-            echo "DIAGNOSIS: database only accessible via IPv6 (2600:1f14:b9e::) - requires manual intervention"
-          fi
+      - run: echo "Workflow removido. Veja comentário acima."
