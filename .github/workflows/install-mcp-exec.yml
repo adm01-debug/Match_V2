@@ -1,0 +1,52 @@
+name: Install mcp_exec on ORIGEM (audit tooling, run-once)
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/install-mcp-exec.yml'
+
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Install postgresql-client
+        run: sudo apt-get install -y --quiet postgresql-client
+
+      - name: Install mcp_exec on ORIGEM
+        env:
+          PGPASSWORD: "uTUg2HHbDHD4goQxM-nH6Rx0vSXjvt8u"
+        run: |
+          psql "postgresql://postgres@db.syinhicmyrsdeaeyayjs.supabase.co:5432/postgres?sslmode=require" \
+            -v ON_ERROR_STOP=1 \
+            -c "
+          CREATE OR REPLACE FUNCTION public.mcp_exec(sql text, max_rows integer DEFAULT 200)
+          RETURNS jsonb
+          LANGUAGE plpgsql
+          SECURITY DEFINER
+          SET search_path = public, extensions, pg_catalog
+          AS \$\$
+          DECLARE
+            result jsonb;
+          BEGIN
+            EXECUTE format(
+              'WITH q AS MATERIALIZED (%s) SELECT jsonb_build_object(''rows'', coalesce(jsonb_agg(to_jsonb(q.*)), ''[]''::jsonb)) FROM q',
+              sql
+            ) INTO result;
+            RETURN coalesce(result, jsonb_build_object('rows', '[]'::jsonb));
+          EXCEPTION WHEN OTHERS THEN
+            RETURN jsonb_build_object('error', SQLERRM, 'rows', '[]'::jsonb);
+          END;
+          \$\$;
+
+          REVOKE ALL ON FUNCTION public.mcp_exec(text, integer) FROM PUBLIC;
+          GRANT EXECUTE ON FUNCTION public.mcp_exec(text, integer) TO service_role;
+          "
+
+      - name: Verify mcp_exec installed
+        env:
+          PGPASSWORD: "uTUg2HHbDHD4goQxM-nH6Rx0vSXjvt8u"
+        run: |
+          psql "postgresql://postgres@db.syinhicmyrsdeaeyayjs.supabase.co:5432/postgres?sslmode=require" \
+            -c "SELECT proname, prosecdef FROM pg_proc WHERE proname='mcp_exec' AND pronamespace='public'::regnamespace;"
