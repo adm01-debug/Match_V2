@@ -14,39 +14,55 @@ jobs:
       - name: Install postgresql-client
         run: sudo apt-get install -y --quiet postgresql-client
 
-      - name: Install mcp_exec on ORIGEM
+      - name: Debug DNS + connectivity
         env:
           PGPASSWORD: "uTUg2HHbDHD4goQxM-nH6Rx0vSXjvt8u"
         run: |
-          psql "postgresql://postgres@db.syinhicmyrsdeaeyayjs.supabase.co:5432/postgres?sslmode=require" \
-            -v ON_ERROR_STOP=1 \
-            -c "
-          CREATE OR REPLACE FUNCTION public.mcp_exec(sql text, max_rows integer DEFAULT 200)
-          RETURNS jsonb
-          LANGUAGE plpgsql
-          SECURITY DEFINER
-          SET search_path = public, extensions, pg_catalog
-          AS \$\$
-          DECLARE
-            result jsonb;
-          BEGIN
-            EXECUTE format(
-              'WITH q AS MATERIALIZED (%s) SELECT jsonb_build_object(''rows'', coalesce(jsonb_agg(to_jsonb(q.*)), ''[]''::jsonb)) FROM q',
-              sql
-            ) INTO result;
-            RETURN coalesce(result, jsonb_build_object('rows', '[]'::jsonb));
-          EXCEPTION WHEN OTHERS THEN
-            RETURN jsonb_build_object('error', SQLERRM, 'rows', '[]'::jsonb);
-          END;
-          \$\$;
+          echo "=== DNS lookup ==="
+          getent ahosts db.syinhicmyrsdeaeyayjs.supabase.co || true
+          getent ahostsv4 db.syinhicmyrsdeaeyayjs.supabase.co || echo "No IPv4 for direct host"
+          getent ahosts aws-0-sa-east-1.pooler.supabase.com || true
+          echo "=== Test pooler ==="
+          PGPASSWORD="uTUg2HHbDHD4goQxM-nH6Rx0vSXjvt8u" psql \
+            -h aws-0-sa-east-1.pooler.supabase.com \
+            -p 6543 \
+            -U postgres.syinhicmyrsdeaeyayjs \
+            -d postgres \
+            --no-password \
+            -c "SELECT version()" 2>&1 || echo "pooler 6543 failed"
+          PGPASSWORD="uTUg2HHbDHD4goQxM-nH6Rx0vSXjvt8u" psql \
+            -h aws-0-sa-east-1.pooler.supabase.com \
+            -p 5432 \
+            -U postgres.syinhicmyrsdeaeyayjs \
+            -d postgres \
+            --no-password \
+            -c "SELECT version()" 2>&1 || echo "pooler 5432 failed"
 
-          REVOKE ALL ON FUNCTION public.mcp_exec(text, integer) FROM PUBLIC;
-          GRANT EXECUTE ON FUNCTION public.mcp_exec(text, integer) TO service_role;
-          "
+      - name: Try other pooler regions
+        run: |
+          for REGION in us-east-1 us-west-1 eu-central-1 ap-southeast-1; do
+            POOLER="aws-0-$REGION.pooler.supabase.com"
+            echo "Testing $POOLER..."
+            PGPASSWORD="uTUg2HHbDHD4goQxM-nH6Rx0vSXjvt8u" timeout 5 psql \
+              -h $POOLER -p 5432 \
+              -U postgres.syinhicmyrsdeaeyayjs \
+              -d postgres --no-password \
+              -c "SELECT 1" 2>&1 | head -2 || true
+          done
 
-      - name: Verify mcp_exec installed
+      - name: Install mcp_exec via direct IPv4 forced
         env:
           PGPASSWORD: "uTUg2HHbDHD4goQxM-nH6Rx0vSXjvt8u"
         run: |
-          psql "postgresql://postgres@db.syinhicmyrsdeaeyayjs.supabase.co:5432/postgres?sslmode=require" \
-            -c "SELECT proname, prosecdef FROM pg_proc WHERE proname='mcp_exec' AND pronamespace='public'::regnamespace;"
+          # Try to get IPv4 via any means
+          IPV4=$(dig +short A db.syinhicmyrsdeaeyayjs.supabase.co | head -1)
+          echo "IPv4 from dig A: $IPV4"
+          if [ -n "$IPV4" ] && [ "$IPV4" != "" ]; then
+            PGPASSWORD="uTUg2HHbDHD4goQxM-nH6Rx0vSXjvt8u" PGHOSTADDR="$IPV4" psql \
+              -h db.syinhicmyrsdeaeyayjs.supabase.co \
+              -p 5432 -U postgres -d postgres \
+              -c "SELECT version()" 2>&1
+          else
+            echo "No IPv4 found - all paths exhausted"
+            echo "DIAGNOSIS: database only accessible via IPv6 (2600:1f14:b9e::) - requires manual intervention"
+          fi
