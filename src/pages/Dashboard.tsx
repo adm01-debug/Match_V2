@@ -23,7 +23,7 @@ import { DashboardHeader } from '@/components/dashboard/sections/DashboardHeader
 import { DashboardKPIs } from '@/components/dashboard/sections/DashboardKPIs';
 import { SlaAlertBanner } from '@/components/dashboard/SlaAlertBanner';
 
-function DashboardErrorFallback({ error, resetErrorBoundary }: { error: Error; resetErrorBoundary: () => void }) {
+function DashboardErrorFallback({ error, resetErrorBoundary }: { error: unknown; resetErrorBoundary: () => void }) {
   return (
     <Layout title="Dashboard">
       <div className="min-h-[400px] flex items-center justify-center p-4">
@@ -33,7 +33,7 @@ function DashboardErrorFallback({ error, resetErrorBoundary }: { error: Error; r
             <CardTitle>Erro ao carregar Dashboard</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4 text-center">
-            <p className="text-sm text-muted-foreground">{error.message}</p>
+            <p className="text-sm text-muted-foreground">{error instanceof Error ? error.message : String(error)}</p>
             <Button onClick={resetErrorBoundary}><RefreshCw className="h-4 w-4 mr-2" />Tentar novamente</Button>
           </CardContent>
         </Card>
