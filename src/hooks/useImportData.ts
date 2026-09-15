@@ -131,7 +131,7 @@ export function useImportData<T>(options: UseImportDataOptions<T>) {
         success.push(validated);
       } catch (error) {
         if (error instanceof z.ZodError) {
-          error.errors.forEach((err) => {
+          error.issues.forEach((err) => {
             const fieldKey = err.path[0];
             errors.push({
               row: index + 2,
@@ -174,7 +174,7 @@ export function useImportData<T>(options: UseImportDataOptions<T>) {
       setStatus('complete');
 
       if (validationResult.errors.length > 0) {
-        toast.warning(`${validationResult.success.length} válidos, ${validationResult.errors.length} com erros`);
+        toast.warning(`${validationResult.success.length} válidos, ${validationResult.errors.length} com erro`);
       } else {
         toast.success(`${validationResult.success.length} registros prontos para importar`);
       }

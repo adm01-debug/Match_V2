@@ -23,7 +23,7 @@ export function useScorecard(processoId?: string) {
 
   const createScorecard = useMutation({
     mutationFn: async (values: Record<string, unknown>) => {
-      const { data, error } = await supabase.from('scorecards').insert(values).select().single();
+      const { data, error } = await supabase.from('scorecards').insert(values as any).select().single();
       if (error) throw error;
       return data;
     },
@@ -35,7 +35,7 @@ export function useScorecard(processoId?: string) {
 
   const updateScorecard = useMutation({
     mutationFn: async ({ id, ...values }: Record<string, unknown> & { id: string }) => {
-      const { error } = await supabase.from('scorecards').update(values).eq('id', id);
+      const { error } = await supabase.from('scorecards').update(values as any).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {

@@ -292,7 +292,7 @@ export function useUpdateVaga() {
       
       const { data, error } = await supabase
         .from('vagas')
-        .update(dbData as Record<string, unknown>)
+        .update(dbData as any)
         .eq('id', id)
         .select()
         .single();

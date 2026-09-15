@@ -111,7 +111,7 @@ export function useUpdateProcessoStatus() {
 
       const { data, error } = await supabase
         .from('processos_seletivos')
-        .update(updateData)
+        .update(updateData as any)
         .eq('id', id)
         .select()
         .single();
