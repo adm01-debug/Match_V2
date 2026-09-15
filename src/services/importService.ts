@@ -28,7 +28,7 @@ export const importService = {
       if (parsed.success) {
         result.success++;
       } else {
-        result.errors.push({ row: i + 1, message: parsed.error.errors.map((e) => e.message).join(', ') });
+        result.errors.push({ row: i + 1, message: parsed.error.issues.map((e) => e.message).join(', ') });
       }
     });
     return result;
