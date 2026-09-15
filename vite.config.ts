@@ -32,12 +32,14 @@ export default defineConfig(({ mode }) => ({
     minify: "esbuild",
     rollupOptions: {
       output: {
-        manualChunks: {
-          vendor: ["react", "react-dom", "react-router-dom"],
-          ui: ["@radix-ui/react-dialog", "@radix-ui/react-slot"],
-          query: ["@tanstack/react-query"],
-          charts: ["recharts"],
-          supabase: ["@supabase/supabase-js"],
+        // rolldown (vite 8) only accepts the function form of manualChunks
+        manualChunks: (id: string) => {
+          if (!id.includes("node_modules")) return;
+          if (/node_modules\/(react|react-dom|react-router|react-router-dom|scheduler)\//.test(id)) return "vendor";
+          if (/node_modules\/@radix-ui\/react-(dialog|slot)\//.test(id)) return "ui";
+          if (/node_modules\/@tanstack\/react-query\//.test(id)) return "query";
+          if (/node_modules\/recharts\//.test(id)) return "charts";
+          if (/node_modules\/@supabase\/supabase-js\//.test(id)) return "supabase";
         },
       },
     },
