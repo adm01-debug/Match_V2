@@ -588,6 +588,7 @@
 * **services:** workflowEngine - align API with tests, add validate, getLogs ([20eaa23](https://github.com/adm01-debug/Match_V2/commit/20eaa236ae66166a0fb9a55fdccdbe585f56747d))
 * **tests:** TwoFactorSetup.test - proper mocks, updated API, comprehensive coverage ([20a91b4](https://github.com/adm01-debug/Match_V2/commit/20a91b4557603e28e366bfb90c8bdadbdab2a627))
 * try pooler IPv4 + force IPv4 on psql for mcp_exec install ([555e269](https://github.com/adm01-debug/Match_V2/commit/555e269d4605df74d4aab34894e5710fafd5d425))
+* **ts:** 12 erros TypeScript — zod v4, Supabase strict, React 19 RefObject ([#67](https://github.com/adm01-debug/Match_V2/issues/67)) ([8dcec64](https://github.com/adm01-debug/Match_V2/commit/8dcec640f5f0b1c7a41ca61aa95432691a8e1d3c))
 * **types:** api - fix spacing, add new types ([afde42a](https://github.com/adm01-debug/Match_V2/commit/afde42a035acc0f3e4bcfba839e9af21dbd8bc87))
 * **types:** forms - fix spacing, add new types ([18880a1](https://github.com/adm01-debug/Match_V2/commit/18880a1bc7e1fb1b139aa74d9242a33acc94237e))
 * **types:** resumeParser - add personalInfo, normalize helper, type guards ([87eb54d](https://github.com/adm01-debug/Match_V2/commit/87eb54d0a5a7fa81e3befba5c8b072ecbdf5f24a))
