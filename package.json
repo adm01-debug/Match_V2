@@ -137,7 +137,7 @@
     "@vitest/coverage-v8": "^5.0.3",
     "autoprefixer": "^10.5.4",
     "bundlewatch": "^0.4.0",
-    "concurrently": "^9.1.2",
+    "concurrently": "^10.0.6",
     "cross-env": "^10.1.0",
     "dotenv-cli": "^11.0.0",
     "eslint": "^10.12.0",
