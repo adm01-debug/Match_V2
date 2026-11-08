@@ -1,0 +1,4074 @@
+{
+  "format_version": 1,
+  "fonte": "scripts/inventario/gerar-rotas.mjs (le src/routes/*.tsx, src/routes/lazyPages.ts e os imports de cada pagina)",
+  "resumo": {
+    "urls": 59,
+    "urls_protegidas": 42,
+    "paginas_em_lazy": 54,
+    "hooks_distintos": 97,
+    "problemas": 0
+  },
+  "urls": [
+    {
+      "caminho": "*",
+      "componente": "NotFound",
+      "arquivo": "src/pages/NotFound.tsx",
+      "declarada_em": "src/routes/AppRoutes.tsx",
+      "protegida": false,
+      "guardas": [],
+      "papeis": [],
+      "redireciona": null,
+      "arquivos_lidos": 5,
+      "hooks": [
+        {
+          "nome": "usePageTitle",
+          "arquivo": "src/hooks/usePageTitle.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [],
+      "tabelas": [],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/",
+      "componente": "Dashboard",
+      "arquivo": "src/pages/Dashboard.tsx",
+      "declarada_em": "src/routes/MainRoutes.tsx",
+      "protegida": true,
+      "guardas": [
+        "ProtectedRoute"
+      ],
+      "papeis": [],
+      "redireciona": null,
+      "arquivos_lidos": 44,
+      "hooks": [
+        {
+          "nome": "useAuth",
+          "arquivo": "src/contexts/AuthContext.tsx"
+        },
+        {
+          "nome": "useDashboardData",
+          "arquivo": "src/hooks/useDashboardData.ts"
+        },
+        {
+          "nome": "useEntrevistasEvolucao",
+          "arquivo": "src/hooks/useEntrevistas.ts"
+        },
+        {
+          "nome": "useEntrevistasPizza",
+          "arquivo": "src/hooks/useEntrevistas.ts"
+        },
+        {
+          "nome": "useFunnelSla",
+          "arquivo": "src/hooks/useFunnelSla.ts"
+        },
+        {
+          "nome": "useFuzzySearch",
+          "arquivo": "src/hooks/useFuzzySearch.ts"
+        },
+        {
+          "nome": "useGamification",
+          "arquivo": "src/hooks/useGamification.ts"
+        },
+        {
+          "nome": "useKeyboardShortcuts",
+          "arquivo": "src/components/intelligence/KeyboardShortcuts.tsx"
+        },
+        {
+          "nome": "useNotifications",
+          "arquivo": "src/contexts/NotificationContext.tsx"
+        },
+        {
+          "nome": "useOnboarding",
+          "arquivo": "src/components/onboarding/OnboardingProvider.tsx"
+        },
+        {
+          "nome": "usePageTitle",
+          "arquivo": "src/hooks/usePageTitle.ts"
+        },
+        {
+          "nome": "useRealtimeNotifications",
+          "arquivo": "src/hooks/useRealtimeNotifications.ts"
+        },
+        {
+          "nome": "useSidebar",
+          "arquivo": "src/components/ui/sidebar.tsx"
+        },
+        {
+          "nome": "useSoundPreferences",
+          "arquivo": "src/hooks/useSoundPreferences.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [
+        "get_user_roles",
+        "hr_funnel_sla"
+      ],
+      "tabelas": [
+        "candidatos",
+        "entrevistas",
+        "notifications",
+        "processos_seletivos",
+        "vagas"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/admin",
+      "componente": "AdminPage",
+      "arquivo": "src/pages/AdminPage.tsx",
+      "declarada_em": "src/routes/AdminRoutes.tsx",
+      "protegida": true,
+      "guardas": [
+        "ProtectedRoute",
+        "Admin2FAGuard"
+      ],
+      "papeis": [
+        "admin"
+      ],
+      "redireciona": null,
+      "arquivos_lidos": 34,
+      "hooks": [
+        {
+          "nome": "useAdminUsers",
+          "arquivo": "src/hooks/useAdminUsers.ts"
+        },
+        {
+          "nome": "useAuditLogs",
+          "arquivo": "src/hooks/useAuditLogs.ts"
+        },
+        {
+          "nome": "useAuth",
+          "arquivo": "src/contexts/AuthContext.tsx"
+        },
+        {
+          "nome": "useFuzzySearch",
+          "arquivo": "src/hooks/useFuzzySearch.ts"
+        },
+        {
+          "nome": "useKeyboardShortcuts",
+          "arquivo": "src/components/intelligence/KeyboardShortcuts.tsx"
+        },
+        {
+          "nome": "useNotifications",
+          "arquivo": "src/contexts/NotificationContext.tsx"
+        },
+        {
+          "nome": "useOnboarding",
+          "arquivo": "src/hooks/useOnboarding.ts"
+        },
+        {
+          "nome": "usePageTitle",
+          "arquivo": "src/hooks/usePageTitle.ts"
+        },
+        {
+          "nome": "useRealtimeNotifications",
+          "arquivo": "src/hooks/useRealtimeNotifications.ts"
+        },
+        {
+          "nome": "useSidebar",
+          "arquivo": "src/components/ui/sidebar.tsx"
+        },
+        {
+          "nome": "useToast",
+          "arquivo": "src/hooks/use-toast.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [
+        "get_user_roles"
+      ],
+      "tabelas": [
+        "ip_access_logs",
+        "notifications",
+        "profiles",
+        "user_roles"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/admin/audit-log",
+      "componente": "AuditLogPage",
+      "arquivo": "src/pages/admin/AuditLogPage.tsx",
+      "declarada_em": "src/routes/AdminRoutes.tsx",
+      "protegida": true,
+      "guardas": [
+        "ProtectedRoute",
+        "Admin2FAGuard"
+      ],
+      "papeis": [
+        "admin"
+      ],
+      "redireciona": null,
+      "arquivos_lidos": 2,
+      "hooks": [],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [
+        "admin_list_audit_log"
+      ],
+      "tabelas": [],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/admin/dlq",
+      "componente": "DeadLetterQueuePage",
+      "arquivo": "src/pages/admin/DeadLetterQueuePage.tsx",
+      "declarada_em": "src/routes/AdminRoutes.tsx",
+      "protegida": true,
+      "guardas": [
+        "ProtectedRoute",
+        "Admin2FAGuard"
+      ],
+      "papeis": [
+        "admin"
+      ],
+      "redireciona": null,
+      "arquivos_lidos": 4,
+      "hooks": [],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [
+        "admin_communication_retry_stats",
+        "admin_integration_health_summary",
+        "admin_list_communication_retries",
+        "admin_requeue_communication_retry"
+      ],
+      "tabelas": [],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/agenda",
+      "componente": "AgendaPage",
+      "arquivo": "src/pages/AgendaPage.tsx",
+      "declarada_em": "src/routes/MainRoutes.tsx",
+      "protegida": true,
+      "guardas": [
+        "ProtectedRoute"
+      ],
+      "papeis": [],
+      "redireciona": null,
+      "arquivos_lidos": 48,
+      "hooks": [
+        {
+          "nome": "useAgendaActions",
+          "arquivo": "src/hooks/useAgendaActions.ts"
+        },
+        {
+          "nome": "useAuth",
+          "arquivo": "src/contexts/AuthContext.tsx"
+        },
+        {
+          "nome": "useConfetti",
+          "arquivo": "src/components/ui/confetti.tsx"
+        },
+        {
+          "nome": "useEntrevistas",
+          "arquivo": "src/hooks/useEntrevistas.ts"
+        },
+        {
+          "nome": "useFuzzySearch",
+          "arquivo": "src/hooks/useFuzzySearch.ts"
+        },
+        {
+          "nome": "useInterviewReminders",
+          "arquivo": "src/hooks/useInterviewReminders.ts"
+        },
+        {
+          "nome": "useKeyboardShortcuts",
+          "arquivo": "src/components/intelligence/KeyboardShortcuts.tsx"
+        },
+        {
+          "nome": "useNotifications",
+          "arquivo": "src/contexts/NotificationContext.tsx"
+        },
+        {
+          "nome": "useOnboarding",
+          "arquivo": "src/hooks/useOnboarding.ts"
+        },
+        {
+          "nome": "usePageTitle",
+          "arquivo": "src/hooks/usePageTitle.ts"
+        },
+        {
+          "nome": "useRealtimeNotifications",
+          "arquivo": "src/hooks/useRealtimeNotifications.ts"
+        },
+        {
+          "nome": "useSidebar",
+          "arquivo": "src/components/ui/sidebar.tsx"
+        },
+        {
+          "nome": "useSoundEffects",
+          "arquivo": "src/hooks/useSoundEffects.ts"
+        },
+        {
+          "nome": "useSuggestedSlots",
+          "arquivo": "src/components/agenda/aiScheduler/useSuggestedSlots.ts"
+        },
+        {
+          "nome": "useToast",
+          "arquivo": "src/hooks/use-toast.ts"
+        },
+        {
+          "nome": "useUpdateEntrevista",
+          "arquivo": "src/hooks/useEntrevistas.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [
+        "interview-reminders"
+      ],
+      "rpcs": [
+        "get_user_roles"
+      ],
+      "tabelas": [
+        "candidatos",
+        "entrevistas",
+        "notifications"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/analytics",
+      "componente": "AdvancedAnalyticsPage",
+      "arquivo": "src/pages/AdvancedAnalyticsPage.tsx",
+      "declarada_em": "src/routes/MainRoutes.tsx",
+      "protegida": true,
+      "guardas": [
+        "ProtectedRoute"
+      ],
+      "papeis": [
+        "admin",
+        "rh"
+      ],
+      "redireciona": null,
+      "arquivos_lidos": 37,
+      "hooks": [
+        {
+          "nome": "useAdvancedAnalytics",
+          "arquivo": "src/hooks/useAdvancedAnalytics.ts"
+        },
+        {
+          "nome": "useAuth",
+          "arquivo": "src/contexts/AuthContext.tsx"
+        },
+        {
+          "nome": "useFunnelSla",
+          "arquivo": "src/hooks/useFunnelSla.ts"
+        },
+        {
+          "nome": "useFuzzySearch",
+          "arquivo": "src/hooks/useFuzzySearch.ts"
+        },
+        {
+          "nome": "useKeyboardShortcuts",
+          "arquivo": "src/components/intelligence/KeyboardShortcuts.tsx"
+        },
+        {
+          "nome": "useLocalStorageState",
+          "arquivo": "src/hooks/useLocalStorageState.ts"
+        },
+        {
+          "nome": "useNotifications",
+          "arquivo": "src/contexts/NotificationContext.tsx"
+        },
+        {
+          "nome": "useOnboarding",
+          "arquivo": "src/hooks/useOnboarding.ts"
+        },
+        {
+          "nome": "usePageTitle",
+          "arquivo": "src/hooks/usePageTitle.ts"
+        },
+        {
+          "nome": "useRealtimeNotifications",
+          "arquivo": "src/hooks/useRealtimeNotifications.ts"
+        },
+        {
+          "nome": "useRegisterFirstResponseBatch",
+          "arquivo": "src/hooks/useRegisterFirstResponse.ts"
+        },
+        {
+          "nome": "useSidebar",
+          "arquivo": "src/components/ui/sidebar.tsx"
+        },
+        {
+          "nome": "useSlaOverdueList",
+          "arquivo": "src/hooks/useSlaOverdueList.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [
+        "get_user_roles",
+        "hr_funnel_sla",
+        "hr_register_first_response",
+        "hr_sla_overdue_list"
+      ],
+      "tabelas": [
+        "entrevistas",
+        "notifications",
+        "processos_seletivos",
+        "propostas",
+        "vagas"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/analytics-basico",
+      "componente": "AnalyticsPage",
+      "arquivo": "src/pages/AnalyticsPage.tsx",
+      "declarada_em": "src/routes/MainRoutes.tsx",
+      "protegida": true,
+      "guardas": [
+        "ProtectedRoute"
+      ],
+      "papeis": [],
+      "redireciona": null,
+      "arquivos_lidos": 24,
+      "hooks": [
+        {
+          "nome": "useAuth",
+          "arquivo": "src/contexts/AuthContext.tsx"
+        },
+        {
+          "nome": "useFuzzySearch",
+          "arquivo": "src/hooks/useFuzzySearch.ts"
+        },
+        {
+          "nome": "useKeyboardShortcuts",
+          "arquivo": "src/components/intelligence/KeyboardShortcuts.tsx"
+        },
+        {
+          "nome": "useNotifications",
+          "arquivo": "src/contexts/NotificationContext.tsx"
+        },
+        {
+          "nome": "useOnboarding",
+          "arquivo": "src/hooks/useOnboarding.ts"
+        },
+        {
+          "nome": "usePageTitle",
+          "arquivo": "src/hooks/usePageTitle.ts"
+        },
+        {
+          "nome": "useRealtimeNotifications",
+          "arquivo": "src/hooks/useRealtimeNotifications.ts"
+        },
+        {
+          "nome": "useSidebar",
+          "arquivo": "src/components/ui/sidebar.tsx"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [
+        "get_user_roles"
+      ],
+      "tabelas": [
+        "candidatos",
+        "notifications",
+        "processos_seletivos",
+        "vagas"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/assinar-proposta/:token",
+      "componente": "AssinarPropostaPage",
+      "arquivo": "src/pages/AssinarPropostaPage.tsx",
+      "declarada_em": "src/routes/AppRoutes.tsx",
+      "protegida": false,
+      "guardas": [],
+      "papeis": [],
+      "redireciona": null,
+      "arquivos_lidos": 4,
+      "hooks": [
+        {
+          "nome": "usePageTitle",
+          "arquivo": "src/hooks/usePageTitle.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [
+        "sign-proposal"
+      ],
+      "rpcs": [
+        "get_proposta_by_token"
+      ],
+      "tabelas": [
+        "propostas"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/auth",
+      "componente": "AuthPage",
+      "arquivo": "src/pages/AuthPage.tsx",
+      "declarada_em": "src/routes/AuthRoutes.tsx",
+      "protegida": false,
+      "guardas": [],
+      "papeis": [],
+      "redireciona": null,
+      "arquivos_lidos": 11,
+      "hooks": [
+        {
+          "nome": "useAuth",
+          "arquivo": "src/contexts/AuthContext.tsx"
+        },
+        {
+          "nome": "usePageTitle",
+          "arquivo": "src/hooks/usePageTitle.ts"
+        },
+        {
+          "nome": "useToast",
+          "arquivo": "src/hooks/use-toast.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [
+        "get_user_roles"
+      ],
+      "tabelas": [],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/auth/2fa",
+      "componente": "TwoFactorAuthPage",
+      "arquivo": "src/pages/auth/TwoFactorAuthPage.tsx",
+      "declarada_em": "src/routes/AuthRoutes.tsx",
+      "protegida": true,
+      "guardas": [
+        "ProtectedRoute"
+      ],
+      "papeis": [],
+      "redireciona": null,
+      "arquivos_lidos": 12,
+      "hooks": [
+        {
+          "nome": "useAuth",
+          "arquivo": "src/contexts/AuthContext.tsx"
+        },
+        {
+          "nome": "usePageTitle",
+          "arquivo": "src/hooks/usePageTitle.ts"
+        },
+        {
+          "nome": "useToast",
+          "arquivo": "src/hooks/use-toast.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [
+        "get_user_roles"
+      ],
+      "tabelas": [
+        "user_2fa",
+        "user_2fa_logs"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/auth/forgot-password",
+      "componente": "ForgotPasswordPage",
+      "arquivo": "src/pages/auth/ForgotPasswordPage.tsx",
+      "declarada_em": "src/routes/AuthRoutes.tsx",
+      "protegida": false,
+      "guardas": [],
+      "papeis": [],
+      "redireciona": null,
+      "arquivos_lidos": 4,
+      "hooks": [
+        {
+          "nome": "usePageTitle",
+          "arquivo": "src/hooks/usePageTitle.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [],
+      "tabelas": [],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/auth/login",
+      "componente": "LoginPage",
+      "arquivo": "src/pages/auth/LoginPage.tsx",
+      "declarada_em": "src/routes/AuthRoutes.tsx",
+      "protegida": false,
+      "guardas": [],
+      "papeis": [],
+      "redireciona": null,
+      "arquivos_lidos": 9,
+      "hooks": [
+        {
+          "nome": "useAuth",
+          "arquivo": "src/contexts/AuthContext.tsx"
+        },
+        {
+          "nome": "usePageTitle",
+          "arquivo": "src/hooks/usePageTitle.ts"
+        },
+        {
+          "nome": "useToast",
+          "arquivo": "src/hooks/use-toast.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [
+        "get_user_roles"
+      ],
+      "tabelas": [],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/auth/register",
+      "componente": "RegisterPage",
+      "arquivo": "src/pages/auth/RegisterPage.tsx",
+      "declarada_em": "src/routes/AuthRoutes.tsx",
+      "protegida": false,
+      "guardas": [],
+      "papeis": [],
+      "redireciona": null,
+      "arquivos_lidos": 8,
+      "hooks": [
+        {
+          "nome": "useAuth",
+          "arquivo": "src/contexts/AuthContext.tsx"
+        },
+        {
+          "nome": "usePageTitle",
+          "arquivo": "src/hooks/usePageTitle.ts"
+        },
+        {
+          "nome": "useToast",
+          "arquivo": "src/hooks/use-toast.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [
+        "get_user_roles"
+      ],
+      "tabelas": [],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/auth/reset-password",
+      "componente": "ResetPasswordPage",
+      "arquivo": "src/pages/auth/ResetPasswordPage.tsx",
+      "declarada_em": "src/routes/AuthRoutes.tsx",
+      "protegida": false,
+      "guardas": [],
+      "papeis": [],
+      "redireciona": null,
+      "arquivos_lidos": 5,
+      "hooks": [
+        {
+          "nome": "usePageTitle",
+          "arquivo": "src/hooks/usePageTitle.ts"
+        },
+        {
+          "nome": "useToast",
+          "arquivo": "src/hooks/use-toast.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [],
+      "tabelas": [],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/avaliacao-cognitiva",
+      "componente": "CognitiveTestPage",
+      "arquivo": "src/pages/CognitiveTestPage.tsx",
+      "declarada_em": "src/routes/AppRoutes.tsx",
+      "protegida": false,
+      "guardas": [],
+      "papeis": [],
+      "redireciona": null,
+      "arquivos_lidos": 6,
+      "hooks": [
+        {
+          "nome": "useCognitiveSessionItems",
+          "arquivo": "src/hooks/useCognitiveTest.ts"
+        },
+        {
+          "nome": "useCognitiveTimer",
+          "arquivo": "src/hooks/useCognitiveTest.ts"
+        },
+        {
+          "nome": "useFinishCognitiveSession",
+          "arquivo": "src/hooks/useCognitiveTest.ts"
+        },
+        {
+          "nome": "useStartCognitiveSession",
+          "arquivo": "src/hooks/useCognitiveTest.ts"
+        },
+        {
+          "nome": "useSubmitCognitiveResponse",
+          "arquivo": "src/hooks/useCognitiveTest.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [
+        "finish_cognitive_session",
+        "get_cognitive_result",
+        "get_cognitive_session_items",
+        "start_cognitive_session",
+        "submit_cognitive_response"
+      ],
+      "tabelas": [
+        "cognitive_sessions"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/avaliacao-cognitiva/:vagaId",
+      "componente": "CognitiveTestPage",
+      "arquivo": "src/pages/CognitiveTestPage.tsx",
+      "declarada_em": "src/routes/AppRoutes.tsx",
+      "protegida": false,
+      "guardas": [],
+      "papeis": [],
+      "redireciona": null,
+      "arquivos_lidos": 6,
+      "hooks": [
+        {
+          "nome": "useCognitiveSessionItems",
+          "arquivo": "src/hooks/useCognitiveTest.ts"
+        },
+        {
+          "nome": "useCognitiveTimer",
+          "arquivo": "src/hooks/useCognitiveTest.ts"
+        },
+        {
+          "nome": "useFinishCognitiveSession",
+          "arquivo": "src/hooks/useCognitiveTest.ts"
+        },
+        {
+          "nome": "useStartCognitiveSession",
+          "arquivo": "src/hooks/useCognitiveTest.ts"
+        },
+        {
+          "nome": "useSubmitCognitiveResponse",
+          "arquivo": "src/hooks/useCognitiveTest.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [
+        "finish_cognitive_session",
+        "get_cognitive_result",
+        "get_cognitive_session_items",
+        "start_cognitive_session",
+        "submit_cognitive_response"
+      ],
+      "tabelas": [
+        "cognitive_sessions"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/avaliacao-comportamental",
+      "componente": "BehavioralAssessmentPage",
+      "arquivo": "src/pages/BehavioralAssessmentPage.tsx",
+      "declarada_em": "src/routes/MainRoutes.tsx",
+      "protegida": true,
+      "guardas": [
+        "ProtectedRoute"
+      ],
+      "papeis": [],
+      "redireciona": null,
+      "arquivos_lidos": 58,
+      "hooks": [
+        {
+          "nome": "useAuth",
+          "arquivo": "src/contexts/AuthContext.tsx"
+        },
+        {
+          "nome": "useBehavioralAssessment",
+          "arquivo": "src/hooks/useBehavioralAssessmentResults.ts"
+        },
+        {
+          "nome": "useBehavioralScoreCalculation",
+          "arquivo": "src/hooks/useBehavioralScoreCalculation.ts"
+        },
+        {
+          "nome": "useCompanyProfile",
+          "arquivo": "src/components/assessments/companyProfile/useCompanyProfile.ts"
+        },
+        {
+          "nome": "useFuzzySearch",
+          "arquivo": "src/hooks/useFuzzySearch.ts"
+        },
+        {
+          "nome": "useKeyboardShortcuts",
+          "arquivo": "src/components/intelligence/KeyboardShortcuts.tsx"
+        },
+        {
+          "nome": "useNotifications",
+          "arquivo": "src/contexts/NotificationContext.tsx"
+        },
+        {
+          "nome": "useOnboarding",
+          "arquivo": "src/hooks/useOnboarding.ts"
+        },
+        {
+          "nome": "usePageTitle",
+          "arquivo": "src/hooks/usePageTitle.ts"
+        },
+        {
+          "nome": "useRealtimeNotifications",
+          "arquivo": "src/hooks/useRealtimeNotifications.ts"
+        },
+        {
+          "nome": "useSaveBehavioralResult",
+          "arquivo": "src/hooks/behavioralResults/mutations.ts"
+        },
+        {
+          "nome": "useScenarioPlayer",
+          "arquivo": "src/components/assessments/immersive/useScenarioPlayer.ts"
+        },
+        {
+          "nome": "useSidebar",
+          "arquivo": "src/components/ui/sidebar.tsx"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [
+        "get_user_roles"
+      ],
+      "tabelas": [
+        "avaliacoes_comportamentais_resultados",
+        "notifications",
+        "perfis_comportamentais_empresa"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/avaliacao/:processoId",
+      "componente": "AvaliacaoForm",
+      "arquivo": "src/pages/AvaliacaoForm.tsx",
+      "declarada_em": "src/routes/MainRoutes.tsx",
+      "protegida": true,
+      "guardas": [
+        "ProtectedRoute"
+      ],
+      "papeis": [],
+      "redireciona": null,
+      "arquivos_lidos": 32,
+      "hooks": [
+        {
+          "nome": "useAuth",
+          "arquivo": "src/contexts/AuthContext.tsx"
+        },
+        {
+          "nome": "useAvaliacao",
+          "arquivo": "src/hooks/useAvaliacoes.ts"
+        },
+        {
+          "nome": "useAvaliacaoForm",
+          "arquivo": "src/hooks/useAvaliacaoForm.ts"
+        },
+        {
+          "nome": "useAvaliacoes",
+          "arquivo": "src/hooks/useAvaliacoes.ts"
+        },
+        {
+          "nome": "useFuzzySearch",
+          "arquivo": "src/hooks/useFuzzySearch.ts"
+        },
+        {
+          "nome": "useKeyboardShortcuts",
+          "arquivo": "src/components/intelligence/KeyboardShortcuts.tsx"
+        },
+        {
+          "nome": "useNotifications",
+          "arquivo": "src/contexts/NotificationContext.tsx"
+        },
+        {
+          "nome": "useOnboarding",
+          "arquivo": "src/hooks/useOnboarding.ts"
+        },
+        {
+          "nome": "usePageTitle",
+          "arquivo": "src/hooks/usePageTitle.ts"
+        },
+        {
+          "nome": "useProcessosSeletivos",
+          "arquivo": "src/hooks/useProcessosSeletivos.ts"
+        },
+        {
+          "nome": "useRealtimeNotifications",
+          "arquivo": "src/hooks/useRealtimeNotifications.ts"
+        },
+        {
+          "nome": "useSidebar",
+          "arquivo": "src/components/ui/sidebar.tsx"
+        },
+        {
+          "nome": "useToast",
+          "arquivo": "src/hooks/use-toast.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [
+        "get_user_roles"
+      ],
+      "tabelas": [
+        "avaliacoes",
+        "notifications",
+        "processos_seletivos"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/avaliacoes",
+      "componente": "AvaliacoesPage",
+      "arquivo": "src/pages/AvaliacoesPage.tsx",
+      "declarada_em": "src/routes/MainRoutes.tsx",
+      "protegida": true,
+      "guardas": [
+        "ProtectedRoute"
+      ],
+      "papeis": [],
+      "redireciona": null,
+      "arquivos_lidos": 25,
+      "hooks": [
+        {
+          "nome": "useAuth",
+          "arquivo": "src/contexts/AuthContext.tsx"
+        },
+        {
+          "nome": "useFuzzySearch",
+          "arquivo": "src/hooks/useFuzzySearch.ts"
+        },
+        {
+          "nome": "useKeyboardShortcuts",
+          "arquivo": "src/components/intelligence/KeyboardShortcuts.tsx"
+        },
+        {
+          "nome": "useNotifications",
+          "arquivo": "src/contexts/NotificationContext.tsx"
+        },
+        {
+          "nome": "useOnboarding",
+          "arquivo": "src/hooks/useOnboarding.ts"
+        },
+        {
+          "nome": "usePageTitle",
+          "arquivo": "src/hooks/usePageTitle.ts"
+        },
+        {
+          "nome": "useRealtimeNotifications",
+          "arquivo": "src/hooks/useRealtimeNotifications.ts"
+        },
+        {
+          "nome": "useSidebar",
+          "arquivo": "src/components/ui/sidebar.tsx"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [
+        "get_user_roles"
+      ],
+      "tabelas": [
+        "avaliacoes",
+        "notifications"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/avaliacoes-comportamentais",
+      "componente": "BehavioralAssessmentsPage",
+      "arquivo": "src/pages/BehavioralAssessmentsPage.tsx",
+      "declarada_em": "src/routes/MainRoutes.tsx",
+      "protegida": true,
+      "guardas": [
+        "ProtectedRoute"
+      ],
+      "papeis": [],
+      "redireciona": null,
+      "arquivos_lidos": 73,
+      "hooks": [
+        {
+          "nome": "useAssessmentEngine",
+          "arquivo": "src/hooks/useAssessmentEngine.ts"
+        },
+        {
+          "nome": "useAuth",
+          "arquivo": "src/contexts/AuthContext.tsx"
+        },
+        {
+          "nome": "useBehavioralGamification",
+          "arquivo": "src/hooks/useBehavioralGamification.ts"
+        },
+        {
+          "nome": "useDailyChallenges",
+          "arquivo": "src/components/gamification/dailyChallenges/useDailyChallenges.ts"
+        },
+        {
+          "nome": "useDashboardData",
+          "arquivo": "src/components/gamification/dashboard/useDashboardData.ts"
+        },
+        {
+          "nome": "useFuzzySearch",
+          "arquivo": "src/hooks/useFuzzySearch.ts"
+        },
+        {
+          "nome": "useGamification",
+          "arquivo": "src/hooks/useGamification.ts"
+        },
+        {
+          "nome": "useGamificationSupabase",
+          "arquivo": "src/hooks/useGamificationSupabase.ts"
+        },
+        {
+          "nome": "useGamificationTriggers",
+          "arquivo": "src/hooks/useGamificationTriggers.ts"
+        },
+        {
+          "nome": "useKeyboardShortcuts",
+          "arquivo": "src/components/intelligence/KeyboardShortcuts.tsx"
+        },
+        {
+          "nome": "useNotifications",
+          "arquivo": "src/contexts/NotificationContext.tsx"
+        },
+        {
+          "nome": "useOnboarding",
+          "arquivo": "src/hooks/useOnboarding.ts"
+        },
+        {
+          "nome": "usePageTitle",
+          "arquivo": "src/hooks/usePageTitle.ts"
+        },
+        {
+          "nome": "usePersonalityMiniGame",
+          "arquivo": "src/components/assessments/gamified/personalityMiniGame/usePersonalityMiniGame.ts"
+        },
+        {
+          "nome": "useRealtimeNotifications",
+          "arquivo": "src/hooks/useRealtimeNotifications.ts"
+        },
+        {
+          "nome": "useSaveBehavioralResult",
+          "arquivo": "src/hooks/useBehavioralAssessments.ts"
+        },
+        {
+          "nome": "useSidebar",
+          "arquivo": "src/components/ui/sidebar.tsx"
+        },
+        {
+          "nome": "useSoundPreferences",
+          "arquivo": "src/hooks/useSoundPreferences.ts"
+        },
+        {
+          "nome": "useWeeklyMissions",
+          "arquivo": "src/components/gamification/weeklyMissions/useWeeklyMissions.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [
+        "add_user_xp",
+        "get_user_roles",
+        "update_user_streak"
+      ],
+      "tabelas": [
+        "behavioral_assessment_results",
+        "notifications",
+        "processos_seletivos",
+        "user_achievements",
+        "user_badges",
+        "user_gamification",
+        "xp_transactions"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/banco-talentos",
+      "componente": "TalentPoolPage",
+      "arquivo": "src/pages/TalentPoolPage.tsx",
+      "declarada_em": "src/routes/MainRoutes.tsx",
+      "protegida": true,
+      "guardas": [
+        "ProtectedRoute"
+      ],
+      "papeis": [],
+      "redireciona": null,
+      "arquivos_lidos": 24,
+      "hooks": [
+        {
+          "nome": "useAuth",
+          "arquivo": "src/contexts/AuthContext.tsx"
+        },
+        {
+          "nome": "useFuzzySearch",
+          "arquivo": "src/hooks/useFuzzySearch.ts"
+        },
+        {
+          "nome": "useKeyboardShortcuts",
+          "arquivo": "src/components/intelligence/KeyboardShortcuts.tsx"
+        },
+        {
+          "nome": "useNotifications",
+          "arquivo": "src/contexts/NotificationContext.tsx"
+        },
+        {
+          "nome": "useOnboarding",
+          "arquivo": "src/hooks/useOnboarding.ts"
+        },
+        {
+          "nome": "useRealtimeNotifications",
+          "arquivo": "src/hooks/useRealtimeNotifications.ts"
+        },
+        {
+          "nome": "useSidebar",
+          "arquivo": "src/components/ui/sidebar.tsx"
+        },
+        {
+          "nome": "useTalentPool",
+          "arquivo": "src/hooks/useTalentPool.ts"
+        },
+        {
+          "nome": "useToast",
+          "arquivo": "src/hooks/use-toast.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [
+        "get_user_roles"
+      ],
+      "tabelas": [
+        "candidatos",
+        "notifications"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/candidato/:id",
+      "componente": "CandidatoPerfilPage",
+      "arquivo": "src/pages/CandidatoPerfilPage.tsx",
+      "declarada_em": "src/routes/MainRoutes.tsx",
+      "protegida": true,
+      "guardas": [
+        "ProtectedRoute"
+      ],
+      "papeis": [],
+      "redireciona": null,
+      "arquivos_lidos": 27,
+      "hooks": [
+        {
+          "nome": "useAuth",
+          "arquivo": "src/contexts/AuthContext.tsx"
+        },
+        {
+          "nome": "useCandidatoPerfil",
+          "arquivo": "src/hooks/useCandidatoPerfil.ts"
+        },
+        {
+          "nome": "useFuzzySearch",
+          "arquivo": "src/hooks/useFuzzySearch.ts"
+        },
+        {
+          "nome": "useKeyboardShortcuts",
+          "arquivo": "src/components/intelligence/KeyboardShortcuts.tsx"
+        },
+        {
+          "nome": "useNotifications",
+          "arquivo": "src/contexts/NotificationContext.tsx"
+        },
+        {
+          "nome": "useOnboarding",
+          "arquivo": "src/hooks/useOnboarding.ts"
+        },
+        {
+          "nome": "usePageTitle",
+          "arquivo": "src/hooks/usePageTitle.ts"
+        },
+        {
+          "nome": "useRealtimeNotifications",
+          "arquivo": "src/hooks/useRealtimeNotifications.ts"
+        },
+        {
+          "nome": "useSidebar",
+          "arquivo": "src/components/ui/sidebar.tsx"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [
+        "get_user_roles"
+      ],
+      "tabelas": [
+        "candidatos",
+        "candidaturas",
+        "entrevistas",
+        "notifications",
+        "processos_seletivos"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/carreiras",
+      "componente": "CarreirasPage",
+      "arquivo": "src/pages/CarreirasPage.tsx",
+      "declarada_em": "src/routes/AppRoutes.tsx",
+      "protegida": false,
+      "guardas": [],
+      "papeis": [],
+      "redireciona": null,
+      "arquivos_lidos": 2,
+      "hooks": [],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [],
+      "tabelas": [
+        "empresa_branding",
+        "vagas"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/carreiras/:slug",
+      "componente": "CarreirasPage",
+      "arquivo": "src/pages/CarreirasPage.tsx",
+      "declarada_em": "src/routes/AppRoutes.tsx",
+      "protegida": false,
+      "guardas": [],
+      "papeis": [],
+      "redireciona": null,
+      "arquivos_lidos": 2,
+      "hooks": [],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [],
+      "tabelas": [
+        "empresa_branding",
+        "vagas"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/carreiras/vaga/:vagaId",
+      "componente": "AplicarVagaPage",
+      "arquivo": "src/pages/AplicarVagaPage.tsx",
+      "declarada_em": "src/routes/AppRoutes.tsx",
+      "protegida": false,
+      "guardas": [],
+      "papeis": [],
+      "redireciona": null,
+      "arquivos_lidos": 4,
+      "hooks": [],
+      "buckets": [],
+      "edges": [
+        "public-apply"
+      ],
+      "rpcs": [],
+      "tabelas": [
+        "empresa_branding",
+        "vagas"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/comunicacao",
+      "componente": "ComunicacaoPage",
+      "arquivo": "src/pages/ComunicacaoPage.tsx",
+      "declarada_em": "src/routes/MainRoutes.tsx",
+      "protegida": true,
+      "guardas": [
+        "ProtectedRoute"
+      ],
+      "papeis": [],
+      "redireciona": null,
+      "arquivos_lidos": 27,
+      "hooks": [
+        {
+          "nome": "useAuth",
+          "arquivo": "src/contexts/AuthContext.tsx"
+        },
+        {
+          "nome": "useComunicacoes",
+          "arquivo": "src/hooks/useComunicacoes.ts"
+        },
+        {
+          "nome": "useFuzzySearch",
+          "arquivo": "src/hooks/useFuzzySearch.ts"
+        },
+        {
+          "nome": "useKeyboardShortcuts",
+          "arquivo": "src/components/intelligence/KeyboardShortcuts.tsx"
+        },
+        {
+          "nome": "useNotifications",
+          "arquivo": "src/contexts/NotificationContext.tsx"
+        },
+        {
+          "nome": "useOnboarding",
+          "arquivo": "src/hooks/useOnboarding.ts"
+        },
+        {
+          "nome": "usePageTitle",
+          "arquivo": "src/hooks/usePageTitle.ts"
+        },
+        {
+          "nome": "useRealtimeNotifications",
+          "arquivo": "src/hooks/useRealtimeNotifications.ts"
+        },
+        {
+          "nome": "useSidebar",
+          "arquivo": "src/components/ui/sidebar.tsx"
+        },
+        {
+          "nome": "useToast",
+          "arquivo": "src/hooks/use-toast.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [
+        "send-email"
+      ],
+      "rpcs": [
+        "get_user_roles"
+      ],
+      "tabelas": [
+        "candidatos",
+        "comunicacoes",
+        "notifications"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/configuracoes/seguranca",
+      "componente": "SecuritySettingsPage",
+      "arquivo": "src/pages/settings/SecuritySettingsPage.tsx",
+      "declarada_em": "src/routes/AdminRoutes.tsx",
+      "protegida": true,
+      "guardas": [
+        "ProtectedRoute"
+      ],
+      "papeis": [],
+      "redireciona": null,
+      "arquivos_lidos": 24,
+      "hooks": [
+        {
+          "nome": "useAuth",
+          "arquivo": "src/contexts/AuthContext.tsx"
+        },
+        {
+          "nome": "usePushNotifications",
+          "arquivo": "src/hooks/usePushNotifications.ts"
+        },
+        {
+          "nome": "useReauth",
+          "arquivo": "src/hooks/useReauth.ts"
+        },
+        {
+          "nome": "useSoundPreferences",
+          "arquivo": "src/hooks/useSoundPreferences.ts"
+        },
+        {
+          "nome": "useToast",
+          "arquivo": "src/hooks/use-toast.ts"
+        },
+        {
+          "nome": "useTrustedDevices",
+          "arquivo": "src/hooks/useTrustedDevices.ts"
+        },
+        {
+          "nome": "useWebAuthn",
+          "arquivo": "src/hooks/useWebAuthn.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [
+        "get_user_roles"
+      ],
+      "tabelas": [
+        "ip_access_logs",
+        "trusted_devices",
+        "user_2fa",
+        "user_2fa_logs",
+        "webauthn_credentials"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/deu-match",
+      "componente": "DeuMatchPage",
+      "arquivo": "src/pages/DeuMatchPage.tsx",
+      "declarada_em": "src/routes/MainRoutes.tsx",
+      "protegida": true,
+      "guardas": [
+        "ProtectedRoute"
+      ],
+      "papeis": [],
+      "redireciona": null,
+      "arquivos_lidos": 36,
+      "hooks": [
+        {
+          "nome": "useAuth",
+          "arquivo": "src/contexts/AuthContext.tsx"
+        },
+        {
+          "nome": "useFuzzySearch",
+          "arquivo": "src/hooks/useFuzzySearch.ts"
+        },
+        {
+          "nome": "useKeyboardShortcuts",
+          "arquivo": "src/components/intelligence/KeyboardShortcuts.tsx"
+        },
+        {
+          "nome": "useNotifications",
+          "arquivo": "src/contexts/NotificationContext.tsx"
+        },
+        {
+          "nome": "useOnboarding",
+          "arquivo": "src/hooks/useOnboarding.ts"
+        },
+        {
+          "nome": "useRealtimeNotifications",
+          "arquivo": "src/hooks/useRealtimeNotifications.ts"
+        },
+        {
+          "nome": "useSidebar",
+          "arquivo": "src/components/ui/sidebar.tsx"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [
+        "get_user_roles"
+      ],
+      "tabelas": [
+        "notifications"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/diagnostico",
+      "componente": "DiagnosticoPage",
+      "arquivo": "src/pages/DiagnosticoPage.tsx",
+      "declarada_em": "src/routes/AdminRoutes.tsx",
+      "protegida": true,
+      "guardas": [
+        "ProtectedRoute",
+        "Admin2FAGuard"
+      ],
+      "papeis": [
+        "admin"
+      ],
+      "redireciona": null,
+      "arquivos_lidos": 5,
+      "hooks": [
+        {
+          "nome": "useAuth",
+          "arquivo": "src/contexts/AuthContext.tsx"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [
+        "get_user_roles"
+      ],
+      "tabelas": [
+        "profiles",
+        "vagas"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/edge-functions-test",
+      "componente": "EdgeFunctionTestPage",
+      "arquivo": "src/pages/EdgeFunctionTestPage.tsx",
+      "declarada_em": "src/routes/AdminRoutes.tsx",
+      "protegida": true,
+      "guardas": [
+        "ProtectedRoute",
+        "Admin2FAGuard"
+      ],
+      "papeis": [
+        "admin"
+      ],
+      "redireciona": null,
+      "arquivos_lidos": 11,
+      "hooks": [
+        {
+          "nome": "useAuth",
+          "arquivo": "src/contexts/AuthContext.tsx"
+        },
+        {
+          "nome": "useEdgeFunctionTests",
+          "arquivo": "src/pages/edgeFunctionTest/useEdgeFunctionTests.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [
+        "get_user_roles"
+      ],
+      "tabelas": [],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/gamification",
+      "componente": "GamificationPage",
+      "arquivo": "src/pages/GamificationPage.tsx",
+      "declarada_em": "src/routes/MainRoutes.tsx",
+      "protegida": true,
+      "guardas": [
+        "ProtectedRoute"
+      ],
+      "papeis": [],
+      "redireciona": null,
+      "arquivos_lidos": 47,
+      "hooks": [
+        {
+          "nome": "useAuth",
+          "arquivo": "src/contexts/AuthContext.tsx"
+        },
+        {
+          "nome": "useDailyChallenges",
+          "arquivo": "src/components/gamification/dailyChallenges/useDailyChallenges.ts"
+        },
+        {
+          "nome": "useDashboardData",
+          "arquivo": "src/components/gamification/dashboard/useDashboardData.ts"
+        },
+        {
+          "nome": "useFuzzySearch",
+          "arquivo": "src/hooks/useFuzzySearch.ts"
+        },
+        {
+          "nome": "useGamification",
+          "arquivo": "src/hooks/useGamification.ts"
+        },
+        {
+          "nome": "useGamificationOnboarding",
+          "arquivo": "src/components/gamification/GamificationOnboarding.tsx"
+        },
+        {
+          "nome": "useKeyboardShortcuts",
+          "arquivo": "src/components/intelligence/KeyboardShortcuts.tsx"
+        },
+        {
+          "nome": "useNotifications",
+          "arquivo": "src/contexts/NotificationContext.tsx"
+        },
+        {
+          "nome": "useOnboarding",
+          "arquivo": "src/hooks/useOnboarding.ts"
+        },
+        {
+          "nome": "usePageTitle",
+          "arquivo": "src/hooks/usePageTitle.ts"
+        },
+        {
+          "nome": "useRealtimeNotifications",
+          "arquivo": "src/hooks/useRealtimeNotifications.ts"
+        },
+        {
+          "nome": "useSidebar",
+          "arquivo": "src/components/ui/sidebar.tsx"
+        },
+        {
+          "nome": "useSoundPreferences",
+          "arquivo": "src/hooks/useSoundPreferences.ts"
+        },
+        {
+          "nome": "useWeeklyMissions",
+          "arquivo": "src/components/gamification/weeklyMissions/useWeeklyMissions.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [
+        "get_user_roles"
+      ],
+      "tabelas": [
+        "notifications"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/gestor",
+      "componente": "HiringManagerPortalPage",
+      "arquivo": "src/pages/HiringManagerPortalPage.tsx",
+      "declarada_em": "src/routes/MainRoutes.tsx",
+      "protegida": true,
+      "guardas": [
+        "ProtectedRoute"
+      ],
+      "papeis": [
+        "gestor",
+        "admin"
+      ],
+      "redireciona": null,
+      "arquivos_lidos": 30,
+      "hooks": [
+        {
+          "nome": "useAuth",
+          "arquivo": "src/contexts/AuthContext.tsx"
+        },
+        {
+          "nome": "useFuzzySearch",
+          "arquivo": "src/hooks/useFuzzySearch.ts"
+        },
+        {
+          "nome": "useHiringManagerData",
+          "arquivo": "src/hooks/useHiringManagerData.ts"
+        },
+        {
+          "nome": "useKeyboardShortcuts",
+          "arquivo": "src/components/intelligence/KeyboardShortcuts.tsx"
+        },
+        {
+          "nome": "useNotifications",
+          "arquivo": "src/contexts/NotificationContext.tsx"
+        },
+        {
+          "nome": "useOnboarding",
+          "arquivo": "src/hooks/useOnboarding.ts"
+        },
+        {
+          "nome": "usePageTitle",
+          "arquivo": "src/hooks/usePageTitle.ts"
+        },
+        {
+          "nome": "useRealtimeNotifications",
+          "arquivo": "src/hooks/useRealtimeNotifications.ts"
+        },
+        {
+          "nome": "useSidebar",
+          "arquivo": "src/components/ui/sidebar.tsx"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [
+        "get_user_roles"
+      ],
+      "tabelas": [
+        "entrevistas",
+        "notifications",
+        "processos_seletivos",
+        "vagas"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/indicacoes",
+      "componente": "IndicacoesPage",
+      "arquivo": "src/pages/IndicacoesPage.tsx",
+      "declarada_em": "src/routes/MainRoutes.tsx",
+      "protegida": true,
+      "guardas": [
+        "ProtectedRoute"
+      ],
+      "papeis": [],
+      "redireciona": null,
+      "arquivos_lidos": 42,
+      "hooks": [
+        {
+          "nome": "useAuth",
+          "arquivo": "src/contexts/AuthContext.tsx"
+        },
+        {
+          "nome": "useFuzzySearch",
+          "arquivo": "src/hooks/useFuzzySearch.ts"
+        },
+        {
+          "nome": "useIndicacoes",
+          "arquivo": "src/hooks/useIndicacoes.ts"
+        },
+        {
+          "nome": "useKeyboardShortcuts",
+          "arquivo": "src/components/intelligence/KeyboardShortcuts.tsx"
+        },
+        {
+          "nome": "useNotifications",
+          "arquivo": "src/contexts/NotificationContext.tsx"
+        },
+        {
+          "nome": "useOnboarding",
+          "arquivo": "src/hooks/useOnboarding.ts"
+        },
+        {
+          "nome": "usePageTitle",
+          "arquivo": "src/hooks/usePageTitle.ts"
+        },
+        {
+          "nome": "useRealtimeNotifications",
+          "arquivo": "src/hooks/useRealtimeNotifications.ts"
+        },
+        {
+          "nome": "useSidebar",
+          "arquivo": "src/components/ui/sidebar.tsx"
+        },
+        {
+          "nome": "useVagas",
+          "arquivo": "src/hooks/useVagas.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [
+        "get_user_roles"
+      ],
+      "tabelas": [
+        "indicacoes",
+        "notifications",
+        "vagas"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/ofertas",
+      "componente": "OfferManagementPage",
+      "arquivo": "src/pages/OfferManagementPage.tsx",
+      "declarada_em": "src/routes/MainRoutes.tsx",
+      "protegida": true,
+      "guardas": [
+        "ProtectedRoute"
+      ],
+      "papeis": [],
+      "redireciona": null,
+      "arquivos_lidos": 29,
+      "hooks": [
+        {
+          "nome": "useAuth",
+          "arquivo": "src/contexts/AuthContext.tsx"
+        },
+        {
+          "nome": "useFuzzySearch",
+          "arquivo": "src/hooks/useFuzzySearch.ts"
+        },
+        {
+          "nome": "useKeyboardShortcuts",
+          "arquivo": "src/components/intelligence/KeyboardShortcuts.tsx"
+        },
+        {
+          "nome": "useNotifications",
+          "arquivo": "src/contexts/NotificationContext.tsx"
+        },
+        {
+          "nome": "useOnboarding",
+          "arquivo": "src/hooks/useOnboarding.ts"
+        },
+        {
+          "nome": "usePageTitle",
+          "arquivo": "src/hooks/usePageTitle.ts"
+        },
+        {
+          "nome": "usePropostas",
+          "arquivo": "src/hooks/usePropostas.ts"
+        },
+        {
+          "nome": "useRealtimeNotifications",
+          "arquivo": "src/hooks/useRealtimeNotifications.ts"
+        },
+        {
+          "nome": "useSidebar",
+          "arquivo": "src/components/ui/sidebar.tsx"
+        }
+      ],
+      "buckets": [],
+      "edges": [
+        "send-email"
+      ],
+      "rpcs": [
+        "get_user_roles"
+      ],
+      "tabelas": [
+        "notifications",
+        "propostas"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/parser-curriculo",
+      "componente": "ResumeParserPage",
+      "arquivo": "src/pages/ResumeParserPage.tsx",
+      "declarada_em": "src/routes/MainRoutes.tsx",
+      "protegida": true,
+      "guardas": [
+        "ProtectedRoute"
+      ],
+      "papeis": [],
+      "redireciona": null,
+      "arquivos_lidos": 32,
+      "hooks": [
+        {
+          "nome": "useAuth",
+          "arquivo": "src/contexts/AuthContext.tsx"
+        },
+        {
+          "nome": "useFuzzySearch",
+          "arquivo": "src/hooks/useFuzzySearch.ts"
+        },
+        {
+          "nome": "useKeyboardShortcuts",
+          "arquivo": "src/components/intelligence/KeyboardShortcuts.tsx"
+        },
+        {
+          "nome": "useLinkedInImport",
+          "arquivo": "src/hooks/useLinkedInImport.ts"
+        },
+        {
+          "nome": "useNotifications",
+          "arquivo": "src/contexts/NotificationContext.tsx"
+        },
+        {
+          "nome": "useOnboarding",
+          "arquivo": "src/hooks/useOnboarding.ts"
+        },
+        {
+          "nome": "useRealtimeNotifications",
+          "arquivo": "src/hooks/useRealtimeNotifications.ts"
+        },
+        {
+          "nome": "useResumeParser",
+          "arquivo": "src/components/candidatos/resumeParser/useResumeParser.ts"
+        },
+        {
+          "nome": "useSidebar",
+          "arquivo": "src/components/ui/sidebar.tsx"
+        },
+        {
+          "nome": "useToast",
+          "arquivo": "src/hooks/use-toast.ts"
+        },
+        {
+          "nome": "useVagas",
+          "arquivo": "src/hooks/useVagas.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [
+        "match-score",
+        "parse-resume"
+      ],
+      "rpcs": [
+        "create_candidato_with_details",
+        "get_user_roles"
+      ],
+      "tabelas": [
+        "candidatos",
+        "match_scores",
+        "notifications",
+        "vagas"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/pipeline",
+      "componente": "Pipeline",
+      "arquivo": "src/pages/Pipeline.tsx",
+      "declarada_em": "src/routes/MainRoutes.tsx",
+      "protegida": true,
+      "guardas": [
+        "ProtectedRoute"
+      ],
+      "papeis": [],
+      "redireciona": null,
+      "arquivos_lidos": 32,
+      "hooks": [
+        {
+          "nome": "useAuth",
+          "arquivo": "src/contexts/AuthContext.tsx"
+        },
+        {
+          "nome": "useConfetti",
+          "arquivo": "src/components/ui/index.ts"
+        },
+        {
+          "nome": "useFuzzySearch",
+          "arquivo": "src/hooks/useFuzzySearch.ts"
+        },
+        {
+          "nome": "useKeyboardShortcuts",
+          "arquivo": "src/components/intelligence/KeyboardShortcuts.tsx"
+        },
+        {
+          "nome": "useNotifications",
+          "arquivo": "src/contexts/NotificationContext.tsx"
+        },
+        {
+          "nome": "useOnboarding",
+          "arquivo": "src/hooks/useOnboarding.ts"
+        },
+        {
+          "nome": "usePageTitle",
+          "arquivo": "src/hooks/usePageTitle.ts"
+        },
+        {
+          "nome": "useProcessosSeletivos",
+          "arquivo": "src/hooks/useProcessosSeletivos.ts"
+        },
+        {
+          "nome": "useRealtimeNotifications",
+          "arquivo": "src/hooks/useRealtimeNotifications.ts"
+        },
+        {
+          "nome": "useSidebar",
+          "arquivo": "src/components/ui/sidebar.tsx"
+        },
+        {
+          "nome": "useSoundEffects",
+          "arquivo": "src/hooks/useSoundEffects.ts"
+        },
+        {
+          "nome": "useUpdateProcessoEtapa",
+          "arquivo": "src/hooks/useProcessosSeletivos.ts"
+        },
+        {
+          "nome": "useVagas",
+          "arquivo": "src/hooks/useVagas.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [
+        "get_user_roles"
+      ],
+      "tabelas": [
+        "notifications",
+        "processos_seletivos",
+        "vagas"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/portal",
+      "componente": "PortalAuthPage",
+      "arquivo": "src/pages/portal/PortalAuthPage.tsx",
+      "declarada_em": "src/routes/PortalRoutes.tsx",
+      "protegida": false,
+      "guardas": [],
+      "papeis": [],
+      "redireciona": null,
+      "arquivos_lidos": 5,
+      "hooks": [
+        {
+          "nome": "useCandidatoAuth",
+          "arquivo": "src/contexts/CandidatoAuthContext.tsx"
+        },
+        {
+          "nome": "usePageTitle",
+          "arquivo": "src/hooks/usePageTitle.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [],
+      "tabelas": [
+        "candidatos_auth"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/portal/dashboard",
+      "componente": "PortalDashboard",
+      "arquivo": "src/pages/portal/PortalDashboard.tsx",
+      "declarada_em": "src/routes/PortalRoutes.tsx",
+      "protegida": true,
+      "guardas": [
+        "PortalProtectedRoute"
+      ],
+      "papeis": [],
+      "redireciona": null,
+      "arquivos_lidos": 7,
+      "hooks": [
+        {
+          "nome": "useCandidatoAuth",
+          "arquivo": "src/contexts/CandidatoAuthContext.tsx"
+        },
+        {
+          "nome": "useNotificacoesCandidato",
+          "arquivo": "src/hooks/useNotificacoesCandidato.ts"
+        },
+        {
+          "nome": "usePageTitle",
+          "arquivo": "src/hooks/usePageTitle.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [],
+      "tabelas": [
+        "candidatos_auth",
+        "candidaturas",
+        "notificacoes_candidato",
+        "vagas"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/portal/perfil",
+      "componente": "PortalPerfil",
+      "arquivo": "src/pages/portal/PortalPerfil.tsx",
+      "declarada_em": "src/routes/PortalRoutes.tsx",
+      "protegida": true,
+      "guardas": [
+        "PortalProtectedRoute"
+      ],
+      "papeis": [],
+      "redireciona": null,
+      "arquivos_lidos": 6,
+      "hooks": [
+        {
+          "nome": "useCandidatoAuth",
+          "arquivo": "src/contexts/CandidatoAuthContext.tsx"
+        },
+        {
+          "nome": "usePageTitle",
+          "arquivo": "src/hooks/usePageTitle.ts"
+        }
+      ],
+      "buckets": [
+        "curriculos"
+      ],
+      "edges": [],
+      "rpcs": [],
+      "tabelas": [
+        "candidatos_auth"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/portal/vagas",
+      "componente": "PortalVagas",
+      "arquivo": "src/pages/portal/PortalVagas.tsx",
+      "declarada_em": "src/routes/PortalRoutes.tsx",
+      "protegida": true,
+      "guardas": [
+        "PortalProtectedRoute"
+      ],
+      "papeis": [],
+      "redireciona": null,
+      "arquivos_lidos": 9,
+      "hooks": [
+        {
+          "nome": "useCandidatoAuth",
+          "arquivo": "src/contexts/CandidatoAuthContext.tsx"
+        },
+        {
+          "nome": "usePageTitle",
+          "arquivo": "src/hooks/usePageTitle.ts"
+        },
+        {
+          "nome": "usePortalVagas",
+          "arquivo": "src/pages/portal/portalVagas/usePortalVagas.ts"
+        }
+      ],
+      "buckets": [
+        "curriculos"
+      ],
+      "edges": [],
+      "rpcs": [],
+      "tabelas": [
+        "candidatos_auth",
+        "candidaturas",
+        "vagas"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/privacidade",
+      "componente": "PrivacidadePage",
+      "arquivo": "src/pages/public/PrivacidadePage.tsx",
+      "declarada_em": "src/routes/AppRoutes.tsx",
+      "protegida": false,
+      "guardas": [],
+      "papeis": [],
+      "redireciona": null,
+      "arquivos_lidos": 1,
+      "hooks": [],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [],
+      "tabelas": [],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/relatorios",
+      "componente": "ReportsPage",
+      "arquivo": "src/pages/ReportsPage.tsx",
+      "declarada_em": "src/routes/MainRoutes.tsx",
+      "protegida": true,
+      "guardas": [
+        "ProtectedRoute"
+      ],
+      "papeis": [],
+      "redireciona": null,
+      "arquivos_lidos": 32,
+      "hooks": [
+        {
+          "nome": "useAuth",
+          "arquivo": "src/contexts/AuthContext.tsx"
+        },
+        {
+          "nome": "useFuzzySearch",
+          "arquivo": "src/hooks/useFuzzySearch.ts"
+        },
+        {
+          "nome": "useKeyboardShortcuts",
+          "arquivo": "src/components/intelligence/KeyboardShortcuts.tsx"
+        },
+        {
+          "nome": "useNotifications",
+          "arquivo": "src/contexts/NotificationContext.tsx"
+        },
+        {
+          "nome": "useOnboarding",
+          "arquivo": "src/hooks/useOnboarding.ts"
+        },
+        {
+          "nome": "usePageTitle",
+          "arquivo": "src/hooks/usePageTitle.ts"
+        },
+        {
+          "nome": "useRealtimeNotifications",
+          "arquivo": "src/hooks/useRealtimeNotifications.ts"
+        },
+        {
+          "nome": "useSidebar",
+          "arquivo": "src/components/ui/sidebar.tsx"
+        },
+        {
+          "nome": "useToast",
+          "arquivo": "src/hooks/use-toast.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [
+        "get_user_roles"
+      ],
+      "tabelas": [
+        "candidatos",
+        "entrevistas",
+        "notifications",
+        "processos_seletivos",
+        "vagas"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/security/rate-limit",
+      "componente": "RateLimitDashboard",
+      "arquivo": "src/pages/security/RateLimitDashboard.tsx",
+      "declarada_em": "src/routes/AdminRoutes.tsx",
+      "protegida": true,
+      "guardas": [
+        "ProtectedRoute",
+        "Admin2FAGuard"
+      ],
+      "papeis": [
+        "admin"
+      ],
+      "redireciona": null,
+      "arquivos_lidos": 15,
+      "hooks": [
+        {
+          "nome": "useAuth",
+          "arquivo": "src/contexts/AuthContext.tsx"
+        },
+        {
+          "nome": "useKeyboardShortcuts",
+          "arquivo": "src/components/intelligence/KeyboardShortcuts.tsx"
+        },
+        {
+          "nome": "useNotifications",
+          "arquivo": "src/contexts/NotificationContext.tsx"
+        },
+        {
+          "nome": "usePageTitle",
+          "arquivo": "src/hooks/usePageTitle.ts"
+        },
+        {
+          "nome": "useRealtimeNotifications",
+          "arquivo": "src/hooks/useRealtimeNotifications.ts"
+        },
+        {
+          "nome": "useToast",
+          "arquivo": "src/hooks/use-toast.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [
+        "get_user_roles"
+      ],
+      "tabelas": [
+        "allowed_ips",
+        "blocked_ips",
+        "ip_access_logs",
+        "notifications",
+        "rate_limit_logs"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/security/roles",
+      "componente": "RolesPage",
+      "arquivo": "src/pages/security/RolesPage.tsx",
+      "declarada_em": "src/routes/AdminRoutes.tsx",
+      "protegida": true,
+      "guardas": [
+        "ProtectedRoute",
+        "Admin2FAGuard"
+      ],
+      "papeis": [
+        "admin"
+      ],
+      "redireciona": null,
+      "arquivos_lidos": 14,
+      "hooks": [
+        {
+          "nome": "useAuth",
+          "arquivo": "src/contexts/AuthContext.tsx"
+        },
+        {
+          "nome": "useFuzzySearch",
+          "arquivo": "src/hooks/useFuzzySearch.ts"
+        },
+        {
+          "nome": "useKeyboardShortcuts",
+          "arquivo": "src/components/intelligence/KeyboardShortcuts.tsx"
+        },
+        {
+          "nome": "useNotifications",
+          "arquivo": "src/contexts/NotificationContext.tsx"
+        },
+        {
+          "nome": "usePageTitle",
+          "arquivo": "src/hooks/usePageTitle.ts"
+        },
+        {
+          "nome": "useRealtimeNotifications",
+          "arquivo": "src/hooks/useRealtimeNotifications.ts"
+        },
+        {
+          "nome": "useToast",
+          "arquivo": "src/hooks/use-toast.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [
+        "get_user_roles",
+        "log_admin_action"
+      ],
+      "tabelas": [
+        "notifications",
+        "profiles",
+        "user_roles"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/status",
+      "componente": "StatusPage",
+      "arquivo": "src/pages/StatusPage.tsx",
+      "declarada_em": "src/routes/AppRoutes.tsx",
+      "protegida": false,
+      "guardas": [],
+      "papeis": [],
+      "redireciona": null,
+      "arquivos_lidos": 5,
+      "hooks": [],
+      "buckets": [],
+      "edges": [
+        "health"
+      ],
+      "rpcs": [
+        "public_email_delivery_sla"
+      ],
+      "tabelas": [],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/talentos",
+      "componente": "CandidatosPage",
+      "arquivo": "src/pages/CandidatosPage.tsx",
+      "declarada_em": "src/routes/MainRoutes.tsx",
+      "protegida": true,
+      "guardas": [
+        "ProtectedRoute"
+      ],
+      "papeis": [],
+      "redireciona": null,
+      "arquivos_lidos": 49,
+      "hooks": [
+        {
+          "nome": "useAuth",
+          "arquivo": "src/contexts/AuthContext.tsx"
+        },
+        {
+          "nome": "useCandidatoCandidaturas",
+          "arquivo": "src/hooks/useCandidatoCandidaturas.ts"
+        },
+        {
+          "nome": "useCandidatosData",
+          "arquivo": "src/hooks/useCandidatosData.ts"
+        },
+        {
+          "nome": "useCandidatoSkills",
+          "arquivo": "src/hooks/useSkills.ts"
+        },
+        {
+          "nome": "useCandidatoTechProfile",
+          "arquivo": "src/hooks/useCandidatoTechProfile.ts"
+        },
+        {
+          "nome": "useDebounce",
+          "arquivo": "src/hooks/useDebounce.ts"
+        },
+        {
+          "nome": "useFuzzySearch",
+          "arquivo": "src/hooks/useFuzzySearch.ts"
+        },
+        {
+          "nome": "useKeyboardShortcuts",
+          "arquivo": "src/components/intelligence/KeyboardShortcuts.tsx"
+        },
+        {
+          "nome": "useNotifications",
+          "arquivo": "src/contexts/NotificationContext.tsx"
+        },
+        {
+          "nome": "useOnboarding",
+          "arquivo": "src/hooks/useOnboarding.ts"
+        },
+        {
+          "nome": "usePageTitle",
+          "arquivo": "src/hooks/usePageTitle.ts"
+        },
+        {
+          "nome": "usePotentialIndex",
+          "arquivo": "src/hooks/usePotentialIndex.ts"
+        },
+        {
+          "nome": "usePotentialIndexBatch",
+          "arquivo": "src/hooks/usePotentialIndexBatch.ts"
+        },
+        {
+          "nome": "useRealtimeNotifications",
+          "arquivo": "src/hooks/useRealtimeNotifications.ts"
+        },
+        {
+          "nome": "useSidebar",
+          "arquivo": "src/components/ui/sidebar.tsx"
+        },
+        {
+          "nome": "useSkills",
+          "arquivo": "src/hooks/useSkills.ts"
+        },
+        {
+          "nome": "useSoundEffects",
+          "arquivo": "src/hooks/useSoundEffects.ts"
+        },
+        {
+          "nome": "useTalentExport",
+          "arquivo": "src/hooks/useTalentExport.ts"
+        },
+        {
+          "nome": "useTalentSearch",
+          "arquivo": "src/hooks/useTalentSearch.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [
+        "get_user_roles",
+        "search_candidatos"
+      ],
+      "tabelas": [
+        "avaliacoes_comportamentais_resultados",
+        "candidato_skills",
+        "candidatos",
+        "candidatos_auth",
+        "candidaturas",
+        "cognitive_sessions",
+        "comunicacoes",
+        "match_scores",
+        "notifications",
+        "skills"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/termos",
+      "componente": "TermosPage",
+      "arquivo": "src/pages/public/TermosPage.tsx",
+      "declarada_em": "src/routes/AppRoutes.tsx",
+      "protegida": false,
+      "guardas": [],
+      "papeis": [],
+      "redireciona": null,
+      "arquivos_lidos": 1,
+      "hooks": [],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [],
+      "tabelas": [],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/testes",
+      "componente": "TestsPage",
+      "arquivo": "src/pages/TestsPage.tsx",
+      "declarada_em": "src/routes/MainRoutes.tsx",
+      "protegida": true,
+      "guardas": [
+        "ProtectedRoute"
+      ],
+      "papeis": [],
+      "redireciona": null,
+      "arquivos_lidos": 78,
+      "hooks": [
+        {
+          "nome": "useAssessment",
+          "arquivo": "src/hooks/useAssessments.ts"
+        },
+        {
+          "nome": "useAuth",
+          "arquivo": "src/contexts/AuthContext.tsx"
+        },
+        {
+          "nome": "useCompanyProfile",
+          "arquivo": "src/components/assessments/companyProfile/useCompanyProfile.ts"
+        },
+        {
+          "nome": "useDeleteProva",
+          "arquivo": "src/hooks/useProvas.ts"
+        },
+        {
+          "nome": "useDuplicateProva",
+          "arquivo": "src/hooks/useProvas.ts"
+        },
+        {
+          "nome": "useFuzzySearch",
+          "arquivo": "src/hooks/useFuzzySearch.ts"
+        },
+        {
+          "nome": "useKeyboardShortcuts",
+          "arquivo": "src/components/intelligence/KeyboardShortcuts.tsx"
+        },
+        {
+          "nome": "useNotifications",
+          "arquivo": "src/contexts/NotificationContext.tsx"
+        },
+        {
+          "nome": "useOnboarding",
+          "arquivo": "src/hooks/useOnboarding.ts"
+        },
+        {
+          "nome": "usePageTitle",
+          "arquivo": "src/hooks/usePageTitle.ts"
+        },
+        {
+          "nome": "usePersonalityAssessment",
+          "arquivo": "src/hooks/usePersonalityAssessment.ts"
+        },
+        {
+          "nome": "useProvas",
+          "arquivo": "src/hooks/useProvas.ts"
+        },
+        {
+          "nome": "useRealtimeNotifications",
+          "arquivo": "src/hooks/useRealtimeNotifications.ts"
+        },
+        {
+          "nome": "useScenarioPlayer",
+          "arquivo": "src/components/assessments/immersive/useScenarioPlayer.ts"
+        },
+        {
+          "nome": "useSidebar",
+          "arquivo": "src/components/ui/sidebar.tsx"
+        },
+        {
+          "nome": "useSoundEffects",
+          "arquivo": "src/hooks/useSoundEffects.ts"
+        },
+        {
+          "nome": "useSubmitAssessment",
+          "arquivo": "src/hooks/useAssessments.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [
+        "get_user_roles"
+      ],
+      "tabelas": [
+        "assessment_questoes",
+        "assessment_respostas",
+        "assessments",
+        "bateria_provas_rel",
+        "baterias_provas",
+        "behavioral_assessment_results",
+        "notifications",
+        "provas"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/testes/:id/editar",
+      "componente": "ProvaEditor",
+      "arquivo": "src/pages/ProvaEditor.tsx",
+      "declarada_em": "src/routes/MainRoutes.tsx",
+      "protegida": true,
+      "guardas": [
+        "ProtectedRoute"
+      ],
+      "papeis": [],
+      "redireciona": null,
+      "arquivos_lidos": 27,
+      "hooks": [
+        {
+          "nome": "useAuth",
+          "arquivo": "src/contexts/AuthContext.tsx"
+        },
+        {
+          "nome": "useCreateProva",
+          "arquivo": "src/hooks/useProvas.ts"
+        },
+        {
+          "nome": "useFuzzySearch",
+          "arquivo": "src/hooks/useFuzzySearch.ts"
+        },
+        {
+          "nome": "useKeyboardShortcuts",
+          "arquivo": "src/components/intelligence/KeyboardShortcuts.tsx"
+        },
+        {
+          "nome": "useNotifications",
+          "arquivo": "src/contexts/NotificationContext.tsx"
+        },
+        {
+          "nome": "useOnboarding",
+          "arquivo": "src/hooks/useOnboarding.ts"
+        },
+        {
+          "nome": "usePageTitle",
+          "arquivo": "src/hooks/usePageTitle.ts"
+        },
+        {
+          "nome": "useProva",
+          "arquivo": "src/hooks/useProvas.ts"
+        },
+        {
+          "nome": "useRealtimeNotifications",
+          "arquivo": "src/hooks/useRealtimeNotifications.ts"
+        },
+        {
+          "nome": "useSidebar",
+          "arquivo": "src/components/ui/sidebar.tsx"
+        },
+        {
+          "nome": "useToast",
+          "arquivo": "src/hooks/use-toast.ts"
+        },
+        {
+          "nome": "useUpdateProva",
+          "arquivo": "src/hooks/useProvas.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [
+        "get_user_roles"
+      ],
+      "tabelas": [
+        "bateria_provas_rel",
+        "baterias_provas",
+        "notifications",
+        "provas"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/testes/:provaId/aplicar",
+      "componente": "ProvaAplicacao",
+      "arquivo": "src/pages/ProvaAplicacao.tsx",
+      "declarada_em": "src/routes/MainRoutes.tsx",
+      "protegida": true,
+      "guardas": [
+        "ProtectedRoute"
+      ],
+      "papeis": [],
+      "redireciona": null,
+      "arquivos_lidos": 26,
+      "hooks": [
+        {
+          "nome": "useAuth",
+          "arquivo": "src/contexts/AuthContext.tsx"
+        },
+        {
+          "nome": "useFuzzySearch",
+          "arquivo": "src/hooks/useFuzzySearch.ts"
+        },
+        {
+          "nome": "useKeyboardShortcuts",
+          "arquivo": "src/components/intelligence/KeyboardShortcuts.tsx"
+        },
+        {
+          "nome": "useNotifications",
+          "arquivo": "src/contexts/NotificationContext.tsx"
+        },
+        {
+          "nome": "useOnboarding",
+          "arquivo": "src/hooks/useOnboarding.ts"
+        },
+        {
+          "nome": "usePageTitle",
+          "arquivo": "src/hooks/usePageTitle.ts"
+        },
+        {
+          "nome": "useProva",
+          "arquivo": "src/hooks/useProvas.ts"
+        },
+        {
+          "nome": "useRealtimeNotifications",
+          "arquivo": "src/hooks/useRealtimeNotifications.ts"
+        },
+        {
+          "nome": "useSidebar",
+          "arquivo": "src/components/ui/sidebar.tsx"
+        },
+        {
+          "nome": "useToast",
+          "arquivo": "src/hooks/use-toast.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [
+        "get_user_roles"
+      ],
+      "tabelas": [
+        "bateria_provas_rel",
+        "baterias_provas",
+        "notifications",
+        "provas"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/testes/nova",
+      "componente": "ProvaEditor",
+      "arquivo": "src/pages/ProvaEditor.tsx",
+      "declarada_em": "src/routes/MainRoutes.tsx",
+      "protegida": true,
+      "guardas": [
+        "ProtectedRoute"
+      ],
+      "papeis": [],
+      "redireciona": null,
+      "arquivos_lidos": 27,
+      "hooks": [
+        {
+          "nome": "useAuth",
+          "arquivo": "src/contexts/AuthContext.tsx"
+        },
+        {
+          "nome": "useCreateProva",
+          "arquivo": "src/hooks/useProvas.ts"
+        },
+        {
+          "nome": "useFuzzySearch",
+          "arquivo": "src/hooks/useFuzzySearch.ts"
+        },
+        {
+          "nome": "useKeyboardShortcuts",
+          "arquivo": "src/components/intelligence/KeyboardShortcuts.tsx"
+        },
+        {
+          "nome": "useNotifications",
+          "arquivo": "src/contexts/NotificationContext.tsx"
+        },
+        {
+          "nome": "useOnboarding",
+          "arquivo": "src/hooks/useOnboarding.ts"
+        },
+        {
+          "nome": "usePageTitle",
+          "arquivo": "src/hooks/usePageTitle.ts"
+        },
+        {
+          "nome": "useProva",
+          "arquivo": "src/hooks/useProvas.ts"
+        },
+        {
+          "nome": "useRealtimeNotifications",
+          "arquivo": "src/hooks/useRealtimeNotifications.ts"
+        },
+        {
+          "nome": "useSidebar",
+          "arquivo": "src/components/ui/sidebar.tsx"
+        },
+        {
+          "nome": "useToast",
+          "arquivo": "src/hooks/use-toast.ts"
+        },
+        {
+          "nome": "useUpdateProva",
+          "arquivo": "src/hooks/useProvas.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [
+        "get_user_roles"
+      ],
+      "tabelas": [
+        "bateria_provas_rel",
+        "baterias_provas",
+        "notifications",
+        "provas"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/vagas",
+      "componente": "VagasList",
+      "arquivo": "src/pages/VagasList.tsx",
+      "declarada_em": "src/routes/MainRoutes.tsx",
+      "protegida": true,
+      "guardas": [
+        "ProtectedRoute"
+      ],
+      "papeis": [],
+      "redireciona": null,
+      "arquivos_lidos": 38,
+      "hooks": [
+        {
+          "nome": "useAuth",
+          "arquivo": "src/contexts/AuthContext.tsx"
+        },
+        {
+          "nome": "useDeleteVaga",
+          "arquivo": "src/hooks/useVagas.ts"
+        },
+        {
+          "nome": "useFuzzySearch",
+          "arquivo": "src/hooks/useFuzzySearch.ts"
+        },
+        {
+          "nome": "useItemMatches",
+          "arquivo": "src/contexts/FuzzySearchContext.tsx"
+        },
+        {
+          "nome": "useKeyboardShortcuts",
+          "arquivo": "src/components/intelligence/KeyboardShortcuts.tsx"
+        },
+        {
+          "nome": "useNotifications",
+          "arquivo": "src/contexts/NotificationContext.tsx"
+        },
+        {
+          "nome": "useOnboarding",
+          "arquivo": "src/hooks/useOnboarding.ts"
+        },
+        {
+          "nome": "useRealtimeNotifications",
+          "arquivo": "src/hooks/useRealtimeNotifications.ts"
+        },
+        {
+          "nome": "useSidebar",
+          "arquivo": "src/components/ui/sidebar.tsx"
+        },
+        {
+          "nome": "useSoundEffects",
+          "arquivo": "src/hooks/useSoundEffects.ts"
+        },
+        {
+          "nome": "useVagas",
+          "arquivo": "src/hooks/useVagas.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [
+        "get_user_roles"
+      ],
+      "tabelas": [
+        "notifications",
+        "vagas"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/vagas/:id",
+      "componente": "VagaDetalhes",
+      "arquivo": "src/pages/VagaDetalhes.tsx",
+      "declarada_em": "src/routes/MainRoutes.tsx",
+      "protegida": true,
+      "guardas": [
+        "ProtectedRoute"
+      ],
+      "papeis": [],
+      "redireciona": null,
+      "arquivos_lidos": 29,
+      "hooks": [
+        {
+          "nome": "useAuth",
+          "arquivo": "src/contexts/AuthContext.tsx"
+        },
+        {
+          "nome": "useFuzzySearch",
+          "arquivo": "src/hooks/useFuzzySearch.ts"
+        },
+        {
+          "nome": "useKeyboardShortcuts",
+          "arquivo": "src/components/intelligence/KeyboardShortcuts.tsx"
+        },
+        {
+          "nome": "useNotifications",
+          "arquivo": "src/contexts/NotificationContext.tsx"
+        },
+        {
+          "nome": "useOnboarding",
+          "arquivo": "src/hooks/useOnboarding.ts"
+        },
+        {
+          "nome": "usePageTitle",
+          "arquivo": "src/hooks/usePageTitle.ts"
+        },
+        {
+          "nome": "useProcessosSeletivos",
+          "arquivo": "src/hooks/useProcessosSeletivos.ts"
+        },
+        {
+          "nome": "useRealtimeNotifications",
+          "arquivo": "src/hooks/useRealtimeNotifications.ts"
+        },
+        {
+          "nome": "useSidebar",
+          "arquivo": "src/components/ui/sidebar.tsx"
+        },
+        {
+          "nome": "useUpdateVaga",
+          "arquivo": "src/hooks/useVagas.ts"
+        },
+        {
+          "nome": "useVaga",
+          "arquivo": "src/hooks/useVagas.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [
+        "get_user_roles"
+      ],
+      "tabelas": [
+        "notifications",
+        "processos_seletivos",
+        "vagas"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/vagas/:id/editar",
+      "componente": "VagaForm",
+      "arquivo": "src/pages/VagaForm.tsx",
+      "declarada_em": "src/routes/MainRoutes.tsx",
+      "protegida": true,
+      "guardas": [
+        "ProtectedRoute"
+      ],
+      "papeis": [],
+      "redireciona": null,
+      "arquivos_lidos": 32,
+      "hooks": [
+        {
+          "nome": "useAuth",
+          "arquivo": "src/contexts/AuthContext.tsx"
+        },
+        {
+          "nome": "useCreateVaga",
+          "arquivo": "src/hooks/useVagas.ts"
+        },
+        {
+          "nome": "useFuzzySearch",
+          "arquivo": "src/hooks/useFuzzySearch.ts"
+        },
+        {
+          "nome": "useKeyboardShortcuts",
+          "arquivo": "src/components/intelligence/KeyboardShortcuts.tsx"
+        },
+        {
+          "nome": "useNotifications",
+          "arquivo": "src/contexts/NotificationContext.tsx"
+        },
+        {
+          "nome": "useOnboarding",
+          "arquivo": "src/hooks/useOnboarding.ts"
+        },
+        {
+          "nome": "usePageTitle",
+          "arquivo": "src/hooks/usePageTitle.ts"
+        },
+        {
+          "nome": "useRealtimeNotifications",
+          "arquivo": "src/hooks/useRealtimeNotifications.ts"
+        },
+        {
+          "nome": "useSidebar",
+          "arquivo": "src/components/ui/sidebar.tsx"
+        },
+        {
+          "nome": "useToast",
+          "arquivo": "src/hooks/use-toast.ts"
+        },
+        {
+          "nome": "useUpdateVaga",
+          "arquivo": "src/hooks/useVagas.ts"
+        },
+        {
+          "nome": "useVaga",
+          "arquivo": "src/hooks/useVagas.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [
+        "get_user_roles"
+      ],
+      "tabelas": [
+        "notifications",
+        "vagas"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/vagas/:vagaId/aplicar",
+      "componente": "AplicarVagaPage",
+      "arquivo": "src/pages/AplicarVagaPage.tsx",
+      "declarada_em": "src/routes/AppRoutes.tsx",
+      "protegida": false,
+      "guardas": [],
+      "papeis": [],
+      "redireciona": null,
+      "arquivos_lidos": 4,
+      "hooks": [],
+      "buckets": [],
+      "edges": [
+        "public-apply"
+      ],
+      "rpcs": [],
+      "tabelas": [
+        "empresa_branding",
+        "vagas"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/vagas/:vagaId/ranking",
+      "componente": "RankingVagaPage",
+      "arquivo": "src/pages/RankingVagaPage.tsx",
+      "declarada_em": "src/routes/MainRoutes.tsx",
+      "protegida": true,
+      "guardas": [
+        "ProtectedRoute"
+      ],
+      "papeis": [
+        "admin",
+        "rh",
+        "gestor"
+      ],
+      "redireciona": null,
+      "arquivos_lidos": 3,
+      "hooks": [
+        {
+          "nome": "useBulkAiScreening",
+          "arquivo": "src/hooks/useRankingVaga.ts"
+        },
+        {
+          "nome": "useRankingStats",
+          "arquivo": "src/hooks/useRankingVaga.ts"
+        },
+        {
+          "nome": "useRankingVaga",
+          "arquivo": "src/hooks/useRankingVaga.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [
+        "ai-screening"
+      ],
+      "rpcs": [],
+      "tabelas": [
+        "candidaturas",
+        "triagem_ia",
+        "vagas"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/vagas/nova",
+      "componente": "VagaForm",
+      "arquivo": "src/pages/VagaForm.tsx",
+      "declarada_em": "src/routes/MainRoutes.tsx",
+      "protegida": true,
+      "guardas": [
+        "ProtectedRoute"
+      ],
+      "papeis": [],
+      "redireciona": null,
+      "arquivos_lidos": 32,
+      "hooks": [
+        {
+          "nome": "useAuth",
+          "arquivo": "src/contexts/AuthContext.tsx"
+        },
+        {
+          "nome": "useCreateVaga",
+          "arquivo": "src/hooks/useVagas.ts"
+        },
+        {
+          "nome": "useFuzzySearch",
+          "arquivo": "src/hooks/useFuzzySearch.ts"
+        },
+        {
+          "nome": "useKeyboardShortcuts",
+          "arquivo": "src/components/intelligence/KeyboardShortcuts.tsx"
+        },
+        {
+          "nome": "useNotifications",
+          "arquivo": "src/contexts/NotificationContext.tsx"
+        },
+        {
+          "nome": "useOnboarding",
+          "arquivo": "src/hooks/useOnboarding.ts"
+        },
+        {
+          "nome": "usePageTitle",
+          "arquivo": "src/hooks/usePageTitle.ts"
+        },
+        {
+          "nome": "useRealtimeNotifications",
+          "arquivo": "src/hooks/useRealtimeNotifications.ts"
+        },
+        {
+          "nome": "useSidebar",
+          "arquivo": "src/components/ui/sidebar.tsx"
+        },
+        {
+          "nome": "useToast",
+          "arquivo": "src/hooks/use-toast.ts"
+        },
+        {
+          "nome": "useUpdateVaga",
+          "arquivo": "src/hooks/useVagas.ts"
+        },
+        {
+          "nome": "useVaga",
+          "arquivo": "src/hooks/useVagas.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [
+        "get_user_roles"
+      ],
+      "tabelas": [
+        "notifications",
+        "vagas"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/workflows",
+      "componente": "WorkflowEditorPage",
+      "arquivo": "src/pages/WorkflowEditorPage.tsx",
+      "declarada_em": "src/routes/MainRoutes.tsx",
+      "protegida": true,
+      "guardas": [
+        "ProtectedRoute"
+      ],
+      "papeis": [],
+      "redireciona": null,
+      "arquivos_lidos": 33,
+      "hooks": [
+        {
+          "nome": "useAuth",
+          "arquivo": "src/contexts/AuthContext.tsx"
+        },
+        {
+          "nome": "useFuzzySearch",
+          "arquivo": "src/hooks/useFuzzySearch.ts"
+        },
+        {
+          "nome": "useKeyboardShortcuts",
+          "arquivo": "src/components/intelligence/KeyboardShortcuts.tsx"
+        },
+        {
+          "nome": "useNotifications",
+          "arquivo": "src/contexts/NotificationContext.tsx"
+        },
+        {
+          "nome": "useOnboarding",
+          "arquivo": "src/hooks/useOnboarding.ts"
+        },
+        {
+          "nome": "usePageTitle",
+          "arquivo": "src/hooks/usePageTitle.ts"
+        },
+        {
+          "nome": "useRealtimeNotifications",
+          "arquivo": "src/hooks/useRealtimeNotifications.ts"
+        },
+        {
+          "nome": "useRegrasAutomacao",
+          "arquivo": "src/hooks/useRegrasAutomacao.ts"
+        },
+        {
+          "nome": "useSidebar",
+          "arquivo": "src/components/ui/sidebar.tsx"
+        },
+        {
+          "nome": "useToast",
+          "arquivo": "src/hooks/use-toast.ts"
+        },
+        {
+          "nome": "useWorkflow",
+          "arquivo": "src/hooks/useWorkflow.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [
+        "get_user_roles"
+      ],
+      "tabelas": [
+        "notifications",
+        "regras_automacao"
+      ],
+      "imports_quebrados": []
+    }
+  ],
+  "hooks": {
+    "useAdminUsers": {
+      "arquivo": "src/hooks/useAdminUsers.ts",
+      "rotas": [
+        "/admin"
+      ]
+    },
+    "useAdvancedAnalytics": {
+      "arquivo": "src/hooks/useAdvancedAnalytics.ts",
+      "rotas": [
+        "/analytics"
+      ]
+    },
+    "useAgendaActions": {
+      "arquivo": "src/hooks/useAgendaActions.ts",
+      "rotas": [
+        "/agenda"
+      ]
+    },
+    "useAssessment": {
+      "arquivo": "src/hooks/useAssessments.ts",
+      "rotas": [
+        "/testes"
+      ]
+    },
+    "useAssessmentEngine": {
+      "arquivo": "src/hooks/useAssessmentEngine.ts",
+      "rotas": [
+        "/avaliacoes-comportamentais"
+      ]
+    },
+    "useAuditLogs": {
+      "arquivo": "src/hooks/useAuditLogs.ts",
+      "rotas": [
+        "/admin"
+      ]
+    },
+    "useAuth": {
+      "arquivo": "src/contexts/AuthContext.tsx",
+      "rotas": [
+        "/",
+        "/admin",
+        "/agenda",
+        "/analytics",
+        "/analytics-basico",
+        "/auth",
+        "/auth/2fa",
+        "/auth/login",
+        "/auth/register",
+        "/avaliacao-comportamental",
+        "/avaliacao/:processoId",
+        "/avaliacoes",
+        "/avaliacoes-comportamentais",
+        "/banco-talentos",
+        "/candidato/:id",
+        "/comunicacao",
+        "/configuracoes/seguranca",
+        "/deu-match",
+        "/diagnostico",
+        "/edge-functions-test",
+        "/gamification",
+        "/gestor",
+        "/indicacoes",
+        "/ofertas",
+        "/parser-curriculo",
+        "/pipeline",
+        "/relatorios",
+        "/security/rate-limit",
+        "/security/roles",
+        "/talentos",
+        "/testes",
+        "/testes/:id/editar",
+        "/testes/:provaId/aplicar",
+        "/testes/nova",
+        "/vagas",
+        "/vagas/:id",
+        "/vagas/:id/editar",
+        "/vagas/nova",
+        "/workflows"
+      ]
+    },
+    "useAvaliacao": {
+      "arquivo": "src/hooks/useAvaliacoes.ts",
+      "rotas": [
+        "/avaliacao/:processoId"
+      ]
+    },
+    "useAvaliacaoForm": {
+      "arquivo": "src/hooks/useAvaliacaoForm.ts",
+      "rotas": [
+        "/avaliacao/:processoId"
+      ]
+    },
+    "useAvaliacoes": {
+      "arquivo": "src/hooks/useAvaliacoes.ts",
+      "rotas": [
+        "/avaliacao/:processoId"
+      ]
+    },
+    "useBehavioralAssessment": {
+      "arquivo": "src/hooks/useBehavioralAssessmentResults.ts",
+      "rotas": [
+        "/avaliacao-comportamental"
+      ]
+    },
+    "useBehavioralGamification": {
+      "arquivo": "src/hooks/useBehavioralGamification.ts",
+      "rotas": [
+        "/avaliacoes-comportamentais"
+      ]
+    },
+    "useBehavioralScoreCalculation": {
+      "arquivo": "src/hooks/useBehavioralScoreCalculation.ts",
+      "rotas": [
+        "/avaliacao-comportamental"
+      ]
+    },
+    "useBulkAiScreening": {
+      "arquivo": "src/hooks/useRankingVaga.ts",
+      "rotas": [
+        "/vagas/:vagaId/ranking"
+      ]
+    },
+    "useCandidatoAuth": {
+      "arquivo": "src/contexts/CandidatoAuthContext.tsx",
+      "rotas": [
+        "/portal",
+        "/portal/dashboard",
+        "/portal/perfil",
+        "/portal/vagas"
+      ]
+    },
+    "useCandidatoCandidaturas": {
+      "arquivo": "src/hooks/useCandidatoCandidaturas.ts",
+      "rotas": [
+        "/talentos"
+      ]
+    },
+    "useCandidatoPerfil": {
+      "arquivo": "src/hooks/useCandidatoPerfil.ts",
+      "rotas": [
+        "/candidato/:id"
+      ]
+    },
+    "useCandidatoSkills": {
+      "arquivo": "src/hooks/useSkills.ts",
+      "rotas": [
+        "/talentos"
+      ]
+    },
+    "useCandidatoTechProfile": {
+      "arquivo": "src/hooks/useCandidatoTechProfile.ts",
+      "rotas": [
+        "/talentos"
+      ]
+    },
+    "useCandidatosData": {
+      "arquivo": "src/hooks/useCandidatosData.ts",
+      "rotas": [
+        "/talentos"
+      ]
+    },
+    "useCognitiveSessionItems": {
+      "arquivo": "src/hooks/useCognitiveTest.ts",
+      "rotas": [
+        "/avaliacao-cognitiva",
+        "/avaliacao-cognitiva/:vagaId"
+      ]
+    },
+    "useCognitiveTimer": {
+      "arquivo": "src/hooks/useCognitiveTest.ts",
+      "rotas": [
+        "/avaliacao-cognitiva",
+        "/avaliacao-cognitiva/:vagaId"
+      ]
+    },
+    "useCompanyProfile": {
+      "arquivo": "src/components/assessments/companyProfile/useCompanyProfile.ts",
+      "rotas": [
+        "/avaliacao-comportamental",
+        "/testes"
+      ]
+    },
+    "useComunicacoes": {
+      "arquivo": "src/hooks/useComunicacoes.ts",
+      "rotas": [
+        "/comunicacao"
+      ]
+    },
+    "useConfetti": {
+      "arquivo": "src/components/ui/confetti.tsx",
+      "rotas": [
+        "/agenda",
+        "/pipeline"
+      ]
+    },
+    "useCreateProva": {
+      "arquivo": "src/hooks/useProvas.ts",
+      "rotas": [
+        "/testes/:id/editar",
+        "/testes/nova"
+      ]
+    },
+    "useCreateVaga": {
+      "arquivo": "src/hooks/useVagas.ts",
+      "rotas": [
+        "/vagas/:id/editar",
+        "/vagas/nova"
+      ]
+    },
+    "useDailyChallenges": {
+      "arquivo": "src/components/gamification/dailyChallenges/useDailyChallenges.ts",
+      "rotas": [
+        "/avaliacoes-comportamentais",
+        "/gamification"
+      ]
+    },
+    "useDashboardData": {
+      "arquivo": "src/hooks/useDashboardData.ts",
+      "rotas": [
+        "/",
+        "/avaliacoes-comportamentais",
+        "/gamification"
+      ]
+    },
+    "useDebounce": {
+      "arquivo": "src/hooks/useDebounce.ts",
+      "rotas": [
+        "/talentos"
+      ]
+    },
+    "useDeleteProva": {
+      "arquivo": "src/hooks/useProvas.ts",
+      "rotas": [
+        "/testes"
+      ]
+    },
+    "useDeleteVaga": {
+      "arquivo": "src/hooks/useVagas.ts",
+      "rotas": [
+        "/vagas"
+      ]
+    },
+    "useDuplicateProva": {
+      "arquivo": "src/hooks/useProvas.ts",
+      "rotas": [
+        "/testes"
+      ]
+    },
+    "useEdgeFunctionTests": {
+      "arquivo": "src/pages/edgeFunctionTest/useEdgeFunctionTests.ts",
+      "rotas": [
+        "/edge-functions-test"
+      ]
+    },
+    "useEntrevistas": {
+      "arquivo": "src/hooks/useEntrevistas.ts",
+      "rotas": [
+        "/agenda"
+      ]
+    },
+    "useEntrevistasEvolucao": {
+      "arquivo": "src/hooks/useEntrevistas.ts",
+      "rotas": [
+        "/"
+      ]
+    },
+    "useEntrevistasPizza": {
+      "arquivo": "src/hooks/useEntrevistas.ts",
+      "rotas": [
+        "/"
+      ]
+    },
+    "useFinishCognitiveSession": {
+      "arquivo": "src/hooks/useCognitiveTest.ts",
+      "rotas": [
+        "/avaliacao-cognitiva",
+        "/avaliacao-cognitiva/:vagaId"
+      ]
+    },
+    "useFunnelSla": {
+      "arquivo": "src/hooks/useFunnelSla.ts",
+      "rotas": [
+        "/",
+        "/analytics"
+      ]
+    },
+    "useFuzzySearch": {
+      "arquivo": "src/hooks/useFuzzySearch.ts",
+      "rotas": [
+        "/",
+        "/admin",
+        "/agenda",
+        "/analytics",
+        "/analytics-basico",
+        "/avaliacao-comportamental",
+        "/avaliacao/:processoId",
+        "/avaliacoes",
+        "/avaliacoes-comportamentais",
+        "/banco-talentos",
+        "/candidato/:id",
+        "/comunicacao",
+        "/deu-match",
+        "/gamification",
+        "/gestor",
+        "/indicacoes",
+        "/ofertas",
+        "/parser-curriculo",
+        "/pipeline",
+        "/relatorios",
+        "/security/roles",
+        "/talentos",
+        "/testes",
+        "/testes/:id/editar",
+        "/testes/:provaId/aplicar",
+        "/testes/nova",
+        "/vagas",
+        "/vagas/:id",
+        "/vagas/:id/editar",
+        "/vagas/nova",
+        "/workflows"
+      ]
+    },
+    "useGamification": {
+      "arquivo": "src/hooks/useGamification.ts",
+      "rotas": [
+        "/",
+        "/avaliacoes-comportamentais",
+        "/gamification"
+      ]
+    },
+    "useGamificationOnboarding": {
+      "arquivo": "src/components/gamification/GamificationOnboarding.tsx",
+      "rotas": [
+        "/gamification"
+      ]
+    },
+    "useGamificationSupabase": {
+      "arquivo": "src/hooks/useGamificationSupabase.ts",
+      "rotas": [
+        "/avaliacoes-comportamentais"
+      ]
+    },
+    "useGamificationTriggers": {
+      "arquivo": "src/hooks/useGamificationTriggers.ts",
+      "rotas": [
+        "/avaliacoes-comportamentais"
+      ]
+    },
+    "useHiringManagerData": {
+      "arquivo": "src/hooks/useHiringManagerData.ts",
+      "rotas": [
+        "/gestor"
+      ]
+    },
+    "useIndicacoes": {
+      "arquivo": "src/hooks/useIndicacoes.ts",
+      "rotas": [
+        "/indicacoes"
+      ]
+    },
+    "useInterviewReminders": {
+      "arquivo": "src/hooks/useInterviewReminders.ts",
+      "rotas": [
+        "/agenda"
+      ]
+    },
+    "useItemMatches": {
+      "arquivo": "src/contexts/FuzzySearchContext.tsx",
+      "rotas": [
+        "/vagas"
+      ]
+    },
+    "useKeyboardShortcuts": {
+      "arquivo": "src/components/intelligence/KeyboardShortcuts.tsx",
+      "rotas": [
+        "/",
+        "/admin",
+        "/agenda",
+        "/analytics",
+        "/analytics-basico",
+        "/avaliacao-comportamental",
+        "/avaliacao/:processoId",
+        "/avaliacoes",
+        "/avaliacoes-comportamentais",
+        "/banco-talentos",
+        "/candidato/:id",
+        "/comunicacao",
+        "/deu-match",
+        "/gamification",
+        "/gestor",
+        "/indicacoes",
+        "/ofertas",
+        "/parser-curriculo",
+        "/pipeline",
+        "/relatorios",
+        "/security/rate-limit",
+        "/security/roles",
+        "/talentos",
+        "/testes",
+        "/testes/:id/editar",
+        "/testes/:provaId/aplicar",
+        "/testes/nova",
+        "/vagas",
+        "/vagas/:id",
+        "/vagas/:id/editar",
+        "/vagas/nova",
+        "/workflows"
+      ]
+    },
+    "useLinkedInImport": {
+      "arquivo": "src/hooks/useLinkedInImport.ts",
+      "rotas": [
+        "/parser-curriculo"
+      ]
+    },
+    "useLocalStorageState": {
+      "arquivo": "src/hooks/useLocalStorageState.ts",
+      "rotas": [
+        "/analytics"
+      ]
+    },
+    "useNotificacoesCandidato": {
+      "arquivo": "src/hooks/useNotificacoesCandidato.ts",
+      "rotas": [
+        "/portal/dashboard"
+      ]
+    },
+    "useNotifications": {
+      "arquivo": "src/contexts/NotificationContext.tsx",
+      "rotas": [
+        "/",
+        "/admin",
+        "/agenda",
+        "/analytics",
+        "/analytics-basico",
+        "/avaliacao-comportamental",
+        "/avaliacao/:processoId",
+        "/avaliacoes",
+        "/avaliacoes-comportamentais",
+        "/banco-talentos",
+        "/candidato/:id",
+        "/comunicacao",
+        "/deu-match",
+        "/gamification",
+        "/gestor",
+        "/indicacoes",
+        "/ofertas",
+        "/parser-curriculo",
+        "/pipeline",
+        "/relatorios",
+        "/security/rate-limit",
+        "/security/roles",
+        "/talentos",
+        "/testes",
+        "/testes/:id/editar",
+        "/testes/:provaId/aplicar",
+        "/testes/nova",
+        "/vagas",
+        "/vagas/:id",
+        "/vagas/:id/editar",
+        "/vagas/nova",
+        "/workflows"
+      ]
+    },
+    "useOnboarding": {
+      "arquivo": "src/components/onboarding/OnboardingProvider.tsx",
+      "rotas": [
+        "/",
+        "/admin",
+        "/agenda",
+        "/analytics",
+        "/analytics-basico",
+        "/avaliacao-comportamental",
+        "/avaliacao/:processoId",
+        "/avaliacoes",
+        "/avaliacoes-comportamentais",
+        "/banco-talentos",
+        "/candidato/:id",
+        "/comunicacao",
+        "/deu-match",
+        "/gamification",
+        "/gestor",
+        "/indicacoes",
+        "/ofertas",
+        "/parser-curriculo",
+        "/pipeline",
+        "/relatorios",
+        "/talentos",
+        "/testes",
+        "/testes/:id/editar",
+        "/testes/:provaId/aplicar",
+        "/testes/nova",
+        "/vagas",
+        "/vagas/:id",
+        "/vagas/:id/editar",
+        "/vagas/nova",
+        "/workflows"
+      ]
+    },
+    "usePageTitle": {
+      "arquivo": "src/hooks/usePageTitle.ts",
+      "rotas": [
+        "*",
+        "/",
+        "/admin",
+        "/agenda",
+        "/analytics",
+        "/analytics-basico",
+        "/assinar-proposta/:token",
+        "/auth",
+        "/auth/2fa",
+        "/auth/forgot-password",
+        "/auth/login",
+        "/auth/register",
+        "/auth/reset-password",
+        "/avaliacao-comportamental",
+        "/avaliacao/:processoId",
+        "/avaliacoes",
+        "/avaliacoes-comportamentais",
+        "/candidato/:id",
+        "/comunicacao",
+        "/gamification",
+        "/gestor",
+        "/indicacoes",
+        "/ofertas",
+        "/pipeline",
+        "/portal",
+        "/portal/dashboard",
+        "/portal/perfil",
+        "/portal/vagas",
+        "/relatorios",
+        "/security/rate-limit",
+        "/security/roles",
+        "/talentos",
+        "/testes",
+        "/testes/:id/editar",
+        "/testes/:provaId/aplicar",
+        "/testes/nova",
+        "/vagas/:id",
+        "/vagas/:id/editar",
+        "/vagas/nova",
+        "/workflows"
+      ]
+    },
+    "usePersonalityAssessment": {
+      "arquivo": "src/hooks/usePersonalityAssessment.ts",
+      "rotas": [
+        "/testes"
+      ]
+    },
+    "usePersonalityMiniGame": {
+      "arquivo": "src/components/assessments/gamified/personalityMiniGame/usePersonalityMiniGame.ts",
+      "rotas": [
+        "/avaliacoes-comportamentais"
+      ]
+    },
+    "usePortalVagas": {
+      "arquivo": "src/pages/portal/portalVagas/usePortalVagas.ts",
+      "rotas": [
+        "/portal/vagas"
+      ]
+    },
+    "usePotentialIndex": {
+      "arquivo": "src/hooks/usePotentialIndex.ts",
+      "rotas": [
+        "/talentos"
+      ]
+    },
+    "usePotentialIndexBatch": {
+      "arquivo": "src/hooks/usePotentialIndexBatch.ts",
+      "rotas": [
+        "/talentos"
+      ]
+    },
+    "useProcessosSeletivos": {
+      "arquivo": "src/hooks/useProcessosSeletivos.ts",
+      "rotas": [
+        "/avaliacao/:processoId",
+        "/pipeline",
+        "/vagas/:id"
+      ]
+    },
+    "usePropostas": {
+      "arquivo": "src/hooks/usePropostas.ts",
+      "rotas": [
+        "/ofertas"
+      ]
+    },
+    "useProva": {
+      "arquivo": "src/hooks/useProvas.ts",
+      "rotas": [
+        "/testes/:id/editar",
+        "/testes/:provaId/aplicar",
+        "/testes/nova"
+      ]
+    },
+    "useProvas": {
+      "arquivo": "src/hooks/useProvas.ts",
+      "rotas": [
+        "/testes"
+      ]
+    },
+    "usePushNotifications": {
+      "arquivo": "src/hooks/usePushNotifications.ts",
+      "rotas": [
+        "/configuracoes/seguranca"
+      ]
+    },
+    "useRankingStats": {
+      "arquivo": "src/hooks/useRankingVaga.ts",
+      "rotas": [
+        "/vagas/:vagaId/ranking"
+      ]
+    },
+    "useRankingVaga": {
+      "arquivo": "src/hooks/useRankingVaga.ts",
+      "rotas": [
+        "/vagas/:vagaId/ranking"
+      ]
+    },
+    "useRealtimeNotifications": {
+      "arquivo": "src/hooks/useRealtimeNotifications.ts",
+      "rotas": [
+        "/",
+        "/admin",
+        "/agenda",
+        "/analytics",
+        "/analytics-basico",
+        "/avaliacao-comportamental",
+        "/avaliacao/:processoId",
+        "/avaliacoes",
+        "/avaliacoes-comportamentais",
+        "/banco-talentos",
+        "/candidato/:id",
+        "/comunicacao",
+        "/deu-match",
+        "/gamification",
+        "/gestor",
+        "/indicacoes",
+        "/ofertas",
+        "/parser-curriculo",
+        "/pipeline",
+        "/relatorios",
+        "/security/rate-limit",
+        "/security/roles",
+        "/talentos",
+        "/testes",
+        "/testes/:id/editar",
+        "/testes/:provaId/aplicar",
+        "/testes/nova",
+        "/vagas",
+        "/vagas/:id",
+        "/vagas/:id/editar",
+        "/vagas/nova",
+        "/workflows"
+      ]
+    },
+    "useReauth": {
+      "arquivo": "src/hooks/useReauth.ts",
+      "rotas": [
+        "/configuracoes/seguranca"
+      ]
+    },
+    "useRegisterFirstResponseBatch": {
+      "arquivo": "src/hooks/useRegisterFirstResponse.ts",
+      "rotas": [
+        "/analytics"
+      ]
+    },
+    "useRegrasAutomacao": {
+      "arquivo": "src/hooks/useRegrasAutomacao.ts",
+      "rotas": [
+        "/workflows"
+      ]
+    },
+    "useResumeParser": {
+      "arquivo": "src/components/candidatos/resumeParser/useResumeParser.ts",
+      "rotas": [
+        "/parser-curriculo"
+      ]
+    },
+    "useSaveBehavioralResult": {
+      "arquivo": "src/hooks/behavioralResults/mutations.ts",
+      "rotas": [
+        "/avaliacao-comportamental",
+        "/avaliacoes-comportamentais"
+      ]
+    },
+    "useScenarioPlayer": {
+      "arquivo": "src/components/assessments/immersive/useScenarioPlayer.ts",
+      "rotas": [
+        "/avaliacao-comportamental",
+        "/testes"
+      ]
+    },
+    "useSidebar": {
+      "arquivo": "src/components/ui/sidebar.tsx",
+      "rotas": [
+        "/",
+        "/admin",
+        "/agenda",
+        "/analytics",
+        "/analytics-basico",
+        "/avaliacao-comportamental",
+        "/avaliacao/:processoId",
+        "/avaliacoes",
+        "/avaliacoes-comportamentais",
+        "/banco-talentos",
+        "/candidato/:id",
+        "/comunicacao",
+        "/deu-match",
+        "/gamification",
+        "/gestor",
+        "/indicacoes",
+        "/ofertas",
+        "/parser-curriculo",
+        "/pipeline",
+        "/relatorios",
+        "/talentos",
+        "/testes",
+        "/testes/:id/editar",
+        "/testes/:provaId/aplicar",
+        "/testes/nova",
+        "/vagas",
+        "/vagas/:id",
+        "/vagas/:id/editar",
+        "/vagas/nova",
+        "/workflows"
+      ]
+    },
+    "useSkills": {
+      "arquivo": "src/hooks/useSkills.ts",
+      "rotas": [
+        "/talentos"
+      ]
+    },
+    "useSlaOverdueList": {
+      "arquivo": "src/hooks/useSlaOverdueList.ts",
+      "rotas": [
+        "/analytics"
+      ]
+    },
+    "useSoundEffects": {
+      "arquivo": "src/hooks/useSoundEffects.ts",
+      "rotas": [
+        "/agenda",
+        "/pipeline",
+        "/talentos",
+        "/testes",
+        "/vagas"
+      ]
+    },
+    "useSoundPreferences": {
+      "arquivo": "src/hooks/useSoundPreferences.ts",
+      "rotas": [
+        "/",
+        "/avaliacoes-comportamentais",
+        "/configuracoes/seguranca",
+        "/gamification"
+      ]
+    },
+    "useStartCognitiveSession": {
+      "arquivo": "src/hooks/useCognitiveTest.ts",
+      "rotas": [
+        "/avaliacao-cognitiva",
+        "/avaliacao-cognitiva/:vagaId"
+      ]
+    },
+    "useSubmitAssessment": {
+      "arquivo": "src/hooks/useAssessments.ts",
+      "rotas": [
+        "/testes"
+      ]
+    },
+    "useSubmitCognitiveResponse": {
+      "arquivo": "src/hooks/useCognitiveTest.ts",
+      "rotas": [
+        "/avaliacao-cognitiva",
+        "/avaliacao-cognitiva/:vagaId"
+      ]
+    },
+    "useSuggestedSlots": {
+      "arquivo": "src/components/agenda/aiScheduler/useSuggestedSlots.ts",
+      "rotas": [
+        "/agenda"
+      ]
+    },
+    "useTalentExport": {
+      "arquivo": "src/hooks/useTalentExport.ts",
+      "rotas": [
+        "/talentos"
+      ]
+    },
+    "useTalentPool": {
+      "arquivo": "src/hooks/useTalentPool.ts",
+      "rotas": [
+        "/banco-talentos"
+      ]
+    },
+    "useTalentSearch": {
+      "arquivo": "src/hooks/useTalentSearch.ts",
+      "rotas": [
+        "/talentos"
+      ]
+    },
+    "useToast": {
+      "arquivo": "src/hooks/use-toast.ts",
+      "rotas": [
+        "/admin",
+        "/agenda",
+        "/auth",
+        "/auth/2fa",
+        "/auth/login",
+        "/auth/register",
+        "/auth/reset-password",
+        "/avaliacao/:processoId",
+        "/banco-talentos",
+        "/comunicacao",
+        "/configuracoes/seguranca",
+        "/parser-curriculo",
+        "/relatorios",
+        "/security/rate-limit",
+        "/security/roles",
+        "/testes/:id/editar",
+        "/testes/:provaId/aplicar",
+        "/testes/nova",
+        "/vagas/:id/editar",
+        "/vagas/nova",
+        "/workflows"
+      ]
+    },
+    "useTrustedDevices": {
+      "arquivo": "src/hooks/useTrustedDevices.ts",
+      "rotas": [
+        "/configuracoes/seguranca"
+      ]
+    },
+    "useUpdateEntrevista": {
+      "arquivo": "src/hooks/useEntrevistas.ts",
+      "rotas": [
+        "/agenda"
+      ]
+    },
+    "useUpdateProcessoEtapa": {
+      "arquivo": "src/hooks/useProcessosSeletivos.ts",
+      "rotas": [
+        "/pipeline"
+      ]
+    },
+    "useUpdateProva": {
+      "arquivo": "src/hooks/useProvas.ts",
+      "rotas": [
+        "/testes/:id/editar",
+        "/testes/nova"
+      ]
+    },
+    "useUpdateVaga": {
+      "arquivo": "src/hooks/useVagas.ts",
+      "rotas": [
+        "/vagas/:id",
+        "/vagas/:id/editar",
+        "/vagas/nova"
+      ]
+    },
+    "useVaga": {
+      "arquivo": "src/hooks/useVagas.ts",
+      "rotas": [
+        "/vagas/:id",
+        "/vagas/:id/editar",
+        "/vagas/nova"
+      ]
+    },
+    "useVagas": {
+      "arquivo": "src/hooks/useVagas.ts",
+      "rotas": [
+        "/indicacoes",
+        "/parser-curriculo",
+        "/pipeline",
+        "/vagas"
+      ]
+    },
+    "useWebAuthn": {
+      "arquivo": "src/hooks/useWebAuthn.ts",
+      "rotas": [
+        "/configuracoes/seguranca"
+      ]
+    },
+    "useWeeklyMissions": {
+      "arquivo": "src/components/gamification/weeklyMissions/useWeeklyMissions.ts",
+      "rotas": [
+        "/avaliacoes-comportamentais",
+        "/gamification"
+      ]
+    },
+    "useWorkflow": {
+      "arquivo": "src/hooks/useWorkflow.ts",
+      "rotas": [
+        "/workflows"
+      ]
+    }
+  },
+  "problemas": []
+}

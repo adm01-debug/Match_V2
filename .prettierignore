@@ -25,3 +25,11 @@ public/assets
 
 # Logs
 *.log
+
+# Scripts de contexto autônomo portados do Zapp_Web_V2: mantidos byte-idênticos ao upstream
+scripts/ai-context
+scripts/regras_negocio
+scripts/inventario
+scripts/ci/inventario-*.unit.mjs
+inventario
+docs/contexto

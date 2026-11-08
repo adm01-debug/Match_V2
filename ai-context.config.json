@@ -1,0 +1,3 @@
+{
+  "publicacao": "Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` que toque código e uma vez por dia, pelo workflow `contexto.yml`; índice único das fontes em `docs/contexto/00-INDEX.md`. O estado real do banco não sai daqui: está em `inventario/estado/banco.json` (workflow `inventario-estado-semanal.yml`)."
+}

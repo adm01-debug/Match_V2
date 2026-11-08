@@ -39,3 +39,17 @@ supabase/.temp
 *.pem
 .vercel
 .netlify
+
+# Inventário gerado: só os JSONs versionados ficam em inventario/estado/ (ver o README de lá)
+inventario/estado/tabelas-uso.json
+inventario/ia/
+graphify-out/
+# Contexto para agentes: gerado e publicado na branch `contexto`; em main só manual/ é versionado
+docs/contexto/codigo/
+docs/contexto/regras/*
+!docs/contexto/regras/manual/
+docs/contexto/00-INDEX.md
+
+# Python (scripts/regras_negocio)
+__pycache__/
+*.pyc
