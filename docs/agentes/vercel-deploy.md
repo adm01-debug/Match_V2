@@ -8,6 +8,7 @@ Ler quando for confirmar um deploy, mexer em env var do front ou em domínio.
 | Framework / build / output | Vite + React · `npm run build` · `dist/` · Node 22 |
 | MCP Vercel | ferramentas `mcp__Vercel__*` — **escrita = ação de produção** |
 | Analytics | dependência `@vercel/speed-insights` no `package.json` |
+| URL de produção | `https://match-v2.vercel.app` — é o campo `homepage` do repositório no GitHub; não foi aberta nem verificada nesta sessão |
 
 ## Deploy e edge functions
 
