@@ -123,3 +123,15 @@ jobs:
           name: dist
           path: dist
           retention-days: 7
+
+  agents-docs:
+    name: Agents Docs Integrity
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Integridade das instruções para agentes
+        run: |
+          git fetch --no-tags --depth=1 origin main
+          AGENTS_MD_BASE=FETCH_HEAD node scripts/ci/check-agents-md-integrity.mjs
