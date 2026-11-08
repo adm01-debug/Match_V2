@@ -448,6 +448,7 @@
 * create agendaData.ts to resolve missing module [build fix] ([eb7562b](https://github.com/adm01-debug/Match_V2/commit/eb7562b8b9c9a5e8db3cdbd0a39f55c97ade6335))
 * **dashboard:** KPICard - remove JSON.stringify memo, a11y, loading state ([5e76660](https://github.com/adm01-debug/Match_V2/commit/5e76660169bfb100ab673124e9234c2a9ce791df))
 * **dashboard:** TopCandidatos - immutable sort, memo, a11y, callbacks ([7946226](https://github.com/adm01-debug/Match_V2/commit/7946226dbd2ccad9ba38cfe3be73de2e2c275070))
+* **deps:** baixa typescript para 6.0.3 e eslint para 9.39.5 ([#113](https://github.com/adm01-debug/Match_V2/issues/113)) ([7d41659](https://github.com/adm01-debug/Match_V2/commit/7d4165940c81201dbb08ff736ed22c47d73af479))
 * error handling ([376a827](https://github.com/adm01-debug/Match_V2/commit/376a827782ba2ec6c98a368a6351c33a959c129c))
 * error handling ([ea34500](https://github.com/adm01-debug/Match_V2/commit/ea34500499b302e7a36ea6eedc84a317864e7d01))
 * error handling ([a350b67](https://github.com/adm01-debug/Match_V2/commit/a350b672a5da9ee3cf74b46ebc6d3cdae5772c11))
