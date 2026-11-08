@@ -277,6 +277,12 @@ jobs:
           `docs/contexto/regras/manual/` na **main**. O estado real do banco nao esta aqui: ele fica em
           `inventario/estado/banco.json` na main (workflow `inventario-estado-semanal.yml`).
           EOF
+          # Sem isto a Vercel faria um preview deploy a cada publicacao nesta branch (a integracao
+          # git da Vercel esta ativa neste repo — ela comenta nas PRs; a Vercel le o vercel.json do
+          # commit deployado, por isso o arquivo vive na branch gerada, nao na main).
+          cat > "$PUB/vercel.json" <<'EOF'
+          { "ignoreCommand": "exit 0", "git": { "deploymentEnabled": { "contexto": false } } }
+          EOF
           cd "$PUB"
           git config user.name 'contexto[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
