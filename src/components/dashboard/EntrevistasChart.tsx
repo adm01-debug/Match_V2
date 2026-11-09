@@ -255,7 +255,7 @@ const EntrevistasChartComponent = memo(function EntrevistasChart() {
                           ))}
                         </Pie>
                         <Tooltip 
-                          formatter={(value: number, name: string) => [value, name]}
+                          formatter={(value, name) => [value, name]}
                           contentStyle={{ 
                             backgroundColor: 'hsl(var(--card))', 
                             border: '1px solid hsl(var(--border))',

@@ -132,7 +132,7 @@ export function CandidatosFilters({
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar mode="single" selected={dateFrom} onSelect={setDateFrom} initialFocus locale={ptBR} />
+                    <Calendar mode="single" selected={dateFrom} onSelect={setDateFrom} autoFocus locale={ptBR} />
                   </PopoverContent>
                 </Popover>
                 <Popover>
@@ -143,7 +143,7 @@ export function CandidatosFilters({
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar mode="single" selected={dateTo} onSelect={setDateTo} initialFocus locale={ptBR} />
+                    <Calendar mode="single" selected={dateTo} onSelect={setDateTo} autoFocus locale={ptBR} />
                   </PopoverContent>
                 </Popover>
               </div>
