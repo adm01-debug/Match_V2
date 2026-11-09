@@ -1,4 +1,4 @@
-## 0.1.0 (2026-11-08)
+## 0.1.0 (2026-11-09)
 
 
 ### Features
@@ -197,6 +197,7 @@
 * **common:** add ConfirmDialog component with hook ([ad55e93](https://github.com/adm01-debug/Match_V2/commit/ad55e938e17e481385f7bc00968d3f6e212015fb))
 * **common:** add ErrorBoundary component ([16ee0d8](https://github.com/adm01-debug/Match_V2/commit/16ee0d853ca9638e9dd9aec5e0d1c96e792ec632))
 * **common:** add LoadingSkeleton component with variants ([151d15b](https://github.com/adm01-debug/Match_V2/commit/151d15baad841360fb60dd2dd02d7fa5f50b478b))
+* **contexto:** camada autônoma de inventário e contexto para agentes de ia ([838a4dc](https://github.com/adm01-debug/Match_V2/commit/838a4dcc6babfd555a01d52528007569d2dc9030))
 * criar AnalyticsProvider para tracking automático de páginas ([82fe956](https://github.com/adm01-debug/Match_V2/commit/82fe956586ec573a892c28a396cc6b85fe93f3f7))
 * criar componente ErrorBoundary para tratamento de erros ([5561323](https://github.com/adm01-debug/Match_V2/commit/55613239f243426af4289fa9b471d95b75ecc8a4))
 * criar configuração base do Storybook ([ed9b8f5](https://github.com/adm01-debug/Match_V2/commit/ed9b8f5f71ce5da92efb59de6896d33e3de238ae))
@@ -595,6 +596,7 @@
 * **types:** api - fix spacing, add new types ([afde42a](https://github.com/adm01-debug/Match_V2/commit/afde42a035acc0f3e4bcfba839e9af21dbd8bc87))
 * **types:** forms - fix spacing, add new types ([18880a1](https://github.com/adm01-debug/Match_V2/commit/18880a1bc7e1fb1b139aa74d9242a33acc94237e))
 * **types:** resumeParser - add personalInfo, normalize helper, type guards ([87eb54d](https://github.com/adm01-debug/Match_V2/commit/87eb54d0a5a7fa81e3befba5c8b072ecbdf5f24a))
+* **ui:** corrigir 35 erros de tsc herdados de bumps de dependências ([8438c52](https://github.com/adm01-debug/Match_V2/commit/8438c52302736a8c9a56211cb9b5861e6a3c5036))
 * update branding to Match ATS, clean up duplicates, add PWA meta ([627f5cf](https://github.com/adm01-debug/Match_V2/commit/627f5cfb1f63d7399687c29b245a456f3af8ebfb))
 * update Entrevista interface to match component expectations [build fix] ([a3f2127](https://github.com/adm01-debug/Match_V2/commit/a3f2127126f2842a3a727c799bd94d0911308a86))
 * update tsconfig.node.json for Lovable build ([f2df327](https://github.com/adm01-debug/Match_V2/commit/f2df327a8057979d434f56fa22e667e26b6455c3))
