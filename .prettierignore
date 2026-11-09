@@ -26,7 +26,9 @@ public/assets
 # Logs
 *.log
 
-# Scripts de contexto autônomo portados do Zapp_Web_V2: mantidos byte-idênticos ao upstream
+# Scripts de contexto autônomo portados do Zapp_Web_V2 (scripts/ai-context e
+# scripts/regras_negocio são byte-idênticos ao upstream; scripts/inventario foi adaptado a este
+# repo) e os dados/docs que eles geram — nenhum deles deve ser tocado pelo prettier.
 scripts/ai-context
 scripts/regras_negocio
 scripts/inventario

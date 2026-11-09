@@ -7,7 +7,7 @@ FastAPI/Flask/Django, Supabase/Prisma/Drizzle/TypeORM/SQL. Saída determinístic
 
 **Como rodar:** `node scripts/ai-context/gerar.mjs [--root <dir>] [--out <dir>] [--quiet]`
 (padrão de saída `inventario/ia`, ou `ai-context.config.json → out`, ou env `AI_CONTEXT_DIR`).
-Atalhos: `npm run contexto:ia` e `npm run contexto:ia:test`.
+Atalhos: `npm run contexto:ia` (gera) e `npm run contexto:test` (roda esta suíte + as de inventário/regras).
 Testes: `node --test scripts/ai-context/gerar.unit.mjs`. Cenários: `cenarios.mjs`.
 
 **Config opcional** (`ai-context.config.json` na raiz): `out`, `skipDirs`, `srcDirs`, `menuFiles`,

@@ -173,11 +173,24 @@ jobs:
 
       - name: Habilitar auto-merge no PR do inventário
         if: steps.pull-request.outputs.pull-request-number != ''
-        continue-on-error: true # falha se o repo não tiver auto-merge habilitado; o PR fica aberto
         env:
           GH_TOKEN: ${{ github.token }}
           PR_NUMBER: ${{ steps.pull-request.outputs.pull-request-number }}
-        run: gh pr merge --auto --squash "$PR_NUMBER" --repo "$GITHUB_REPOSITORY"
+        run: |
+          # O repo não tem auto-merge habilitado hoje (allow_auto_merge=false, ver
+          # docs/agentes/github-ci.md) e `gh pr merge --auto` falha nesse caso — sem
+          # continue-on-error isso ficaria vermelho toda semana por um pré-requisito que só o
+          # dono liga nas Settings. Em vez de mascarar com continue-on-error (que também
+          # esconderia uma falha de API real), trata exatamente esse erro conhecido como aviso
+          # e deixa qualquer outro tipo de falha vermelha de verdade.
+          if ! saida="$(gh pr merge --auto --squash "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" 2>&1)"; then
+            if echo "$saida" | grep -qi "auto-merge is not allowed\|auto_merge_disabled\|AutoMerge"; then
+              echo "::warning::Auto-merge não habilitado no repositório (allow_auto_merge=false) — PR #$PR_NUMBER fica aberto para merge manual."
+            else
+              echo "$saida" >&2
+              exit 1
+            fi
+          fi
 
       - name: Upload do inventário
         if: always()
