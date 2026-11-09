@@ -1,3 +1,23 @@
+# Changelog
+
+## 1.0.0 (2026-11-09)
+
+
+### Features
+
+* **contexto:** camada autônoma de inventário e contexto para agentes de ia ([838a4dc](https://github.com/adm01-debug/Match_V2/commit/838a4dcc6babfd555a01d52528007569d2dc9030))
+* Migração Banco Lovable para Supabase Match - V2 ([d545e2c](https://github.com/adm01-debug/Match_V2/commit/d545e2cb4dfacd375d577bb052fa9d21c97483c1))
+
+
+### Bug Fixes
+
+* **build:** adiciona react-is como dependência direta ([#111](https://github.com/adm01-debug/Match_V2/issues/111)) ([e24e4a8](https://github.com/adm01-debug/Match_V2/commit/e24e4a8501779a55f1c85a58fd70918ee05bb0f0))
+* **deps:** baixa typescript para 6.0.3 e eslint para 9.39.5 ([#113](https://github.com/adm01-debug/Match_V2/issues/113)) ([7d41659](https://github.com/adm01-debug/Match_V2/commit/7d4165940c81201dbb08ff736ed22c47d73af479))
+* **hooks:** renomeia configs CommonJS para .cjs em projeto type:module ([#110](https://github.com/adm01-debug/Match_V2/issues/110)) ([0174eb5](https://github.com/adm01-debug/Match_V2/commit/0174eb51a31550723d361744139785496e55bb9c))
+* try pooler IPv4 + force IPv4 on psql for mcp_exec install ([555e269](https://github.com/adm01-debug/Match_V2/commit/555e269d4605df74d4aab34894e5710fafd5d425))
+* **ts:** 12 erros TypeScript — zod v4, Supabase strict, React 19 RefObject ([#67](https://github.com/adm01-debug/Match_V2/issues/67)) ([8dcec64](https://github.com/adm01-debug/Match_V2/commit/8dcec640f5f0b1c7a41ca61aa95432691a8e1d3c))
+* **ui:** corrigir 35 erros de tsc herdados de bumps de dependências ([8438c52](https://github.com/adm01-debug/Match_V2/commit/8438c52302736a8c9a56211cb9b5861e6a3c5036))
+
 ## 0.1.0 (2026-11-09)
 
 
@@ -944,4 +964,3 @@
 * useMemo import ([a4dd750](https://github.com/adm01-debug/Match_V2/commit/a4dd7504c190211ee0a43c785dcfe253caf5be90))
 * useMemo import ([2f973d0](https://github.com/adm01-debug/Match_V2/commit/2f973d07b769ce23257ca0a8d71f1872f2b4fe12))
 * useMemo import ([2ccc85b](https://github.com/adm01-debug/Match_V2/commit/2ccc85b0266b33acd7f72da1e6fe4c836a635cb8))
-
