@@ -53,12 +53,11 @@ issue ou log.
 
 ## Edge functions
 
-- 27 funções em `supabase/functions/` + `_shared/` (`aiCache.ts`, `knockout.ts`, `metrics.ts`, `rateLimit.ts`,
-  `resilience.ts`, `retryQueue.ts`).
+- 25 funções em `supabase/functions/` (`_shared/` é pasta de helpers sem deploy próprio: `aiCache.ts`, `knockout.ts`, `metrics.ts`, `rateLimit.ts`, `resilience.ts`, `retryQueue.ts`).
 - **Nenhum workflow implanta edge function.** `supabase functions deploy` é manual (CLI, MCP ou Studio);
   merge em `main` sobe **só o front**. Nunca diga "edge no ar" sem confirmar a versão publicada.
 - Públicas por configuração (`verify_jwt = false` em `supabase/config.toml`): `health`, `resend-webhook`,
-  `proactive-alerts`, `public-apply`, `sign-proposal`, `migrate-helper`. Mexer em qualquer uma delas é mexer
+  `proactive-alerts`, `public-apply`, `sign-proposal`. Mexer em qualquer uma delas é mexer
   em superfície sem autenticação — rate limit e validação de payload são obrigatórios (ver
   `_shared/rateLimit.ts` e `docs/agentes/regras-dominio.md`).
 - Segredos das edges (`SUPABASE_SERVICE_ROLE_KEY`, chaves de IA, Evolution, Resend) vivem no painel/secrets
