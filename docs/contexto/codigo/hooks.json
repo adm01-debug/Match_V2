@@ -1,0 +1,3675 @@
+{
+ "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
+ "format_version": 2,
+ "total": 145,
+ "hooks": [
+  {
+   "arquivo": "scripts/ai-context/cenarios.mjs",
+   "hooks_exportados": [
+    "useA",
+    "useB",
+    "useC",
+    "useX"
+   ],
+   "linhas": 173,
+   "dominio": null,
+   "tabelas": [
+    "a",
+    "fantasma",
+    "so_teste",
+    "t",
+    "t1",
+    "tx"
+   ],
+   "rpcs": [
+    "r1"
+   ],
+   "edges": [
+    "inexistente",
+    "other",
+    "tick"
+   ],
+   "hooks_internos": [
+    "useFeatureFlag"
+   ],
+   "canais_realtime": [],
+   "usado_por": 0,
+   "usado_por_arquivos": [],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/components/a11y/FocusTrap.tsx",
+   "hooks_exportados": [
+    "useFocusManagement"
+   ],
+   "linhas": 181,
+   "dominio": "components/a11y",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useEffect"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/a11y/index.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/components/a11y/HighContrastMode.tsx",
+   "hooks_exportados": [
+    "useHighContrast"
+   ],
+   "linhas": 72,
+   "dominio": "components/a11y",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useContext",
+    "useEffect",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 2,
+   "usado_por_arquivos": [
+    "src/components/a11y/index.ts",
+    "src/components/settings/AccessibilitySettings.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/components/a11y/KeyboardNavigation.tsx",
+   "hooks_exportados": [
+    "useRovingTabIndex"
+   ],
+   "linhas": 218,
+   "dominio": "components/a11y",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/a11y/index.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/components/a11y/ReducedMotion.tsx",
+   "hooks_exportados": [
+    "usePrefersReducedMotion",
+    "useReducedMotion"
+   ],
+   "linhas": 111,
+   "dominio": "components/a11y",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useContext",
+    "useEffect",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 2,
+   "usado_por_arquivos": [
+    "src/components/a11y/index.ts",
+    "src/components/settings/AccessibilitySettings.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/components/a11y/ScreenReaderAnnounce.tsx",
+   "hooks_exportados": [
+    "useAccessibleAnnouncements",
+    "useAnnounce"
+   ],
+   "linhas": 138,
+   "dominio": "components/a11y",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useContext",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/a11y/index.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/components/agenda/aiScheduler/useSuggestedSlots.ts",
+   "hooks_exportados": [
+    "useSuggestedSlots"
+   ],
+   "linhas": 161,
+   "dominio": "components/agenda",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useEntrevistas"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/agenda/AIInterviewScheduler.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/components/assessments/companyProfile/useCompanyProfile.ts",
+   "hooks_exportados": [
+    "useCompanyProfile"
+   ],
+   "linhas": 95,
+   "dominio": "components/assessments",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useMemo",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/assessments/CompanyProfileBuilder.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/components/assessments/gamified/personalityMiniGame/usePersonalityMiniGame.ts",
+   "hooks_exportados": [
+    "usePersonalityMiniGame"
+   ],
+   "linhas": 125,
+   "dominio": "components/assessments",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useEffect",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/assessments/gamified/PersonalityMiniGame.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/components/assessments/immersive/useScenarioPlayer.ts",
+   "hooks_exportados": [
+    "useScenarioPlayer"
+   ],
+   "linhas": 98,
+   "dominio": "components/assessments",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useEffect",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/assessments/ImmersiveScenarioPlayer.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/components/auth/PasswordStrengthIndicator.tsx",
+   "hooks_exportados": [
+    "usePasswordStrength"
+   ],
+   "linhas": 258,
+   "dominio": "components/auth",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useMemo",
+    "usePasswordBreachCheck"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/auth/index.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/components/candidatos/resumeParser/useResumeParser.ts",
+   "hooks_exportados": [
+    "useResumeParser"
+   ],
+   "linhas": 147,
+   "dominio": "components/candidatos",
+   "tabelas": [],
+   "rpcs": [
+    "create_candidato_with_details"
+   ],
+   "edges": [
+    "parse-resume"
+   ],
+   "hooks_internos": [
+    "useCallback",
+    "useState",
+    "useToast"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/candidatos/ResumeParser.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/components/common/ConfirmDialog.tsx",
+   "hooks_exportados": [
+    "useConfirmDialog"
+   ],
+   "linhas": 199,
+   "dominio": "components/common",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/common/index.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/components/common/GlobalShortcutsProvider.tsx",
+   "hooks_exportados": [
+    "useGlobalShortcuts"
+   ],
+   "linhas": 241,
+   "dominio": "components/common",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useContext",
+    "useKeyboardShortcuts",
+    "useNavigate"
+   ],
+   "canais_realtime": [],
+   "usado_por": 2,
+   "usado_por_arquivos": [
+    "src/App.tsx",
+    "src/components/common/index.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/components/common/index.ts",
+   "hooks_exportados": [
+    "useGlobalShortcuts"
+   ],
+   "linhas": 18,
+   "dominio": "components/common",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/index.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/components/forms/FormProgress.tsx",
+   "hooks_exportados": [
+    "useMultiStepForm"
+   ],
+   "linhas": 303,
+   "dominio": "components/forms",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/forms/index.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/components/forms/index.ts",
+   "hooks_exportados": [
+    "useMultiStepForm"
+   ],
+   "linhas": 8,
+   "dominio": "components/forms",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/index.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/components/gamification/AchievementNotification.tsx",
+   "hooks_exportados": [
+    "useAchievementNotification"
+   ],
+   "linhas": 282,
+   "dominio": "components/gamification",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useEffect",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/gamification/index.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/components/gamification/dailyChallenges/useDailyChallenges.ts",
+   "hooks_exportados": [
+    "useDailyChallenges"
+   ],
+   "linhas": 51,
+   "dominio": "components/gamification",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useMemo"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/gamification/DailyChallenges.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/components/gamification/dashboard/useDashboardData.ts",
+   "hooks_exportados": [
+    "useDashboardData"
+   ],
+   "linhas": 72,
+   "dominio": "components/gamification",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useGamification",
+    "useMemo"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/gamification/GamificationDashboard.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/components/gamification/GamificationOnboarding.tsx",
+   "hooks_exportados": [
+    "useGamificationOnboarding"
+   ],
+   "linhas": 384,
+   "dominio": "components/gamification",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 2,
+   "usado_por_arquivos": [
+    "src/components/gamification/index.ts",
+    "src/pages/GamificationPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/components/gamification/index.ts",
+   "hooks_exportados": [
+    "useAchievementNotification",
+    "useGamificationOnboarding",
+    "useXPToast"
+   ],
+   "linhas": 66,
+   "dominio": "components/gamification",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [],
+   "canais_realtime": [],
+   "usado_por": 4,
+   "usado_por_arquivos": [
+    "src/components/behavioral/BehavioralGamifiedTab.tsx",
+    "src/components/behavioral/BehavioralLeaderboardTab.tsx",
+    "src/components/index.ts",
+    "src/pages/BehavioralAssessmentsPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/components/gamification/weeklyMissions/useWeeklyMissions.ts",
+   "hooks_exportados": [
+    "useWeeklyMissions"
+   ],
+   "linhas": 40,
+   "dominio": "components/gamification",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useMemo"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/gamification/WeeklyMissions.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/components/gamification/XPToast.tsx",
+   "hooks_exportados": [
+    "useXPToast"
+   ],
+   "linhas": 344,
+   "dominio": "components/gamification",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useEffect"
+   ],
+   "canais_realtime": [],
+   "usado_por": 2,
+   "usado_por_arquivos": [
+    "src/components/gamification/index.ts",
+    "src/pages/GamificationPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/components/intelligence/index.ts",
+   "hooks_exportados": [
+    "useKeyboardShortcuts",
+    "useRecentActions",
+    "useRecentActionsTracker"
+   ],
+   "linhas": 22,
+   "dominio": "components/intelligence",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/index.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/components/intelligence/KeyboardShortcuts.tsx",
+   "hooks_exportados": [
+    "useKeyboardShortcuts"
+   ],
+   "linhas": 332,
+   "dominio": "components/intelligence",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useEffect",
+    "useFuzzySearch",
+    "useMemo",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 3,
+   "usado_por_arquivos": [
+    "src/components/common/GlobalShortcutsProvider.tsx",
+    "src/components/intelligence/index.ts",
+    "src/components/layout/Layout.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/components/intelligence/PredictiveSearch.tsx",
+   "hooks_exportados": [
+    "useSearchHistory"
+   ],
+   "linhas": 372,
+   "dominio": "components/intelligence",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useDebounce",
+    "useEffect",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/intelligence/index.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/components/intelligence/RecentActions.tsx",
+   "hooks_exportados": [
+    "useRecentActions"
+   ],
+   "linhas": 376,
+   "dominio": "components/intelligence",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useEffect"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/intelligence/index.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/components/intelligence/RecentActionsWidget.tsx",
+   "hooks_exportados": [
+    "useRecentActionsTracker"
+   ],
+   "linhas": 362,
+   "dominio": "components/intelligence",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useEffect",
+    "useNavigate"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/intelligence/index.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/components/onboarding/index.ts",
+   "hooks_exportados": [
+    "useOnboarding"
+   ],
+   "linhas": 8,
+   "dominio": "components/onboarding",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/index.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/components/onboarding/OnboardingProvider.tsx",
+   "hooks_exportados": [
+    "useOnboarding"
+   ],
+   "linhas": 52,
+   "dominio": "components/onboarding",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useContext",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 3,
+   "usado_por_arquivos": [
+    "src/App.tsx",
+    "src/components/onboarding/index.ts",
+    "src/pages/Dashboard.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/components/ui/confetti.tsx",
+   "hooks_exportados": [
+    "useConfetti"
+   ],
+   "linhas": 231,
+   "dominio": "components/ui",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useEffect"
+   ],
+   "canais_realtime": [],
+   "usado_por": 2,
+   "usado_por_arquivos": [
+    "src/components/ui/index.ts",
+    "src/hooks/useAgendaActions.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/components/ui/form.tsx",
+   "hooks_exportados": [
+    "useFormField"
+   ],
+   "linhas": 130,
+   "dominio": "components/ui",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useContext",
+    "useFormContext",
+    "useId"
+   ],
+   "canais_realtime": [],
+   "usado_por": 0,
+   "usado_por_arquivos": [],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/components/ui/index.ts",
+   "hooks_exportados": [
+    "useConfetti",
+    "useRipple"
+   ],
+   "linhas": 54,
+   "dominio": "components/ui",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [],
+   "canais_realtime": [],
+   "usado_por": 3,
+   "usado_por_arquivos": [
+    "scripts/ai-context/cenarios.mjs",
+    "src/hooks/useCandidatosData.ts",
+    "src/pages/Pipeline.tsx"
+   ],
+   "coberto_por_testes": 1
+  },
+  {
+   "arquivo": "src/components/ui/ripple-effect.tsx",
+   "hooks_exportados": [
+    "useRipple"
+   ],
+   "linhas": 158,
+   "dominio": "components/ui",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useRef"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/ui/index.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/components/ui/sidebar.tsx",
+   "hooks_exportados": [
+    "useSidebar"
+   ],
+   "linhas": 638,
+   "dominio": "components/ui",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useContext",
+    "useEffect",
+    "useIsMobile",
+    "useMemo",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 2,
+   "usado_por_arquivos": [
+    "src/components/layout/AppSidebar.tsx",
+    "src/components/layout/Layout.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/contexts/AnalyticsProvider.tsx",
+   "hooks_exportados": [
+    "useAnalyticsContext"
+   ],
+   "linhas": 52,
+   "dominio": "contexts",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useContext"
+   ],
+   "canais_realtime": [],
+   "usado_por": 2,
+   "usado_por_arquivos": [
+    "src/App.tsx",
+    "src/contexts/index.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/contexts/AuthContext.tsx",
+   "hooks_exportados": [
+    "useAuth"
+   ],
+   "linhas": 155,
+   "dominio": "contexts",
+   "tabelas": [],
+   "rpcs": [
+    "get_user_roles"
+   ],
+   "edges": [],
+   "hooks_internos": [
+    "useContext",
+    "useEffect",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 34,
+   "usado_por_arquivos": [
+    "src/App.tsx",
+    "src/components/admin/users/EditRolesDialog.tsx",
+    "src/components/admin/users/adminRolesConfig.ts",
+    "src/components/auth/Admin2FAGuard.tsx",
+    "src/components/auth/MFASMSSetup.tsx",
+    "src/components/auth/ProtectedRoute.tsx",
+    "src/components/auth/SessionManager.tsx",
+    "src/components/common/CommandMenu.tsx",
+    "src/components/layout/AppSidebar.tsx",
+    "src/contexts/PermissionContext.tsx",
+    "src/contexts/index.ts",
+    "src/hooks/index.ts",
+    "src/hooks/use2FA.ts",
+    "src/hooks/useAdminUsers.ts",
+    "src/hooks/useBehavioralGamification.ts",
+    "src/hooks/useGamificationSupabase.ts",
+    "src/hooks/useGamificationTriggers.ts",
+    "src/hooks/useIndicacoes.ts",
+    "src/hooks/useNewDeviceDetection.ts",
+    "src/hooks/usePermissions.ts",
+    "src/hooks/useRealtimeNotifications.ts",
+    "src/hooks/useReauth.ts",
+    "src/hooks/useTrustedDevices.ts",
+    "src/hooks/useWebAuthn.ts",
+    "src/pages/AdminPage.tsx",
+    "src/pages/AuthPage.tsx",
+    "src/pages/DiagnosticoPage.tsx",
+    "src/pages/EdgeFunctionTestPage.tsx",
+    "src/pages/HiringManagerPortalPage.tsx",
+    "src/pages/auth/LoginPage.tsx"
+   ],
+   "coberto_por_testes": 1
+  },
+  {
+   "arquivo": "src/contexts/CandidatoAuthContext.tsx",
+   "hooks_exportados": [
+    "useCandidatoAuth"
+   ],
+   "linhas": 167,
+   "dominio": "contexts",
+   "tabelas": [
+    "candidatos_auth"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useContext",
+    "useEffect",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 9,
+   "usado_por_arquivos": [
+    "src/App.tsx",
+    "src/components/portal/CurriculoUpload.tsx",
+    "src/components/portal/PortalProtectedRoute.tsx",
+    "src/contexts/index.ts",
+    "src/hooks/useNotificacoesCandidato.ts",
+    "src/pages/portal/PortalAuthPage.tsx",
+    "src/pages/portal/PortalDashboard.tsx",
+    "src/pages/portal/PortalPerfil.tsx",
+    "src/pages/portal/portalVagas/usePortalVagas.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/contexts/FuzzySearchContext.tsx",
+   "hooks_exportados": [
+    "useFuzzySearchContext",
+    "useItemMatches"
+   ],
+   "linhas": 49,
+   "dominio": "contexts",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useContext"
+   ],
+   "canais_realtime": [],
+   "usado_por": 3,
+   "usado_por_arquivos": [
+    "src/components/vagas/VagaCard.tsx",
+    "src/contexts/index.ts",
+    "src/pages/VagasList.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/contexts/NotificationContext.tsx",
+   "hooks_exportados": [
+    "useNotifications"
+   ],
+   "linhas": 80,
+   "dominio": "contexts",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useContext",
+    "useRealtimeNotifications"
+   ],
+   "canais_realtime": [],
+   "usado_por": 3,
+   "usado_por_arquivos": [
+    "src/App.tsx",
+    "src/components/layout/Layout.tsx",
+    "src/contexts/index.ts"
+   ],
+   "coberto_por_testes": 1
+  },
+  {
+   "arquivo": "src/contexts/PermissionContext.tsx",
+   "hooks_exportados": [
+    "usePermissionContext"
+   ],
+   "linhas": 78,
+   "dominio": "contexts",
+   "tabelas": [],
+   "rpcs": [
+    "get_user_permissions"
+   ],
+   "edges": [],
+   "hooks_internos": [
+    "useAuth",
+    "useCallback",
+    "useContext",
+    "useEffect",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 0,
+   "usado_por_arquivos": [],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/contexts/TenantContext.tsx",
+   "hooks_exportados": [
+    "useTenantContext"
+   ],
+   "linhas": 56,
+   "dominio": "contexts",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useContext"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/hooks/useTenant.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/behavioralResults/companyProfile.ts",
+   "hooks_exportados": [
+    "useCompanyBehavioralProfiles",
+    "useSaveCompanyProfile"
+   ],
+   "linhas": 69,
+   "dominio": "hooks/behavioralResults",
+   "tabelas": [
+    "perfis_comportamentais_empresa"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useMutation",
+    "useQuery",
+    "useQueryClient"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/hooks/useBehavioralAssessmentResults.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/behavioralResults/mutations.ts",
+   "hooks_exportados": [
+    "useSaveBehavioralResult"
+   ],
+   "linhas": 68,
+   "dominio": "hooks/behavioralResults",
+   "tabelas": [
+    "avaliacoes_comportamentais_resultados"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useMutation",
+    "useQueryClient"
+   ],
+   "canais_realtime": [],
+   "usado_por": 2,
+   "usado_por_arquivos": [
+    "src/hooks/behavioralResults/session.ts",
+    "src/hooks/useBehavioralAssessmentResults.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/behavioralResults/queries.ts",
+   "hooks_exportados": [
+    "useAllBehavioralResults",
+    "useCandidateBehavioralResults"
+   ],
+   "linhas": 51,
+   "dominio": "hooks/behavioralResults",
+   "tabelas": [
+    "avaliacoes_comportamentais_resultados"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useQuery"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/hooks/useBehavioralAssessmentResults.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/behavioralResults/session.ts",
+   "hooks_exportados": [
+    "useBehavioralAssessment"
+   ],
+   "linhas": 93,
+   "dominio": "hooks/behavioralResults",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useSaveBehavioralResult"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/hooks/useBehavioralAssessmentResults.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/index.ts",
+   "hooks_exportados": [
+    "useAssessment",
+    "useAssessments",
+    "useAuth",
+    "useAvaliacao",
+    "useAvaliacoes",
+    "useAvaliacoesProcesso",
+    "useBehavioralStats",
+    "useBulkActions",
+    "useCandidateAssessments",
+    "useCandidateBehavioralResults",
+    "useCandidato",
+    "useCandidatoPerfil",
+    "useCandidatos",
+    "useCandidatosDisponiveis",
+    "useCandidatosSelect",
+    "useCandidatosStats",
+    "useCompletedTools",
+    "useComunicacoes",
+    "useCreateCandidato",
+    "useCreateEntrevista",
+    "useCreateProcesso",
+    "useCreateProva",
+    "useCreateVaga",
+    "useDashboardData",
+    "useDebounce",
+    "useDeleteCandidato",
+    "useDeleteProcesso",
+    "useDeleteProva",
+    "useDeleteVaga",
+    "useDocumentosCandidato",
+    "useDuplicateProva",
+    "useEmailTemplates",
+    "useEntrevistas",
+    "useEntrevistasEvolucao",
+    "useEntrevistasPizza",
+    "useEntrevistasStats",
+    "useFocusTrap",
+    "useFormAutoSave",
+    "useFormDirtyState",
+    "useFormSubmit",
+    "useFuzzySearch",
+    "useGamification",
+    "useHistoricoEtapas",
+    "useIPVerification",
+    "useImportData",
+    "useInfiniteScroll",
+    "useIntersectionObserver",
+    "useInterviewReminders",
+    "useIsMobile",
+    "useKeyboardShortcuts",
+    "useLazyImage",
+    "useNewDeviceDetection",
+    "useNotasCandidato",
+    "useOnboarding",
+    "useOptimisticUpdate",
+    "usePageTitle",
+    "usePasswordBreachCheck",
+    "useProcessoBehavioralResults",
+    "useProcessosByVaga",
+    "useProcessosSeletivos",
+    "useProva",
+    "useProvas",
+    "usePullToRefresh",
+    "usePushNotifications",
+    "useRealtimeNotifications",
+    "useReauth",
+    "useSaveBehavioralResult",
+    "useSavedFilters",
+    "useSessionTimeout",
+    "useSoundEffects",
+    "useSoundPreferences",
+    "useSubmitAssessment",
+    "useSwipeGesture",
+    "useToast",
+    "useTrustedDevices",
+    "useUpdateCandidato",
+    "useUpdateEntrevista",
+    "useUpdateProcessoEtapa",
+    "useUpdateProcessoStatus",
+    "useUpdateProva",
+    "useUpdateVaga",
+    "useVaga",
+    "useVagas",
+    "useVagasSelect",
+    "useVagasUrgentes",
+    "useVirtualGrid",
+    "useVirtualScroll",
+    "useWebAuthn"
+   ],
+   "linhas": 76,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "scripts/ai-context/cenarios.mjs"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/use-mobile.tsx",
+   "hooks_exportados": [
+    "useIsMobile"
+   ],
+   "linhas": 20,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useEffect"
+   ],
+   "canais_realtime": [],
+   "usado_por": 2,
+   "usado_por_arquivos": [
+    "src/components/ui/sidebar.tsx",
+    "src/hooks/index.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/use-toast.ts",
+   "hooks_exportados": [
+    "useToast"
+   ],
+   "linhas": 194,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useEffect"
+   ],
+   "canais_realtime": [],
+   "usado_por": 58,
+   "usado_por_arquivos": [
+    "src/components/admin/GDPRConsent.tsx",
+    "src/components/admin/SLAConfig.tsx",
+    "src/components/admin/SSOSettings.tsx",
+    "src/components/admin/WhiteLabelSettings.tsx",
+    "src/components/agenda/GoogleCalendarExport.tsx",
+    "src/components/auth/MFASMSSetup.tsx",
+    "src/components/auth/QRCodeGenerator.tsx",
+    "src/components/auth/RecoveryCodesDisplay.tsx",
+    "src/components/auth/TwoFactorSetup.tsx",
+    "src/components/auth/TwoFactorVerify.tsx",
+    "src/components/candidatos/MatchScoreCalculator.tsx",
+    "src/components/candidatos/ResumeParser.tsx",
+    "src/components/candidatos/resumeParser/useResumeParser.ts",
+    "src/components/reports/ReportExport.tsx",
+    "src/components/reports/ReportScheduler.tsx",
+    "src/components/security/BlockedIPsPanel.tsx",
+    "src/components/security/IPWhitelistPanel.tsx",
+    "src/components/settings/GoogleCalendarConnect.tsx",
+    "src/components/settings/IndeedConnect.tsx",
+    "src/components/settings/JobBoardConnects.tsx",
+    "src/components/settings/LinkedInConnect.tsx",
+    "src/components/settings/OutlookCalendarConnect.tsx",
+    "src/components/settings/SlackConnect.tsx",
+    "src/components/settings/TeamsConnect.tsx",
+    "src/components/ui/toaster.tsx",
+    "src/components/vagas/JobPublisher.tsx",
+    "src/components/vagas/JobTemplates.tsx",
+    "src/components/vagas/MultiChannelJobPublisher.tsx",
+    "src/hooks/index.ts",
+    "src/hooks/use2FA.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useAdminUsers.ts",
+   "hooks_exportados": [
+    "useAdminUsers"
+   ],
+   "linhas": 90,
+   "dominio": "hooks",
+   "tabelas": [
+    "profiles",
+    "user_roles"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useEffect",
+    "useState",
+    "useToast"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/pages/AdminPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useAdvancedAnalytics.ts",
+   "hooks_exportados": [
+    "useAdvancedAnalytics"
+   ],
+   "linhas": 275,
+   "dominio": "hooks",
+   "tabelas": [
+    "entrevistas",
+    "processos_seletivos",
+    "propostas",
+    "vagas"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useQuery"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/pages/AdvancedAnalyticsPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useAdvancedSearch.ts",
+   "hooks_exportados": [
+    "useAdvancedSearch"
+   ],
+   "linhas": 80,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useDebounce",
+    "useMemo",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 0,
+   "usado_por_arquivos": [],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useAgendaActions.ts",
+   "hooks_exportados": [
+    "useAgendaActions"
+   ],
+   "linhas": 80,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useConfetti",
+    "useSoundEffects",
+    "useUpdateEntrevista"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/pages/AgendaPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useAiScreening.ts",
+   "hooks_exportados": [
+    "useRunAiScreening",
+    "useTriagemCandidatura",
+    "useTriagensVaga"
+   ],
+   "linhas": 79,
+   "dominio": "hooks",
+   "tabelas": [
+    "triagem_ia"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useMutation",
+    "useQuery",
+    "useQueryClient"
+   ],
+   "canais_realtime": [],
+   "usado_por": 2,
+   "usado_por_arquivos": [
+    "src/components/candidaturas/AiScreeningCard.tsx",
+    "src/hooks/useRankingVaga.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useAnalytics.ts",
+   "hooks_exportados": [
+    "useAnalytics"
+   ],
+   "linhas": 55,
+   "dominio": "hooks",
+   "tabelas": [
+    "candidatos",
+    "entrevistas",
+    "processos_seletivos",
+    "vagas"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useQuery"
+   ],
+   "canais_realtime": [],
+   "usado_por": 0,
+   "usado_por_arquivos": [],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useAssessmentEngine.ts",
+   "hooks_exportados": [
+    "useAssessmentEngine"
+   ],
+   "linhas": 160,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useGamification",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/assessments/gamified/GamifiedAssessmentEngine.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useAssessments.ts",
+   "hooks_exportados": [
+    "useAssessment",
+    "useAssessments",
+    "useCandidateAssessments",
+    "useSubmitAssessment"
+   ],
+   "linhas": 255,
+   "dominio": "hooks",
+   "tabelas": [
+    "assessment_questoes",
+    "assessment_respostas",
+    "assessments"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useMutation",
+    "useQuery",
+    "useQueryClient"
+   ],
+   "canais_realtime": [],
+   "usado_por": 2,
+   "usado_por_arquivos": [
+    "src/components/assessments/AssessmentPlayer.tsx",
+    "src/hooks/index.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useAuditLogs.ts",
+   "hooks_exportados": [
+    "useAuditLogs"
+   ],
+   "linhas": 57,
+   "dominio": "hooks",
+   "tabelas": [
+    "ip_access_logs"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useQuery"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/admin/AuditLogViewer.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useAvaliacaoForm.ts",
+   "hooks_exportados": [
+    "useAvaliacaoForm"
+   ],
+   "linhas": 122,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useAvaliacao",
+    "useAvaliacoes",
+    "useEffect",
+    "useMemo",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/pages/AvaliacaoForm.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useAvaliacoes.ts",
+   "hooks_exportados": [
+    "useAvaliacao",
+    "useAvaliacoes",
+    "useAvaliacoesProcesso"
+   ],
+   "linhas": 238,
+   "dominio": "hooks",
+   "tabelas": [
+    "avaliacoes"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useMutation",
+    "useQuery",
+    "useQueryClient"
+   ],
+   "canais_realtime": [],
+   "usado_por": 2,
+   "usado_por_arquivos": [
+    "src/hooks/index.ts",
+    "src/hooks/useAvaliacaoForm.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useBehavioralAssessmentResults.ts",
+   "hooks_exportados": [
+    "useAllBehavioralResults",
+    "useBehavioralAssessment",
+    "useCandidateBehavioralResults",
+    "useCompanyBehavioralProfiles",
+    "useSaveBehavioralResult",
+    "useSaveCompanyProfile"
+   ],
+   "linhas": 15,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/pages/BehavioralAssessmentPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useBehavioralAssessments.ts",
+   "hooks_exportados": [
+    "useBehavioralStats",
+    "useCandidateBehavioralResults",
+    "useCompletedTools",
+    "useProcessoBehavioralResults",
+    "useSaveBehavioralResult"
+   ],
+   "linhas": 229,
+   "dominio": "hooks",
+   "tabelas": [
+    "behavioral_assessment_results"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useMutation",
+    "useQuery",
+    "useQueryClient"
+   ],
+   "canais_realtime": [],
+   "usado_por": 2,
+   "usado_por_arquivos": [
+    "src/hooks/index.ts",
+    "src/pages/BehavioralAssessmentsPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useBehavioralGamification.ts",
+   "hooks_exportados": [
+    "useBehavioralGamification"
+   ],
+   "linhas": 319,
+   "dominio": "hooks",
+   "tabelas": [
+    "behavioral_assessment_results"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useAuth",
+    "useCallback",
+    "useEffect",
+    "useGamification",
+    "useGamificationTriggers",
+    "useMemo",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/pages/BehavioralAssessmentsPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useBehavioralScoreCalculation.ts",
+   "hooks_exportados": [
+    "useBehavioralScoreCalculation"
+   ],
+   "linhas": 131,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useMemo"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/pages/BehavioralAssessmentPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useBulkActions.ts",
+   "hooks_exportados": [
+    "useBulkActions"
+   ],
+   "linhas": 372,
+   "dominio": "hooks",
+   "tabelas": [
+    "candidatos",
+    "candidaturas"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useMutation",
+    "useQueryClient",
+    "useToast"
+   ],
+   "canais_realtime": [],
+   "usado_por": 2,
+   "usado_por_arquivos": [
+    "src/components/BulkActionsBar.tsx",
+    "src/hooks/index.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useBulkSelection.ts",
+   "hooks_exportados": [
+    "useBulkSelection"
+   ],
+   "linhas": 49,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useMemo"
+   ],
+   "canais_realtime": [],
+   "usado_por": 0,
+   "usado_por_arquivos": [],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useCandidatoCandidaturas.ts",
+   "hooks_exportados": [
+    "useCandidatoCandidaturas"
+   ],
+   "linhas": 65,
+   "dominio": "hooks",
+   "tabelas": [
+    "candidatos_auth",
+    "candidaturas"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/candidatos/CandidatoTimelineSection.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useCandidatoPerfil.ts",
+   "hooks_exportados": [
+    "useCandidatoPerfil"
+   ],
+   "linhas": 119,
+   "dominio": "hooks",
+   "tabelas": [
+    "candidatos",
+    "candidaturas",
+    "entrevistas",
+    "processos_seletivos"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useQuery"
+   ],
+   "canais_realtime": [],
+   "usado_por": 2,
+   "usado_por_arquivos": [
+    "src/hooks/index.ts",
+    "src/pages/CandidatoPerfilPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useCandidatos.ts",
+   "hooks_exportados": [
+    "useCandidato",
+    "useCandidatos",
+    "useCandidatosSelect",
+    "useCandidatosStats",
+    "useCreateCandidato",
+    "useDeleteCandidato",
+    "useUpdateCandidato"
+   ],
+   "linhas": 194,
+   "dominio": "hooks",
+   "tabelas": [
+    "candidatos"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useMutation",
+    "useQuery",
+    "useQueryClient"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/hooks/index.ts"
+   ],
+   "coberto_por_testes": 1
+  },
+  {
+   "arquivo": "src/hooks/useCandidatosData.ts",
+   "hooks_exportados": [
+    "useCandidatosData"
+   ],
+   "linhas": 101,
+   "dominio": "hooks",
+   "tabelas": [
+    "candidatos",
+    "match_scores"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useEffect",
+    "useSoundEffects",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/pages/CandidatosPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useCandidatoTechProfile.ts",
+   "hooks_exportados": [
+    "useCandidatoTechProfile"
+   ],
+   "linhas": 74,
+   "dominio": "hooks",
+   "tabelas": [
+    "candidatos"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useMutation",
+    "useQuery",
+    "useQueryClient"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/candidatos/CandidatoTechProfileForm.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useCandidaturaTimeline.ts",
+   "hooks_exportados": [
+    "useCandidaturaTimeline"
+   ],
+   "linhas": 52,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [
+    "hr_candidatura_timeline"
+   ],
+   "edges": [],
+   "hooks_internos": [],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/candidatos/CandidaturaTimelineList.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useCognitiveTest.ts",
+   "hooks_exportados": [
+    "useCandidatoCognitiveSessions",
+    "useCognitiveResult",
+    "useCognitiveSessionItems",
+    "useCognitiveTimer",
+    "useFinishCognitiveSession",
+    "useStartCognitiveSession",
+    "useSubmitCognitiveResponse"
+   ],
+   "linhas": 249,
+   "dominio": "hooks",
+   "tabelas": [
+    "cognitive_sessions"
+   ],
+   "rpcs": [
+    "finish_cognitive_session",
+    "get_cognitive_result",
+    "get_cognitive_session_items",
+    "start_cognitive_session",
+    "submit_cognitive_response"
+   ],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useEffect",
+    "useMemo",
+    "useQuery",
+    "useQueryClient"
+   ],
+   "canais_realtime": [],
+   "usado_por": 2,
+   "usado_por_arquivos": [
+    "src/components/cognitive/CognitiveTestPlayer.tsx",
+    "src/pages/CognitiveTestPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useComunicacoes.ts",
+   "hooks_exportados": [
+    "useComunicacoes"
+   ],
+   "linhas": 139,
+   "dominio": "hooks",
+   "tabelas": [
+    "comunicacoes"
+   ],
+   "rpcs": [],
+   "edges": [
+    "send-email"
+   ],
+   "hooks_internos": [
+    "useMutation",
+    "useQuery",
+    "useQueryClient",
+    "useToast"
+   ],
+   "canais_realtime": [],
+   "usado_por": 3,
+   "usado_por_arquivos": [
+    "src/components/comunicacao/EnviarEmailDialog.tsx",
+    "src/hooks/index.ts",
+    "src/pages/ComunicacaoPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useDashboardData.ts",
+   "hooks_exportados": [
+    "useDashboardData"
+   ],
+   "linhas": 298,
+   "dominio": "hooks",
+   "tabelas": [
+    "candidatos",
+    "entrevistas",
+    "processos_seletivos",
+    "vagas"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useQuery"
+   ],
+   "canais_realtime": [],
+   "usado_por": 2,
+   "usado_por_arquivos": [
+    "src/hooks/index.ts",
+    "src/pages/Dashboard.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useDebounce.ts",
+   "hooks_exportados": [
+    "useDebounce"
+   ],
+   "linhas": 29,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useEffect"
+   ],
+   "canais_realtime": [],
+   "usado_por": 5,
+   "usado_por_arquivos": [
+    "src/components/intelligence/PredictiveSearch.tsx",
+    "src/hooks/index.ts",
+    "src/hooks/useAdvancedSearch.ts",
+    "src/hooks/useFormAutoSave.ts",
+    "src/pages/CandidatosPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useDocumentosCandidato.ts",
+   "hooks_exportados": [
+    "useDocumentosCandidato"
+   ],
+   "linhas": 96,
+   "dominio": "hooks",
+   "tabelas": [
+    "documentos",
+    "documentos_candidatos"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useMutation",
+    "useQuery",
+    "useQueryClient",
+    "useToast"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/hooks/index.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useDuplicate.ts",
+   "hooks_exportados": [
+    "useDuplicate"
+   ],
+   "linhas": 49,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useToast"
+   ],
+   "canais_realtime": [],
+   "usado_por": 0,
+   "usado_por_arquivos": [],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useEmailTemplates.ts",
+   "hooks_exportados": [
+    "useEmailTemplates"
+   ],
+   "linhas": 102,
+   "dominio": "hooks",
+   "tabelas": [
+    "email_templates"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useMutation",
+    "useQuery",
+    "useQueryClient",
+    "useToast"
+   ],
+   "canais_realtime": [],
+   "usado_por": 2,
+   "usado_por_arquivos": [
+    "src/components/comunicacao/EnviarEmailDialog.tsx",
+    "src/hooks/index.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useEntrevistas.ts",
+   "hooks_exportados": [
+    "useCandidatosDisponiveis",
+    "useCreateEntrevista",
+    "useEntrevistas",
+    "useEntrevistasEvolucao",
+    "useEntrevistasPizza",
+    "useEntrevistasStats",
+    "useUpdateEntrevista"
+   ],
+   "linhas": 345,
+   "dominio": "hooks",
+   "tabelas": [
+    "candidatos",
+    "entrevistas"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useMutation",
+    "useQuery",
+    "useQueryClient"
+   ],
+   "canais_realtime": [],
+   "usado_por": 7,
+   "usado_por_arquivos": [
+    "src/components/agenda/AgendarEntrevistaDialog.tsx",
+    "src/components/agenda/aiScheduler/useSuggestedSlots.ts",
+    "src/components/dashboard/EntrevistasChart.tsx",
+    "src/components/dashboard/EntrevistasStats.tsx",
+    "src/hooks/index.ts",
+    "src/hooks/useAgendaActions.ts",
+    "src/pages/AgendaPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useExportData.ts",
+   "hooks_exportados": [
+    "useExportData"
+   ],
+   "linhas": 63,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useState",
+    "useToast"
+   ],
+   "canais_realtime": [],
+   "usado_por": 0,
+   "usado_por_arquivos": [],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useFeatureFlag.ts",
+   "hooks_exportados": [
+    "useFeatureFlag",
+    "useFeatureFlags"
+   ],
+   "linhas": 65,
+   "dominio": "hooks",
+   "tabelas": [
+    "feature_flags"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useQuery"
+   ],
+   "canais_realtime": [],
+   "usado_por": 0,
+   "usado_por_arquivos": [],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useFocusTrap.tsx",
+   "hooks_exportados": [
+    "useFocusTrap"
+   ],
+   "linhas": 98,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useEffect"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/hooks/index.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useFormAutoSave.ts",
+   "hooks_exportados": [
+    "useFormAutoSave",
+    "useFormDirtyState",
+    "useFormSubmit"
+   ],
+   "linhas": 189,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useDebounce",
+    "useEffect",
+    "useRef",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/hooks/index.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useFunnelSla.ts",
+   "hooks_exportados": [
+    "useFunnelSla"
+   ],
+   "linhas": 72,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [
+    "hr_funnel_sla"
+   ],
+   "edges": [],
+   "hooks_internos": [],
+   "canais_realtime": [],
+   "usado_por": 2,
+   "usado_por_arquivos": [
+    "src/components/analytics/FunnelSlaTab.tsx",
+    "src/components/dashboard/SlaAlertBanner.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useFuzzySearch.ts",
+   "hooks_exportados": [
+    "useFuzzySearch"
+   ],
+   "linhas": 210,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useMemo"
+   ],
+   "canais_realtime": [],
+   "usado_por": 15,
+   "usado_por_arquivos": [
+    "src/components/candidatos/CandidatoCard.tsx",
+    "src/components/candidatos/CandidatosList.tsx",
+    "src/components/dashboard/CommandCenter.tsx",
+    "src/components/intelligence/KeyboardShortcuts.tsx",
+    "src/components/pipeline/PipelineCandidateCard.tsx",
+    "src/components/vagas/JobTemplates.tsx",
+    "src/contexts/FuzzySearchContext.tsx",
+    "src/hooks/index.ts",
+    "src/pages/AdminPage.tsx",
+    "src/pages/ComunicacaoPage.tsx",
+    "src/pages/OfferManagementPage.tsx",
+    "src/pages/Pipeline.tsx",
+    "src/pages/TestsPage.tsx",
+    "src/pages/VagasList.tsx",
+    "src/pages/security/RolesPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useGamification.ts",
+   "hooks_exportados": [
+    "useGamification"
+   ],
+   "linhas": 289,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useEffect",
+    "useMemo",
+    "useSoundPreferences",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 10,
+   "usado_por_arquivos": [
+    "src/components/gamification/AchievementProfile.tsx",
+    "src/components/gamification/GamificationWidget.tsx",
+    "src/components/gamification/LevelUpCelebration.tsx",
+    "src/components/gamification/dashboard/useDashboardData.ts",
+    "src/hooks/index.ts",
+    "src/hooks/useAssessmentEngine.ts",
+    "src/hooks/useBehavioralGamification.ts",
+    "src/pages/BehavioralAssessmentsPage.tsx",
+    "src/pages/Dashboard.tsx",
+    "src/pages/GamificationPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useGamificationSupabase.ts",
+   "hooks_exportados": [
+    "useGamificationSupabase"
+   ],
+   "linhas": 258,
+   "dominio": "hooks",
+   "tabelas": [
+    "user_achievements",
+    "user_badges",
+    "user_gamification",
+    "xp_transactions"
+   ],
+   "rpcs": [
+    "add_user_xp",
+    "update_user_streak"
+   ],
+   "edges": [],
+   "hooks_internos": [
+    "useAuth",
+    "useCallback",
+    "useEffect",
+    "useMemo",
+    "useSoundPreferences",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/hooks/useGamificationTriggers.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useGamificationTriggers.ts",
+   "hooks_exportados": [
+    "useGamificationTriggers"
+   ],
+   "linhas": 158,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useAuth",
+    "useCallback",
+    "useGamificationSupabase"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/hooks/useBehavioralGamification.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useHiringManagerData.ts",
+   "hooks_exportados": [
+    "useHiringManagerData"
+   ],
+   "linhas": 115,
+   "dominio": "hooks",
+   "tabelas": [
+    "entrevistas",
+    "processos_seletivos",
+    "vagas"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useQuery"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/pages/HiringManagerPortalPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useHistoricoEtapas.ts",
+   "hooks_exportados": [
+    "useHistoricoEtapas"
+   ],
+   "linhas": 40,
+   "dominio": "hooks",
+   "tabelas": [
+    "historico_etapas"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useQuery"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/hooks/index.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useHunterLeads.ts",
+   "hooks_exportados": [
+    "useHunterLeads",
+    "useSyncHunterLeads"
+   ],
+   "linhas": 75,
+   "dominio": "hooks",
+   "tabelas": [
+    "hunter_leads"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useMutation",
+    "useQuery",
+    "useQueryClient"
+   ],
+   "canais_realtime": [],
+   "usado_por": 0,
+   "usado_por_arquivos": [],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useImportData.ts",
+   "hooks_exportados": [
+    "useImportData"
+   ],
+   "linhas": 230,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 2,
+   "usado_por_arquivos": [
+    "src/components/DataImporter.tsx",
+    "src/hooks/index.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useIndicacoes.ts",
+   "hooks_exportados": [
+    "useIndicacoes"
+   ],
+   "linhas": 86,
+   "dominio": "hooks",
+   "tabelas": [
+    "indicacoes"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useAuth",
+    "useMutation",
+    "useQuery",
+    "useQueryClient",
+    "useVagas"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/pages/IndicacoesPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useIntersectionObserver.ts",
+   "hooks_exportados": [
+    "useInfiniteScroll",
+    "useIntersectionObserver",
+    "useLazyImage"
+   ],
+   "linhas": 137,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useEffect",
+    "useRef",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 3,
+   "usado_por_arquivos": [
+    "src/components/common/LazyLoad.tsx",
+    "src/components/common/VirtualList.tsx",
+    "src/hooks/index.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useInterviewKits.ts",
+   "hooks_exportados": [
+    "useAttachKitToVaga",
+    "useDetachKitFromVaga",
+    "useEntrevistaRespostas",
+    "useKitPerguntas",
+    "useSaveKitResposta",
+    "useVagaInterviewKits"
+   ],
+   "linhas": 177,
+   "dominio": "hooks",
+   "tabelas": [
+    "entrevista_respostas",
+    "template_perguntas",
+    "vaga_interview_kits"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useMutation",
+    "useQuery",
+    "useQueryClient"
+   ],
+   "canais_realtime": [],
+   "usado_por": 2,
+   "usado_por_arquivos": [
+    "src/components/entrevistas/InterviewKitRunner.tsx",
+    "src/components/vagas/VagaInterviewKitsManager.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useInterviewReminders.ts",
+   "hooks_exportados": [
+    "useInterviewReminders"
+   ],
+   "linhas": 134,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [
+    "interview-reminders"
+   ],
+   "hooks_internos": [
+    "useCallback",
+    "useState",
+    "useToast"
+   ],
+   "canais_realtime": [],
+   "usado_por": 2,
+   "usado_por_arquivos": [
+    "src/components/agenda/InterviewReminderButton.tsx",
+    "src/hooks/index.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useIPVerification.ts",
+   "hooks_exportados": [
+    "useIPVerification"
+   ],
+   "linhas": 116,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useEffect",
+    "useQuery"
+   ],
+   "canais_realtime": [],
+   "usado_por": 2,
+   "usado_por_arquivos": [
+    "src/components/security/IPGuard.tsx",
+    "src/hooks/index.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useKeyboardShortcuts.tsx",
+   "hooks_exportados": [
+    "useKeyboardShortcuts"
+   ],
+   "linhas": 172,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useEffect",
+    "useNavigate",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/hooks/index.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useLinkedInImport.ts",
+   "hooks_exportados": [
+    "useLinkedInImport"
+   ],
+   "linhas": 106,
+   "dominio": "hooks",
+   "tabelas": [
+    "candidatos"
+   ],
+   "rpcs": [],
+   "edges": [
+    "parse-resume"
+   ],
+   "hooks_internos": [
+    "useMutation",
+    "useToast"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/candidatos/LinkedInImportDialog.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useLocalStorageState.ts",
+   "hooks_exportados": [
+    "useLocalStorageState"
+   ],
+   "linhas": 77,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useEffect"
+   ],
+   "canais_realtime": [],
+   "usado_por": 2,
+   "usado_por_arquivos": [
+    "src/components/analytics/FunnelSlaTab.tsx",
+    "src/components/analytics/SlaOverdueList.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useNewDeviceDetection.ts",
+   "hooks_exportados": [
+    "useNewDeviceDetection"
+   ],
+   "linhas": 154,
+   "dominio": "hooks",
+   "tabelas": [
+    "trusted_devices"
+   ],
+   "rpcs": [],
+   "edges": [
+    "new-device-alert"
+   ],
+   "hooks_internos": [
+    "useAuth",
+    "useCallback",
+    "useEffect",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 2,
+   "usado_por_arquivos": [
+    "src/components/auth/NewDeviceDetector.tsx",
+    "src/hooks/index.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useNotasCandidato.ts",
+   "hooks_exportados": [
+    "useNotasCandidato"
+   ],
+   "linhas": 92,
+   "dominio": "hooks",
+   "tabelas": [
+    "notas_candidatos",
+    "profiles"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useMutation",
+    "useQuery",
+    "useQueryClient",
+    "useToast"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/hooks/index.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useNotificacoesCandidato.ts",
+   "hooks_exportados": [
+    "useNotificacoesCandidato"
+   ],
+   "linhas": 109,
+   "dominio": "hooks",
+   "tabelas": [
+    "notificacoes_candidato"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCandidatoAuth",
+    "useEffect",
+    "useMutation",
+    "useQuery",
+    "useQueryClient"
+   ],
+   "canais_realtime": [
+    "notificacoes-candidato-realtime"
+   ],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/portal/NotificacoesDropdown.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useOnboarding.ts",
+   "hooks_exportados": [
+    "useOnboarding"
+   ],
+   "linhas": 30,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 2,
+   "usado_por_arquivos": [
+    "src/components/layout/AppSidebar.tsx",
+    "src/hooks/index.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useOptimisticUpdate.ts",
+   "hooks_exportados": [
+    "useBatchOptimisticUpdate",
+    "useOptimisticList",
+    "useOptimisticUpdate"
+   ],
+   "linhas": 330,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/hooks/index.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/usePageTitle.ts",
+   "hooks_exportados": [
+    "usePageTitle"
+   ],
+   "linhas": 53,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useEffect"
+   ],
+   "canais_realtime": [],
+   "usado_por": 39,
+   "usado_por_arquivos": [
+    "src/hooks/index.ts",
+    "src/pages/AdminPage.tsx",
+    "src/pages/AdvancedAnalyticsPage.tsx",
+    "src/pages/AgendaPage.tsx",
+    "src/pages/AnalyticsPage.tsx",
+    "src/pages/AssinarPropostaPage.tsx",
+    "src/pages/AuthPage.tsx",
+    "src/pages/AvaliacaoForm.tsx",
+    "src/pages/AvaliacoesPage.tsx",
+    "src/pages/BehavioralAssessmentPage.tsx",
+    "src/pages/BehavioralAssessmentsPage.tsx",
+    "src/pages/CandidatoPerfilPage.tsx",
+    "src/pages/CandidatosPage.tsx",
+    "src/pages/ComunicacaoPage.tsx",
+    "src/pages/Dashboard.tsx",
+    "src/pages/GamificationPage.tsx",
+    "src/pages/HiringManagerPortalPage.tsx",
+    "src/pages/IndicacoesPage.tsx",
+    "src/pages/NotFound.tsx",
+    "src/pages/OfferManagementPage.tsx",
+    "src/pages/Pipeline.tsx",
+    "src/pages/ProvaAplicacao.tsx",
+    "src/pages/ProvaEditor.tsx",
+    "src/pages/ReportsPage.tsx",
+    "src/pages/TestsPage.tsx",
+    "src/pages/VagaDetalhes.tsx",
+    "src/pages/VagaForm.tsx",
+    "src/pages/WorkflowEditorPage.tsx",
+    "src/pages/auth/ForgotPasswordPage.tsx",
+    "src/pages/auth/LoginPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/usePasswordBreachCheck.ts",
+   "hooks_exportados": [
+    "usePasswordBreachCheck"
+   ],
+   "linhas": 61,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useEffect"
+   ],
+   "canais_realtime": [],
+   "usado_por": 2,
+   "usado_por_arquivos": [
+    "src/components/auth/PasswordStrengthIndicator.tsx",
+    "src/hooks/index.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/usePermissions.ts",
+   "hooks_exportados": [
+    "usePermissions"
+   ],
+   "linhas": 45,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [
+    "get_user_permissions"
+   ],
+   "edges": [],
+   "hooks_internos": [
+    "useAuth",
+    "useCallback",
+    "useQuery"
+   ],
+   "canais_realtime": [],
+   "usado_por": 0,
+   "usado_por_arquivos": [],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/usePersonalityAssessment.ts",
+   "hooks_exportados": [
+    "usePersonalityAssessment"
+   ],
+   "linhas": 293,
+   "dominio": "hooks",
+   "tabelas": [
+    "behavioral_assessment_results"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useMutation",
+    "useQueryClient",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/assessments/PersonalityAssessmentPlayer.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/usePotentialIndex.ts",
+   "hooks_exportados": [
+    "usePotentialIndex"
+   ],
+   "linhas": 88,
+   "dominio": "hooks",
+   "tabelas": [
+    "avaliacoes_comportamentais_resultados",
+    "cognitive_sessions"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/candidatos/PotentialIndexCard.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/usePotentialIndexBatch.ts",
+   "hooks_exportados": [
+    "usePotentialIndexBatch"
+   ],
+   "linhas": 106,
+   "dominio": "hooks",
+   "tabelas": [
+    "avaliacoes_comportamentais_resultados",
+    "cognitive_sessions"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/candidatos/CandidatosList.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useProcessosSeletivos.ts",
+   "hooks_exportados": [
+    "useCreateProcesso",
+    "useDeleteProcesso",
+    "useProcessosByVaga",
+    "useProcessosSeletivos",
+    "useUpdateProcessoEtapa",
+    "useUpdateProcessoStatus"
+   ],
+   "linhas": 181,
+   "dominio": "hooks",
+   "tabelas": [
+    "processos_seletivos"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useMutation",
+    "useQuery",
+    "useQueryClient"
+   ],
+   "canais_realtime": [],
+   "usado_por": 4,
+   "usado_por_arquivos": [
+    "src/hooks/index.ts",
+    "src/pages/AvaliacaoForm.tsx",
+    "src/pages/Pipeline.tsx",
+    "src/pages/VagaDetalhes.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/usePropostas.ts",
+   "hooks_exportados": [
+    "usePropostas"
+   ],
+   "linhas": 175,
+   "dominio": "hooks",
+   "tabelas": [
+    "propostas"
+   ],
+   "rpcs": [],
+   "edges": [
+    "send-email"
+   ],
+   "hooks_internos": [
+    "useMutation",
+    "useQuery",
+    "useQueryClient"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/pages/OfferManagementPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useProvas.ts",
+   "hooks_exportados": [
+    "useBaterias",
+    "useCreateProva",
+    "useDeleteProva",
+    "useDuplicateProva",
+    "useProva",
+    "useProvas",
+    "useProvasAtivas",
+    "useProvasStats",
+    "useUpdateProva"
+   ],
+   "linhas": 301,
+   "dominio": "hooks",
+   "tabelas": [
+    "bateria_provas_rel",
+    "baterias_provas",
+    "provas"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useMutation",
+    "useQuery",
+    "useQueryClient"
+   ],
+   "canais_realtime": [],
+   "usado_por": 4,
+   "usado_por_arquivos": [
+    "src/hooks/index.ts",
+    "src/pages/ProvaAplicacao.tsx",
+    "src/pages/ProvaEditor.tsx",
+    "src/pages/TestsPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/usePullToRefresh.tsx",
+   "hooks_exportados": [
+    "usePullToRefresh"
+   ],
+   "linhas": 109,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useRef",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/hooks/index.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/usePushNotifications.ts",
+   "hooks_exportados": [
+    "usePushNotifications"
+   ],
+   "linhas": 294,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useEffect",
+    "useRef",
+    "useState",
+    "useToast"
+   ],
+   "canais_realtime": [],
+   "usado_por": 2,
+   "usado_por_arquivos": [
+    "src/components/security/PushNotificationSettings.tsx",
+    "src/hooks/index.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useRankingVaga.ts",
+   "hooks_exportados": [
+    "useBulkAiScreening",
+    "useRankingStats",
+    "useRankingVaga"
+   ],
+   "linhas": 115,
+   "dominio": "hooks",
+   "tabelas": [
+    "candidaturas",
+    "triagem_ia"
+   ],
+   "rpcs": [],
+   "edges": [
+    "ai-screening"
+   ],
+   "hooks_internos": [
+    "useMemo",
+    "useMutation",
+    "useQuery",
+    "useQueryClient"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/pages/RankingVagaPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useRateLimiter.ts",
+   "hooks_exportados": [
+    "useRateLimiter"
+   ],
+   "linhas": 41,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 0,
+   "usado_por_arquivos": [],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useRealtimeNotifications.ts",
+   "hooks_exportados": [
+    "useRealtimeNotifications"
+   ],
+   "linhas": 414,
+   "dominio": "hooks",
+   "tabelas": [
+    "notifications"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useAuth",
+    "useCallback",
+    "useEffect",
+    "useRef",
+    "useState"
+   ],
+   "canais_realtime": [
+    "entrevistas-realtime",
+    "match-scores-realtime",
+    "notifications-realtime",
+    "processos-realtime",
+    "vagas-realtime"
+   ],
+   "usado_por": 3,
+   "usado_por_arquivos": [
+    "src/components/notifications/NotificationPanel.tsx",
+    "src/contexts/NotificationContext.tsx",
+    "src/hooks/index.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useReauth.ts",
+   "hooks_exportados": [
+    "useReauth"
+   ],
+   "linhas": 271,
+   "dominio": "hooks",
+   "tabelas": [
+    "user_2fa",
+    "user_2fa_logs"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useAuth",
+    "useCallback"
+   ],
+   "canais_realtime": [],
+   "usado_por": 3,
+   "usado_por_arquivos": [
+    "src/components/auth/ReauthDialog.tsx",
+    "src/hooks/index.ts",
+    "src/pages/settings/SecuritySettingsPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useRegisterFirstResponse.ts",
+   "hooks_exportados": [
+    "useRegisterFirstResponse",
+    "useRegisterFirstResponseBatch"
+   ],
+   "linhas": 146,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [
+    "hr_register_first_response"
+   ],
+   "edges": [],
+   "hooks_internos": [
+    "useMutation",
+    "useQueryClient"
+   ],
+   "canais_realtime": [],
+   "usado_por": 2,
+   "usado_por_arquivos": [
+    "src/components/analytics/SlaOverdueList.tsx",
+    "src/components/analytics/SlaRegisterContactButton.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useRegrasAutomacao.ts",
+   "hooks_exportados": [
+    "useRegrasAutomacao"
+   ],
+   "linhas": 189,
+   "dominio": "hooks",
+   "tabelas": [
+    "regras_automacao"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useEffect",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/pages/WorkflowEditorPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useSavedFilters.ts",
+   "hooks_exportados": [
+    "useSavedFilters"
+   ],
+   "linhas": 131,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useEffect",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 2,
+   "usado_por_arquivos": [
+    "src/components/SavedFiltersDropdown.tsx",
+    "src/hooks/index.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useScorecard.ts",
+   "hooks_exportados": [
+    "useScorecard"
+   ],
+   "linhas": 49,
+   "dominio": "hooks",
+   "tabelas": [
+    "scorecards"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useMutation",
+    "useQuery",
+    "useQueryClient",
+    "useToast"
+   ],
+   "canais_realtime": [],
+   "usado_por": 0,
+   "usado_por_arquivos": [],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useSessionTimeout.ts",
+   "hooks_exportados": [
+    "useSessionTimeout"
+   ],
+   "linhas": 213,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useEffect",
+    "useNavigate",
+    "useRef",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 2,
+   "usado_por_arquivos": [
+    "src/components/auth/SessionManager.tsx",
+    "src/hooks/index.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useSkills.ts",
+   "hooks_exportados": [
+    "useCandidatoSkills",
+    "useSkillSearch",
+    "useSkills",
+    "useSkillsByCategoria"
+   ],
+   "linhas": 220,
+   "dominio": "hooks",
+   "tabelas": [
+    "candidato_skills",
+    "skills"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useMemo",
+    "useMutation",
+    "useQuery",
+    "useQueryClient"
+   ],
+   "canais_realtime": [],
+   "usado_por": 3,
+   "usado_por_arquivos": [
+    "src/components/candidatos/CandidatoSkillsEditor.tsx",
+    "src/components/candidatos/SkillAutocomplete.tsx",
+    "src/components/candidatos/TalentSkillsFilter.tsx"
+   ],
+   "coberto_por_testes": 1
+  },
+  {
+   "arquivo": "src/hooks/useSlaOverdueList.ts",
+   "hooks_exportados": [
+    "useSlaOverdueList"
+   ],
+   "linhas": 66,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [
+    "hr_sla_overdue_list"
+   ],
+   "edges": [],
+   "hooks_internos": [],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/analytics/SlaOverdueList.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useSoundEffects.ts",
+   "hooks_exportados": [
+    "useSoundEffects"
+   ],
+   "linhas": 226,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useEffect",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 7,
+   "usado_por_arquivos": [
+    "src/hooks/index.ts",
+    "src/hooks/useAgendaActions.ts",
+    "src/hooks/useCandidatosData.ts",
+    "src/pages/AgendaPage.tsx",
+    "src/pages/Pipeline.tsx",
+    "src/pages/TestsPage.tsx",
+    "src/pages/VagasList.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useSoundPreferences.ts",
+   "hooks_exportados": [
+    "useSoundPreferences"
+   ],
+   "linhas": 291,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useEffect",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 7,
+   "usado_por_arquivos": [
+    "src/components/portal/PortalProtectedRoute.tsx",
+    "src/components/settings/AccessibilitySettings.tsx",
+    "src/components/settings/SoundSettingsCard.tsx",
+    "src/components/settings/SoundSettingsPanel.tsx",
+    "src/hooks/index.ts",
+    "src/hooks/useGamification.ts",
+    "src/hooks/useGamificationSupabase.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useSwipeGesture.tsx",
+   "hooks_exportados": [
+    "useSwipeGesture"
+   ],
+   "linhas": 105,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useRef"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/hooks/index.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useTalentExport.ts",
+   "hooks_exportados": [
+    "useTalentExport"
+   ],
+   "linhas": 159,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [
+    "search_candidatos"
+   ],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/pages/CandidatosPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useTalentPool.ts",
+   "hooks_exportados": [
+    "useTalentPool"
+   ],
+   "linhas": 52,
+   "dominio": "hooks",
+   "tabelas": [
+    "candidatos"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useMutation",
+    "useQuery",
+    "useQueryClient",
+    "useToast"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/pages/TalentPoolPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useTalentSearch.ts",
+   "hooks_exportados": [
+    "useTalentSearch"
+   ],
+   "linhas": 192,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [
+    "search_candidatos"
+   ],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useMemo",
+    "useQuery",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 3,
+   "usado_por_arquivos": [
+    "src/components/candidatos/TalentAdvancedFilters.tsx",
+    "src/hooks/useTalentExport.ts",
+    "src/pages/CandidatosPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useTenant.ts",
+   "hooks_exportados": [
+    "useTenant"
+   ],
+   "linhas": 6,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useTenantContext"
+   ],
+   "canais_realtime": [],
+   "usado_por": 0,
+   "usado_por_arquivos": [],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useTrustedDevices.ts",
+   "hooks_exportados": [
+    "useTrustedDevices"
+   ],
+   "linhas": 198,
+   "dominio": "hooks",
+   "tabelas": [
+    "trusted_devices"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useAuth",
+    "useCallback",
+    "useEffect",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 2,
+   "usado_por_arquivos": [
+    "src/components/auth/TrustedDevicesManager.tsx",
+    "src/hooks/index.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useVagas.ts",
+   "hooks_exportados": [
+    "useCreateVaga",
+    "useDeleteVaga",
+    "useUpdateVaga",
+    "useVaga",
+    "useVagas",
+    "useVagasSelect",
+    "useVagasUrgentes"
+   ],
+   "linhas": 331,
+   "dominio": "hooks",
+   "tabelas": [
+    "vagas"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useMutation",
+    "useQuery",
+    "useQueryClient"
+   ],
+   "canais_realtime": [],
+   "usado_por": 9,
+   "usado_por_arquivos": [
+    "src/components/agenda/AgendarEntrevistaDialog.tsx",
+    "src/components/candidatos/MatchScoreCalculator.tsx",
+    "src/components/vagas/VagaCard.tsx",
+    "src/hooks/index.ts",
+    "src/hooks/useIndicacoes.ts",
+    "src/pages/Pipeline.tsx",
+    "src/pages/VagaDetalhes.tsx",
+    "src/pages/VagaForm.tsx",
+    "src/pages/VagasList.tsx"
+   ],
+   "coberto_por_testes": 1
+  },
+  {
+   "arquivo": "src/hooks/useVersions.ts",
+   "hooks_exportados": [
+    "useVersions"
+   ],
+   "linhas": 60,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback"
+   ],
+   "canais_realtime": [],
+   "usado_por": 0,
+   "usado_por_arquivos": [],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useVirtualScroll.ts",
+   "hooks_exportados": [
+    "useVirtualGrid",
+    "useVirtualScroll"
+   ],
+   "linhas": 205,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useEffect",
+    "useMemo",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 2,
+   "usado_por_arquivos": [
+    "src/components/common/VirtualList.tsx",
+    "src/hooks/index.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useWebAuthn.ts",
+   "hooks_exportados": [
+    "useWebAuthn"
+   ],
+   "linhas": 258,
+   "dominio": "hooks",
+   "tabelas": [
+    "webauthn_credentials"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useAuth",
+    "useCallback",
+    "useEffect",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 3,
+   "usado_por_arquivos": [
+    "src/components/security/PasskeyManager.tsx",
+    "src/hooks/index.ts",
+    "src/pages/settings/SecuritySettingsPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useWhiteLabel.ts",
+   "hooks_exportados": [
+    "useWhiteLabel"
+   ],
+   "linhas": 55,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useEffect"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/admin/WhiteLabelSettings.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useWorkflow.ts",
+   "hooks_exportados": [
+    "useWorkflow"
+   ],
+   "linhas": 74,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useToast"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/pages/WorkflowEditorPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/pages/edgeFunctionTest/useEdgeFunctionTests.ts",
+   "hooks_exportados": [
+    "useEdgeFunctionTests"
+   ],
+   "linhas": 43,
+   "dominio": "pages/edgeFunctionTest",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/pages/EdgeFunctionTestPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/pages/portal/portalVagas/usePortalVagas.ts",
+   "hooks_exportados": [
+    "usePortalVagas"
+   ],
+   "linhas": 87,
+   "dominio": "pages/portal",
+   "tabelas": [
+    "candidaturas",
+    "curriculos",
+    "vagas"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCandidatoAuth",
+    "useMutation",
+    "useQuery",
+    "useQueryClient"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/pages/portal/PortalVagas.tsx"
+   ],
+   "coberto_por_testes": 0
+  }
+ ]
+}

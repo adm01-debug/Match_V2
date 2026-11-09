@@ -1,0 +1,1114 @@
+{
+ "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
+ "format_version": 2,
+ "frameworks": [
+  "vitest",
+  "playwright"
+ ],
+ "total": 90,
+ "por_tipo": {
+  "e2e": 36,
+  "pytest": 1,
+  "unit": 53
+ },
+ "onde_ficam": [
+  {
+   "padrao": "e2e/",
+   "arquivos": 36
+  },
+  {
+   "padrao": "co-localizado (__tests__)",
+   "arquivos": 24
+  },
+  {
+   "padrao": "outro",
+   "arquivos": 22
+  },
+  {
+   "padrao": "co-localizado (*.test)",
+   "arquivos": 8
+  }
+ ],
+ "arquivos": [
+  {
+   "arquivo": "e2e/filtering.spec.ts",
+   "tipo": "e2e",
+   "linhas": 44,
+   "testa": [],
+   "casos": 5
+  },
+  {
+   "arquivo": "e2e/form-validation.spec.ts",
+   "tipo": "e2e",
+   "linhas": 36,
+   "testa": [],
+   "casos": 4
+  },
+  {
+   "arquivo": "e2e/home-page.spec.ts",
+   "tipo": "e2e",
+   "linhas": 15,
+   "testa": [],
+   "casos": 2
+  },
+  {
+   "arquivo": "e2e/indicacoes.spec.ts",
+   "tipo": "e2e",
+   "linhas": 8,
+   "testa": [],
+   "casos": 1
+  },
+  {
+   "arquivo": "e2e/infinite-scroll.spec.ts",
+   "tipo": "e2e",
+   "linhas": 31,
+   "testa": [],
+   "casos": 3
+  },
+  {
+   "arquivo": "e2e/job-publisher.spec.ts",
+   "tipo": "e2e",
+   "linhas": 20,
+   "testa": [],
+   "casos": 2
+  },
+  {
+   "arquivo": "e2e/keyboard-shortcuts.spec.ts",
+   "tipo": "e2e",
+   "linhas": 36,
+   "testa": [],
+   "casos": 4
+  },
+  {
+   "arquivo": "e2e/localization.spec.ts",
+   "tipo": "e2e",
+   "linhas": 22,
+   "testa": [],
+   "casos": 3
+  },
+  {
+   "arquivo": "e2e/mobile.spec.ts",
+   "tipo": "e2e",
+   "linhas": 27,
+   "testa": [],
+   "casos": 3
+  },
+  {
+   "arquivo": "e2e/navigation.spec.ts",
+   "tipo": "e2e",
+   "linhas": 11,
+   "testa": [],
+   "casos": 1
+  },
+  {
+   "arquivo": "e2e/not-found.spec.ts",
+   "tipo": "e2e",
+   "linhas": 10,
+   "testa": [],
+   "casos": 1
+  },
+  {
+   "arquivo": "e2e/offer-signature-flow.spec.ts",
+   "tipo": "e2e",
+   "linhas": 126,
+   "testa": [],
+   "casos": 11
+  },
+  {
+   "arquivo": "e2e/offline.spec.ts",
+   "tipo": "e2e",
+   "linhas": 22,
+   "testa": [],
+   "casos": 2
+  },
+  {
+   "arquivo": "e2e/pagination.spec.ts",
+   "tipo": "e2e",
+   "linhas": 36,
+   "testa": [],
+   "casos": 4
+  },
+  {
+   "arquivo": "e2e/performance.spec.ts",
+   "tipo": "e2e",
+   "linhas": 26,
+   "testa": [],
+   "casos": 2
+  },
+  {
+   "arquivo": "e2e/pipeline.spec.ts",
+   "tipo": "e2e",
+   "linhas": 9,
+   "testa": [],
+   "casos": 1
+  },
+  {
+   "arquivo": "e2e/portal-auth.spec.ts",
+   "tipo": "e2e",
+   "linhas": 23,
+   "testa": [],
+   "casos": 3
+  },
+  {
+   "arquivo": "e2e/portal-dashboard.spec.ts",
+   "tipo": "e2e",
+   "linhas": 10,
+   "testa": [],
+   "casos": 1
+  },
+  {
+   "arquivo": "e2e/portal-home.spec.ts",
+   "tipo": "e2e",
+   "linhas": 15,
+   "testa": [],
+   "casos": 2
+  },
+  {
+   "arquivo": "e2e/portal-perfil.spec.ts",
+   "tipo": "e2e",
+   "linhas": 10,
+   "testa": [],
+   "casos": 1
+  },
+  {
+   "arquivo": "e2e/portal-vagas.spec.ts",
+   "tipo": "e2e",
+   "linhas": 10,
+   "testa": [],
+   "casos": 1
+  },
+  {
+   "arquivo": "e2e/portal.spec.ts",
+   "tipo": "e2e",
+   "linhas": 37,
+   "testa": [],
+   "casos": 4
+  },
+  {
+   "arquivo": "e2e/print.spec.ts",
+   "tipo": "e2e",
+   "linhas": 31,
+   "testa": [],
+   "casos": 4
+  },
+  {
+   "arquivo": "e2e/prova-aplicacao.spec.ts",
+   "tipo": "e2e",
+   "linhas": 10,
+   "testa": [],
+   "casos": 1
+  },
+  {
+   "arquivo": "e2e/prova-editor.spec.ts",
+   "tipo": "e2e",
+   "linhas": 16,
+   "testa": [],
+   "casos": 2
+  },
+  {
+   "arquivo": "e2e/relatorios.spec.ts",
+   "tipo": "e2e",
+   "linhas": 8,
+   "testa": [],
+   "casos": 1
+  },
+  {
+   "arquivo": "e2e/responsive.spec.ts",
+   "tipo": "e2e",
+   "linhas": 43,
+   "testa": [],
+   "casos": 4
+  },
+  {
+   "arquivo": "e2e/resume-parser.spec.ts",
+   "tipo": "e2e",
+   "linhas": 10,
+   "testa": [],
+   "casos": 1
+  },
+  {
+   "arquivo": "e2e/search.spec.ts",
+   "tipo": "e2e",
+   "linhas": 39,
+   "testa": [],
+   "casos": 4
+  },
+  {
+   "arquivo": "e2e/seo.spec.ts",
+   "tipo": "e2e",
+   "linhas": 43,
+   "testa": [],
+   "casos": 5
+  },
+  {
+   "arquivo": "e2e/sorting.spec.ts",
+   "tipo": "e2e",
+   "linhas": 37,
+   "testa": [],
+   "casos": 4
+  },
+  {
+   "arquivo": "e2e/tests.spec.ts",
+   "tipo": "e2e",
+   "linhas": 16,
+   "testa": [],
+   "casos": 2
+  },
+  {
+   "arquivo": "e2e/vaga-detalhes.spec.ts",
+   "tipo": "e2e",
+   "linhas": 12,
+   "testa": [],
+   "casos": 1
+  },
+  {
+   "arquivo": "e2e/vaga-form.spec.ts",
+   "tipo": "e2e",
+   "linhas": 12,
+   "testa": [],
+   "casos": 1
+  },
+  {
+   "arquivo": "e2e/vagas-list.spec.ts",
+   "tipo": "e2e",
+   "linhas": 15,
+   "testa": [],
+   "casos": 2
+  },
+  {
+   "arquivo": "e2e/websocket.spec.ts",
+   "tipo": "e2e",
+   "linhas": 30,
+   "testa": [],
+   "casos": 3
+  },
+  {
+   "arquivo": "scripts/ai-context/gerar.unit.mjs",
+   "tipo": "unit",
+   "linhas": 361,
+   "testa": [
+    "src/components/auth/ProtectedRoute.tsx",
+    "src/components/ui/index.ts",
+    "src/routes/AppRoutes.tsx"
+   ],
+   "casos": 18
+  },
+  {
+   "arquivo": "scripts/ci/inventario-banco.unit.mjs",
+   "tipo": "unit",
+   "linhas": 228,
+   "testa": [
+    "scripts/inventario/gerar-banco.mjs"
+   ],
+   "casos": 18
+  },
+  {
+   "arquivo": "scripts/ci/inventario-mudou.unit.mjs",
+   "tipo": "unit",
+   "linhas": 106,
+   "testa": [
+    "scripts/inventario/mudou-conteudo.mjs"
+   ],
+   "casos": 9
+  },
+  {
+   "arquivo": "scripts/ci/inventario-repo.unit.mjs",
+   "tipo": "unit",
+   "linhas": 93,
+   "testa": [],
+   "casos": 3
+  },
+  {
+   "arquivo": "scripts/ci/inventario-rotas.unit.mjs",
+   "tipo": "unit",
+   "linhas": 194,
+   "testa": [
+    "src/components/auth/Admin2FAGuard.tsx",
+    "src/components/auth/ProtectedRoute.tsx",
+    "src/contexts/AuthContext.tsx",
+    "src/hooks/useVagas.ts",
+    "src/integrations/supabase/client.ts",
+    "src/pages/AdminPage.tsx",
+    "src/pages/Dashboard.tsx"
+   ],
+   "casos": 6
+  },
+  {
+   "arquivo": "scripts/regras_negocio/test_generate.py",
+   "tipo": "pytest",
+   "linhas": 164,
+   "testa": [],
+   "casos": 0
+  },
+  {
+   "arquivo": "src/components/agenda/__tests__/AIInterviewScheduler.integration.test.tsx",
+   "tipo": "unit",
+   "linhas": 41,
+   "testa": [
+    "src/components/agenda/AIInterviewScheduler.tsx",
+    "src/utils/test-utils.tsx"
+   ],
+   "casos": 1
+  },
+  {
+   "arquivo": "src/components/auth/__tests__/ProtectedRoute.test.tsx",
+   "tipo": "unit",
+   "linhas": 120,
+   "testa": [
+    "src/components/auth/ProtectedRoute.tsx"
+   ],
+   "casos": 6
+  },
+  {
+   "arquivo": "src/components/layout/Layout.test.tsx",
+   "tipo": "unit",
+   "linhas": 70,
+   "testa": [
+    "src/components/layout/Layout.tsx",
+    "src/components/ui/tooltip.tsx",
+    "src/contexts/NotificationContext.tsx"
+   ],
+   "casos": 1
+  },
+  {
+   "arquivo": "src/components/tests/BateriaCard.tsx",
+   "tipo": "unit",
+   "linhas": 77,
+   "testa": [
+    "src/components/ui/badge.tsx",
+    "src/components/ui/button.tsx",
+    "src/components/ui/card.tsx",
+    "src/config/testsConfig.ts"
+   ],
+   "casos": 0
+  },
+  {
+   "arquivo": "src/components/tests/CategoriaCard.tsx",
+   "tipo": "unit",
+   "linhas": 60,
+   "testa": [
+    "src/components/ui/badge.tsx",
+    "src/components/ui/card.tsx",
+    "src/config/testsConfig.ts",
+    "src/types/tests.ts"
+   ],
+   "casos": 0
+  },
+  {
+   "arquivo": "src/components/tests/index.ts",
+   "tipo": "unit",
+   "linhas": 15,
+   "testa": [],
+   "casos": 0
+  },
+  {
+   "arquivo": "src/components/tests/ProvaCard.tsx",
+   "tipo": "unit",
+   "linhas": 171,
+   "testa": [
+    "src/components/ui/badge.tsx",
+    "src/components/ui/button.tsx",
+    "src/components/ui/card.tsx",
+    "src/components/ui/dropdown-menu.tsx",
+    "src/components/ui/progress.tsx",
+    "src/config/testsConfig.ts",
+    "src/types/tests.ts"
+   ],
+   "casos": 0
+  },
+  {
+   "arquivo": "src/components/tests/ProvaTimer.tsx",
+   "tipo": "unit",
+   "linhas": 62,
+   "testa": [
+    "src/lib/utils.ts"
+   ],
+   "casos": 0
+  },
+  {
+   "arquivo": "src/components/tests/QuestaoAplicacao.tsx",
+   "tipo": "unit",
+   "linhas": 172,
+   "testa": [
+    "src/components/ui/badge.tsx",
+    "src/components/ui/card.tsx",
+    "src/components/ui/label.tsx",
+    "src/components/ui/radio-group.tsx",
+    "src/components/ui/textarea.tsx",
+    "src/lib/utils.ts",
+    "src/types/tests.ts"
+   ],
+   "casos": 0
+  },
+  {
+   "arquivo": "src/components/tests/QuestaoCard.tsx",
+   "tipo": "unit",
+   "linhas": 145,
+   "testa": [
+    "src/components/ui/badge.tsx",
+    "src/components/ui/button.tsx",
+    "src/components/ui/card.tsx",
+    "src/lib/utils.ts",
+    "src/types/tests.ts"
+   ],
+   "casos": 0
+  },
+  {
+   "arquivo": "src/components/tests/QuestaoForm.tsx",
+   "tipo": "unit",
+   "linhas": 265,
+   "testa": [
+    "src/components/ui/button.tsx",
+    "src/components/ui/card.tsx",
+    "src/components/ui/input.tsx",
+    "src/components/ui/label.tsx",
+    "src/components/ui/radio-group.tsx",
+    "src/components/ui/select.tsx",
+    "src/components/ui/textarea.tsx",
+    "src/lib/utils.ts",
+    "src/types/tests.ts"
+   ],
+   "casos": 0
+  },
+  {
+   "arquivo": "src/components/tests/ResultadoProvaView.tsx",
+   "tipo": "unit",
+   "linhas": 279,
+   "testa": [
+    "src/components/ui/badge.tsx",
+    "src/components/ui/button.tsx",
+    "src/components/ui/card.tsx",
+    "src/components/ui/progress.tsx",
+    "src/lib/utils.ts",
+    "src/types/tests.ts"
+   ],
+   "casos": 0
+  },
+  {
+   "arquivo": "src/components/tests/TestFilters.tsx",
+   "tipo": "unit",
+   "linhas": 125,
+   "testa": [
+    "src/components/ui/badge.tsx",
+    "src/components/ui/button.tsx",
+    "src/components/ui/input.tsx",
+    "src/components/ui/select.tsx",
+    "src/config/testsConfig.ts",
+    "src/types/tests.ts"
+   ],
+   "casos": 0
+  },
+  {
+   "arquivo": "src/hooks/__tests__/useCandidatos.test.ts",
+   "tipo": "unit",
+   "linhas": 45,
+   "testa": [
+    "src/hooks/useCandidatos.ts"
+   ],
+   "casos": 5
+  },
+  {
+   "arquivo": "src/lib/__tests__/advancedBehavioralCalculator.test.ts",
+   "tipo": "unit",
+   "linhas": 199,
+   "testa": [
+    "src/lib/advancedBehavioralCalculator.ts"
+   ],
+   "casos": 24
+  },
+  {
+   "arquivo": "src/lib/__tests__/apiClient.test.ts",
+   "tipo": "unit",
+   "linhas": 39,
+   "testa": [
+    "src/lib/apiClient.ts"
+   ],
+   "casos": 6
+  },
+  {
+   "arquivo": "src/lib/__tests__/constants.test.ts",
+   "tipo": "unit",
+   "linhas": 147,
+   "testa": [
+    "src/lib/constants.ts"
+   ],
+   "casos": 44
+  },
+  {
+   "arquivo": "src/lib/__tests__/dateUtils.test.ts",
+   "tipo": "unit",
+   "linhas": 98,
+   "testa": [
+    "src/lib/dateUtils.ts"
+   ],
+   "casos": 15
+  },
+  {
+   "arquivo": "src/lib/__tests__/errorHandler.test.ts",
+   "tipo": "unit",
+   "linhas": 54,
+   "testa": [
+    "src/lib/errorHandler.ts"
+   ],
+   "casos": 8
+  },
+  {
+   "arquivo": "src/lib/__tests__/excelImporter.test.ts",
+   "tipo": "unit",
+   "linhas": 52,
+   "testa": [
+    "src/lib/excelImporter.ts"
+   ],
+   "casos": 6
+  },
+  {
+   "arquivo": "src/lib/__tests__/matchCalculator.test.ts",
+   "tipo": "unit",
+   "linhas": 334,
+   "testa": [
+    "src/lib/matchCalculator.ts",
+    "src/types/match.ts"
+   ],
+   "casos": 32
+  },
+  {
+   "arquivo": "src/lib/__tests__/storageUtils.test.ts",
+   "tipo": "unit",
+   "linhas": 108,
+   "testa": [
+    "src/lib/storageUtils.ts"
+   ],
+   "casos": 16
+  },
+  {
+   "arquivo": "src/pages/__tests__/IndicacoesPage.integration.test.tsx",
+   "tipo": "unit",
+   "linhas": 127,
+   "testa": [
+    "src/pages/IndicacoesPage.tsx",
+    "src/utils/test-utils.tsx"
+   ],
+   "casos": 3
+  },
+  {
+   "arquivo": "src/pages/tests/iconMap.ts",
+   "tipo": "unit",
+   "linhas": 12,
+   "testa": [],
+   "casos": 0
+  },
+  {
+   "arquivo": "src/pages/tests/ProvaCard.tsx",
+   "tipo": "unit",
+   "linhas": 92,
+   "testa": [
+    "src/components/ui/badge.tsx",
+    "src/components/ui/button.tsx",
+    "src/components/ui/card.tsx",
+    "src/components/ui/highlight-match.tsx",
+    "src/config/testsConfig.ts",
+    "src/lib/utils.ts",
+    "src/types/tests.ts"
+   ],
+   "casos": 0
+  },
+  {
+   "arquivo": "src/pages/tests/TestsFilters.tsx",
+   "tipo": "unit",
+   "linhas": 53,
+   "testa": [
+    "src/components/ui/input.tsx",
+    "src/components/ui/select.tsx",
+    "src/config/testsConfig.ts"
+   ],
+   "casos": 0
+  },
+  {
+   "arquivo": "src/pages/tests/TestsStats.tsx",
+   "tipo": "unit",
+   "linhas": 59,
+   "testa": [
+    "src/components/ui/card.tsx"
+   ],
+   "casos": 0
+  },
+  {
+   "arquivo": "src/services/__tests__/aiService.test.ts",
+   "tipo": "unit",
+   "linhas": 94,
+   "testa": [
+    "src/services/aiService.ts"
+   ],
+   "casos": 7
+  },
+  {
+   "arquivo": "src/services/__tests__/cacheService.test.ts",
+   "tipo": "unit",
+   "linhas": 95,
+   "testa": [
+    "src/services/cacheService.ts"
+   ],
+   "casos": 11
+  },
+  {
+   "arquivo": "src/services/__tests__/emailService.test.ts",
+   "tipo": "unit",
+   "linhas": 118,
+   "testa": [
+    "src/services/emailService.ts"
+   ],
+   "casos": 8
+  },
+  {
+   "arquivo": "src/services/__tests__/exportService.test.ts",
+   "tipo": "unit",
+   "linhas": 72,
+   "testa": [
+    "src/services/exportService.ts"
+   ],
+   "casos": 9
+  },
+  {
+   "arquivo": "src/services/__tests__/gdprService.test.ts",
+   "tipo": "unit",
+   "linhas": 42,
+   "testa": [
+    "src/services/gdprService.ts"
+   ],
+   "casos": 6
+  },
+  {
+   "arquivo": "src/services/__tests__/integrations.test.ts",
+   "tipo": "unit",
+   "linhas": 51,
+   "testa": [
+    "src/services/cathoService.ts",
+    "src/services/infojobsService.ts",
+    "src/services/vagasService.ts"
+   ],
+   "casos": 5
+  },
+  {
+   "arquivo": "src/services/__tests__/jobBoardService.test.ts",
+   "tipo": "unit",
+   "linhas": 69,
+   "testa": [
+    "src/services/cathoService.ts",
+    "src/services/infojobsService.ts",
+    "src/services/jobBoardService.ts",
+    "src/services/vagasService.ts"
+   ],
+   "casos": 9
+  },
+  {
+   "arquivo": "src/services/__tests__/linkedinService.test.ts",
+   "tipo": "unit",
+   "linhas": 36,
+   "testa": [
+    "src/services/linkedinService.ts"
+   ],
+   "casos": 4
+  },
+  {
+   "arquivo": "src/services/__tests__/matchingService.test.ts",
+   "tipo": "unit",
+   "linhas": 105,
+   "testa": [
+    "src/services/matchingService.ts"
+   ],
+   "casos": 13
+  },
+  {
+   "arquivo": "src/services/__tests__/whatsappService.test.ts",
+   "tipo": "unit",
+   "linhas": 58,
+   "testa": [
+    "src/services/whatsappService.ts"
+   ],
+   "casos": 4
+  },
+  {
+   "arquivo": "src/services/__tests__/workflowEngine.test.ts",
+   "tipo": "unit",
+   "linhas": 171,
+   "testa": [
+    "src/services/workflowEngine.ts",
+    "src/types/workflow.ts"
+   ],
+   "casos": 25
+  },
+  {
+   "arquivo": "src/test/csvExport.test.ts",
+   "tipo": "unit",
+   "linhas": 52,
+   "testa": [
+    "src/lib/csvExport.ts"
+   ],
+   "casos": 6
+  },
+  {
+   "arquivo": "src/test/mocks/supabase.ts",
+   "tipo": "unit",
+   "linhas": 79,
+   "testa": [],
+   "casos": 0
+  },
+  {
+   "arquivo": "src/test/no-hardcoded-colors.test.ts",
+   "tipo": "unit",
+   "linhas": 154,
+   "testa": [],
+   "casos": 7
+  },
+  {
+   "arquivo": "src/test/potentialIndex.test.ts",
+   "tipo": "unit",
+   "linhas": 75,
+   "testa": [
+    "src/lib/potentialIndex.ts"
+   ],
+   "casos": 9
+  },
+  {
+   "arquivo": "src/test/setup.ts",
+   "tipo": "unit",
+   "linhas": 59,
+   "testa": [],
+   "casos": 0
+  },
+  {
+   "arquivo": "src/test/techProfile.test.ts",
+   "tipo": "unit",
+   "linhas": 72,
+   "testa": [
+    "src/hooks/useSkills.ts",
+    "src/types/techProfile.ts"
+   ],
+   "casos": 10
+  },
+  {
+   "arquivo": "src/types/__tests__/behavioralDNA.test.ts",
+   "tipo": "unit",
+   "linhas": 133,
+   "testa": [
+    "src/types/behavioralDNA.ts"
+   ],
+   "casos": 12
+  },
+  {
+   "arquivo": "supabase/functions/geo-check/index.test.ts",
+   "tipo": "unit",
+   "linhas": 36,
+   "testa": [],
+   "casos": 2
+  },
+  {
+   "arquivo": "supabase/functions/health/index.test.ts",
+   "tipo": "unit",
+   "linhas": 32,
+   "testa": [],
+   "casos": 2
+  },
+  {
+   "arquivo": "supabase/functions/ip-guard/index.test.ts",
+   "tipo": "unit",
+   "linhas": 48,
+   "testa": [],
+   "casos": 3
+  }
+ ],
+ "sql": [],
+ "cobertura_por_arquivo": {
+  "scripts/inventario/gerar-banco.mjs": 1,
+  "scripts/inventario/mudou-conteudo.mjs": 1,
+  "src/components/agenda/AIInterviewScheduler.tsx": 1,
+  "src/components/auth/Admin2FAGuard.tsx": 1,
+  "src/components/auth/ProtectedRoute.tsx": 3,
+  "src/components/layout/Layout.tsx": 1,
+  "src/components/ui/badge.tsx": 8,
+  "src/components/ui/button.tsx": 7,
+  "src/components/ui/card.tsx": 9,
+  "src/components/ui/dropdown-menu.tsx": 1,
+  "src/components/ui/highlight-match.tsx": 1,
+  "src/components/ui/index.ts": 1,
+  "src/components/ui/input.tsx": 3,
+  "src/components/ui/label.tsx": 2,
+  "src/components/ui/progress.tsx": 2,
+  "src/components/ui/radio-group.tsx": 2,
+  "src/components/ui/select.tsx": 3,
+  "src/components/ui/textarea.tsx": 2,
+  "src/components/ui/tooltip.tsx": 1,
+  "src/config/testsConfig.ts": 6,
+  "src/contexts/AuthContext.tsx": 1,
+  "src/contexts/NotificationContext.tsx": 1,
+  "src/hooks/useCandidatos.ts": 1,
+  "src/hooks/useSkills.ts": 1,
+  "src/hooks/useVagas.ts": 1,
+  "src/integrations/supabase/client.ts": 1,
+  "src/lib/advancedBehavioralCalculator.ts": 1,
+  "src/lib/apiClient.ts": 1,
+  "src/lib/constants.ts": 1,
+  "src/lib/csvExport.ts": 1,
+  "src/lib/dateUtils.ts": 1,
+  "src/lib/errorHandler.ts": 1,
+  "src/lib/excelImporter.ts": 1,
+  "src/lib/matchCalculator.ts": 1,
+  "src/lib/potentialIndex.ts": 1,
+  "src/lib/storageUtils.ts": 1,
+  "src/lib/utils.ts": 6,
+  "src/pages/AdminPage.tsx": 1,
+  "src/pages/Dashboard.tsx": 1,
+  "src/pages/IndicacoesPage.tsx": 1,
+  "src/routes/AppRoutes.tsx": 1,
+  "src/services/aiService.ts": 1,
+  "src/services/cacheService.ts": 1,
+  "src/services/cathoService.ts": 2,
+  "src/services/emailService.ts": 1,
+  "src/services/exportService.ts": 1,
+  "src/services/gdprService.ts": 1,
+  "src/services/infojobsService.ts": 2,
+  "src/services/jobBoardService.ts": 1,
+  "src/services/linkedinService.ts": 1,
+  "src/services/matchingService.ts": 1,
+  "src/services/vagasService.ts": 2,
+  "src/services/whatsappService.ts": 1,
+  "src/services/workflowEngine.ts": 1,
+  "src/types/behavioralDNA.ts": 1,
+  "src/types/match.ts": 1,
+  "src/types/techProfile.ts": 1,
+  "src/types/tests.ts": 8,
+  "src/types/workflow.ts": 1,
+  "src/utils/test-utils.tsx": 2
+ },
+ "sem_teste": {
+  "telas": [
+   "src/pages/AdvancedAnalyticsPage.tsx",
+   "src/pages/AgendaPage.tsx",
+   "src/pages/AnalyticsPage.tsx",
+   "src/pages/AplicarVagaPage.tsx",
+   "src/pages/AssinarPropostaPage.tsx",
+   "src/pages/AuthPage.tsx",
+   "src/pages/AvaliacaoForm.tsx",
+   "src/pages/AvaliacoesPage.tsx",
+   "src/pages/BehavioralAssessmentPage.tsx",
+   "src/pages/BehavioralAssessmentsPage.tsx",
+   "src/pages/CandidatoPerfilPage.tsx",
+   "src/pages/CandidatosPage.tsx",
+   "src/pages/CarreirasPage.tsx",
+   "src/pages/CognitiveTestPage.tsx",
+   "src/pages/ComunicacaoPage.tsx",
+   "src/pages/DeuMatchPage.tsx",
+   "src/pages/DiagnosticoPage.tsx",
+   "src/pages/EdgeFunctionTestPage.tsx",
+   "src/pages/GamificationPage.tsx",
+   "src/pages/HiringManagerPortalPage.tsx",
+   "src/pages/NotFound.tsx",
+   "src/pages/OfferManagementPage.tsx",
+   "src/pages/Pipeline.tsx",
+   "src/pages/ProvaAplicacao.tsx",
+   "src/pages/ProvaEditor.tsx",
+   "src/pages/RankingVagaPage.tsx",
+   "src/pages/ReportsPage.tsx",
+   "src/pages/ResumeParserPage.tsx",
+   "src/pages/StatusPage.tsx",
+   "src/pages/TalentPoolPage.tsx",
+   "src/pages/TestsPage.tsx",
+   "src/pages/VagaDetalhes.tsx",
+   "src/pages/VagaForm.tsx",
+   "src/pages/VagasList.tsx",
+   "src/pages/WorkflowEditorPage.tsx",
+   "src/pages/admin/AuditLogPage.tsx",
+   "src/pages/admin/DeadLetterQueuePage.tsx",
+   "src/pages/auth/ForgotPasswordPage.tsx",
+   "src/pages/auth/LoginPage.tsx",
+   "src/pages/auth/RegisterPage.tsx",
+   "src/pages/auth/ResetPasswordPage.tsx",
+   "src/pages/auth/TwoFactorAuthPage.tsx",
+   "src/pages/portal/PortalAuthPage.tsx",
+   "src/pages/portal/PortalDashboard.tsx",
+   "src/pages/portal/PortalPerfil.tsx",
+   "src/pages/portal/PortalVagas.tsx",
+   "src/pages/public/PrivacidadePage.tsx",
+   "src/pages/public/TermosPage.tsx",
+   "src/pages/security/RateLimitDashboard.tsx",
+   "src/pages/security/RolesPage.tsx",
+   "src/pages/settings/SecuritySettingsPage.tsx"
+  ],
+  "hooks": [
+   "scripts/ai-context/cenarios.mjs",
+   "src/components/a11y/FocusTrap.tsx",
+   "src/components/a11y/HighContrastMode.tsx",
+   "src/components/a11y/KeyboardNavigation.tsx",
+   "src/components/a11y/ReducedMotion.tsx",
+   "src/components/a11y/ScreenReaderAnnounce.tsx",
+   "src/components/agenda/aiScheduler/useSuggestedSlots.ts",
+   "src/components/assessments/companyProfile/useCompanyProfile.ts",
+   "src/components/assessments/gamified/personalityMiniGame/usePersonalityMiniGame.ts",
+   "src/components/assessments/immersive/useScenarioPlayer.ts",
+   "src/components/auth/PasswordStrengthIndicator.tsx",
+   "src/components/candidatos/resumeParser/useResumeParser.ts",
+   "src/components/common/ConfirmDialog.tsx",
+   "src/components/common/GlobalShortcutsProvider.tsx",
+   "src/components/common/index.ts",
+   "src/components/forms/FormProgress.tsx",
+   "src/components/forms/index.ts",
+   "src/components/gamification/AchievementNotification.tsx",
+   "src/components/gamification/dailyChallenges/useDailyChallenges.ts",
+   "src/components/gamification/dashboard/useDashboardData.ts",
+   "src/components/gamification/GamificationOnboarding.tsx",
+   "src/components/gamification/index.ts",
+   "src/components/gamification/weeklyMissions/useWeeklyMissions.ts",
+   "src/components/gamification/XPToast.tsx",
+   "src/components/intelligence/index.ts",
+   "src/components/intelligence/KeyboardShortcuts.tsx",
+   "src/components/intelligence/PredictiveSearch.tsx",
+   "src/components/intelligence/RecentActions.tsx",
+   "src/components/intelligence/RecentActionsWidget.tsx",
+   "src/components/onboarding/index.ts",
+   "src/components/onboarding/OnboardingProvider.tsx",
+   "src/components/ui/confetti.tsx",
+   "src/components/ui/form.tsx",
+   "src/components/ui/ripple-effect.tsx",
+   "src/components/ui/sidebar.tsx",
+   "src/contexts/AnalyticsProvider.tsx",
+   "src/contexts/CandidatoAuthContext.tsx",
+   "src/contexts/FuzzySearchContext.tsx",
+   "src/contexts/PermissionContext.tsx",
+   "src/contexts/TenantContext.tsx",
+   "src/hooks/behavioralResults/companyProfile.ts",
+   "src/hooks/behavioralResults/mutations.ts",
+   "src/hooks/behavioralResults/queries.ts",
+   "src/hooks/behavioralResults/session.ts",
+   "src/hooks/index.ts",
+   "src/hooks/use-mobile.tsx",
+   "src/hooks/use-toast.ts",
+   "src/hooks/useAdminUsers.ts",
+   "src/hooks/useAdvancedAnalytics.ts",
+   "src/hooks/useAdvancedSearch.ts",
+   "src/hooks/useAgendaActions.ts",
+   "src/hooks/useAiScreening.ts",
+   "src/hooks/useAnalytics.ts",
+   "src/hooks/useAssessmentEngine.ts",
+   "src/hooks/useAssessments.ts",
+   "src/hooks/useAuditLogs.ts",
+   "src/hooks/useAvaliacaoForm.ts",
+   "src/hooks/useAvaliacoes.ts",
+   "src/hooks/useBehavioralAssessmentResults.ts",
+   "src/hooks/useBehavioralAssessments.ts",
+   "src/hooks/useBehavioralGamification.ts",
+   "src/hooks/useBehavioralScoreCalculation.ts",
+   "src/hooks/useBulkActions.ts",
+   "src/hooks/useBulkSelection.ts",
+   "src/hooks/useCandidatoCandidaturas.ts",
+   "src/hooks/useCandidatoPerfil.ts",
+   "src/hooks/useCandidatosData.ts",
+   "src/hooks/useCandidatoTechProfile.ts",
+   "src/hooks/useCandidaturaTimeline.ts",
+   "src/hooks/useCognitiveTest.ts",
+   "src/hooks/useComunicacoes.ts",
+   "src/hooks/useDashboardData.ts",
+   "src/hooks/useDebounce.ts",
+   "src/hooks/useDocumentosCandidato.ts",
+   "src/hooks/useDuplicate.ts",
+   "src/hooks/useEmailTemplates.ts",
+   "src/hooks/useEntrevistas.ts",
+   "src/hooks/useExportData.ts",
+   "src/hooks/useFeatureFlag.ts",
+   "src/hooks/useFocusTrap.tsx",
+   "src/hooks/useFormAutoSave.ts",
+   "src/hooks/useFunnelSla.ts",
+   "src/hooks/useFuzzySearch.ts",
+   "src/hooks/useGamification.ts",
+   "src/hooks/useGamificationSupabase.ts",
+   "src/hooks/useGamificationTriggers.ts",
+   "src/hooks/useHiringManagerData.ts",
+   "src/hooks/useHistoricoEtapas.ts",
+   "src/hooks/useHunterLeads.ts",
+   "src/hooks/useImportData.ts",
+   "src/hooks/useIndicacoes.ts",
+   "src/hooks/useIntersectionObserver.ts",
+   "src/hooks/useInterviewKits.ts",
+   "src/hooks/useInterviewReminders.ts",
+   "src/hooks/useIPVerification.ts",
+   "src/hooks/useKeyboardShortcuts.tsx",
+   "src/hooks/useLinkedInImport.ts",
+   "src/hooks/useLocalStorageState.ts",
+   "src/hooks/useNewDeviceDetection.ts",
+   "src/hooks/useNotasCandidato.ts",
+   "src/hooks/useNotificacoesCandidato.ts",
+   "src/hooks/useOnboarding.ts",
+   "src/hooks/useOptimisticUpdate.ts",
+   "src/hooks/usePageTitle.ts",
+   "src/hooks/usePasswordBreachCheck.ts",
+   "src/hooks/usePermissions.ts",
+   "src/hooks/usePersonalityAssessment.ts",
+   "src/hooks/usePotentialIndex.ts",
+   "src/hooks/usePotentialIndexBatch.ts",
+   "src/hooks/useProcessosSeletivos.ts",
+   "src/hooks/usePropostas.ts",
+   "src/hooks/useProvas.ts",
+   "src/hooks/usePullToRefresh.tsx",
+   "src/hooks/usePushNotifications.ts",
+   "src/hooks/useRankingVaga.ts",
+   "src/hooks/useRateLimiter.ts",
+   "src/hooks/useRealtimeNotifications.ts",
+   "src/hooks/useReauth.ts",
+   "src/hooks/useRegisterFirstResponse.ts",
+   "src/hooks/useRegrasAutomacao.ts",
+   "src/hooks/useSavedFilters.ts",
+   "src/hooks/useScorecard.ts",
+   "src/hooks/useSessionTimeout.ts",
+   "src/hooks/useSlaOverdueList.ts",
+   "src/hooks/useSoundEffects.ts",
+   "src/hooks/useSoundPreferences.ts",
+   "src/hooks/useSwipeGesture.tsx",
+   "src/hooks/useTalentExport.ts",
+   "src/hooks/useTalentPool.ts",
+   "src/hooks/useTalentSearch.ts",
+   "src/hooks/useTenant.ts",
+   "src/hooks/useTrustedDevices.ts",
+   "src/hooks/useVersions.ts",
+   "src/hooks/useVirtualScroll.ts",
+   "src/hooks/useWebAuthn.ts",
+   "src/hooks/useWhiteLabel.ts",
+   "src/hooks/useWorkflow.ts",
+   "src/pages/edgeFunctionTest/useEdgeFunctionTests.ts",
+   "src/pages/portal/portalVagas/usePortalVagas.ts"
+  ],
+  "edges": [
+   "ai-assistant",
+   "ai-screening",
+   "behavioral-analysis",
+   "cultural-fit",
+   "evolution-api",
+   "evolution-health",
+   "generate-scorecard",
+   "github-api",
+   "hunter-sync",
+   "interview-reminders",
+   "match-score",
+   "new-device-alert",
+   "parse-resume",
+   "password-reset-approval",
+   "proactive-alerts",
+   "process-retry-queue",
+   "public-apply",
+   "resend-webhook",
+   "send-email",
+   "send-whatsapp",
+   "sign-proposal",
+   "webhook-handler"
+  ],
+  "servicos": [
+   "src/services/evolutionApiService.ts",
+   "src/services/gamificationTriggers.ts",
+   "src/services/indeedService.ts",
+   "src/services/ipService.ts",
+   "src/services/logger.ts",
+   "src/services/meetingService.ts",
+   "src/services/passwordBreachService.ts",
+   "src/services/passwordResetService.ts",
+   "src/services/reportingService.ts"
+  ]
+ }
+}

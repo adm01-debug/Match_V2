@@ -1,0 +1,3447 @@
+{
+ "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
+ "format_version": 2,
+ "total": 127,
+ "por_camada": {
+  "config": 10,
+  "contexts": 1,
+  "data": 36,
+  "domain": 2,
+  "integrations": 3,
+  "lib": 41,
+  "python": 3,
+  "services": 29,
+  "utils": 2
+ },
+ "arquivos": [
+  {
+   "arquivo": "find_no_rls.py",
+   "camada": "python",
+   "exports": [],
+   "linhas": 27,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [
+    "os",
+    "re"
+   ],
+   "rotas_http": 0,
+   "usado_por": 0,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 0,
+   "orfao": true
+  },
+  {
+   "arquivo": "scripts/regras_negocio/generate.py",
+   "camada": "python",
+   "exports": [
+    "analyze_code_file",
+    "balanced",
+    "detect_stack",
+    "dir_tree",
+    "extract_html_constraints",
+    "extract_zod",
+    "files_cell",
+    "git",
+    "header",
+    "is_app_code",
+    "is_archived_sql",
+    "is_test_file",
+    "llm_synthesis",
+    "log",
+    "main",
+    "md_table",
+    "op_from_chain",
+    "read_text",
+    "redact",
+    "rel",
+    "render_access",
+    "render_architecture",
+    "render_changes",
+    "render_database",
+    "render_database_pointer",
+    "render_dataflow",
+    "render_features",
+    "render_glossary",
+    "render_index",
+    "render_integrations",
+    "render_modules",
+    "render_overview",
+    "render_rules",
+    "squash",
+    "stable_hash",
+    "strip_sql_comments",
+    "trunc",
+    "upsert_pointer",
+    "walk_repo"
+   ],
+   "linhas": 2138,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [
+    "AI_CONTEXT_INDEX",
+    "AI_CONTEXT_MODEL",
+    "AI_CONTEXT_PROFILE",
+    "AI_CONTEXT_SCHEMA_SNAPSHOT",
+    "ANTHROPIC_API_KEY"
+   ],
+   "externos": [
+    "__future__",
+    "argparse",
+    "collections",
+    "datetime",
+    "hashlib",
+    "json",
+    "os",
+    "pathlib",
+    "re",
+    "subprocess",
+    "sys",
+    "urllib"
+   ],
+   "rotas_http": 0,
+   "usado_por": 0,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 0,
+   "orfao": true
+  },
+  {
+   "arquivo": "scripts/regras_negocio/indice.py",
+   "camada": "python",
+   "exports": [
+    "entry_file",
+    "git",
+    "main",
+    "parse_dt",
+    "producer_health",
+    "read_manifest"
+   ],
+   "linhas": 237,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [
+    "__future__",
+    "argparse",
+    "datetime",
+    "json",
+    "pathlib",
+    "re",
+    "subprocess",
+    "sys"
+   ],
+   "rotas_http": 0,
+   "usado_por": 0,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 0,
+   "orfao": true
+  },
+  {
+   "arquivo": "src/config/behavioralGamification.ts",
+   "camada": "config",
+   "exports": [
+    "BEHAVIORAL_ACHIEVEMENTS",
+    "BEHAVIORAL_BONUS",
+    "BEHAVIORAL_LEVELS",
+    "BEHAVIORAL_XP_REWARDS",
+    "BehavioralAchievement",
+    "calculateBehavioralXP",
+    "calculateTotalBehavioralXP",
+    "checkBehavioralAchievements",
+    "getBehavioralLevel"
+   ],
+   "export_default": null,
+   "linhas": 313,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "hooks"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/config/behavioralPillars.ts",
+   "camada": "config",
+   "exports": [
+    "BEHAVIORAL_PILLARS",
+    "COMPANY_CULTURE_DIMENSIONS",
+    "IMMERSIVE_SCENARIOS"
+   ],
+   "export_default": "(anônimo)",
+   "linhas": 29,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 33,
+   "usado_por_modulos": [
+    "components/assessments",
+    "config",
+    "data",
+    "data/immersiveScenarios",
+    "hooks",
+    "hooks/behavioralResults",
+    "pages"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/config/behavioralPillars/cultureDimensions.ts",
+   "camada": "config",
+   "exports": [
+    "COMPANY_CULTURE_DIMENSIONS"
+   ],
+   "export_default": null,
+   "linhas": 48,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "config"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/config/behavioralPillars/pillars.ts",
+   "camada": "config",
+   "exports": [
+    "BEHAVIORAL_PILLARS"
+   ],
+   "export_default": null,
+   "linhas": 250,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "config"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/config/behavioralPillars/scenarios.ts",
+   "camada": "config",
+   "exports": [
+    "IMMERSIVE_SCENARIOS"
+   ],
+   "export_default": null,
+   "linhas": 337,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "config"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/config/behavioralPillars/types.ts",
+   "camada": "config",
+   "exports": [
+    "AuthenticityMetrics",
+    "BehavioralPillar",
+    "CompanyProfile",
+    "ImmersiveScenario",
+    "PredictiveFitAnalysis",
+    "ScenarioOption"
+   ],
+   "export_default": null,
+   "linhas": 97,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 3,
+   "usado_por_modulos": [
+    "config",
+    "config/behavioralPillars"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/config/index.ts",
+   "camada": "config",
+   "exports": [
+    "APP_CONFIG"
+   ],
+   "export_default": null,
+   "linhas": 22,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 0,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/config/ipWhitelist.ts",
+   "camada": "config",
+   "exports": [
+    "AllowedIP",
+    "DEVELOPMENT_IPS",
+    "IPSecurityConfig",
+    "IP_SECURITY_CONFIG",
+    "STATIC_ALLOWED_IPS",
+    "isDevelopment"
+   ],
+   "export_default": null,
+   "linhas": 88,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [
+    "DEV",
+    "MODE"
+   ],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 4,
+   "usado_por_modulos": [
+    "components/security",
+    "config",
+    "hooks",
+    "services"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/config/pipelineConfig.ts",
+   "camada": "config",
+   "exports": [
+    "EtapaConfig",
+    "etapaPremiumColors",
+    "etapasConfig",
+    "etapasPipeline",
+    "getEtapaConfig",
+    "ordenarEtapas",
+    "statusColors"
+   ],
+   "export_default": "etapasConfig",
+   "linhas": 221,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 2,
+   "usado_por_modulos": [
+    "config",
+    "pages"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/config/testsConfig.ts",
+   "camada": "config",
+   "exports": [
+    "CategoriaInfo",
+    "DepartamentoInfo",
+    "NivelInfo",
+    "categoriasInfo",
+    "departamentosInfo",
+    "getCategoriaById",
+    "getDepartamentoById",
+    "getNivelById",
+    "niveisInfo",
+    "tiposQuestao"
+   ],
+   "export_default": "(anônimo)",
+   "linhas": 133,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 3,
+   "usado_por_modulos": [
+    "config",
+    "pages"
+   ],
+   "coberto_por_testes": 6,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/contexts/index.ts",
+   "camada": "contexts",
+   "exports": [],
+   "export_default": null,
+   "linhas": 11,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 0,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/advancedBehavioralData.ts",
+   "camada": "data",
+   "exports": [
+    "generationalQuestions",
+    "getAdvancedQuestionsForTool",
+    "stressProfileQuestions",
+    "triuneBrainQuestions"
+   ],
+   "export_default": null,
+   "linhas": 324,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "data"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/agendaData.ts",
+   "camada": "data",
+   "exports": [
+    "AgendaStatusEntrevista",
+    "AgendaTipoEntrevista",
+    "Entrevista",
+    "EntrevistaFeedback",
+    "Entrevistador",
+    "Local",
+    "StatusEntrevista",
+    "TipoEntrevista",
+    "entrevistadoresDisponiveis",
+    "formatDuration",
+    "getStatusStyle",
+    "getTipoStyle",
+    "locaisDisponiveis",
+    "mockEntrevistas",
+    "parseTimeString",
+    "statusConfig",
+    "statusStyles",
+    "tipoConfig"
+   ],
+   "export_default": "(anônimo)",
+   "linhas": 220,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 9,
+   "usado_por_modulos": [
+    "components/agenda",
+    "data"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/avaliacaoData.ts",
+   "camada": "data",
+   "exports": [
+    "competencias",
+    "notasDescricao"
+   ],
+   "export_default": "(anônimo)",
+   "linhas": 26,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "data"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/behavioralAssessments/cognitiveBiases.ts",
+   "camada": "data",
+   "exports": [
+    "cognitiveBiasesQuestions"
+   ],
+   "export_default": null,
+   "linhas": 64,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "data"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/behavioralAssessments/disc.ts",
+   "camada": "data",
+   "exports": [
+    "discQuestions"
+   ],
+   "export_default": null,
+   "linhas": 113,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "data"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/behavioralAssessments/emotionalIntelligence.ts",
+   "camada": "data",
+   "exports": [
+    "emotionalIntelligenceQuestions"
+   ],
+   "export_default": null,
+   "linhas": 89,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "data"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/behavioralAssessments/emotionalStates.ts",
+   "camada": "data",
+   "exports": [
+    "emotionalStatesQuestions"
+   ],
+   "export_default": null,
+   "linhas": 62,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "data"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/behavioralAssessments/mentalTriggers.ts",
+   "camada": "data",
+   "exports": [
+    "mentalTriggersQuestions"
+   ],
+   "export_default": null,
+   "linhas": 57,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "data"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/behavioralAssessments/metaprograms.ts",
+   "camada": "data",
+   "exports": [
+    "metaprogramsQuestions"
+   ],
+   "export_default": null,
+   "linhas": 73,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "data"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/behavioralAssessments/rapport.ts",
+   "camada": "data",
+   "exports": [
+    "rapportQuestions"
+   ],
+   "export_default": null,
+   "linhas": 56,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "data"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/behavioralAssessments/sleightOfMouth.ts",
+   "camada": "data",
+   "exports": [
+    "sleightOfMouthQuestions"
+   ],
+   "export_default": null,
+   "linhas": 48,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "data"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/behavioralAssessments/vakd.ts",
+   "camada": "data",
+   "exports": [
+    "vakdQuestions"
+   ],
+   "export_default": null,
+   "linhas": 87,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "data"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/behavioralAssessments/values.ts",
+   "camada": "data",
+   "exports": [
+    "valuesQuestions"
+   ],
+   "export_default": null,
+   "linhas": 88,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "data"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/behavioralAssessmentsData.ts",
+   "camada": "data",
+   "exports": [
+    "cognitiveBiasesQuestions",
+    "discQuestions",
+    "emotionalIntelligenceQuestions",
+    "emotionalStatesQuestions",
+    "getQuestionsForTool",
+    "mentalTriggersQuestions",
+    "metaprogramsQuestions",
+    "rapportQuestions",
+    "sleightOfMouthQuestions",
+    "vakdQuestions",
+    "valuesQuestions"
+   ],
+   "export_default": null,
+   "linhas": 72,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 2,
+   "usado_por_modulos": [
+    "components/assessments",
+    "data"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/candidatoPerfilData.ts",
+   "camada": "data",
+   "exports": [
+    "ArquivoAnexo",
+    "AvaliacaoCandidato",
+    "CandidatoPerfil",
+    "Certificacao",
+    "ExperienciaProfissional",
+    "FormacaoAcademica",
+    "HistoricoCandidato",
+    "emptyCandidatoPerfil",
+    "mockCandidatoPerfil"
+   ],
+   "export_default": "(anônimo)",
+   "linhas": 167,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 9,
+   "usado_por_modulos": [
+    "components/candidato",
+    "data"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/emailTemplatesData.ts",
+   "camada": "data",
+   "exports": [
+    "EmailTemplate",
+    "VariavelDisponivel",
+    "emailTemplatesMock",
+    "variaveisDisponiveis"
+   ],
+   "export_default": "(anônimo)",
+   "linhas": 64,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "data"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/gamifiedAssessmentData.ts",
+   "camada": "data",
+   "exports": [
+    "GAMIFIED_QUESTIONS",
+    "PERSONALITY_MINI_GAMES",
+    "VALUE_CARDS"
+   ],
+   "export_default": null,
+   "linhas": 347,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 2,
+   "usado_por_modulos": [
+    "components/gamification",
+    "pages"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/immersiveScenarios/adaptability.ts",
+   "camada": "data",
+   "exports": [
+    "ADAPTABILITY_SCENARIOS"
+   ],
+   "export_default": null,
+   "linhas": 142,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "data"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/immersiveScenarios/collaboration.ts",
+   "camada": "data",
+   "exports": [
+    "COLLABORATION_SCENARIOS"
+   ],
+   "export_default": null,
+   "linhas": 142,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "data"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/immersiveScenarios/communication.ts",
+   "camada": "data",
+   "exports": [
+    "COMMUNICATION_SCENARIOS"
+   ],
+   "export_default": null,
+   "linhas": 137,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "data"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/immersiveScenarios/criticalThinking.ts",
+   "camada": "data",
+   "exports": [
+    "CRITICAL_THINKING_SCENARIOS"
+   ],
+   "export_default": null,
+   "linhas": 152,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "data"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/immersiveScenarios/emotionalIntelligence.ts",
+   "camada": "data",
+   "exports": [
+    "EMOTIONAL_INTELLIGENCE_SCENARIOS"
+   ],
+   "export_default": null,
+   "linhas": 139,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "data"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/immersiveScenarios/integrity.ts",
+   "camada": "data",
+   "exports": [
+    "INTEGRITY_SCENARIOS"
+   ],
+   "export_default": null,
+   "linhas": 143,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "data"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/immersiveScenarios/leadership.ts",
+   "camada": "data",
+   "exports": [
+    "LEADERSHIP_SCENARIOS"
+   ],
+   "export_default": null,
+   "linhas": 149,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "data"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/immersiveScenarios/proactivity.ts",
+   "camada": "data",
+   "exports": [
+    "PROACTIVITY_SCENARIOS"
+   ],
+   "export_default": null,
+   "linhas": 140,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "data"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/immersiveScenarios/resilience.ts",
+   "camada": "data",
+   "exports": [
+    "RESILIENCE_SCENARIOS"
+   ],
+   "export_default": null,
+   "linhas": 142,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "data"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/immersiveScenarios/resultsOrientation.ts",
+   "camada": "data",
+   "exports": [
+    "RESULTS_ORIENTATION_SCENARIOS"
+   ],
+   "export_default": null,
+   "linhas": 144,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "data"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/immersiveScenariosData.ts",
+   "camada": "data",
+   "exports": [
+    "ADAPTABILITY_SCENARIOS",
+    "ALL_EXPANDED_SCENARIOS",
+    "COLLABORATION_SCENARIOS",
+    "COMMUNICATION_SCENARIOS",
+    "CRITICAL_THINKING_SCENARIOS",
+    "EMOTIONAL_INTELLIGENCE_SCENARIOS",
+    "INTEGRITY_SCENARIOS",
+    "LEADERSHIP_SCENARIOS",
+    "PROACTIVITY_SCENARIOS",
+    "RESILIENCE_SCENARIOS",
+    "RESULTS_ORIENTATION_SCENARIOS",
+    "SCENARIOS_BY_PILLAR",
+    "selectBalancedScenarios"
+   ],
+   "export_default": "(anônimo)",
+   "linhas": 120,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "pages"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/index.ts",
+   "camada": "data",
+   "exports": [
+    "cognitiveBiasesQuestions",
+    "competencias",
+    "discQuestions",
+    "emailTemplatesMock",
+    "emotionalIntelligenceQuestions",
+    "emotionalStatesQuestions",
+    "emptyCandidatoPerfil",
+    "entrevistadoresDisponiveis",
+    "formatDuration",
+    "getQuestionsForTool",
+    "getStatusStyle",
+    "getTipoStyle",
+    "locaisDisponiveis",
+    "mentalTriggersQuestions",
+    "metaprogramsQuestions",
+    "mockCandidatoPerfil",
+    "mockEntrevistas",
+    "notasDescricao",
+    "parseTimeString",
+    "rapportQuestions",
+    "sleightOfMouthQuestions",
+    "statusConfig",
+    "statusStyles",
+    "tipoConfig",
+    "vakdQuestions",
+    "valuesQuestions",
+    "variaveisDisponiveis"
+   ],
+   "export_default": null,
+   "linhas": 65,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 0,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/personality/bigFive.ts",
+   "camada": "data",
+   "exports": [
+    "BIG_FIVE_QUESTIONS"
+   ],
+   "export_default": null,
+   "linhas": 161,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "data"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/personality/enneagram.ts",
+   "camada": "data",
+   "exports": [
+    "ENNEAGRAM_QUESTIONS"
+   ],
+   "export_default": null,
+   "linhas": 105,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "data"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/personality/likert.ts",
+   "camada": "data",
+   "exports": [
+    "LIKERT_5",
+    "LIKERT_7"
+   ],
+   "export_default": null,
+   "linhas": 18,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 4,
+   "usado_por_modulos": [
+    "data",
+    "data/personality"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/personality/mbti.ts",
+   "camada": "data",
+   "exports": [
+    "MBTI_QUESTIONS"
+   ],
+   "export_default": null,
+   "linhas": 102,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "data"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/personalityQuestions.ts",
+   "camada": "data",
+   "exports": [
+    "ALL_PERSONALITY_QUESTIONS",
+    "BIG_FIVE_QUESTIONS",
+    "ENNEAGRAM_QUESTIONS",
+    "LIKERT_5",
+    "LIKERT_7",
+    "MBTI_QUESTIONS",
+    "getQuestionsByFramework",
+    "shuffleQuestions"
+   ],
+   "export_default": null,
+   "linhas": 46,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 4,
+   "usado_por_modulos": [
+    "hooks",
+    "lib/personality"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/phaseChallengeData.ts",
+   "camada": "data",
+   "exports": [
+    "CHALLENGE_PHASES"
+   ],
+   "export_default": null,
+   "linhas": 253,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 2,
+   "usado_por_modulos": [
+    "components/gamification",
+    "pages"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/valoresCulturais.ts",
+   "camada": "data",
+   "exports": [
+    "VALORES_CULTURAIS"
+   ],
+   "export_default": null,
+   "linhas": 229,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 2,
+   "usado_por_modulos": [
+    "lib",
+    "types"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/domain/gamification/calculator.ts",
+   "camada": "domain",
+   "exports": [
+    "calculateLevel",
+    "calculateLevelProgress",
+    "getLevelInfo"
+   ],
+   "export_default": null,
+   "linhas": 36,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "hooks"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/domain/gamification/constants.ts",
+   "camada": "domain",
+   "exports": [
+    "UserLevel",
+    "levels",
+    "xpRewards"
+   ],
+   "export_default": null,
+   "linhas": 46,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 2,
+   "usado_por_modulos": [
+    "domain/gamification",
+    "hooks"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/integrations/lovable/index.ts",
+   "camada": "integrations",
+   "exports": [
+    "lovable"
+   ],
+   "export_default": null,
+   "linhas": 39,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [
+    "@lovable.dev/cloud-auth-js"
+   ],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "pages/auth"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/integrations/supabase/client.ts",
+   "camada": "integrations",
+   "exports": [
+    "supabase"
+   ],
+   "export_default": null,
+   "linhas": 17,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [
+    "VITE_SUPABASE_ANON_KEY",
+    "VITE_SUPABASE_URL"
+   ],
+   "externos": [
+    "@supabase/supabase-js"
+   ],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 110,
+   "usado_por_modulos": [
+    "components/auth",
+    "components/candidatos",
+    "components/comunicacao",
+    "components/portal",
+    "components/security",
+    "components/vagas",
+    "contexts",
+    "hooks",
+    "hooks/behavioralResults",
+    "hooks/gamification",
+    "integrations/lovable",
+    "lib",
+    "pages",
+    "pages/admin",
+    "pages/auth",
+    "pages/edgeFunctionTest",
+    "pages/portal",
+    "pages/security",
+    "pages/settings",
+    "services"
+   ],
+   "coberto_por_testes": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/integrations/supabase/types.ts",
+   "camada": "integrations",
+   "exports": [
+    "CompositeTypes",
+    "Constants",
+    "Database",
+    "Enums",
+    "Json",
+    "Tables",
+    "TablesInsert",
+    "TablesUpdate"
+   ],
+   "export_default": null,
+   "linhas": 4629,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 12,
+   "usado_por_modulos": [
+    "components/candidatos",
+    "hooks",
+    "hooks/behavioralResults",
+    "integrations/supabase",
+    "pages",
+    "types"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/advancedBehavioral/crossFramework.ts",
+   "camada": "lib",
+   "exports": [
+    "extractDISCFromResults",
+    "performCrossFrameworkAnalysis"
+   ],
+   "export_default": null,
+   "linhas": 147,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "lib/advancedBehavioral"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/advancedBehavioral/generational.ts",
+   "camada": "lib",
+   "exports": [
+    "calculateGenerationalResult"
+   ],
+   "export_default": null,
+   "linhas": 67,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "lib/advancedBehavioral"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/advancedBehavioral/index.ts",
+   "camada": "lib",
+   "exports": [
+    "calculateAdvancedResult",
+    "calculateGenerationalResult",
+    "calculateStressProfileResult",
+    "calculateTriuneBrainResult",
+    "extractDISCFromResults",
+    "performCrossFrameworkAnalysis"
+   ],
+   "export_default": null,
+   "linhas": 39,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "lib"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/advancedBehavioral/stressProfile.ts",
+   "camada": "lib",
+   "exports": [
+    "calculateStressProfileResult"
+   ],
+   "export_default": null,
+   "linhas": 55,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "lib/advancedBehavioral"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/advancedBehavioral/triuneBrain.ts",
+   "camada": "lib",
+   "exports": [
+    "calculateTriuneBrainResult"
+   ],
+   "export_default": null,
+   "linhas": 62,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "lib/advancedBehavioral"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/advancedBehavioral/types.ts",
+   "camada": "lib",
+   "exports": [
+    "CrossFrameworkAnalysis",
+    "GenerationalResult",
+    "StressProfileResult",
+    "TriuneBrainResult"
+   ],
+   "export_default": null,
+   "linhas": 41,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 5,
+   "usado_por_modulos": [
+    "lib/advancedBehavioral"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/advancedBehavioralCalculator.ts",
+   "camada": "lib",
+   "exports": [],
+   "export_default": null,
+   "linhas": 6,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "components/assessments"
+   ],
+   "coberto_por_testes": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/apiClient.ts",
+   "camada": "lib",
+   "exports": [
+    "apiClient",
+    "createApiUrl"
+   ],
+   "export_default": null,
+   "linhas": 86,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "lib"
+   ],
+   "coberto_por_testes": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/behavioral/behavioralScoring.ts",
+   "camada": "lib",
+   "exports": [
+    "calculateAdvancedResults",
+    "calculateBehavioralResults",
+    "calculateStandardResults"
+   ],
+   "export_default": null,
+   "linhas": 186,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "components/assessments"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/constants.ts",
+   "camada": "lib",
+   "exports": [
+    "API_ENDPOINTS",
+    "APP_NAME",
+    "APP_VERSION",
+    "CATEGORIAS_PROVA",
+    "CHART_COLORS",
+    "CHART_TOKEN",
+    "DATE_FORMATS",
+    "DEPARTAMENTOS",
+    "ETAPAS_PROCESSO",
+    "FONTES_CANDIDATOS",
+    "METAS_PADRAO",
+    "MODALIDADES_TRABALHO",
+    "NIVEIS_EXPERIENCIA",
+    "PAGINATION",
+    "PRIORIDADES",
+    "STATUS_COLORS",
+    "STATUS_VAGA",
+    "TIPOS_CONTRATO",
+    "TIPOS_ENTREVISTA",
+    "VALIDATION"
+   ],
+   "export_default": null,
+   "linhas": 190,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 7,
+   "usado_por_modulos": [
+    "components/reports",
+    "config",
+    "constants",
+    "hooks",
+    "lib",
+    "pages"
+   ],
+   "coberto_por_testes": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/csvExport.ts",
+   "camada": "lib",
+   "exports": [
+    "CsvColumn",
+    "buildCsv",
+    "downloadCsv",
+    "escapeCsvCell",
+    "safeFileName",
+    "toCellText"
+   ],
+   "export_default": null,
+   "linhas": 91,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 2,
+   "usado_por_modulos": [
+    "components/analytics",
+    "hooks"
+   ],
+   "coberto_por_testes": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/dateUtils.ts",
+   "camada": "lib",
+   "exports": [
+    "formatDate",
+    "formatDateTime",
+    "formatRelative",
+    "isToday"
+   ],
+   "export_default": null,
+   "linhas": 30,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "lib"
+   ],
+   "coberto_por_testes": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/deviceFingerprint.ts",
+   "camada": "lib",
+   "exports": [
+    "DeviceInfo",
+    "generateDeviceFingerprint",
+    "getDeviceName"
+   ],
+   "export_default": null,
+   "linhas": 142,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 4,
+   "usado_por_modulos": [
+    "components/auth",
+    "hooks",
+    "lib"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/errorHandler.ts",
+   "camada": "lib",
+   "exports": [
+    "handleApiError",
+    "handleError"
+   ],
+   "export_default": null,
+   "linhas": 28,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [
+    "sonner"
+   ],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "lib"
+   ],
+   "coberto_por_testes": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/excelImporter.ts",
+   "camada": "lib",
+   "exports": [
+    "exportToExcel",
+    "parseCSV"
+   ],
+   "export_default": "(anônimo)",
+   "linhas": 78,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 2,
+   "usado_por_modulos": [
+    "components/candidatos",
+    "lib"
+   ],
+   "coberto_por_testes": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/index.ts",
+   "camada": "lib",
+   "exports": [
+    "apiClient",
+    "createApiUrl",
+    "exportToExcel",
+    "formatDate",
+    "formatDateTime",
+    "formatRelative",
+    "generateDeviceFingerprint",
+    "getDeviceName",
+    "handleApiError",
+    "handleError",
+    "isToday",
+    "parseCSV"
+   ],
+   "export_default": null,
+   "linhas": 17,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 0,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/jobFit/executiveReport.ts",
+   "camada": "lib",
+   "exports": [
+    "gerarRelatorioExecutivo"
+   ],
+   "export_default": null,
+   "linhas": 167,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 2,
+   "usado_por_modulos": [
+    "lib",
+    "lib/jobFit"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/jobFit/index.ts",
+   "camada": "lib",
+   "exports": [
+    "RED_FLAG_RULES",
+    "calcularJobFit",
+    "detectarRedFlags",
+    "gerarRelatorioExecutivo"
+   ],
+   "export_default": null,
+   "linhas": 8,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 0,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/jobFit/jobFitCalculator.ts",
+   "camada": "lib",
+   "exports": [
+    "calcularJobFit"
+   ],
+   "export_default": null,
+   "linhas": 226,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 2,
+   "usado_por_modulos": [
+    "lib",
+    "lib/jobFit"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/jobFit/redFlagDetector.ts",
+   "camada": "lib",
+   "exports": [
+    "RED_FLAG_RULES",
+    "detectarRedFlags"
+   ],
+   "export_default": null,
+   "linhas": 89,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 2,
+   "usado_por_modulos": [
+    "lib",
+    "lib/jobFit"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/jobFit/redFlagRules.ts",
+   "camada": "lib",
+   "exports": [
+    "RED_FLAG_RULES"
+   ],
+   "export_default": null,
+   "linhas": 124,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "lib/jobFit"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/jobFitCalculator.ts",
+   "camada": "lib",
+   "exports": [
+    "RED_FLAG_RULES",
+    "calcularJobFit",
+    "detectarRedFlags",
+    "gerarRelatorioExecutivo"
+   ],
+   "export_default": null,
+   "linhas": 9,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 0,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 0,
+   "orfao": true
+  },
+  {
+   "arquivo": "src/lib/matchCalculator.ts",
+   "camada": "lib",
+   "exports": [
+    "calcularMatch",
+    "limparPerfisLocais",
+    "recuperarPerfilLocal",
+    "salvarPerfilLocal"
+   ],
+   "export_default": null,
+   "linhas": 225,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "pages"
+   ],
+   "coberto_por_testes": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/matchHelpers.ts",
+   "camada": "lib",
+   "exports": [
+    "calcularAlinhamento",
+    "getCorAlinhamento",
+    "getValorPorId"
+   ],
+   "export_default": null,
+   "linhas": 35,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "types"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/matchSchemas.ts",
+   "camada": "lib",
+   "exports": [
+    "candidatoSchema",
+    "matchFilterConfigs",
+    "matchImportTemplates",
+    "vagaSchema"
+   ],
+   "export_default": null,
+   "linhas": 56,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [
+    "zod"
+   ],
+   "zod_schemas": 2,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 2,
+   "usado_por_modulos": [
+    "components/candidatos",
+    "lib"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/personality/bigFiveCalculator.ts",
+   "camada": "lib",
+   "exports": [
+    "calculateBigFiveResult"
+   ],
+   "export_default": null,
+   "linhas": 195,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 2,
+   "usado_por_modulos": [
+    "lib",
+    "lib/personality"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/personality/enneagramCalculator.ts",
+   "camada": "lib",
+   "exports": [
+    "calculateEnneagramResult"
+   ],
+   "export_default": null,
+   "linhas": 249,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 2,
+   "usado_por_modulos": [
+    "lib",
+    "lib/personality"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/personality/index.ts",
+   "camada": "lib",
+   "exports": [
+    "calculateBigFiveResult",
+    "calculateConsistency",
+    "calculateEnneagramResult",
+    "calculateMBTIResult",
+    "getLevel",
+    "normalizeScore"
+   ],
+   "export_default": null,
+   "linhas": 9,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 0,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/personality/mbtiCalculator.ts",
+   "camada": "lib",
+   "exports": [
+    "calculateMBTIResult"
+   ],
+   "export_default": null,
+   "linhas": 249,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 2,
+   "usado_por_modulos": [
+    "lib",
+    "lib/personality"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/personality/utils.ts",
+   "camada": "lib",
+   "exports": [
+    "calculateConsistency",
+    "getLevel",
+    "normalizeScore"
+   ],
+   "export_default": null,
+   "linhas": 36,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 4,
+   "usado_por_modulos": [
+    "lib/personality"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/personalityCalculator.ts",
+   "camada": "lib",
+   "exports": [
+    "calculateBigFiveResult",
+    "calculateEnneagramResult",
+    "calculateMBTIResult"
+   ],
+   "export_default": null,
+   "linhas": 9,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "hooks"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/potentialIndex.ts",
+   "camada": "lib",
+   "exports": [
+    "POTENTIAL_TIER_LABEL",
+    "POTENTIAL_WEIGHTS",
+    "PotentialComponent",
+    "PotentialConfidence",
+    "PotentialIndexInput",
+    "PotentialIndexResult",
+    "PotentialSignal",
+    "PotentialTier",
+    "calcularIndicePotencial",
+    "classificarPotencial"
+   ],
+   "export_default": null,
+   "linhas": 155,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 4,
+   "usado_por_modulos": [
+    "components/candidatos",
+    "hooks"
+   ],
+   "coberto_por_testes": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/queryConfig.ts",
+   "camada": "lib",
+   "exports": [
+    "mutationConfig",
+    "queryConfig"
+   ],
+   "export_default": null,
+   "linhas": 17,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "lib"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/sentry.ts",
+   "camada": "lib",
+   "exports": [
+    "addBreadcrumb",
+    "captureException",
+    "captureMessage",
+    "initSentry",
+    "isSentryEnabled",
+    "setUser"
+   ],
+   "export_default": null,
+   "linhas": 69,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [
+    "MODE",
+    "PROD"
+   ],
+   "externos": [
+    "@sentry/react"
+   ],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 7,
+   "usado_por_modulos": [
+    "components",
+    "components/common",
+    "contexts",
+    "lib",
+    "services"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/sentryRpc.ts",
+   "camada": "lib",
+   "exports": [
+    "tracedRpc"
+   ],
+   "export_default": null,
+   "linhas": 37,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [
+    "@sentry/react"
+   ],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 7,
+   "usado_por_modulos": [
+    "contexts",
+    "hooks",
+    "pages",
+    "pages/admin",
+    "services"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/sentrySupabaseBreadcrumbs.ts",
+   "camada": "lib",
+   "exports": [
+    "installSupabaseFetchBreadcrumbs"
+   ],
+   "export_default": null,
+   "linhas": 90,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/storageUtils.ts",
+   "camada": "lib",
+   "exports": [
+    "clearStorage",
+    "getItem",
+    "removeItem",
+    "setItem",
+    "storage"
+   ],
+   "export_default": "storage",
+   "linhas": 64,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "lib"
+   ],
+   "coberto_por_testes": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/toast-utils.tsx",
+   "camada": "lib",
+   "exports": [
+    "actionableToast",
+    "errorToast",
+    "infoToast",
+    "loadingToast",
+    "promiseToast",
+    "successToast",
+    "warningToast"
+   ],
+   "export_default": null,
+   "linhas": 249,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [
+    "lucide-react"
+   ],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 2,
+   "usado_por_modulos": [
+    "hooks",
+    "lib"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/utils.ts",
+   "camada": "lib",
+   "exports": [
+    "cn"
+   ],
+   "export_default": null,
+   "linhas": 17,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [
+    "clsx",
+    "tailwind-merge"
+   ],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 262,
+   "usado_por_modulos": [
+    "components",
+    "components/a11y",
+    "components/agenda",
+    "components/analytics",
+    "components/assessments",
+    "components/auth",
+    "components/avaliacao",
+    "components/candidato",
+    "components/candidatos",
+    "components/cognitive",
+    "components/common",
+    "components/dashboard",
+    "components/empty-states",
+    "components/forms",
+    "components/gamification",
+    "components/hiring-manager",
+    "components/intelligence",
+    "components/layout",
+    "components/match",
+    "components/mobile",
+    "components/navigation",
+    "components/notifications",
+    "components/offers",
+    "components/onboarding",
+    "components/pipeline",
+    "components/portal",
+    "components/settings",
+    "components/skeletons",
+    "components/ui",
+    "components/vagas",
+    "components/vagas-list",
+    "components/visualization",
+    "lib",
+    "pages"
+   ],
+   "coberto_por_testes": 6,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/webVitals.ts",
+   "camada": "lib",
+   "exports": [
+    "initWebVitals"
+   ],
+   "export_default": null,
+   "linhas": 84,
+   "tabelas": [
+    "web_vitals"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "env": [
+    "DEV"
+   ],
+   "externos": [
+    "web-vitals"
+   ],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/whatsappIntake.ts",
+   "camada": "lib",
+   "exports": [
+    "buildWhatsappApplyUrl",
+    "buildWhatsappShareVagaUrl",
+    "normalizeWhatsappNumber"
+   ],
+   "export_default": null,
+   "linhas": 35,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "pages"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/services/aiService.ts",
+   "camada": "services",
+   "exports": [
+    "aiService"
+   ],
+   "export_default": null,
+   "linhas": 34,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [
+    "generate-scorecard",
+    "match-score",
+    "parse-resume"
+   ],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 0,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 1,
+   "orfao": true
+  },
+  {
+   "arquivo": "src/services/autoSchedulingService.ts",
+   "camada": "services",
+   "exports": [
+    "autoSchedulingService"
+   ],
+   "export_default": null,
+   "linhas": 39,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 0,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 0,
+   "orfao": true
+  },
+  {
+   "arquivo": "src/services/cacheService.ts",
+   "camada": "services",
+   "exports": [
+    "cacheService"
+   ],
+   "export_default": null,
+   "linhas": 44,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 0,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 1,
+   "orfao": true
+  },
+  {
+   "arquivo": "src/services/cathoService.ts",
+   "camada": "services",
+   "exports": [
+    "cathoService"
+   ],
+   "export_default": null,
+   "linhas": 17,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "services"
+   ],
+   "coberto_por_testes": 2,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/services/emailService.ts",
+   "camada": "services",
+   "exports": [
+    "emailService"
+   ],
+   "export_default": null,
+   "linhas": 42,
+   "tabelas": [
+    "email_templates"
+   ],
+   "rpcs": [],
+   "edges": [
+    "send-email"
+   ],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 0,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 1,
+   "orfao": true
+  },
+  {
+   "arquivo": "src/services/evolutionApiService.ts",
+   "camada": "services",
+   "exports": [
+    "evolutionApi",
+    "evolutionChats",
+    "evolutionInstances",
+    "evolutionMessages"
+   ],
+   "export_default": "evolutionApi",
+   "linhas": 233,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [
+    "evolution-api"
+   ],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 2,
+   "usado_por_modulos": [
+    "services"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/services/exportService.ts",
+   "camada": "services",
+   "exports": [
+    "exportService"
+   ],
+   "export_default": null,
+   "linhas": 39,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 0,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 1,
+   "orfao": true
+  },
+  {
+   "arquivo": "src/services/gamificationTriggers.ts",
+   "camada": "services",
+   "exports": [
+    "GamificationTriggerResult",
+    "awardXP",
+    "checkMilestoneAchievements",
+    "createTriggerCallback",
+    "gamificationTriggers"
+   ],
+   "export_default": null,
+   "linhas": 226,
+   "tabelas": [
+    "processos_seletivos",
+    "user_achievements",
+    "user_gamification",
+    "xp_transactions"
+   ],
+   "rpcs": [
+    "add_user_xp"
+   ],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "hooks"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/services/gdprService.ts",
+   "camada": "services",
+   "exports": [
+    "gdprService"
+   ],
+   "export_default": null,
+   "linhas": 30,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 0,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 1,
+   "orfao": true
+  },
+  {
+   "arquivo": "src/services/googleCalendarService.ts",
+   "camada": "services",
+   "exports": [
+    "googleCalendarService"
+   ],
+   "export_default": null,
+   "linhas": 32,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 0,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 0,
+   "orfao": true
+  },
+  {
+   "arquivo": "src/services/importService.ts",
+   "camada": "services",
+   "exports": [
+    "ImportResult",
+    "importService"
+   ],
+   "export_default": null,
+   "linhas": 37,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [
+    "zod"
+   ],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 0,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 0,
+   "orfao": true
+  },
+  {
+   "arquivo": "src/services/indeedService.ts",
+   "camada": "services",
+   "exports": [
+    "indeedService"
+   ],
+   "export_default": null,
+   "linhas": 24,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "services"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/services/index.ts",
+   "camada": "services",
+   "exports": [
+    "addIPToWhitelist",
+    "apiLogger",
+    "authLogger",
+    "checkPasswordBreach",
+    "clearIPCache",
+    "completePasswordReset",
+    "createContextLogger",
+    "createPasswordResetRequest",
+    "edgeFunctionLogger",
+    "evolutionApi",
+    "evolutionChats",
+    "evolutionInstances",
+    "evolutionMessages",
+    "getAllowedIPsFromDB",
+    "getClientIP",
+    "getPasswordResetRequests",
+    "isIPAllowed",
+    "logBlockedAttempt",
+    "logger",
+    "processResetRequest",
+    "realtimeLogger",
+    "removeIPFromWhitelist",
+    "supabaseLogger",
+    "validateResetToken",
+    "whatsappService"
+   ],
+   "export_default": null,
+   "linhas": 27,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 0,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/services/infojobsService.ts",
+   "camada": "services",
+   "exports": [
+    "infojobsService"
+   ],
+   "export_default": null,
+   "linhas": 17,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "services"
+   ],
+   "coberto_por_testes": 2,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/services/ipService.ts",
+   "camada": "services",
+   "exports": [
+    "addIPToWhitelist",
+    "clearIPCache",
+    "getAllowedIPsFromDB",
+    "getClientIP",
+    "isIPAllowed",
+    "logBlockedAttempt",
+    "removeIPFromWhitelist"
+   ],
+   "export_default": null,
+   "linhas": 246,
+   "tabelas": [
+    "allowed_ips",
+    "ip_access_logs"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 2,
+   "usado_por_modulos": [
+    "hooks",
+    "services"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/services/jobBoardService.ts",
+   "camada": "services",
+   "exports": [
+    "JobBoard",
+    "jobBoardService"
+   ],
+   "export_default": null,
+   "linhas": 43,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 0,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 1,
+   "orfao": true
+  },
+  {
+   "arquivo": "src/services/linkedinService.ts",
+   "camada": "services",
+   "exports": [
+    "LinkedInProfile",
+    "linkedinService"
+   ],
+   "export_default": null,
+   "linhas": 37,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "services"
+   ],
+   "coberto_por_testes": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/services/logger.ts",
+   "camada": "services",
+   "exports": [
+    "apiLogger",
+    "authLogger",
+    "createContextLogger",
+    "edgeFunctionLogger",
+    "logger",
+    "realtimeLogger",
+    "supabaseLogger"
+   ],
+   "export_default": "logger",
+   "linhas": 203,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [
+    "DEV"
+   ],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 60,
+   "usado_por_modulos": [
+    "components",
+    "components/assessments",
+    "components/auth",
+    "components/intelligence",
+    "components/mobile",
+    "components/security",
+    "components/vagas",
+    "contexts",
+    "hooks",
+    "hooks/behavioralResults",
+    "hooks/gamification",
+    "lib",
+    "pages",
+    "pages/settings",
+    "services"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/services/matchingService.ts",
+   "camada": "services",
+   "exports": [
+    "matchingService"
+   ],
+   "export_default": null,
+   "linhas": 35,
+   "tabelas": [
+    "match_scores"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 0,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 1,
+   "orfao": true
+  },
+  {
+   "arquivo": "src/services/meetingService.ts",
+   "camada": "services",
+   "exports": [
+    "Meeting",
+    "meetingService"
+   ],
+   "export_default": null,
+   "linhas": 40,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "services"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/services/outlookService.ts",
+   "camada": "services",
+   "exports": [
+    "outlookService"
+   ],
+   "export_default": null,
+   "linhas": 27,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 0,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 0,
+   "orfao": true
+  },
+  {
+   "arquivo": "src/services/passwordBreachService.ts",
+   "camada": "services",
+   "exports": [
+    "BreachCheckResult",
+    "checkPasswordBreach"
+   ],
+   "export_default": null,
+   "linhas": 77,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 2,
+   "usado_por_modulos": [
+    "hooks",
+    "services"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/services/passwordResetService.ts",
+   "camada": "services",
+   "exports": [
+    "PasswordResetRequest",
+    "completePasswordReset",
+    "createPasswordResetRequest",
+    "getPasswordResetRequests",
+    "processResetRequest",
+    "validateResetToken"
+   ],
+   "export_default": null,
+   "linhas": 227,
+   "tabelas": [
+    "password_reset_requests",
+    "profiles"
+   ],
+   "rpcs": [],
+   "edges": [
+    "password-reset-approval"
+   ],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 2,
+   "usado_por_modulos": [
+    "components/auth",
+    "services"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/services/reportingService.ts",
+   "camada": "services",
+   "exports": [
+    "ChartType",
+    "ExportFormat",
+    "REPORT_TEMPLATES",
+    "ReportConfig",
+    "ReportData",
+    "ReportFilter",
+    "ReportScheduleConfig",
+    "ReportType",
+    "exportToCSV",
+    "exportToJSON",
+    "fetchReportData"
+   ],
+   "export_default": null,
+   "linhas": 309,
+   "tabelas": [
+    "candidatos",
+    "entrevistas",
+    "processos_seletivos",
+    "vagas"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 6,
+   "usado_por_modulos": [
+    "components/reports",
+    "pages"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/services/slackService.ts",
+   "camada": "services",
+   "exports": [
+    "slackService"
+   ],
+   "export_default": null,
+   "linhas": 24,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 0,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 0,
+   "orfao": true
+  },
+  {
+   "arquivo": "src/services/teamsService.ts",
+   "camada": "services",
+   "exports": [
+    "teamsService"
+   ],
+   "export_default": null,
+   "linhas": 21,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 0,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 0,
+   "orfao": true
+  },
+  {
+   "arquivo": "src/services/vagasService.ts",
+   "camada": "services",
+   "exports": [
+    "vagasComService"
+   ],
+   "export_default": null,
+   "linhas": 17,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "services"
+   ],
+   "coberto_por_testes": 2,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/services/whatsappService.ts",
+   "camada": "services",
+   "exports": [
+    "whatsappService"
+   ],
+   "export_default": null,
+   "linhas": 52,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [
+    "send-whatsapp"
+   ],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "services"
+   ],
+   "coberto_por_testes": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/services/workflowEngine.ts",
+   "camada": "services",
+   "exports": [
+    "WorkflowEngine",
+    "WorkflowExecutionContext",
+    "WorkflowExecutionResult",
+    "workflowEngine"
+   ],
+   "export_default": null,
+   "linhas": 121,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 0,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 1,
+   "orfao": true
+  },
+  {
+   "arquivo": "src/utils/index.ts",
+   "camada": "utils",
+   "exports": [],
+   "export_default": null,
+   "linhas": 7,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 0,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/utils/test-utils.tsx",
+   "camada": "utils",
+   "exports": [
+    "createMockSupabaseClient",
+    "render",
+    "waitForLoadingToFinish"
+   ],
+   "export_default": null,
+   "linhas": 66,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [
+    "@tanstack/react-query",
+    "@testing-library/react",
+    "react",
+    "react-router-dom",
+    "vitest"
+   ],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "utils"
+   ],
+   "coberto_por_testes": 2,
+   "orfao": false
+  }
+ ]
+}

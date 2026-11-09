@@ -1,0 +1,5901 @@
+{
+ "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
+ "format_version": 2,
+ "descricao": "menu → módulo (pasta de domínio) → telas/rotas → hooks → edge functions → tabelas → dependências entre módulos. edges/tabelas/rpcs são TRANSITIVOS (tudo que os arquivos do módulo puxam); `diretos` tem só o que está escrito nos arquivos do próprio módulo.",
+ "modulos": [
+  {
+   "modulo": "components",
+   "arquivos": 6,
+   "testes": 0,
+   "linhas": 805,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 5,
+   "hooks_locais": [
+    "useAccessibleAnnouncements",
+    "useAchievementNotification",
+    "useAnnounce",
+    "useAssessment",
+    "useAssessments",
+    "useAuth",
+    "useBulkActions",
+    "useCandidateAssessments",
+    "useCandidatoAuth",
+    "useCandidatosDisponiveis",
+    "useCompanyProfile",
+    "useComunicacoes",
+    "useConfirmDialog",
+    "useCreateEntrevista",
+    "useCreateVaga",
+    "useDailyChallenges",
+    "useDashboardData",
+    "useDebounce",
+    "useDeleteVaga",
+    "useEmailTemplates",
+    "useEntrevistas",
+    "useEntrevistasEvolucao",
+    "useEntrevistasPizza",
+    "useEntrevistasStats",
+    "useFocusManagement",
+    "useFuzzySearch",
+    "useFuzzySearchContext",
+    "useGamification",
+    "useGamificationOnboarding",
+    "useGlobalShortcuts",
+    "useHighContrast",
+    "useIPVerification",
+    "useImportData",
+    "useInfiniteScroll",
+    "useIntersectionObserver",
+    "useInterviewReminders",
+    "useIsMobile",
+    "useItemMatches",
+    "useKeyboardShortcuts",
+    "useLazyImage",
+    "useMultiStepForm",
+    "useNewDeviceDetection",
+    "useNotifications",
+    "useOnboarding",
+    "usePasswordBreachCheck",
+    "usePersonalityAssessment",
+    "usePrefersReducedMotion",
+    "usePushNotifications",
+    "useRealtimeNotifications",
+    "useReauth",
+    "useRecentActions",
+    "useRecentActionsTracker",
+    "useReducedMotion",
+    "useResumeParser",
+    "useRovingTabIndex",
+    "useSavedFilters",
+    "useScenarioPlayer",
+    "useSearchHistory",
+    "useSessionTimeout",
+    "useSidebar",
+    "useSoundPreferences",
+    "useSubmitAssessment",
+    "useSuggestedSlots",
+    "useToast",
+    "useTrustedDevices",
+    "useUpdateEntrevista",
+    "useUpdateVaga",
+    "useVaga",
+    "useVagas",
+    "useVagasSelect",
+    "useVagasUrgentes",
+    "useVirtualGrid",
+    "useVirtualScroll",
+    "useWebAuthn",
+    "useWeeklyMissions",
+    "useXPToast"
+   ],
+   "hooks_definidos": [],
+   "edges": [
+    "interview-reminders",
+    "match-score",
+    "new-device-alert",
+    "parse-resume",
+    "password-reset-approval",
+    "send-email"
+   ],
+   "tabelas": [
+    "allowed_ips",
+    "assessment_questoes",
+    "assessment_respostas",
+    "assessments",
+    "behavioral_assessment_results",
+    "blocked_ips",
+    "candidatos",
+    "candidatos_auth",
+    "candidaturas",
+    "comunicacoes",
+    "curriculos",
+    "email_templates",
+    "entrevistas",
+    "ip_access_logs",
+    "match_scores",
+    "notifications",
+    "password_reset_requests",
+    "profiles",
+    "trusted_devices",
+    "user_2fa",
+    "user_2fa_logs",
+    "vagas",
+    "webauthn_credentials"
+   ],
+   "rpcs": [
+    "create_candidato_with_details",
+    "get_user_roles"
+   ],
+   "buckets": [],
+   "canais_realtime": [
+    "entrevistas-realtime",
+    "match-scores-realtime",
+    "notifications-realtime",
+    "processos-realtime",
+    "vagas-realtime"
+   ],
+   "env": [
+    "DEV",
+    "MODE",
+    "PROD",
+    "VITE_SUPABASE_ANON_KEY",
+    "VITE_SUPABASE_URL"
+   ],
+   "flags": [],
+   "papeis": [
+    "admin",
+    "alert",
+    "article",
+    "button",
+    "dialog",
+    "dominant",
+    "gestor",
+    "group",
+    "img",
+    "link",
+    "list",
+    "listbox",
+    "listitem",
+    "menuitem",
+    "navigation",
+    "note",
+    "option",
+    "presentation",
+    "progressbar",
+    "region",
+    "status"
+   ],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "components/candidatos"
+   ],
+   "depende_de_modulos": [
+    "components/a11y",
+    "components/agenda",
+    "components/assessments",
+    "components/auth",
+    "components/candidato",
+    "components/candidatos",
+    "components/common",
+    "components/comunicacao",
+    "components/dashboard",
+    "components/empty-states",
+    "components/forms",
+    "components/gamification",
+    "components/intelligence",
+    "components/layout",
+    "components/mobile",
+    "components/navigation",
+    "components/notifications",
+    "components/onboarding",
+    "components/pipeline",
+    "components/portal",
+    "components/search",
+    "components/security",
+    "components/settings",
+    "components/skeletons",
+    "components/tests",
+    "components/ui",
+    "components/vagas",
+    "components/visualization",
+    "hooks",
+    "lib",
+    "services"
+   ],
+   "pacotes_externos": [
+    "lucide-react",
+    "zod"
+   ]
+  },
+  {
+   "modulo": "components/a11y",
+   "arquivos": 10,
+   "testes": 0,
+   "linhas": 841,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 9,
+   "hooks_locais": [
+    "useAccessibleAnnouncements",
+    "useAnnounce",
+    "useFocusManagement",
+    "useHighContrast",
+    "usePrefersReducedMotion",
+    "useReducedMotion",
+    "useRovingTabIndex"
+   ],
+   "hooks_definidos": [
+    "useFocusManagement",
+    "useHighContrast",
+    "useRovingTabIndex",
+    "usePrefersReducedMotion",
+    "useReducedMotion",
+    "useAccessibleAnnouncements",
+    "useAnnounce"
+   ],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [],
+   "flags": [],
+   "papeis": [
+    "listbox",
+    "option",
+    "status"
+   ],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "components",
+    "components/settings"
+   ],
+   "depende_de_modulos": [
+    "lib"
+   ],
+   "pacotes_externos": []
+  },
+  {
+   "modulo": "components/admin",
+   "arquivos": 9,
+   "testes": 0,
+   "linhas": 630,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 8,
+   "hooks_locais": [
+    "useAuditLogs",
+    "useToast",
+    "useWhiteLabel"
+   ],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [
+    "ip_access_logs"
+   ],
+   "rpcs": [
+    "get_user_roles"
+   ],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [
+    "MODE",
+    "PROD",
+    "VITE_SUPABASE_ANON_KEY",
+    "VITE_SUPABASE_URL"
+   ],
+   "flags": [],
+   "papeis": [],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "hooks",
+    "pages"
+   ],
+   "depende_de_modulos": [
+    "components/ui",
+    "contexts",
+    "hooks"
+   ],
+   "pacotes_externos": [
+    "lucide-react"
+   ]
+  },
+  {
+   "modulo": "components/agenda",
+   "arquivos": 22,
+   "testes": 1,
+   "linhas": 2827,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 15,
+   "hooks_locais": [
+    "useCandidatosDisponiveis",
+    "useCreateEntrevista",
+    "useCreateVaga",
+    "useDeleteVaga",
+    "useEntrevistas",
+    "useEntrevistasEvolucao",
+    "useEntrevistasPizza",
+    "useEntrevistasStats",
+    "useInterviewReminders",
+    "useSuggestedSlots",
+    "useToast",
+    "useUpdateEntrevista",
+    "useUpdateVaga",
+    "useVaga",
+    "useVagas",
+    "useVagasSelect",
+    "useVagasUrgentes"
+   ],
+   "hooks_definidos": [
+    "useSuggestedSlots"
+   ],
+   "edges": [
+    "interview-reminders"
+   ],
+   "tabelas": [
+    "candidatos",
+    "entrevistas",
+    "vagas"
+   ],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [
+    "VITE_SUPABASE_ANON_KEY",
+    "VITE_SUPABASE_URL"
+   ],
+   "flags": [],
+   "papeis": [
+    "alert",
+    "region"
+   ],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "components",
+    "pages"
+   ],
+   "depende_de_modulos": [
+    "components/ui",
+    "data",
+    "hooks",
+    "lib"
+   ],
+   "pacotes_externos": [
+    "date-fns",
+    "framer-motion",
+    "lucide-react",
+    "react-router-dom",
+    "sonner"
+   ]
+  },
+  {
+   "modulo": "components/analytics",
+   "arquivos": 11,
+   "testes": 0,
+   "linhas": 1162,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 11,
+   "hooks_locais": [
+    "useCandidaturaTimeline",
+    "useFunnelSla",
+    "useLocalStorageState",
+    "useRegisterFirstResponse",
+    "useRegisterFirstResponseBatch",
+    "useSlaOverdueList"
+   ],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [
+    "hr_candidatura_timeline",
+    "hr_funnel_sla",
+    "hr_register_first_response",
+    "hr_sla_overdue_list"
+   ],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [
+    "VITE_SUPABASE_ANON_KEY",
+    "VITE_SUPABASE_URL"
+   ],
+   "flags": [],
+   "papeis": [
+    "alert",
+    "group"
+   ],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "pages"
+   ],
+   "depende_de_modulos": [
+    "components/candidatos",
+    "components/ui",
+    "hooks",
+    "lib"
+   ],
+   "pacotes_externos": [
+    "framer-motion",
+    "lucide-react",
+    "recharts"
+   ]
+  },
+  {
+   "modulo": "components/assessments",
+   "arquivos": 65,
+   "testes": 0,
+   "linhas": 8429,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 55,
+   "hooks_locais": [
+    "useAssessment",
+    "useAssessmentEngine",
+    "useAssessments",
+    "useCandidateAssessments",
+    "useCompanyProfile",
+    "useGamification",
+    "usePersonalityAssessment",
+    "usePersonalityMiniGame",
+    "useScenarioPlayer",
+    "useSoundPreferences",
+    "useSubmitAssessment"
+   ],
+   "hooks_definidos": [
+    "useCompanyProfile",
+    "usePersonalityMiniGame",
+    "useScenarioPlayer"
+   ],
+   "edges": [],
+   "tabelas": [
+    "assessment_questoes",
+    "assessment_respostas",
+    "assessments",
+    "behavioral_assessment_results"
+   ],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [
+    "DEV",
+    "MODE",
+    "PROD",
+    "VITE_SUPABASE_ANON_KEY",
+    "VITE_SUPABASE_URL"
+   ],
+   "flags": [],
+   "papeis": [
+    "dominant"
+   ],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "components",
+    "components/gamification",
+    "data",
+    "hooks",
+    "hooks/behavioralResults",
+    "pages"
+   ],
+   "depende_de_modulos": [
+    "components/ui",
+    "config",
+    "data",
+    "hooks",
+    "lib",
+    "lib/behavioral",
+    "services",
+    "types"
+   ],
+   "pacotes_externos": [
+    "canvas-confetti",
+    "framer-motion",
+    "lucide-react",
+    "recharts",
+    "sonner"
+   ]
+  },
+  {
+   "modulo": "components/auth",
+   "arquivos": 20,
+   "testes": 1,
+   "linhas": 2810,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 19,
+   "hooks_locais": [
+    "useAuth",
+    "useNewDeviceDetection",
+    "usePasswordBreachCheck",
+    "useReauth",
+    "useSessionTimeout",
+    "useToast",
+    "useTrustedDevices"
+   ],
+   "hooks_definidos": [
+    "usePasswordStrength"
+   ],
+   "edges": [
+    "new-device-alert",
+    "password-reset-approval"
+   ],
+   "tabelas": [
+    "password_reset_requests",
+    "profiles",
+    "trusted_devices",
+    "user_2fa",
+    "user_2fa_logs"
+   ],
+   "rpcs": [
+    "get_user_roles"
+   ],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [
+    "DEV",
+    "MODE",
+    "PROD",
+    "VITE_SUPABASE_ANON_KEY",
+    "VITE_SUPABASE_URL"
+   ],
+   "flags": [],
+   "papeis": [
+    "admin",
+    "alert",
+    "list",
+    "listitem",
+    "region"
+   ],
+   "diretos": {
+    "edges": [],
+    "tabelas": [
+     "user_2fa_logs"
+    ],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "components",
+    "pages",
+    "pages/auth",
+    "pages/settings",
+    "routes"
+   ],
+   "depende_de_modulos": [
+    "components/ui",
+    "contexts",
+    "hooks",
+    "integrations/supabase",
+    "lib",
+    "services"
+   ],
+   "pacotes_externos": [
+    "date-fns",
+    "framer-motion",
+    "lucide-react",
+    "react-router-dom",
+    "zod"
+   ]
+  },
+  {
+   "modulo": "components/avaliacao",
+   "arquivos": 4,
+   "testes": 0,
+   "linhas": 233,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 4,
+   "hooks_locais": [],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [],
+   "flags": [],
+   "papeis": [],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "hooks",
+    "pages"
+   ],
+   "depende_de_modulos": [
+    "components/ui",
+    "lib"
+   ],
+   "pacotes_externos": [
+    "lucide-react"
+   ]
+  },
+  {
+   "modulo": "components/behavioral",
+   "arquivos": 4,
+   "testes": 0,
+   "linhas": 383,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 4,
+   "hooks_locais": [
+    "useAchievementNotification",
+    "useDailyChallenges",
+    "useDashboardData",
+    "useGamification",
+    "useGamificationOnboarding",
+    "useSoundPreferences",
+    "useWeeklyMissions",
+    "useXPToast"
+   ],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [
+    "DEV",
+    "MODE",
+    "PROD"
+   ],
+   "flags": [],
+   "papeis": [
+    "progressbar"
+   ],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "pages"
+   ],
+   "depende_de_modulos": [
+    "components/gamification",
+    "components/ui",
+    "types"
+   ],
+   "pacotes_externos": [
+    "framer-motion",
+    "lucide-react"
+   ]
+  },
+  {
+   "modulo": "components/candidate-profile",
+   "arquivos": 2,
+   "testes": 0,
+   "linhas": 124,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 2,
+   "hooks_locais": [],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [],
+   "flags": [],
+   "papeis": [],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "pages"
+   ],
+   "depende_de_modulos": [
+    "components/ui"
+   ],
+   "pacotes_externos": [
+    "lucide-react"
+   ]
+  },
+  {
+   "modulo": "components/candidato",
+   "arquivos": 10,
+   "testes": 0,
+   "linhas": 1456,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 9,
+   "hooks_locais": [
+    "useComunicacoes",
+    "useEmailTemplates",
+    "useToast"
+   ],
+   "hooks_definidos": [],
+   "edges": [
+    "send-email"
+   ],
+   "tabelas": [
+    "comunicacoes",
+    "email_templates"
+   ],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [
+    "DEV",
+    "MODE",
+    "PROD",
+    "VITE_SUPABASE_ANON_KEY",
+    "VITE_SUPABASE_URL"
+   ],
+   "flags": [],
+   "papeis": [
+    "article",
+    "region"
+   ],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "components"
+   ],
+   "depende_de_modulos": [
+    "components/comunicacao",
+    "components/ui",
+    "data",
+    "lib"
+   ],
+   "pacotes_externos": [
+    "lucide-react",
+    "sonner"
+   ]
+  },
+  {
+   "modulo": "components/candidatos",
+   "arquivos": 37,
+   "testes": 0,
+   "linhas": 5605,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 33,
+   "hooks_locais": [
+    "useBulkActions",
+    "useCandidatoCandidaturas",
+    "useCandidatoSkills",
+    "useCandidatoTechProfile",
+    "useCandidaturaTimeline",
+    "useCreateVaga",
+    "useDeleteVaga",
+    "useImportData",
+    "useLinkedInImport",
+    "usePotentialIndex",
+    "usePotentialIndexBatch",
+    "useResumeParser",
+    "useSavedFilters",
+    "useSkillSearch",
+    "useSkills",
+    "useSkillsByCategoria",
+    "useTalentSearch",
+    "useToast",
+    "useUpdateVaga",
+    "useVaga",
+    "useVagas",
+    "useVagasSelect",
+    "useVagasUrgentes"
+   ],
+   "hooks_definidos": [
+    "useResumeParser"
+   ],
+   "edges": [
+    "match-score",
+    "parse-resume"
+   ],
+   "tabelas": [
+    "avaliacoes_comportamentais_resultados",
+    "candidato_skills",
+    "candidatos",
+    "candidatos_auth",
+    "candidaturas",
+    "cognitive_sessions",
+    "comunicacoes",
+    "match_scores",
+    "skills",
+    "vagas"
+   ],
+   "rpcs": [
+    "create_candidato_with_details",
+    "hr_candidatura_timeline",
+    "search_candidatos"
+   ],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [
+    "DEV",
+    "MODE",
+    "PROD",
+    "VITE_SUPABASE_ANON_KEY",
+    "VITE_SUPABASE_URL"
+   ],
+   "flags": [],
+   "papeis": [
+    "alert",
+    "article",
+    "combobox",
+    "group",
+    "img",
+    "list",
+    "listitem",
+    "menuitem",
+    "note",
+    "region"
+   ],
+   "diretos": {
+    "edges": [
+     "match-score",
+     "parse-resume"
+    ],
+    "tabelas": [
+     "candidatos",
+     "comunicacoes",
+     "match_scores"
+    ],
+    "rpcs": [
+     "create_candidato_with_details"
+    ]
+   },
+   "importado_por_outros_modulos": [
+    "components",
+    "components/analytics",
+    "pages"
+   ],
+   "depende_de_modulos": [
+    "components",
+    "components/empty-states",
+    "components/search",
+    "components/ui",
+    "hooks",
+    "integrations/supabase",
+    "lib",
+    "types"
+   ],
+   "pacotes_externos": [
+    "date-fns",
+    "framer-motion",
+    "lucide-react",
+    "react-router-dom",
+    "recharts",
+    "sonner"
+   ]
+  },
+  {
+   "modulo": "components/candidaturas",
+   "arquivos": 1,
+   "testes": 0,
+   "linhas": 163,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 1,
+   "hooks_locais": [
+    "useRunAiScreening",
+    "useTriagemCandidatura",
+    "useTriagensVaga"
+   ],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [
+    "triagem_ia"
+   ],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [
+    "VITE_SUPABASE_ANON_KEY",
+    "VITE_SUPABASE_URL"
+   ],
+   "flags": [],
+   "papeis": [],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [],
+   "depende_de_modulos": [
+    "components/ui",
+    "hooks"
+   ],
+   "pacotes_externos": [
+    "lucide-react",
+    "sonner"
+   ]
+  },
+  {
+   "modulo": "components/carreiras",
+   "arquivos": 1,
+   "testes": 0,
+   "linhas": 92,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 1,
+   "hooks_locais": [],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [],
+   "flags": [],
+   "papeis": [],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "pages"
+   ],
+   "depende_de_modulos": [
+    "components/ui",
+    "types"
+   ],
+   "pacotes_externos": []
+  },
+  {
+   "modulo": "components/cognitive",
+   "arquivos": 2,
+   "testes": 0,
+   "linhas": 334,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 2,
+   "hooks_locais": [
+    "useCandidatoCognitiveSessions",
+    "useCognitiveResult",
+    "useCognitiveSessionItems",
+    "useCognitiveTimer",
+    "useFinishCognitiveSession",
+    "useStartCognitiveSession",
+    "useSubmitCognitiveResponse"
+   ],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [
+    "cognitive_sessions"
+   ],
+   "rpcs": [
+    "finish_cognitive_session",
+    "get_cognitive_result",
+    "get_cognitive_session_items",
+    "start_cognitive_session",
+    "submit_cognitive_response"
+   ],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [
+    "VITE_SUPABASE_ANON_KEY",
+    "VITE_SUPABASE_URL"
+   ],
+   "flags": [],
+   "papeis": [
+    "alert",
+    "status",
+    "timer"
+   ],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "pages"
+   ],
+   "depende_de_modulos": [
+    "components/ui",
+    "hooks",
+    "lib",
+    "types"
+   ],
+   "pacotes_externos": [
+    "lucide-react",
+    "sonner"
+   ]
+  },
+  {
+   "modulo": "components/common",
+   "arquivos": 15,
+   "testes": 0,
+   "linhas": 2027,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 13,
+   "hooks_locais": [
+    "useAuth",
+    "useConfirmDialog",
+    "useFuzzySearch",
+    "useGlobalShortcuts",
+    "useInfiniteScroll",
+    "useIntersectionObserver",
+    "useKeyboardShortcuts",
+    "useLazyImage",
+    "useVirtualGrid",
+    "useVirtualScroll"
+   ],
+   "hooks_definidos": [
+    "useConfirmDialog",
+    "useGlobalShortcuts",
+    "useGlobalShortcuts"
+   ],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [
+    "get_user_roles"
+   ],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [
+    "MODE",
+    "PROD",
+    "VITE_SUPABASE_ANON_KEY",
+    "VITE_SUPABASE_URL"
+   ],
+   "flags": [],
+   "papeis": [
+    "admin",
+    "status"
+   ],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "components",
+    "components/layout"
+   ],
+   "depende_de_modulos": [
+    "components/intelligence",
+    "components/ui",
+    "contexts",
+    "hooks",
+    "lib"
+   ],
+   "pacotes_externos": [
+    "framer-motion",
+    "lucide-react",
+    "next-themes",
+    "react-router-dom",
+    "sonner"
+   ]
+  },
+  {
+   "modulo": "components/comunicacao",
+   "arquivos": 3,
+   "testes": 0,
+   "linhas": 420,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 2,
+   "hooks_locais": [
+    "useComunicacoes",
+    "useEmailTemplates",
+    "useToast"
+   ],
+   "hooks_definidos": [],
+   "edges": [
+    "send-email"
+   ],
+   "tabelas": [
+    "comunicacoes",
+    "email_templates"
+   ],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [
+    "DEV",
+    "MODE",
+    "PROD",
+    "VITE_SUPABASE_ANON_KEY",
+    "VITE_SUPABASE_URL"
+   ],
+   "flags": [],
+   "papeis": [
+    "article",
+    "region"
+   ],
+   "diretos": {
+    "edges": [],
+    "tabelas": [
+     "comunicacoes"
+    ],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "components",
+    "components/candidato"
+   ],
+   "depende_de_modulos": [
+    "components/ui",
+    "hooks",
+    "integrations/supabase"
+   ],
+   "pacotes_externos": [
+    "date-fns",
+    "lucide-react",
+    "sonner"
+   ]
+  },
+  {
+   "modulo": "components/dashboard",
+   "arquivos": 22,
+   "testes": 0,
+   "linhas": 3867,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 20,
+   "hooks_locais": [
+    "useCandidatosDisponiveis",
+    "useCreateEntrevista",
+    "useEntrevistas",
+    "useEntrevistasEvolucao",
+    "useEntrevistasPizza",
+    "useEntrevistasStats",
+    "useFunnelSla",
+    "useFuzzySearch",
+    "useUpdateEntrevista"
+   ],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [
+    "candidatos",
+    "entrevistas"
+   ],
+   "rpcs": [
+    "hr_funnel_sla"
+   ],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [
+    "VITE_SUPABASE_ANON_KEY",
+    "VITE_SUPABASE_URL"
+   ],
+   "flags": [],
+   "papeis": [
+    "alert",
+    "article",
+    "button",
+    "list",
+    "region",
+    "status"
+   ],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "components",
+    "pages"
+   ],
+   "depende_de_modulos": [
+    "components/ui",
+    "components/visualization",
+    "hooks",
+    "lib",
+    "types"
+   ],
+   "pacotes_externos": [
+    "date-fns",
+    "framer-motion",
+    "lucide-react",
+    "react-router-dom",
+    "recharts"
+   ]
+  },
+  {
+   "modulo": "components/deu-match",
+   "arquivos": 4,
+   "testes": 0,
+   "linhas": 463,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 4,
+   "hooks_locais": [
+    "useAuth",
+    "useFuzzySearch",
+    "useIsMobile",
+    "useKeyboardShortcuts",
+    "useNotifications",
+    "useOnboarding",
+    "useRealtimeNotifications",
+    "useSidebar"
+   ],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [
+    "notifications"
+   ],
+   "rpcs": [
+    "get_user_roles"
+   ],
+   "buckets": [],
+   "canais_realtime": [
+    "entrevistas-realtime",
+    "match-scores-realtime",
+    "notifications-realtime",
+    "processos-realtime",
+    "vagas-realtime"
+   ],
+   "env": [
+    "DEV",
+    "MODE",
+    "PROD",
+    "VITE_SUPABASE_ANON_KEY",
+    "VITE_SUPABASE_URL"
+   ],
+   "flags": [],
+   "papeis": [
+    "admin",
+    "dialog",
+    "gestor",
+    "link",
+    "navigation",
+    "presentation",
+    "region"
+   ],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "pages"
+   ],
+   "depende_de_modulos": [
+    "components/layout",
+    "components/match",
+    "components/ui",
+    "types"
+   ],
+   "pacotes_externos": [
+    "canvas-confetti",
+    "framer-motion",
+    "lucide-react"
+   ]
+  },
+  {
+   "modulo": "components/dna",
+   "arquivos": 17,
+   "testes": 0,
+   "linhas": 2181,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 14,
+   "hooks_locais": [],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [],
+   "flags": [],
+   "papeis": [],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [],
+   "depende_de_modulos": [
+    "components/ui",
+    "types"
+   ],
+   "pacotes_externos": [
+    "canvas-confetti",
+    "framer-motion",
+    "lucide-react"
+   ]
+  },
+  {
+   "modulo": "components/empty-states",
+   "arquivos": 22,
+   "testes": 0,
+   "linhas": 1260,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 19,
+   "hooks_locais": [],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [],
+   "flags": [],
+   "papeis": [],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "components",
+    "components/candidatos",
+    "pages"
+   ],
+   "depende_de_modulos": [
+    "components/ui",
+    "lib"
+   ],
+   "pacotes_externos": [
+    "framer-motion",
+    "lucide-react",
+    "react-router-dom",
+    "sonner"
+   ]
+  },
+  {
+   "modulo": "components/entrevistas",
+   "arquivos": 1,
+   "testes": 0,
+   "linhas": 198,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 1,
+   "hooks_locais": [
+    "useAttachKitToVaga",
+    "useDetachKitFromVaga",
+    "useEntrevistaRespostas",
+    "useKitPerguntas",
+    "useSaveKitResposta",
+    "useVagaInterviewKits"
+   ],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [
+    "entrevista_respostas",
+    "template_perguntas",
+    "vaga_interview_kits"
+   ],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [
+    "VITE_SUPABASE_ANON_KEY",
+    "VITE_SUPABASE_URL"
+   ],
+   "flags": [],
+   "papeis": [],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [],
+   "depende_de_modulos": [
+    "components/ui",
+    "hooks"
+   ],
+   "pacotes_externos": [
+    "lucide-react",
+    "sonner"
+   ]
+  },
+  {
+   "modulo": "components/forms",
+   "arquivos": 3,
+   "testes": 0,
+   "linhas": 569,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 2,
+   "hooks_locais": [
+    "useMultiStepForm"
+   ],
+   "hooks_definidos": [
+    "useMultiStepForm",
+    "useMultiStepForm"
+   ],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [],
+   "flags": [],
+   "papeis": [
+    "alert"
+   ],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "components"
+   ],
+   "depende_de_modulos": [
+    "components/ui",
+    "lib"
+   ],
+   "pacotes_externos": [
+    "framer-motion",
+    "lucide-react"
+   ]
+  },
+  {
+   "modulo": "components/gamification",
+   "arquivos": 69,
+   "testes": 0,
+   "linhas": 7300,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 47,
+   "hooks_locais": [
+    "useAchievementNotification",
+    "useAssessmentEngine",
+    "useAuth",
+    "useDailyChallenges",
+    "useDashboardData",
+    "useFuzzySearch",
+    "useGamification",
+    "useGamificationOnboarding",
+    "useIsMobile",
+    "useKeyboardShortcuts",
+    "useNotifications",
+    "useOnboarding",
+    "usePersonalityMiniGame",
+    "useRealtimeNotifications",
+    "useSidebar",
+    "useSoundPreferences",
+    "useWeeklyMissions",
+    "useXPToast"
+   ],
+   "hooks_definidos": [
+    "useAchievementNotification",
+    "useDailyChallenges",
+    "useDashboardData",
+    "useGamificationOnboarding",
+    "useAchievementNotification",
+    "useGamificationOnboarding",
+    "useXPToast",
+    "useWeeklyMissions",
+    "useXPToast"
+   ],
+   "edges": [],
+   "tabelas": [
+    "notifications"
+   ],
+   "rpcs": [
+    "get_user_roles"
+   ],
+   "buckets": [],
+   "canais_realtime": [
+    "entrevistas-realtime",
+    "match-scores-realtime",
+    "notifications-realtime",
+    "processos-realtime",
+    "vagas-realtime"
+   ],
+   "env": [
+    "DEV",
+    "MODE",
+    "PROD",
+    "VITE_SUPABASE_ANON_KEY",
+    "VITE_SUPABASE_URL"
+   ],
+   "flags": [],
+   "papeis": [
+    "admin",
+    "dialog",
+    "gestor",
+    "link",
+    "navigation",
+    "presentation",
+    "progressbar",
+    "region"
+   ],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "components",
+    "components/behavioral",
+    "pages"
+   ],
+   "depende_de_modulos": [
+    "components/assessments",
+    "components/layout",
+    "components/ui",
+    "data",
+    "hooks",
+    "lib"
+   ],
+   "pacotes_externos": [
+    "canvas-confetti",
+    "framer-motion",
+    "lucide-react",
+    "react-router-dom",
+    "sonner"
+   ]
+  },
+  {
+   "modulo": "components/hiring-manager",
+   "arquivos": 5,
+   "testes": 0,
+   "linhas": 356,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 4,
+   "hooks_locais": [],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [],
+   "flags": [],
+   "papeis": [],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "hooks",
+    "pages"
+   ],
+   "depende_de_modulos": [
+    "components/ui",
+    "lib"
+   ],
+   "pacotes_externos": [
+    "date-fns",
+    "framer-motion",
+    "lucide-react",
+    "recharts"
+   ]
+  },
+  {
+   "modulo": "components/indicacoes",
+   "arquivos": 6,
+   "testes": 0,
+   "linhas": 375,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 5,
+   "hooks_locais": [],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [],
+   "flags": [],
+   "papeis": [],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "hooks",
+    "pages"
+   ],
+   "depende_de_modulos": [
+    "components/ui"
+   ],
+   "pacotes_externos": [
+    "date-fns",
+    "lucide-react",
+    "sonner"
+   ]
+  },
+  {
+   "modulo": "components/intelligence",
+   "arquivos": 7,
+   "testes": 0,
+   "linhas": 2118,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 6,
+   "hooks_locais": [
+    "useDebounce",
+    "useFuzzySearch",
+    "useKeyboardShortcuts",
+    "useRecentActions",
+    "useRecentActionsTracker",
+    "useSearchHistory"
+   ],
+   "hooks_definidos": [
+    "useKeyboardShortcuts",
+    "useRecentActions",
+    "useRecentActionsTracker",
+    "useKeyboardShortcuts",
+    "useSearchHistory",
+    "useRecentActions",
+    "useRecentActionsTracker"
+   ],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [
+    "DEV",
+    "MODE",
+    "PROD"
+   ],
+   "flags": [],
+   "papeis": [],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "components",
+    "components/common",
+    "components/layout"
+   ],
+   "depende_de_modulos": [
+    "components/ui",
+    "hooks",
+    "lib",
+    "services"
+   ],
+   "pacotes_externos": [
+    "date-fns",
+    "framer-motion",
+    "lucide-react",
+    "react-router-dom"
+   ]
+  },
+  {
+   "modulo": "components/layout",
+   "arquivos": 5,
+   "testes": 1,
+   "linhas": 754,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 3,
+   "hooks_locais": [
+    "useAuth",
+    "useFuzzySearch",
+    "useIsMobile",
+    "useKeyboardShortcuts",
+    "useNotifications",
+    "useOnboarding",
+    "useRealtimeNotifications",
+    "useSidebar"
+   ],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [
+    "notifications"
+   ],
+   "rpcs": [
+    "get_user_roles"
+   ],
+   "buckets": [],
+   "canais_realtime": [
+    "entrevistas-realtime",
+    "match-scores-realtime",
+    "notifications-realtime",
+    "processos-realtime",
+    "vagas-realtime"
+   ],
+   "env": [
+    "DEV",
+    "MODE",
+    "PROD",
+    "VITE_SUPABASE_ANON_KEY",
+    "VITE_SUPABASE_URL"
+   ],
+   "flags": [],
+   "papeis": [
+    "admin",
+    "dialog",
+    "gestor",
+    "link",
+    "navigation",
+    "presentation",
+    "region"
+   ],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "components",
+    "components/deu-match",
+    "components/gamification",
+    "pages",
+    "pages/security"
+   ],
+   "depende_de_modulos": [
+    "components/common",
+    "components/intelligence",
+    "components/navigation",
+    "components/notifications",
+    "components/onboarding",
+    "components/ui",
+    "contexts",
+    "hooks",
+    "lib"
+   ],
+   "pacotes_externos": [
+    "framer-motion",
+    "lucide-react",
+    "react-router-dom"
+   ]
+  },
+  {
+   "modulo": "components/match",
+   "arquivos": 14,
+   "testes": 0,
+   "linhas": 1663,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 11,
+   "hooks_locais": [],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [],
+   "flags": [],
+   "papeis": [],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "components/deu-match",
+    "pages"
+   ],
+   "depende_de_modulos": [
+    "components/ui",
+    "lib",
+    "types"
+   ],
+   "pacotes_externos": [
+    "canvas-confetti",
+    "framer-motion",
+    "lucide-react"
+   ]
+  },
+  {
+   "modulo": "components/mobile",
+   "arquivos": 6,
+   "testes": 0,
+   "linhas": 1351,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 5,
+   "hooks_locais": [],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [
+    "DEV",
+    "MODE",
+    "PROD"
+   ],
+   "flags": [],
+   "papeis": [],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "components"
+   ],
+   "depende_de_modulos": [
+    "components/ui",
+    "lib",
+    "services"
+   ],
+   "pacotes_externos": [
+    "framer-motion",
+    "lucide-react"
+   ]
+  },
+  {
+   "modulo": "components/navigation",
+   "arquivos": 4,
+   "testes": 0,
+   "linhas": 613,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 3,
+   "hooks_locais": [],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [],
+   "flags": [],
+   "papeis": [
+    "link",
+    "navigation",
+    "presentation"
+   ],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "components",
+    "components/layout"
+   ],
+   "depende_de_modulos": [
+    "components/ui",
+    "lib"
+   ],
+   "pacotes_externos": [
+    "framer-motion",
+    "lucide-react",
+    "react-router-dom"
+   ]
+  },
+  {
+   "modulo": "components/notifications",
+   "arquivos": 2,
+   "testes": 0,
+   "linhas": 271,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 1,
+   "hooks_locais": [
+    "useAuth",
+    "useRealtimeNotifications"
+   ],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [
+    "notifications"
+   ],
+   "rpcs": [
+    "get_user_roles"
+   ],
+   "buckets": [],
+   "canais_realtime": [
+    "entrevistas-realtime",
+    "match-scores-realtime",
+    "notifications-realtime",
+    "processos-realtime",
+    "vagas-realtime"
+   ],
+   "env": [
+    "DEV",
+    "MODE",
+    "PROD",
+    "VITE_SUPABASE_ANON_KEY",
+    "VITE_SUPABASE_URL"
+   ],
+   "flags": [],
+   "papeis": [
+    "region"
+   ],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "components",
+    "components/layout"
+   ],
+   "depende_de_modulos": [
+    "components/ui",
+    "hooks",
+    "lib"
+   ],
+   "pacotes_externos": [
+    "date-fns",
+    "lucide-react"
+   ]
+  },
+  {
+   "modulo": "components/offers",
+   "arquivos": 6,
+   "testes": 0,
+   "linhas": 555,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 6,
+   "hooks_locais": [],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [],
+   "flags": [],
+   "papeis": [],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "pages"
+   ],
+   "depende_de_modulos": [
+    "components/ui",
+    "lib"
+   ],
+   "pacotes_externos": [
+    "date-fns",
+    "framer-motion",
+    "lucide-react"
+   ]
+  },
+  {
+   "modulo": "components/onboarding",
+   "arquivos": 3,
+   "testes": 0,
+   "linhas": 440,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 2,
+   "hooks_locais": [
+    "useOnboarding"
+   ],
+   "hooks_definidos": [
+    "useOnboarding",
+    "useOnboarding"
+   ],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [],
+   "flags": [],
+   "papeis": [
+    "dialog"
+   ],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "components",
+    "components/layout",
+    "pages"
+   ],
+   "depende_de_modulos": [
+    "components/ui",
+    "lib"
+   ],
+   "pacotes_externos": [
+    "lucide-react"
+   ]
+  },
+  {
+   "modulo": "components/pipeline",
+   "arquivos": 8,
+   "testes": 0,
+   "linhas": 1229,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 7,
+   "hooks_locais": [],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [],
+   "flags": [],
+   "papeis": [
+    "region"
+   ],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "components",
+    "pages"
+   ],
+   "depende_de_modulos": [
+    "components/ui",
+    "hooks",
+    "lib",
+    "types"
+   ],
+   "pacotes_externos": [
+    "@dnd-kit/core",
+    "@dnd-kit/sortable",
+    "@dnd-kit/utilities",
+    "@hello-pangea/dnd",
+    "framer-motion",
+    "lucide-react"
+   ]
+  },
+  {
+   "modulo": "components/portal",
+   "arquivos": 4,
+   "testes": 0,
+   "linhas": 677,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 2,
+   "hooks_locais": [
+    "useCandidatoAuth",
+    "useNotificacoesCandidato",
+    "useSoundPreferences"
+   ],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [
+    "candidatos_auth",
+    "curriculos",
+    "notificacoes_candidato"
+   ],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [
+    "notificacoes-candidato-realtime"
+   ],
+   "env": [
+    "DEV",
+    "MODE",
+    "PROD",
+    "VITE_SUPABASE_ANON_KEY",
+    "VITE_SUPABASE_URL"
+   ],
+   "flags": [],
+   "papeis": [
+    "article",
+    "region"
+   ],
+   "diretos": {
+    "edges": [],
+    "tabelas": [
+     "candidatos_auth",
+     "curriculos"
+    ],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "components",
+    "pages/portal",
+    "routes"
+   ],
+   "depende_de_modulos": [
+    "components/ui",
+    "contexts",
+    "hooks",
+    "integrations/supabase",
+    "lib"
+   ],
+   "pacotes_externos": [
+    "@tanstack/react-query",
+    "canvas-confetti",
+    "date-fns",
+    "framer-motion",
+    "lucide-react",
+    "react-router-dom",
+    "sonner"
+   ]
+  },
+  {
+   "modulo": "components/reports",
+   "arquivos": 6,
+   "testes": 0,
+   "linhas": 660,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 6,
+   "hooks_locais": [
+    "useToast"
+   ],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [
+    "candidatos",
+    "entrevistas",
+    "processos_seletivos",
+    "vagas"
+   ],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [
+    "VITE_SUPABASE_ANON_KEY",
+    "VITE_SUPABASE_URL"
+   ],
+   "flags": [],
+   "papeis": [],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "pages"
+   ],
+   "depende_de_modulos": [
+    "components/ui",
+    "hooks",
+    "lib",
+    "services"
+   ],
+   "pacotes_externos": [
+    "lucide-react",
+    "recharts"
+   ]
+  },
+  {
+   "modulo": "components/search",
+   "arquivos": 2,
+   "testes": 0,
+   "linhas": 200,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 1,
+   "hooks_locais": [],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [],
+   "flags": [],
+   "papeis": [],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "components",
+    "components/candidatos"
+   ],
+   "depende_de_modulos": [
+    "components/ui"
+   ],
+   "pacotes_externos": [
+    "date-fns",
+    "lucide-react"
+   ]
+  },
+  {
+   "modulo": "components/security",
+   "arquivos": 8,
+   "testes": 0,
+   "linhas": 1575,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 7,
+   "hooks_locais": [
+    "useAuth",
+    "useIPVerification",
+    "usePushNotifications",
+    "useToast",
+    "useWebAuthn"
+   ],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [
+    "allowed_ips",
+    "blocked_ips",
+    "ip_access_logs",
+    "user_2fa_logs",
+    "webauthn_credentials"
+   ],
+   "rpcs": [
+    "get_user_roles"
+   ],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [
+    "DEV",
+    "MODE",
+    "PROD",
+    "VITE_SUPABASE_ANON_KEY",
+    "VITE_SUPABASE_URL"
+   ],
+   "flags": [],
+   "papeis": [
+    "status"
+   ],
+   "diretos": {
+    "edges": [],
+    "tabelas": [
+     "allowed_ips",
+     "blocked_ips",
+     "ip_access_logs",
+     "user_2fa_logs"
+    ],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "components",
+    "pages/security",
+    "pages/settings"
+   ],
+   "depende_de_modulos": [
+    "components/ui",
+    "config",
+    "hooks",
+    "integrations/supabase",
+    "services"
+   ],
+   "pacotes_externos": [
+    "@tanstack/react-query",
+    "date-fns",
+    "lucide-react",
+    "sonner"
+   ]
+  },
+  {
+   "modulo": "components/settings",
+   "arquivos": 11,
+   "testes": 0,
+   "linhas": 1016,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 10,
+   "hooks_locais": [
+    "useHighContrast",
+    "usePrefersReducedMotion",
+    "useReducedMotion",
+    "useSoundPreferences",
+    "useToast"
+   ],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [
+    "DEV",
+    "MODE",
+    "PROD"
+   ],
+   "flags": [],
+   "papeis": [],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "components",
+    "pages/settings"
+   ],
+   "depende_de_modulos": [
+    "components/a11y",
+    "components/ui",
+    "hooks",
+    "lib"
+   ],
+   "pacotes_externos": [
+    "framer-motion",
+    "lucide-react"
+   ]
+  },
+  {
+   "modulo": "components/skeletons",
+   "arquivos": 6,
+   "testes": 0,
+   "linhas": 831,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 5,
+   "hooks_locais": [],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [],
+   "flags": [],
+   "papeis": [
+    "status"
+   ],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "components"
+   ],
+   "depende_de_modulos": [
+    "lib"
+   ],
+   "pacotes_externos": [
+    "framer-motion"
+   ]
+  },
+  {
+   "modulo": "components/tests",
+   "arquivos": 0,
+   "testes": 10,
+   "linhas": 0,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 0,
+   "hooks_locais": [],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [],
+   "flags": [],
+   "papeis": [],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [],
+   "depende_de_modulos": [],
+   "pacotes_externos": []
+  },
+  {
+   "modulo": "components/ui",
+   "arquivos": 62,
+   "testes": 0,
+   "linhas": 6975,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 58,
+   "hooks_locais": [
+    "useConfetti",
+    "useFormField",
+    "useIsMobile",
+    "useRipple",
+    "useSidebar",
+    "useToast"
+   ],
+   "hooks_definidos": [
+    "useConfetti",
+    "useFormField",
+    "useConfetti",
+    "useRipple",
+    "useRipple",
+    "useSidebar"
+   ],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [],
+   "flags": [],
+   "papeis": [
+    "alert",
+    "group",
+    "link",
+    "navigation",
+    "presentation",
+    "region",
+    "separator"
+   ],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "components",
+    "components/admin",
+    "components/agenda",
+    "components/analytics",
+    "components/assessments",
+    "components/auth",
+    "components/avaliacao",
+    "components/behavioral",
+    "components/candidate-profile",
+    "components/candidato",
+    "components/candidatos",
+    "components/candidaturas",
+    "components/carreiras",
+    "components/cognitive",
+    "components/common",
+    "components/comunicacao",
+    "components/dashboard",
+    "components/deu-match",
+    "components/dna",
+    "components/empty-states",
+    "components/entrevistas",
+    "components/forms",
+    "components/gamification",
+    "components/hiring-manager",
+    "components/indicacoes",
+    "components/intelligence",
+    "components/layout",
+    "components/match",
+    "components/mobile",
+    "components/navigation",
+    "components/notifications",
+    "components/offers",
+    "components/onboarding",
+    "components/pipeline",
+    "components/portal",
+    "components/reports",
+    "components/search",
+    "components/security",
+    "components/settings",
+    "components/vaga-detalhes",
+    "components/vaga-form",
+    "components/vagas",
+    "components/vagas-list",
+    "components/visualization",
+    "components/workflow",
+    "hooks",
+    "lib",
+    "pages",
+    "pages/admin",
+    "pages/auth",
+    "pages/edgeFunctionTest",
+    "pages/portal",
+    "pages/security",
+    "pages/settings",
+    "utils"
+   ],
+   "depende_de_modulos": [
+    "hooks",
+    "lib"
+   ],
+   "pacotes_externos": [
+    "@radix-ui/react-accordion",
+    "@radix-ui/react-alert-dialog",
+    "@radix-ui/react-aspect-ratio",
+    "@radix-ui/react-avatar",
+    "@radix-ui/react-checkbox",
+    "@radix-ui/react-collapsible",
+    "@radix-ui/react-context-menu",
+    "@radix-ui/react-dialog",
+    "@radix-ui/react-dropdown-menu",
+    "@radix-ui/react-hover-card",
+    "@radix-ui/react-label",
+    "@radix-ui/react-menubar",
+    "@radix-ui/react-navigation-menu",
+    "@radix-ui/react-popover",
+    "@radix-ui/react-progress",
+    "@radix-ui/react-radio-group",
+    "@radix-ui/react-scroll-area",
+    "@radix-ui/react-select",
+    "@radix-ui/react-separator",
+    "@radix-ui/react-slider",
+    "@radix-ui/react-slot",
+    "@radix-ui/react-switch",
+    "@radix-ui/react-tabs",
+    "@radix-ui/react-toast",
+    "@radix-ui/react-toggle",
+    "@radix-ui/react-toggle-group",
+    "@radix-ui/react-tooltip",
+    "canvas-confetti",
+    "class-variance-authority",
+    "cmdk",
+    "embla-carousel-react",
+    "framer-motion",
+    "input-otp",
+    "lucide-react",
+    "next-themes",
+    "react-day-picker",
+    "react-hook-form",
+    "react-resizable-panels",
+    "recharts",
+    "sonner"
+   ]
+  },
+  {
+   "modulo": "components/vaga-detalhes",
+   "arquivos": 2,
+   "testes": 0,
+   "linhas": 102,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 2,
+   "hooks_locais": [],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [],
+   "flags": [],
+   "papeis": [],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "pages"
+   ],
+   "depende_de_modulos": [
+    "components/ui"
+   ],
+   "pacotes_externos": [
+    "lucide-react"
+   ]
+  },
+  {
+   "modulo": "components/vaga-form",
+   "arquivos": 5,
+   "testes": 0,
+   "linhas": 348,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 4,
+   "hooks_locais": [],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [],
+   "flags": [],
+   "papeis": [],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "pages"
+   ],
+   "depende_de_modulos": [
+    "components/ui"
+   ],
+   "pacotes_externos": [
+    "lucide-react"
+   ]
+  },
+  {
+   "modulo": "components/vagas",
+   "arquivos": 10,
+   "testes": 0,
+   "linhas": 1271,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 8,
+   "hooks_locais": [
+    "useAttachKitToVaga",
+    "useCreateVaga",
+    "useDeleteVaga",
+    "useDetachKitFromVaga",
+    "useEntrevistaRespostas",
+    "useFuzzySearch",
+    "useFuzzySearchContext",
+    "useItemMatches",
+    "useKitPerguntas",
+    "useSaveKitResposta",
+    "useToast",
+    "useUpdateVaga",
+    "useVaga",
+    "useVagaInterviewKits",
+    "useVagas",
+    "useVagasSelect",
+    "useVagasUrgentes"
+   ],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [
+    "entrevista_respostas",
+    "template_perguntas",
+    "templates_entrevista",
+    "vaga_interview_kits",
+    "vagas"
+   ],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [
+    "DEV",
+    "MODE",
+    "PROD",
+    "VITE_SUPABASE_ANON_KEY",
+    "VITE_SUPABASE_URL"
+   ],
+   "flags": [],
+   "papeis": [
+    "article",
+    "group"
+   ],
+   "diretos": {
+    "edges": [],
+    "tabelas": [
+     "templates_entrevista"
+    ],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "components",
+    "pages"
+   ],
+   "depende_de_modulos": [
+    "components/ui",
+    "contexts",
+    "hooks",
+    "integrations/supabase",
+    "lib",
+    "services",
+    "types"
+   ],
+   "pacotes_externos": [
+    "@tanstack/react-query",
+    "framer-motion",
+    "lucide-react",
+    "react-router-dom",
+    "sonner"
+   ]
+  },
+  {
+   "modulo": "components/vagas-list",
+   "arquivos": 2,
+   "testes": 0,
+   "linhas": 92,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 2,
+   "hooks_locais": [],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [],
+   "flags": [],
+   "papeis": [],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "pages"
+   ],
+   "depende_de_modulos": [
+    "components/ui",
+    "lib"
+   ],
+   "pacotes_externos": [
+    "framer-motion",
+    "lucide-react"
+   ]
+  },
+  {
+   "modulo": "components/visualization",
+   "arquivos": 17,
+   "testes": 0,
+   "linhas": 1961,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 13,
+   "hooks_locais": [],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [],
+   "flags": [],
+   "papeis": [
+    "progressbar"
+   ],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "components",
+    "components/dashboard"
+   ],
+   "depende_de_modulos": [
+    "components/ui",
+    "lib"
+   ],
+   "pacotes_externos": [
+    "framer-motion",
+    "lucide-react",
+    "recharts"
+   ]
+  },
+  {
+   "modulo": "components/workflow",
+   "arquivos": 6,
+   "testes": 0,
+   "linhas": 298,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 2,
+   "hooks_locais": [],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [],
+   "flags": [],
+   "papeis": [],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "pages"
+   ],
+   "depende_de_modulos": [
+    "components/ui"
+   ],
+   "pacotes_externos": [
+    "@xyflow/react",
+    "lucide-react"
+   ]
+  },
+  {
+   "modulo": "config",
+   "arquivos": 6,
+   "testes": 0,
+   "linhas": 806,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 0,
+   "hooks_locais": [],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [
+    "DEV",
+    "MODE"
+   ],
+   "flags": [],
+   "papeis": [],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "components/assessments",
+    "components/security",
+    "data",
+    "data/immersiveScenarios",
+    "hooks",
+    "hooks/behavioralResults",
+    "pages",
+    "services"
+   ],
+   "depende_de_modulos": [
+    "config/behavioralPillars",
+    "lib",
+    "types"
+   ],
+   "pacotes_externos": []
+  },
+  {
+   "modulo": "config/behavioralPillars",
+   "arquivos": 4,
+   "testes": 0,
+   "linhas": 732,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 0,
+   "hooks_locais": [],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [],
+   "flags": [],
+   "papeis": [],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "config"
+   ],
+   "depende_de_modulos": [],
+   "pacotes_externos": []
+  },
+  {
+   "modulo": "constants",
+   "arquivos": 3,
+   "testes": 0,
+   "linhas": 240,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 0,
+   "hooks_locais": [],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [],
+   "flags": [],
+   "papeis": [],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [],
+   "depende_de_modulos": [
+    "lib"
+   ],
+   "pacotes_externos": []
+  },
+  {
+   "modulo": "contexts",
+   "arquivos": 8,
+   "testes": 0,
+   "linhas": 648,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 7,
+   "hooks_locais": [
+    "useAnalyticsContext",
+    "useAuth",
+    "useFuzzySearchContext",
+    "useItemMatches",
+    "useNotifications",
+    "usePermissionContext",
+    "useRealtimeNotifications",
+    "useTenantContext"
+   ],
+   "hooks_definidos": [
+    "useAnalyticsContext",
+    "useAuth",
+    "useCandidatoAuth",
+    "useFuzzySearchContext",
+    "useItemMatches",
+    "useNotifications",
+    "usePermissionContext",
+    "useTenantContext"
+   ],
+   "edges": [],
+   "tabelas": [
+    "candidatos_auth",
+    "notifications"
+   ],
+   "rpcs": [
+    "get_user_permissions",
+    "get_user_roles"
+   ],
+   "buckets": [],
+   "canais_realtime": [
+    "entrevistas-realtime",
+    "match-scores-realtime",
+    "notifications-realtime",
+    "processos-realtime",
+    "vagas-realtime"
+   ],
+   "env": [
+    "DEV",
+    "MODE",
+    "PROD",
+    "VITE_SUPABASE_ANON_KEY",
+    "VITE_SUPABASE_URL"
+   ],
+   "flags": [],
+   "papeis": [],
+   "diretos": {
+    "edges": [],
+    "tabelas": [
+     "candidatos_auth"
+    ],
+    "rpcs": [
+     "get_user_permissions",
+     "get_user_roles"
+    ]
+   },
+   "importado_por_outros_modulos": [
+    "components/admin",
+    "components/auth",
+    "components/common",
+    "components/layout",
+    "components/portal",
+    "components/vagas",
+    "hooks",
+    "pages",
+    "pages/auth",
+    "pages/portal",
+    "pages/security",
+    "routes"
+   ],
+   "depende_de_modulos": [
+    "hooks",
+    "integrations/supabase",
+    "lib",
+    "services"
+   ],
+   "pacotes_externos": [
+    "@supabase/supabase-js"
+   ]
+  },
+  {
+   "modulo": "data",
+   "arquivos": 12,
+   "testes": 0,
+   "linhas": 1933,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 0,
+   "hooks_locais": [
+    "useAssessmentEngine",
+    "useGamification",
+    "useSoundPreferences"
+   ],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [
+    "DEV",
+    "MODE",
+    "PROD"
+   ],
+   "flags": [],
+   "papeis": [
+    "dominant"
+   ],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "components/agenda",
+    "components/assessments",
+    "components/candidato",
+    "components/gamification",
+    "hooks",
+    "lib",
+    "lib/personality",
+    "pages",
+    "types"
+   ],
+   "depende_de_modulos": [
+    "components/assessments",
+    "config",
+    "data/behavioralAssessments",
+    "data/immersiveScenarios",
+    "data/personality",
+    "types"
+   ],
+   "pacotes_externos": []
+  },
+  {
+   "modulo": "data/behavioralAssessments",
+   "arquivos": 10,
+   "testes": 0,
+   "linhas": 737,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 0,
+   "hooks_locais": [],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [],
+   "flags": [],
+   "papeis": [],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "data"
+   ],
+   "depende_de_modulos": [
+    "types"
+   ],
+   "pacotes_externos": []
+  },
+  {
+   "modulo": "data/immersiveScenarios",
+   "arquivos": 10,
+   "testes": 0,
+   "linhas": 1430,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 0,
+   "hooks_locais": [],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [],
+   "flags": [],
+   "papeis": [],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "data"
+   ],
+   "depende_de_modulos": [
+    "config"
+   ],
+   "pacotes_externos": []
+  },
+  {
+   "modulo": "data/personality",
+   "arquivos": 4,
+   "testes": 0,
+   "linhas": 386,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 0,
+   "hooks_locais": [],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [],
+   "flags": [],
+   "papeis": [
+    "dominant"
+   ],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "data"
+   ],
+   "depende_de_modulos": [
+    "types"
+   ],
+   "pacotes_externos": []
+  },
+  {
+   "modulo": "domain/gamification",
+   "arquivos": 2,
+   "testes": 0,
+   "linhas": 82,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 0,
+   "hooks_locais": [],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [],
+   "flags": [],
+   "papeis": [],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "hooks"
+   ],
+   "depende_de_modulos": [],
+   "pacotes_externos": []
+  },
+  {
+   "modulo": "hooks",
+   "arquivos": 97,
+   "testes": 0,
+   "linhas": 14397,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 0,
+   "hooks_locais": [
+    "useAdminUsers",
+    "useAdvancedAnalytics",
+    "useAgendaActions",
+    "useAllBehavioralResults",
+    "useAnalytics",
+    "useAssessment",
+    "useAssessmentEngine",
+    "useAssessments",
+    "useAttachKitToVaga",
+    "useAuditLogs",
+    "useAuth",
+    "useAvaliacao",
+    "useAvaliacaoForm",
+    "useAvaliacoes",
+    "useAvaliacoesProcesso",
+    "useBaterias",
+    "useBehavioralAssessment",
+    "useBehavioralGamification",
+    "useBehavioralScoreCalculation",
+    "useBehavioralStats",
+    "useBulkActions",
+    "useBulkAiScreening",
+    "useCandidateAssessments",
+    "useCandidateBehavioralResults",
+    "useCandidato",
+    "useCandidatoAuth",
+    "useCandidatoCandidaturas",
+    "useCandidatoCognitiveSessions",
+    "useCandidatoSkills",
+    "useCandidatoTechProfile",
+    "useCandidatos",
+    "useCandidatosData",
+    "useCandidatosDisponiveis",
+    "useCandidatosSelect",
+    "useCandidatosStats",
+    "useCandidaturaTimeline",
+    "useCognitiveResult",
+    "useCognitiveSessionItems",
+    "useCognitiveTimer",
+    "useCompanyBehavioralProfiles",
+    "useCompletedTools",
+    "useComunicacoes",
+    "useConfetti",
+    "useCreateCandidato",
+    "useCreateEntrevista",
+    "useCreateProcesso",
+    "useCreateProva",
+    "useCreateVaga",
+    "useDashboardData",
+    "useDebounce",
+    "useDeleteCandidato",
+    "useDeleteProcesso",
+    "useDeleteProva",
+    "useDeleteVaga",
+    "useDetachKitFromVaga",
+    "useDocumentosCandidato",
+    "useDuplicate",
+    "useDuplicateProva",
+    "useEmailTemplates",
+    "useEntrevistaRespostas",
+    "useEntrevistas",
+    "useEntrevistasEvolucao",
+    "useEntrevistasPizza",
+    "useEntrevistasStats",
+    "useExportData",
+    "useFeatureFlag",
+    "useFeatureFlags",
+    "useFinishCognitiveSession",
+    "useFunnelSla",
+    "useGamification",
+    "useGamificationSupabase",
+    "useGamificationTriggers",
+    "useHiringManagerData",
+    "useHistoricoEtapas",
+    "useHunterLeads",
+    "useIndicacoes",
+    "useInfiniteScroll",
+    "useIntersectionObserver",
+    "useInterviewReminders",
+    "useIsMobile",
+    "useKeyboardShortcuts",
+    "useKitPerguntas",
+    "useLazyImage",
+    "useLinkedInImport",
+    "useNotasCandidato",
+    "useNotificacoesCandidato",
+    "useOnboarding",
+    "usePageTitle",
+    "usePermissions",
+    "usePersonalityAssessment",
+    "usePotentialIndex",
+    "usePotentialIndexBatch",
+    "useProcessoBehavioralResults",
+    "useProcessosByVaga",
+    "useProcessosSeletivos",
+    "usePropostas",
+    "useProva",
+    "useProvas",
+    "useProvasAtivas",
+    "useProvasStats",
+    "usePullToRefresh",
+    "usePushNotifications",
+    "useRankingStats",
+    "useRankingVaga",
+    "useRateLimiter",
+    "useRealtimeNotifications",
+    "useReauth",
+    "useRegisterFirstResponse",
+    "useRegisterFirstResponseBatch",
+    "useRegrasAutomacao",
+    "useRipple",
+    "useRunAiScreening",
+    "useSaveBehavioralResult",
+    "useSaveCompanyProfile",
+    "useSaveKitResposta",
+    "useSavedFilters",
+    "useScenarioPlayer",
+    "useScorecard",
+    "useSkillSearch",
+    "useSkills",
+    "useSkillsByCategoria",
+    "useSlaOverdueList",
+    "useSoundEffects",
+    "useSoundPreferences",
+    "useStartCognitiveSession",
+    "useSubmitAssessment",
+    "useSubmitCognitiveResponse",
+    "useSwipeGesture",
+    "useSyncHunterLeads",
+    "useTalentExport",
+    "useTalentPool",
+    "useTalentSearch",
+    "useTenant",
+    "useTenantContext",
+    "useToast",
+    "useTriagemCandidatura",
+    "useTriagensVaga",
+    "useUpdateCandidato",
+    "useUpdateEntrevista",
+    "useUpdateProcessoEtapa",
+    "useUpdateProcessoStatus",
+    "useUpdateProva",
+    "useUpdateVaga",
+    "useVaga",
+    "useVagaInterviewKits",
+    "useVagas",
+    "useVagasSelect",
+    "useVagasUrgentes",
+    "useWebAuthn",
+    "useWhiteLabel",
+    "useWorkflow"
+   ],
+   "hooks_definidos": [
+    "useAssessment",
+    "useAssessments",
+    "useAuth",
+    "useAvaliacao",
+    "useAvaliacoes",
+    "useAvaliacoesProcesso",
+    "useBehavioralStats",
+    "useBulkActions",
+    "useCandidateAssessments",
+    "useCandidateBehavioralResults",
+    "useCandidato",
+    "useCandidatoPerfil",
+    "useCandidatos",
+    "useCandidatosDisponiveis",
+    "useCandidatosSelect",
+    "useCandidatosStats",
+    "useCompletedTools",
+    "useComunicacoes",
+    "useCreateCandidato",
+    "useCreateEntrevista",
+    "useCreateProcesso",
+    "useCreateProva",
+    "useCreateVaga",
+    "useDashboardData",
+    "useDebounce",
+    "useDeleteCandidato",
+    "useDeleteProcesso",
+    "useDeleteProva",
+    "useDeleteVaga",
+    "useDocumentosCandidato",
+    "useDuplicateProva",
+    "useEmailTemplates",
+    "useEntrevistas",
+    "useEntrevistasEvolucao",
+    "useEntrevistasPizza",
+    "useEntrevistasStats",
+    "useFocusTrap",
+    "useFormAutoSave",
+    "useFormDirtyState",
+    "useFormSubmit",
+    "useFuzzySearch",
+    "useGamification",
+    "useHistoricoEtapas",
+    "useIPVerification",
+    "useImportData",
+    "useInfiniteScroll",
+    "useIntersectionObserver",
+    "useInterviewReminders",
+    "useIsMobile",
+    "useKeyboardShortcuts",
+    "useLazyImage",
+    "useNewDeviceDetection",
+    "useNotasCandidato",
+    "useOnboarding",
+    "useOptimisticUpdate",
+    "usePageTitle",
+    "usePasswordBreachCheck",
+    "useProcessoBehavioralResults",
+    "useProcessosByVaga",
+    "useProcessosSeletivos",
+    "useProva",
+    "useProvas",
+    "usePullToRefresh",
+    "usePushNotifications",
+    "useRealtimeNotifications",
+    "useReauth",
+    "useSaveBehavioralResult",
+    "useSavedFilters",
+    "useSessionTimeout",
+    "useSoundEffects",
+    "useSoundPreferences",
+    "useSubmitAssessment",
+    "useSwipeGesture",
+    "useToast",
+    "useTrustedDevices",
+    "useUpdateCandidato",
+    "useUpdateEntrevista",
+    "useUpdateProcessoEtapa",
+    "useUpdateProcessoStatus",
+    "useUpdateProva",
+    "useUpdateVaga",
+    "useVaga",
+    "useVagas",
+    "useVagasSelect",
+    "useVagasUrgentes",
+    "useVirtualGrid",
+    "useVirtualScroll",
+    "useWebAuthn",
+    "useIsMobile",
+    "useToast",
+    "useAdminUsers",
+    "useAdvancedAnalytics",
+    "useAdvancedSearch",
+    "useAgendaActions",
+    "useRunAiScreening",
+    "useTriagemCandidatura",
+    "useTriagensVaga",
+    "useAnalytics",
+    "useAssessmentEngine",
+    "useAssessment",
+    "useAssessments",
+    "useCandidateAssessments",
+    "useSubmitAssessment",
+    "useAuditLogs",
+    "useAvaliacaoForm",
+    "useAvaliacao",
+    "useAvaliacoes",
+    "useAvaliacoesProcesso",
+    "useAllBehavioralResults",
+    "useBehavioralAssessment",
+    "useCandidateBehavioralResults",
+    "useCompanyBehavioralProfiles",
+    "useSaveBehavioralResult",
+    "useSaveCompanyProfile",
+    "useBehavioralStats",
+    "useCandidateBehavioralResults",
+    "useCompletedTools",
+    "useProcessoBehavioralResults",
+    "useSaveBehavioralResult",
+    "useBehavioralGamification",
+    "useBehavioralScoreCalculation",
+    "useBulkActions",
+    "useBulkSelection",
+    "useCandidatoCandidaturas",
+    "useCandidatoPerfil",
+    "useCandidato",
+    "useCandidatos",
+    "useCandidatosSelect",
+    "useCandidatosStats",
+    "useCreateCandidato",
+    "useDeleteCandidato",
+    "useUpdateCandidato",
+    "useCandidatosData",
+    "useCandidatoTechProfile",
+    "useCandidaturaTimeline",
+    "useCandidatoCognitiveSessions",
+    "useCognitiveResult",
+    "useCognitiveSessionItems",
+    "useCognitiveTimer",
+    "useFinishCognitiveSession",
+    "useStartCognitiveSession",
+    "useSubmitCognitiveResponse",
+    "useComunicacoes",
+    "useDashboardData",
+    "useDebounce",
+    "useDocumentosCandidato",
+    "useDuplicate",
+    "useEmailTemplates",
+    "useCandidatosDisponiveis",
+    "useCreateEntrevista",
+    "useEntrevistas",
+    "useEntrevistasEvolucao",
+    "useEntrevistasPizza",
+    "useEntrevistasStats",
+    "useUpdateEntrevista",
+    "useExportData",
+    "useFeatureFlag",
+    "useFeatureFlags",
+    "useFocusTrap",
+    "useFormAutoSave",
+    "useFormDirtyState",
+    "useFormSubmit",
+    "useFunnelSla",
+    "useFuzzySearch",
+    "useGamification",
+    "useGamificationSupabase",
+    "useGamificationTriggers",
+    "useHiringManagerData",
+    "useHistoricoEtapas",
+    "useHunterLeads",
+    "useSyncHunterLeads",
+    "useImportData",
+    "useIndicacoes",
+    "useInfiniteScroll",
+    "useIntersectionObserver",
+    "useLazyImage",
+    "useAttachKitToVaga",
+    "useDetachKitFromVaga",
+    "useEntrevistaRespostas",
+    "useKitPerguntas",
+    "useSaveKitResposta",
+    "useVagaInterviewKits",
+    "useInterviewReminders",
+    "useIPVerification",
+    "useKeyboardShortcuts",
+    "useLinkedInImport",
+    "useLocalStorageState",
+    "useNewDeviceDetection",
+    "useNotasCandidato",
+    "useNotificacoesCandidato",
+    "useOnboarding",
+    "useBatchOptimisticUpdate",
+    "useOptimisticList",
+    "useOptimisticUpdate",
+    "usePageTitle",
+    "usePasswordBreachCheck",
+    "usePermissions",
+    "usePersonalityAssessment",
+    "usePotentialIndex",
+    "usePotentialIndexBatch",
+    "useCreateProcesso",
+    "useDeleteProcesso",
+    "useProcessosByVaga",
+    "useProcessosSeletivos",
+    "useUpdateProcessoEtapa",
+    "useUpdateProcessoStatus",
+    "usePropostas",
+    "useBaterias",
+    "useCreateProva",
+    "useDeleteProva",
+    "useDuplicateProva",
+    "useProva",
+    "useProvas",
+    "useProvasAtivas",
+    "useProvasStats",
+    "useUpdateProva",
+    "usePullToRefresh",
+    "usePushNotifications",
+    "useBulkAiScreening",
+    "useRankingStats",
+    "useRankingVaga",
+    "useRateLimiter",
+    "useRealtimeNotifications",
+    "useReauth",
+    "useRegisterFirstResponse",
+    "useRegisterFirstResponseBatch",
+    "useRegrasAutomacao",
+    "useSavedFilters",
+    "useScorecard",
+    "useSessionTimeout",
+    "useCandidatoSkills",
+    "useSkillSearch",
+    "useSkills",
+    "useSkillsByCategoria",
+    "useSlaOverdueList",
+    "useSoundEffects",
+    "useSoundPreferences",
+    "useSwipeGesture",
+    "useTalentExport",
+    "useTalentPool",
+    "useTalentSearch",
+    "useTenant",
+    "useTrustedDevices",
+    "useCreateVaga",
+    "useDeleteVaga",
+    "useUpdateVaga",
+    "useVaga",
+    "useVagas",
+    "useVagasSelect",
+    "useVagasUrgentes",
+    "useVersions",
+    "useVirtualGrid",
+    "useVirtualScroll",
+    "useWebAuthn",
+    "useWhiteLabel",
+    "useWorkflow"
+   ],
+   "edges": [
+    "ai-screening",
+    "interview-reminders",
+    "new-device-alert",
+    "parse-resume",
+    "send-email"
+   ],
+   "tabelas": [
+    "allowed_ips",
+    "assessment_questoes",
+    "assessment_respostas",
+    "assessments",
+    "avaliacoes",
+    "avaliacoes_comportamentais_resultados",
+    "bateria_provas_rel",
+    "baterias_provas",
+    "behavioral_assessment_results",
+    "candidato_skills",
+    "candidatos",
+    "candidatos_auth",
+    "candidaturas",
+    "cognitive_sessions",
+    "comunicacoes",
+    "documentos",
+    "documentos_candidatos",
+    "email_templates",
+    "entrevista_respostas",
+    "entrevistas",
+    "feature_flags",
+    "historico_etapas",
+    "hunter_leads",
+    "indicacoes",
+    "ip_access_logs",
+    "match_scores",
+    "notas_candidatos",
+    "notificacoes_candidato",
+    "notifications",
+    "perfis_comportamentais_empresa",
+    "processos_seletivos",
+    "profiles",
+    "propostas",
+    "provas",
+    "regras_automacao",
+    "scorecards",
+    "skills",
+    "template_perguntas",
+    "triagem_ia",
+    "trusted_devices",
+    "user_2fa",
+    "user_2fa_logs",
+    "user_achievements",
+    "user_badges",
+    "user_gamification",
+    "user_roles",
+    "vaga_interview_kits",
+    "vagas",
+    "webauthn_credentials",
+    "xp_transactions"
+   ],
+   "rpcs": [
+    "add_user_xp",
+    "finish_cognitive_session",
+    "get_cognitive_result",
+    "get_cognitive_session_items",
+    "get_user_permissions",
+    "get_user_roles",
+    "hr_candidatura_timeline",
+    "hr_funnel_sla",
+    "hr_register_first_response",
+    "hr_sla_overdue_list",
+    "search_candidatos",
+    "start_cognitive_session",
+    "submit_cognitive_response",
+    "update_user_streak"
+   ],
+   "buckets": [
+    "documentos"
+   ],
+   "canais_realtime": [
+    "entrevistas-realtime",
+    "match-scores-realtime",
+    "notificacoes-candidato-realtime",
+    "notifications-realtime",
+    "processos-realtime",
+    "vagas-realtime"
+   ],
+   "env": [
+    "DEV",
+    "MODE",
+    "PROD",
+    "VITE_SUPABASE_ANON_KEY",
+    "VITE_SUPABASE_URL"
+   ],
+   "flags": [],
+   "papeis": [
+    "dominant"
+   ],
+   "diretos": {
+    "edges": [
+     "ai-screening",
+     "interview-reminders",
+     "new-device-alert",
+     "parse-resume",
+     "send-email"
+    ],
+    "tabelas": [
+     "assessment_questoes",
+     "assessment_respostas",
+     "assessments",
+     "avaliacoes",
+     "avaliacoes_comportamentais_resultados",
+     "bateria_provas_rel",
+     "baterias_provas",
+     "behavioral_assessment_results",
+     "candidato_skills",
+     "candidatos",
+     "candidatos_auth",
+     "candidaturas",
+     "cognitive_sessions",
+     "comunicacoes",
+     "documentos",
+     "documentos_candidatos",
+     "email_templates",
+     "entrevista_respostas",
+     "entrevistas",
+     "feature_flags",
+     "historico_etapas",
+     "hunter_leads",
+     "indicacoes",
+     "ip_access_logs",
+     "match_scores",
+     "notas_candidatos",
+     "notificacoes_candidato",
+     "notifications",
+     "processos_seletivos",
+     "profiles",
+     "propostas",
+     "provas",
+     "regras_automacao",
+     "scorecards",
+     "skills",
+     "template_perguntas",
+     "triagem_ia",
+     "trusted_devices",
+     "user_2fa",
+     "user_2fa_logs",
+     "user_achievements",
+     "user_badges",
+     "user_gamification",
+     "user_roles",
+     "vaga_interview_kits",
+     "vagas",
+     "webauthn_credentials",
+     "xp_transactions"
+    ],
+    "rpcs": [
+     "add_user_xp",
+     "finish_cognitive_session",
+     "get_cognitive_result",
+     "get_cognitive_session_items",
+     "get_user_permissions",
+     "hr_candidatura_timeline",
+     "hr_funnel_sla",
+     "hr_register_first_response",
+     "hr_sla_overdue_list",
+     "search_candidatos",
+     "start_cognitive_session",
+     "submit_cognitive_response",
+     "update_user_streak"
+    ]
+   },
+   "importado_por_outros_modulos": [
+    "components",
+    "components/admin",
+    "components/agenda",
+    "components/analytics",
+    "components/assessments",
+    "components/auth",
+    "components/candidatos",
+    "components/candidaturas",
+    "components/cognitive",
+    "components/common",
+    "components/comunicacao",
+    "components/dashboard",
+    "components/entrevistas",
+    "components/gamification",
+    "components/intelligence",
+    "components/layout",
+    "components/notifications",
+    "components/pipeline",
+    "components/portal",
+    "components/reports",
+    "components/security",
+    "components/settings",
+    "components/ui",
+    "components/vagas",
+    "contexts",
+    "lib",
+    "pages",
+    "pages/auth",
+    "pages/portal",
+    "pages/security",
+    "pages/settings"
+   ],
+   "depende_de_modulos": [
+    "components/admin",
+    "components/assessments",
+    "components/avaliacao",
+    "components/hiring-manager",
+    "components/indicacoes",
+    "components/ui",
+    "config",
+    "contexts",
+    "data",
+    "domain/gamification",
+    "hooks/behavioralResults",
+    "hooks/gamification",
+    "integrations/supabase",
+    "lib",
+    "services",
+    "types"
+   ],
+   "pacotes_externos": [
+    "@supabase/supabase-js",
+    "@tanstack/react-query",
+    "canvas-confetti",
+    "date-fns",
+    "fuse.js",
+    "lucide-react",
+    "react-router-dom",
+    "sonner",
+    "xlsx",
+    "zod"
+   ]
+  },
+  {
+   "modulo": "hooks/__tests__",
+   "arquivos": 0,
+   "testes": 1,
+   "linhas": 0,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 0,
+   "hooks_locais": [],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [],
+   "flags": [],
+   "papeis": [],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [],
+   "depende_de_modulos": [],
+   "pacotes_externos": []
+  },
+  {
+   "modulo": "hooks/behavioralResults",
+   "arquivos": 5,
+   "testes": 0,
+   "linhas": 359,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 0,
+   "hooks_locais": [
+    "useAllBehavioralResults",
+    "useBehavioralAssessment",
+    "useCandidateBehavioralResults",
+    "useCompanyBehavioralProfiles",
+    "useSaveBehavioralResult",
+    "useSaveCompanyProfile",
+    "useScenarioPlayer"
+   ],
+   "hooks_definidos": [
+    "useCompanyBehavioralProfiles",
+    "useSaveCompanyProfile",
+    "useSaveBehavioralResult",
+    "useAllBehavioralResults",
+    "useCandidateBehavioralResults",
+    "useBehavioralAssessment"
+   ],
+   "edges": [],
+   "tabelas": [
+    "avaliacoes_comportamentais_resultados",
+    "perfis_comportamentais_empresa"
+   ],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [
+    "DEV",
+    "MODE",
+    "PROD",
+    "VITE_SUPABASE_ANON_KEY",
+    "VITE_SUPABASE_URL"
+   ],
+   "flags": [],
+   "papeis": [],
+   "diretos": {
+    "edges": [],
+    "tabelas": [
+     "avaliacoes_comportamentais_resultados",
+     "perfis_comportamentais_empresa"
+    ],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "hooks"
+   ],
+   "depende_de_modulos": [
+    "components/assessments",
+    "config",
+    "integrations/supabase",
+    "services"
+   ],
+   "pacotes_externos": [
+    "@tanstack/react-query",
+    "sonner"
+   ]
+  },
+  {
+   "modulo": "hooks/gamification",
+   "arquivos": 3,
+   "testes": 0,
+   "linhas": 113,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 0,
+   "hooks_locais": [],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [
+    "user_achievements",
+    "user_badges",
+    "user_gamification",
+    "xp_transactions"
+   ],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [
+    "DEV",
+    "MODE",
+    "PROD",
+    "VITE_SUPABASE_ANON_KEY",
+    "VITE_SUPABASE_URL"
+   ],
+   "flags": [],
+   "papeis": [],
+   "diretos": {
+    "edges": [],
+    "tabelas": [
+     "user_achievements",
+     "user_badges",
+     "user_gamification",
+     "xp_transactions"
+    ],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "hooks"
+   ],
+   "depende_de_modulos": [
+    "integrations/supabase",
+    "services"
+   ],
+   "pacotes_externos": []
+  },
+  {
+   "modulo": "integrations/lovable",
+   "arquivos": 1,
+   "testes": 0,
+   "linhas": 39,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 0,
+   "hooks_locais": [],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [
+    "VITE_SUPABASE_ANON_KEY",
+    "VITE_SUPABASE_URL"
+   ],
+   "flags": [],
+   "papeis": [],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "pages/auth"
+   ],
+   "depende_de_modulos": [
+    "integrations/supabase"
+   ],
+   "pacotes_externos": [
+    "@lovable.dev/cloud-auth-js"
+   ]
+  },
+  {
+   "modulo": "integrations/supabase",
+   "arquivos": 2,
+   "testes": 0,
+   "linhas": 4646,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 0,
+   "hooks_locais": [],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [
+    "VITE_SUPABASE_ANON_KEY",
+    "VITE_SUPABASE_URL"
+   ],
+   "flags": [],
+   "papeis": [],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "components/auth",
+    "components/candidatos",
+    "components/comunicacao",
+    "components/portal",
+    "components/security",
+    "components/vagas",
+    "contexts",
+    "hooks",
+    "hooks/behavioralResults",
+    "hooks/gamification",
+    "integrations/lovable",
+    "lib",
+    "pages",
+    "pages/admin",
+    "pages/auth",
+    "pages/edgeFunctionTest",
+    "pages/portal",
+    "pages/security",
+    "pages/settings",
+    "services",
+    "types"
+   ],
+   "depende_de_modulos": [],
+   "pacotes_externos": [
+    "@supabase/supabase-js"
+   ]
+  },
+  {
+   "modulo": "lib",
+   "arquivos": 24,
+   "testes": 0,
+   "linhas": 1819,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 0,
+   "hooks_locais": [
+    "useToast"
+   ],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [
+    "web_vitals"
+   ],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [
+    "DEV",
+    "MODE",
+    "PROD",
+    "VITE_SUPABASE_ANON_KEY",
+    "VITE_SUPABASE_URL"
+   ],
+   "flags": [],
+   "papeis": [
+    "dominant"
+   ],
+   "diretos": {
+    "edges": [],
+    "tabelas": [
+     "web_vitals"
+    ],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "components",
+    "components/a11y",
+    "components/agenda",
+    "components/analytics",
+    "components/assessments",
+    "components/auth",
+    "components/avaliacao",
+    "components/candidato",
+    "components/candidatos",
+    "components/cognitive",
+    "components/common",
+    "components/dashboard",
+    "components/empty-states",
+    "components/forms",
+    "components/gamification",
+    "components/hiring-manager",
+    "components/intelligence",
+    "components/layout",
+    "components/match",
+    "components/mobile",
+    "components/navigation",
+    "components/notifications",
+    "components/offers",
+    "components/onboarding",
+    "components/pipeline",
+    "components/portal",
+    "components/reports",
+    "components/settings",
+    "components/skeletons",
+    "components/ui",
+    "components/vagas",
+    "components/vagas-list",
+    "components/visualization",
+    "config",
+    "constants",
+    "contexts",
+    "hooks",
+    "pages",
+    "pages/admin",
+    "services",
+    "types"
+   ],
+   "depende_de_modulos": [
+    "components/ui",
+    "data",
+    "hooks",
+    "integrations/supabase",
+    "lib/advancedBehavioral",
+    "lib/jobFit",
+    "lib/personality",
+    "services",
+    "types"
+   ],
+   "pacotes_externos": [
+    "@sentry/react",
+    "clsx",
+    "lucide-react",
+    "sonner",
+    "tailwind-merge",
+    "web-vitals",
+    "zod"
+   ]
+  },
+  {
+   "modulo": "lib/__tests__",
+   "arquivos": 0,
+   "testes": 8,
+   "linhas": 0,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 0,
+   "hooks_locais": [],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [],
+   "flags": [],
+   "papeis": [],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [],
+   "depende_de_modulos": [],
+   "pacotes_externos": []
+  },
+  {
+   "modulo": "lib/advancedBehavioral",
+   "arquivos": 6,
+   "testes": 0,
+   "linhas": 411,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 0,
+   "hooks_locais": [],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [],
+   "flags": [],
+   "papeis": [],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "lib"
+   ],
+   "depende_de_modulos": [
+    "types"
+   ],
+   "pacotes_externos": []
+  },
+  {
+   "modulo": "lib/behavioral",
+   "arquivos": 1,
+   "testes": 0,
+   "linhas": 186,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 0,
+   "hooks_locais": [],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [],
+   "flags": [],
+   "papeis": [],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "components/assessments"
+   ],
+   "depende_de_modulos": [
+    "types"
+   ],
+   "pacotes_externos": []
+  },
+  {
+   "modulo": "lib/jobFit",
+   "arquivos": 5,
+   "testes": 0,
+   "linhas": 614,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 0,
+   "hooks_locais": [],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [],
+   "flags": [],
+   "papeis": [],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "lib"
+   ],
+   "depende_de_modulos": [
+    "types"
+   ],
+   "pacotes_externos": []
+  },
+  {
+   "modulo": "lib/personality",
+   "arquivos": 5,
+   "testes": 0,
+   "linhas": 738,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 0,
+   "hooks_locais": [],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [],
+   "flags": [],
+   "papeis": [
+    "dominant"
+   ],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "lib"
+   ],
+   "depende_de_modulos": [
+    "data",
+    "types"
+   ],
+   "pacotes_externos": []
+  },
+  {
+   "modulo": "pages",
+   "arquivos": 39,
+   "testes": 0,
+   "linhas": 7726,
+   "itens_menu": [
+    "Administração",
+    "Administração",
+    "Agenda",
+    "Agenda",
+    "Avaliações",
+    "Banco de Talentos",
+    "Comunicação",
+    "Comunicação",
+    "Dashboard",
+    "Indicações",
+    "Indicações",
+    "Início",
+    "Nova Prova",
+    "Nova Vaga",
+    "Pipeline",
+    "Pipeline",
+    "Relatórios",
+    "Relatórios",
+    "Talentos",
+    "Testes",
+    "Vagas",
+    "Vagas",
+    "Analytics Avançado",
+    "Conquistas",
+    "Deu Match",
+    "Ofertas",
+    "Portal Gestor",
+    "Workflows",
+    "Banco de Talentos",
+    "Parser Currículo",
+    "Avaliação Imersiva",
+    "Avaliações",
+    "Comportamentais",
+    "Testes"
+   ],
+   "telas": [
+    "/",
+    "/*",
+    "/admin",
+    "/agenda",
+    "/analytics",
+    "/analytics-basico",
+    "/assinar-proposta/:token",
+    "/auth",
+    "/avaliacao-cognitiva",
+    "/avaliacao-cognitiva/:vagaId",
+    "/avaliacao-comportamental",
+    "/avaliacao/:processoId",
+    "/avaliacoes",
+    "/avaliacoes-comportamentais",
+    "/banco-talentos",
+    "/candidato/:id",
+    "/carreiras",
+    "/carreiras/:slug",
+    "/carreiras/vaga/:vagaId",
+    "/comunicacao",
+    "/deu-match",
+    "/diagnostico",
+    "/edge-functions-test",
+    "/gamification",
+    "/gestor",
+    "/indicacoes",
+    "/ofertas",
+    "/parser-curriculo",
+    "/pipeline",
+    "/relatorios",
+    "/status",
+    "/talentos",
+    "/testes",
+    "/testes/:id/editar",
+    "/testes/:provaId/aplicar",
+    "/testes/nova",
+    "/vagas",
+    "/vagas/:id",
+    "/vagas/:id/editar",
+    "/vagas/:vagaId/aplicar",
+    "/vagas/:vagaId/ranking",
+    "/vagas/nova",
+    "/workflows"
+   ],
+   "rotas_http": [],
+   "componentes": 38,
+   "hooks_locais": [
+    "useAchievementNotification",
+    "useAdminUsers",
+    "useAdvancedAnalytics",
+    "useAgendaActions",
+    "useAllBehavioralResults",
+    "useAssessment",
+    "useAssessmentEngine",
+    "useAssessments",
+    "useAuditLogs",
+    "useAuth",
+    "useAvaliacao",
+    "useAvaliacaoForm",
+    "useAvaliacoes",
+    "useAvaliacoesProcesso",
+    "useBaterias",
+    "useBehavioralAssessment",
+    "useBehavioralGamification",
+    "useBehavioralScoreCalculation",
+    "useBehavioralStats",
+    "useBulkAiScreening",
+    "useCandidateAssessments",
+    "useCandidateBehavioralResults",
+    "useCandidatoAuth",
+    "useCandidatoCandidaturas",
+    "useCandidatoCognitiveSessions",
+    "useCandidatoPerfil",
+    "useCandidatoSkills",
+    "useCandidatoTechProfile",
+    "useCandidatosData",
+    "useCandidatosDisponiveis",
+    "useCandidaturaTimeline",
+    "useCognitiveResult",
+    "useCognitiveSessionItems",
+    "useCognitiveTimer",
+    "useCompanyBehavioralProfiles",
+    "useCompanyProfile",
+    "useCompletedTools",
+    "useComunicacoes",
+    "useConfetti",
+    "useCreateEntrevista",
+    "useCreateProcesso",
+    "useCreateProva",
+    "useCreateVaga",
+    "useDailyChallenges",
+    "useDashboardData",
+    "useDebounce",
+    "useDeleteProcesso",
+    "useDeleteProva",
+    "useDeleteVaga",
+    "useDuplicateProva",
+    "useEdgeFunctionTests",
+    "useEntrevistas",
+    "useEntrevistasEvolucao",
+    "useEntrevistasPizza",
+    "useEntrevistasStats",
+    "useFinishCognitiveSession",
+    "useFunnelSla",
+    "useFuzzySearch",
+    "useFuzzySearchContext",
+    "useGamification",
+    "useGamificationOnboarding",
+    "useGamificationSupabase",
+    "useGamificationTriggers",
+    "useHiringManagerData",
+    "useIndicacoes",
+    "useInterviewReminders",
+    "useIsMobile",
+    "useItemMatches",
+    "useKeyboardShortcuts",
+    "useLinkedInImport",
+    "useLocalStorageState",
+    "useNotificacoesCandidato",
+    "useNotifications",
+    "useOnboarding",
+    "usePageTitle",
+    "usePersonalityAssessment",
+    "usePersonalityMiniGame",
+    "usePortalVagas",
+    "usePotentialIndex",
+    "usePotentialIndexBatch",
+    "useProcessoBehavioralResults",
+    "useProcessosByVaga",
+    "useProcessosSeletivos",
+    "usePropostas",
+    "useProva",
+    "useProvas",
+    "useProvasAtivas",
+    "useProvasStats",
+    "usePushNotifications",
+    "useRankingStats",
+    "useRankingVaga",
+    "useRealtimeNotifications",
+    "useReauth",
+    "useRegisterFirstResponse",
+    "useRegisterFirstResponseBatch",
+    "useRegrasAutomacao",
+    "useResumeParser",
+    "useRipple",
+    "useRunAiScreening",
+    "useSaveBehavioralResult",
+    "useSaveCompanyProfile",
+    "useScenarioPlayer",
+    "useSidebar",
+    "useSkillSearch",
+    "useSkills",
+    "useSkillsByCategoria",
+    "useSlaOverdueList",
+    "useSoundEffects",
+    "useSoundPreferences",
+    "useStartCognitiveSession",
+    "useSubmitAssessment",
+    "useSubmitCognitiveResponse",
+    "useSuggestedSlots",
+    "useTalentExport",
+    "useTalentPool",
+    "useTalentSearch",
+    "useToast",
+    "useTriagemCandidatura",
+    "useTriagensVaga",
+    "useTrustedDevices",
+    "useUpdateEntrevista",
+    "useUpdateProcessoEtapa",
+    "useUpdateProcessoStatus",
+    "useUpdateProva",
+    "useUpdateVaga",
+    "useVaga",
+    "useVagas",
+    "useVagasSelect",
+    "useVagasUrgentes",
+    "useWebAuthn",
+    "useWeeklyMissions",
+    "useWorkflow",
+    "useXPToast"
+   ],
+   "hooks_definidos": [],
+   "edges": [
+    "ai-screening",
+    "health",
+    "interview-reminders",
+    "match-score",
+    "parse-resume",
+    "public-apply",
+    "send-email",
+    "sign-proposal"
+   ],
+   "tabelas": [
+    "allowed_ips",
+    "assessment_questoes",
+    "assessment_respostas",
+    "assessments",
+    "avaliacoes",
+    "avaliacoes_comportamentais_resultados",
+    "bateria_provas_rel",
+    "baterias_provas",
+    "behavioral_assessment_results",
+    "blocked_ips",
+    "candidato_skills",
+    "candidatos",
+    "candidatos_auth",
+    "candidaturas",
+    "cognitive_sessions",
+    "comunicacoes",
+    "curriculos",
+    "empresa_branding",
+    "entrevistas",
+    "indicacoes",
+    "ip_access_logs",
+    "match_scores",
+    "notificacoes_candidato",
+    "notifications",
+    "perfis_comportamentais_empresa",
+    "processos_seletivos",
+    "profiles",
+    "propostas",
+    "provas",
+    "rate_limit_logs",
+    "regras_automacao",
+    "skills",
+    "triagem_ia",
+    "trusted_devices",
+    "user_2fa",
+    "user_2fa_logs",
+    "user_achievements",
+    "user_badges",
+    "user_gamification",
+    "user_roles",
+    "vagas",
+    "webauthn_credentials",
+    "xp_transactions"
+   ],
+   "rpcs": [
+    "add_user_xp",
+    "create_candidato_with_details",
+    "finish_cognitive_session",
+    "get_cognitive_result",
+    "get_cognitive_session_items",
+    "get_proposta_by_token",
+    "get_user_roles",
+    "hr_candidatura_timeline",
+    "hr_funnel_sla",
+    "hr_register_first_response",
+    "hr_sla_overdue_list",
+    "log_admin_action",
+    "public_email_delivery_sla",
+    "search_candidatos",
+    "start_cognitive_session",
+    "submit_cognitive_response",
+    "update_user_streak"
+   ],
+   "buckets": [
+    "curriculos"
+   ],
+   "canais_realtime": [
+    "entrevistas-realtime",
+    "match-scores-realtime",
+    "notificacoes-candidato-realtime",
+    "notifications-realtime",
+    "processos-realtime",
+    "vagas-realtime"
+   ],
+   "env": [
+    "DEV",
+    "MODE",
+    "PROD",
+    "VITE_SUPABASE_ANON_KEY",
+    "VITE_SUPABASE_URL"
+   ],
+   "flags": [],
+   "papeis": [
+    "admin",
+    "alert",
+    "article",
+    "combobox",
+    "dialog",
+    "dominant",
+    "gestor",
+    "group",
+    "link",
+    "list",
+    "listitem",
+    "main",
+    "navigation",
+    "presentation",
+    "progressbar",
+    "region",
+    "rh",
+    "status",
+    "timer"
+   ],
+   "diretos": {
+    "edges": [
+     "health",
+     "public-apply",
+     "sign-proposal"
+    ],
+    "tabelas": [
+     "avaliacoes",
+     "candidatos",
+     "comunicacoes",
+     "empresa_branding",
+     "processos_seletivos",
+     "profiles",
+     "propostas",
+     "vagas"
+    ],
+    "rpcs": [
+     "get_proposta_by_token",
+     "public_email_delivery_sla"
+    ]
+   },
+   "importado_por_outros_modulos": [
+    "routes"
+   ],
+   "depende_de_modulos": [
+    "components/admin",
+    "components/agenda",
+    "components/analytics",
+    "components/assessments",
+    "components/auth",
+    "components/avaliacao",
+    "components/behavioral",
+    "components/candidate-profile",
+    "components/candidatos",
+    "components/carreiras",
+    "components/cognitive",
+    "components/dashboard",
+    "components/deu-match",
+    "components/empty-states",
+    "components/gamification",
+    "components/hiring-manager",
+    "components/indicacoes",
+    "components/layout",
+    "components/match",
+    "components/offers",
+    "components/onboarding",
+    "components/pipeline",
+    "components/reports",
+    "components/ui",
+    "components/vaga-detalhes",
+    "components/vaga-form",
+    "components/vagas",
+    "components/vagas-list",
+    "components/workflow",
+    "config",
+    "contexts",
+    "data",
+    "hooks",
+    "integrations/supabase",
+    "lib",
+    "pages/auth",
+    "pages/edgeFunctionTest",
+    "pages/portal",
+    "pages/security",
+    "pages/settings",
+    "pages/tests",
+    "services",
+    "types"
+   ],
+   "pacotes_externos": [
+    "@hello-pangea/dnd",
+    "@tanstack/react-query",
+    "canvas-confetti",
+    "date-fns",
+    "framer-motion",
+    "lucide-react",
+    "react-error-boundary",
+    "react-helmet-async",
+    "react-router-dom",
+    "recharts",
+    "sonner"
+   ]
+  },
+  {
+   "modulo": "pages/__tests__",
+   "arquivos": 0,
+   "testes": 1,
+   "linhas": 0,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 0,
+   "hooks_locais": [],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [],
+   "flags": [],
+   "papeis": [],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [],
+   "depende_de_modulos": [],
+   "pacotes_externos": []
+  },
+  {
+   "modulo": "pages/admin",
+   "arquivos": 2,
+   "testes": 0,
+   "linhas": 386,
+   "itens_menu": [],
+   "telas": [
+    "/admin/audit-log",
+    "/admin/dlq"
+   ],
+   "rotas_http": [],
+   "componentes": 2,
+   "hooks_locais": [],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [
+    "admin_communication_retry_stats",
+    "admin_integration_health_summary",
+    "admin_list_audit_log",
+    "admin_list_communication_retries",
+    "admin_requeue_communication_retry"
+   ],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [
+    "MODE",
+    "PROD",
+    "VITE_SUPABASE_ANON_KEY",
+    "VITE_SUPABASE_URL"
+   ],
+   "flags": [],
+   "papeis": [],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": [
+     "admin_communication_retry_stats",
+     "admin_integration_health_summary",
+     "admin_list_audit_log",
+     "admin_list_communication_retries",
+     "admin_requeue_communication_retry"
+    ]
+   },
+   "importado_por_outros_modulos": [
+    "routes"
+   ],
+   "depende_de_modulos": [
+    "components/ui",
+    "integrations/supabase",
+    "lib"
+   ],
+   "pacotes_externos": [
+    "@tanstack/react-query",
+    "date-fns",
+    "lucide-react",
+    "sonner"
+   ]
+  },
+  {
+   "modulo": "pages/auth",
+   "arquivos": 6,
+   "testes": 0,
+   "linhas": 1042,
+   "itens_menu": [],
+   "telas": [
+    "/auth/2fa",
+    "/auth/forgot-password",
+    "/auth/login",
+    "/auth/register",
+    "/auth/reset-password"
+   ],
+   "rotas_http": [],
+   "componentes": 5,
+   "hooks_locais": [
+    "useAuth",
+    "usePageTitle",
+    "useToast"
+   ],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [
+    "user_2fa",
+    "user_2fa_logs"
+   ],
+   "rpcs": [
+    "get_user_roles"
+   ],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [
+    "DEV",
+    "MODE",
+    "PROD",
+    "VITE_SUPABASE_ANON_KEY",
+    "VITE_SUPABASE_URL"
+   ],
+   "flags": [],
+   "papeis": [
+    "alert",
+    "list",
+    "listitem"
+   ],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "pages",
+    "routes"
+   ],
+   "depende_de_modulos": [
+    "components/auth",
+    "components/ui",
+    "contexts",
+    "hooks",
+    "integrations/lovable",
+    "integrations/supabase"
+   ],
+   "pacotes_externos": [
+    "lucide-react",
+    "react-router-dom",
+    "zod"
+   ]
+  },
+  {
+   "modulo": "pages/edgeFunctionTest",
+   "arquivos": 6,
+   "testes": 0,
+   "linhas": 219,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 3,
+   "hooks_locais": [],
+   "hooks_definidos": [
+    "useEdgeFunctionTests"
+   ],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [
+    "VITE_SUPABASE_ANON_KEY",
+    "VITE_SUPABASE_URL"
+   ],
+   "flags": [],
+   "papeis": [
+    "alert"
+   ],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "pages"
+   ],
+   "depende_de_modulos": [
+    "components/ui",
+    "integrations/supabase"
+   ],
+   "pacotes_externos": [
+    "@supabase/supabase-js",
+    "lucide-react",
+    "react-router-dom"
+   ]
+  },
+  {
+   "modulo": "pages/portal",
+   "arquivos": 9,
+   "testes": 0,
+   "linhas": 1333,
+   "itens_menu": [
+    "Portal do Candidato",
+    "Portal Candidato"
+   ],
+   "telas": [
+    "/portal",
+    "/portal/dashboard",
+    "/portal/perfil",
+    "/portal/vagas"
+   ],
+   "rotas_http": [],
+   "componentes": 6,
+   "hooks_locais": [
+    "useCandidatoAuth",
+    "useNotificacoesCandidato",
+    "usePageTitle",
+    "usePortalVagas"
+   ],
+   "hooks_definidos": [
+    "usePortalVagas"
+   ],
+   "edges": [],
+   "tabelas": [
+    "candidatos_auth",
+    "candidaturas",
+    "curriculos",
+    "notificacoes_candidato",
+    "vagas"
+   ],
+   "rpcs": [],
+   "buckets": [
+    "curriculos"
+   ],
+   "canais_realtime": [
+    "notificacoes-candidato-realtime"
+   ],
+   "env": [
+    "VITE_SUPABASE_ANON_KEY",
+    "VITE_SUPABASE_URL"
+   ],
+   "flags": [],
+   "papeis": [
+    "alert",
+    "article",
+    "main"
+   ],
+   "diretos": {
+    "edges": [],
+    "tabelas": [
+     "candidatos_auth",
+     "candidaturas",
+     "curriculos",
+     "vagas"
+    ],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "pages",
+    "routes"
+   ],
+   "depende_de_modulos": [
+    "components/portal",
+    "components/ui",
+    "contexts",
+    "hooks",
+    "integrations/supabase"
+   ],
+   "pacotes_externos": [
+    "@tanstack/react-query",
+    "date-fns",
+    "framer-motion",
+    "lucide-react",
+    "react-router-dom",
+    "sonner"
+   ]
+  },
+  {
+   "modulo": "pages/public",
+   "arquivos": 2,
+   "testes": 0,
+   "linhas": 64,
+   "itens_menu": [],
+   "telas": [
+    "/privacidade",
+    "/termos"
+   ],
+   "rotas_http": [],
+   "componentes": 2,
+   "hooks_locais": [],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [],
+   "flags": [],
+   "papeis": [],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "routes"
+   ],
+   "depende_de_modulos": [],
+   "pacotes_externos": []
+  },
+  {
+   "modulo": "pages/security",
+   "arquivos": 3,
+   "testes": 0,
+   "linhas": 694,
+   "itens_menu": [],
+   "telas": [
+    "/security/rate-limit",
+    "/security/roles"
+   ],
+   "rotas_http": [],
+   "componentes": 2,
+   "hooks_locais": [
+    "useAuth",
+    "useFuzzySearch",
+    "useIsMobile",
+    "useKeyboardShortcuts",
+    "useNotifications",
+    "useOnboarding",
+    "usePageTitle",
+    "useRealtimeNotifications",
+    "useSidebar",
+    "useToast"
+   ],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [
+    "allowed_ips",
+    "blocked_ips",
+    "ip_access_logs",
+    "notifications",
+    "profiles",
+    "rate_limit_logs",
+    "user_roles"
+   ],
+   "rpcs": [
+    "get_user_roles",
+    "log_admin_action"
+   ],
+   "buckets": [],
+   "canais_realtime": [
+    "entrevistas-realtime",
+    "match-scores-realtime",
+    "notifications-realtime",
+    "processos-realtime",
+    "vagas-realtime"
+   ],
+   "env": [
+    "DEV",
+    "MODE",
+    "PROD",
+    "VITE_SUPABASE_ANON_KEY",
+    "VITE_SUPABASE_URL"
+   ],
+   "flags": [],
+   "papeis": [
+    "admin",
+    "alert",
+    "dialog",
+    "gestor",
+    "link",
+    "navigation",
+    "presentation",
+    "region"
+   ],
+   "diretos": {
+    "edges": [],
+    "tabelas": [
+     "ip_access_logs",
+     "profiles",
+     "rate_limit_logs",
+     "user_roles"
+    ],
+    "rpcs": [
+     "log_admin_action"
+    ]
+   },
+   "importado_por_outros_modulos": [
+    "pages",
+    "routes"
+   ],
+   "depende_de_modulos": [
+    "components/layout",
+    "components/security",
+    "components/ui",
+    "contexts",
+    "hooks",
+    "integrations/supabase"
+   ],
+   "pacotes_externos": [
+    "@tanstack/react-query",
+    "date-fns",
+    "lucide-react"
+   ]
+  },
+  {
+   "modulo": "pages/settings",
+   "arquivos": 2,
+   "testes": 0,
+   "linhas": 327,
+   "itens_menu": [
+    "Config",
+    "Segurança"
+   ],
+   "telas": [
+    "/configuracoes/seguranca"
+   ],
+   "rotas_http": [],
+   "componentes": 1,
+   "hooks_locais": [
+    "useAuth",
+    "usePushNotifications",
+    "useReauth",
+    "useSoundPreferences",
+    "useToast",
+    "useTrustedDevices",
+    "useWebAuthn"
+   ],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [
+    "ip_access_logs",
+    "trusted_devices",
+    "user_2fa",
+    "user_2fa_logs",
+    "webauthn_credentials"
+   ],
+   "rpcs": [
+    "get_user_roles"
+   ],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [
+    "DEV",
+    "MODE",
+    "PROD",
+    "VITE_SUPABASE_ANON_KEY",
+    "VITE_SUPABASE_URL"
+   ],
+   "flags": [],
+   "papeis": [
+    "alert",
+    "list",
+    "listitem"
+   ],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "pages",
+    "routes"
+   ],
+   "depende_de_modulos": [
+    "components/auth",
+    "components/security",
+    "components/settings",
+    "components/ui",
+    "hooks",
+    "integrations/supabase",
+    "services"
+   ],
+   "pacotes_externos": [
+    "lucide-react",
+    "react-router-dom",
+    "sonner"
+   ]
+  },
+  {
+   "modulo": "pages/tests",
+   "arquivos": 0,
+   "testes": 4,
+   "linhas": 0,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 0,
+   "hooks_locais": [],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [],
+   "flags": [],
+   "papeis": [],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [],
+   "depende_de_modulos": [],
+   "pacotes_externos": []
+  },
+  {
+   "modulo": "routes",
+   "arquivos": 6,
+   "testes": 0,
+   "linhas": 328,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 1,
+   "hooks_locais": [
+    "useAchievementNotification",
+    "useAdminUsers",
+    "useAdvancedAnalytics",
+    "useAgendaActions",
+    "useAllBehavioralResults",
+    "useAssessment",
+    "useAssessmentEngine",
+    "useAssessments",
+    "useAuditLogs",
+    "useAuth",
+    "useAvaliacao",
+    "useAvaliacaoForm",
+    "useAvaliacoes",
+    "useAvaliacoesProcesso",
+    "useBaterias",
+    "useBehavioralAssessment",
+    "useBehavioralGamification",
+    "useBehavioralScoreCalculation",
+    "useBehavioralStats",
+    "useBulkAiScreening",
+    "useCandidateAssessments",
+    "useCandidateBehavioralResults",
+    "useCandidatoAuth",
+    "useCandidatoCandidaturas",
+    "useCandidatoCognitiveSessions",
+    "useCandidatoPerfil",
+    "useCandidatoSkills",
+    "useCandidatoTechProfile",
+    "useCandidatosData",
+    "useCandidatosDisponiveis",
+    "useCandidaturaTimeline",
+    "useCognitiveResult",
+    "useCognitiveSessionItems",
+    "useCognitiveTimer",
+    "useCompanyBehavioralProfiles",
+    "useCompanyProfile",
+    "useCompletedTools",
+    "useComunicacoes",
+    "useConfetti",
+    "useCreateEntrevista",
+    "useCreateProcesso",
+    "useCreateProva",
+    "useCreateVaga",
+    "useDailyChallenges",
+    "useDashboardData",
+    "useDebounce",
+    "useDeleteProcesso",
+    "useDeleteProva",
+    "useDeleteVaga",
+    "useDuplicateProva",
+    "useEdgeFunctionTests",
+    "useEntrevistas",
+    "useEntrevistasEvolucao",
+    "useEntrevistasPizza",
+    "useEntrevistasStats",
+    "useFinishCognitiveSession",
+    "useFunnelSla",
+    "useFuzzySearch",
+    "useFuzzySearchContext",
+    "useGamification",
+    "useGamificationOnboarding",
+    "useGamificationSupabase",
+    "useGamificationTriggers",
+    "useHiringManagerData",
+    "useIndicacoes",
+    "useInterviewReminders",
+    "useIsMobile",
+    "useItemMatches",
+    "useKeyboardShortcuts",
+    "useLinkedInImport",
+    "useLocalStorageState",
+    "useNotificacoesCandidato",
+    "useNotifications",
+    "useOnboarding",
+    "usePageTitle",
+    "usePersonalityAssessment",
+    "usePersonalityMiniGame",
+    "usePortalVagas",
+    "usePotentialIndex",
+    "usePotentialIndexBatch",
+    "useProcessoBehavioralResults",
+    "useProcessosByVaga",
+    "useProcessosSeletivos",
+    "usePropostas",
+    "useProva",
+    "useProvas",
+    "useProvasAtivas",
+    "useProvasStats",
+    "usePushNotifications",
+    "useRankingStats",
+    "useRankingVaga",
+    "useRealtimeNotifications",
+    "useReauth",
+    "useRegisterFirstResponse",
+    "useRegisterFirstResponseBatch",
+    "useRegrasAutomacao",
+    "useResumeParser",
+    "useRipple",
+    "useRunAiScreening",
+    "useSaveBehavioralResult",
+    "useSaveCompanyProfile",
+    "useScenarioPlayer",
+    "useSidebar",
+    "useSkillSearch",
+    "useSkills",
+    "useSkillsByCategoria",
+    "useSlaOverdueList",
+    "useSoundEffects",
+    "useSoundPreferences",
+    "useStartCognitiveSession",
+    "useSubmitAssessment",
+    "useSubmitCognitiveResponse",
+    "useSuggestedSlots",
+    "useTalentExport",
+    "useTalentPool",
+    "useTalentSearch",
+    "useToast",
+    "useTriagemCandidatura",
+    "useTriagensVaga",
+    "useTrustedDevices",
+    "useUpdateEntrevista",
+    "useUpdateProcessoEtapa",
+    "useUpdateProcessoStatus",
+    "useUpdateProva",
+    "useUpdateVaga",
+    "useVaga",
+    "useVagas",
+    "useVagasSelect",
+    "useVagasUrgentes",
+    "useWebAuthn",
+    "useWeeklyMissions",
+    "useWorkflow",
+    "useXPToast"
+   ],
+   "hooks_definidos": [],
+   "edges": [
+    "ai-screening",
+    "health",
+    "interview-reminders",
+    "match-score",
+    "parse-resume",
+    "public-apply",
+    "send-email",
+    "sign-proposal"
+   ],
+   "tabelas": [
+    "allowed_ips",
+    "assessment_questoes",
+    "assessment_respostas",
+    "assessments",
+    "avaliacoes",
+    "avaliacoes_comportamentais_resultados",
+    "bateria_provas_rel",
+    "baterias_provas",
+    "behavioral_assessment_results",
+    "blocked_ips",
+    "candidato_skills",
+    "candidatos",
+    "candidatos_auth",
+    "candidaturas",
+    "cognitive_sessions",
+    "comunicacoes",
+    "curriculos",
+    "empresa_branding",
+    "entrevistas",
+    "indicacoes",
+    "ip_access_logs",
+    "match_scores",
+    "notificacoes_candidato",
+    "notifications",
+    "perfis_comportamentais_empresa",
+    "processos_seletivos",
+    "profiles",
+    "propostas",
+    "provas",
+    "rate_limit_logs",
+    "regras_automacao",
+    "skills",
+    "triagem_ia",
+    "trusted_devices",
+    "user_2fa",
+    "user_2fa_logs",
+    "user_achievements",
+    "user_badges",
+    "user_gamification",
+    "user_roles",
+    "vagas",
+    "webauthn_credentials",
+    "xp_transactions"
+   ],
+   "rpcs": [
+    "add_user_xp",
+    "admin_communication_retry_stats",
+    "admin_integration_health_summary",
+    "admin_list_audit_log",
+    "admin_list_communication_retries",
+    "admin_requeue_communication_retry",
+    "create_candidato_with_details",
+    "finish_cognitive_session",
+    "get_cognitive_result",
+    "get_cognitive_session_items",
+    "get_proposta_by_token",
+    "get_user_roles",
+    "hr_candidatura_timeline",
+    "hr_funnel_sla",
+    "hr_register_first_response",
+    "hr_sla_overdue_list",
+    "log_admin_action",
+    "public_email_delivery_sla",
+    "search_candidatos",
+    "start_cognitive_session",
+    "submit_cognitive_response",
+    "update_user_streak"
+   ],
+   "buckets": [
+    "curriculos"
+   ],
+   "canais_realtime": [
+    "entrevistas-realtime",
+    "match-scores-realtime",
+    "notificacoes-candidato-realtime",
+    "notifications-realtime",
+    "processos-realtime",
+    "vagas-realtime"
+   ],
+   "env": [
+    "DEV",
+    "MODE",
+    "PROD",
+    "VITE_SUPABASE_ANON_KEY",
+    "VITE_SUPABASE_URL"
+   ],
+   "flags": [],
+   "papeis": [
+    "admin",
+    "alert",
+    "article",
+    "combobox",
+    "dialog",
+    "dominant",
+    "gestor",
+    "group",
+    "link",
+    "list",
+    "listitem",
+    "main",
+    "navigation",
+    "presentation",
+    "progressbar",
+    "region",
+    "rh",
+    "status",
+    "timer"
+   ],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [],
+   "depende_de_modulos": [
+    "components/auth",
+    "components/portal",
+    "contexts",
+    "pages",
+    "pages/admin",
+    "pages/auth",
+    "pages/portal",
+    "pages/public",
+    "pages/security",
+    "pages/settings"
+   ],
+   "pacotes_externos": [
+    "react-router-dom"
+   ]
+  },
+  {
+   "modulo": "services",
+   "arquivos": 29,
+   "testes": 0,
+   "linhas": 2320,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 0,
+   "hooks_locais": [],
+   "hooks_definidos": [],
+   "edges": [
+    "evolution-api",
+    "generate-scorecard",
+    "match-score",
+    "parse-resume",
+    "password-reset-approval",
+    "send-email",
+    "send-whatsapp"
+   ],
+   "tabelas": [
+    "allowed_ips",
+    "candidatos",
+    "email_templates",
+    "entrevistas",
+    "ip_access_logs",
+    "match_scores",
+    "password_reset_requests",
+    "processos_seletivos",
+    "profiles",
+    "user_achievements",
+    "user_gamification",
+    "vagas",
+    "xp_transactions"
+   ],
+   "rpcs": [
+    "add_user_xp"
+   ],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [
+    "DEV",
+    "MODE",
+    "PROD",
+    "VITE_SUPABASE_ANON_KEY",
+    "VITE_SUPABASE_URL"
+   ],
+   "flags": [],
+   "papeis": [],
+   "diretos": {
+    "edges": [
+     "evolution-api",
+     "generate-scorecard",
+     "match-score",
+     "parse-resume",
+     "password-reset-approval",
+     "send-email",
+     "send-whatsapp"
+    ],
+    "tabelas": [
+     "allowed_ips",
+     "candidatos",
+     "email_templates",
+     "entrevistas",
+     "ip_access_logs",
+     "match_scores",
+     "password_reset_requests",
+     "processos_seletivos",
+     "profiles",
+     "user_achievements",
+     "user_gamification",
+     "vagas",
+     "xp_transactions"
+    ],
+    "rpcs": [
+     "add_user_xp"
+    ]
+   },
+   "importado_por_outros_modulos": [
+    "components",
+    "components/assessments",
+    "components/auth",
+    "components/intelligence",
+    "components/mobile",
+    "components/reports",
+    "components/security",
+    "components/vagas",
+    "contexts",
+    "hooks",
+    "hooks/behavioralResults",
+    "hooks/gamification",
+    "lib",
+    "pages",
+    "pages/settings"
+   ],
+   "depende_de_modulos": [
+    "config",
+    "integrations/supabase",
+    "lib",
+    "types"
+   ],
+   "pacotes_externos": [
+    "zod"
+   ]
+  },
+  {
+   "modulo": "services/__tests__",
+   "arquivos": 0,
+   "testes": 11,
+   "linhas": 0,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 0,
+   "hooks_locais": [],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [],
+   "flags": [],
+   "papeis": [],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [],
+   "depende_de_modulos": [],
+   "pacotes_externos": []
+  },
+  {
+   "modulo": "test",
+   "arquivos": 0,
+   "testes": 6,
+   "linhas": 0,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 0,
+   "hooks_locais": [],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [],
+   "flags": [],
+   "papeis": [],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [],
+   "depende_de_modulos": [],
+   "pacotes_externos": []
+  },
+  {
+   "modulo": "types",
+   "arquivos": 18,
+   "testes": 0,
+   "linhas": 2922,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 0,
+   "hooks_locais": [],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [],
+   "flags": [],
+   "papeis": [
+    "dominant"
+   ],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "components/assessments",
+    "components/behavioral",
+    "components/candidatos",
+    "components/carreiras",
+    "components/cognitive",
+    "components/dashboard",
+    "components/deu-match",
+    "components/dna",
+    "components/match",
+    "components/pipeline",
+    "components/vagas",
+    "config",
+    "data",
+    "data/behavioralAssessments",
+    "data/personality",
+    "hooks",
+    "lib",
+    "lib/advancedBehavioral",
+    "lib/behavioral",
+    "lib/jobFit",
+    "lib/personality",
+    "pages",
+    "services"
+   ],
+   "depende_de_modulos": [
+    "data",
+    "integrations/supabase",
+    "lib",
+    "types/behavioral"
+   ],
+   "pacotes_externos": []
+  },
+  {
+   "modulo": "types/__tests__",
+   "arquivos": 0,
+   "testes": 1,
+   "linhas": 0,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 0,
+   "hooks_locais": [],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [],
+   "flags": [],
+   "papeis": [],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [],
+   "depende_de_modulos": [],
+   "pacotes_externos": []
+  },
+  {
+   "modulo": "types/behavioral",
+   "arquivos": 5,
+   "testes": 0,
+   "linhas": 726,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 0,
+   "hooks_locais": [],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [],
+   "flags": [],
+   "papeis": [],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "types"
+   ],
+   "depende_de_modulos": [],
+   "pacotes_externos": []
+  },
+  {
+   "modulo": "utils",
+   "arquivos": 2,
+   "testes": 0,
+   "linhas": 73,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 0,
+   "hooks_locais": [],
+   "hooks_definidos": [],
+   "edges": [],
+   "tabelas": [],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [],
+   "flags": [],
+   "papeis": [],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [],
+   "depende_de_modulos": [
+    "components/ui"
+   ],
+   "pacotes_externos": [
+    "@tanstack/react-query",
+    "@testing-library/react",
+    "react-router-dom",
+    "vitest"
+   ]
+  }
+ ]
+}

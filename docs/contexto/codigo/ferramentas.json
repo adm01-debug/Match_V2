@@ -1,0 +1,1952 @@
+{
+ "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
+ "format_version": 2,
+ "stack": {
+  "linguagens": [
+   "TypeScript (1028)",
+   "SQL (100)",
+   "Markdown (80)",
+   "YAML (52)",
+   "JSON (27)",
+   "JavaScript (20)",
+   "Python (4)",
+   "Shell (3)"
+  ],
+  "linguagem_principal": "TypeScript",
+  "framework": "React",
+  "backend_http": [],
+  "bundler": "Vite",
+  "roteador": "react-router",
+  "banco": "Supabase",
+  "testes": [
+   "vitest",
+   "playwright"
+  ],
+  "ui": [
+   "tailwind",
+   "radix/shadcn"
+  ],
+  "estado": [
+   "react-query"
+  ],
+  "gerenciador_pacotes": "bun",
+  "node": "22.23.2",
+  "python": null,
+  "deploy": [
+   "docker",
+   "compose/swarm"
+  ],
+  "monorepo": null,
+  "pastas_fonte": [
+   "src"
+  ]
+ },
+ "workspaces": [],
+ "package": {
+  "nome": "match-ats",
+  "versao": "1.0.0",
+  "scripts": {
+   "analyze": "vite-bundle-visualizer",
+   "build": "vite build",
+   "build-storybook": "storybook build",
+   "build:dev": "vite build --mode development",
+   "clean": "rm -rf dist node_modules/.cache .turbo",
+   "contexto:ia": "node scripts/ai-context/gerar.mjs --out docs/contexto/codigo",
+   "contexto:regras": "python3 scripts/regras_negocio/generate.py --repo . --out docs/contexto/regras --profile regras --no-pointer",
+   "contexto:test": "node --test scripts/ai-context/gerar.unit.mjs scripts/ci/inventario-rotas.unit.mjs scripts/ci/inventario-banco.unit.mjs scripts/ci/inventario-mudou.unit.mjs scripts/ci/inventario-repo.unit.mjs && python3 scripts/regras_negocio/test_generate.py",
+   "db:migrate": "supabase db push",
+   "db:reset": "supabase db reset",
+   "db:seed": "supabase db seed",
+   "dev": "vite",
+   "docker:build": "docker build -t match-ats .",
+   "format": "prettier --write .",
+   "format:check": "prettier --check .",
+   "inventario:banco": "node scripts/inventario/gerar-banco.mjs",
+   "inventario:edges": "node scripts/inventario/gerar-repo.mjs < /dev/null",
+   "inventario:rotas": "node scripts/inventario/gerar-rotas.mjs",
+   "lint": "eslint .",
+   "lint:fix": "eslint . --fix",
+   "postinstall": "husky install || true",
+   "precommit": "lint-staged",
+   "prepare": "husky install",
+   "preview": "vite preview",
+   "storybook": "storybook dev -p 6006",
+   "storybook:build": "storybook build",
+   "test": "vitest",
+   "test:ci": "vitest run --coverage",
+   "test:coverage": "vitest run --coverage",
+   "test:coverage:report": "vitest run --coverage --reporter=html",
+   "test:e2e": "playwright test",
+   "test:e2e:ui": "playwright test --ui",
+   "test:run": "vitest run",
+   "test:ui": "vitest --ui",
+   "test:watch": "vitest --watch",
+   "type-check": "tsc --noEmit",
+   "typecheck": "tsc --noEmit"
+  },
+  "dependencias": 73,
+  "dev_dependencias": 57,
+  "principais": {
+   "@supabase/supabase-js": "^2.117.3",
+   "@tanstack/react-query": "^5.104.1",
+   "@tanstack/react-query-devtools": "^5.104.1",
+   "date-fns": "^3.6.0",
+   "framer-motion": "12.24.7",
+   "i18next": "^23.16.5",
+   "next-themes": "^0.3.0",
+   "react": "19.3.1",
+   "react-day-picker": "^10.0.2",
+   "react-dom": "19.3.1",
+   "react-dropzone": "20.1.4",
+   "react-error-boundary": "^6.1.6",
+   "react-hook-form": "^7.91.0",
+   "react-i18next": "^17.1.9",
+   "react-is": "19.3.1",
+   "react-resizable-panels": "^4.15.2",
+   "react-router-dom": "^7.18.5",
+   "reactflow": "11.11.4",
+   "recharts": "^3.10.1",
+   "tailwindcss-animate": "^1.0.7",
+   "zod": "^4.6.5"
+  },
+  "engines": null,
+  "packageManager": null
+ },
+ "python": null,
+ "configs": [
+  ".editorconfig",
+  ".github/CODEOWNERS",
+  ".github/PULL_REQUEST_TEMPLATE.md",
+  ".github/dependabot.yml",
+  ".husky/commit-msg",
+  ".husky/pre-commit",
+  ".nvmrc",
+  ".prettierrc",
+  "Dockerfile",
+  "Dockerfile.prod",
+  "Makefile",
+  "ai-context.config.json",
+  "commitlint.config.cjs",
+  "components.json",
+  "docker-compose.override.yml",
+  "docker-compose.prod.yml",
+  "docker-compose.yaml",
+  "eslint.config.js",
+  "lint-staged.config.cjs",
+  "package.json",
+  "playwright.config.ts",
+  "postcss.config.js",
+  "supabase/config.toml",
+  "tailwind.config.ts",
+  "tsconfig.app.json",
+  "tsconfig.build.json",
+  "tsconfig.json",
+  "tsconfig.node.json",
+  "vite.config.ts",
+  "vitest.config.ts"
+ ],
+ "workflows": [
+  {
+   "arquivo": ".github/workflows/a11y.yml",
+   "nome": "Accessibility Tests",
+   "gatilhos": [
+    "pull_request",
+    "push"
+   ],
+   "crons": [],
+   "branches": [
+    "main"
+   ],
+   "jobs": [
+    "a11y"
+   ],
+   "permissoes": [],
+   "scripts_usados": [],
+   "npm_scripts": [
+    "storybook:build"
+   ],
+   "secrets": [],
+   "actions": [
+    "actions/checkout",
+    "actions/setup-node"
+   ]
+  },
+  {
+   "arquivo": ".github/workflows/auto-assign.yml",
+   "nome": "Auto Assign",
+   "gatilhos": [
+    "pull_request"
+   ],
+   "crons": [],
+   "branches": [],
+   "jobs": [
+    "assign"
+   ],
+   "permissoes": [],
+   "scripts_usados": [],
+   "npm_scripts": [],
+   "secrets": [
+    "GITHUB_TOKEN"
+   ],
+   "actions": [
+    "kentaro-m/auto-assign-action"
+   ]
+  },
+  {
+   "arquivo": ".github/workflows/bundle-size.yml",
+   "nome": "Bundle Size",
+   "gatilhos": [
+    "pull_request"
+   ],
+   "crons": [],
+   "branches": [
+    "main"
+   ],
+   "jobs": [
+    "bundle-size"
+   ],
+   "permissoes": [],
+   "scripts_usados": [],
+   "npm_scripts": [
+    "build"
+   ],
+   "secrets": [],
+   "actions": [
+    "actions/checkout",
+    "actions/setup-node"
+   ]
+  },
+  {
+   "arquivo": ".github/workflows/changelog.yml",
+   "nome": "Changelog",
+   "gatilhos": [
+    "push",
+    "workflow_dispatch"
+   ],
+   "crons": [],
+   "branches": [
+    "main"
+   ],
+   "jobs": [
+    "changelog"
+   ],
+   "permissoes": [
+    "contents: write",
+    "pull-requests: write"
+   ],
+   "scripts_usados": [],
+   "npm_scripts": [],
+   "secrets": [
+    "GITHUB_TOKEN"
+   ],
+   "actions": [
+    "TriPSs/conventional-changelog-action",
+    "actions/checkout",
+    "actions/setup-node",
+    "peter-evans/create-pull-request"
+   ]
+  },
+  {
+   "arquivo": ".github/workflows/chromatic.yml",
+   "nome": "Chromatic",
+   "gatilhos": [
+    "pull_request",
+    "push"
+   ],
+   "crons": [],
+   "branches": [
+    "main"
+   ],
+   "jobs": [
+    "chromatic"
+   ],
+   "permissoes": [],
+   "scripts_usados": [],
+   "npm_scripts": [],
+   "secrets": [
+    "CHROMATIC_PROJECT_TOKEN"
+   ],
+   "actions": [
+    "actions/checkout",
+    "actions/setup-node",
+    "chromaui/action"
+   ]
+  },
+  {
+   "arquivo": ".github/workflows/ci.yml",
+   "nome": "CI/CD Pipeline",
+   "gatilhos": [
+    "pull_request",
+    "push"
+   ],
+   "crons": [],
+   "branches": [
+    "develop",
+    "main"
+   ],
+   "jobs": [
+    "lint",
+    "type-check",
+    "test",
+    "security",
+    "build",
+    "agents-docs"
+   ],
+   "permissoes": [],
+   "scripts_usados": [
+    "scripts/ci/check-agents-md-integrity.mjs"
+   ],
+   "npm_scripts": [
+    "build",
+    "lint",
+    "test:run",
+    "type-check"
+   ],
+   "secrets": [],
+   "actions": [
+    "actions/checkout",
+    "actions/setup-node",
+    "actions/upload-artifact",
+    "codecov/codecov-action"
+   ]
+  },
+  {
+   "arquivo": ".github/workflows/codeql.yml",
+   "nome": "CodeQL Analysis",
+   "gatilhos": [
+    "pull_request",
+    "push",
+    "schedule"
+   ],
+   "crons": [
+    "0 6 * * 1"
+   ],
+   "branches": [
+    "main"
+   ],
+   "jobs": [
+    "analyze"
+   ],
+   "permissoes": [],
+   "scripts_usados": [],
+   "npm_scripts": [],
+   "secrets": [],
+   "actions": [
+    "actions/checkout",
+    "github/codeql-action/analyze",
+    "github/codeql-action/init"
+   ]
+  },
+  {
+   "arquivo": ".github/workflows/compress-images.yml",
+   "nome": "Compress Images",
+   "gatilhos": [
+    "pull_request"
+   ],
+   "crons": [],
+   "branches": [],
+   "jobs": [
+    "compress"
+   ],
+   "permissoes": [],
+   "scripts_usados": [],
+   "npm_scripts": [],
+   "secrets": [
+    "GITHUB_TOKEN"
+   ],
+   "actions": [
+    "actions/checkout",
+    "calibreapp/image-actions"
+   ]
+  },
+  {
+   "arquivo": ".github/workflows/contexto.yml",
+   "nome": "Contexto para agentes de IA",
+   "gatilhos": [
+    "push",
+    "schedule",
+    "workflow_dispatch"
+   ],
+   "crons": [
+    "41 9 * * *"
+   ],
+   "branches": [
+    "main"
+   ],
+   "jobs": [
+    "gate",
+    "codigo",
+    "regras",
+    "publicar"
+   ],
+   "permissoes": [
+    "contents: read"
+   ],
+   "scripts_usados": [
+    "scripts/ai-context/gerar.mjs",
+    "scripts/regras_negocio/generate.py",
+    "scripts/regras_negocio/indice.py",
+    "scripts/regras_negocio/test_generate.py"
+   ],
+   "npm_scripts": [],
+   "secrets": [],
+   "actions": [
+    "actions/cache",
+    "actions/checkout",
+    "actions/download-artifact",
+    "actions/setup-node",
+    "actions/upload-artifact"
+   ]
+  },
+  {
+   "arquivo": ".github/workflows/dependabot-auto-merge.yml",
+   "nome": "Dependabot Auto-merge",
+   "gatilhos": [
+    "pull_request"
+   ],
+   "crons": [],
+   "branches": [],
+   "jobs": [
+    "auto-merge"
+   ],
+   "permissoes": [
+    "contents: write",
+    "pull-requests: write"
+   ],
+   "scripts_usados": [],
+   "npm_scripts": [],
+   "secrets": [
+    "GITHUB_TOKEN"
+   ],
+   "actions": [
+    "dependabot/fetch-metadata"
+   ]
+  },
+  {
+   "arquivo": ".github/workflows/dependency-review.yml",
+   "nome": "Dependency Review",
+   "gatilhos": [
+    "pull_request"
+   ],
+   "crons": [],
+   "branches": [
+    "main"
+   ],
+   "jobs": [
+    "dependency-review"
+   ],
+   "permissoes": [
+    "contents: read",
+    "pull-requests: write"
+   ],
+   "scripts_usados": [],
+   "npm_scripts": [],
+   "secrets": [],
+   "actions": [
+    "actions/checkout",
+    "actions/dependency-review-action"
+   ]
+  },
+  {
+   "arquivo": ".github/workflows/deploy.yml",
+   "nome": "Deploy",
+   "gatilhos": [
+    "push",
+    "workflow_dispatch"
+   ],
+   "crons": [],
+   "branches": [
+    "main"
+   ],
+   "jobs": [
+    "deploy"
+   ],
+   "permissoes": [],
+   "scripts_usados": [],
+   "npm_scripts": [
+    "build"
+   ],
+   "secrets": [
+    "VERCEL_ORG_ID",
+    "VERCEL_PROJECT_ID",
+    "VERCEL_TOKEN",
+    "VITE_SUPABASE_ANON_KEY",
+    "VITE_SUPABASE_URL"
+   ],
+   "actions": [
+    "actions/checkout",
+    "actions/setup-node",
+    "amondnet/vercel-action"
+   ]
+  },
+  {
+   "arquivo": ".github/workflows/docker-build.yml",
+   "nome": "Docker Build",
+   "gatilhos": [
+    "push"
+   ],
+   "crons": [],
+   "branches": [
+    "main"
+   ],
+   "jobs": [
+    "build"
+   ],
+   "permissoes": [],
+   "scripts_usados": [],
+   "npm_scripts": [],
+   "secrets": [
+    "GITHUB_TOKEN"
+   ],
+   "actions": [
+    "actions/checkout",
+    "docker/build-push-action",
+    "docker/login-action",
+    "docker/setup-buildx-action"
+   ]
+  },
+  {
+   "arquivo": ".github/workflows/e2e.yml",
+   "nome": "E2E Tests",
+   "gatilhos": [
+    "pull_request",
+    "push"
+   ],
+   "crons": [],
+   "branches": [
+    "main"
+   ],
+   "jobs": [
+    "e2e"
+   ],
+   "permissoes": [],
+   "scripts_usados": [],
+   "npm_scripts": [
+    "test:e2e"
+   ],
+   "secrets": [],
+   "actions": [
+    "actions/checkout",
+    "actions/setup-node",
+    "actions/upload-artifact"
+   ]
+  },
+  {
+   "arquivo": ".github/workflows/generate-audit-pdf.yml",
+   "nome": "Generate Audit PDF",
+   "gatilhos": [
+    "push",
+    "workflow_dispatch"
+   ],
+   "crons": [],
+   "branches": [],
+   "jobs": [
+    "generate-pdf"
+   ],
+   "permissoes": [],
+   "scripts_usados": [],
+   "npm_scripts": [],
+   "secrets": [],
+   "actions": [
+    "actions/checkout",
+    "baileyjm02/markdown-to-pdf"
+   ]
+  },
+  {
+   "arquivo": ".github/workflows/install-mcp-exec.yml",
+   "nome": "_removed_install-mcp-exec",
+   "gatilhos": [
+    "workflow_dispatch"
+   ],
+   "crons": [],
+   "branches": [],
+   "jobs": [
+    "noop"
+   ],
+   "permissoes": [],
+   "scripts_usados": [],
+   "npm_scripts": [],
+   "secrets": [],
+   "actions": []
+  },
+  {
+   "arquivo": ".github/workflows/inventario-estado-semanal.yml",
+   "nome": "Inventário do estado real (semanal)",
+   "gatilhos": [
+    "schedule",
+    "workflow_dispatch"
+   ],
+   "crons": [
+    "23 10 * * 1"
+   ],
+   "branches": [],
+   "jobs": [
+    "gerar"
+   ],
+   "permissoes": [
+    "contents: read"
+   ],
+   "scripts_usados": [
+    "scripts/inventario/gerar-banco.mjs",
+    "scripts/inventario/gerar-repo.mjs",
+    "scripts/inventario/gerar-rotas.mjs",
+    "scripts/inventario/mudou-conteudo.mjs"
+   ],
+   "npm_scripts": [],
+   "secrets": [
+    "SUPABASE_ACCESS_TOKEN"
+   ],
+   "actions": [
+    "actions/checkout",
+    "actions/github-script",
+    "actions/setup-node",
+    "actions/upload-artifact",
+    "peter-evans/create-pull-request"
+   ]
+  },
+  {
+   "arquivo": ".github/workflows/label-sync.yml",
+   "nome": "Sync Labels",
+   "gatilhos": [
+    "push",
+    "workflow_dispatch"
+   ],
+   "crons": [],
+   "branches": [
+    "main"
+   ],
+   "jobs": [
+    "sync"
+   ],
+   "permissoes": [],
+   "scripts_usados": [],
+   "npm_scripts": [],
+   "secrets": [
+    "GITHUB_TOKEN"
+   ],
+   "actions": [
+    "actions/checkout",
+    "micnncim/action-label-syncer"
+   ]
+  },
+  {
+   "arquivo": ".github/workflows/lighthouse.yml",
+   "nome": "Lighthouse CI",
+   "gatilhos": [
+    "pull_request",
+    "push"
+   ],
+   "crons": [],
+   "branches": [
+    "main"
+   ],
+   "jobs": [
+    "lighthouse"
+   ],
+   "permissoes": [],
+   "scripts_usados": [],
+   "npm_scripts": [
+    "build"
+   ],
+   "secrets": [],
+   "actions": [
+    "actions/checkout",
+    "actions/setup-node",
+    "treosh/lighthouse-ci-action"
+   ]
+  },
+  {
+   "arquivo": ".github/workflows/lint.yml",
+   "nome": "Lint",
+   "gatilhos": [
+    "pull_request",
+    "push"
+   ],
+   "crons": [],
+   "branches": [
+    "develop",
+    "main"
+   ],
+   "jobs": [
+    "lint"
+   ],
+   "permissoes": [],
+   "scripts_usados": [],
+   "npm_scripts": [
+    "format:check",
+    "lint",
+    "typecheck"
+   ],
+   "secrets": [],
+   "actions": [
+    "actions/checkout",
+    "actions/setup-node"
+   ]
+  },
+  {
+   "arquivo": ".github/workflows/load-test.yml",
+   "nome": "Load Test",
+   "gatilhos": [
+    "schedule",
+    "workflow_dispatch"
+   ],
+   "crons": [
+    "0 2 * * 1"
+   ],
+   "branches": [],
+   "jobs": [
+    "k6"
+   ],
+   "permissoes": [],
+   "scripts_usados": [],
+   "npm_scripts": [],
+   "secrets": [
+    "K6_CLOUD_TOKEN"
+   ],
+   "actions": [
+    "actions/checkout",
+    "grafana/k6-action"
+   ]
+  },
+  {
+   "arquivo": ".github/workflows/lock-threads.yml",
+   "nome": "Lock Threads",
+   "gatilhos": [
+    "schedule",
+    "workflow_dispatch"
+   ],
+   "crons": [
+    "0 0 * * *"
+   ],
+   "branches": [],
+   "jobs": [
+    "lock"
+   ],
+   "permissoes": [],
+   "scripts_usados": [],
+   "npm_scripts": [],
+   "secrets": [],
+   "actions": [
+    "dessant/lock-threads"
+   ]
+  },
+  {
+   "arquivo": ".github/workflows/performance.yml",
+   "nome": "Performance",
+   "gatilhos": [
+    "push",
+    "schedule"
+   ],
+   "crons": [
+    "0 0 * * 0"
+   ],
+   "branches": [
+    "main"
+   ],
+   "jobs": [
+    "lighthouse"
+   ],
+   "permissoes": [],
+   "scripts_usados": [],
+   "npm_scripts": [
+    "build"
+   ],
+   "secrets": [],
+   "actions": [
+    "actions/checkout",
+    "actions/setup-node",
+    "treosh/lighthouse-ci-action"
+   ]
+  },
+  {
+   "arquivo": ".github/workflows/pr-check.yml",
+   "nome": "PR Check",
+   "gatilhos": [
+    "pull_request"
+   ],
+   "crons": [],
+   "branches": [
+    "develop",
+    "main"
+   ],
+   "jobs": [
+    "check"
+   ],
+   "permissoes": [],
+   "scripts_usados": [],
+   "npm_scripts": [
+    "build",
+    "lint",
+    "test",
+    "type-check"
+   ],
+   "secrets": [],
+   "actions": [
+    "actions/checkout",
+    "actions/setup-node"
+   ]
+  },
+  {
+   "arquivo": ".github/workflows/pr-size.yml",
+   "nome": "PR Size Labels",
+   "gatilhos": [
+    "pull_request"
+   ],
+   "crons": [],
+   "branches": [],
+   "jobs": [
+    "size-label"
+   ],
+   "permissoes": [],
+   "scripts_usados": [],
+   "npm_scripts": [],
+   "secrets": [
+    "GITHUB_TOKEN"
+   ],
+   "actions": [
+    "actions/labeler",
+    "codelytv/pr-size-labeler"
+   ]
+  },
+  {
+   "arquivo": ".github/workflows/preview.yml",
+   "nome": "Preview Deploy",
+   "gatilhos": [
+    "pull_request"
+   ],
+   "crons": [],
+   "branches": [],
+   "jobs": [
+    "preview"
+   ],
+   "permissoes": [],
+   "scripts_usados": [],
+   "npm_scripts": [
+    "build"
+   ],
+   "secrets": [],
+   "actions": [
+    "actions/checkout",
+    "actions/github-script",
+    "actions/setup-node"
+   ]
+  },
+  {
+   "arquivo": ".github/workflows/release-please.yml",
+   "nome": "Release Please",
+   "gatilhos": [
+    "push"
+   ],
+   "crons": [],
+   "branches": [
+    "main"
+   ],
+   "jobs": [
+    "release-please"
+   ],
+   "permissoes": [
+    "contents: write",
+    "pull-requests: write"
+   ],
+   "scripts_usados": [],
+   "npm_scripts": [],
+   "secrets": [],
+   "actions": [
+    "google-github-actions/release-please-action"
+   ]
+  },
+  {
+   "arquivo": ".github/workflows/release.yml",
+   "nome": "Release",
+   "gatilhos": [
+    "push"
+   ],
+   "crons": [],
+   "branches": [],
+   "jobs": [
+    "release"
+   ],
+   "permissoes": [
+    "contents: write"
+   ],
+   "scripts_usados": [],
+   "npm_scripts": [
+    "build"
+   ],
+   "secrets": [
+    "GITHUB_TOKEN"
+   ],
+   "actions": [
+    "actions/checkout",
+    "actions/setup-node",
+    "orhun/git-cliff-action",
+    "softprops/action-gh-release"
+   ]
+  },
+  {
+   "arquivo": ".github/workflows/security-scan.yml",
+   "nome": "Security Scan",
+   "gatilhos": [
+    "pull_request",
+    "push",
+    "schedule"
+   ],
+   "crons": [
+    "0 0 * * 1"
+   ],
+   "branches": [
+    "main"
+   ],
+   "jobs": [
+    "security"
+   ],
+   "permissoes": [],
+   "scripts_usados": [],
+   "npm_scripts": [],
+   "secrets": [
+    "SNYK_TOKEN"
+   ],
+   "actions": [
+    "actions/checkout",
+    "actions/setup-node",
+    "snyk/actions/node",
+    "trufflesecurity/trufflehog"
+   ]
+  },
+  {
+   "arquivo": ".github/workflows/sentry-dsn-gate.yml",
+   "nome": "Sentry DSN Gate",
+   "gatilhos": [
+    "pull_request",
+    "push"
+   ],
+   "crons": [],
+   "branches": [
+    "main"
+   ],
+   "jobs": [
+    "sentry-dsn-gate"
+   ],
+   "permissoes": [],
+   "scripts_usados": [],
+   "npm_scripts": [],
+   "secrets": [
+    "VITE_SENTRY_DSN"
+   ],
+   "actions": [
+    "actions/checkout"
+   ]
+  },
+  {
+   "arquivo": ".github/workflows/size-label.yml",
+   "nome": "PR Size Labels",
+   "gatilhos": [
+    "pull_request"
+   ],
+   "crons": [],
+   "branches": [],
+   "jobs": [
+    "size-label"
+   ],
+   "permissoes": [],
+   "scripts_usados": [],
+   "npm_scripts": [],
+   "secrets": [
+    "GITHUB_TOKEN"
+   ],
+   "actions": [
+    "codelytv/pr-size-labeler"
+   ]
+  },
+  {
+   "arquivo": ".github/workflows/stale.yml",
+   "nome": "Stale Issues",
+   "gatilhos": [
+    "schedule",
+    "workflow_dispatch"
+   ],
+   "crons": [
+    "30 1 * * *"
+   ],
+   "branches": [],
+   "jobs": [
+    "stale"
+   ],
+   "permissoes": [
+    "issues: write",
+    "pull-requests: write"
+   ],
+   "scripts_usados": [],
+   "npm_scripts": [],
+   "secrets": [],
+   "actions": [
+    "actions/stale"
+   ]
+  },
+  {
+   "arquivo": ".github/workflows/storybook-deploy.yml",
+   "nome": "Storybook Deploy",
+   "gatilhos": [
+    "push"
+   ],
+   "crons": [],
+   "branches": [
+    "main"
+   ],
+   "jobs": [
+    "deploy-storybook"
+   ],
+   "permissoes": [],
+   "scripts_usados": [],
+   "npm_scripts": [
+    "build-storybook"
+   ],
+   "secrets": [
+    "GITHUB_TOKEN"
+   ],
+   "actions": [
+    "actions/checkout",
+    "actions/setup-node",
+    "peaceiris/actions-gh-pages"
+   ]
+  },
+  {
+   "arquivo": ".github/workflows/test.yml",
+   "nome": "Test",
+   "gatilhos": [
+    "pull_request",
+    "push"
+   ],
+   "crons": [],
+   "branches": [
+    "develop",
+    "main"
+   ],
+   "jobs": [
+    "unit-tests",
+    "integration-tests"
+   ],
+   "permissoes": [],
+   "scripts_usados": [],
+   "npm_scripts": [],
+   "secrets": [],
+   "actions": [
+    "actions/checkout",
+    "actions/setup-node",
+    "codecov/codecov-action"
+   ]
+  },
+  {
+   "arquivo": ".github/workflows/visual-regression.yml",
+   "nome": "Visual Regression",
+   "gatilhos": [
+    "pull_request"
+   ],
+   "crons": [],
+   "branches": [
+    "main"
+   ],
+   "jobs": [
+    "chromatic"
+   ],
+   "permissoes": [],
+   "scripts_usados": [],
+   "npm_scripts": [],
+   "secrets": [
+    "CHROMATIC_PROJECT_TOKEN"
+   ],
+   "actions": [
+    "actions/checkout",
+    "actions/setup-node",
+    "chromaui/action"
+   ]
+  },
+  {
+   "arquivo": ".github/workflows/welcome.yml",
+   "nome": "Welcome",
+   "gatilhos": [
+    "issues",
+    "pull_request_target"
+   ],
+   "crons": [],
+   "branches": [],
+   "jobs": [
+    "welcome"
+   ],
+   "permissoes": [],
+   "scripts_usados": [],
+   "npm_scripts": [],
+   "secrets": [
+    "GITHUB_TOKEN"
+   ],
+   "actions": [
+    "actions/first-interaction"
+   ]
+  }
+ ],
+ "hooks_git": [
+  {
+   "arquivo": ".husky/commit-msg",
+   "comandos": [
+    ". \"$(dirname -- \"$0\")/_/husky.sh\"",
+    "npx --no -- commitlint --edit ${1}"
+   ]
+  },
+  {
+   "arquivo": ".husky/pre-commit",
+   "comandos": [
+    ". \"$(dirname -- \"$0\")/_/husky.sh\"",
+    "npx lint-staged"
+   ]
+  }
+ ],
+ "docs_raiz": [
+  {
+   "arquivo": ".github/PULL_REQUEST_TEMPLATE.md",
+   "titulo": null,
+   "linhas": 30
+  },
+  {
+   "arquivo": "AGENTS.md",
+   "titulo": "AGENTS.md — Match_V2",
+   "linhas": 122
+  },
+  {
+   "arquivo": "CHANGELOG.md",
+   "titulo": null,
+   "linhas": 946
+  },
+  {
+   "arquivo": "CLAUDE.md",
+   "titulo": null,
+   "linhas": 2
+  },
+  {
+   "arquivo": "CODE_OF_CONDUCT.md",
+   "titulo": "Contributor Covenant Code of Conduct",
+   "linhas": 43
+  },
+  {
+   "arquivo": "CONTRIBUTING.md",
+   "titulo": "Contributing to Match ATS",
+   "linhas": 71
+  },
+  {
+   "arquivo": "README.md",
+   "titulo": "🎯 Match ATS",
+   "linhas": 88
+  },
+  {
+   "arquivo": "SECURITY.md",
+   "titulo": "Security Policy",
+   "linhas": 43
+  },
+  {
+   "arquivo": "audit_report.md",
+   "titulo": "Auditoria Técnica Enterprise 10/10 - People Lovers (Match ATS)",
+   "linhas": 88
+  },
+  {
+   "arquivo": "docs/ACCESSIBILITY.md",
+   "titulo": "Accessibility Guide",
+   "linhas": 68
+  },
+  {
+   "arquivo": "docs/ADR.md",
+   "titulo": "Architecture Decision Records",
+   "linhas": 24
+  },
+  {
+   "arquivo": "docs/API_REFERENCE.md",
+   "titulo": "API Reference - Match ATS",
+   "linhas": 174
+  },
+  {
+   "arquivo": "docs/API_TYPES.md",
+   "titulo": "API Types Documentation",
+   "linhas": 73
+  },
+  {
+   "arquivo": "docs/ARCHITECTURE.md",
+   "titulo": "Match ATS - Architecture",
+   "linhas": 35
+  },
+  {
+   "arquivo": "docs/AUDITORIA_CODIGO_360.md",
+   "titulo": "🔍 Auditoria 360° de Código — People Lovers",
+   "linhas": 125
+  },
+  {
+   "arquivo": "docs/AUDITORIA_ENTERPRISE_PEOPLE_LOVERS.md",
+   "titulo": "Auditoria Técnica Enterprise 10/10 - People Lovers (Match ATS)",
+   "linhas": 88
+  },
+  {
+   "arquivo": "docs/AUDITORIA_EXAUSTIVA_FUNCIONALIDADES.md",
+   "titulo": "🔍 AUDITORIA EXAUSTIVA — MATCH ATS (ATUALIZADA)",
+   "linhas": 379
+  },
+  {
+   "arquivo": "docs/AUDITORIA_QA_EXAUSTIVA.md",
+   "titulo": "🔬 Auditoria Exaustiva QA – People Lovers",
+   "linhas": 89
+  },
+  {
+   "arquivo": "docs/BACKUP.md",
+   "titulo": "Backup e Disaster Recovery - Match ATS",
+   "linhas": 80
+  },
+  {
+   "arquivo": "docs/BENCHMARK_GEEKHUNTER.md",
+   "titulo": "Benchmark GeekHunter → People Lovers",
+   "linhas": 208
+  },
+  {
+   "arquivo": "docs/COMPLETE_INVENTORY.md",
+   "titulo": "📦 Inventário Completo do Projeto Match ATS",
+   "linhas": 746
+  },
+  {
+   "arquivo": "docs/COMPONENTS_GUIDE.md",
+   "titulo": "Guia de Componentes - Match ATS",
+   "linhas": 82
+  },
+  {
+   "arquivo": "docs/DATABASE.md",
+   "titulo": "Database Schema",
+   "linhas": 49
+  },
+  {
+   "arquivo": "docs/DEPENDENCIES_INSTALL.md",
+   "titulo": "📦 Dependências Pendentes - Match ATS",
+   "linhas": 63
+  },
+  {
+   "arquivo": "docs/DEPLOYMENT.md",
+   "titulo": "Deployment Guide",
+   "linhas": 26
+  },
+  {
+   "arquivo": "docs/DEVELOPMENT.md",
+   "titulo": "Development Guide",
+   "linhas": 36
+  },
+  {
+   "arquivo": "docs/FAQ.md",
+   "titulo": "Frequently Asked Questions",
+   "linhas": 68
+  },
+  {
+   "arquivo": "docs/GLOSSARY.md",
+   "titulo": "Glossário",
+   "linhas": 32
+  },
+  {
+   "arquivo": "docs/HOOKS_GUIDE.md",
+   "titulo": "Guia de Hooks - Match ATS",
+   "linhas": 95
+  },
+  {
+   "arquivo": "docs/HOTFIX.md",
+   "titulo": "Procedimento de Hotfix",
+   "linhas": 33
+  },
+  {
+   "arquivo": "docs/INTERNATIONALIZATION.md",
+   "titulo": "Internationalization (i18n) Guide",
+   "linhas": 66
+  },
+  {
+   "arquivo": "docs/IP_WHITELIST.md",
+   "titulo": "🔐 Sistema de Whitelist de IPs - MATCH ATS",
+   "linhas": 172
+  },
+  {
+   "arquivo": "docs/LEVANTAMENTO_FUNCIONALIDADES_COMPLETO.md",
+   "titulo": "📋 MATCH ATS — LEVANTAMENTO EXAUSTIVO DE FUNCIONALIDADES",
+   "linhas": 1450
+  },
+  {
+   "arquivo": "docs/MELHORIAS_PENDENTES.md",
+   "titulo": "Melhorias Pendentes — Análise Exaustiva",
+   "linhas": 193
+  },
+  {
+   "arquivo": "docs/MIGRATION.md",
+   "titulo": "Migration Guide",
+   "linhas": 72
+  },
+  {
+   "arquivo": "docs/MONITORING.md",
+   "titulo": "Monitoramento",
+   "linhas": 41
+  },
+  {
+   "arquivo": "docs/ONBOARDING.md",
+   "titulo": "Developer Onboarding - Match ATS",
+   "linhas": 40
+  },
+  {
+   "arquivo": "docs/PERFORMANCE.md",
+   "titulo": "Performance Guide",
+   "linhas": 73
+  },
+  {
+   "arquivo": "docs/PLANO_MELHORIAS_50_ETAPAS.md",
+   "titulo": "Plano de Melhorias — 50 Etapas",
+   "linhas": 262
+  },
+  {
+   "arquivo": "docs/POST_MORTEM_TEMPLATE.md",
+   "titulo": "Template de Post-Mortem (Análise de Incidente)",
+   "linhas": 37
+  },
+  {
+   "arquivo": "docs/PROJECT_TEMPLATE.md",
+   "titulo": "Template de Projeto Base - Match ATS",
+   "linhas": 341
+  },
+  {
+   "arquivo": "docs/RELEASE-PROCESS.md",
+   "titulo": "Release Process - Match ATS",
+   "linhas": 31
+  },
+  {
+   "arquivo": "docs/ROADMAP.md",
+   "titulo": "Roadmap — Match ATS / People Lovers",
+   "linhas": 123
+  },
+  {
+   "arquivo": "docs/RUNBOOK.md",
+   "titulo": "Operational Runbook - Match ATS",
+   "linhas": 30
+  },
+  {
+   "arquivo": "docs/SCALING.md",
+   "titulo": "Escalabilidade",
+   "linhas": 44
+  },
+  {
+   "arquivo": "docs/SDK.md",
+   "titulo": "SDK - Match ATS",
+   "linhas": 205
+  },
+  {
+   "arquivo": "docs/SECURITY-CHECKLIST.md",
+   "titulo": "Security Checklist - Match ATS",
+   "linhas": 32
+  },
+  {
+   "arquivo": "docs/STATE_MANAGEMENT.md",
+   "titulo": "State Management - Match ATS",
+   "linhas": 85
+  },
+  {
+   "arquivo": "docs/STYLEGUIDE.md",
+   "titulo": "Style Guide",
+   "linhas": 49
+  },
+  {
+   "arquivo": "docs/SYSTEM_FEATURES.md",
+   "titulo": "Match ATS - Levantamento Completo de Funcionalidades e Ferramentas",
+   "linhas": 903
+  },
+  {
+   "arquivo": "docs/TESTING.md",
+   "titulo": "Testing Guide",
+   "linhas": 128
+  },
+  {
+   "arquivo": "docs/TROUBLESHOOTING.md",
+   "titulo": "Troubleshooting Guide",
+   "linhas": 73
+  },
+  {
+   "arquivo": "docs/USER_GUIDE.md",
+   "titulo": "Guia do Usuário",
+   "linhas": 48
+  },
+  {
+   "arquivo": "docs/VERSIONING.md",
+   "titulo": "Versionamento",
+   "linhas": 38
+  },
+  {
+   "arquivo": "docs/WEBHOOKS.md",
+   "titulo": "Webhooks - Match ATS",
+   "linhas": 139
+  },
+  {
+   "arquivo": "docs/audit_report.md",
+   "titulo": "Auditoria Técnica Enterprise 10/10 - People Lovers (Match ATS)",
+   "linhas": 88
+  },
+  {
+   "arquivo": "docs/index.md",
+   "titulo": "Match ATS Documentation",
+   "linhas": 73
+  }
+ ],
+ "docs_em_subpastas": [
+  {
+   "pasta": "docs/ADR",
+   "arquivos_md": 8
+  },
+  {
+   "pasta": "docs/agentes",
+   "arquivos_md": 7
+  },
+  {
+   "pasta": "docs/contexto",
+   "arquivos_md": 2
+  }
+ ],
+ "changelog_topo": "0.1.0 (2026-11-08)",
+ "env": {
+  "declaradas_no_env_example": [
+   "VITE_ANALYTICS_ID",
+   "VITE_API_URL",
+   "VITE_APP_VERSION",
+   "VITE_ENABLE_ANALYTICS",
+   "VITE_ENABLE_PWA",
+   "VITE_ENABLE_SENTRY",
+   "VITE_SENTRY_DSN",
+   "VITE_SUPABASE_ANON_KEY",
+   "VITE_SUPABASE_URL"
+  ],
+  "usadas_no_front": [
+   "DEV",
+   "MODE",
+   "PROD",
+   "VITE_SUPABASE_ANON_KEY",
+   "VITE_SUPABASE_URL"
+  ],
+  "usadas_nas_edges": [
+   "ALERT_EMAIL_TO",
+   "EVOLUTION_API_KEY",
+   "EVOLUTION_API_URL",
+   "EVOLUTION_INSTANCE_NAME",
+   "FROM_EMAIL",
+   "GITHUB_PAT",
+   "LOVABLE_API_KEY",
+   "RESEND_API_KEY",
+   "RESEND_WEBHOOK_SECRET",
+   "SITE_URL",
+   "SUPABASE_ANON_KEY",
+   "SUPABASE_SERVICE_ROLE_KEY",
+   "SUPABASE_URL",
+   "VITE_SUPABASE_PUBLISHABLE_KEY",
+   "VITE_SUPABASE_URL",
+   "WEBHOOK_SIGNING_SECRET"
+  ],
+  "usadas_no_python": [
+   "AI_CONTEXT_INDEX",
+   "AI_CONTEXT_MODEL",
+   "AI_CONTEXT_PROFILE",
+   "AI_CONTEXT_SCHEMA_SNAPSHOT",
+   "ANTHROPIC_API_KEY"
+  ],
+  "usadas_mas_nao_declaradas": [
+   "DEV",
+   "MODE",
+   "PROD"
+  ],
+  "secrets_em_workflows": [
+   "CHROMATIC_PROJECT_TOKEN",
+   "GITHUB_TOKEN",
+   "K6_CLOUD_TOKEN",
+   "SNYK_TOKEN",
+   "SUPABASE_ACCESS_TOKEN",
+   "VERCEL_ORG_ID",
+   "VERCEL_PROJECT_ID",
+   "VERCEL_TOKEN",
+   "VITE_SENTRY_DSN",
+   "VITE_SUPABASE_ANON_KEY",
+   "VITE_SUPABASE_URL"
+  ]
+ },
+ "deploy": {
+  "alvos": [
+   "docker",
+   "compose/swarm"
+  ],
+  "dockerfiles": [
+   {
+    "arquivo": "Dockerfile",
+    "base": [
+     "nginx:alpine",
+     "node:22-alpine"
+    ],
+    "portas": [
+     "80"
+    ]
+   },
+   {
+    "arquivo": "Dockerfile.prod",
+    "base": [
+     "nginx:alpine",
+     "node:22-alpine"
+    ],
+    "portas": [
+     "3000"
+    ]
+   }
+  ],
+  "compose": [
+   {
+    "arquivo": "docker-compose.override.yml",
+    "servicos": [
+     "app",
+     "storybook"
+    ]
+   },
+   {
+    "arquivo": "docker-compose.prod.yml",
+    "servicos": [
+     "app",
+     "nginx",
+     "default"
+    ]
+   },
+   {
+    "arquivo": "docker-compose.yaml",
+    "servicos": [
+     "app",
+     "db",
+     "db_data"
+    ]
+   }
+  ],
+  "vercel": null
+ },
+ "integracoes": {
+  "sdks": [
+   {
+    "pacote": "i18next",
+    "servico": "i18next",
+    "versao": "^23.16.5"
+   },
+   {
+    "pacote": "react-i18next",
+    "servico": "i18next",
+    "versao": "^17.1.9"
+   },
+   {
+    "pacote": "@tanstack/react-query",
+    "servico": "react-query",
+    "versao": "^5.104.1"
+   },
+   {
+    "pacote": "@sentry/react",
+    "servico": "Sentry",
+    "versao": "^8.43.0"
+   },
+   {
+    "pacote": "@supabase/supabase-js",
+    "servico": "Supabase",
+    "versao": "^2.117.3"
+   },
+   {
+    "pacote": "zod",
+    "servico": "zod",
+    "versao": "^4.6.5"
+   }
+  ],
+  "hosts_externos": [
+   {
+    "host": "api.resend.com",
+    "arquivos": 7
+   },
+   {
+    "host": "ai-gateway.lovable.dev",
+    "arquivos": 6
+   },
+   {
+    "host": "linkedin.com",
+    "arquivos": 5
+   },
+   {
+    "host": "api.dicebear.com",
+    "arquivos": 3
+   },
+   {
+    "host": "api.ipify.org",
+    "arquivos": 3
+   },
+   {
+    "host": "meet.google.com",
+    "arquivos": 3
+   },
+   {
+    "host": "teams.microsoft.com",
+    "arquivos": 2
+   },
+   {
+    "host": "test.com",
+    "arquivos": 2
+   },
+   {
+    "host": "x.supabase.co",
+    "arquivos": 2
+   },
+   {
+    "host": "zoom.us",
+    "arquivos": 2
+   },
+   {
+    "host": "accounts.google.com",
+    "arquivos": 1
+   },
+   {
+    "host": "api.pwnedpasswords.com",
+    "arquivos": 1
+   },
+   {
+    "host": "api.supabase.com",
+    "arquivos": 1
+   },
+   {
+    "host": "api.x.com",
+    "arquivos": 1
+   },
+   {
+    "host": "calendar.google.com",
+    "arquivos": 1
+   },
+   {
+    "host": "chart.googleapis.com",
+    "arquivos": 1
+   },
+   {
+    "host": "images.unsplash.com",
+    "arquivos": 1
+   },
+   {
+    "host": "ip-api.com",
+    "arquivos": 1
+   },
+   {
+    "host": "kjymlggxuoqsakjkjnkc.supabase.co",
+    "arquivos": 1
+   },
+   {
+    "host": "match-ats.lovable.app",
+    "arquivos": 1
+   },
+   {
+    "host": "placeholder.supabase.co",
+    "arquivos": 1
+   },
+   {
+    "host": "wa.me",
+    "arquivos": 1
+   },
+   {
+    "host": "www.googleapis.com",
+    "arquivos": 1
+   }
+  ],
+  "env_de_integracao": [
+   "EVOLUTION_API_KEY",
+   "EVOLUTION_API_URL",
+   "EVOLUTION_INSTANCE_NAME",
+   "LOVABLE_API_KEY",
+   "RESEND_API_KEY",
+   "RESEND_WEBHOOK_SECRET",
+   "VITE_ENABLE_SENTRY",
+   "VITE_SENTRY_DSN",
+   "WEBHOOK_SIGNING_SECRET"
+  ],
+  "webhooks_recebidos": [
+   "health",
+   "proactive-alerts",
+   "public-apply",
+   "resend-webhook",
+   "sign-proposal"
+  ],
+  "realtime": [
+   "entrevistas-realtime",
+   "match-scores-realtime",
+   "notificacoes-candidato-realtime",
+   "notifications-realtime",
+   "processos-realtime",
+   "vagas-realtime"
+  ]
+ },
+ "permissoes": {
+  "papeis_no_codigo": [
+   {
+    "papel": "article",
+    "ocorrencias": 28
+   },
+   {
+    "papel": "main",
+    "ocorrencias": 21
+   },
+   {
+    "papel": "region",
+    "ocorrencias": 15
+   },
+   {
+    "papel": "status",
+    "ocorrencias": 10
+   },
+   {
+    "papel": "admin",
+    "ocorrencias": 9
+   },
+   {
+    "papel": "alert",
+    "ocorrencias": 6
+   },
+   {
+    "papel": "system",
+    "ocorrencias": 6
+   },
+   {
+    "papel": "user",
+    "ocorrencias": 6
+   },
+   {
+    "papel": "group",
+    "ocorrencias": 4
+   },
+   {
+    "papel": "list",
+    "ocorrencias": 4
+   },
+   {
+    "papel": "gestor",
+    "ocorrencias": 3
+   },
+   {
+    "papel": "listitem",
+    "ocorrencias": 3
+   },
+   {
+    "papel": "navigation",
+    "ocorrencias": 3
+   },
+   {
+    "papel": "progressbar",
+    "ocorrencias": 2
+   },
+   {
+    "papel": "rh",
+    "ocorrencias": 2
+   },
+   {
+    "papel": "agent",
+    "ocorrencias": 1
+   },
+   {
+    "papel": "authenticated",
+    "ocorrencias": 1
+   },
+   {
+    "papel": "button",
+    "ocorrencias": 1
+   },
+   {
+    "papel": "combobox",
+    "ocorrencias": 1
+   },
+   {
+    "papel": "dialog",
+    "ocorrencias": 1
+   },
+   {
+    "papel": "dominant",
+    "ocorrencias": 1
+   },
+   {
+    "papel": "img",
+    "ocorrencias": 1
+   },
+   {
+    "papel": "link",
+    "ocorrencias": 1
+   },
+   {
+    "papel": "listbox",
+    "ocorrencias": 1
+   },
+   {
+    "papel": "menuitem",
+    "ocorrencias": 1
+   },
+   {
+    "papel": "note",
+    "ocorrencias": 1
+   },
+   {
+    "papel": "option",
+    "ocorrencias": 1
+   },
+   {
+    "papel": "presentation",
+    "ocorrencias": 1
+   },
+   {
+    "papel": "separator",
+    "ocorrencias": 1
+   },
+   {
+    "papel": "sup",
+    "ocorrencias": 1
+   },
+   {
+    "papel": "timer",
+    "ocorrencias": 1
+   }
+  ],
+  "enums_de_papel": [
+   {
+    "enum": "app_role",
+    "valores": [
+     "admin",
+     "rh",
+     "gestor"
+    ]
+   }
+  ],
+  "rpcs_de_autorizacao": [
+   "admin_communication_retry_stats",
+   "admin_integration_health_summary",
+   "admin_list_audit_log",
+   "admin_list_communication_retries",
+   "admin_requeue_communication_retry",
+   "get_user_permissions",
+   "get_user_roles",
+   "is_hr_staff",
+   "log_admin_action"
+  ],
+  "guards": [
+   "src/components/auth/Admin2FAGuard.tsx",
+   "src/components/auth/ProtectedRoute.tsx",
+   "src/components/portal/PortalProtectedRoute.tsx",
+   "src/components/security/IPGuard.tsx"
+  ],
+  "rotas_protegidas": 14,
+  "rotas_publicas": [
+   "/",
+   "/*",
+   "/agenda",
+   "/analytics",
+   "/analytics-basico",
+   "/assinar-proposta/:token",
+   "/auth/forgot-password",
+   "/auth/login",
+   "/auth/register",
+   "/auth/reset-password",
+   "/avaliacao-cognitiva",
+   "/avaliacao-cognitiva/:vagaId",
+   "/avaliacao-comportamental",
+   "/avaliacao/:processoId",
+   "/avaliacoes",
+   "/avaliacoes-comportamentais",
+   "/banco-talentos",
+   "/candidato/:id",
+   "/carreiras",
+   "/carreiras/:slug",
+   "/carreiras/vaga/:vagaId",
+   "/comunicacao",
+   "/deu-match",
+   "/gamification",
+   "/gestor",
+   "/indicacoes",
+   "/ofertas",
+   "/parser-curriculo",
+   "/pipeline",
+   "/privacidade",
+   "/relatorios",
+   "/status",
+   "/talentos",
+   "/termos",
+   "/testes",
+   "/testes/:id/editar",
+   "/testes/:provaId/aplicar",
+   "/testes/nova",
+   "/vagas",
+   "/vagas/:id",
+   "/vagas/:id/editar",
+   "/vagas/:vagaId/aplicar",
+   "/vagas/:vagaId/ranking",
+   "/vagas/nova",
+   "/workflows"
+  ],
+  "menu_com_papeis": [
+   {
+    "rotulo": "Administração",
+    "papeis": [
+     "admin"
+    ]
+   },
+   {
+    "rotulo": "Relatórios",
+    "papeis": [
+     "admin",
+     "rh"
+    ]
+   },
+   {
+    "rotulo": "Analytics Avançado",
+    "papeis": [
+     "admin",
+     "rh"
+    ]
+   },
+   {
+    "rotulo": "Portal Gestor",
+    "papeis": [
+     "admin",
+     "gestor"
+    ]
+   }
+  ],
+  "tabelas_sem_rls": []
+ },
+ "feature_flags": {
+  "total": 3,
+  "flags": [
+   {
+    "flag": "FEATURE_X",
+    "arquivos": 1
+   },
+   {
+    "flag": "nova-tela",
+    "arquivos": 1
+   },
+   {
+    "flag": "novo-inbox",
+    "arquivos": 1
+   }
+  ],
+  "tabelas_de_flag": [
+   "feature_flags"
+  ]
+ },
+ "providers": {
+  "entrada": "src/main.tsx",
+  "providers": [
+   "AnalyticsProvider",
+   "AuthProvider",
+   "BrowserRouter",
+   "CandidatoAuthProvider",
+   "ErrorBoundary",
+   "GlobalShortcutsProvider",
+   "NotificationProvider",
+   "OnboardingProvider",
+   "QueryClientProvider",
+   "ThemeProvider",
+   "TooltipProvider"
+  ]
+ },
+ "i18n": {
+  "arquivos": 0,
+  "idiomas": [],
+  "lib": [
+   "i18next"
+  ]
+ }
+}

@@ -1,0 +1,367 @@
+{
+ "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
+ "format_version": 2,
+ "nos": 960,
+ "arestas": 3379,
+ "hubs": [
+  {
+   "arquivo": "src/lib/utils.ts",
+   "importado_por": 268
+  },
+  {
+   "arquivo": "src/components/ui/card.tsx",
+   "importado_por": 264
+  },
+  {
+   "arquivo": "src/components/ui/button.tsx",
+   "importado_por": 256
+  },
+  {
+   "arquivo": "src/components/ui/badge.tsx",
+   "importado_por": 209
+  },
+  {
+   "arquivo": "src/integrations/supabase/client.ts",
+   "importado_por": 111
+  },
+  {
+   "arquivo": "src/components/ui/input.tsx",
+   "importado_por": 76
+  },
+  {
+   "arquivo": "src/components/ui/label.tsx",
+   "importado_por": 65
+  },
+  {
+   "arquivo": "src/services/logger.ts",
+   "importado_por": 60
+  },
+  {
+   "arquivo": "src/hooks/use-toast.ts",
+   "importado_por": 58
+  },
+  {
+   "arquivo": "src/components/ui/progress.tsx",
+   "importado_por": 56
+  },
+  {
+   "arquivo": "src/components/ui/select.tsx",
+   "importado_por": 46
+  },
+  {
+   "arquivo": "src/components/ui/skeleton.tsx",
+   "importado_por": 44
+  },
+  {
+   "arquivo": "src/hooks/usePageTitle.ts",
+   "importado_por": 39
+  },
+  {
+   "arquivo": "src/contexts/AuthContext.tsx",
+   "importado_por": 35
+  },
+  {
+   "arquivo": "src/types/behavioral.ts",
+   "importado_por": 35
+  },
+  {
+   "arquivo": "src/components/layout/Layout.tsx",
+   "importado_por": 34
+  },
+  {
+   "arquivo": "src/config/behavioralPillars.ts",
+   "importado_por": 33
+  },
+  {
+   "arquivo": "src/components/ui/tabs.tsx",
+   "importado_por": 30
+  },
+  {
+   "arquivo": "src/components/ui/dialog.tsx",
+   "importado_por": 29
+  },
+  {
+   "arquivo": "src/components/ui/textarea.tsx",
+   "importado_por": 29
+  },
+  {
+   "arquivo": "src/components/ui/avatar.tsx",
+   "importado_por": 27
+  },
+  {
+   "arquivo": "src/components/ui/alert.tsx",
+   "importado_por": 23
+  },
+  {
+   "arquivo": "src/components/ui/tooltip.tsx",
+   "importado_por": 17
+  },
+  {
+   "arquivo": "src/types/match.ts",
+   "importado_por": 17
+  },
+  {
+   "arquivo": "supabase/functions/_shared/rateLimit.ts",
+   "importado_por": 17
+  },
+  {
+   "arquivo": "src/components/ui/dropdown-menu.tsx",
+   "importado_por": 16
+  },
+  {
+   "arquivo": "src/components/ui/separator.tsx",
+   "importado_por": 16
+  },
+  {
+   "arquivo": "src/components/ui/switch.tsx",
+   "importado_por": 16
+  },
+  {
+   "arquivo": "src/types/recruitment.ts",
+   "importado_por": 16
+  },
+  {
+   "arquivo": "src/components/ui/scroll-area.tsx",
+   "importado_por": 15
+  },
+  {
+   "arquivo": "src/hooks/useFuzzySearch.ts",
+   "importado_por": 15
+  },
+  {
+   "arquivo": "src/types/personality.ts",
+   "importado_por": 14
+  },
+  {
+   "arquivo": "src/components/empty-states/illustrations/shared.ts",
+   "importado_por": 13
+  },
+  {
+   "arquivo": "src/components/ui/checkbox.tsx",
+   "importado_por": 13
+  },
+  {
+   "arquivo": "src/components/ui/popover.tsx",
+   "importado_por": 13
+  },
+  {
+   "arquivo": "src/components/ui/slider.tsx",
+   "importado_por": 12
+  },
+  {
+   "arquivo": "src/integrations/supabase/types.ts",
+   "importado_por": 12
+  },
+  {
+   "arquivo": "src/types/tests.ts",
+   "importado_por": 12
+  },
+  {
+   "arquivo": "src/types/advancedBehavioral.ts",
+   "importado_por": 11
+  },
+  {
+   "arquivo": "src/hooks/useGamification.ts",
+   "importado_por": 10
+  }
+ ],
+ "ciclos": {
+  "total": 1,
+  "maiores": [
+   {
+    "tamanho": 3,
+    "arquivos": [
+     "src/data/valoresCulturais.ts",
+     "src/lib/matchHelpers.ts",
+     "src/types/match.ts"
+    ]
+   }
+  ]
+ },
+ "orfaos": [
+  "find_no_rls.py",
+  "public/sw.js",
+  "src/components/admin/GDPRConsent.tsx",
+  "src/components/admin/WhiteLabelSettings.tsx",
+  "src/components/analytics/AnalyticsKPIGrid.tsx",
+  "src/components/candidatos/CandidatoCard.tsx",
+  "src/components/candidatos/CandidatosCharts.tsx",
+  "src/components/candidatos/CandidatosFilters.tsx",
+  "src/components/candidatos/CandidatosSearchFilters.tsx",
+  "src/components/candidatos/CandidatosStatsCards.tsx",
+  "src/components/candidaturas/AiScreeningCard.tsx",
+  "src/components/common/OfflineFallback.tsx",
+  "src/components/dna/index.ts",
+  "src/components/entrevistas/InterviewKitRunner.tsx",
+  "src/components/index.ts",
+  "src/components/match/index.ts",
+  "src/components/mobile/PullToRefreshIndicator.tsx",
+  "src/components/offers/OfferDetailDialog.tsx",
+  "src/components/offers/ViewOfferDialog.tsx",
+  "src/components/settings/IndeedConnect.tsx",
+  "src/components/settings/JobBoardConnects.tsx",
+  "src/components/settings/LinkedInConnect.tsx",
+  "src/components/settings/OutlookCalendarConnect.tsx",
+  "src/components/settings/SlackConnect.tsx",
+  "src/components/settings/TeamsConnect.tsx",
+  "src/components/ui/accordion.tsx",
+  "src/components/ui/aspect-ratio.tsx",
+  "src/components/ui/carousel.tsx",
+  "src/components/ui/chart.tsx",
+  "src/components/ui/context-menu.tsx",
+  "src/components/ui/drawer.tsx",
+  "src/components/ui/form.tsx",
+  "src/components/ui/info-tooltip.tsx",
+  "src/components/ui/input-otp.tsx",
+  "src/components/ui/menubar.tsx",
+  "src/components/ui/navigation-menu.tsx",
+  "src/components/ui/pagination.tsx",
+  "src/components/ui/password-input.tsx",
+  "src/components/ui/priority-badge.tsx",
+  "src/components/ui/resizable.tsx",
+  "src/components/ui/toggle-group.tsx",
+  "src/components/vagas/VagaInterviewKitsManager.tsx",
+  "src/config/index.ts",
+  "src/constants/index.ts",
+  "src/contexts/PermissionContext.tsx",
+  "src/contexts/index.ts",
+  "src/data/index.ts",
+  "src/hooks/useAdvancedSearch.ts",
+  "src/hooks/useAnalytics.ts",
+  "src/hooks/useBulkSelection.ts",
+  "src/hooks/useDuplicate.ts",
+  "src/hooks/useExportData.ts",
+  "src/hooks/useFeatureFlag.ts",
+  "src/hooks/useHunterLeads.ts",
+  "src/hooks/usePermissions.ts",
+  "src/hooks/useRateLimiter.ts",
+  "src/hooks/useScorecard.ts",
+  "src/hooks/useTenant.ts",
+  "src/hooks/useVersions.ts",
+  "src/lib/index.ts",
+  "src/lib/jobFit/index.ts",
+  "src/lib/jobFitCalculator.ts",
+  "src/lib/personality/index.ts",
+  "src/services/aiService.ts",
+  "src/services/autoSchedulingService.ts",
+  "src/services/cacheService.ts",
+  "src/services/emailService.ts",
+  "src/services/exportService.ts",
+  "src/services/gdprService.ts",
+  "src/services/googleCalendarService.ts",
+  "src/services/importService.ts",
+  "src/services/index.ts",
+  "src/services/jobBoardService.ts",
+  "src/services/matchingService.ts",
+  "src/services/outlookService.ts",
+  "src/services/slackService.ts",
+  "src/services/teamsService.ts",
+  "src/services/workflowEngine.ts",
+  "src/utils/index.ts",
+  "test-supabase.mjs",
+  "vitest.workspace.ts"
+ ],
+ "modulos_mais_acoplados": [
+  {
+   "modulo": "components/ui",
+   "depende_de": 2,
+   "importado_por": 55
+  },
+  {
+   "modulo": "lib",
+   "depende_de": 9,
+   "importado_por": 41
+  },
+  {
+   "modulo": "hooks",
+   "depende_de": 16,
+   "importado_por": 31
+  },
+  {
+   "modulo": "pages",
+   "depende_de": 43,
+   "importado_por": 1
+  },
+  {
+   "modulo": "components",
+   "depende_de": 31,
+   "importado_por": 1
+  },
+  {
+   "modulo": "types",
+   "depende_de": 4,
+   "importado_por": 23
+  },
+  {
+   "modulo": "integrations/supabase",
+   "depende_de": 0,
+   "importado_por": 21
+  },
+  {
+   "modulo": "services",
+   "depende_de": 4,
+   "importado_por": 15
+  },
+  {
+   "modulo": "contexts",
+   "depende_de": 4,
+   "importado_por": 12
+  },
+  {
+   "modulo": "data",
+   "depende_de": 6,
+   "importado_por": 9
+  },
+  {
+   "modulo": "components/assessments",
+   "depende_de": 8,
+   "importado_por": 6
+  },
+  {
+   "modulo": "components/layout",
+   "depende_de": 9,
+   "importado_por": 5
+  },
+  {
+   "modulo": "components/auth",
+   "depende_de": 6,
+   "importado_por": 5
+  },
+  {
+   "modulo": "components/candidatos",
+   "depende_de": 8,
+   "importado_por": 3
+  },
+  {
+   "modulo": "config",
+   "depende_de": 3,
+   "importado_por": 8
+  },
+  {
+   "modulo": "routes",
+   "depende_de": 10,
+   "importado_por": 0
+  },
+  {
+   "modulo": "components/gamification",
+   "depende_de": 6,
+   "importado_por": 3
+  },
+  {
+   "modulo": "components/vagas",
+   "depende_de": 7,
+   "importado_por": 2
+  },
+  {
+   "modulo": "pages/settings",
+   "depende_de": 7,
+   "importado_por": 2
+  },
+  {
+   "modulo": "components/portal",
+   "depende_de": 5,
+   "importado_por": 3
+  }
+ ],
+ "arestas_em": "docs/contexto/codigo/grafo-arestas.json"
+}
