@@ -4,6 +4,7 @@ Regras do dono para qualquer agente de IA; vencem os `docs/` (histórico). Detal
 divergiu da realidade → corrija no mesmo PR do fix. Responda sempre em PT-BR.
 
 ## Postura
+
 - O dono não é dev: decide negócio; o agente executa a engenharia inteira via MCP. Nunca passo manual do
   dono nem pedir que ele revise diff.
 - Qualidade + velocidade, mínimo de tokens. Decida como dev sênior; pergunte só com custo, arquitetura,
@@ -16,14 +17,17 @@ divergiu da realidade → corrija no mesmo PR do fix. Responda sempre em PT-BR.
 - `APROVADO` = execute o plano como descrito, sem reconfirmar.
 - Uma tarefa por vez, cada uma com sua branch/PR. Outro bug → "Próximos passos". Travou → reporte o erro
   exato e pare; não contorne regra. Releia o pedido antes de concluir.
-- Tokens: leia só o trecho necessário; `src/routes/lazyPages.ts`, `src/services/` e `supabase/functions/`
-  antes de buscar por texto; exploração ampla → subagente; nenhuma tool "por garantia"; não gere código que
+- Tokens: leia só o trecho necessário; **antes de varrer o repo**, leia o contexto já gerado
+  (`inventario/estado/*.json` na main e `docs/contexto/00-INDEX.md` na branch `contexto` —
+  `docs/agentes/contexto-autonomo.md`); depois `src/routes/lazyPages.ts`, `src/services/` e
+  `supabase/functions/`; exploração ampla → subagente; nenhuma tool "por garantia"; não gere código que
   não será aplicado.
 - Segredos nunca em código, commit ou resposta — só em env/secret do serviço (edge: `supabase secrets set`
   ou painel). PAT exposto em chat → rotacionar na hora. Nunca imprima nem commite `.env`, tokens,
   `service_role` ou a URL com token do MCP em `.mcp.json`.
 
 ## Bugs e funcionalidades
+
 - Diagnóstico antes de patch: logs e estado real, ponto exato (arquivo:linha), causa; várias causas → liste
   todas, corrija a pedida.
 - Antes da PR: `npm run lint`, `npm run type-check` e `npx vitest run <caminho>` do que tocou. Só erro seu
@@ -37,6 +41,7 @@ divergiu da realidade → corrija no mesmo PR do fix. Responda sempre em PT-BR.
   deixe código morto ou feature "quase" sem dizer.
 
 ## Comunicação
+
 - Resultado primeiro, só o que muda decisão do dono. Sem introdução, recapitulação, narração, hedging,
   disclaimer, lição de moral ou cortesia. Efeito no negócio; técnica só se perguntarem. Resposta e plano
   proporcionais ao tamanho do fix; não despeje log — cite a linha que importa. Caminhos, comandos e links
@@ -48,6 +53,7 @@ divergiu da realidade → corrija no mesmo PR do fix. Responda sempre em PT-BR.
   `Próximos passos: nada pendente neste escopo.`
 
 ## Fluxo Git — detalhe em `docs/agentes/github-ci.md`
+
 - Repo `adm01-debug/Match_V2`, `main`, **privado**. Escrita no GitHub: MCP **`GITHUB - MCP - FOREVER`**
   (`github_push_files`: `files` + `delete` num commit); `git push`/`gh` só em repo autorizado na sessão.
 - Nunca commite em `main`. Só escreva em branch que **você** criou nesta sessão; branch alheia ou já
@@ -56,7 +62,7 @@ divergiu da realidade → corrija no mesmo PR do fix. Responda sempre em PT-BR.
   de dependabot abertas, então filtre por arquivo, não por contagem).
 - Branch de `main` atualizado: `claude/<fix|feat|chore|ci>-<slug>-<AAMMDD-HHMM>`.
 - Commit PT-BR, 1 atômico, `<tipo>(<escopo>): <assunto>`; tipos do `commitlint.config.js`: `feat fix docs
-  style refactor perf test build ci chore revert a11y security ux` — **não há `infra:`** (use `ci:`/`chore:`);
+style refactor perf test build ci chore revert a11y security ux` — **não há `infra:`** (use `ci:`/`chore:`);
   assunto todo minúsculo e ≤ 72 caracteres, linha de corpo ≤ 100.
 - **Não há branch protection** neste repo e `delete_branch_on_merge` está desligado: o merge não é barrado
   por check nenhum e a branch sobra — apague à mão depois do squash.
@@ -69,6 +75,7 @@ divergiu da realidade → corrija no mesmo PR do fix. Responda sempre em PT-BR.
 - Fim: link da PR + estado.
 
 ## Banco — ler `docs/agentes/banco.md` antes de SQL, migration ou deploy
+
 - Projeto Supabase **`syinhicmyrsdeaeyayjs`** (`supabase/config.toml:1`), hospedado na organização
   **Lovable** — não na conta do cliente. SQL pelo MCP **`supabase-match-v2`** (declarado em `.mcp.json`) ou
   pelo SQL Editor do Lovable Studio.
@@ -78,10 +85,11 @@ divergiu da realidade → corrija no mesmo PR do fix. Responda sempre em PT-BR.
 - 97 arquivos em `supabase/migrations/`; `npm run db:migrate` = `supabase db push`. Ordem obrigatória:
   arquivo → PR → merge → deploy do código → apply. Nunca DDL a partir de branch aberta.
 - Diagnóstico em produção = **só leitura**. DDL destrutivo, segredos e rotação: só com o dono.
-- 27 edge functions em `supabase/functions/` e **nenhum workflow as implanta** — deploy é manual
+- 25 edge functions em `supabase/functions/` (`_shared/` é pasta de helpers sem deploy próprio) e **nenhum workflow as implanta** — deploy é manual
   (CLI/MCP/Studio). Não anuncie "edge no ar" sem confirmar.
 
 ## Serviços — ler `docs/agentes/servicos.md` e `docs/agentes/vercel-deploy.md`
+
 - **Vercel**: projeto `match-v2`; front sobe pelo `deploy.yml` (push em `main`, `amondnet/vercel-action`) e
   preview por PR (`preview.yml`). Nunca segredo de servidor no Vercel; `VITE_*` entra no bundle e é público.
 - **Sentry**: `sentry-dsn-gate.yml` reprova qualquer PR/push em `main` sem o secret `VITE_SENTRY_DSN`.
@@ -92,6 +100,7 @@ divergiu da realidade → corrija no mesmo PR do fix. Responda sempre em PT-BR.
   **não validada** em produção nesta sessão — não afirme que está rodando.
 
 ## Stack e comandos — detalhe em `docs/agentes/mapa-repo.md`
+
 - Vite + React + TS (`src/`), Supabase (`supabase/functions/` em Deno, `supabase/migrations/`), Playwright
   (`e2e/`), Storybook, **npm** (`npm ci` — é o que a CI usa; `bun.lock` e `bun.lockb` na raiz são legado,
   nenhum workflow usa bun), Node **22.23.2** (`.nvmrc`; CI em `22`).
@@ -102,8 +111,11 @@ divergiu da realidade → corrija no mesmo PR do fix. Responda sempre em PT-BR.
   **Não use `--no-verify`**.
 
 ## Onde olhar primeiro
+
 - `AGENTS.md` + `docs/agentes/*.md` = regras vivas. Os ~48 arquivos soltos em `docs/` (auditorias, planos,
   levantamentos) são **histórico**: contexto, não fonte de verdade — e podem contradizer este arquivo.
 - Telas e papéis: `src/routes/` (`AppRoutes`, `MainRoutes`, `AdminRoutes`, `AuthRoutes`, `PortalRoutes`,
   `lazyPages.ts`). Integrações: `src/services/`. Back: `supabase/functions/`.
 - Regras de negócio que o código não deixa óbvio: `docs/agentes/regras-dominio.md`.
+- Estado real gerado por script (tabelas, RLS, cron, rotas, edges, regras extraídas):
+  `docs/agentes/contexto-autonomo.md` diz qual arquivo responde o quê e quando é refeito.
