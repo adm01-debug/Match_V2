@@ -72,7 +72,7 @@ export const CandidatosCharts = memo(function CandidatosCharts({ statusStats, ev
                     borderRadius: '12px',
                     boxShadow: '0 10px 40px -10px hsl(var(--primary) / 0.2)'
                   }}
-                  formatter={(value: number, name: string) => [
+                  formatter={(value, name) => [
                     value,
                     name === 'accumulated' ? 'Total Acumulado' : 'Novos no dia'
                   ]}
@@ -114,7 +114,7 @@ export const CandidatosCharts = memo(function CandidatosCharts({ statusStats, ev
                   ))}
                 </Pie>
                 <Tooltip 
-                  formatter={(value: number) => [`${value} candidatos`, '']}
+                  formatter={(value) => [`${value} candidatos`, '']}
                   contentStyle={{ 
                     backgroundColor: 'hsl(var(--popover))', 
                     border: '1px solid hsl(var(--border))',

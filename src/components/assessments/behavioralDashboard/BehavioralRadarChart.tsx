@@ -68,7 +68,7 @@ export function BehavioralRadarChart({ data, hasCompanyProfile }: Props) {
                 border: '1px solid hsl(var(--border))',
                 borderRadius: '8px',
               }}
-              formatter={(value: number, name: string) => [`${value.toFixed(0)}%`, name]}
+              formatter={(value, name) => [`${Number(value).toFixed(0)}%`, name]}
             />
           </RadarChart>
         </ResponsiveContainer>

@@ -84,8 +84,8 @@ export const AnimatedPieChart = memo(function AnimatedPieChart({
             animationEasing="ease-out"
             onMouseEnter={(_, index) => setActiveIndex(index)}
             onMouseLeave={() => setActiveIndex(null)}
-            label={showLabels ? ({ name, percent }: { name: string; percent: number }) => 
-              `${name}: ${(percent * 100).toFixed(0)}%` : undefined
+            label={showLabels ? ({ name, percent }) =>
+              `${name}: ${((percent ?? 0) * 100).toFixed(0)}%` : undefined
             }
           >
             {data.map((_, index) => (
