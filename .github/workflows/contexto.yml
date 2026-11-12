@@ -219,14 +219,14 @@ jobs:
 
       - name: Baixar codigo/
         if: needs.codigo.outputs.artifact-id != ''
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           artifact-ids: ${{ needs.codigo.outputs.artifact-id }}
           path: ${{ runner.temp }}/art/contexto-codigo
 
       - name: Baixar regras/
         if: needs.regras.outputs.artifact-id != ''
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           artifact-ids: ${{ needs.regras.outputs.artifact-id }}
           path: ${{ runner.temp }}/art/contexto-regras
