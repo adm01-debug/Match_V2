@@ -2,11 +2,76 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "838a4dcc6babfd555a01d52528007569d2dc9030",
+  "commit": "50668aec3b102cb0d8a0d930152423649f0534ab",
   "branch": "main",
-  "data_commit": "2026-11-08T21:43:35-03:00",
+  "data_commit": "2026-11-09T12:28:11Z",
   "remote": "https://github.com/adm01-debug/Match_V2",
   "ultimos_commits": [
+   {
+    "sha": "50668ae",
+    "data": "2026-11-09",
+    "assunto": "Merge pull request #123 from adm01-debug/dependabot/npm_and_yarn/input-otp-1.5.0"
+   },
+   {
+    "sha": "66e8646",
+    "data": "2026-11-09",
+    "assunto": "Merge pull request #120 from adm01-debug/dependabot/npm_and_yarn/radix-ui/react-toast-1.3.1"
+   },
+   {
+    "sha": "c4452fb",
+    "data": "2026-11-09",
+    "assunto": "chore(deps): bump input-otp from 1.4.2 to 1.5.0"
+   },
+   {
+    "sha": "2fa4c13",
+    "data": "2026-11-09",
+    "assunto": "Merge pull request #104 from adm01-debug/dependabot/npm_and_yarn/supabase-9cd0c0434b"
+   },
+   {
+    "sha": "e712769",
+    "data": "2026-11-09",
+    "assunto": "chore(deps): bump @radix-ui/react-toast from 1.2.23 to 1.3.1"
+   },
+   {
+    "sha": "71805dc",
+    "data": "2026-11-09",
+    "assunto": "Merge pull request #119 from adm01-debug/dependabot/npm_and_yarn/radix-ui/react-switch-1.4.1"
+   },
+   {
+    "sha": "887f7c2",
+    "data": "2026-11-09",
+    "assunto": "chore(deps): bump @supabase/supabase-js"
+   },
+   {
+    "sha": "01e4880",
+    "data": "2026-11-09",
+    "assunto": "chore(deps): bump @radix-ui/react-switch from 1.2.5 to 1.4.1"
+   },
+   {
+    "sha": "44642e9",
+    "data": "2026-11-09",
+    "assunto": "Merge pull request #117 from adm01-debug/dependabot/npm_and_yarn/react-57546a5b99"
+   },
+   {
+    "sha": "47509b7",
+    "data": "2026-11-09",
+    "assunto": "Merge pull request #103 from adm01-debug/dependabot/npm_and_yarn/tanstack-04e70c8c84"
+   },
+   {
+    "sha": "188a5f3",
+    "data": "2026-11-09",
+    "assunto": "chore(deps): bump the tanstack group across 1 directory with 3 updates"
+   },
+   {
+    "sha": "266679b",
+    "data": "2026-11-09",
+    "assunto": "chore(deps): bump the react group with 2 updates"
+   },
+   {
+    "sha": "23d4210",
+    "data": "2026-11-09",
+    "assunto": "chore(release): v0.1.0 [skip ci]"
+   },
    {
     "sha": "838a4dc",
     "data": "2026-11-08",
@@ -66,90 +131,25 @@
     "sha": "790cbf9",
     "data": "2026-11-08",
     "assunto": "chore(agentes): instruções enxutas no padrão do zapp web v2 (#108)"
-   },
-   {
-    "sha": "af0ded6",
-    "data": "2026-11-02",
-    "assunto": "Merge pull request #106 from adm01-debug/dependabot/npm_and_yarn/react-5d968281fa"
-   },
-   {
-    "sha": "41e5ed3",
-    "data": "2026-11-02",
-    "assunto": "chore(deps): bump the react group across 1 directory with 7 updates"
-   },
-   {
-    "sha": "1757fe4",
-    "data": "2026-10-13",
-    "assunto": "Merge pull request #100 from adm01-debug/dependabot/npm_and_yarn/radix-ui/react-accordion-1.2.21"
-   },
-   {
-    "sha": "6e7785d",
-    "data": "2026-10-13",
-    "assunto": "Merge pull request #99 from adm01-debug/dependabot/npm_and_yarn/zod-4.6.5"
-   },
-   {
-    "sha": "1abde2b",
-    "data": "2026-10-13",
-    "assunto": "Merge pull request #92 from adm01-debug/dependabot/npm_and_yarn/vite-8.3.4"
-   },
-   {
-    "sha": "59efe27",
-    "data": "2026-10-13",
-    "assunto": "chore(deps): bump @radix-ui/react-accordion from 1.2.11 to 1.2.21"
-   },
-   {
-    "sha": "b659b94",
-    "data": "2026-10-13",
-    "assunto": "chore(deps): bump zod from 4.4.3 to 4.6.5"
-   },
-   {
-    "sha": "32f3c0e",
-    "data": "2026-10-13",
-    "assunto": "chore(deps): bump vite from 8.3.0 to 8.3.4"
-   },
-   {
-    "sha": "7833f22",
-    "data": "2026-10-13",
-    "assunto": "Merge pull request #91 from adm01-debug/dependabot/npm_and_yarn/tailwindcss/typography-0.5.20"
-   },
-   {
-    "sha": "a264c0b",
-    "data": "2026-10-13",
-    "assunto": "chore(deps): bump @tailwindcss/typography from 0.5.16 to 0.5.20"
-   },
-   {
-    "sha": "5d06724",
-    "data": "2026-10-13",
-    "assunto": "Merge pull request #95 from adm01-debug/dependabot/npm_and_yarn/storybook/test-runner-0.26.0"
-   },
-   {
-    "sha": "8acf338",
-    "data": "2026-10-13",
-    "assunto": "chore(deps): bump @storybook/test-runner from 0.19.1 to 0.26.0"
-   },
-   {
-    "sha": "8a0bd89",
-    "data": "2026-10-13",
-    "assunto": "Merge pull request #94 from adm01-debug/dependabot/npm_and_yarn/radix-ui/react-avatar-1.2.7"
    }
   ],
   "arquivos_mudados_7d": 67,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "package.json",
-    "mudancas": 14
+    "mudancas": 10
    },
    {
     "pasta": "package-lock.json",
-    "mudancas": 13
+    "mudancas": 9
+   },
+   {
+    "pasta": "CHANGELOG.md",
+    "mudancas": 4
    },
    {
     "pasta": "src/components/ui",
     "mudancas": 4
-   },
-   {
-    "pasta": "CHANGELOG.md",
-    "mudancas": 3
    },
    {
     "pasta": "src/components/agenda",
@@ -199,94 +199,58 @@
   "arquivos_mais_mudados_90d": [
    {
     "arquivo": "package.json",
-    "mudancas": 32
+    "mudancas": 37
    },
    {
     "arquivo": "package-lock.json",
-    "mudancas": 31
+    "mudancas": 36
    },
    {
     "arquivo": "CHANGELOG.md",
-    "mudancas": 13
+    "mudancas": 12
    },
    {
     "arquivo": ".github/workflows/ci.yml",
-    "mudancas": 7
-   },
-   {
-    "arquivo": ".github/workflows/changelog.yml",
     "mudancas": 6
    },
    {
-    "arquivo": ".github/workflows/e2e.yml",
+    "arquivo": ".github/workflows/changelog.yml",
     "mudancas": 5
+   },
+   {
+    "arquivo": ".github/workflows/e2e.yml",
+    "mudancas": 4
    },
    {
     "arquivo": ".github/workflows/lighthouse.yml",
-    "mudancas": 5
+    "mudancas": 4
    },
    {
     "arquivo": ".github/workflows/performance.yml",
-    "mudancas": 5
+    "mudancas": 4
    },
    {
     "arquivo": ".github/workflows/release.yml",
-    "mudancas": 5
+    "mudancas": 4
    },
    {
     "arquivo": ".github/workflows/test.yml",
-    "mudancas": 5
+    "mudancas": 4
    },
    {
     "arquivo": ".github/workflows/a11y.yml",
-    "mudancas": 4
-   },
-   {
-    "arquivo": ".github/workflows/bundle-size.yml",
-    "mudancas": 4
-   },
-   {
-    "arquivo": ".github/workflows/chromatic.yml",
-    "mudancas": 4
-   },
-   {
-    "arquivo": ".github/workflows/deploy.yml",
-    "mudancas": 4
-   },
-   {
-    "arquivo": ".github/workflows/lint.yml",
-    "mudancas": 4
-   },
-   {
-    "arquivo": ".github/workflows/pr-check.yml",
-    "mudancas": 4
-   },
-   {
-    "arquivo": ".github/workflows/preview.yml",
-    "mudancas": 4
-   },
-   {
-    "arquivo": ".github/workflows/security-scan.yml",
-    "mudancas": 4
-   },
-   {
-    "arquivo": ".github/workflows/storybook-deploy.yml",
-    "mudancas": 4
-   },
-   {
-    "arquivo": ".github/workflows/visual-regression.yml",
-    "mudancas": 4
-   },
-   {
-    "arquivo": "supabase/config.toml",
-    "mudancas": 4
-   },
-   {
-    "arquivo": ".github/workflows/codeql.yml",
     "mudancas": 3
    },
    {
-    "arquivo": ".github/workflows/docker-build.yml",
+    "arquivo": ".github/workflows/bundle-size.yml",
+    "mudancas": 3
+   },
+   {
+    "arquivo": ".github/workflows/chromatic.yml",
+    "mudancas": 3
+   },
+   {
+    "arquivo": ".github/workflows/deploy.yml",
     "mudancas": 3
    },
    {
@@ -294,26 +258,62 @@
     "mudancas": 3
    },
    {
+    "arquivo": ".github/workflows/lint.yml",
+    "mudancas": 3
+   },
+   {
+    "arquivo": ".github/workflows/pr-check.yml",
+    "mudancas": 3
+   },
+   {
+    "arquivo": ".github/workflows/preview.yml",
+    "mudancas": 3
+   },
+   {
+    "arquivo": ".github/workflows/security-scan.yml",
+    "mudancas": 3
+   },
+   {
+    "arquivo": ".github/workflows/storybook-deploy.yml",
+    "mudancas": 3
+   },
+   {
+    "arquivo": ".github/workflows/visual-regression.yml",
+    "mudancas": 3
+   },
+   {
     "arquivo": "AGENTS.md",
     "mudancas": 3
+   },
+   {
+    "arquivo": ".github/workflows/codeql.yml",
+    "mudancas": 2
+   },
+   {
+    "arquivo": ".github/workflows/docker-build.yml",
+    "mudancas": 2
+   },
+   {
+    "arquivo": "docs/agentes/banco.md",
+    "mudancas": 2
    }
   ],
   "autores_30d": [
-   {
-    "autor": "dependabot[bot]",
-    "commits": 11
-   },
-   {
-    "autor": "github-actions[bot]",
-    "commits": 11
-   },
    {
     "autor": "adm01-debug",
     "commits": 9
    },
    {
+    "autor": "dependabot[bot]",
+    "commits": 7
+   },
+   {
+    "autor": "github-actions[bot]",
+    "commits": 7
+   },
+   {
     "autor": "Conventional Changelog Action",
-    "commits": 3
+    "commits": 4
    }
   ]
  },

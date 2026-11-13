@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "838a4dcc6babfd555a01d52528007569d2dc9030",
+  "sha": "50668aec3b102cb0d8a0d930152423649f0534ab",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Match_V2",
-  "generated_at": "2026-11-09 01:35 UTC",
+  "generated_at": "2026-11-13 09:59 UTC",
   "files_total": 1351,
   "code_files": 1155,
   "code_lines": 144234
  },
  "version": "1.3.2",
- "facts_hash": "296760383da79882",
+ "facts_hash": "7df3934308d827ba",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -22,12 +22,12 @@
     "in": "package.json"
    },
    "@supabase/supabase-js": {
-    "version": "^2.117.3",
+    "version": "^2.119.0",
     "role": "Supabase (DB/Auth/Storage/Functions)",
     "in": "package.json"
    },
    "@tanstack/react-query": {
-    "version": "^5.104.1",
+    "version": "^5.106.1",
     "role": "Cache/fetch de dados (TanStack Query)",
     "in": "package.json"
    },
@@ -74396,10 +74396,121 @@
   }
  },
  "git": {
-  "sha": "838a4dcc6babfd555a01d52528007569d2dc9030",
+  "sha": "50668aec3b102cb0d8a0d930152423649f0534ab",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Match_V2",
   "commits": [
+   {
+    "sha": "50668ae",
+    "date": "2026-11-09",
+    "author": "github-actions[bot]",
+    "subject": "Merge pull request #123 from adm01-debug/dependabot/npm_and_yarn/input-otp-1.5.0",
+    "files": []
+   },
+   {
+    "sha": "66e8646",
+    "date": "2026-11-09",
+    "author": "github-actions[bot]",
+    "subject": "Merge pull request #120 from adm01-debug/dependabot/npm_and_yarn/radix-ui/react-toast-1.3.1",
+    "files": []
+   },
+   {
+    "sha": "c4452fb",
+    "date": "2026-11-09",
+    "author": "dependabot[bot]",
+    "subject": "chore(deps): bump input-otp from 1.4.2 to 1.5.0",
+    "files": [
+     "package-lock.json",
+     "package.json"
+    ]
+   },
+   {
+    "sha": "2fa4c13",
+    "date": "2026-11-09",
+    "author": "github-actions[bot]",
+    "subject": "Merge pull request #104 from adm01-debug/dependabot/npm_and_yarn/supabase-9cd0c0434b",
+    "files": []
+   },
+   {
+    "sha": "e712769",
+    "date": "2026-11-09",
+    "author": "dependabot[bot]",
+    "subject": "chore(deps): bump @radix-ui/react-toast from 1.2.23 to 1.3.1",
+    "files": [
+     "package-lock.json",
+     "package.json"
+    ]
+   },
+   {
+    "sha": "71805dc",
+    "date": "2026-11-09",
+    "author": "github-actions[bot]",
+    "subject": "Merge pull request #119 from adm01-debug/dependabot/npm_and_yarn/radix-ui/react-switch-1.4.1",
+    "files": []
+   },
+   {
+    "sha": "887f7c2",
+    "date": "2026-11-09",
+    "author": "dependabot[bot]",
+    "subject": "chore(deps): bump @supabase/supabase-js",
+    "files": [
+     "package-lock.json",
+     "package.json"
+    ]
+   },
+   {
+    "sha": "01e4880",
+    "date": "2026-11-09",
+    "author": "dependabot[bot]",
+    "subject": "chore(deps): bump @radix-ui/react-switch from 1.2.5 to 1.4.1",
+    "files": [
+     "package-lock.json",
+     "package.json"
+    ]
+   },
+   {
+    "sha": "44642e9",
+    "date": "2026-11-09",
+    "author": "github-actions[bot]",
+    "subject": "Merge pull request #117 from adm01-debug/dependabot/npm_and_yarn/react-57546a5b99",
+    "files": []
+   },
+   {
+    "sha": "47509b7",
+    "date": "2026-11-09",
+    "author": "github-actions[bot]",
+    "subject": "Merge pull request #103 from adm01-debug/dependabot/npm_and_yarn/tanstack-04e70c8c84",
+    "files": []
+   },
+   {
+    "sha": "188a5f3",
+    "date": "2026-11-09",
+    "author": "dependabot[bot]",
+    "subject": "chore(deps): bump the tanstack group across 1 directory with 3 updates",
+    "files": [
+     "package-lock.json",
+     "package.json"
+    ]
+   },
+   {
+    "sha": "266679b",
+    "date": "2026-11-09",
+    "author": "dependabot[bot]",
+    "subject": "chore(deps): bump the react group with 2 updates",
+    "files": [
+     "package-lock.json",
+     "package.json"
+    ]
+   },
+   {
+    "sha": "23d4210",
+    "date": "2026-11-09",
+    "author": "Conventional Changelog Action",
+    "subject": "chore(release): v0.1.0 [skip ci]",
+    "files": [
+     "CHANGELOG.md"
+    ]
+   },
    {
     "sha": "838a4dc",
     "date": "2026-11-08",
@@ -74607,132 +74718,20 @@
     "author": "github-actions[bot]",
     "subject": "Merge pull request #92 from adm01-debug/dependabot/npm_and_yarn/vite-8.3.4",
     "files": []
-   },
-   {
-    "sha": "59efe27",
-    "date": "2026-10-13",
-    "author": "dependabot[bot]",
-    "subject": "chore(deps): bump @radix-ui/react-accordion from 1.2.11 to 1.2.21",
-    "files": [
-     "package-lock.json",
-     "package.json"
-    ]
-   },
-   {
-    "sha": "b659b94",
-    "date": "2026-10-13",
-    "author": "dependabot[bot]",
-    "subject": "chore(deps): bump zod from 4.4.3 to 4.6.5",
-    "files": [
-     "package-lock.json",
-     "package.json"
-    ]
-   },
-   {
-    "sha": "32f3c0e",
-    "date": "2026-10-13",
-    "author": "dependabot[bot]",
-    "subject": "chore(deps): bump vite from 8.3.0 to 8.3.4",
-    "files": [
-     "package-lock.json",
-     "package.json"
-    ]
-   },
-   {
-    "sha": "7833f22",
-    "date": "2026-10-13",
-    "author": "github-actions[bot]",
-    "subject": "Merge pull request #91 from adm01-debug/dependabot/npm_and_yarn/tailwindcss/typography-0.5.20",
-    "files": []
-   },
-   {
-    "sha": "a264c0b",
-    "date": "2026-10-13",
-    "author": "dependabot[bot]",
-    "subject": "chore(deps): bump @tailwindcss/typography from 0.5.16 to 0.5.20",
-    "files": [
-     "package-lock.json",
-     "package.json"
-    ]
-   },
-   {
-    "sha": "5d06724",
-    "date": "2026-10-13",
-    "author": "github-actions[bot]",
-    "subject": "Merge pull request #95 from adm01-debug/dependabot/npm_and_yarn/storybook/test-runner-0.26.0",
-    "files": []
-   },
-   {
-    "sha": "8acf338",
-    "date": "2026-10-13",
-    "author": "dependabot[bot]",
-    "subject": "chore(deps): bump @storybook/test-runner from 0.19.1 to 0.26.0",
-    "files": [
-     "package-lock.json",
-     "package.json"
-    ]
-   },
-   {
-    "sha": "8a0bd89",
-    "date": "2026-10-13",
-    "author": "github-actions[bot]",
-    "subject": "Merge pull request #94 from adm01-debug/dependabot/npm_and_yarn/radix-ui/react-avatar-1.2.7",
-    "files": []
-   },
-   {
-    "sha": "0df7db7",
-    "date": "2026-10-13",
-    "author": "dependabot[bot]",
-    "subject": "chore(deps): bump @radix-ui/react-avatar from 1.1.10 to 1.2.7",
-    "files": [
-     "package-lock.json",
-     "package.json"
-    ]
-   },
-   {
-    "sha": "103e54e",
-    "date": "2026-10-13",
-    "author": "github-actions[bot]",
-    "subject": "Merge pull request #90 from adm01-debug/dependabot/npm_and_yarn/linting-da1a9481d3",
-    "files": []
-   },
-   {
-    "sha": "02d90f5",
-    "date": "2026-10-13",
-    "author": "github-actions[bot]",
-    "subject": "Merge pull request #88 from adm01-debug/dependabot/npm_and_yarn/testing-04e1cc7ff2",
-    "files": []
-   },
-   {
-    "sha": "bf177a7",
-    "date": "2026-10-13",
-    "author": "dependabot[bot]",
-    "subject": "chore(deps): bump the linting group with 2 updates",
-    "files": [
-     "package-lock.json",
-     "package.json"
-    ]
-   },
-   {
-    "sha": "d9f7a6a",
-    "date": "2026-10-13",
-    "author": "github-actions[bot]",
-    "subject": "Merge pull request #87 from adm01-debug/dependabot/npm_and_yarn/react-029a7c4af4",
-    "files": []
    }
   ],
   "hot_files": [
    [
     "package.json",
-    11
-   ],
-   [
-    "package-lock.json",
     10
    ],
    [
+    "package-lock.json",
+    9
+   ],
+   [
     "CHANGELOG.md",
-    3
+    4
    ],
    [
     "AGENTS.md",

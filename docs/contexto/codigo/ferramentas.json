@@ -87,9 +87,9 @@
   "dependencias": 73,
   "dev_dependencias": 57,
   "principais": {
-   "@supabase/supabase-js": "^2.117.3",
-   "@tanstack/react-query": "^5.104.1",
-   "@tanstack/react-query-devtools": "^5.104.1",
+   "@supabase/supabase-js": "^2.119.0",
+   "@tanstack/react-query": "^5.106.1",
+   "@tanstack/react-query-devtools": "^5.106.1",
    "date-fns": "^3.6.0",
    "framer-motion": "12.24.7",
    "i18next": "^23.16.5",
@@ -100,9 +100,9 @@
    "react-dropzone": "20.1.4",
    "react-error-boundary": "^6.1.6",
    "react-hook-form": "^7.91.0",
-   "react-i18next": "^17.1.9",
+   "react-i18next": "^17.1.13",
    "react-is": "19.3.1",
-   "react-resizable-panels": "^4.15.2",
+   "react-resizable-panels": "^4.18.1",
    "react-router-dom": "^7.18.5",
    "reactflow": "11.11.4",
    "recharts": "^3.10.1",
@@ -1114,7 +1114,7 @@
   {
    "arquivo": "CHANGELOG.md",
    "titulo": null,
-   "linhas": 946
+   "linhas": 948
   },
   {
    "arquivo": "CLAUDE.md",
@@ -1401,7 +1401,7 @@
    "arquivos_md": 2
   }
  ],
- "changelog_topo": "0.1.0 (2026-11-08)",
+ "changelog_topo": "0.1.0 (2026-11-09)",
  "env": {
   "declaradas_no_env_example": [
    "VITE_ANALYTICS_ID",
@@ -1529,12 +1529,12 @@
    {
     "pacote": "react-i18next",
     "servico": "i18next",
-    "versao": "^17.1.9"
+    "versao": "^17.1.13"
    },
    {
     "pacote": "@tanstack/react-query",
     "servico": "react-query",
-    "versao": "^5.104.1"
+    "versao": "^5.106.1"
    },
    {
     "pacote": "@sentry/react",
@@ -1544,7 +1544,7 @@
    {
     "pacote": "@supabase/supabase-js",
     "servico": "Supabase",
-    "versao": "^2.117.3"
+    "versao": "^2.119.0"
    },
    {
     "pacote": "zod",

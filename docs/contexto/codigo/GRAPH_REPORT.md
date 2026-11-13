@@ -1,7 +1,7 @@
-# Graph Report - Match_V2  (2026-11-09)
+# Graph Report - Match_V2  (2026-11-13)
 
 ## Corpus Check
-- 1271 files · ~560,064 words
+- 1271 files · ~560,090 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 20 file(s) not represented in the graph (top: (none) 12, .example 1, .prod 1)
 
@@ -11,7 +11,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `838a4dcc`
+- Built from commit: `50668aec`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -1444,7 +1444,7 @@ Nodes (8): idx_triagem_ia_candidatura, idx_triagem_ia_vaga_score, public.triagem
 
 ### Community 249 - "index.md"
 Cohesion: 0.25
-Nodes (4): 0.1.0 (2026-11-08), Bug Fixes, Features, Performance Improvements
+Nodes (4): 0.1.0 (2026-11-09), Bug Fixes, Features, Performance Improvements
 
 ### Community 250 - "Regras de domínio que o código não deixa óbvio — referência para agentes"
 Cohesion: 0.25

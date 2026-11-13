@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` que toque código e uma vez por dia, pelo workflow `contexto.yml`; índice único das fontes em `docs/contexto/00-INDEX.md`. O estado real do banco não sai daqui: está em `inventario/estado/banco.json` (workflow `inventario-estado-semanal.yml`). Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `838a4dcc6babfd555a01d52528007569d2dc9030` (2026-11-08T21:43:35-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` que toque código e uma vez por dia, pelo workflow `contexto.yml`; índice único das fontes em `docs/contexto/00-INDEX.md`. O estado real do banco não sai daqui: está em `inventario/estado/banco.json` (workflow `inventario-estado-semanal.yml`). Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `50668aec3b102cb0d8a0d930152423649f0534ab` (2026-11-09T12:28:11Z).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -262,27 +262,27 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 3 — ex.: scripts/ai-context/cenarios.mjs:102, scripts/ci/inventario-banco.unit.mjs:174, test-supabase.mjs:5
 
 ## Grafo de código (graphify)
-- 7399 nós · 19466 arestas · 454 comunidades · grafo do commit `838a4dcc`
+- 7399 nós · 19466 arestas · 454 comunidades · grafo do commit `50668aec`
 - comunidades maiores: lucide-react (256), react (170), cn (128), ComunicacaoPage.tsx (123), gamification/index.ts (123), select.tsx (107), vagas/VagaCard.tsx (107), Layout.tsx (101), hooks/index.ts (88), package.json (85), client.ts (80), gerar.mjs (80)
 - símbolos mais chamados: cn() (src/lib/utils.ts), useToast() (src/hooks/use-toast.ts), usePageTitle() (src/hooks/usePageTitle.ts), useAuth() (src/contexts/AuthContext.tsx), header() (scripts/regras_negocio/generate.py), uniq() (scripts/ai-context/gerar.mjs), readText() (scripts/ai-context/gerar.mjs), md_table() (scripts/regras_negocio/generate.py), read_text() (scripts/regras_negocio/generate.py), useFuzzySearch() (src/hooks/useFuzzySearch.ts), has() (scripts/ai-context/gerar.mjs), .write() (scripts/regras_negocio/test_generate.py)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
 
 ## Hotspots (arquivos mais alterados, 90 dias)
-- package.json (32)
-- package-lock.json (31)
-- CHANGELOG.md (13)
-- .github/workflows/ci.yml (7)
-- .github/workflows/changelog.yml (6)
-- .github/workflows/e2e.yml (5)
-- .github/workflows/lighthouse.yml (5)
-- .github/workflows/performance.yml (5)
-- .github/workflows/release.yml (5)
-- .github/workflows/test.yml (5)
-- .github/workflows/a11y.yml (4)
-- .github/workflows/bundle-size.yml (4)
-- .github/workflows/chromatic.yml (4)
-- .github/workflows/deploy.yml (4)
-- .github/workflows/lint.yml (4)
+- package.json (37)
+- package-lock.json (36)
+- CHANGELOG.md (12)
+- .github/workflows/ci.yml (6)
+- .github/workflows/changelog.yml (5)
+- .github/workflows/e2e.yml (4)
+- .github/workflows/lighthouse.yml (4)
+- .github/workflows/performance.yml (4)
+- .github/workflows/release.yml (4)
+- .github/workflows/test.yml (4)
+- .github/workflows/a11y.yml (3)
+- .github/workflows/bundle-size.yml (3)
+- .github/workflows/chromatic.yml (3)
+- .github/workflows/deploy.yml (3)
+- .github/workflows/install-mcp-exec.yml (3)
 
 ## Workflows
 - `a11y.yml` — Accessibility Tests (pull_request, push)
@@ -364,7 +364,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 ## Documentos (raiz e docs/)
 - `.github/PULL_REQUEST_TEMPLATE.md` (30 linhas)
 - `AGENTS.md` — AGENTS.md — Match_V2 (122 linhas)
-- `CHANGELOG.md` (946 linhas)
+- `CHANGELOG.md` (948 linhas)
 - `CLAUDE.md` (2 linhas)
 - `CODE_OF_CONDUCT.md` — Contributor Covenant Code of Conduct (43 linhas)
 - `CONTRIBUTING.md` — Contributing to Match ATS (71 linhas)
@@ -420,24 +420,24 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - `docs/audit_report.md` — Auditoria Técnica Enterprise 10/10 - People Lovers (Match ATS) (88 linhas)
 - `docs/index.md` — Match ATS Documentation (73 linhas)
 - subpastas de docs/: docs/ADR (8), docs/agentes (7), docs/contexto (2)
-- CHANGELOG topo: 0.1.0 (2026-11-08)
+- CHANGELOG topo: 0.1.0 (2026-11-09)
 
 ## Últimos commits
+- 2026-11-09 `50668ae` Merge pull request #123 from adm01-debug/dependabot/npm_and_yarn/input-otp-1.5.0
+- 2026-11-09 `66e8646` Merge pull request #120 from adm01-debug/dependabot/npm_and_yarn/radix-ui/react-toast-1.3.1
+- 2026-11-09 `c4452fb` chore(deps): bump input-otp from 1.4.2 to 1.5.0
+- 2026-11-09 `2fa4c13` Merge pull request #104 from adm01-debug/dependabot/npm_and_yarn/supabase-9cd0c0434b
+- 2026-11-09 `e712769` chore(deps): bump @radix-ui/react-toast from 1.2.23 to 1.3.1
+- 2026-11-09 `71805dc` Merge pull request #119 from adm01-debug/dependabot/npm_and_yarn/radix-ui/react-switch-1.4.1
+- 2026-11-09 `887f7c2` chore(deps): bump @supabase/supabase-js
+- 2026-11-09 `01e4880` chore(deps): bump @radix-ui/react-switch from 1.2.5 to 1.4.1
+- 2026-11-09 `44642e9` Merge pull request #117 from adm01-debug/dependabot/npm_and_yarn/react-57546a5b99
+- 2026-11-09 `47509b7` Merge pull request #103 from adm01-debug/dependabot/npm_and_yarn/tanstack-04e70c8c84
+- 2026-11-09 `188a5f3` chore(deps): bump the tanstack group across 1 directory with 3 updates
+- 2026-11-09 `266679b` chore(deps): bump the react group with 2 updates
+- 2026-11-09 `23d4210` chore(release): v0.1.0 [skip ci]
 - 2026-11-08 `838a4dc` feat(contexto): camada autônoma de inventário e contexto para agentes de ia
 - 2026-11-08 `a9deb2d` docs(agentes): corrige contagem de edges (27→25) e remove migrate-helper
-- 2026-11-08 `5c7c1db` security(functions): remove edge migrate-helper com chave exposta
-- 2026-11-08 `8438c52` fix(ui): corrigir 35 erros de tsc herdados de bumps de dependências
-- 2026-11-08 `616aa19` chore(release): v0.1.0 [skip ci]
-- 2026-11-08 `7d41659` fix(deps): baixa typescript para 6.0.3 e eslint para 9.39.5 (#113)
-- 2026-11-08 `1b43c16` chore(release): v0.1.0 [skip ci]
-- 2026-11-08 `5ef8c64` ci(agentes): guard de integridade das instruções para agentes (#109)
-- 2026-11-08 `e24e4a8` fix(build): adiciona react-is como dependência direta (#111)
-- 2026-11-08 `0174eb5` fix(hooks): renomeia configs CommonJS para .cjs em projeto type:module (#110)
-- 2026-11-08 `96ec68c` chore(release): v0.1.0 [skip ci]
-- 2026-11-08 `790cbf9` chore(agentes): instruções enxutas no padrão do zapp web v2 (#108)
-- 2026-11-02 `af0ded6` Merge pull request #106 from adm01-debug/dependabot/npm_and_yarn/react-5d968281fa
-- 2026-11-02 `41e5ed3` chore(deps): bump the react group across 1 directory with 7 updates
-- 2026-10-13 `1757fe4` Merge pull request #100 from adm01-debug/dependabot/npm_and_yarn/radix-ui/react-accordion-1.2.21
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`
